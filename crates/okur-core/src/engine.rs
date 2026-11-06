@@ -88,7 +88,7 @@ enum PendingViewer {
 /// The marks the reading choices put on a page's root ([`ScreenReaderEngine::reading_marks`]):
 /// each mark with its value, `None` where the mark is left off.
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ReadingMarks([(&'static str, Option<String>); 3]);
+pub struct ReadingMarks([(&'static str, Option<String>); 4]);
 
 impl ReadingMarks {
     /// Whether `page` carries these marks already.
@@ -912,6 +912,10 @@ impl ScreenReaderEngine {
                         .and_then(|v| v.as_str().map(str::to_owned)),
                 },
             ),
+            (
+                crate::linearize::WEB_VERBOSITY,
+                self.settings.web_verbosity.mark().map(str::to_owned),
+            ),
         ])
     }
 
@@ -939,16 +943,21 @@ impl ScreenReaderEngine {
         };
         let at = self.cursor.current_node_id;
         let offset = self.cursor.offset;
+        // Where in its element the cursor is, kept: the word at the cursor stays the word.
+        let within = at
+            .and_then(|id| self.cursor.buffer.start_of(id))
+            .map(|start| offset.saturating_sub(start));
         crate::retire::retire(std::mem::replace(
             &mut self.cursor.buffer,
             VirtualBuffer::from_aom_owned(page),
         ));
         self.say_all = None;
+        let length = self.cursor.buffer.text.len();
         match at.and_then(|id| self.cursor.buffer.start_of(id)) {
-            Some(start) => self.cursor.move_to(start),
-            None => self
+            Some(start) => self
                 .cursor
-                .move_to(offset.min(self.cursor.buffer.text.len())),
+                .move_to((start + within.unwrap_or(0)).min(length)),
+            None => self.cursor.move_to(offset.min(length)),
         }
     }
 
@@ -2149,10 +2158,6 @@ impl ScreenReaderEngine {
             .resolve(application.as_deref(), site.as_deref());
         let voice_changed = settings.voice != self.settings.voice;
         let dictionary_changed = settings.dictionary != self.settings.dictionary;
-        let choices_changed = settings.identify_same_page_links
-            != self.settings.identify_same_page_links
-            || settings.show_graphics != self.settings.show_graphics
-            || settings.heading_indication != self.settings.heading_indication;
         // The cursor says a page control's focus itself, at the verbosity in force.
         self.cursor.verbosity = settings.verbosity.clone();
         self.settings = settings;
@@ -2162,9 +2167,9 @@ impl ScreenReaderEngine {
         if dictionary_changed {
             self.speech.set_dictionary(&self.settings.dictionary);
         }
-        if choices_changed {
-            self.reread_with_choices();
-        }
+        // The page read with the choices in force: a changed choice, or a page built before the
+        // settings came (replay's first page; nothing is built again when its marks match).
+        self.reread_with_choices();
         self.sync_speech_mode();
     }
 

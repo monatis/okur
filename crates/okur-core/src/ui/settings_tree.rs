@@ -211,7 +211,7 @@ fn center_group(id: &str) -> Option<TreeGroup> {
         }
         "smart_navigation" => TreeGroup::WebNavigation,
         "heading_indication" => TreeGroup::WebHeadings,
-        "read_page_on_load" => TreeGroup::WebReading,
+        "read_page_on_load" | "web_verbosity" => TreeGroup::WebReading,
         "forms_mode" => TreeGroup::FormsMode,
         "identify_same_page_links" => TreeGroup::WebLinks,
         "voice.indicate_caps"

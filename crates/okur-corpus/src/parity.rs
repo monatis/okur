@@ -1135,12 +1135,24 @@ fn replay_settings(evidence: &Value) -> okur_core::settings::Settings {
     else {
         return base;
     };
-    import_jaws(&base, &|file, section, key| match file {
-        JawsFile::DefaultJcf => default_jcf
-            .get(section)?
-            .get(key)?
-            .as_str()
-            .map(str::to_owned),
+    // The application's own file: the one other settings file of the recording (Chrome.JCF).
+    let application = evidence
+        .pointer("/provenance/jaws_settings")
+        .and_then(Value::as_object)
+        .and_then(|files| {
+            files
+                .iter()
+                .find(|(name, _)| {
+                    name.to_ascii_uppercase().ends_with(".JCF") && name.as_str() != "DEFAULT.JCF"
+                })
+                .map(|(_, jcf)| jcf)
+        });
+    import_jaws(&base, &|file, section, key| {
+        let jcf = match file {
+            JawsFile::DefaultJcf => default_jcf,
+            JawsFile::Application => application?,
+        };
+        jcf.get(section)?.get(key)?.as_str().map(str::to_owned)
     })
 }
 

@@ -361,6 +361,8 @@ okur-core/src/native_focus.rs: "Alt+"
 okur-core/src/native_focus.rs: "WindowsForms"
 # The registry's words for the user's start after sign-in (StartAfterSignIn).
 okur-core/src/settings.rs: "all-users"
+okur-core/src/settings.rs: "medium"
+okur-core/src/settings.rs: "low"
 okur-core/src/settings.rs: "always"
 okur-core/src/settings.rs: "never"
 okur-core/src/settings.rs: "SELECT"

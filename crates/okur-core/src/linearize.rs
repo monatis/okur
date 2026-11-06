@@ -16,6 +16,7 @@ use crate::buffer::{
     TableGrid, VirtualBuffer,
 };
 use crate::messages::msg;
+use crate::settings::WebStructure;
 
 /// Role marker brackets used by JAWS speech history (`\u{1d} role \u{1e}`).
 const RS: char = '\u{1d}';
@@ -378,6 +379,8 @@ struct Builder<'a> {
     /// Graphics are read; off, left out of the page ([`NO_GRAPHICS`]).
     graphics: bool,
     headings: crate::settings::HeadingIndication,
+    /// Which structures' starts and ends are said ([`WEB_VERBOSITY`]).
+    web_verbosity: crate::settings::WebVerbosity,
     /// Marks said at the start of the next line: the "end Deletion" of deleted text that
     /// ended its line.
     pending_marks: Vec<String>,
@@ -395,6 +398,11 @@ pub const NO_GRAPHICS: &str = "okur_no_graphics";
 /// The page's attribute that says how its headings' roles are said, when not with their level
 /// ("text" or "heading", [`crate::settings::HeadingIndication`]'s names) [obs, 730, 731].
 pub const HEADING_INDICATION: &str = "okur_heading_indication";
+
+/// The page's attribute that says how much of its structure is said, when not High's:
+/// "medium" or "low" ([`crate::settings::WebVerbosity`]; JAWS's Web Verbosity Level). Set as
+/// [`PLAIN_SAME_PAGE_LINKS`] is.
+pub const WEB_VERBOSITY: &str = "okur_web_verbosity";
 
 /// The heading indication `page` is marked with.
 pub fn heading_indication_of(page: &AomNode) -> crate::settings::HeadingIndication {
@@ -423,6 +431,7 @@ impl<'a> Builder<'a> {
             same_page_links: true,
             graphics: true,
             headings: crate::settings::HeadingIndication::Level,
+            web_verbosity: crate::settings::WebVerbosity::High,
             pending_marks: Vec::new(),
         }
     }
@@ -610,6 +619,11 @@ impl<'a> Builder<'a> {
         }
     }
 
+    /// Whether the start and end of `structure` are said at the page's Web Verbosity Level.
+    fn announces(&self, structure: WebStructure) -> bool {
+        self.web_verbosity.announces(structure)
+    }
+
     fn classify(&self, node: &AomNode, parent: Option<&AomNode>) -> Class {
         let aria = attr(node, "aria_role").unwrap_or_default();
         match &node.role {
@@ -629,6 +643,20 @@ impl<'a> Builder<'a> {
             Role::Table => Class::Table,
             Role::List => Class::List,
             Role::ListItem => Class::ListItem,
+            Role::Landmark { landmark_type }
+                if !self.announces(match landmark_type.as_str() {
+                    "banner" => WebStructure::Banner,
+                    "contentinfo" => WebStructure::ContentInformation,
+                    "main" => WebStructure::Main,
+                    "navigation" => WebStructure::Navigation,
+                    "complementary" => WebStructure::Complementary,
+                    "search" => WebStructure::Search,
+                    "form" => WebStructure::Form,
+                    _ => WebStructure::Region,
+                }) =>
+            {
+                Class::Block
+            }
             Role::Landmark { landmark_type } => {
                 let name = node.name.as_deref().map(squash).unwrap_or_default();
                 let label = |kind: &str| {
@@ -661,6 +689,10 @@ impl<'a> Builder<'a> {
                     end: msg::dialog_end().to_string(),
                 }
             }
+            Role::BlockQuote if !self.announces(WebStructure::BlockQuotation) => Class::Block,
+            Role::Group if aria == "article" && !self.announces(WebStructure::Article) => {
+                Class::Block
+            }
             Role::BlockQuote => Class::Container {
                 start: msg::block_quote().to_string(),
                 end: msg::block_quote_end().to_string(),
@@ -670,6 +702,13 @@ impl<'a> Builder<'a> {
                 end: msg::article_end().to_string(),
             },
             // A named group is a fieldset/radio group: its name is the legend (§3).
+            Role::Group
+                if aria == "group"
+                    && !self.announces(WebStructure::GroupBox)
+                    && node.name.as_deref().is_some_and(|n| !n.trim().is_empty()) =>
+            {
+                Class::Block
+            }
             Role::Group
                 if aria == "group"
                     && node.name.as_deref().is_some_and(|n| !n.trim().is_empty()) =>
@@ -1496,6 +1535,18 @@ impl<'a> Builder<'a> {
     /// §3/§8: "list of N items" … "list end", with "nesting level K" for nested lists.
     fn visit_list(&mut self, node: &AomNode) {
         self.flush();
+        // A level that leaves lists out (Low) says no start or end, its items still bulleted
+        // [obs, 1171/s2-s5, s16-s19]; L still finds the list, at its first item.
+        if !self.announces(WebStructure::List) {
+            let start_offset = self.offset();
+            self.buffer.lists.push(start_offset);
+            self.list_depth += 1;
+            self.visit_children(node);
+            self.list_depth -= 1;
+            self.flush();
+            self.record_container(node, start_offset);
+            return;
+        }
         let items = node
             .children
             .iter()
@@ -1884,6 +1935,7 @@ fn visit_page(root: &AomNode) -> (VirtualBuffer, Vec<(usize, &'static str, Strin
     builder.same_page_links = attr(root, PLAIN_SAME_PAGE_LINKS).is_none();
     builder.graphics = attr(root, NO_GRAPHICS).is_none();
     builder.headings = heading_indication_of(root);
+    builder.web_verbosity = crate::settings::WebVerbosity::from_mark(attr(root, WEB_VERBOSITY));
     builder.buffer.root_id = Some(root.id);
     builder.buffer.mark_readable(root.id);
 
@@ -2405,6 +2457,68 @@ mod tests {
             speech.get(1).copied(),
             Some(format!("{}Skip", role_marker("Link")).as_str())
         );
+    }
+
+    /// Web Verbosity Level: High says every region's start and end, Medium leaves out the
+    /// banner, complementary and content information regions, Low every region and block
+    /// quote, keeping their text [jaws-reading-settings-research.md §14]. A page without the
+    /// mark reads at High, as the corpus was recorded.
+    #[test]
+    fn web_verbosity_level_says_its_structures() {
+        let landmark = |id, kind: &str, text: &str| {
+            AomNode::new(
+                id,
+                Role::Landmark {
+                    landmark_type: kind.to_owned(),
+                },
+            )
+            .with_children(vec![AomNode::new(id + 1, Role::Paragraph).with_text(text)])
+        };
+        let page = |mark: Option<&str>| {
+            let mut root = AomNode::new(0, Role::Document).with_children(vec![
+                landmark(1, "banner", "Masthead"),
+                landmark(3, "navigation", "Menu"),
+                landmark(5, "main", "Story"),
+                AomNode::new(7, Role::BlockQuote).with_children(vec![AomNode::new(
+                    8,
+                    Role::Paragraph,
+                )
+                .with_text("Quoted")]),
+                landmark(9, "complementary", "Aside"),
+                landmark(11, "contentinfo", "Footer"),
+            ]);
+            if let Some(mark) = mark {
+                root.attributes
+                    .insert(WEB_VERBOSITY.to_owned(), mark.to_owned());
+            }
+            crate::buffer::VirtualBuffer::from_aom(&root)
+                .lines
+                .iter()
+                .map(|l| l.text.clone())
+                .collect::<Vec<_>>()
+        };
+        let high = page(None);
+        assert!(high.iter().any(|l| l == "banner"), "{high:?}");
+        assert!(high.iter().any(|l| l == "block quote"), "{high:?}");
+        let medium = page(Some("medium"));
+        assert!(!medium.iter().any(|l| l.contains("banner")), "{medium:?}");
+        assert!(
+            medium.iter().any(|l| l.contains("navigation region")),
+            "{medium:?}"
+        );
+        assert!(medium.iter().any(|l| l == "main region"), "{medium:?}");
+        assert!(
+            !medium.iter().any(|l| l.contains("complementary")),
+            "{medium:?}"
+        );
+        assert!(medium.iter().any(|l| l == "Masthead"), "{medium:?}");
+        let low = page(Some("low"));
+        assert!(
+            !low.iter()
+                .any(|l| l.contains("region") || l.contains("quote")),
+            "{low:?}"
+        );
+        assert_eq!(low.iter().filter(|l| !l.is_empty()).count(), 6, "{low:?}");
     }
 
     /// Tab to a current link (dev box, as above): a same page link says the state after its

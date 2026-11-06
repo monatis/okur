@@ -542,6 +542,11 @@ settings-smart-navigation-controls-and-tables = Controls and Tables
 # Indicate Headings, in Web / HTML / PDFs > Headings and Frames [obs, the walk of Settings
 # Center's search; "Headings Only" from its help].
 settings-tree-headings-and-frames = Headings and Frames
+settings-tree-web-verbosity = Web Verbosity Level
+settings-tree-web-verbosity-description = How much of a page's structure is said as you read: High says where every region and structure starts and ends, Medium the main ones, Low only tables.
+settings-web-verbosity-high = High
+settings-web-verbosity-medium = Medium
+settings-web-verbosity-low = Low
 settings-tree-indicate-headings = Indicate Headings
 settings-tree-indicate-headings-description = How a heading is said when you move to it: its text alone, with the word heading, or with the word heading and its level.
 settings-indicate-headings-none = No Headings

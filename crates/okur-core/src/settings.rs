@@ -276,6 +276,106 @@ impl FormsMode {
     }
 }
 
+/// How much of a page's structure the virtual cursor says: JAWS's Web Verbosity Level (Settings
+/// Center, Web / HTML / PDFs, Reading; an application's `[VirtualCursorVerbosity]
+/// VirtualCursorVerbosityLevel`), Medium by default (JAWS 2025's help). Each level says the start
+/// and end of its own structures ([`WebStructure`]; jaws-reading-settings-research.md §14, read
+/// of JAWS's Configure Web Verbosity Levels on old-pc, 2026-11-06). Old-pc's Chrome reads at High
+/// (2), which the web corpus was recorded at.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum WebVerbosity {
+    High,
+    #[default]
+    Medium,
+    Low,
+}
+
+/// A structure whose start and end the virtual cursor may say, as Configure Web Verbosity
+/// Levels lists them ("Announce Start and End For:").
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum WebStructure {
+    BlockQuotation,
+    DescribedBy,
+    Description,
+    EditableSection,
+    Feed,
+    Figure,
+    FlashObject,
+    Frame,
+    GroupBox,
+    List,
+    Log,
+    Note,
+    Article,
+    Banner,
+    Complementary,
+    ContentInformation,
+    Document,
+    Form,
+    Main,
+    Navigation,
+    Region,
+    Search,
+    TableOrGrid,
+    Toolbar,
+}
+
+impl WebVerbosity {
+    /// The level a `VirtualCursorVerbosityLevel` value sets: 2 High (old-pc's Chrome, which
+    /// Settings Center shows as High), 0 Low, any other Medium.
+    pub fn from_jcf(value: &str) -> Self {
+        match value.trim() {
+            "2" => Self::High,
+            "0" => Self::Low,
+            _ => Self::Medium,
+        }
+    }
+
+    /// Whether this level says the start and end of `structure`, as JAWS's levels do by
+    /// default [jaws-reading-settings-research.md §14].
+    pub fn announces(self, structure: WebStructure) -> bool {
+        use WebStructure::*;
+        match self {
+            Self::High => !matches!(structure, Description | Document),
+            Self::Medium => !matches!(
+                structure,
+                DescribedBy
+                    | Description
+                    | FlashObject
+                    | Frame
+                    | Banner
+                    | Complementary
+                    | ContentInformation
+                    | Document
+                    | Form
+                    | Region
+                    | Search
+            ),
+            Self::Low => matches!(structure, EditableSection | TableOrGrid),
+        }
+    }
+
+    /// The level's name in a page's reading mark, none for High: every page built before the
+    /// setting was read at High, as the corpus was recorded.
+    pub fn mark(self) -> Option<&'static str> {
+        match self {
+            Self::High => None,
+            Self::Medium => Some("medium"),
+            Self::Low => Some("low"),
+        }
+    }
+
+    /// The level a page's reading mark names.
+    pub fn from_mark(mark: Option<&str>) -> Self {
+        match mark {
+            Some("medium") => Self::Medium,
+            Some("low") => Self::Low,
+            _ => Self::High,
+        }
+    }
+}
+
 /// How a heading's role is said: JAWS's `[HTML] HeadingIndication` (2 by default): its text
 /// alone at 0, "heading" at 1, "heading level 1" at 2 [obs, 730, 731; 11].
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
@@ -1147,6 +1247,8 @@ pub struct Settings {
     pub show_graphics: bool,
     /// How a heading's role is said.
     pub heading_indication: HeadingIndication,
+    /// How much of a page's structure the virtual cursor says: JAWS's Web Verbosity Level.
+    pub web_verbosity: WebVerbosity,
     /// A page is read from its top once it loads, after its title and summary: JAWS's
     /// "Document and Web Pages Automatically Read When Loaded" (Settings Center, Web/HTML/PDFs,
     /// Reading; `[HTML] SayAllOnDocumentLoad`), on in JAWS 2025. Off, the title and the
@@ -1226,6 +1328,7 @@ impl Default for Settings {
             identify_same_page_links: true,
             show_graphics: true,
             heading_indication: HeadingIndication::Level,
+            web_verbosity: WebVerbosity::default(),
             read_page_on_load: true,
             indentation: false,
             screen_echo: ScreenEcho::default(),
@@ -1373,6 +1476,8 @@ impl Settings {
             identify_same_page_links: true,
             show_graphics: true,
             heading_indication: HeadingIndication::Level,
+            // Old-pc's Chrome reads at High (its Chrome.JCF), as the web corpus was recorded.
+            web_verbosity: WebVerbosity::High,
             read_page_on_load: true,
             indentation: false,
             screen_echo: ScreenEcho::default(),

@@ -827,27 +827,45 @@ fn jaws_file_settings(
 ) -> Result<okur_core::settings::Settings, String> {
     use okur_core::settings::registry::{import_jaws, JawsFile};
     let file = read_jcf(jcf)?;
-    let overrides = match scenario {
+    let scenario: serde_json::Value = match scenario {
         Some(path) => {
             let text = std::fs::read_to_string(path).map_err(|e| format!("{path}: {e}"))?;
-            let scenario: serde_json::Value =
-                serde_json::from_str(text.trim_start_matches('\u{feff}'))
-                    .map_err(|e| format!("{path}: {e}"))?;
-            scenario
-                .pointer("/jaws_settings/DEFAULT.JCF")
-                .cloned()
-                .unwrap_or_default()
+            serde_json::from_str(text.trim_start_matches('\u{feff}'))
+                .map_err(|e| format!("{path}: {e}"))?
         }
         None => serde_json::Value::Null,
     };
+    let overrides = scenario
+        .pointer("/jaws_settings/DEFAULT.JCF")
+        .cloned()
+        .unwrap_or_default();
+    // The scenario's application's own file beside it (Chrome.JCF for a page), with the
+    // scenario's keys for it: JAWS takes its keys over DEFAULT.JCF's (Web Verbosity Level).
+    let application = scenario
+        .get("target_app")
+        .and_then(|a| a.as_str())
+        .filter(|app| *app == "chrome")
+        .map(|_| "Chrome.JCF");
+    let app_file = application
+        .and_then(|name| std::path::Path::new(jcf).parent().map(|dir| dir.join(name)))
+        .and_then(|path| read_jcf(&path.to_string_lossy()).ok())
+        .unwrap_or_default();
+    let app_overrides = application
+        .and_then(|name| scenario.get("jaws_settings").and_then(|s| s.get(name)))
+        .cloned()
+        .unwrap_or_default();
     let base = okur_core::settings::Settings::reference_machine();
-    Ok(import_jaws(&base, &|kind, section, key| match kind {
-        JawsFile::DefaultJcf => overrides
+    Ok(import_jaws(&base, &|kind, section, key| {
+        let (overrides, file) = match kind {
+            JawsFile::DefaultJcf => (&overrides, &file),
+            JawsFile::Application => (&app_overrides, &app_file),
+        };
+        overrides
             .get(section)
             .and_then(|s| s.get(key))
             .and_then(|v| v.as_str())
             .map(str::to_owned)
-            .or_else(|| file.get(&(section.to_owned(), key.to_owned())).cloned()),
+            .or_else(|| file.get(&(section.to_owned(), key.to_owned())).cloned())
     }))
 }
 

@@ -14,6 +14,7 @@ use super::{
     DateProcessing, FormsMode, HeadingIndication, KeyboardLayout, KeyboardSettings, LessSpeech,
     MouseEchoUnit, NumberProcessing, OkurKey, OutputType, Punctuation, SayAllUnit, ScreenEcho,
     Settings, SmartNavigation, SpeechMode, Synthesizer, TypingEcho, Verbosity, VerbosityLevel,
+    WebVerbosity,
 };
 use crate::messages::{msg, StaticMessage};
 use crate::settings_layers::Scope;
@@ -144,6 +145,9 @@ impl Scopes {
 pub enum JawsFile {
     /// The user's `DEFAULT.JCF`: the settings for all applications.
     DefaultJcf,
+    /// The application's own settings file (`Chrome.JCF`), whose keys JAWS takes over
+    /// `DEFAULT.JCF`'s.
+    Application,
 }
 
 /// A key's value in JAWS's settings files, by file, section and key; `None` when the file does
@@ -549,6 +553,18 @@ pub static SETTINGS: &[SettingSpec] = &[
             Kind::Choice(choices::<HeadingIndication>),
         )
     },
+    // Web Verbosity Level (Web / HTML / PDFs, Reading, its first item): the application's
+    // `[VirtualCursorVerbosity] VirtualCursorVerbosityLevel`, else `DEFAULT.JCF`'s.
+    SettingSpec {
+        jaws: Jaws::Import(import_web_verbosity),
+        tree_label: Some(msg::settings_tree_web_verbosity),
+        ..spec(
+            "web_verbosity",
+            Group::Reading,
+            None,
+            Kind::Choice(choices::<WebVerbosity>),
+        )
+    },
     SettingSpec {
         jaws: default_jcf("HTML", "SayAllOnDocumentLoad", |v| {
             Value::Bool(v.trim() != "0")
@@ -884,6 +900,17 @@ fn import_output_modes(lookup: JawsLookup<'_>, settings: &mut Settings) {
     }
 }
 
+/// The Web Verbosity Level the application's settings file gives, else `DEFAULT.JCF`'s, else
+/// JAWS's default, Medium.
+fn import_web_verbosity(lookup: JawsLookup<'_>, settings: &mut Settings) {
+    const SECTION: &str = "VirtualCursorVerbosity";
+    const KEY: &str = "VirtualCursorVerbosityLevel";
+    settings.web_verbosity = lookup(JawsFile::Application, SECTION, KEY)
+        .or_else(|| lookup(JawsFile::DefaultJcf, SECTION, KEY))
+        .map(|v| WebVerbosity::from_jcf(&v))
+        .unwrap_or_default();
+}
+
 /// The key labels `DEFAULT.JCF`'s `[KeyLabels]` changes: each key the table lists, its value
 /// "0|Space" where it differs from the default.
 fn import_key_labels(lookup: JawsLookup<'_>, settings: &mut Settings) {
@@ -967,6 +994,17 @@ impl Choices for SmartNavigation {
 /// Settings Center's names for Indicate Headings' values [obs, the walk of Settings Center's
 /// search: "No Headings", "Headings with Level"; doc, its help: "Headings Only"]. JAWS's
 /// last two, Play Sound and Speak Heading with Headings Voice, are not built.
+impl Choices for WebVerbosity {
+    const ALL: &'static [Self] = &[Self::High, Self::Medium, Self::Low];
+    fn label(self) -> StaticMessage {
+        match self {
+            Self::High => msg::settings_web_verbosity_high(),
+            Self::Medium => msg::settings_web_verbosity_medium(),
+            Self::Low => msg::settings_web_verbosity_low(),
+        }
+    }
+}
+
 impl Choices for HeadingIndication {
     const ALL: &'static [Self] = &[Self::Text, Self::Heading, Self::Level];
     fn label(self) -> StaticMessage {
@@ -1397,6 +1435,12 @@ mod tests {
                 (JawsFile::DefaultJcf, "Options", "TypingEcho") => "0",
                 (JawsFile::DefaultJcf, "FormsMode", "AutoFormsMode") => "0",
                 (JawsFile::DefaultJcf, "OutputModes", "ACCESS_KEY") => "0|0|0|Access Key",
+                // Old-pc's Chrome.JCF: High.
+                (
+                    JawsFile::Application,
+                    "VirtualCursorVerbosity",
+                    "VirtualCursorVerbosityLevel",
+                ) => "2",
                 _ => return None,
             };
             Some(found.to_owned())
@@ -1416,6 +1460,8 @@ mod tests {
         let desktop = import_jaws(&base, &|_, _, _| None);
         assert_eq!(desktop.keyboard, KeyboardSettings::default());
         assert_eq!(desktop.forms_mode, FormsMode::Auto);
+        // Without the application's file, JAWS's default level.
+        assert_eq!(desktop.web_verbosity, WebVerbosity::Medium);
     }
 
     /// Indicate Caps During Say All, cleared by default (`SayAllIndicateCaps=0`), is read from
