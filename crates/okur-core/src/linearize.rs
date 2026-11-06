@@ -328,6 +328,9 @@ enum Class {
     Separator,
     /// A form control rendered as a single line; children are not rendered.
     Control,
+    /// An editing host (contenteditable): its name on a line, then its content between
+    /// "Editable Section Start" and "Editable Section End" [obs, 1172/s23-s26].
+    EditableSection,
     Table,
     List,
     ListItem,
@@ -404,6 +407,45 @@ pub const HEADING_INDICATION: &str = "okur_heading_indication";
 /// ([`crate::settings::WebVerbosity::mark`]; JAWS's Web Verbosity Level). Set as
 /// [`PLAIN_SAME_PAGE_LINKS`] is.
 pub const WEB_VERBOSITY: &str = "okur_web_verbosity";
+
+/// Whether `child` is a fieldset's legend, its `legend` text, which is not read again: the
+/// element that names an ARIA group is read where it is, a heading as a heading, a line of text
+/// as its line ("group start Rating | Rating") [obs, round-aria4, 2079/s2, 2088/s1;
+/// round-aria17, 2443/s2, 2462/s1], and a control named as the legend is read: ARIA-AT's form's
+/// "Add Contact" submit button in its "Add Contact" fieldset [obs, round-aria36, 3084/s1].
+fn is_legend(child: &AomNode, legend: Option<&str>) -> bool {
+    !matches!(
+        child.role,
+        Role::Heading { .. }
+            | Role::Button
+            | Role::MenuButton
+            | Role::Edit
+            | Role::CheckBox
+            | Role::RadioButton
+            | Role::ComboBox
+            | Role::Slider
+            | Role::Link { .. }
+    ) && legend.is_some_and(|l| text_content(child) == l)
+}
+
+/// The controls inside `node`: a toolbar's, "Formatting toolbar with 2 controls" [obs, 1172/s19].
+fn controls_in(node: &AomNode) -> usize {
+    node.children
+        .iter()
+        .map(|child| {
+            if child.role.is_interactive_control()
+                || matches!(
+                    child.role,
+                    Role::Edit | Role::CheckBox | Role::RadioButton | Role::ComboBox | Role::Slider
+                )
+            {
+                1
+            } else {
+                controls_in(child)
+            }
+        })
+        .sum()
+}
 
 /// The heading indication `page` is marked with.
 pub fn heading_indication_of(page: &AomNode) -> crate::settings::HeadingIndication {
@@ -632,6 +674,13 @@ impl<'a> Builder<'a> {
             Role::Link { .. } => Class::Link,
             Role::Image => Class::Graphic,
             Role::Separator => Class::Separator,
+            Role::Edit if attr(node, "editing_host") == Some("true") => {
+                if self.announces(WebStructure::EditableSection) {
+                    Class::EditableSection
+                } else {
+                    Class::Block
+                }
+            }
             Role::Edit
             | Role::CheckBox
             | Role::RadioButton
@@ -700,10 +749,43 @@ impl<'a> Builder<'a> {
                 start: msg::block_quote().to_string(),
                 end: msg::block_quote_end().to_string(),
             },
-            Role::Group if aria == "article" => Class::Container {
-                start: msg::article().to_string(),
-                end: msg::article_end().to_string(),
+            // A named article says its name with both ends [obs, 1172/s6, s8].
+            Role::Group if aria == "article" => match node.name.as_deref().map(squash) {
+                Some(name) if !name.is_empty() => Class::Container {
+                    start: msg::article_named(name.as_str()).render(),
+                    end: msg::article_named_end(name).render(),
+                },
+                _ => Class::Container {
+                    start: msg::article().to_string(),
+                    end: msg::article_end().to_string(),
+                },
             },
+            Role::Group if aria == "feed" && !self.announces(WebStructure::Feed) => Class::Block,
+            Role::Group if aria == "feed" => {
+                let name = node.name.as_deref().map(squash).unwrap_or_default();
+                Class::Container {
+                    start: msg::feed_start(name.as_str()).render().trim().to_owned(),
+                    end: msg::feed_end(name).render().trim().to_owned(),
+                }
+            }
+            Role::Group if aria == "note" && !self.announces(WebStructure::Note) => Class::Block,
+            Role::Group if aria == "note" => Class::Container {
+                start: msg::note_start().to_string(),
+                end: msg::note_end().to_string(),
+            },
+            Role::Group if aria == "toolbar" && !self.announces(WebStructure::Toolbar) => {
+                Class::Block
+            }
+            Role::Group if aria == "toolbar" => {
+                let name = node.name.as_deref().map(squash).unwrap_or_default();
+                Class::Container {
+                    start: msg::toolbar_start(name.as_str(), controls_in(node))
+                        .render()
+                        .trim()
+                        .to_owned(),
+                    end: msg::toolbar_end().to_string(),
+                }
+            }
             // A named group is a fieldset/radio group: its name is the legend (§3).
             Role::Group
                 if aria == "group"
@@ -821,7 +903,20 @@ impl<'a> Builder<'a> {
                     self.tablists
                         .push(node.name.as_deref().map(squash).unwrap_or_default());
                 }
-                self.visit_children(node);
+                // A fieldset whose start and end the level leaves out reads without its legend
+                // too: "Express check box not checked" at Low [obs, 1174/s15].
+                let legend = (node.role == Role::Group
+                    && attr(node, "aria_role") == Some("group")
+                    && attr(node, "radiogroup").is_none()
+                    && attr(node, "aria_group").is_none())
+                .then(|| node.name.as_deref().map(squash))
+                .flatten();
+                for child in &node.children {
+                    if legend.is_some() && is_legend(child, legend.as_deref()) {
+                        continue;
+                    }
+                    self.visit(child, Some(node));
+                }
                 if is_tablist {
                     self.tablists.pop();
                 }
@@ -851,6 +946,22 @@ impl<'a> Builder<'a> {
                 if self.buffer.lines.len() > start {
                     self.emit_boundary(node.id, node.role.clone(), msg::menu_bar_end().as_str());
                 }
+            }
+            Class::EditableSection => {
+                self.flush();
+                let name = node.name.as_deref().map(squash).unwrap_or_default();
+                let first = if name.is_empty() {
+                    None
+                } else {
+                    Some(self.emit_boundary(node.id, node.role.clone(), &name))
+                };
+                let start = msg::editable_section_start().to_string();
+                let start_offset = self.emit_boundary(node.id, node.role.clone(), &start);
+                self.visit_children(node);
+                self.flush();
+                let end = msg::editable_section_end().to_string();
+                self.emit_boundary(node.id, node.role.clone(), &end);
+                self.record_container(node, first.unwrap_or(start_offset));
             }
             Class::Container { start, end } => {
                 self.flush();
@@ -892,27 +1003,7 @@ impl<'a> Builder<'a> {
                     && attr(node, "radiogroup").is_none()
                     && attr(node, "aria_group").is_none();
                 for child in &node.children {
-                    // The legend repeats the fieldset name and is not read again; the element
-                    // that names an ARIA group is read where it is: a heading as a heading, a
-                    // line of text as its line ("group start Rating | Rating") [obs,
-                    // round-aria4, 2079/s2, 2088/s1; round-aria17, 2443/s2, 2462/s1]. A control
-                    // named as the legend is read: ARIA-AT's form's "Add Contact" submit button
-                    // in its "Add Contact" fieldset [obs, round-aria36, 3084/s1].
-                    if fieldset
-                        && !matches!(
-                            child.role,
-                            Role::Heading { .. }
-                                | Role::Button
-                                | Role::MenuButton
-                                | Role::Edit
-                                | Role::CheckBox
-                                | Role::RadioButton
-                                | Role::ComboBox
-                                | Role::Slider
-                                | Role::Link { .. }
-                        )
-                        && legend.as_deref().is_some_and(|l| text_content(child) == l)
-                    {
+                    if fieldset && is_legend(child, legend.as_deref()) {
                         continue;
                     }
                     self.visit(child, Some(node));

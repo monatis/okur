@@ -352,6 +352,14 @@ fn convert(
     match (&role, node.msaa_role) {
         (Role::Group, Some(msaa_role::DOCUMENT)) => set_attr("aria_role", "article".to_owned()),
         // A fieldset: a named grouping. An unnamed one (a form, a section) keeps its xml-roles.
+        // A feed is one too, which JAWS says as a feed ("Updates feed" [obs, 1172/s5]).
+        (Role::Group, Some(msaa_role::GROUPING))
+            if aom.name.is_some()
+                && is_grouping(node)
+                && attr("xml-roles").as_deref() == Some("feed") =>
+        {
+            set_attr("aria_role", "feed".to_owned())
+        }
         (Role::Group, Some(msaa_role::GROUPING)) if aom.name.is_some() && is_grouping(node) => {
             set_attr("aria_role", "group".to_owned())
         }
@@ -368,6 +376,13 @@ fn convert(
                 set_attr("aria_role", r);
             }
         }
+    }
+    // An editing host (contenteditable): JAWS reads it in the
+    // page as a section, "Notes field | Editable Section Start | Editable text | Editable
+    // Section End" [obs, 1172/s23-s26].
+    // A section (a div) made editable: not a text field, nor a spin box or a combo box's edit.
+    if role == Role::Edit && node.ia2_role == Some(xa11y_windows::ia2::roles::IA2_ROLE_SECTION) {
+        set_attr("editing_host", "true".to_owned());
     }
     // An ARIA radio group (`role="radiogroup"`), a group as a fieldset is, which JAWS says
     // its own way as the focus comes into it [obs, round-aria4, 2080/s1].

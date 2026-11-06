@@ -433,6 +433,11 @@ fn convert(node: &UiaNode, next_id: &mut usize) -> okur_core::AomNode {
     if aria_property(node, "multiline") == Some("true") {
         set_attr("multiline", "true".to_owned());
     }
+    // An editing host (contenteditable), which JAWS reads in the page as a section: "Notes field |
+    // Editable Section Start | Editable text | Editable Section End" [obs, 1172/s23-s26].
+    if node.control_type == CT_GROUP && is_editing_host(node) {
+        set_attr("editing_host", "true".to_owned());
+    }
     // aria-describedby text, spoken after the value in focus phrasing.
     if let Some(d) = node
         .full_description

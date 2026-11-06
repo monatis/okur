@@ -23,6 +23,22 @@ block-quote = block quote
 block-quote-end = block quote end
 article = article
 article-end = article end
+# A named article: "First update article", "First update article end" [obs, 1172/s6, s8].
+article-named = { $name } article
+article-named-end = { $name } article end
+# A feed of articles: "Updates feed", "Updates feed end" [obs, 1172/s5, s12].
+feed-start = { $name } feed
+feed-end = { $name } feed end
+# A note (role note): "note", "note end" [obs, 1172/s16, s18].
+note-start = note
+note-end = note end
+# A toolbar: "Formatting toolbar with 2 controls", "toolbar end" [obs, 1172/s19, s22].
+toolbar-start = { $name } toolbar with { $count } controls
+toolbar-end = toolbar end
+# An editing host (contenteditable) read in the page: its name, then its text between these
+# [obs, 1172/s23-s26].
+editable-section-start = Editable Section Start
+editable-section-end = Editable Section End
 # A named group of controls (a fieldset): its legend follows.
 group-start = group start { $name }
 group-end = group end { $name }
