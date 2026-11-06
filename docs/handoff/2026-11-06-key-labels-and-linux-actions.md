@@ -187,6 +187,55 @@ and on the dev box alike. At the owner's request the question went to Microsoft 
 <https://learn.microsoft.com/en-us/answers/questions/6063178>. If nothing moves by the end of
 2026-11-11, the subagent's plan stands: cancel and submit 1.2.0.0.
 
+## Okur's dialogs: Settings Center's opening and the way back
+
+- **Settings Center opens on its search box alone** (`70000015`): JAWS's own says "NotePad - JAWS
+  Settings Center dialog | SearchBox Edit | Type in text." [1169/s1]; Okur's said "SearchBox"
+  twice, its shown label read as the dialog's prompt (a label with no access key, JAWS's rule,
+  688/s9). `ControlKind::SearchBox`: an edit named by a label that is not shown (the hidden
+  static still names it, live). Live on old-pc, `run-scenario.ps1 -Reader okur` of 1169's s1 and
+  s42, `okur-lab live-parity`: s1 "Notepad - Okur Settings Center dialog | SearchBox Edit | Type
+  in text.", differing only in JAWS's "NotePad" (its settings file's name).
+- **The window after Okur's settings**: Escape out of Settings Center said nothing live, where
+  JAWS says "sr-notepad-fixture.txt - Notepad | edit | Type in text." [1169/s42; 1154/s33,
+  1155/s28, 1156/s43]. JAWS's Settings Center and Dictionary Manager are programs of their own
+  (SettingsCenter.exe, JDiction.exe): leaving them is a switch of programs. Its lists and viewers
+  are jfw.exe's and return to the focus alone (1036/s3, 1133/s3), which the gate's ratchet
+  caught when the first fix applied to every dialog (29 Word and Excel steps). Now
+  `returning_from_program` for Settings Center, Quick Settings and the Dictionary Manager:
+  `okur-lab live-parity`: `s42 MATCH` ("Okur live: 1/2 steps match JAWS exactly").
+- `lab-push.ps1` sends `okur-ui.exe` too: old-pc's had been copied by hand.
+- **1169's replay (22/42) is JAWS's Settings Center script**, not a reading rule: its tree
+  ("FeatureTree", reached through MSAA alone: 197 flat items whose value is their level) is read
+  with values from each item's selected child option ("JAWS Key for Laptop Layout Caps Lock") and
+  an "Unavailable Only available when..." text that no accessibility API holds. Not built: Okur's
+  users do not use JAWS's Settings Center, and no other recorded application has such a tree.
+
+## Rounds 1175 and 1178: frames, clickable text, descriptions
+
+- **Recorded** (`0d571ff5`): `web-structures-2.html` (a titled iframe, a clickable division, a
+  button and a paragraph with aria-describedby) at High, Medium and Low. JAWS: High "Weather frame
+  frame | Frame text Weather frame | Weather frame frame end"; Medium "Frame text Weather frame";
+  Low "Frame text". Clickable text plain at every level. The described paragraph at High adds
+  "Use JawsKey+Alt+R to read descriptive text", the accepted divergence for a key that does
+  nothing (`7e639a32`).
+- **Built** (`b75ea863`): an iframe is Okur's frame role in both mappings (IA2's iframe tag,
+  UIA's document holding its page's document), which nothing produced before: the buffer's frames
+  and Insert+F9 had none to find. Its ends at High. The frame's name after its text at High and
+  Medium is a known gap (`a_frames_name_follows_its_text_at_high_and_medium`).
+- `okur-lab parity --write-baseline`: `JAWS parity (Ia2): 12476/13071 steps match exactly; 388
+  accepted divergences not counted` (12388/12981 before the round).
+- **Round 1178 recording** (`web-structures-3.html`, in `corpus/pending/`): a titled frame of two
+  lines, a frame without a title and a division with a title attribute, at the three levels, to
+  tell where the name goes and what Low turns off.
+- A round's page waits in `corpus/pending/` with its scenarios (`2ac0d6c7`,
+  verification-loop.md): in `corpus/fixtures/` it made every commit before the import fail.
+
+## Also
+
+- README: the demo video's badge (`fd540b71`, the owner's YouTube video); "Trying it" built
+  `okur-lab` where it runs `okur` (`06bbd332`, since `a8f1b0a6`).
+
 ## Next
 
 1. ~~**Web Verbosity Level, built**~~ (done above; the plan as written): a setting with High, Medium
@@ -198,7 +247,7 @@ and on the dev box alike. At the owner's request the question went to Microsoft 
    (cursor.rs reads landmarks from spans). Record first: one page with every landmark, an
    article, a figure, a block quote, a list and a table read with Down at Medium and at Low
    (`jaws_settings` Chrome.JCF VirtualCursorVerbosityLevel 1 and 0, to confirm those values).
-2. ~~Round 1172's structures~~ and per site levels (done above). Left of the levels: frames,
-   DescribedBy and clickable elements.
+2. ~~Round 1172's structures~~, per site levels, ~~frames' ends, DescribedBy, clickable
+   elements~~ (done above). Left of the levels: round 1178, the frame's name after its text.
 3. Then the plan's §3.2 in its order: Settings Center's other groups beside JAWS's.
 4. Linux: more of the web corpus in the lab (379/379 now), GTK's controls.
