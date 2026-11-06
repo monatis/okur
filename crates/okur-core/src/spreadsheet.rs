@@ -9,6 +9,17 @@ use serde::{Deserialize, Serialize};
 use crate::input::Key;
 use crate::messages::msg;
 
+/// The cell a region key moves to, by its reference, "C4": the data region's first (top left)
+/// or last (bottom right) cell; `None` without a region read.
+pub(crate) fn region_edge(details: &crate::event::SheetDetails, last: bool) -> Option<String> {
+    let region = details.region.trim();
+    if region.is_empty() {
+        return None;
+    }
+    let (first, end) = region.split_once(':').unwrap_or((region, region));
+    Some(if last { end } else { first }.to_owned())
+}
+
 /// What an information key says of the details read: "visible range is A1 through X30 | 12 of
 /// the 720 visible cells contain data.", "Gridlines are on", "no hyperlink associated with this
 /// cell.", "This cell has no input message.", "No formula in current cell.", "10" [obs,
@@ -148,6 +159,11 @@ pub(crate) enum SheetReading {
     InputMessage,
     Formula,
     FormulaBarWord,
+    /// Alt+Shift+Home and End: the first and the last cell of the active cell's data region
+    /// moved to, then said with "First cell in current data region" or "Last cell in current
+    /// data region" after it [obs, 1184/s14, s15].
+    RegionStart,
+    RegionEnd,
     Row,
     RowFromStart,
     RowToEnd,
@@ -215,7 +231,9 @@ impl SheetReading {
             | Self::Hyperlink
             | Self::InputMessage
             | Self::Formula
-            | Self::FormulaBarWord => SheetCells::Details,
+            | Self::FormulaBarWord
+            | Self::RegionStart
+            | Self::RegionEnd => SheetCells::Details,
         }
     }
 
@@ -232,6 +250,8 @@ impl SheetReading {
             (Key::Alpha('H'), false, true, true) => Self::Hyperlink,
             (Key::Alpha('V'), true, false, true) => Self::InputMessage,
             (Key::Numpad5, true, false, false) => Self::FormulaBarWord,
+            (Key::Home, false, true, true) => Self::RegionStart,
+            (Key::End, false, true, true) => Self::RegionEnd,
             _ => return None,
         })
     }
@@ -289,6 +309,8 @@ impl SheetReading {
             | Self::InputMessage
             | Self::Formula
             | Self::FormulaBarWord => return details_said(self, place.details.as_ref()?),
+            // A move, which the engine makes; the cell it comes to is said.
+            Self::RegionStart | Self::RegionEnd => return None,
             _ => {}
         }
         let (cells, at, row) = match self {
@@ -312,7 +334,9 @@ impl SheetReading {
             | Self::Hyperlink
             | Self::InputMessage
             | Self::Formula
-            | Self::FormulaBarWord => return None,
+            | Self::FormulaBarWord
+            | Self::RegionStart
+            | Self::RegionEnd => return None,
         };
         let read: Vec<&str> = part
             .iter()
@@ -330,6 +354,8 @@ pub(crate) enum SelectionKey {
     Extend,
     Rows,
     Columns,
+    /// Shift+Backspace: the selection collapsed to the active cell [obs, 1184/s13].
+    Collapse,
 }
 
 impl SelectionKey {
@@ -340,6 +366,10 @@ impl SelectionKey {
         match (key, m.shift, m.ctrl) {
             (Key::Space, true, false) => Some(Self::Rows),
             (Key::Space, false, true) => Some(Self::Columns),
+            // The data region selected, said as a range, "select | A 1 | Branch | C 4 | 14"
+            // [obs, 1184/s12].
+            (Key::Space, true, true) => Some(Self::Extend),
+            (Key::Backspace, true, false) => Some(Self::Collapse),
             (
                 Key::LeftArrow
                 | Key::RightArrow
@@ -731,6 +761,16 @@ pub(crate) fn selection_said(
     match key {
         SelectionKey::Rows => lines.push(msg::excel_selected_row().to_string()),
         SelectionKey::Columns => lines.push(msg::excel_selected_column().to_string()),
+        // "Selection collapsed to active cell | 12 | B 2" [obs, 1184/s13].
+        SelectionKey::Collapse => {
+            lines.push(msg::excel_selection_collapsed().to_string());
+            let value = known_text(place, (active.left, active.top), (active.left, active.top));
+            if !value.is_empty() {
+                lines.push(value);
+            }
+            lines.push(cell_coordinates(active.left, active.top));
+            return Some(lines.join("\n"));
+        }
         SelectionKey::Extend => {}
     }
     let whole_sheet =

@@ -245,6 +245,8 @@ excel-select = select
 excel-unselect = unselect
 excel-selected-row = selected entire row
 excel-selected-column = Selected entire column
+# Shift+Backspace in a sheet [obs, 1184/s13].
+excel-selection-collapsed = Selection collapsed to active cell
 # Excel's lists with nothing to list: a column's [obs, 521/s9 in round-521e]; formulas' and
 # worksheets' [hyp: not recorded].
 excel-no-column-cells = No cells with data in current column.
@@ -265,6 +267,9 @@ excel-gridlines-off = Gridlines are off
 excel-no-hyperlink = no hyperlink associated with this cell.
 excel-no-input-message = This cell has no input message.
 excel-no-formula = No formula in current cell.
+# Alt+Shift+Home and End, after the cell moved to [obs, 1184/s14, s15].
+excel-region-first = First cell in current data region
+excel-region-last = Last cell in current data region
 excel-no-notes = No cells with notes or comments.
 # Say Window Title in Web Layout and Read Mode: JAWS's lower case "reading layout" [obs,
 # 1042/s5, s9].

@@ -550,7 +550,13 @@ fn sheet_details(window: &IDispatch, cell: &IDispatch) -> Option<okur_core::Shee
         .and_then(|v| bool::try_from(&v).ok())
         .unwrap_or(false);
     let formula_bar = text(cell, "Formula").trim().to_owned();
+    let region = property(cell, "CurrentRegion")
+        .as_ref()
+        .and_then(object)
+        .and_then(|region| address(&region))
+        .unwrap_or_default();
     Some(okur_core::SheetDetails {
+        region,
         visible_range: address(&visible).unwrap_or_default(),
         visible_cells: u32::try_from(rows.saturating_mul(columns)).unwrap_or(0),
         visible_with_data: with_data.max(0.0) as u32,

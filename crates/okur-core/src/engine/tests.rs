@@ -10041,6 +10041,75 @@ fn excel_notes_said_and_listed() {
     assert_eq!(title.as_deref(), Some("Cells with Notes"));
 }
 
+/// Alt+Shift+End in Excel: the data region asked for, its last cell selected, the old cell's
+/// focus on the way quiet, and the cell moved to said with "Last cell in current data region"
+/// after it [obs, 1184/s14].
+#[test]
+fn excel_region_end_moves_and_says_the_edge() {
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let cell = |name: &str, value: &str| {
+        let mut cell = FocusEvent::new(Role::TableCell)
+            .with_name(name)
+            .with_window_title("sr-excel-fixture.xlsx - Excel");
+        cell.value = Some(value.into());
+        cell.app = Some("EXCEL.EXE".into());
+        cell.platform.window_class = Some("EXCEL7".into());
+        cell
+    };
+    let place = |address: &str, details: Option<crate::event::SheetDetails>| {
+        AccessibilityEvent::SheetPlace(Some(crate::event::SheetPlace {
+            address: address.into(),
+            selection: address.into(),
+            row: vec![String::new()],
+            column: vec![String::new()],
+            details,
+            ..crate::event::SheetPlace::default()
+        }))
+    };
+    engine.handle_focus_event(&cell("A2", "Central"));
+    engine.handle_focus_event(&cell("B2", "12"));
+    let _ = engine.handle_accessibility_event(&place("B2", None));
+    let _ = speech.take();
+    let mut end = KeyEvent::new(Key::End, Modifiers::none(), true);
+    end.modifiers.alt = true;
+    end.modifiers.shift = true;
+    assert_eq!(engine.handle_key_event(&end), KeyAction::Consume);
+    let region = crate::event::SheetDetails {
+        region: "A1:C4".into(),
+        ..crate::event::SheetDetails::default()
+    };
+    assert_eq!(
+        engine.handle_accessibility_event(&place("B2", Some(region))),
+        None
+    );
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(request, _)| request == "Visible C4"));
+    // The old cell's focus on the way, quiet; then the cell moved to.
+    assert_eq!(
+        engine.handle_accessibility_event(&AccessibilityEvent::Focus(cell("B2", "12"))),
+        None
+    );
+    assert_eq!(
+        engine
+            .handle_accessibility_event(&AccessibilityEvent::Focus(cell("C4", "14")))
+            .as_deref(),
+        Some("14\nC 4\nLast cell in current data region")
+    );
+    // Done: the next cell is said as any.
+    assert_eq!(
+        engine
+            .handle_accessibility_event(&AccessibilityEvent::Focus(cell("C3", "6")))
+            .as_deref(),
+        Some("6\nC 3")
+    );
+}
+
 /// JAWS's Excel information keys, each asked of Excel and said as JAWS says it [obs,
 /// 1184/s6-s10, s19, s20].
 #[test]

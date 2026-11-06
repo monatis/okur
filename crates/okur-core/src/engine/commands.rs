@@ -1290,9 +1290,12 @@ impl ScreenReaderEngine {
     /// elsewhere they run as virtual cursor or application commands.
     /// The focus, where it is in one of Excel's sheets (a cell, or the grid of an empty one).
     fn sheet_focus(&self) -> Option<crate::event::FocusEvent> {
-        self.last_native_focus
-            .clone()
-            .filter(crate::apps::windows::excel::in_sheet)
+        self.last_native_focus.clone().filter(Self::is_sheet)
+    }
+
+    /// Whether `focus` is in one of Excel's sheets: a cell, or the grid of an empty one.
+    pub(super) fn is_sheet(focus: &crate::event::FocusEvent) -> bool {
+        crate::apps::windows::excel::in_sheet(focus)
     }
 
     /// The workbooks' titles Okur has kept, and where it keeps them: each workbook reads with

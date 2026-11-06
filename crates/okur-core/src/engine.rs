@@ -406,6 +406,9 @@ pub struct ScreenReaderEngine {
     /// Excel's Insert+Ctrl+Alt+C and R, kept from one session to the next, and those its names
     /// give.
     sheet_titles: std::collections::HashMap<String, crate::spreadsheet::SheetTitles>,
+    /// Alt+Shift+Home or End's move under way: the cell it goes to, by its reference, and the
+    /// words said after it.
+    region_edge: Option<(String, String)>,
     /// The titles set, kept, and where they are kept.
     kept_titles: crate::spreadsheet::WorkbookTitles,
     title_store: Option<Box<dyn crate::spreadsheet::TitleStore>>,
@@ -756,6 +759,7 @@ impl ScreenReaderEngine {
             sheet_asks: std::collections::VecDeque::new(),
             sheet_selection: None,
             sheet_titles: std::collections::HashMap::new(),
+            region_edge: None,
             kept_titles: crate::spreadsheet::WorkbookTitles::default(),
             title_store: None,
             monitor_cells: std::collections::HashMap::new(),
@@ -994,6 +998,23 @@ impl ScreenReaderEngine {
             .map(|app| app.as_ref())
     }
 
+    /// A sheet's focus while Alt+Shift+Home or End's move is under way: the cell moved to said
+    /// with the edge's words after it where it is said at once (a workbook without titles), and
+    /// later with its place where it waits for it ([`Self::sheet_cell_said`]); any other cell on
+    /// the way, the old one's focus again, quiet [obs, 1184/s14, s15].
+    fn region_edge_focus(&mut self, focus: &crate::event::FocusEvent) -> Option<String> {
+        let (target, words) = self.region_edge.clone()?;
+        let said = self.quietly(|engine| engine.handle_focus_event(focus));
+        if focus.name.as_deref().map(str::trim) != Some(target.as_str()) {
+            return None;
+        }
+        let cell = said?;
+        self.region_edge = None;
+        let said = format!("{cell}\n{words}");
+        self.speech.speak(&said, true);
+        Some(said)
+    }
+
     /// Excel's place for a cell asked for: a cell waiting for its titles, said with them; the
     /// selection a selecting key changed; an empty cell where the grid has the focus.
     fn sheet_cell_said(&mut self, place: Option<&crate::event::SheetPlace>) -> Option<String> {
@@ -1006,6 +1027,28 @@ impl ScreenReaderEngine {
             self.sheet_titles
                 .entry(crate::spreadsheet::workbook(&window).to_owned())
                 .or_insert_with(|| crate::spreadsheet::named_titles(place));
+        }
+        // After Alt+Shift+Home or End, only the cell moved to is said, the edge's words after
+        // it; the old cell's focus on the way is quiet [obs, 1184/s14, s15].
+        if let Some((target, words)) = self.region_edge.clone() {
+            let here = place.map(|p| p.address.as_str());
+            if here != Some(target.as_str()) {
+                let _ = self.quietly(|engine| {
+                    engine
+                        .apps
+                        .iter_mut()
+                        .find_map(|app| app.sheet_place(place))
+                });
+                return None;
+            }
+            self.region_edge = None;
+            let said = self
+                .apps
+                .iter_mut()
+                .find_map(|app| app.sheet_place(place))
+                .map(|cell| format!("{cell}\n{words}"))?;
+            self.speech.speak(&said, true);
+            return Some(said);
         }
         // A cell its application waited to say with the place (its titles).
         if let Some(said) = self.apps.iter_mut().find_map(|app| app.sheet_place(place)) {
@@ -1173,8 +1216,10 @@ impl ScreenReaderEngine {
         self.apply_pending_page();
         let page_applied = started.elapsed();
 
-        // A key ends the quiet return from Okur's dialogs: what it does is said.
+        // A key ends the quiet return from Okur's dialogs: what it does is said; and a region
+        // key's move that never came.
         self.quiet_focus_until = None;
+        self.region_edge = None;
         self.dialog_focus_target = None;
         self.page_said_for = None;
         self.focus_at_key = self.last_page_focus;
@@ -1947,6 +1992,13 @@ impl ScreenReaderEngine {
                 self.quietly(|engine| engine.handle_focus_event(focus));
                 None
             }
+            // Alt+Shift+Home or End's move under way: the cell moved to, the edge's words after
+            // it; any other cell on the way quiet [obs, 1184/s14, s15].
+            AccessibilityEvent::Focus(focus)
+                if self.region_edge.is_some() && Self::is_sheet(focus) =>
+            {
+                self.region_edge_focus(focus)
+            }
             AccessibilityEvent::Focus(focus) => {
                 let spoken = self.handle_focus_event(focus);
                 self.forget_other_windows_screen();
@@ -2004,6 +2056,31 @@ impl ScreenReaderEngine {
                     self.sheet_last = Some((read.address.clone(), read.selection.clone()));
                 }
                 match self.sheet_asks.pop_front()? {
+                    // Alt+Shift+Home and End: the region's edge selected; the cell coming there
+                    // is said with the edge's words [obs, 1184/s14, s15].
+                    SheetAsk::Reading(
+                        reading @ (crate::spreadsheet::SheetReading::RegionStart
+                        | crate::spreadsheet::SheetReading::RegionEnd),
+                    ) => {
+                        let last = reading == crate::spreadsheet::SheetReading::RegionEnd;
+                        let target = place
+                            .as_ref()
+                            .and_then(|p| p.details.as_ref())
+                            .and_then(|d| crate::spreadsheet::region_edge(d, last))?;
+                        let words = if last {
+                            msg::excel_region_last()
+                        } else {
+                            msg::excel_region_first()
+                        };
+                        let moved = self.actions.as_ref().is_some_and(|actions| {
+                            actions
+                                .move_to_sheet_entry(crate::event::SheetListKind::Visible, &target)
+                        });
+                        if moved {
+                            self.region_edge = Some((target, words.to_string()));
+                        }
+                        None
+                    }
                     SheetAsk::Reading(reading) => {
                         let said = reading.said(place.as_ref()?)?;
                         self.speech.speak(&said, true);

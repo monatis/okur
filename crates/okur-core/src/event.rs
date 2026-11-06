@@ -269,6 +269,9 @@ pub struct SheetDetails {
     /// What the formula bar shows: the cell's formula, else its value.
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub formula_bar: String,
+    /// The active cell's data region, "A1:C4" (`Range.CurrentRegion`).
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub region: String,
 }
 
 /// One of a sheet's cells, by its column and row from 1, and the text it shows.
