@@ -142,7 +142,11 @@ purpose, the reason is in [accepted divergences](accepted-divergences.md).
   cell or the range selected, Alt+Shift+1 to 0 read it with its titles, and Ctrl+Shift+M lists
   them to move to one. Alt+Shift+Apostrophe reads the cell's note ("No note or comment visible
   for this cell." where it has none), and Ctrl+Shift+Apostrophe lists the window's cells with
-  notes.
+  notes. Alt+Shift+V says the visible range and how many of its cells hold data, Alt+Shift+G the
+  gridlines, Alt+Shift+H the hyperlink, Ctrl+Shift+V the input message, Insert+Ctrl+F2 the
+  formula and Ctrl+NumPad 5 the formula bar's last number or word; Alt+Shift+Home and End move
+  to the data region's first and last cells, Ctrl+Shift+Space selects the region and
+  Shift+Backspace collapses the selection.
   Selecting with Shift and the arrows says the cells added, Shift+Space and Ctrl+Space the
   whole row or column. An empty cell is "blank" with its coordinates; typing in a cell, Delete
   and Ctrl+Z ("Undo") say the cell as it is after them. Shift+F10 opens the cell's menu and

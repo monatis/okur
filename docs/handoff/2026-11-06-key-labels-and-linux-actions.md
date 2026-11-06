@@ -277,6 +277,30 @@ and on the dev box alike. At the owner's request the question went to Microsoft 
 - Round 1182 (Excel's window as the focus returns) is not imported: Escape from the Run dialog
   went to the desktop. The opening's "Please wait | ... | Hours" is an open item.
 
+## Excel's information keys (round 1184)
+
+- **Recorded** (`0c11b30e`, the third recording; the first had Excel's "already open" question
+  take trial 1, the second traced no region): JAWS's Alt+Shift+V, "visible range is A1 through
+  X30 | 12 of the 720 visible cells contain data."; Alt+Shift+G, "Gridlines are on"; Alt+Shift+H,
+  "no hyperlink associated with this cell."; Ctrl+Shift+V, "This cell has no input message.";
+  Insert+Ctrl+F2, "No formula in current cell."; Ctrl+NumPad5, "10"; Ctrl+Shift+Space, "select |
+  A 1 | Branch | C 4 | 14"; Shift+Backspace, "Selection collapsed to active cell | 12 | B 2";
+  Alt+Shift+End, "14 | C 4 | Last cell in current data region". Alt+1, 2, 4 and Ctrl+2 said
+  nothing.
+- **Built** (`b0509c44`, `6305fbc4`): one read of Excel's object model, `SheetCells::Details`
+  (the visible range and `CountA` over it, `DisplayGridlines`, the first hyperlink, the
+  validation's input message, the formula, `CurrentRegion`), traced by okur-lab in each step's
+  complete place. Alt+Shift+Home and End ask for the region, select its edge, keep the old cell's
+  focus on the way quiet and say the cell moved to with the edge's words. The keys sit before the
+  reading keys (Ctrl+NumPad5 is Say Paragraph elsewhere). `okur-lab parity`: `JAWS parity (Ia2):
+  12575/13173 steps match exactly` (1184: 20/22).
+- Left: Ctrl+Insert+V's "Microsoft Excel Retail Version" (Okur says the file's product, "Microsoft
+  Office 2016 Version"), Alt+Shift+B's border ("Black Thin Grid Line surrounding Border of active
+  cell.", wants a fixture with borders), a hyperlink's, an input message's and a formula's own
+  text (not recorded).
+- Old-pc's Excel: kept running by `sr-excel-comments.xlsx` (a fresh Excel shows Office's
+  Activation Wizard; the fixture's own workbook as the keeper made Excel ask to reopen it).
+
 ## Also
 
 - README: the demo video's badge (`fd540b71`, the owner's YouTube video); "Trying it" built
