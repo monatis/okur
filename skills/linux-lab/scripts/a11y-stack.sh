@@ -19,7 +19,13 @@ if [ "${1:-}" = "--inner" ]; then
                 string:org.a11y.Status "string:$switch" variant:boolean:true
     done
     /usr/libexec/at-spi2-registryd &
-    fluxbox >/dev/null 2>&1 &
+    # The window manager without key bindings: fluxbox's own (Ctrl+Alt+arrows for workspaces)
+    # grab on the root and come before Okur's, so table cell keys never reached it (109, the
+    # Linux live runs, 2026-11-06). A desktop's own bindings are a question for the port.
+    fluxbox_dir=$(mktemp -d)
+    : > "$fluxbox_dir/keys"
+    printf 'session.keyFile: %s/keys\n' "$fluxbox_dir" > "$fluxbox_dir/init"
+    fluxbox -rc "$fluxbox_dir/init" >/dev/null 2>&1 &
     sleep 1
     export ACCESSIBILITY_ENABLED=1 GTK_A11Y=atspi NO_AT_BRIDGE=0
     "$@"

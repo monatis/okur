@@ -1112,6 +1112,41 @@ function Set-ShellItemFocus([IntPtr]$handle) {
     return $false
 }
 
+function Close-OfficeActivationWizard([int]$seconds) {
+    # Office on old-pc is not activated: since 2026-11-06 its Activation Wizard opens over the
+    # workbook as a new Excel or Word process starts, some seconds after its window, and takes
+    # every key of the trial (Okur's live 1135 read the wizard's links); the Excel already
+    # running had kept it away (round 521e) until a stuck workbook had to be closed. It is not
+    # the scenario's: closed as it comes. UI Automation finds it among Excel's or Word's main
+    # windows' children (a NUIDialog, not a top-level window FindWindow finds by that title);
+    # WM_CLOSE closes it.
+    Add-Type -AssemblyName UIAutomationClient
+    $named = New-Object System.Windows.Automation.PropertyCondition(
+        [System.Windows.Automation.AutomationElement]::NameProperty, 'Microsoft Office Activation Wizard')
+    $root = [System.Windows.Automation.AutomationElement]::RootElement
+    $all = [System.Windows.Automation.Condition]::TrueCondition
+    $children = [System.Windows.Automation.TreeScope]::Children
+    for ($i = 0; $i -lt $seconds * 10; $i++) {
+        $wizard = $null
+        try {
+            foreach ($window in $root.FindAll($children, $all)) {
+                if ($window.Current.ClassName -notin @('XLMAIN', 'OpusApp')) { continue }
+                $wizard = $window.FindFirst($children, $named)
+                if ($wizard) { break }
+            }
+        } catch { $wizard = $null }
+        if ($wizard -and $wizard.Current.NativeWindowHandle -ne 0) {
+            $handle = [IntPtr]$wizard.Current.NativeWindowHandle
+            [void][SrKeyInput]::PostMessage($handle, 0x0010, [IntPtr]::Zero, [IntPtr]::Zero)
+            Start-Sleep -Milliseconds 500
+            Write-Warning "Office's Activation Wizard was closed"
+            return $true
+        }
+        Start-Sleep -Milliseconds 100
+    }
+    return $false
+}
+
 function Start-DesktopFixture {
     $old = Find-WindowByTitle $launch.window_title
     if ($old -or $script:fixtureProcess) { Stop-DesktopFixture; Start-Sleep -Milliseconds 500 }
@@ -1125,10 +1160,12 @@ function Start-DesktopFixture {
     # kept to the application's windows, walked past a WPF window's last element into the
     # PowerShell console that runs it, the same process (1018, 1019).
     $style = if ($launch.hide_console) { 'Hidden' } else { 'Normal' }
+    $officeRunning = [bool](Get-Process EXCEL, WINWORD -ErrorAction SilentlyContinue)
     $script:fixtureProcess = Start-Process powershell -WindowStyle $style -PassThru -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $fixturePath)
     for ($i = 0; $i -lt 100; $i++) {
         $p = Find-WindowByTitle $launch.window_title
         if ($p) {
+            if ($launch.window_title -match ' - (Excel|Word)\b') { [void](Close-OfficeActivationWizard $(if ($officeRunning) { 2 } else { 15 })) }
             # Windows can refuse to bring a window forward: then a browser window or JAWS's viewer
             # left by an earlier scenario keeps the keys, and the trial reads it (504 and 505 on
             # old-pc, 2026-10-19). The fixture is asked until it is in front, minimized and
