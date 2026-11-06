@@ -1411,8 +1411,8 @@ High and Medium), and what each level announces the start and end of by default:
 | Toolbar | yes | yes | no |
 
 Over Chrome, Settings Center says "Web Verbosity Level High": old-pc's `Chrome.JCF` holds
-`[VirtualCursorVerbosity] VirtualCursorVerbosityLevel=2`, so 2 is High (inferred: 1 Medium, 0
-Low, to confirm by recording). **The web corpus was recorded at High**, not at JAWS's default:
+`[VirtualCursorVerbosity] VirtualCursorVerbosityLevel=2`, so 2 is High; 1 is Medium and 0 is Low (1170,
+1171: the article read at each). **The web corpus was recorded at High**, not at JAWS's default:
 Okur's region and structure announcements were fitted to High's set. Built as JAWS has it, Okur's
 default is Medium, and replay takes High from each recording's `Chrome.JCF` (its provenance
 holds it), so parity keeps measuring what was recorded while a user hears Medium's fewer

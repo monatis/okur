@@ -292,7 +292,7 @@ with no way to change it), **Missing** (neither). §4.13 and §4.14 list setting
 
 | # | JAWS | Values, default | Scope | Source | Okur | Okur today |
 |---|---|---|---|---|---|---|
-| 90 | Web Verbosity Level | High, **Medium**, Low | all, per browser, per site | [SU7] | Missing | Structure is announced one way; old-pc's `Chrome.JCF` `VirtualCursorVerbosityLevel=2` is recorded, not replayed |
+| 90 | Web Verbosity Level | High, **Medium**, Low | all, per browser, per site | [SU7] | Built (2026-11-06, `09a31f8a`) | Per application from its JCF (2 High, 1 Medium, 0 Low: 1170, 1171); old-pc's Chrome reads at High, which replay keeps; per site and Configure Web Verbosity Levels' own choices not yet |
 | 91 | Configure Web Verbosity Levels: per level, which structures are announced (each region type, frames, lists, tables, block quotes, articles, groups; descriptions since 2025) | Medium: navigation and main regions only; frames at High only; tables at every level | all, per browser | [SU7], [F1], [F8] | Missing | Always said: every region type, lists with nesting, block quotes, articles, groups, frames (`crates/okur-core/locales/en-US/page.ftl`, `speech.ftl`) |
 | 92 | Text Links Show Using | **Screen Text**, Title, Alt attribute, Longest, Custom Search | all, per application, per site | [SU12] | Partial | Screen text, or the aria-label (`linearize.rs:753-821`); no setting |
 | 92a | Filter Consecutive Duplicate Links (a graphic link and a text link to one address) | on when added (JAWS 11); reported off for Chrome and Firefox today | all, per application | [DS-web], [WebAIM-dup] | Missing | Both links are lines |

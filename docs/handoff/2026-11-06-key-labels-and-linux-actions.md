@@ -113,9 +113,27 @@ JAWS's features from Settings Center and the help) and
   VirtualCursorVerbosityLevel=2`): the web corpus was recorded at High, where JAWS's default is
   Medium; Okur announces High's set today, for everyone.
 
+## Web Verbosity Level, built
+
+- **Recorded** (`e959ca0f`): 1170 and 1171, 101's article read with Down at Chrome.JCF levels 1
+  and 0: 1 is Medium (no banner, complementary or content information), 0 is Low (only the table;
+  list items keep their bullets, without "list of" and "list end").
+- **Built** (`09a31f8a`): `web_verbosity` (High, Medium, Low), Medium by default as JAWS's, per
+  application from its JCF; a reading mark on the page; landmarks, block quotes, articles, group
+  boxes and lists the level leaves out are blocks without start and end lines. Replay merges the
+  recording's Chrome.JCF over DEFAULT.JCF, and the reference machine is High. **Users now hear
+  Medium on the web** (JAWS's default): no banner, complementary, content information, form,
+  region or search starts and ends, which Okur said before, fitted to old-pc's High.
+- `okur-lab parity --write-baseline`: `JAWS parity (Ia2): 12238/12831 steps match exactly; 388
+  accepted divergences not counted` (12090/12683 before, unchanged by the code; 1170 and 1171's
+  148 steps all match).
+- Not yet: Configure Web Verbosity Levels' own choices per level (a dialog of 24 check items),
+  per site levels, and the structures Okur's buffer does not mark yet (figure, feed, log, note,
+  toolbar, frame, editable section, DescribedBy).
+
 ## Next
 
-1. **Web Verbosity Level, built** (the customization map's rank 4): a setting with High, Medium
+1. ~~**Web Verbosity Level, built**~~ (done above; the plan as written): a setting with High, Medium
    (the default) and Low, per application, read from the application's JCF; replay merges the
    recording's application JCF (Chrome.JCF, in its provenance) over DEFAULT.JCF as JAWS does, and
    the reference machine is High, so parity keeps measuring what was recorded. The level reaches
