@@ -1330,49 +1330,87 @@ impl ScreenReaderEngine {
         true
     }
 
-    /// Excel's monitor cell `digit` (1 to 9, 0 the tenth) set to the active cell, in a sheet;
-    /// false elsewhere, the key left to the rest.
+    /// The worksheet's monitor cells, by their place among its ten, where the focus is in a sheet.
+    fn monitor_slots(&mut self) -> Option<&mut [Option<crate::actions::CellRange>; 10]> {
+        let focus = self.sheet_focus()?;
+        let sheet = crate::spreadsheet::monitor_sheet(&focus, &self.sheet_name)?;
+        Some(self.monitor_cells.entry(sheet).or_default())
+    }
+
+    /// Excel's monitor cell `digit` (1 to 9, 0 the tenth) set to the selection Excel last named,
+    /// a range or the active cell, an empty one too: "Setting monitor cell 2 to B2:B3",
+    /// "Setting monitor cell 3 to D1"; a range already a monitor cell is not set again, "The
+    /// current cell is already defined as a monitor cell." [obs, 1135/s3, 1166/s5-s8, s14]. False
+    /// outside a sheet, the key left to the rest.
     fn set_monitor_cell(&mut self, digit: u8) -> bool {
         let Some(focus) = self.sheet_focus() else {
             return false;
         };
-        let Some(sheet) = crate::spreadsheet::monitor_sheet(&focus, &self.sheet_name) else {
-            return false;
-        };
-        // From a cell; the grid's focus, an empty cell, sets nothing yet [hyp: not recorded].
-        let Some((column, row)) = crate::apps::windows::excel::cell_at(&focus) else {
+        // The selection as Excel last read it, where it holds the focused cell; else the cell.
+        let at = crate::apps::windows::excel::cell_at(&focus);
+        let read = self.sheet_last.as_ref().and_then(|(address, selection)| {
+            let range = crate::spreadsheet::range_of(selection)
+                .or_else(|| crate::spreadsheet::range_of(address))?;
+            let holds = at.is_none_or(|(column, row)| {
+                (range.left..=range.right).contains(&column)
+                    && (range.top..=range.bottom).contains(&row)
+            });
+            holds.then_some(range)
+        });
+        let Some(range) = read.or_else(|| at.map(|(c, r)| crate::actions::CellRange::cell(c, r)))
+        else {
             return true;
         };
-        let cells = self.monitor_cells.entry(sheet).or_default();
-        if let Some(slot) = cells.get_mut(crate::spreadsheet::monitor_index(digit)) {
-            *slot = Some((column, row));
-        }
-        let said = msg::excel_monitor_cell_set(
-            crate::spreadsheet::monitor_number(digit).to_string(),
-            crate::spreadsheet::reference(column, row),
-        )
-        .render();
+        let Some(slots) = self.monitor_slots() else {
+            return false;
+        };
+        let said = if slots.contains(&Some(range)) {
+            msg::excel_monitor_cell_defined().to_string()
+        } else {
+            if let Some(slot) = slots.get_mut(crate::spreadsheet::monitor_index(digit)) {
+                *slot = Some(range);
+            }
+            msg::excel_monitor_cell_set(
+                crate::spreadsheet::monitor_number(digit).to_string(),
+                crate::spreadsheet::range_reference(&range),
+            )
+            .render()
+        };
         self.speech.speak(&said, true);
         true
     }
 
-    /// Excel's monitor cell `digit` read, asked of Excel: its text, then its reference [obs,
-    /// 1135/s5]. False outside a sheet and where the cell is not set [hyp: what JAWS says then
-    /// is not recorded], the key left to the rest.
+    /// Excel's monitor cell `digit` read, asked of Excel with the column and row titles set:
+    /// "Weekdays | 12 | B2" [obs, 1135/s5, 1166/s19]; one not set, "monitor cell 2 undefined"
+    /// [obs, 1166/s1]. False outside a sheet, the key left to the rest.
     pub(super) fn read_monitor_cell(&mut self, digit: u8) -> bool {
         use crate::spreadsheet::{SheetAsk, SheetReading};
-        let Some(focus) = self.sheet_focus() else {
+        let titles = self
+            .sheet_focus()
+            .and_then(|f| f.window_title)
+            .and_then(|window| self.sheet_titles.get(&window).cloned())
+            .unwrap_or_default();
+        let Some(slots) = self.monitor_slots() else {
             return false;
         };
-        let cell = crate::spreadsheet::monitor_sheet(&focus, &self.sheet_name)
-            .and_then(|sheet| self.monitor_cells.get(&sheet))
-            .and_then(|cells| cells.get(crate::spreadsheet::monitor_index(digit)))
+        let Some(range) = slots
+            .get(crate::spreadsheet::monitor_index(digit))
             .copied()
-            .flatten();
-        let Some((column, row)) = cell else {
-            return false;
+            .flatten()
+        else {
+            let said = msg::excel_monitor_cell_undefined(
+                crate::spreadsheet::monitor_number(digit).to_string(),
+            )
+            .render();
+            self.speech.speak(&said, true);
+            return true;
         };
-        let reading = SheetReading::Monitor { column, row };
+        let range = crate::actions::CellRange {
+            title_row: titles.row,
+            title_column: titles.column,
+            ..range
+        };
+        let reading = SheetReading::Monitor(range);
         if self.ask_sheet(reading.cells(), SheetAsk::Reading(reading)) {
             self.key_since_focus = false;
         }
@@ -1380,26 +1418,29 @@ impl ScreenReaderEngine {
     }
 
     /// Excel's Move to Monitor Cell (Ctrl+Shift+M): each of the worksheet's monitor cells asked
-    /// of Excel, the list opening with the last one's text, "B2: 12 | 1 of 1" [obs, 1135/s6].
-    /// False outside a sheet and with none set [hyp: what JAWS says then is not recorded].
+    /// of Excel, the list opening with the last one's text, "B2: 12 | 1 of 1" [obs, 1135/s6];
+    /// with none set, "No monitor cells defined for Hours" [obs, 1166/s2]. False outside a
+    /// sheet, the key left to the rest.
     pub(super) fn open_monitor_list(&mut self) -> bool {
         use crate::spreadsheet::SheetAsk;
-        let Some(focus) = self.sheet_focus() else {
+        let Some(slots) = self.monitor_slots() else {
             return false;
         };
-        let cells: Vec<(u32, u32)> = crate::spreadsheet::monitor_sheet(&focus, &self.sheet_name)
-            .and_then(|sheet| self.monitor_cells.get(&sheet))
-            .map(|cells| cells.iter().flatten().copied().collect())
-            .unwrap_or_default();
-        if cells.is_empty() {
-            return false;
+        let ranges: Vec<crate::actions::CellRange> = slots.iter().flatten().copied().collect();
+        if ranges.is_empty() {
+            // The worksheet as Excel names it, read now.
+            let around = crate::actions::SheetCells::Around(Some((None, None)));
+            if self.ask_sheet(around, SheetAsk::NoMonitorCells) {
+                self.key_since_focus = false;
+            }
+            return true;
         }
         self.monitor_entries.clear();
-        let count = cells.len();
-        for (index, (column, row)) in cells.into_iter().enumerate() {
+        let count = ranges.len();
+        for (index, range) in ranges.into_iter().enumerate() {
             let last = index + 1 == count;
-            let ask = SheetAsk::MonitorEntry { column, row, last };
-            if !self.ask_sheet(crate::actions::SheetCells::Cell { column, row }, ask) {
+            let ask = SheetAsk::MonitorEntry { range, last };
+            if !self.ask_sheet(crate::actions::SheetCells::Range(range), ask) {
                 return false;
             }
         }
@@ -1407,19 +1448,31 @@ impl ScreenReaderEngine {
         true
     }
 
-    /// A monitor cell's text come for the Move to Monitor Cell list, "B2: 12"; with the last,
+    /// The worksheet named for Move to Monitor Cell with none set.
+    pub(super) fn no_monitor_cells(
+        &mut self,
+        place: Option<&crate::event::SheetPlace>,
+    ) -> Option<String> {
+        let sheet = place
+            .map(|p| p.sheet.clone())
+            .filter(|s| !s.is_empty())
+            .unwrap_or_else(|| self.sheet_name.clone());
+        let said = msg::excel_no_monitor_cells(sheet).render();
+        self.speech.speak(&said, true);
+        Some(said)
+    }
+
+    /// A monitor cell's texts come for the Move to Monitor Cell list, "B2: 12"; with the last,
     /// the list opens.
     pub(super) fn monitor_entry(
         &mut self,
         place: Option<&crate::event::SheetPlace>,
-        column: u32,
-        row: u32,
+        range: crate::actions::CellRange,
         last: bool,
     ) -> Option<String> {
-        let reference = crate::spreadsheet::reference(column, row);
+        let reference = crate::spreadsheet::range_reference(&range);
         let text = place
-            .and_then(|p| p.cells.iter().find(|c| (c.column, c.row) == (column, row)))
-            .map(|c| c.text.trim().to_owned())
+            .map(|p| crate::spreadsheet::range_texts(p, &range))
             .unwrap_or_default();
         self.monitor_entries.push(crate::event::SheetEntry {
             label: format!("{reference}: {text}"),

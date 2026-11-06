@@ -86,12 +86,10 @@ pub(crate) enum SheetReading {
     /// formula's value, "column total=14" [obs, 1132/s11, s12].
     ColumnTotal,
     RowTotal,
-    /// A monitor cell read (Alt+Shift+1 to 0): its text, then its reference, "12 | B2" [obs,
-    /// 1135/s5].
-    Monitor {
-        column: u32,
-        row: u32,
-    },
+    /// A monitor cell read (Alt+Shift+1 to 0): its column title where the titles are set, its
+    /// cells' texts, then its reference, "12 | B2" [obs, 1135/s5], "Weekdays | 12 | B2", "12 |
+    /// 10 | B2:B3", an empty one's reference alone, "D1" [obs, 1166].
+    Monitor(crate::actions::CellRange),
 }
 
 /// What one of Excel's places was asked for: a cell to say (its grid focused without a cell, a
@@ -105,10 +103,12 @@ pub(crate) enum SheetAsk {
     Reading(SheetReading),
     /// A monitor cell's text for the Move to Monitor Cell list; the list opens with the last.
     MonitorEntry {
-        column: u32,
-        row: u32,
+        range: crate::actions::CellRange,
         last: bool,
     },
+    /// The worksheet's name, for Move to Monitor Cell with none set: "No monitor cells defined
+    /// for Hours" [obs, 1166/s2].
+    NoMonitorCells,
 }
 
 impl SheetReading {
@@ -128,7 +128,7 @@ impl SheetReading {
             Self::RowTitle(column) => SheetCells::Around(Some((None, Some(column)))),
             Self::Format => SheetCells::Format,
             Self::ColumnTotal | Self::RowTotal => SheetCells::Sums,
-            Self::Monitor { column, row } => SheetCells::Cell { column, row },
+            Self::Monitor(range) => SheetCells::Range(range),
         }
     }
 
@@ -178,20 +178,7 @@ impl SheetReading {
                     None => msg::excel_no_row_total().to_string(),
                 });
             }
-            Self::Monitor { column, row } => {
-                let text = place
-                    .cells
-                    .iter()
-                    .find(|c| (c.column, c.row) == (column, row))
-                    .map(|c| c.text.trim())
-                    .filter(|t| !t.is_empty())
-                    .map_or_else(|| msg::blank().to_string(), str::to_owned);
-                return Some(format!(
-                    "{text}
-{}",
-                    reference(column, row)
-                ));
-            }
+            Self::Monitor(range) => return Some(monitor_said(place, range)),
             _ => {}
         }
         let (cells, at, row) = match self {
@@ -209,7 +196,7 @@ impl SheetReading {
             | Self::Format
             | Self::ColumnTotal
             | Self::RowTotal
-            | Self::Monitor { .. } => return None,
+            | Self::Monitor(_) => return None,
         };
         let read: Vec<&str> = part
             .iter()
@@ -333,6 +320,73 @@ pub(crate) fn monitor_number(digit: u8) -> u8 {
     } else {
         digit
     }
+}
+
+/// What a monitor cell read says of `place`: the titles' texts, the cells' texts, one a line,
+/// and the range's reference [obs, 1166/s10, s16, s19].
+pub(crate) fn monitor_said(
+    place: &crate::event::SheetPlace,
+    range: crate::actions::CellRange,
+) -> String {
+    let mut lines: Vec<String> = range
+        .titles()
+        .into_iter()
+        .filter_map(|cell| cell_text(place, cell))
+        .collect();
+    lines.extend(
+        range
+            .cells()
+            .into_iter()
+            .filter_map(|cell| cell_text(place, cell)),
+    );
+    lines.push(range_reference(&range));
+    lines.join("\n")
+}
+
+/// The text `place` read of a cell, where it shows one.
+fn cell_text(place: &crate::event::SheetPlace, (column, row): (u32, u32)) -> Option<String> {
+    place
+        .cells
+        .iter()
+        .find(|c| (c.column, c.row) == (column, row))
+        .map(|c| c.text.trim().to_owned())
+        .filter(|t| !t.is_empty())
+}
+
+/// The texts of a monitor cell's cells, for its entry in Move to Monitor Cell.
+pub(crate) fn range_texts(
+    place: &crate::event::SheetPlace,
+    range: &crate::actions::CellRange,
+) -> String {
+    range
+        .cells()
+        .into_iter()
+        .filter_map(|cell| cell_text(place, cell))
+        .collect::<Vec<_>>()
+        .join(" ")
+}
+
+/// A range's reference as Excel writes it, "B2", "B2:B3".
+pub fn range_reference(range: &crate::actions::CellRange) -> String {
+    let first = reference(range.left, range.top);
+    if (range.left, range.top) == (range.right, range.bottom) {
+        first
+    } else {
+        format!("{first}:{}", reference(range.right, range.bottom))
+    }
+}
+
+/// The range a reference names, "B2" or "B2:B3", without titles.
+pub(crate) fn range_of(reference: &str) -> Option<crate::actions::CellRange> {
+    let cells = cells(reference)?;
+    Some(crate::actions::CellRange {
+        left: cells.left,
+        top: cells.top,
+        right: cells.right,
+        bottom: cells.bottom,
+        title_row: None,
+        title_column: None,
+    })
 }
 
 /// A cell's reference as Excel writes it, "B2".

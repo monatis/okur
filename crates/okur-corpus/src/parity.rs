@@ -1829,29 +1829,35 @@ impl ScreenReads {
                 snapshot.and_then(|s| s.sheet_place.clone()),
             ));
         }
-        // A single cell read (a monitor cell's), answered with its text as the window showed it
-        // after the step: the step's visible cells with data ("B2: 12"), blank where it is not
-        // among them [1135/s5].
-        let cells: Vec<usize> = requests
+        // A range read (a monitor cell's), answered with each cell's text as the window showed it
+        // after the step: the step's visible cells with data ("B2: 12"), none where a cell is not
+        // among them [1135/s5, 1166].
+        let ranges: Vec<okur_core::actions::CellRange> = requests
             .iter()
-            .filter(|(read, _)| read == "sheet cell")
-            .map(|(_, key)| *key)
+            .filter_map(|(read, _)| okur_core::actions::CellRange::from_note(read))
             .collect();
-        while let Some(&key) = cells.get(self.sheet_cells) {
+        while let Some(range) = ranges.get(self.sheet_cells) {
             self.sheet_cells += 1;
-            let (column, row) = okur_core::actions::sheet_cell_of(key);
-            let reference = okur_core::spreadsheet::reference(column, row);
-            let text = snapshot
-                .and_then(|s| s.sheet_lists.as_ref())
-                .and_then(|lists| lists.visible.as_ref())
-                .and_then(|visible| visible.entries.iter().find(|e| e.target == reference))
-                .and_then(|entry| entry.label.strip_prefix(&format!("{reference}: ")))
-                .unwrap_or_default()
-                .to_owned();
+            let shown = |(column, row): (u32, u32)| {
+                let reference = okur_core::spreadsheet::reference(column, row);
+                let text = snapshot
+                    .and_then(|s| s.sheet_lists.as_ref())
+                    .and_then(|lists| lists.visible.as_ref())
+                    .and_then(|visible| visible.entries.iter().find(|e| e.target == reference))
+                    .and_then(|entry| entry.label.strip_prefix(&format!("{reference}: ")))
+                    .unwrap_or_default()
+                    .to_owned();
+                okur_core::SheetCell { column, row, text }
+            };
             let mut place = snapshot
                 .and_then(|s| s.sheet_place.clone())
                 .unwrap_or_default();
-            place.cells = vec![okur_core::SheetCell { column, row, text }];
+            place.cells = range
+                .titles()
+                .into_iter()
+                .chain(range.cells())
+                .map(shown)
+                .collect();
             deliver(okur_core::AccessibilityEvent::SheetPlace(Some(place)));
         }
         let Some(snapshot) = snapshot else {

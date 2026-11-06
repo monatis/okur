@@ -401,7 +401,10 @@ pub struct ScreenReaderEngine {
     sheet_titles: std::collections::HashMap<String, crate::spreadsheet::SheetTitles>,
     /// Excel's monitor cells, ten per worksheet ([`crate::spreadsheet::monitor_sheet`]), each a
     /// cell's column and row, for the session (Insert+Shift+1 to 0).
-    monitor_cells: std::collections::HashMap<String, [Option<(u32, u32)>; 10]>,
+    monitor_cells: std::collections::HashMap<String, [Option<crate::actions::CellRange>; 10]>,
+    /// The active cell's reference and the selection's, as Excel last read them: what a monitor
+    /// cell is set to, an empty cell's or a range's too.
+    sheet_last: Option<(String, String)>,
     /// The worksheet Excel last named with a place it read: monitor cells are its.
     sheet_name: String,
     /// The Move to Monitor Cell list's entries read so far, as each cell's text comes.
@@ -742,6 +745,7 @@ impl ScreenReaderEngine {
             sheet_selection: None,
             sheet_titles: std::collections::HashMap::new(),
             monitor_cells: std::collections::HashMap::new(),
+            sheet_last: None,
             sheet_name: String::new(),
             monitor_entries: Vec::new(),
             say_all_paragraphs_asked: false,
@@ -1953,6 +1957,9 @@ impl ScreenReaderEngine {
                 if let Some(sheet) = place.as_ref().map(|p| &p.sheet).filter(|s| !s.is_empty()) {
                     self.sheet_name.clone_from(sheet);
                 }
+                if let Some(read) = place.as_ref().filter(|p| !p.address.is_empty()) {
+                    self.sheet_last = Some((read.address.clone(), read.selection.clone()));
+                }
                 match self.sheet_asks.pop_front()? {
                     SheetAsk::Reading(reading) => {
                         let said = reading.said(place.as_ref()?)?;
@@ -1962,9 +1969,10 @@ impl ScreenReaderEngine {
                     // A newer cell asked for behind this one: this place has gone by.
                     SheetAsk::Cell if self.sheet_asks.contains(&SheetAsk::Cell) => None,
                     SheetAsk::Cell => self.sheet_cell_said(place.as_ref()),
-                    SheetAsk::MonitorEntry { column, row, last } => {
-                        self.monitor_entry(place.as_ref(), column, row, last)
+                    SheetAsk::MonitorEntry { range, last } => {
+                        self.monitor_entry(place.as_ref(), range, last)
                     }
+                    SheetAsk::NoMonitorCells => self.no_monitor_cells(place.as_ref()),
                 }
             }
             AccessibilityEvent::DocumentNotes(kind, notes)

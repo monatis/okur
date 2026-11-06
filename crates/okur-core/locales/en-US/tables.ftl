@@ -205,6 +205,11 @@ excel-active-cell = Active Cell: { $cell }
 excel-column-titles-set = Setting column titles row range to { $row }
 # Insert+Shift+1 to 0: a monitor cell set to the active cell [obs, 1135/s3].
 excel-monitor-cell-set = Setting monitor cell { $number } to { $cell }
+# Insert+Shift+1 to 0 on a cell already a monitor cell; Alt+Shift+1 to 0 for one not set;
+# Ctrl+Shift+M with none set, the worksheet named [obs, 1166/s6, s1, s2].
+excel-monitor-cell-defined = The current cell is already defined as a monitor cell.
+excel-monitor-cell-undefined = monitor cell { $number } undefined
+excel-no-monitor-cells = No monitor cells defined for { $sheet }
 # The totals readers: Insert+NumPad Enter the column's, from its SUM formula, "column total=14"
 # [obs, 1132/s11]; Insert+Delete the row's, none found [obs, 1132/s12]; the others [hyp].
 excel-column-total = column total={ $total }

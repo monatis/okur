@@ -47,22 +47,92 @@ pub enum SheetCells {
     Format,
     /// The first SUM formulas of the active cell's column and row (the totals readers).
     Sums,
-    /// One cell's text, by its column and row from 1, wherever the active cell is: a monitor
-    /// cell's (Alt+Shift+1 to 0) [obs, 1135/s5].
-    Cell { column: u32, row: u32 },
+    /// A range's cells' texts, wherever the active cell is, with its title cells: a monitor
+    /// cell's (Alt+Shift+1 to 0) [obs, 1135/s5, 1166].
+    Range(CellRange),
 }
 
-/// A cell read alone ([`SheetCells::Cell`]) as the recording actions note it: its column and
-/// row in one number, the row in the low 24 bits (Excel's last is 1,048,576).
-pub fn sheet_cell_key(column: u32, row: u32) -> usize {
-    (usize::try_from(column).unwrap_or(0) << 24) | usize::try_from(row).unwrap_or(0)
+/// A rectangle of a sheet's cells, columns and rows from 1, and the titles read with it: the row
+/// of column titles and the column of row titles, where the workbook has them set.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct CellRange {
+    pub left: u32,
+    pub top: u32,
+    pub right: u32,
+    pub bottom: u32,
+    pub title_row: Option<u32>,
+    pub title_column: Option<u32>,
 }
 
-/// The column and row a [`sheet_cell_key`] holds.
-pub fn sheet_cell_of(key: usize) -> (u32, u32) {
-    let column = u32::try_from(key >> 24).unwrap_or(0);
-    let row = u32::try_from(key & 0x00FF_FFFF).unwrap_or(0);
-    (column, row)
+/// The most cells of a range read at once.
+pub const MAX_RANGE_CELLS: usize = 256;
+
+impl CellRange {
+    pub fn cell(column: u32, row: u32) -> Self {
+        Self {
+            left: column,
+            top: row,
+            right: column,
+            bottom: row,
+            title_row: None,
+            title_column: None,
+        }
+    }
+
+    /// Its cells, row by row, at most [`MAX_RANGE_CELLS`].
+    pub fn cells(&self) -> Vec<(u32, u32)> {
+        (self.top..=self.bottom)
+            .flat_map(|row| (self.left..=self.right).map(move |column| (column, row)))
+            .take(MAX_RANGE_CELLS)
+            .collect()
+    }
+
+    /// Its title cells: the column title above its first column, the row title left of its
+    /// first row.
+    pub fn titles(&self) -> Vec<(u32, u32)> {
+        let mut titles = Vec::new();
+        if let Some(row) = self.title_row {
+            titles.push((self.left, row));
+        }
+        if let Some(column) = self.title_column {
+            titles.push((column, self.top));
+        }
+        titles
+    }
+
+    /// As the recording actions note it, "sheet cells 2,2,2,3,1,0" (0 for no title).
+    pub fn note(&self) -> String {
+        format!(
+            "sheet cells {},{},{},{},{},{}",
+            self.left,
+            self.top,
+            self.right,
+            self.bottom,
+            self.title_row.unwrap_or(0),
+            self.title_column.unwrap_or(0)
+        )
+    }
+
+    /// The range a [`Self::note`] holds.
+    pub fn from_note(note: &str) -> Option<Self> {
+        let numbers: Vec<u32> = note
+            .strip_prefix("sheet cells ")?
+            .split(',')
+            .map(|n| n.parse().ok())
+            .collect::<Option<_>>()?;
+        let [left, top, right, bottom, title_row, title_column] = numbers.as_slice() else {
+            return None;
+        };
+        let some = |n: u32| (n > 0).then_some(n);
+        Some(Self {
+            left: *left,
+            top: *top,
+            right: *right,
+            bottom: *bottom,
+            title_row: some(*title_row),
+            title_column: some(*title_column),
+        })
+    }
 }
 
 /// Platform actions on the live element a buffer node was captured from.
@@ -681,7 +751,12 @@ impl ApplicationActions for RecordingActions {
         let (read, key) = match cells {
             SheetCells::Format | SheetCells::Sums => ("sheet details", 0),
             SheetCells::Around(_) | SheetCells::Lines => ("sheet place", 0),
-            SheetCells::Cell { column, row } => ("sheet cell", sheet_cell_key(column, row)),
+            SheetCells::Range(range) => {
+                if let Ok(mut log) = self.log.lock() {
+                    log.push((range.note(), 0));
+                }
+                return true;
+            }
         };
         if let Ok(mut log) = self.log.lock() {
             log.push((read.to_owned(), key));

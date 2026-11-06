@@ -9693,10 +9693,8 @@ fn excel_the_monitor_cell_list() {
     };
     let listed = engine.handle_key_event(&KeyEvent::new(Key::Alpha('M'), ctrl_shift, true));
     assert_eq!(listed, KeyAction::Consume);
-    assert!(actions.requests().contains(&(
-        "sheet cell".to_owned(),
-        crate::actions::sheet_cell_key(2, 2)
-    )));
+    let note = crate::actions::CellRange::cell(2, 2).note();
+    assert!(actions.requests().contains(&(note, 0)));
     engine.handle_accessibility_event(&AccessibilityEvent::SheetPlace(Some(
         crate::event::SheetPlace {
             address: "B2".into(),
@@ -10074,7 +10072,7 @@ fn excel_a_selection_grows_a_cell_at_a_time_with_shift_pressed_again() {
 
 /// Excel's monitor cells: Insert+Shift+1 sets the first to the active cell, "Setting monitor
 /// cell 1 to B2"; Alt+Shift+1 from another cell asks Excel for that cell and says its text,
-/// then its reference, "12 | B2" [obs, 1135/s3, s5]. Not set, Alt+Shift+2 is Excel's.
+/// then its reference, "12 | B2" [obs, 1135/s3, s5]; one not set is undefined [obs, 1166/s1].
 #[test]
 fn excel_monitor_cells_are_set_and_read() {
     let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
@@ -10126,8 +10124,8 @@ fn excel_monitor_cells_are_set_and_read() {
     };
     let read = engine.handle_key_event(&KeyEvent::new(Key::Digit(1), alt_shift, true));
     assert_eq!(read, KeyAction::Consume);
-    let key = crate::actions::sheet_cell_key(2, 2);
-    assert!(actions.requests().contains(&("sheet cell".to_owned(), key)));
+    let note = crate::actions::CellRange::cell(2, 2).note();
+    assert!(actions.requests().contains(&(note, 0)));
     let said = engine.handle_accessibility_event(&AccessibilityEvent::SheetPlace(Some(
         crate::event::SheetPlace {
             address: "C4".into(),
@@ -10140,8 +10138,12 @@ fn excel_monitor_cells_are_set_and_read() {
         },
     )));
     assert_eq!(said.as_deref(), Some("12\nB2"));
+    // Not set: "monitor cell 2 undefined" [obs, 1166/s1]; set again: already defined [obs,
+    // 1166/s6].
+    speech.take();
     let unset = engine.handle_key_event(&KeyEvent::new(Key::Digit(2), alt_shift, true));
-    assert_eq!(unset, KeyAction::PassThrough);
+    assert_eq!(unset, KeyAction::Consume);
+    assert_eq!(speech.take(), ["monitor cell 2 undefined"]);
 }
 
 /// Insert+Space, then a question mark (Shift+Slash): the layer's help in the Virtual Viewer,

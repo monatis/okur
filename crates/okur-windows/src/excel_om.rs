@@ -185,15 +185,21 @@ pub fn sheet_place(
                 })
                 .collect();
         }
-        // One cell's text wherever the active cell is: a monitor cell's.
-        SheetCells::Cell { column: c, row: r } => {
-            if let (Ok(ci), Ok(ri)) = (i32::try_from(c), i32::try_from(r)) {
-                place.cells = vec![okur_core::SheetCell {
-                    column: c,
-                    row: r,
-                    text: shown(ri, ci),
-                }];
-            }
+        // A range's cells' texts, wherever the active cell is, with its title cells: a monitor
+        // cell's.
+        SheetCells::Range(range) => {
+            place.cells = range
+                .titles()
+                .into_iter()
+                .chain(range.cells())
+                .filter_map(|(c, r)| {
+                    Some(okur_core::SheetCell {
+                        column: c,
+                        row: r,
+                        text: shown(i32::try_from(r).ok()?, i32::try_from(c).ok()?),
+                    })
+                })
+                .collect();
         }
         SheetCells::Lines => {}
     }
