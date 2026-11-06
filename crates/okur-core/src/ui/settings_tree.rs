@@ -1147,8 +1147,8 @@ impl SettingsTree {
             control(
                 SEARCH,
                 msg::settings_tree_search().to_string(),
-                // An edit, "SearchBox Edit" as JAWS's [obs, the walk of Settings Center].
-                ControlKind::Edit {
+                // An edit, "SearchBox Edit" as JAWS's [obs, the walk of Settings Center; 1169/s1].
+                ControlKind::SearchBox {
                     text: self.search.clone(),
                 },
             ),

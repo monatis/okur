@@ -183,6 +183,7 @@ impl ScreenReaderEngine {
             // The dictionary in force again. The window it goes back to is said, as JAWS says
             // Notepad as its manager closes [obs, 1154/s16, s33].
             self.configure_voice();
+            self.returning_from_program();
         }
         None
     }

@@ -2937,7 +2937,7 @@ impl ScreenReaderEngine {
                 } else {
                     self.settings_dialog = None;
                 }
-                self.returning_from_dialog();
+                self.returning_from_program();
             }
             Outcome::OpenVerbosityLevels => self.open_verbosity_levels(),
             Outcome::OpenKeyLabels => self.open_key_labels(),
@@ -2987,7 +2987,7 @@ impl ScreenReaderEngine {
             ids.into_iter()
                 .for_each(|id| ui.send(crate::ui::ToUi::DialogClose { id }));
         }
-        self.returning_from_dialog();
+        self.returning_from_program();
     }
 
     /// What the user did to one of Okur's windows.
@@ -3201,10 +3201,26 @@ impl ScreenReaderEngine {
     }
 
     /// Starts the quiet return after one of Okur's dialogs closed: the window it came from
-    /// takes the focus back within this.
+    /// takes the focus back within this. JAWS's lists and viewers, in JAWS's own process,
+    /// return to the focus alone: "heading level 1 | Library Hours | Edit" [obs, 1036/s3],
+    /// "Weekdays B 1" [obs, 1133/s3].
     fn returning_from_dialog(&mut self) {
         const RETURN: std::time::Duration = std::time::Duration::from_millis(800);
         self.quiet_focus_until = Some(std::time::Instant::now() + RETURN);
+    }
+
+    /// The return from one of Okur's dialogs that stand for a program of JAWS's own (its
+    /// Settings Center and Dictionary Manager run apart from JAWS): back in an application,
+    /// its window and focus are said again as the focus comes back, as after any switch of
+    /// programs: "sr-notepad-fixture.txt - Notepad | edit | Type in text." [obs, 1169/s42,
+    /// 1154/s33, 1155/s28]. Back on a page, the return is quiet as from the other dialogs.
+    pub(crate) fn returning_from_program(&mut self) {
+        if self.app_mode == AppMode::VirtualBuffer {
+            self.returning_from_dialog();
+        } else {
+            self.last_window_title = None;
+            self.native_focus.reset();
+        }
     }
 
     /// Opens one of JAWS's list dialogs on the page's elements of its kind; with none, says

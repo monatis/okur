@@ -172,6 +172,13 @@ pub enum ControlKind {
     Edit {
         text: String,
     },
+    /// A search field: an edit named by its label, which is not shown, so that no text of the
+    /// dialog's comes before it. JAWS's Settings Center says "SearchBox Edit" alone [obs,
+    /// 1169/s1], where a label shown without an access key is read as the dialog's prompt too
+    /// [obs, 688/s9]. Its value is the text, told as it is typed.
+    SearchBox {
+        text: String,
+    },
     /// The dialog's own text, as a message box shows it: a question it asks (the question
     /// before Okur exits). Static text, outside the tab order, the whole dialog wide; the
     /// label is not shown.

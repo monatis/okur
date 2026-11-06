@@ -597,6 +597,7 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
             ControlKind::Choice { .. }
             | ControlKind::ComboEdit { .. }
             | ControlKind::Edit { .. }
+            | ControlKind::SearchBox { .. }
             | ControlKind::Slider { .. } => {
                 let width = (MARGIN, WIDTH - MARGIN);
                 if seen_list {
@@ -633,6 +634,7 @@ fn is_labelled(kind: &ControlKind) -> bool {
         ControlKind::Choice { .. }
             | ControlKind::ComboEdit { .. }
             | ControlKind::Edit { .. }
+            | ControlKind::SearchBox { .. }
             | ControlKind::Slider { .. }
     )
 }
@@ -645,10 +647,15 @@ fn push_labelled(
     (left, y, right): (i16, i16, i16),
 ) -> i16 {
     // The label first: in the tab order before its control, it names it and gives it its
-    // access key.
+    // access key. A search box's is not shown: it still names the field, and leaves the
+    // control view, where it would be read as the dialog's text.
     items.push(Item {
         class: Class::Static,
-        style: WS_CHILD | WS_VISIBLE,
+        style: if matches!(control.kind, ControlKind::SearchBox { .. }) {
+            WS_CHILD
+        } else {
+            WS_CHILD | WS_VISIBLE
+        },
         x: left,
         y: y + 2,
         cx: LABEL_WIDTH,
@@ -697,7 +704,7 @@ fn push_labelled(
             });
             12
         }
-        ControlKind::Edit { .. } => {
+        ControlKind::Edit { .. } | ControlKind::SearchBox { .. } => {
             items.push(Item {
                 class: Class::Edit,
                 style: WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_GROUP | WS_BORDER | ES_AUTOHSCROLL,
@@ -807,6 +814,7 @@ fn form_layout(dialog: &DialogSpec) -> Layout {
             ControlKind::Choice { .. }
             | ControlKind::ComboEdit { .. }
             | ControlKind::Edit { .. }
+            | ControlKind::SearchBox { .. }
             | ControlKind::Slider { .. }
             | ControlKind::Text { .. } => {
                 y = push_labelled(&mut items, control, id, (left, y, right));
@@ -1414,6 +1422,51 @@ mod tests {
             .items
             .iter()
             .any(|i| i.class == Class::Static && i.text == " "));
+    }
+
+    /// A search box's label comes just before it, naming it, and is not shown: Settings
+    /// Center opens on "SearchBox Edit" alone, as JAWS's does [obs, 1169/s1].
+    #[test]
+    fn a_search_boxs_label_names_it_unseen() {
+        let spec = DialogSpec {
+            id: 3,
+            title: "Settings".into(),
+            controls: vec![
+                control(
+                    "search",
+                    "SearchBox",
+                    ControlKind::SearchBox {
+                        text: String::new(),
+                    },
+                ),
+                control(
+                    "find",
+                    "Find what:",
+                    ControlKind::Edit {
+                        text: String::new(),
+                    },
+                ),
+                control(
+                    "tree",
+                    "",
+                    ControlKind::Tree {
+                        items: Vec::new(),
+                        selected: 0,
+                    },
+                ),
+                control("ok", "OK", ControlKind::Button { default: true }),
+            ],
+            keys: Vec::new(),
+        };
+        let layout = layout(&spec);
+        let before = |text: &str| {
+            let at = layout.items.iter().position(|i| i.text == text)?;
+            let label = layout.items.get(at)?;
+            let field = layout.items.get(at + 1)?;
+            Some((field.class.clone(), label.style & WS_VISIBLE != 0))
+        };
+        assert_eq!(before("SearchBox"), Some((Class::Edit, false)));
+        assert_eq!(before("Find what:"), Some((Class::Edit, true)));
     }
 
     #[test]

@@ -152,6 +152,7 @@ fn initial(kind: &ControlKind) -> Option<Value> {
         ControlKind::Slider { value, .. } => Some(Value::Number(*value)),
         ControlKind::Text { text }
         | ControlKind::Edit { text }
+        | ControlKind::SearchBox { text }
         | ControlKind::ComboEdit { text, .. } => Some(Value::Text(text.clone())),
         ControlKind::Group
         | ControlKind::Button { .. }
@@ -477,7 +478,7 @@ fn fill(window: HWND, index: usize, item: HWND, kind: &ControlKind) {
                 let text = wide(text);
                 let _ = SetWindowTextW(item, windows::core::PCWSTR(text.as_ptr()));
             }
-            ControlKind::Edit { text } => {
+            ControlKind::Edit { text } | ControlKind::SearchBox { text } => {
                 set(window, index, item, kind, &Value::Text(text.clone()));
             }
             ControlKind::ComboEdit { text, history } => {
@@ -1016,7 +1017,7 @@ fn set(window: HWND, index: usize, item: HWND, kind: &ControlKind, value: &Value
                 let _ = SetWindowTextW(item, windows::core::PCWSTR(text.as_ptr()));
             }
             // A text field's text, selected, so that what is typed replaces it.
-            (ControlKind::Edit { .. }, Value::Text(text)) => {
+            (ControlKind::Edit { .. } | ControlKind::SearchBox { .. }, Value::Text(text)) => {
                 let text = wide(text);
                 let _ = SetWindowTextW(item, windows::core::PCWSTR(text.as_ptr()));
                 SendMessageW(item, EM_SETSEL, Some(WPARAM(0)), Some(LPARAM(-1)));
@@ -2027,7 +2028,9 @@ pub(crate) unsafe extern "system" fn dialog_proc(
                     changed(window, &hit, Value::Checked(checked));
                 }
                 // A text field tells its text as it is typed.
-                (ControlKind::Edit { .. }, _) if code == EN_CHANGE => {
+                (ControlKind::Edit { .. } | ControlKind::SearchBox { .. }, _)
+                    if code == EN_CHANGE =>
+                {
                     changed(window, &hit, Value::Text(window_text(item)));
                 }
                 // An editable combo box tells its text as it is typed, or chosen from its list.

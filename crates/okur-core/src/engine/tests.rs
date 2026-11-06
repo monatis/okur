@@ -6396,6 +6396,39 @@ fn notepads_edit_and_its_menu_bar() {
     );
 }
 
+/// Back from one of Okur's dialogs to an application, its window and focus are said again, as
+/// JAWS's are on leaving its Settings Center and Dictionary Manager over Notepad:
+/// "sr-notepad-fixture.txt - Notepad | edit | Type in text." [obs, 1169/s42, 1154/s33].
+#[test]
+fn an_applications_window_is_said_again_after_okurs_dialog() {
+    use crate::ui::{FromUi, ToUi};
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    engine.app_mode = AppMode::NativeControl;
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let title = "sr-notepad-fixture.txt - Notepad";
+    let mut edit = FocusEvent::new(Role::Edit).with_name("Text Editor");
+    edit.window_title = Some(title.to_owned());
+    edit.app = Some("notepad.exe".into());
+    let arrival = engine.handle_focus_event(&edit).unwrap_or_default();
+    assert!(arrival.contains(title), "{arrival:?}");
+    let _ = engine.execute(crate::command::Command::SettingsCenter);
+    let Some(id) = ui.take().into_iter().find_map(|m| match m {
+        ToUi::DialogShow { dialog } => Some(dialog.id),
+        _ => None,
+    }) else {
+        panic_free_fail("Settings Center not shown");
+        return;
+    };
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogClosed { id }));
+    let back = engine
+        .handle_accessibility_event(&AccessibilityEvent::Focus(edit.clone()))
+        .unwrap_or_default();
+    assert!(back.contains(title), "{back:?}");
+    assert!(back.contains(msg::hint_type_in_text().as_str()), "{back:?}");
+}
+
 /// The table layer [obs, 535]: Insert+Space, T says "Table layer"; the arrows move by cell,
 /// Shift+Up reads the row whole and Shift+Numpad5 the column; Escape leaves the layer
 /// silently and Down is the virtual cursor's again. Windows+Alt+Down reads the next row

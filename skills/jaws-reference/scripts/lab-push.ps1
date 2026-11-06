@@ -7,6 +7,7 @@
     Runs on the development machine from the repository root. Stages:
       bin/okur.exe                       <- -Okur (default target/debug/okur.exe), if built
       bin/okur-lab.exe                   <- okur-lab.exe beside it (the harness's program), if built
+      bin/okur-ui.exe                    <- okur-ui.exe beside it (Okur's dialogs), if built
       scripts/*.ps1                        <- skills/jaws-reference/scripts/*.ps1
       fixtures/*.html                      <- corpus/fixtures/*.html
       scenarios/*.json                     <- corpus/scenarios/*.json
@@ -27,7 +28,7 @@ param(
 $ErrorActionPreference = 'Stop'
 
 $sets = @(
-    @{ dest = 'bin';       files = @(Get-Item $Okur, (Join-Path (Split-Path -Parent $Okur) 'okur-lab.exe') -ErrorAction SilentlyContinue) },
+    @{ dest = 'bin';       files = @(Get-Item $Okur, (Join-Path (Split-Path -Parent $Okur) 'okur-lab.exe'), (Join-Path (Split-Path -Parent $Okur) 'okur-ui.exe') -ErrorAction SilentlyContinue) },
     @{ dest = 'scripts';   files = @(Get-ChildItem (Join-Path $RepoRoot 'skills\jaws-reference\scripts\*.ps1')) },
     @{ dest = 'fixtures';  files = @(Get-ChildItem (Join-Path $RepoRoot 'corpus\fixtures\*') -Include *.html, *.ps1) },
     @{ dest = 'scenarios'; files = @(Get-ChildItem (Join-Path $RepoRoot 'corpus\scenarios\*.json')) }
