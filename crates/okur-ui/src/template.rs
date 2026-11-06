@@ -153,6 +153,20 @@ pub fn radio_of(id: u16) -> Option<(usize, usize)> {
 /// left, the buttons beside it, the radio groups side by side below), any other as a form.
 /// Items are in the description's order, which is the tab order.
 pub fn layout(dialog: &DialogSpec) -> Layout {
+    without_empty_labels(laid_out(dialog))
+}
+
+/// A label with no text is not made: it shows nothing, and Windows names an empty static after
+/// the static before it, so it read as the hidden results list's "0 Search Results" under
+/// Settings Center's description (Okur's dialog probe on old-pc, 2026-11-06).
+fn without_empty_labels(mut layout: Layout) -> Layout {
+    layout
+        .items
+        .retain(|i| !(i.class == Class::Static && i.id == LABEL_ID && i.text.is_empty()));
+    layout
+}
+
+fn laid_out(dialog: &DialogSpec) -> Layout {
     if dialog.controls.iter().any(|c| {
         matches!(
             c.kind,
@@ -848,6 +862,10 @@ const PAGE_HEIGHT: i16 = 140;
 /// tab order): its text, its radio buttons or its list box under the label naming it, its
 /// check boxes. The wizard's buttons are its sheet's.
 pub fn page_layout(page: &DialogSpec) -> Layout {
+    without_empty_labels(page_items(page))
+}
+
+fn page_items(page: &DialogSpec) -> Layout {
     let mut items = Vec::new();
     let mut ids = Vec::new();
     let mut y = MARGIN;
@@ -1381,6 +1399,12 @@ mod tests {
             .iter()
             .find(|i| i.class == Class::Static && i.text == "0 Search Results");
         assert!(label.is_some_and(|l| l.style & WS_VISIBLE == 0));
+        // The tree's label has no text: no window is made for it, which Windows would name
+        // after the static before it (Okur's dialog probe on old-pc, 2026-11-06).
+        assert!(!layout
+            .items
+            .iter()
+            .any(|i| i.class == Class::Static && i.text.is_empty()));
     }
 
     #[test]
