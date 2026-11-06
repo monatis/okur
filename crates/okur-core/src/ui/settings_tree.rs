@@ -90,6 +90,8 @@ pub enum TreeGroup {
     User,
     Web,
     WebReading,
+    /// Web / HTML / PDFs > Reading > Configure Web Verbosity Levels: High..., Medium..., Low...
+    WebVerbosityLevels,
     WebNavigation,
     WebLinks,
     WebHeadings,
@@ -117,10 +119,11 @@ pub enum TreeGroup {
 
 impl TreeGroup {
     /// Settings Center's, in JAWS's order, each group right before its subgroups.
-    const CENTER: [TreeGroup; 21] = [
+    const CENTER: [TreeGroup; 22] = [
         Self::User,
         Self::Web,
         Self::WebReading,
+        Self::WebVerbosityLevels,
         Self::WebNavigation,
         Self::WebLinks,
         Self::WebHeadings,
@@ -157,6 +160,7 @@ impl TreeGroup {
             Self::TextPhonetic => Some(Self::TextGeneral),
             Self::AutoFormsMode => Some(Self::FormsMode),
             Self::KeyboardGeneral => Some(Self::Keyboard),
+            Self::WebVerbosityLevels => Some(Self::WebReading),
             _ => None,
         }
     }
@@ -176,6 +180,7 @@ impl TreeGroup {
             Self::User => msg::settings_tree_user(),
             Self::Web => msg::settings_tree_web(),
             Self::WebReading => msg::settings_tree_reading(),
+            Self::WebVerbosityLevels => msg::settings_tree_web_verbosity_levels(),
             Self::WebLinks => msg::settings_tree_links(),
             Self::WebNavigation => msg::settings_tree_navigation(),
             Self::WebHeadings => msg::settings_tree_headings_and_frames(),
@@ -328,16 +333,26 @@ enum Opens {
     /// Keyboard, General's "Manage Key Labels...", the group's last item [obs, the walk of
     /// Settings Center: "Manage Key Labels... | 10 of 10"].
     KeyLabels,
+    /// Configure Web Verbosity Levels' "High...", "Medium...", "Low..." [obs, the walk of
+    /// Configure Web Verbosity Levels].
+    WebLevel(crate::settings::WebVerbosity),
 }
 
 impl Opens {
-    const ALL: [Opens; 2] = [Opens::VerbosityLevels, Opens::KeyLabels];
+    const ALL: [Opens; 5] = [
+        Opens::VerbosityLevels,
+        Opens::KeyLabels,
+        Opens::WebLevel(crate::settings::WebVerbosity::High),
+        Opens::WebLevel(crate::settings::WebVerbosity::Medium),
+        Opens::WebLevel(crate::settings::WebVerbosity::Low),
+    ];
 
     /// The group it is the last item of.
     fn group(self) -> TreeGroup {
         match self {
             Self::VerbosityLevels => TreeGroup::SpeechVerbosity,
             Self::KeyLabels => TreeGroup::KeyboardGeneral,
+            Self::WebLevel(_) => TreeGroup::WebVerbosityLevels,
         }
     }
 
@@ -345,6 +360,7 @@ impl Opens {
         match self {
             Self::VerbosityLevels => msg::settings_tree_configure_verbosity().to_string(),
             Self::KeyLabels => msg::settings_tree_manage_key_labels().to_string(),
+            Self::WebLevel(level) => msg::settings_tree_web_level(level_name(level)).render(),
         }
     }
 
@@ -354,6 +370,7 @@ impl Opens {
                 msg::settings_tree_configure_verbosity_description().to_string()
             }
             Self::KeyLabels => msg::settings_tree_manage_key_labels_description().to_string(),
+            Self::WebLevel(_) => msg::settings_tree_web_level_description().to_string(),
         }
     }
 
@@ -362,6 +379,7 @@ impl Opens {
         match self {
             Self::VerbosityLevels => Outcome::OpenVerbosityLevels,
             Self::KeyLabels => Outcome::OpenKeyLabels,
+            Self::WebLevel(level) => Outcome::OpenWebLevel(level),
         }
     }
 
@@ -370,9 +388,23 @@ impl Opens {
         let name = match self {
             Self::VerbosityLevels => "verbosity_levels",
             Self::KeyLabels => "key_labels",
+            Self::WebLevel(crate::settings::WebVerbosity::High) => "web_high",
+            Self::WebLevel(crate::settings::WebVerbosity::Medium) => "web_medium",
+            Self::WebLevel(crate::settings::WebVerbosity::Low) => "web_low",
         };
         format!("{PANE_OPENS}{name}")
     }
+}
+
+/// A level's name as Settings Center says it: "High", "Medium", "Low".
+pub fn level_name(level: crate::settings::WebVerbosity) -> String {
+    use crate::settings::WebVerbosity;
+    match level {
+        WebVerbosity::High => msg::settings_web_verbosity_high(),
+        WebVerbosity::Medium => msg::settings_web_verbosity_medium(),
+        WebVerbosity::Low => msg::settings_web_verbosity_low(),
+    }
+    .to_string()
 }
 
 /// A row of the tree: a group, a setting in the group above it, or an item that opens a
@@ -768,6 +800,24 @@ impl SettingsTree {
     }
 
     /// The settings as the dialog shows them now.
+    /// Configure Web Verbosity Levels' OK: the draft's choices are `changes`, and Apply is
+    /// available.
+    pub fn set_web_structures(
+        &mut self,
+        changes: Vec<crate::settings::WebStructureChange>,
+    ) -> Vec<ToUi> {
+        if self.draft.web_structures == changes {
+            return Vec::new();
+        }
+        self.draft.web_structures = changes;
+        self.changed = true;
+        vec![ToUi::DialogEnable {
+            id: self.id,
+            control: "apply".to_owned(),
+            enabled: true,
+        }]
+    }
+
     /// Manage Key Labels' OK: the draft's key labels are `changes`, and Apply is available.
     pub fn set_key_labels(&mut self, changes: Vec<crate::key_labels::KeyLabelChange>) -> Vec<ToUi> {
         if self.draft.key_labels == changes {

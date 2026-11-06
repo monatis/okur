@@ -773,3 +773,45 @@ key-labels-toggle-mute = &Toggle Mute
 key-labels-change-label = &Change Label
 key-labels-ok = OK
 key-labels-cancel = Cancel
+
+## Configure Web Verbosity Levels (Settings Center, Web / HTML / PDFs, Reading), as JAWS's [obs,
+## the walk of Configure Web Verbosity Levels, old-pc 2026-11-06].
+settings-tree-web-verbosity-levels = Configure Web Verbosity Levels
+# An item that opens a level's choices: "High...".
+settings-tree-web-level = { $level }...
+settings-tree-web-level-description = Opens the list of what this level says the start and end of as you read a page: each kind of region, lists, tables, block quotes and more.
+web-level-title = { $level } Virtual Cursor Verbosity Preferences
+web-level-tree = Announce Start and End For:
+web-level-ok = OK
+web-level-cancel = Cancel
+web-structure-regions = Regions
+web-structure-regions-description = The page's regions, each kind on its own: Space here turns them all.
+# The selected item's description, under the tree.
+web-structure-description-of = When checked, where each { $name } starts and ends is said as you read.
+web-structure-block-quotation = Block Quotation
+web-structure-clickable = Clickable Elements
+web-structure-described-by = DescribedBy Announcement
+web-structure-description = Description
+web-structure-editable-section = Editable Section
+web-structure-feed = Feed
+web-structure-figure = Figure
+web-structure-flash = Flash Object
+web-structure-frame = Frame
+web-structure-group-box = Group Box
+web-structure-list = List
+web-structure-log = Log
+web-structure-note = Note
+web-structure-application = Application
+web-structure-article = Article
+web-structure-banner = Banner
+web-structure-complementary = Complementary Information
+web-structure-content-information = Content Information
+web-structure-document = Document
+web-structure-form = Form
+web-structure-main = Main Region
+web-structure-navigation = Navigation Region
+web-structure-region = Region
+web-structure-search = Search Region
+web-structure-tab-panel = Tab Panel
+web-structure-table = Table Or Grid
+web-structure-toolbar = Toolbar

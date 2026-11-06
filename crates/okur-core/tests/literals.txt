@@ -83,6 +83,11 @@ okur-core/src/ui/settings_tree.rs: "voice.text.dates"
 okur-core/src/ui/settings_tree.rs: "voice.text.numbers"
 okur-core/src/ui/settings_tree.rs: "pane:"
 okur-core/src/ui/settings_tree.rs: "opens:"
+# Configure Web Verbosity Levels' control ids.
+okur-core/src/ui/web_verbosity.rs: "structures"
+okur-core/src/ui/web_verbosity.rs: "description"
+okur-core/src/ui/web_verbosity.rs: "ok"
+okur-core/src/ui/web_verbosity.rs: "cancel"
 # Manage Key Labels' control ids.
 okur-core/src/ui/key_labels.rs: "keys"
 okur-core/src/ui/key_labels.rs: "toggle"

@@ -74,6 +74,9 @@ pub enum Outcome {
     OpenVerbosityLevels,
     /// Open Manage Key Labels over the dialog, on its draft's key labels.
     OpenKeyLabels,
+    /// Open Configure Web Verbosity Levels' dialog for this level over the dialog, on its
+    /// draft's choices.
+    OpenWebLevel(crate::settings::WebVerbosity),
     /// Forget Last Changed Settings' entry for `setting` in `scope`, or all of the place's
     /// with none (Remove, Remove All), then send these. Done at once, with no Apply [obs, the
     /// walk of Last Changed Settings].

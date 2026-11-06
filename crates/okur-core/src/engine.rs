@@ -57,6 +57,7 @@ mod toggles;
 mod tray;
 #[cfg(test)]
 mod web_app_tests;
+mod web_verbosity;
 mod window_list;
 mod word_list;
 
@@ -331,6 +332,8 @@ pub struct ScreenReaderEngine {
     settings_tree: Option<crate::ui::settings_tree::SettingsTree>,
     /// Manage Key Labels, open over Settings Center.
     key_labels_dialog: Option<crate::ui::key_labels::KeyLabelsDialog>,
+    /// A Web Verbosity Level's choices, open over Settings Center.
+    web_level_dialog: Option<crate::ui::web_verbosity::WebLevelDialog>,
     /// Said before the next focus spoken: what one of Okur's dialogs did as it moved the focus
     /// ("Search edit box cleared.").
     said_before_focus: Option<String>,
@@ -717,6 +720,7 @@ impl ScreenReaderEngine {
             settings_dialog: None,
             settings_tree: None,
             key_labels_dialog: None,
+            web_level_dialog: None,
             said_before_focus: None,
             basics_dialog: None,
             startup_wizard: None,
@@ -2937,6 +2941,7 @@ impl ScreenReaderEngine {
             }
             Outcome::OpenVerbosityLevels => self.open_verbosity_levels(),
             Outcome::OpenKeyLabels => self.open_key_labels(),
+            Outcome::OpenWebLevel(level) => self.open_web_level(level),
             Outcome::Forget {
                 scope,
                 setting,
@@ -3012,6 +3017,7 @@ impl ScreenReaderEngine {
             _ if self.is_placemarker_event(message) => self.handle_placemarker_event(message),
             _ if self.is_dictionary_event(message) => self.handle_dictionary_event(message),
             _ if self.is_key_labels_event(message) => self.handle_key_labels_event(message),
+            _ if self.is_web_level_event(message) => self.handle_web_level_event(message),
             _ if self.is_command_search_event(message) => self.handle_command_search_event(message),
             _ if self.is_flexible_web_event(message) => self.handle_flexible_web_event(message),
             _ if self.is_startup_wizard_event(message) => self.handle_startup_wizard_event(message),

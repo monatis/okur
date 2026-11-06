@@ -26,6 +26,7 @@ pub mod startup_wizard;
 pub mod tray;
 pub mod voice_adjustment;
 pub mod voice_profile;
+pub mod web_verbosity;
 pub mod windows;
 
 pub use okur_ui_model::{
