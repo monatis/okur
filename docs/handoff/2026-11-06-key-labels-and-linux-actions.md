@@ -131,9 +131,22 @@ JAWS's features from Settings Center and the help) and
   Chrome.JCF beside it, with the scenario's level 1), `okur-lab live-parity`: `Okur live: 74/74
   steps match JAWS exactly`; `Okur live, spoken: 74/74 steps send the synthesizer what JAWS sent
   its own`.
-- Not yet: Configure Web Verbosity Levels' own choices per level (a dialog of 27 check items; JAWS keeps a change as `[VirtualCursorVerbosity] ApplicationRegion=0|1|0`, one value per level),
-  per site levels, and the structures Okur's buffer does not mark yet (figure, feed, log, note,
-  toolbar, frame, editable section, DescribedBy).
+- **The full tree and its store** (`bbd5da12`, `07fa6ef6`): 17 items with Regions holding 11 (the
+  first reading had hidden the lines that began with a level: Clickable Elements, Application,
+  Tab Panel). JAWS keeps a change in the application's JCF, `[VirtualCursorVerbosity]
+  ApplicationRegion=0|1|0`, High|Medium|Low (its shipped DEFAULT.JCF names every key; its defaults
+  are the walk's).
+- **Each level's choices** (`45eab1dd`): `web_structures` holds the changed structures, read from
+  the files; the page's mark names the structures left out.
+- **Okur's Configure Web Verbosity Levels** (`acaae423`, `ae70d6cd`): under Web Verbosity Level,
+  High..., Medium..., Low..., each "<Level> Virtual Cursor Verbosity Preferences" with "Announce
+  Start and End For:" (17 items, Regions with 11), the description, OK, Cancel. Live on old-pc it
+  reads "Block Quotation checked | 1 of 17" and Space "Banner | checked | 3 of 11", as JAWS's.
+  The live runs fixed for every dialog: tree check boxes said, a read-only text following its
+  item (okur-ui never set a Note: Settings Center's description had stayed the first item's), an
+  empty label a space (left out, it let the next field borrow a hidden label's name).
+- Not yet: per site levels, and structures Okur's buffer does not mark yet (figure, feed, log,
+  note, toolbar, frame, editable section, DescribedBy, clickable elements).
 
 ## Next
 
