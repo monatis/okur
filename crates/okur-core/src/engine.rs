@@ -1605,7 +1605,9 @@ impl ScreenReaderEngine {
                 && m.shift
                 && !m.alt
                 && !m.insert
-                && self.open_document_notes(crate::event::NoteKind::Comment)
+                && (self.open_document_notes(crate::event::NoteKind::Comment)
+                    // Excel's Cells with Notes [obs, 1183/s6].
+                    || self.open_sheet_list(crate::event::SheetListKind::Notes))
             {
                 return KeyAction::Consume;
             }
@@ -1645,6 +1647,10 @@ impl ScreenReaderEngine {
                         None => said,
                     };
                     self.speech.speak(&said, true);
+                    return KeyAction::Consume;
+                }
+                // Excel's: the active cell's note [obs, 1183/s3, s5].
+                if self.open_sheet_list(crate::event::SheetListKind::Note) {
                     return KeyAction::Consume;
                 }
             }
@@ -3562,6 +3568,16 @@ impl ScreenReaderEngine {
             return None;
         }
         self.sheet_list_asked = None;
+        // The active cell's note, or that it has none: "Includes Saturday mornings.", "No note
+        // or comment visible for this cell." [obs, 1183/s3, s5].
+        if kind == crate::event::SheetListKind::Note {
+            let said = entries
+                .first()
+                .map(|note| note.label.clone())
+                .unwrap_or_else(|| msg::excel_no_note().to_string());
+            self.speech.speak(&said, true);
+            return Some(said);
+        }
         if entries.is_empty() {
             let none = match kind {
                 crate::event::SheetListKind::Formulas => msg::excel_no_formulas(),
@@ -3571,8 +3587,12 @@ impl ScreenReaderEngine {
                 // [hyp: not recorded]
                 crate::event::SheetListKind::Visible => msg::excel_no_visible_cells(),
                 crate::event::SheetListKind::Worksheets => msg::excel_no_worksheets(),
-                // Never asked of Excel: the engine opens the list itself.
-                crate::event::SheetListKind::Monitor => return None,
+                // [hyp: not recorded]
+                crate::event::SheetListKind::Notes => msg::excel_no_notes(),
+                // Never asked of Excel: the engine opens the list itself; the note is said above.
+                crate::event::SheetListKind::Monitor | crate::event::SheetListKind::Note => {
+                    return None
+                }
             }
             .to_string();
             self.speech.speak(&none, true);

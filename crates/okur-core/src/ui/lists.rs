@@ -863,6 +863,9 @@ impl ListDialog {
                     crate::event::SheetListKind::Visible => msg::list_dialog_cells_with_data(),
                     crate::event::SheetListKind::Worksheets => msg::list_dialog_move_to_worksheet(),
                     crate::event::SheetListKind::Monitor => msg::list_dialog_move_to_monitor_cell(),
+                    crate::event::SheetListKind::Notes | crate::event::SheetListKind::Note => {
+                        msg::list_dialog_cells_with_notes()
+                    }
                 },
                 vec![
                     // Move to Monitor Cell's is a list box without a name, "dialog | List box |

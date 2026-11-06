@@ -1565,6 +1565,11 @@ struct SnapshotSheetLists {
     visible: Option<SnapshotSheetList>,
     #[serde(default)]
     worksheets: Option<SnapshotSheetList>,
+    /// The window's cells with notes and the active cell's note (none before 1183).
+    #[serde(default)]
+    notes: Option<SnapshotSheetList>,
+    #[serde(default)]
+    note: Option<SnapshotSheetList>,
 }
 
 /// The screen reads and recognitions the engine asked for, counted as answered.
@@ -1583,7 +1588,7 @@ struct ScreenReads {
     /// Single cells read (a monitor cell's) asked for and answered.
     sheet_cells: usize,
     /// Excel's lists asked for and answered, by kind.
-    sheet_lists: [usize; 5],
+    sheet_lists: [usize; 7],
     paragraphs: usize,
     links: usize,
     spacings: usize,
@@ -1806,6 +1811,8 @@ impl ScreenReads {
             SheetListKind::Worksheets,
             SheetListKind::Row,
             SheetListKind::Visible,
+            SheetListKind::Notes,
+            SheetListKind::Note,
         ]) {
             while *answered < count(kind.read_name()) {
                 *answered += 1;
@@ -1817,6 +1824,8 @@ impl ScreenReads {
                         SheetListKind::Worksheets => lists.worksheets.clone(),
                         SheetListKind::Row => lists.row.clone(),
                         SheetListKind::Visible => lists.visible.clone(),
+                        SheetListKind::Notes => lists.notes.clone(),
+                        SheetListKind::Note => lists.note.clone(),
                         // Never asked of Excel: the engine reads each monitor cell.
                         SheetListKind::Monitor => None,
                     })

@@ -403,6 +403,46 @@ pub fn sheet_list(
         }
         // The monitor cells are the engine's: it reads each cell itself.
         okur_core::SheetListKind::Monitor => Vec::new(),
+        // The window's cells with notes (legacy comments), "B2: Includes Saturday mornings."
+        // [obs, 1183/s6]; for Note, the active cell's note alone, its text [obs, 1183/s3].
+        okur_core::SheetListKind::Notes | okur_core::SheetListKind::Note => {
+            let visible = object(&property(&window, "VisibleRange")?)?;
+            let (top, left) = (number(&visible, "Row")?, number(&visible, "Column")?);
+            let rows = number(&object(&property(&visible, "Rows")?)?, "Count")?;
+            let columns = number(&object(&property(&visible, "Columns")?)?, "Count")?;
+            let comments = object(&property(&sheet, "Comments")?)?;
+            let count = number(&comments, "Count")?.clamp(0, MAX_LISTED);
+            let mut found = Vec::new();
+            for index in 1..=count {
+                let Some(comment) = crate::word_om::item(&comments, index) else {
+                    continue;
+                };
+                let Some(at) = property(&comment, "Parent").as_ref().and_then(object) else {
+                    continue;
+                };
+                let (Some(r), Some(c)) = (number(&at, "Row"), number(&at, "Column")) else {
+                    continue;
+                };
+                let wanted = if kind == okur_core::SheetListKind::Note {
+                    (r, c) == (row, column)
+                } else {
+                    (top..top + rows).contains(&r) && (left..left + columns).contains(&c)
+                };
+                let note = comment_text(&comment);
+                if !wanted || note.is_empty() {
+                    continue;
+                }
+                if let Some(cell) = address(&at) {
+                    let label = if kind == okur_core::SheetListKind::Note {
+                        note
+                    } else {
+                        format!("{cell}: {note}")
+                    };
+                    found.push(entry(label, cell));
+                }
+            }
+            found
+        }
         okur_core::SheetListKind::Column
         | okur_core::SheetListKind::Row
         | okur_core::SheetListKind::Formulas => {
@@ -457,10 +497,27 @@ pub fn sheet_list(
     // The visible cells' list selects the active cell's entry, so it carries its reference.
     let place = match kind {
         okur_core::SheetListKind::Row => row.to_string(),
-        okur_core::SheetListKind::Visible => address(&cell).unwrap_or_default(),
+        okur_core::SheetListKind::Visible
+        | okur_core::SheetListKind::Notes
+        | okur_core::SheetListKind::Note => address(&cell).unwrap_or_default(),
         _ => letters,
     };
     Some((place, entries))
+}
+
+/// A note's text (`Comment.Text`, a method), its spaces and line breaks squashed.
+fn comment_text(comment: &IDispatch) -> String {
+    use windows::Win32::System::Com::{DISPATCH_FLAGS, DISPATCH_METHOD};
+    let flags = DISPATCH_FLAGS(DISPATCH_METHOD.0 | DISPATCH_PROPERTYGET.0);
+    crate::word_om::invoke(comment, "Text", flags, &mut [])
+        .and_then(|text| windows::core::BSTR::try_from(&text).ok())
+        .map(|text| {
+            text.to_string()
+                .split_whitespace()
+                .collect::<Vec<_>>()
+                .join(" ")
+        })
+        .unwrap_or_default()
 }
 
 /// Goes to `target` of one of those lists in Excel's grid window `grid`: selects the cell it

@@ -166,6 +166,11 @@ pub enum SheetListKind {
     /// The worksheet's monitor cells, "B2: 12" (Ctrl+Shift+M) [obs, 1135/s6]: the engine knows
     /// them and reads each cell; Excel is not asked for this list.
     Monitor,
+    /// The window's cells with notes (Excel's legacy comments), "B2: Includes Saturday
+    /// mornings." (Ctrl+Shift+Apostrophe, JAWS's Cells with Notes) [obs, 1183/s6].
+    Notes,
+    /// The active cell's note alone, its text (Alt+Shift+Apostrophe) [obs, 1183/s3, s5].
+    Note,
 }
 
 impl SheetListKind {
@@ -178,6 +183,8 @@ impl SheetListKind {
             Self::Visible => "sheet visible",
             Self::Worksheets => "worksheets",
             Self::Monitor => "sheet monitor cells",
+            Self::Notes => "sheet notes",
+            Self::Note => "sheet note",
         }
     }
 }

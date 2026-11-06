@@ -1528,6 +1528,8 @@ async fn main() {
                     "row": sheet_list(okur_core::SheetListKind::Row),
                     "visible": sheet_list(okur_core::SheetListKind::Visible),
                     "worksheets": sheet_list(okur_core::SheetListKind::Worksheets),
+                    "notes": sheet_list(okur_core::SheetListKind::Notes),
+                    "note": sheet_list(okur_core::SheetListKind::Note),
                 })
             });
             let paragraphs = okur_lab::probes::document_paragraphs_now(window_title.as_deref());

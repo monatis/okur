@@ -252,6 +252,10 @@ excel-no-row-cells = No cells with data in current row.
 excel-no-visible-cells = No cells with data.
 excel-no-formulas = No cells with formulas.
 excel-no-worksheets = No worksheets.
+# Alt+Shift+Apostrophe on a cell without a note [obs, 1183/s5]; Ctrl+Shift+Apostrophe with none in
+# the window [hyp: not recorded].
+excel-no-note = No note or comment visible for this cell.
+excel-no-notes = No cells with notes or comments.
 # Say Window Title in Web Layout and Read Mode: JAWS's lower case "reading layout" [obs,
 # 1042/s5, s9].
 word-view-web = Web Layout View

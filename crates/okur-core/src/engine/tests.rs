@@ -9968,6 +9968,79 @@ fn excel_the_visible_cells_list() {
         .any(|c| matches!(&c.kind, ControlKind::List { selected: 1, .. }))));
 }
 
+/// Excel's notes: Alt+Shift+Apostrophe says the active cell's, "Includes Saturday mornings.",
+/// or "No note or comment visible for this cell."; Ctrl+Shift+Apostrophe lists the window's in
+/// Cells with Notes, "B2: Includes Saturday mornings." [obs, 1183/s3, s5, s6].
+#[test]
+fn excel_notes_said_and_listed() {
+    use crate::event::{SheetEntry, SheetListKind};
+    use crate::ui::ToUi;
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let mut cell = FocusEvent::new(Role::TableCell)
+        .with_name("B2")
+        .with_window_title("sr-excel-comments.xlsx - Excel");
+    cell.value = Some("12".into());
+    cell.app = Some("EXCEL.EXE".into());
+    cell.platform.window_class = Some("EXCEL7".into());
+    engine.handle_focus_event(&cell);
+    let apostrophe = |alt: bool| {
+        let mut key = KeyEvent::new(Key::Apostrophe, Modifiers::none(), true);
+        key.modifiers.shift = true;
+        key.modifiers.alt = alt;
+        key.modifiers.ctrl = !alt;
+        key
+    };
+    let list = |kind: SheetListKind, entries: Vec<SheetEntry>| AccessibilityEvent::SheetList {
+        kind,
+        column: "B2".into(),
+        entries,
+    };
+    let note = SheetEntry {
+        label: "Includes Saturday mornings.".into(),
+        target: "B2".into(),
+    };
+    assert_eq!(
+        engine.handle_key_event(&apostrophe(true)),
+        KeyAction::Consume
+    );
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(read, _)| read == "sheet note"));
+    assert_eq!(
+        engine
+            .handle_accessibility_event(&list(SheetListKind::Note, vec![note]))
+            .as_deref(),
+        Some("Includes Saturday mornings.")
+    );
+    engine.handle_key_event(&apostrophe(true));
+    assert_eq!(
+        engine
+            .handle_accessibility_event(&list(SheetListKind::Note, Vec::new()))
+            .as_deref(),
+        Some("No note or comment visible for this cell.")
+    );
+    engine.handle_key_event(&apostrophe(false));
+    engine.handle_accessibility_event(&list(
+        SheetListKind::Notes,
+        vec![SheetEntry {
+            label: "B2: Includes Saturday mornings.".into(),
+            target: "B2".into(),
+        }],
+    ));
+    let title = ui.take().into_iter().find_map(|m| match m {
+        ToUi::DialogShow { dialog } => Some(dialog.title),
+        _ => None,
+    });
+    assert_eq!(title.as_deref(), Some("Cells with Notes"));
+}
+
 /// A panic while speech is set aside (a focus taken in quietly, a report during Say All) gives
 /// the real speech back: it had stayed dropped, and Okur mute for the session (performance
 /// review 2026-11-02, engine finding 7).
