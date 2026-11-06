@@ -101,6 +101,12 @@ Order of work, most used first:
 
 ## Native desktop
 
+- **A window back in front with no focus event** (1179's first recording, round 1178, trial 1's
+  trace): the batch's console took the front for a second, and Chrome came back with a
+  foreground event alone; JAWS read on, Okur's replay stayed in the console. Live, Okur reads
+  no focus on a foreground event (performance review 2026-11-03: 73% of windows send one within
+  200 ms); a foreground with no focus after it within that time could be read as one, in the
+  live capture and the trace's replay alike.
 - **Dialogs** (323, 322; audit §2.3):
   - the page's name and text on Ctrl+Tab ("Security Page | For special permissions or advanced
     settings, click Advanced." 323/s10): the tracer has the page's name but not its own text.

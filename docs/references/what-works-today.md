@@ -135,7 +135,8 @@ purpose, the reason is in [accepted divergences](accepted-divergences.md).
   Insert+Shift+C the column's cells, Insert+Shift+R the row's and Ctrl+Shift+S the worksheets,
   and OK goes there; Ctrl+Shift+D lists the visible cells with data. Insert+Ctrl+Alt+C and R set
   a row as the column titles and a column as the row titles, or the workbook's names give them
-  ("Title", "ColumnTitle", "RowTitle"), and they are said on entering another column or row;
+  ("Title", "ColumnTitle", "RowTitle"), and they are said on entering another column or row,
+  kept for the workbook from one session to the next;
   Insert+NumPad Enter and Insert+Delete read the column's and the row's total, and Insert+F the
   cell's font and formatting. Ten monitor cells per worksheet: Insert+Shift+1 to 0 set one to the
   cell or the range selected, Alt+Shift+1 to 0 read it with its titles, and Ctrl+Shift+M lists

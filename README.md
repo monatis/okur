@@ -113,8 +113,7 @@ documentation describes and Okur lacks, most important first. Among them:
   Windows applications through UI Automation, so Outlook is expected to work, but JAWS's own
   Outlook keys (a message's header fields on Alt+1 to Alt+9, its attachments on Insert+A) are
   not built yet.
-- In Excel: titles kept from one session to the next, comments and the rest of JAWS's Excel
-  keys.
+- In Excel: comments and the rest of JAWS's Excel keys.
 - Windows' sign-in and lock screens and User Account Control prompts: a Microsoft Store app
   cannot run there. Okur's own installer can, and waits for a code-signing certificate.
 - On macOS, the keyboard and speech.
