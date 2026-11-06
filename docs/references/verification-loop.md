@@ -202,6 +202,12 @@ Write down what JAWS should say before writing code.
     `git add` and moving files in separate commands, and keep the commit message in a file
     (`git commit -F`).
   - **Untracked scenarios without evidence fail its tests.** Keep them in `corpus/pending/`.
+  - **So does a new fixture or snapshot in `corpus/fixtures/` or `corpus/snapshots/`:** the
+    manifest and the invariants baseline go stale, and every commit until the import fails.
+    Keep a round's page in `corpus/pending/` beside its scenarios, and send both to old-pc
+    with the round (a folder in the shared Dropbox and a round script that copies them into
+    place, as rounds 1172 to 1178 did). `preview-round.sh` reads the page there and the
+    snapshots from the fetched round; they move into the corpus at the import.
 - **Branches.** Work on a feature branch. When the phase is reviewed, fast-forward `main` to
   it and start the next branch from `main`. The user pushes to GitHub
   (`origin`, github.com/monatis/okur); agents do not push.
