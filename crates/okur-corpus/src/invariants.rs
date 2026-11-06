@@ -196,9 +196,20 @@ pub fn check(aom: &AomNode) -> Vec<Violation> {
     // Every word on a flow line must come from a single element's text, or from the inline
     // flow of an element holding only inline text (a paragraph's): "mc2" with its raised
     // "2", "1st" with its "st" (JAWS's word [obs, 811/s15]).
+    // An element's title (HTML's `title`) is its own words too, said after its first line
+    // [obs, 1178/s12].
     let sources: Vec<String> = nodes
         .iter()
-        .flat_map(|n| [n.text.as_deref(), n.name.as_deref(), n.value.as_deref()])
+        .flat_map(|n| {
+            [
+                n.text.as_deref(),
+                n.name.as_deref(),
+                n.value.as_deref(),
+                n.attributes
+                    .get(okur_core::linearize::TITLE_ATTRIBUTE)
+                    .map(String::as_str),
+            ]
+        })
         .flatten()
         .map(str::to_owned)
         .chain(
