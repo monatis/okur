@@ -179,6 +179,9 @@ def build(app):
     box.append(Gtk.Label(label="Ready", xalign=0))
     window.set_child(box)
     window.present()
+    # The fruit list's focus on its selected item, Bananas, where Tab enters it, as in WinForms'
+    # list box (GTK's list view enters at the item it focused last, else the first).
+    fruit.scroll_to(1, Gtk.ListScrollFlags.FOCUS, None)
     name.grab_focus()
 
 
