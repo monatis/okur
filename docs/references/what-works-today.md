@@ -149,7 +149,10 @@ purpose, the reason is in [accepted divergences](accepted-divergences.md).
   Shift+Backspace collapses the selection. Insert+Tab says the worksheet, the cell and its
   coordinates, and twice quickly shows the cell's appearance in the Virtual Viewer; AutoSum
   (Alt+Equals), the date and time stamps (Ctrl+Semicolon, Ctrl+Shift+Semicolon) say what they
-  do, and Alt+PageDown and Alt+PageUp say the screen moved before the cell.
+  do, and Alt+PageDown and Alt+PageUp say the screen moved before the cell. Alt+Shift+B
+  describes the cell's border edge by edge; Ctrl+Shift+B, Ctrl+Shift+O, Insert+Alt+C and
+  Insert+F7 list the worksheet's page breaks, objects, charts and hyperlinks; Ctrl+Insert+Enter
+  and Ctrl+Insert+Delete set the totals' column and row; a cell with a hyperlink says so.
   Selecting with Shift and the arrows says the cells added, Shift+Space and Ctrl+Space the
   whole row or column. An empty cell is "blank" with its coordinates; typing in a cell, Delete
   and Ctrl+Z ("Undo") say the cell as it is after them. Shift+F10 opens the cell's menu and

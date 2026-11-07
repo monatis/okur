@@ -319,11 +319,47 @@ and on the dev box alike. At the owner's request the question went to Microsoft 
   Current Focus pressed twice; elsewhere the focus as once), the application's `focus_again`
   after the viewer closes, Ctrl+A a selecting key. `okur-lab parity`: `JAWS parity (Ia2):
   12611/13209 steps match exactly` (1185: 17/17, 1186: 19/19).
-- **Queued on old-pc**: 1187 (select region Ctrl+Shift+8, page breaks Ctrl+Shift+B, worksheet
-  objects Ctrl+Shift+O, Insert+Ctrl+C, Insert+Alt+C, spelling Insert+F7, the totals' row and
-  column setters Ctrl+Insert+Delete and Enter, formula mode Equals) and 1188 (Alt+Shift+B on a
-  new fixture, `corpus/pending/desktop-excel-borders.ps1`, with borders of several styles; its
-  trace has no border data yet, so a re-recording follows once okur-lab reads borders).
+
+## Excel's worksheet lists, borders, totals and hyperlinks (rounds 1187 to 1194)
+
+- **1187** (`10441d1f`, recorded in round 1189's run; the first lost Excel's focus in a trial):
+  Ctrl+Shift+8 silent and Ctrl+Home then "First cell" alone (the cell already active, no
+  selection said since; after Ctrl+Shift+End's said selection it is "First cell | Branch | A 1",
+  1186/s17); Ctrl+Shift+B "Collecting cells at PageBreaks. | no horizontal or vertical page
+  breaks."; Ctrl+Shift+O "Please wait, collecting objects. | Worksheet contains no objects.";
+  Insert+Ctrl+C "The chart is not active. You must first press Insert+ALT+c to select it.";
+  Insert+Alt+C "There are no charts on this worksheet."; Insert+F7 "Please wait, collecting
+  hyperlinks. | No hyperlinks on worksheet."; Insert+Delete without a SUM in the row "no totals
+  column defined and I cannot find a sum formula in the current row."; Equals "type in the
+  formula and press enter". Built in `7922552b`: four new `SheetListKind`s read from Excel's
+  object model (page breaks, shapes, charts, hyperlinks), traced by okur-lab.
+- **1188** (`a1e22736`, recorded in round 1192's run with okur-lab tracing the border edges and
+  the fill pattern; Insert+F needs `settle_max_ms` 20000, its 12 lines outlast 10 s): Alt+Shift+B,
+  "Black Thin Grid Line surrounding Border of active cell.", "Red Thick Continuous Bottom Edge,
+  Black Thin Grid Line top, left and right borders of active cell.", "green Medium Continuous
+  Right Edge, Black Thin Continuous Left Edge, Black Thick Double Bottom Edge, Black Thin Dot Top
+  Edge"; the appearance viewer's fill "Yellow solid" after the font's white background; Insert+F's
+  dimensions rounded (76 for 75.75). Built in `743e944d` (`spreadsheet::border_said`, Office's
+  standard colors named before the color table: #00B050 is JAWS's "green").
+- **1189** (not imported: no trial settles): Ctrl+Insert+Enter and Ctrl+Insert+Delete run a JAWS
+  script that fails ("unknown function call to: settotalscolumntocurrent | Setting totals column
+  to") yet sets the totals; the readers then read that cell. Built in `956e8c31` as an accepted
+  divergence: "Setting totals column to B", "Setting totals row to 2". Round 1189 also read
+  Excel's version: EXCEL.EXE's ProductName "Microsoft Office 2016", Application.Name "Microsoft
+  Excel", ProductCode {90160000-0011-0000-1000-0000000FF1CE}; where JAWS's "Retail" comes from
+  is still open (Ctrl+Insert+V, 1184/s8).
+- **1191** (new fixture `corpus/pending/desktop-excel-links.ps1`, hyperlinks and manual page
+  breaks): Alt+Shift+H "https://example.com/"; Down onto a link cell "Docs | has hyperlink | A 2 |
+  To activate press Enter.", Up "Home page | has hyperlink | A 1" (built in `15958f73`, the hint
+  not twice in a row, a hypothesis 1195 should test); Insert+F7 "Select Hyperlink dialog | List
+  box | Home page | 1 of 2". JAWS's Select Hyperlink dialog then took none of the recorder's keys
+  (no focus events, only the recorder's own "Speech history cleared"), so 1191 now ends at
+  Insert+F7, and 1194 records the page breaks' list alone. In replay Okur names the list box
+  after the dialog ("Select Hyperlink List box"), still to find.
+- **1193** (cell PlaceMarkers, Ctrl+Windows+K and the rest) and **1194** recorded or running
+  when old-pc went offline (2026-11-07, "target_offline"); fetch both when it is back.
+- `okur-lab parity`: `JAWS parity (Ia2): 12651/13248 steps match exactly; 388 accepted
+  divergences not counted`.
 
 ## Also
 
