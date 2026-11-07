@@ -10309,7 +10309,7 @@ fn excel_titles_are_kept_for_the_next_session() {
             .copied(),
         Some(crate::spreadsheet::SheetTitles {
             row: Some(1),
-            column: None
+            ..crate::spreadsheet::SheetTitles::default()
         })
     );
     // The next session, with the titles kept, and one without.
@@ -10345,7 +10345,7 @@ fn excel_answers_go_to_their_asks_in_turn() {
         "Hours.xlsx".to_owned(),
         crate::spreadsheet::SheetTitles {
             row: Some(1),
-            column: None,
+            ..crate::spreadsheet::SheetTitles::default()
         },
     );
     let cell = |name: &str, value: &str| {

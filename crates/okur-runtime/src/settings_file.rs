@@ -861,6 +861,7 @@ mod tests {
             SheetTitles {
                 row: Some(1),
                 column: Some(1),
+                ..SheetTitles::default()
             },
         );
         titles.workbooks.insert(
@@ -868,6 +869,7 @@ mod tests {
             SheetTitles {
                 row: None,
                 column: Some(2),
+                ..SheetTitles::default()
             },
         );
         TitleStore::save(&files, &titles);

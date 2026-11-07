@@ -212,6 +212,10 @@ excel-active-cell = Active Cell: { $cell }
 # Insert+Ctrl+Alt+C and R: the active cell's row set as the column titles, its column as the row
 # titles [obs, 1132/s1, s2].
 excel-column-titles-set = Setting column titles row range to { $row }
+# Ctrl+Insert+Enter and Ctrl+Insert+Delete: the totals column and row set; JAWS's script fails
+# after "Setting totals column to" and still sets them [obs, round 1189, not imported].
+excel-totals-column-set = Setting totals column to { $column }
+excel-totals-row-set = Setting totals row to { $row }
 # Insert+Shift+1 to 0: a monitor cell set to the active cell [obs, 1135/s3].
 excel-monitor-cell-set = Setting monitor cell { $number } to { $cell }
 # Insert+Shift+1 to 0 on a cell already a monitor cell; Alt+Shift+1 to 0 for one not set;

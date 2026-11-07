@@ -1763,6 +1763,18 @@ A step can be in more than one entry; all of its entries apply.
   page whose list is named for what it holds. The rows, buttons and hints are JAWS's.
 - Decided by the agent, 2026-11-06.
 
+### Excel's totals setters finish their sentence
+
+- Steps: `1189-desktop-excel-totals-setters` s3, s5 (pending, not imported: JAWS's script keeps
+  the steps from falling silent, so no trial of the three succeeds; kept in `corpus/pending/`).
+- Difference: on Ctrl+Insert+Enter JAWS says "unknown function call to: | settotalscolumntocurrent
+  | settotalscolumntocurrent | Setting totals column to" and stops, on Ctrl+Insert+Delete the same
+  with "settotalsrowtocurrent"; Okur says "Setting totals column to B", "Setting totals row to 2".
+- Why: JAWS's Excel script calls a function it does not have, which is JAWS's fault, not
+  behavior. The totals are set all the same: the totals readers after them read the cell in
+  that column or row, "row total=12", "column total=12" (s4, s7), and so does Okur.
+- Decided by the agent, 2026-11-07.
+
 ## Considered and not accepted
 
 - From a newer JAWS (2025.2508.120, ARIA-AT's reports), not followed: Insert+Up on a menu

@@ -95,6 +95,12 @@ pub struct SheetTitles {
     pub row: Option<u32>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub column: Option<u32>,
+    /// The row holding the column totals and the column holding the row totals, as
+    /// Ctrl+Insert+Delete and Ctrl+Insert+Enter set them, for the totals readers.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub totals_row: Option<u32>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub totals_column: Option<u32>,
 }
 
 /// The titles set in each workbook, by its name ("Hours.xlsx"), kept from one session to the
@@ -129,6 +135,10 @@ pub(crate) enum TitleKey {
     SetRowTitles,
     SayColumnTitle,
     SayRowTitle,
+    /// Ctrl+Insert+Enter and Ctrl+Insert+Delete: the active cell's column as the one holding
+    /// the row totals, its row as the one holding the column totals (JAWS's help).
+    SetTotalsColumn,
+    SetTotalsRow,
 }
 
 impl TitleKey {
@@ -142,13 +152,18 @@ impl TitleKey {
             (Key::Alpha('R'), true, true, false) => Some(Self::SetRowTitles),
             (Key::Alpha('C'), false, true, true) => Some(Self::SayColumnTitle),
             (Key::Alpha('R'), false, true, true) => Some(Self::SayRowTitle),
+            (Key::Enter, true, false, false) => Some(Self::SetTotalsColumn),
+            (Key::Delete, true, false, false) => Some(Self::SetTotalsRow),
             _ => None,
         }
     }
 
     /// Sets `titles` from the cell at (`column`, `row`), and what that says: "Setting column
     /// titles row range to 1", "Setting row titles column range to A" [obs, 1132/s1, s2];
-    /// `None` for a key that says a title.
+    /// "Setting totals column to B", "Setting totals row to 2", where JAWS's own script fails
+    /// with "unknown function call to: settotalscolumntocurrent | Setting totals column to"
+    /// and still sets it (accepted-divergences.md) [obs, round 1189, not imported]; `None`
+    /// for a key that says a title.
     pub(crate) fn set(self, titles: &mut SheetTitles, (column, row): (u32, u32)) -> Option<String> {
         match self {
             Self::SetColumnTitles => {
@@ -158,6 +173,14 @@ impl TitleKey {
             Self::SetRowTitles => {
                 titles.column = Some(column);
                 Some(msg::excel_row_titles_set(column_letters(column)).render())
+            }
+            Self::SetTotalsColumn => {
+                titles.totals_column = Some(column);
+                Some(msg::excel_totals_column_set(column_letters(column)).render())
+            }
+            Self::SetTotalsRow => {
+                titles.totals_row = Some(row);
+                Some(msg::excel_totals_row_set(row.to_string()).render())
             }
             Self::SayColumnTitle | Self::SayRowTitle => None,
         }
@@ -215,6 +238,11 @@ pub(crate) enum SheetReading {
     /// formula's value, "column total=14" [obs, 1132/s11, s12].
     ColumnTotal,
     RowTotal,
+    /// The totals readers where a totals row or column is set: the active cell's column's cell
+    /// in that row, its row's cell in that column, "row total=12" [obs, round 1189, not
+    /// imported].
+    ColumnTotalIn(u32),
+    RowTotalIn(u32),
     /// A monitor cell read (Alt+Shift+1 to 0): its column title where the titles are set, its
     /// cells' texts, then its reference, "12 | B2" [obs, 1135/s5], "Weekdays | 12 | B2", "12 |
     /// 10 | B2:B3", an empty one's reference alone, "D1" [obs, 1166].
@@ -257,6 +285,8 @@ impl SheetReading {
             Self::RowTitle(column) => SheetCells::Around(Some((None, Some(column)))),
             Self::Format | Self::Appearance => SheetCells::Format,
             Self::ColumnTotal | Self::RowTotal => SheetCells::Sums,
+            Self::ColumnTotalIn(row) => SheetCells::Around(Some((Some(row), None))),
+            Self::RowTotalIn(column) => SheetCells::Around(Some((None, Some(column)))),
             Self::Monitor(range) => SheetCells::Range(range),
             Self::VisibleRange
             | Self::Gridlines
@@ -353,6 +383,22 @@ impl SheetReading {
                     None => msg::excel_no_row_total().to_string(),
                 });
             }
+            Self::ColumnTotalIn(_) | Self::RowTotalIn(_) => {
+                let (Some(column), Some(row)) = reference_end(place.address.trim())? else {
+                    return None;
+                };
+                return Some(if let Self::ColumnTotalIn(totals) = self {
+                    msg::excel_column_total(known_text(place, (column, row), (column, totals)))
+                        .render()
+                } else {
+                    let totals = if let Self::RowTotalIn(totals) = self {
+                        totals
+                    } else {
+                        column
+                    };
+                    msg::excel_row_total(known_text(place, (column, row), (totals, row))).render()
+                });
+            }
             Self::Monitor(range) => return Some(monitor_said(place, range)),
             Self::VisibleRange
             | Self::Gridlines
@@ -382,6 +428,8 @@ impl SheetReading {
             | Self::Format
             | Self::ColumnTotal
             | Self::RowTotal
+            | Self::ColumnTotalIn(_)
+            | Self::RowTotalIn(_)
             | Self::Monitor(_)
             | Self::VisibleRange
             | Self::Gridlines
@@ -912,6 +960,7 @@ pub(crate) fn named_titles(place: &crate::event::SheetPlace) -> SheetTitles {
     SheetTitles {
         row: place.title_row,
         column: place.title_column,
+        ..SheetTitles::default()
     }
 }
 
@@ -1192,6 +1241,57 @@ mod tests {
                     "Yellow solid".to_owned()
                 ][..]
             )
+        );
+    }
+
+    /// Ctrl+Insert+Enter and Ctrl+Insert+Delete on B2 set the totals column and row; the totals
+    /// readers then read their cells, "row total=12", "column total=12" [obs, round 1189].
+    #[test]
+    fn totals_set_by_hand() {
+        use crate::input::Modifiers;
+        let ctrl_insert = Modifiers {
+            ctrl: true,
+            insert: true,
+            ..Modifiers::none()
+        };
+        let column = TitleKey::of(Key::Enter, ctrl_insert);
+        let row = TitleKey::of(Key::Delete, ctrl_insert);
+        assert_eq!(column, Some(TitleKey::SetTotalsColumn));
+        assert_eq!(row, Some(TitleKey::SetTotalsRow));
+        let mut titles = SheetTitles::default();
+        assert_eq!(
+            column.and_then(|k| k.set(&mut titles, (2, 2))).as_deref(),
+            Some("Setting totals column to B")
+        );
+        assert_eq!(
+            row.and_then(|k| k.set(&mut titles, (2, 2))).as_deref(),
+            Some("Setting totals row to 2")
+        );
+        assert_eq!(
+            (titles.totals_column, titles.totals_row),
+            (Some(2), Some(2))
+        );
+        let mut place = crate::event::SheetPlace {
+            address: "B2".into(),
+            row: vec!["12".into()],
+            column: vec!["12".into()],
+            ..crate::event::SheetPlace::default()
+        };
+        assert_eq!(
+            SheetReading::RowTotalIn(2).said(&place).as_deref(),
+            Some("row total=12")
+        );
+        place.address = "B3".into();
+        place.row = vec!["10".into()];
+        place.column = vec!["10".into()];
+        place.cells = vec![crate::event::SheetCell {
+            column: 2,
+            row: 2,
+            text: "12".into(),
+        }];
+        assert_eq!(
+            SheetReading::ColumnTotalIn(2).said(&place).as_deref(),
+            Some("column total=12")
         );
     }
 

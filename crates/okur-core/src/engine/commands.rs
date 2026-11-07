@@ -1366,7 +1366,10 @@ impl ScreenReaderEngine {
         let reading = match key {
             TitleKey::SayColumnTitle => titles.row.map(SheetReading::ColumnTitle),
             TitleKey::SayRowTitle => titles.column.map(SheetReading::RowTitle),
-            TitleKey::SetColumnTitles | TitleKey::SetRowTitles => {
+            TitleKey::SetColumnTitles
+            | TitleKey::SetRowTitles
+            | TitleKey::SetTotalsColumn
+            | TitleKey::SetTotalsRow => {
                 // Set from a cell; an empty one, the grid's focus, sets nothing [hyp].
                 let said =
                     crate::apps::windows::excel::cell_at(&focus).and_then(|at| key.set(titles, at));
@@ -1659,6 +1662,28 @@ impl ScreenReaderEngine {
             Key::Delete => Some(crate::spreadsheet::SheetReading::RowTotal),
             _ => None,
         };
+        // A totals row or column set: its cell is the total [obs, round 1189, not imported].
+        let totals = self
+            .sheet_focus()
+            .and_then(|focus| focus.window_title)
+            .and_then(|window| {
+                self.sheet_titles
+                    .get(crate::spreadsheet::workbook(&window))
+                    .copied()
+            })
+            .unwrap_or_default();
+        let details = details.map(|reading| {
+            use crate::spreadsheet::SheetReading;
+            match reading {
+                SheetReading::ColumnTotal => totals
+                    .totals_row
+                    .map_or(reading, SheetReading::ColumnTotalIn),
+                SheetReading::RowTotal => totals
+                    .totals_column
+                    .map_or(reading, SheetReading::RowTotalIn),
+                other => other,
+            }
+        });
         if let Some(reading) = details.filter(|_| self.sheet_focus().is_some()) {
             if self.ask_sheet(
                 reading.cells(),
