@@ -16,13 +16,7 @@ async fn main() {
         .with_writer(std::io::stderr)
         .init();
     let args: Vec<String> = std::env::args().skip(1).collect();
-    // The first number that follows no option.
-    let seconds = args
-        .iter()
-        .enumerate()
-        .filter(|(i, _)| *i == 0 || args.get(i - 1).is_none_or(|a| !a.starts_with("--")))
-        .find_map(|(_, a)| a.parse().ok())
-        .unwrap_or(20u64);
+    let seconds = run_seconds(&args);
     let mut settings = okur_core::settings::Settings::default();
     if args.iter().any(|a| a == "--no-speech") {
         settings.voice.synthesizer = okur_core::settings::Synthesizer::NoSpeech;
@@ -75,6 +69,26 @@ async fn main() {
         Ok(reason) => println!("Okur stopped: {reason:?}"),
         Err(error) => println!("Okur did not run: {error}"),
     }
+}
+
+/// The seconds to run, the first number among the arguments that is no option's value
+/// (`--speech-log <path>`, `--web-verbosity <level>`); the lab's runner passes
+/// `--no-speech 3600 --speech-log <path>`, a flag before the number.
+#[cfg(target_os = "linux")]
+fn run_seconds(args: &[String]) -> u64 {
+    const WITH_VALUE: [&str; 2] = ["--speech-log", "--web-verbosity"];
+    let mut skip = false;
+    for arg in args {
+        if std::mem::take(&mut skip) {
+            continue;
+        }
+        if WITH_VALUE.contains(&arg.as_str()) {
+            skip = true;
+        } else if let Ok(seconds) = arg.parse() {
+            return seconds;
+        }
+    }
+    20
 }
 
 #[cfg(not(target_os = "linux"))]

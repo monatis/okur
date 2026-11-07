@@ -242,15 +242,22 @@ def main():
             press(key)
         settled = settle(log, offset)
         said, offset = said_since(log, offset)
-        success = success and settled
+        # A step Okur was no longer running for heard nothing: never a result.
+        running = okur.poll() is None
+        success = success and settled and running
         results.append({
             "step_id": step["id"],
             "t_start_ms": start,
             "t_end_ms": int(time.time() * 1000),
             "action": {"type": kind, "command": command},
-            "observation": {"speech_raw": "\n".join(said), "settled": settled},
-            "step_success": settled,
+            "observation": {"speech_raw": "\n".join(said), "settled": settled,
+                            **({} if running else {"okur_exited": True})},
+            "step_success": settled and running,
         })
+    exited = okur.poll()
+    if exited is not None:
+        print(f"{scenario['id']}: Okur exited ({exited}) before the run ended ({work})",
+              file=sys.stderr)
     okur.terminate()
     chrome.terminate()
     okur.wait(timeout=10)
