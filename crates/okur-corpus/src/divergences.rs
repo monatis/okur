@@ -207,6 +207,12 @@ divergences! {
      which end alike (614).",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-20";
 
+    Difference::OkurAlsoSays("Plan\nA 1") => ["1197-desktop-excel-objects-and-note-editing/s3"],
+    "Escape out of JAWS's Select an object list (Ctrl+Shift+O): JAWS says nothing as the focus \
+     comes back to the cell, where it says the cell out of its other lists, \"Home page | has \
+     hyperlink | A 1\" (1191/s6), \"22 | B 4\" (521/s10). Okur says the cell out of every list.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-11-07";
+
     Difference::JawsAlsoSays("selected\nIzmir a") => ["1167-web-key-labels-changed/s9"],
     "Shift+Tab back into a page's field whose text the browser selects: Chrome reports the \
      selection before the field's focus, and JAWS says it first, \"selected | Izmir a\", then \

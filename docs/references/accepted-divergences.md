@@ -1764,6 +1764,16 @@ A step can be in more than one entry; all of its entries apply.
   page whose list is named for what it holds. The rows, buttons and hints are JAWS's.
 - Decided by the agent, 2026-11-06.
 
+### Excel's objects list closes without the cell
+
+- Steps: `1197-desktop-excel-objects-and-note-editing/s3`.
+- Difference: Escape out of JAWS's Select an object list (Ctrl+Shift+O): JAWS says nothing; Okur
+  says the cell the focus comes back to, "Plan | A 1".
+- Why: JAWS says the cell coming out of its other lists, Select Hyperlink ("Home page | has
+  hyperlink | A 1", `1191`, round 1199) and Cells with Formulas ("22 | B 4", `521/s10`). Okur says
+  where the focus is out of every list.
+- Decided by the agent, 2026-11-07.
+
 ### A page field's selection said before the field
 
 - Steps: `1167-web-key-labels-changed/s9`.
