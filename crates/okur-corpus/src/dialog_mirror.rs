@@ -278,6 +278,22 @@ impl DialogMirror {
         if label.is_some() {
             focus.container_name = label;
         }
+        // A list box is named as Okur's dialog names it: JAWS names an unlabelled one by its
+        // dialog in one of its dialogs and not in another, "Select a System Tray Icon List box"
+        // [obs, 511/s4], "Select Hyperlink dialog | List box" [obs, 1191/s4], with the same
+        // controls traced in both.
+        if ours && focus.container_role == Some(Role::List) && !focus.container_is_list_view {
+            let own = dialog.controls.iter().find_map(|c| match c.kind {
+                ControlKind::ListBox { .. } => Some(plain(&c.label)),
+                _ => None,
+            });
+            if let Some(own) = own {
+                if let Some(list) = focus.groups.iter_mut().rev().find(|g| g.list) {
+                    list.name.clone_from(&own);
+                }
+                focus.container_name = Some(own).filter(|n| !n.is_empty());
+            }
+        }
         // A list item is Okur's own label where JAWS's differs from it only in punctuation:
         // JAWS's \"Radio Buttons List,\" is a typo (an accepted divergence) [obs, 230/s18].
         if focus.role == Role::ListItem {
