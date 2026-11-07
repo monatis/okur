@@ -2057,6 +2057,10 @@
       "sha256": "15c9d8a81f8d6df80bbde20330bea377adbe6b207cd7433e96fdb866aebbda68",
       "size_bytes": 8427
     },
+    "desktop-excel-links.ps1": {
+      "sha256": "3f3045b4c76ed5a62075228900a391455f31cf85aa6b6f95ac5a13260845ef92",
+      "size_bytes": 5632
+    },
     "desktop-excel-titles.ps1": {
       "sha256": "7cb4bbb9cec7f0209f60be3d7fcb8492873cc4977767672d38a8278879cfa03e",
       "size_bytes": 6380
@@ -5208,6 +5212,20 @@
       "fixture": "desktop-excel-borders.ps1",
       "evidence": {
         "sha256": "0123b9c2e23a840ea9bcb105a8b19be6f7abdf94caa629f64e2646607b1ff830",
+        "capture_script_sha256": "60f87ebf646ac08ab9f6ab2694c35d49ed9377ad656e2cf1bf5f3702426698a1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1195-desktop-excel-link-hints",
+      "fixture": "desktop-excel-links.ps1",
+      "evidence": {
+        "sha256": "5ab240b959f33af7a2e8e4ac99fbe3707428d94a6c1b605e1380bfcebb3c2d6e",
         "capture_script_sha256": "60f87ebf646ac08ab9f6ab2694c35d49ed9377ad656e2cf1bf5f3702426698a1",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
@@ -30013,10 +30031,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1976,
-    "scenarios_with_evidence": 1976,
-    "total_trials": 5934,
-    "successful_trials": 5917,
-    "deterministic_scenarios": 1646
+    "scenarios": 1977,
+    "scenarios_with_evidence": 1977,
+    "total_trials": 5937,
+    "successful_trials": 5920,
+    "deterministic_scenarios": 1647
   }
 }

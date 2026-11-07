@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 12653,
-  "total_steps": 13248,
+  "matched_steps": 12656,
+  "total_steps": 13253,
   "accepted_divergences": 388,
   "errors": [],
   "steps": {
@@ -3096,6 +3096,11 @@
     "1188-desktop-excel-borders/s7": "match",
     "1188-desktop-excel-borders/s8": "match",
     "1188-desktop-excel-borders/s9": "match",
+    "1195-desktop-excel-link-hints/s1": "match",
+    "1195-desktop-excel-link-hints/s2": "mismatch",
+    "1195-desktop-excel-link-hints/s3": "match",
+    "1195-desktop-excel-link-hints/s4": "mismatch",
+    "1195-desktop-excel-link-hints/s5": "match",
     "12-struct-heading-level-2/s1": "match",
     "12-struct-heading-level-2/s2": "match",
     "13-struct-next-link/s1": "match",

@@ -1,0 +1,50 @@
+{
+  "id": "1195-desktop-excel-link-hints",
+  "name": "Excel's cells with hyperlinks and the hint to follow them: from A1's link, Down onto A2's link, Down onto A3 without one, Up onto A2's, Up onto A1's, Down onto A2's",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-excel-links.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "jaws_forget": [
+    "PersonalizedSettings\\excel_sr-excel-links.xlsx.JSI",
+    "excel.JCF"
+  ],
+  "launch": {
+    "window_title": "sr-excel-links.xlsx - Excel (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Up"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Up"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Down"
+    }
+  ]
+}
