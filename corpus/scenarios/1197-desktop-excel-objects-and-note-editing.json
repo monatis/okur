@@ -1,0 +1,60 @@
+{
+  "id": "1197-desktop-excel-objects-and-note-editing",
+  "name": "JAWS commands for Excel (popapps.chm) on a sheet with a rectangle: Select worksheet objects (Ctrl+Shift+O), Down and Escape in JAWS's dialog (keys with UI Access); Select the first worksheet object (Insert+Alt+C) with no chart; Create or edit cell comment (Shift+F2) on A1 (JAWS's Edit note dialog), Escape with UI Access; Down",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-excel-objects.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "jaws_forget": [
+    "PersonalizedSettings\\excel_sr-excel-objects.xlsx.JSI",
+    "excel.JCF"
+  ],
+  "launch": {
+    "window_title": "sr-excel-objects.xlsx - Excel (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Ctrl+Shift+O"
+    },
+    {
+      "id": "s2",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s3",
+      "type": "key_ui_access",
+      "command": "Escape"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Insert+Alt+C"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Shift+F2"
+    },
+    {
+      "id": "s6",
+      "type": "key_ui_access",
+      "command": "Escape"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Down"
+    }
+  ]
+}
