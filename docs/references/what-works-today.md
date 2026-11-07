@@ -153,6 +153,8 @@ purpose, the reason is in [accepted divergences](accepted-divergences.md).
   describes the cell's border edge by edge; Ctrl+Shift+B, Ctrl+Shift+O, Insert+Alt+C and
   Insert+F7 list the worksheet's page breaks, objects, charts and hyperlinks; Ctrl+Insert+Enter
   and Ctrl+Insert+Delete set the totals' column and row; a cell with a hyperlink says so.
+  Ctrl+Windows+K sets a cell PlaceMarker, Ctrl+Alt+Windows+K lists the workbook's and
+  Insert+Space, M selects from it to the active cell.
   Selecting with Shift and the arrows says the cells added, Shift+Space and Ctrl+Space the
   whole row or column. An empty cell is "blank" with its coordinates; typing in a cell, Delete
   and Ctrl+Z ("Undo") say the cell as it is after them. Shift+F10 opens the cell's menu and

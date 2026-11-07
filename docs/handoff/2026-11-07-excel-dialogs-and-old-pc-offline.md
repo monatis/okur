@@ -55,11 +55,30 @@ Ctrl+Insert+Shift+Tab).
   "Microsoft Excel", ProductCode `{90160000-0011-0000-1000-0000000FF1CE}`; where JAWS's
   "Retail" in Ctrl+Insert+V comes from is still unknown (1184/s8).
 
+## After old-pc came back (rounds 1193 to 1200)
+
+- **JAWS's own dialogs take keys only with UI Access**: `TypeKey` closed JAWS's Add dialog and
+  reached nothing in Select Hyperlink (round 1195); `key_ui_access` steps (okur-lab-keys, signed,
+  under Program Files) walked them all in round 1199. A scenario that opens one of JAWS's dialogs
+  uses `key_ui_access` inside it.
+- **Cell PlaceMarkers** (`2ef50e20`, `08f7bf5c`; evidence `322a735d`, recorded in round 1198):
+  14/14. Alt+Windows+K does nothing in JAWS there (Okur leaves it unbound).
+- **The hyperlink hint** (`2d43c466`; evidence `53125a0c`, 1195): said on every cell with a link
+  but A1, every trial; Excel's UI Automation calls the plain cell under two links linked. Both a
+  known-gap test.
+- **The worksheet's lists from JAWS's dialogs** (`ad25756f`, round 1199): "Cells at PageBreaks"
+  with "A21:  horizontal", "Select an object" with "rectangle C2-F7: Check totals" (`2d43c466`),
+  Insert+Alt+C with objects and no chart, the hint as a list closes back onto a link cell,
+  Ctrl+Home after an empty cell. Round 1200 re-records 1191 and 1197 with the okur-lab that
+  traces those labels (push `b1a50d49`).
+- `okur-lab parity`: `JAWS parity (Ia2): 12670/13267 steps match exactly; 388 accepted
+  divergences not counted`.
+
 ## Next
 
-1. When old-pc answers: fetch 1193, import it if its trials succeed and build cell PlaceMarkers;
-   start round 1195; import 1191, 1195 and 1196 and build what they show.
-2. Excel's remaining keys: Shift+F2 (a note's editing; it changes the workbook, so the fixture's
-   close must not ask to save), Ctrl+Shift+O and Insert+Alt+C with a shape and a chart (a fixture
-   with a drawing part), the opening announcement (open item), Ctrl+Insert+V's "Retail".
+1. Import 1191 and 1197 from round 1200 once they replay clean.
+2. Excel's remaining keys: JAWS's custom summary (Ctrl+Insert+Tab's "Hours Summary" and its Add
+   dialog, "Name for B2:"; the label typed with UI Access was not kept, so the flow is not
+   known), Shift+F2's JAWS "Edit note" dialog (Okur would need its own, writing the note through
+   Excel's object model), the opening announcement (open item), Ctrl+Insert+V's "Retail".
 3. Then the README's Excel line and figures (`readme-follows-features`), and the plan's §3.2.
