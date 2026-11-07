@@ -2049,6 +2049,10 @@
       "sha256": "1714eada49baac05b6637982281b7fd0f226c29d4bae6e4868f1d8b9dd0802e8",
       "size_bytes": 2217
     },
+    "desktop-excel-borders.ps1": {
+      "sha256": "0ec10548af73a4fa3b040598923c4f36c2b07e88038854fac59224a17cf534bb",
+      "size_bytes": 6758
+    },
     "desktop-excel-comments.ps1": {
       "sha256": "15c9d8a81f8d6df80bbde20330bea377adbe6b207cd7433e96fdb866aebbda68",
       "size_bytes": 8427
@@ -5190,6 +5194,20 @@
       "fixture": "desktop-excel.ps1",
       "evidence": {
         "sha256": "f87e132f08791c64756233d758005a39b70ad6f1bc5b113c82d6b8e763d13972",
+        "capture_script_sha256": "60f87ebf646ac08ab9f6ab2694c35d49ed9377ad656e2cf1bf5f3702426698a1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1188-desktop-excel-borders",
+      "fixture": "desktop-excel-borders.ps1",
+      "evidence": {
+        "sha256": "0123b9c2e23a840ea9bcb105a8b19be6f7abdf94caa629f64e2646607b1ff830",
         "capture_script_sha256": "60f87ebf646ac08ab9f6ab2694c35d49ed9377ad656e2cf1bf5f3702426698a1",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
@@ -29995,10 +30013,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1975,
-    "scenarios_with_evidence": 1975,
-    "total_trials": 5931,
-    "successful_trials": 5914,
-    "deterministic_scenarios": 1645
+    "scenarios": 1976,
+    "scenarios_with_evidence": 1976,
+    "total_trials": 5934,
+    "successful_trials": 5917,
+    "deterministic_scenarios": 1646
   }
 }

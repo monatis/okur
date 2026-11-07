@@ -1,0 +1,139 @@
+{
+  "id": "1188-desktop-excel-borders",
+  "name": "JAWS commands for Excel (popapps.chm): Describe cell border (Alt+Shift+B) on a cell without borders, then on cells with thin automatic borders all round, a thick red bottom, a double top, a dashed blue left, and a mixed set on a filled cell in bold red; on the boxed and the mixed cell also the cell's appearance in detail (Insert+Tab twice quickly), Escape, and Say cell font and attributes (Insert+F); Down twice between the cells",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-excel-borders.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "jaws_forget": [
+    "PersonalizedSettings\\excel_sr-excel-borders.xlsx.JSI",
+    "excel.JCF"
+  ],
+  "launch": {
+    "window_title": "sr-excel-borders.xlsx - Excel (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Alt+Shift+B"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Alt+Shift+B"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Insert+Tab",
+      "repeat": 2
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Insert+F",
+      "settle_max_ms": 20000
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Alt+Shift+B"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Alt+Shift+B"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "Alt+Shift+B"
+    },
+    {
+      "id": "s17",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s18",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s19",
+      "type": "key",
+      "command": "Alt+Shift+B"
+    },
+    {
+      "id": "s20",
+      "type": "key",
+      "command": "Insert+Tab",
+      "repeat": 2
+    },
+    {
+      "id": "s21",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s22",
+      "type": "key",
+      "command": "Insert+F",
+      "settle_max_ms": 20000
+    }
+  ]
+}
