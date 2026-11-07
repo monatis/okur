@@ -10,8 +10,19 @@ set -uo pipefail
 name="${1:-desktop-forms}"
 python3 "$HOME/okur/corpus/fixtures/linux/$name.py" 120 > /tmp/replica.log 2>&1 &
 replica=$!
-sleep 6
-python3 - <<'PY'
+sleep 8
+echo "replica running: $(kill -0 "$replica" 2>/dev/null && echo yes || echo no)"
+python3 -u - <<'PY'
+import gi
+gi.require_version("Atspi", "2.0")
+from gi.repository import Atspi
+desktop = Atspi.get_desktop(0)
+print("applications on the bus:", desktop.get_child_count())
+for i in range(desktop.get_child_count()):
+    app = desktop.get_child_at_index(i)
+    print(" ", i, app.get_name() if app else None, app.get_child_count() if app else None)
+PY
+python3 -u - <<'PY'
 import time
 import gi
 gi.require_version("Atspi", "2.0")
@@ -71,7 +82,7 @@ for i in range(desktop.get_child_count()):
         dump(app)
 PY
 # The focus as Tab moves, each focused element with its ancestors.
-python3 - <<'PY'
+python3 -u - <<'PY'
 import subprocess
 import time
 import gi
