@@ -5226,6 +5226,20 @@
       }
     },
     {
+      "scenario_id": "1191-desktop-excel-links-and-page-breaks",
+      "fixture": "desktop-excel-links.ps1",
+      "evidence": {
+        "sha256": "d002a0af6f29d432e9601f7125299b9f29e5759ecf04932adbb1508d1cd5d393",
+        "capture_script_sha256": "60f87ebf646ac08ab9f6ab2694c35d49ed9377ad656e2cf1bf5f3702426698a1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "1193-desktop-excel-cell-placemarkers",
       "fixture": "desktop-excel.ps1",
       "evidence": {
@@ -30063,10 +30077,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1979,
-    "scenarios_with_evidence": 1979,
-    "total_trials": 5943,
-    "successful_trials": 5926,
+    "scenarios": 1980,
+    "scenarios_with_evidence": 1980,
+    "total_trials": 5946,
+    "successful_trials": 5929,
     "deterministic_scenarios": 1648
   }
 }
