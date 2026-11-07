@@ -295,6 +295,7 @@ mod tests {
                 repeat: false,
                 office_menu_closed: true,
                 sheet_titles: None,
+                hints: true,
             };
             match WordDocument.focus(focus, &mut cx) {
                 FocusResponse::SpeakWhole(announcement) => Some(announcement.render()),

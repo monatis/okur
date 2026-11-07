@@ -390,6 +390,10 @@ impl ScreenReaderEngine {
             repeat,
             office_menu_closed,
             sheet_titles,
+            hints: self
+                .settings
+                .verbosity
+                .says(crate::announcement::PartKind::Hint),
         };
         let mut response = FocusResponse::Pass;
         for app in &mut self.apps {

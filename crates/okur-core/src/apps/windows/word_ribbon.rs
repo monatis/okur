@@ -482,6 +482,7 @@ mod tests {
             repeat: false,
             office_menu_closed: false,
             sheet_titles: Default::default(),
+            hints: true,
         };
         match ribbon.focus(focus, &mut cx) {
             FocusResponse::Speak(announcement) | FocusResponse::SpeakWhole(announcement) => {
@@ -773,6 +774,7 @@ mod tests {
             repeat: false,
             office_menu_closed: false,
             sheet_titles: Default::default(),
+            hints: true,
         };
         assert!(matches!(
             ribbon.focus(&document, &mut cx),
@@ -810,6 +812,7 @@ mod tests {
                 repeat: false,
                 office_menu_closed: false,
                 sheet_titles: Default::default(),
+                hints: true,
             };
             match ribbon.focus(focus, &mut cx) {
                 FocusResponse::Speak(announcement) | FocusResponse::SpeakWhole(announcement) => {

@@ -71,6 +71,9 @@ pub struct AppContext<'a> {
     /// The titles of the workbook in front, set with Excel's Insert+Ctrl+Alt+C and R or given by
     /// its names; `None` before they are known.
     pub sheet_titles: Option<crate::spreadsheet::SheetTitles>,
+    /// Whether usage hints are said (verbosity's tutor messages): a module that keeps its own
+    /// speech for later, beyond the engine's filter, leaves its hints out by it.
+    pub hints: bool,
 }
 
 impl AppContext<'_> {

@@ -61,6 +61,7 @@ mod tests {
                     repeat: false,
                     office_menu_closed: false,
                     sheet_titles: Default::default(),
+                    hints: true,
                 }
             ),
             FocusResponse::Silent

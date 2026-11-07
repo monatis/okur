@@ -188,7 +188,7 @@ impl AppModule for Excel {
         // to follow it, not twice in a row, "Docs | has hyperlink | A 2 | To activate press
         // Enter.", then "Home page | has hyperlink | A 1" [obs, 1191/s2, s3].
         let (value, link) = link_value(focus.value.as_deref().unwrap_or_default());
-        let link_hint = link && !self.link_hint_said;
+        let link_hint = link && !self.link_hint_said && cx.hints;
         self.link_hint_said = link_hint;
         // The key's own word, before the titles where they are said.
         let mut first = Vec::new();
@@ -387,12 +387,56 @@ mod tests {
             repeat,
             office_menu_closed: false,
             sheet_titles: Some(SheetTitles::default()),
+            hints: true,
         };
         match excel.focus(focus, &mut cx) {
             FocusResponse::Speak(announcement) => Some(announcement.render()),
             FocusResponse::Silent => Some(String::new()),
             _ => None,
         }
+    }
+
+    /// A cell with a hyperlink: "has hyperlink" after its text, the hint after its coordinates,
+    /// not twice in a row, "Docs | has hyperlink | A 2 | To activate press Enter." then "Home
+    /// page | has hyperlink | A 1" [obs, 1191/s2, s3].
+    #[test]
+    fn a_cell_with_a_hyperlink_says_so() {
+        let cell = |name: &str, value: &str| {
+            let mut focus = FocusEvent::new(Role::TableCell);
+            focus.name = Some(name.into());
+            focus.value = Some(value.into());
+            focus.platform.window_class = Some(GRID_WINDOW.into());
+            focus
+        };
+        let down = Some((Key::DownArrow, crate::input::Modifiers::none()));
+        let up = Some((Key::UpArrow, crate::input::Modifiers::none()));
+        let mut excel = Excel::default();
+        assert_eq!(
+            said(
+                &mut excel,
+                &cell("A2", "Docs , Contains Hyperlink"),
+                down,
+                false
+            )
+            .as_deref(),
+            Some("Docs\nhas hyperlink\nA 2\nTo activate press Enter.")
+        );
+        assert_eq!(
+            said(
+                &mut excel,
+                &cell("A1", "Home page , Contains Hyperlink"),
+                up,
+                false
+            )
+            .as_deref(),
+            Some("Home page\nhas hyperlink\nA 1")
+        );
+        assert_eq!(
+            excel
+                .focus_again(&cell("A2", "Docs , Contains Hyperlink"))
+                .as_deref(),
+            Some("Docs\nhas hyperlink\nA 2")
+        );
     }
 
     /// Ctrl+Z says "Undo" before the cell it gives back, "Undo | 7 | D 1" [obs, 1123/s8]; the
@@ -508,6 +552,7 @@ mod tests {
                 repeat: false,
                 office_menu_closed: false,
                 sheet_titles: Some(titles),
+                hints: true,
             };
             let said = match excel.focus(focus, &mut cx) {
                 FocusResponse::Speak(announcement) => announcement.render(),
@@ -594,6 +639,7 @@ mod tests {
                 repeat: false,
                 office_menu_closed: false,
                 sheet_titles: Some(titles),
+                hints: true,
             };
             let _ = excel.focus(focus, &mut cx);
             cx.ask_sheet
@@ -640,6 +686,7 @@ mod tests {
                 repeat: false,
                 office_menu_closed: false,
                 sheet_titles: None,
+                hints: true,
             };
             let said = match excel.focus(&focus, &mut cx) {
                 FocusResponse::Speak(announcement) => announcement.render(),

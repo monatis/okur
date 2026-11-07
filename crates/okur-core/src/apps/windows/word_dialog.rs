@@ -258,6 +258,7 @@ mod tests {
             repeat: false,
             office_menu_closed: false,
             sheet_titles: Default::default(),
+            hints: true,
         };
         match dialog.focus(focus, &mut cx) {
             FocusResponse::Speak(announcement) => Some(announcement.render()),

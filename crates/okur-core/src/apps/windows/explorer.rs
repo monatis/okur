@@ -238,6 +238,7 @@ mod tests {
             repeat: false,
             office_menu_closed: false,
             sheet_titles: Default::default(),
+            hints: true,
         };
         match explorer.focus(focus, &mut cx) {
             FocusResponse::Speak(announcement) => announcement.render(),
@@ -301,6 +302,7 @@ mod tests {
             repeat: false,
             office_menu_closed: false,
             sheet_titles: Default::default(),
+            hints: true,
         };
         assert!(matches!(
             explorer.focus(&view, &mut cx),
@@ -330,6 +332,7 @@ mod tests {
                 repeat: false,
                 office_menu_closed: false,
                 sheet_titles: Default::default(),
+                hints: true,
             };
             match explorer.focus(focus, &mut cx) {
                 FocusResponse::Speak(announcement) => announcement.render(),
