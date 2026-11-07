@@ -877,7 +877,11 @@ impl ListDialog {
                     // Move to Monitor Cell's is a list box without a name, "dialog | List box |
                     // B2: 12 | 1 of 1 | To move to an item press the Arrow keys." [obs,
                     // 1135/s6]; the others' a list view, "List1 List view" [obs, 521/s13].
-                    if kind == crate::event::SheetListKind::Monitor {
+                    if matches!(
+                        kind,
+                        crate::event::SheetListKind::Monitor
+                            | crate::event::SheetListKind::Hyperlinks
+                    ) {
                         control(
                             self.list_id(),
                             "",

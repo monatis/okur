@@ -193,6 +193,8 @@ word-revisions-untracked = You must enable Track Changes in order to use this fe
 word-no-note-at-cursor = No footnote or EndNote reference at cursor.
 # Excel's Ctrl+End and Ctrl+Home, before the cell they reach, and a Ctrl arrow's, after it
 # [obs, 1115/s1-s6].
+# A cell with a hyperlink, after its text: "Docs | has hyperlink | A 2" [obs, 1191/s2].
+excel-has-hyperlink = has hyperlink
 excel-last-cell = Last Cell
 excel-first-cell = First cell
 # Alt+PageDown and Alt+PageUp, before the cell they reach [obs, 1185/s14, s15].

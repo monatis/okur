@@ -37,12 +37,14 @@ list-dialog-move-to-worksheet = Move to Worksheet
 list-dialog-cells-with-notes = Cells with Notes
 # Excel's monitor cells, Ctrl+Shift+M: "B2: 12 | 1 of 1" [obs, 1135/s6].
 list-dialog-move-to-monitor-cell = Move to Monitor Cell
-# Excel's page breaks (Ctrl+Shift+B), objects (Ctrl+Shift+O), charts (Insert+Alt+C) and
-# hyperlinks (Insert+F7), named by JAWS's help's descriptions [hyp: none recorded with entries].
+# Excel's page breaks (Ctrl+Shift+B), objects (Ctrl+Shift+O) and charts (Insert+Alt+C), named
+# by JAWS's help's descriptions [hyp: none recorded with entries].
 list-dialog-cells-at-page-breaks = Cells at Page Breaks
 list-dialog-worksheet-objects = Worksheet Objects
 list-dialog-charts = Charts
-list-dialog-hyperlinks = Hyperlinks
+# Excel's hyperlinks (Insert+F7): "Select Hyperlink dialog | List box | Home page | 1 of 2" [obs,
+# 1191/s4].
+list-dialog-hyperlinks = Select Hyperlink
 # Word's revisions, Insert+Shift+R in a document [hyp: 1107 records JAWS's title].
 list-dialog-revisions = Revisions
 # Windows+Semicolon in a document of Word's: the notes the Virtual Viewer shows, JAWS's items in

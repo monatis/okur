@@ -20,6 +20,17 @@ const EDITOR_WINDOW: &str = "EXCEL6";
 /// Excel's main window, which reports the focus back on the cell as a dialog of Excel's closes
 /// [obs, 1124/s7, s9].
 const MAIN_WINDOW: &str = "XLMAIN";
+/// What Excel's UI Automation value of a cell with a hyperlink ends with, after its text and a
+/// comma: "Docs , Contains Hyperlink" [obs, round 1191's trace].
+const LINK_SUFFIX: &str = "Contains Hyperlink";
+
+/// A cell's value without Excel's hyperlink suffix, and whether it had one.
+fn link_value(value: &str) -> (&str, bool) {
+    match value.trim().strip_suffix(LINK_SUFFIX) {
+        Some(text) => (text.trim_end_matches([' ', ',']).trim(), true),
+        None => (value.trim(), false),
+    }
+}
 
 /// Excel's module.
 #[derive(Debug, Default)]
@@ -31,6 +42,9 @@ pub struct Excel {
     last_cell: Option<(u32, u32)>,
     /// A cell said once its titles come with the sheet's place.
     pending: Option<PendingTitles>,
+    /// The last cell said ended with a hyperlink's usage hint, which the next one does not
+    /// repeat [obs, 1191/s3].
+    link_hint_said: bool,
     /// A selecting key's change was said since the last cell: the cell is said again even
     /// where it has not moved [obs, 1186/s17].
     selection_said: bool,
@@ -90,12 +104,16 @@ impl AppModule for Excel {
     /// A cell Okur's list closes back onto, "22 | B 4" [obs, 521/s10, s14].
     fn focus_again(&self, focus: &FocusEvent) -> Option<String> {
         let coordinates = cell(focus)?;
-        let value = focus.value.as_deref().map(str::trim).unwrap_or_default();
-        Some(if value.is_empty() {
-            coordinates
-        } else {
-            format!("{value}\n{coordinates}")
-        })
+        let (value, link) = link_value(focus.value.as_deref().unwrap_or_default());
+        let mut lines: Vec<String> = Vec::new();
+        if !value.is_empty() {
+            lines.push(value.to_owned());
+        }
+        if link {
+            lines.push(msg::excel_has_hyperlink().to_string());
+        }
+        lines.push(coordinates);
+        Some(lines.join("\n"))
     }
 
     /// A cell the menus give back, "Leaving menus | 14 | C 4" [obs, 1116/s7].
@@ -166,7 +184,12 @@ impl AppModule for Excel {
             }
             None => true,
         });
-        let value = focus.value.as_deref().map(str::trim).unwrap_or_default();
+        // A cell with a hyperlink: "has hyperlink" after its text, and after its coordinates how
+        // to follow it, not twice in a row, "Docs | has hyperlink | A 2 | To activate press
+        // Enter.", then "Home page | has hyperlink | A 1" [obs, 1191/s2, s3].
+        let (value, link) = link_value(focus.value.as_deref().unwrap_or_default());
+        let link_hint = link && !self.link_hint_said;
+        self.link_hint_said = link_hint;
         // The key's own word, before the titles where they are said.
         let mut first = Vec::new();
         let mut lines = Vec::new();
@@ -192,6 +215,9 @@ impl AppModule for Excel {
         if !value.is_empty() {
             lines.push(value.to_owned());
         }
+        if link {
+            lines.push(msg::excel_has_hyperlink().to_string());
+        }
         lines.push(coordinates);
         // From an empty cell a new data region starts, "8 | C 2 | start of new Data Region"
         // [obs, 1118/s5].
@@ -207,6 +233,9 @@ impl AppModule for Excel {
                 }
                 .to_string(),
             );
+        }
+        if link_hint {
+            lines.push(msg::hint_activate_enter().to_string());
         }
         self.from_blank = value.is_empty();
         if let Some((at, before)) = moved.filter(|_| waits) {
