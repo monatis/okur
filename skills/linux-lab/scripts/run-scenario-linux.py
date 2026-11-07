@@ -9,6 +9,10 @@ XTest (python-xlib, by keycode), and each step's speech is what Okur's log says 
 after it. Key steps, and JAWS scripts by the key Okur binds to them (okur-core's example
 script_key); a step of another type is skipped, and the trial marked unsuccessful.
 
+A desktop scenario's fixture (a Windows program, `desktop-forms.ps1`) runs as its Linux replica,
+`corpus/fixtures/linux/<name>.py` (GTK 4, the same controls and labels), in Chrome's place; a
+desktop fixture without one is skipped.
+
     python3 run-scenario-linux.py <scenario.json> <run.json>
 
 Run inside the headless desktop (a11y-stack.sh), from ~/okur, after
@@ -160,6 +164,14 @@ def main():
         scenario = json.load(f)
     fixture = scenario.get("fixture", "")
     page = "file://" + FIXTURES + fixture.rsplit("/fixtures/", 1)[-1]
+    # A Windows program's fixture runs as its Linux replica.
+    replica = None
+    if fixture.endswith(".ps1"):
+        name = fixture.rsplit("/", 1)[-1][:-len(".ps1")]
+        replica = os.path.join(FIXTURES, "linux", name + ".py")
+        if not os.path.exists(replica):
+            print(f"{scenario['id']}: no Linux replica of {name}.ps1", file=sys.stderr)
+            sys.exit(2)
     work = tempfile.mkdtemp()
     log = os.path.join(work, "speech.jsonl")
     profile = os.path.join(work, "chrome")
@@ -169,10 +181,16 @@ def main():
                             stdin=subprocess.DEVNULL, stdout=okur_out, stderr=subprocess.STDOUT,
                             env={**os.environ, "RUST_LOG": os.environ.get("RUST_LOG", "okur_linux=debug")})
     time.sleep(4)
-    chrome = subprocess.Popen(["google-chrome", "--no-sandbox", "--no-first-run", "--disable-gpu",
-                               f"--user-data-dir={profile}", "--force-renderer-accessibility",
-                               page], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    time.sleep(15)
+    if replica:
+        chrome = subprocess.Popen(["python3", replica], stdout=subprocess.DEVNULL,
+                                  stderr=subprocess.DEVNULL)
+        time.sleep(6)
+    else:
+        chrome = subprocess.Popen(["google-chrome", "--no-sandbox", "--no-first-run",
+                                   "--disable-gpu", f"--user-data-dir={profile}",
+                                   "--force-renderer-accessibility", page],
+                                  stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        time.sleep(15)
     settle(log, 0, quiet=2.0, longest=30.0)
     # The desktop's applications as AT-SPI lists them, for a run in which Okur said nothing:
     # whether Chrome was on the bus at all.
@@ -245,7 +263,9 @@ def main():
             print("  " + line, file=sys.stderr)
     run = {
         "scenario_id": scenario["id"],
-        "provenance": {"reader": "okur", "platform": "linux", "chrome": "google-chrome",
+        "provenance": {"reader": "okur", "platform": "linux",
+                       **({"application": "corpus/fixtures/linux/" + os.path.basename(replica)}
+                          if replica else {"chrome": "google-chrome"}),
                        "commit": subprocess.run(["git", "rev-parse", "--short", "HEAD"],
                                                 capture_output=True, text=True).stdout.strip()},
         "trials": [{"trial_index": 1, "trial_success": success, "step_results": results}],
