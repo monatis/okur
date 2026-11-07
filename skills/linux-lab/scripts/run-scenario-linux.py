@@ -32,6 +32,20 @@ XA11Y = "./target/debug/xa11y"
 SCRIPT_KEY = "./target/debug/examples/script_key"
 
 
+def recorded_web_verbosity(scenario):
+    """The web verbosity JAWS read the scenario's pages at: its evidence's Chrome.JCF
+    (`VirtualCursorVerbosityLevel`, 2 on old-pc), so Okur reads at the same level; None
+    without one."""
+    path = os.path.expanduser(f"~/okur/corpus/evidence/{scenario['id']}-evidence.json")
+    try:
+        with open(path, encoding="utf-8-sig") as f:
+            settings = json.load(f).get("provenance", {}).get("jaws_settings", {})
+    except (OSError, ValueError):
+        return None
+    level = settings.get("Chrome.JCF", {}).get("VirtualCursorVerbosity", {})
+    return level.get("VirtualCursorVerbosityLevel")
+
+
 def keys_for_scripts(scenario):
     """The key Okur binds to each JAWS script the scenario's steps run (okur-core's example
     script_key, from Okur's own key map): a script Okur binds no key to is left out."""
@@ -177,7 +191,9 @@ def main():
     profile = os.path.join(work, "chrome")
     # Okur's own output is kept: a run in which it said nothing shows why.
     okur_out = open(os.path.join(work, "okur.log"), "w", encoding="utf-8")
-    okur = subprocess.Popen([OKUR, "--no-speech", "3600", "--speech-log", log],
+    level = recorded_web_verbosity(scenario)
+    okur = subprocess.Popen([OKUR, "--no-speech", "3600", "--speech-log", log,
+                             *(["--web-verbosity", level] if level else [])],
                             stdin=subprocess.DEVNULL, stdout=okur_out, stderr=subprocess.STDOUT,
                             env={**os.environ, "RUST_LOG": os.environ.get("RUST_LOG", "okur_linux=debug")})
     time.sleep(4)
@@ -263,7 +279,7 @@ def main():
             print("  " + line, file=sys.stderr)
     run = {
         "scenario_id": scenario["id"],
-        "provenance": {"reader": "okur", "platform": "linux",
+        "provenance": {"reader": "okur", "platform": "linux", "web_verbosity": level,
                        **({"application": "corpus/fixtures/linux/" + os.path.basename(replica)}
                           if replica else {"chrome": "google-chrome"}),
                        "commit": subprocess.run(["git", "rev-parse", "--short", "HEAD"],

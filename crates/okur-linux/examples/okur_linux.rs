@@ -2,6 +2,8 @@
 //! runtime's event loop (`host::run`) with Linux's platform, the X11 keyboard hook, the desktop's
 //! AT-SPI events and speech-dispatcher, printing what it says. `--no-speech` speaks through the
 //! runtime's silent synthesizer instead. Runs for the seconds given (20 by default).
+//! `--web-verbosity <level>` reads pages at a JAWS `VirtualCursorVerbosityLevel` (2 High, 1
+//! Medium, 0 Low): the lab's runs read at the level JAWS's evidence was recorded at.
 
 #[cfg(target_os = "linux")]
 #[tokio::main]
@@ -14,10 +16,23 @@ async fn main() {
         .with_writer(std::io::stderr)
         .init();
     let args: Vec<String> = std::env::args().skip(1).collect();
-    let seconds = args.iter().find_map(|a| a.parse().ok()).unwrap_or(20u64);
+    // The first number that follows no option.
+    let seconds = args
+        .iter()
+        .enumerate()
+        .filter(|(i, _)| *i == 0 || args.get(i - 1).is_none_or(|a| !a.starts_with("--")))
+        .find_map(|(_, a)| a.parse().ok())
+        .unwrap_or(20u64);
     let mut settings = okur_core::settings::Settings::default();
     if args.iter().any(|a| a == "--no-speech") {
         settings.voice.synthesizer = okur_core::settings::Synthesizer::NoSpeech;
+    }
+    if let Some(level) = args
+        .iter()
+        .position(|a| a == "--web-verbosity")
+        .and_then(|i| args.get(i + 1))
+    {
+        settings.web_verbosity = okur_core::settings::WebVerbosity::from_jcf(level);
     }
     let event_source = okur_linux::events::AtspiEventSource::new();
     let objects = event_source.objects();
