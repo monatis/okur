@@ -60,6 +60,7 @@ fn details_said(reading: SheetReading, details: &crate::event::SheetDetails) -> 
             msg::excel_no_formula().to_string(),
         ),
         SheetReading::FormulaBarWord => details.formula_bar.split_whitespace().last()?.to_owned(),
+        SheetReading::Border => border_said(details),
         _ => return None,
     })
 }
@@ -181,6 +182,8 @@ pub(crate) enum SheetReading {
     InputMessage,
     Formula,
     FormulaBarWord,
+    /// Alt+Shift+B: the active cell's border ([`border_said`]) [obs, 1188].
+    Border,
     /// Alt+Shift+Home and End: the first and the last cell of the active cell's data region
     /// moved to, then said with "First cell in current data region" or "Last cell in current
     /// data region" after it [obs, 1184/s14, s15].
@@ -261,6 +264,7 @@ impl SheetReading {
             | Self::InputMessage
             | Self::Formula
             | Self::FormulaBarWord
+            | Self::Border
             | Self::RegionStart
             | Self::RegionEnd => SheetCells::Details,
         }
@@ -281,6 +285,7 @@ impl SheetReading {
             (Key::Numpad5, true, false, false) => Self::FormulaBarWord,
             (Key::Home, false, true, true) => Self::RegionStart,
             (Key::End, false, true, true) => Self::RegionEnd,
+            (Key::Alpha('B'), false, true, true) => Self::Border,
             _ => return None,
         })
     }
@@ -354,7 +359,8 @@ impl SheetReading {
             | Self::Hyperlink
             | Self::InputMessage
             | Self::Formula
-            | Self::FormulaBarWord => return details_said(self, place.details.as_ref()?),
+            | Self::FormulaBarWord
+            | Self::Border => return details_said(self, place.details.as_ref()?),
             // A move, which the engine makes; the cell it comes to is said.
             Self::RegionStart | Self::RegionEnd => return None,
             _ => {}
@@ -383,6 +389,7 @@ impl SheetReading {
             | Self::InputMessage
             | Self::Formula
             | Self::FormulaBarWord
+            | Self::Border
             | Self::RegionStart
             | Self::RegionEnd => return None,
         };
@@ -643,10 +650,13 @@ pub(crate) fn format_said(format: &crate::event::SheetFormat) -> String {
     if !format.cell_style.is_empty() {
         lines.push(format.cell_style.clone());
     }
+    // In whole points, rounded: a column 75.75 points wide is "76" [obs, 1188/s7], 14.4 points
+    // high "14" [obs, 1133/s4].
+    let whole = |hundredths: u32| hundredths.saturating_add(50) / 100;
     lines.push(
         msg::excel_cell_dimensions(
-            (format.width / 100).to_string(),
-            (format.height / 100).to_string(),
+            whole(format.width).to_string(),
+            whole(format.height).to_string(),
         )
         .render(),
     );
@@ -679,7 +689,14 @@ pub(crate) fn appearance_lines(place: &crate::event::SheetPlace) -> Option<Vec<S
     );
     lines.push(msg::font_size(points(format.size)).render());
     lines.push(msg::excel_cell_font_color(text_color(format)).render());
-    lines.push(msg::excel_cell_font_background(fill_color(format)).render());
+    // The font's background is white, a fill or not; the fill comes after it, "Yellow solid"
+    // [obs, 1188/s20]. A pattern other than solid is not named [hyp: none recorded].
+    lines.push(
+        msg::excel_cell_font_background(color_name(crate::color::Rgb::new(255, 255, 255))).render(),
+    );
+    if let Some(fill) = format.fill.filter(|_| matches!(format.pattern, 0 | 1)) {
+        lines.push(msg::excel_cell_fill(color_name(fill)).render());
+    }
     let vertical = vertical_alignment(format.vertical).filter(|_| format.vertical != -4107);
     let horizontal = horizontal_alignment(format.horizontal).filter(|_| format.horizontal != 1);
     lines.push(msg::excel_cell_vertical_alignment(vertical.unwrap_or_default()).render());
@@ -697,12 +714,144 @@ pub(crate) fn appearance_lines(place: &crate::event::SheetPlace) -> Option<Vec<S
 /// A color by the color table's name, capitalized as JAWS says it in Excel, "Black" [obs,
 /// 1133/s4].
 fn color_name(rgb: crate::color::Rgb) -> String {
+    if let Some(name) = office_color(rgb) {
+        return name;
+    }
     let name = crate::color::name_of(rgb).unwrap_or_default();
     let mut chars = name.chars();
     chars
         .next()
         .map(|first| first.to_uppercase().chain(chars).collect::<String>())
         .unwrap_or_default()
+}
+
+/// Office's standard colors, the color picker's row under the theme's, by their names: JAWS
+/// names a border in Office's Green (#00B050) "green" [obs, 1188/s19], where the color table's
+/// nearest is "Spring Green3"; the others as Office names them [hyp: not recorded].
+fn office_color(rgb: crate::color::Rgb) -> Option<String> {
+    Some(
+        match (rgb.r, rgb.g, rgb.b) {
+            (0xC0, 0x00, 0x00) => msg::excel_office_dark_red(),
+            (0xFF, 0xC0, 0x00) => msg::excel_office_orange(),
+            (0x92, 0xD0, 0x50) => msg::excel_office_light_green(),
+            (0x00, 0xB0, 0x50) => msg::excel_office_green(),
+            (0x00, 0xB0, 0xF0) => msg::excel_office_light_blue(),
+            (0x00, 0x70, 0xC0) => msg::excel_office_blue(),
+            (0x00, 0x20, 0x60) => msg::excel_office_dark_blue(),
+            (0x70, 0x30, 0xA0) => msg::excel_office_purple(),
+            _ => return None,
+        }
+        .to_string(),
+    )
+}
+
+/// What Alt+Shift+B says of the active cell's border: each edge with a line by its color,
+/// weight and style, "Red Thick Continuous Bottom Edge", right, left, bottom then top; the
+/// edges without one as the gridlines, the edge across from the first line's first, then top,
+/// bottom, left and right, "Black Thin Grid Line top, left and right borders of active cell.";
+/// four edges alike, or none, around the cell, "Black Thin Continuous surrounding Border of
+/// active cell." [obs, 1184/s11, 1188/s1, s4, s10, s13, s16, s19]. Two or three edges with
+/// lines, and an edge alone without one, are worded the same way [hyp: not recorded].
+fn border_said(details: &crate::event::SheetDetails) -> String {
+    /// Excel's edges (`XlBordersIndex`).
+    const LEFT: i32 = 7;
+    const TOP: i32 = 8;
+    const BOTTOM: i32 = 9;
+    const RIGHT: i32 = 10;
+    let line = |border: &crate::event::SheetBorder| {
+        let weight = match border.weight {
+            1 => msg::excel_border_hairline(),
+            -4138 => msg::excel_border_medium(),
+            4 => msg::excel_border_thick(),
+            _ => msg::excel_border_thin(),
+        };
+        let style = match border.line_style {
+            -4115 => msg::excel_border_dash(),
+            -4118 => msg::excel_border_dot(),
+            -4119 => msg::excel_border_double(),
+            4 => msg::excel_border_dash_dot(),
+            5 => msg::excel_border_dash_dot_dot(),
+            13 => msg::excel_border_slant_dash_dot(),
+            _ => msg::excel_border_continuous(),
+        };
+        let color = color_name(border.color.unwrap_or(crate::color::Rgb::new(0, 0, 0)));
+        format!("{color} {weight} {style}")
+    };
+    let grid = msg::excel_border_grid(color_name(
+        details
+            .gridline_color
+            .unwrap_or(crate::color::Rgb::new(0, 0, 0)),
+    ))
+    .render();
+    let with_line: Vec<&crate::event::SheetBorder> = [RIGHT, LEFT, BOTTOM, TOP]
+        .into_iter()
+        .filter_map(|edge| details.borders.iter().find(|b| b.edge == edge))
+        .collect();
+    let lines: Vec<String> = with_line.iter().map(|b| line(b)).collect();
+    // None, or four alike: around the cell.
+    let around = match lines.as_slice() {
+        [] => Some(grid.clone()),
+        [first, rest @ ..] if rest.len() == 3 && rest.iter().all(|l| l == first) => {
+            Some(first.clone())
+        }
+        _ => None,
+    };
+    if let Some(around) = around {
+        return msg::excel_border_around(around).render();
+    }
+    let edge_name = |edge: i32| match edge {
+        LEFT => msg::excel_edge_left(),
+        TOP => msg::excel_edge_top(),
+        BOTTOM => msg::excel_edge_bottom(),
+        _ => msg::excel_edge_right(),
+    };
+    let mut parts: Vec<String> = with_line
+        .iter()
+        .zip(&lines)
+        .map(|(border, line)| {
+            msg::excel_border_edge(line.as_str(), edge_name(border.edge)).render()
+        })
+        .collect();
+    // The edges without a line, the one across from the first line's edge first.
+    let across = |edge: i32| match edge {
+        LEFT => RIGHT,
+        RIGHT => LEFT,
+        TOP => BOTTOM,
+        _ => TOP,
+    };
+    let bare = |edge: &i32| !with_line.iter().any(|b| b.edge == *edge);
+    let mut without: Vec<i32> = with_line
+        .first()
+        .map(|b| across(b.edge))
+        .filter(bare)
+        .into_iter()
+        .collect();
+    for edge in [TOP, BOTTOM, LEFT, RIGHT] {
+        if bare(&edge) && !without.contains(&edge) {
+            without.push(edge);
+        }
+    }
+    let names: Vec<String> = without
+        .iter()
+        .map(|&edge| {
+            match edge {
+                LEFT => msg::excel_grid_edge_left(),
+                TOP => msg::excel_grid_edge_top(),
+                BOTTOM => msg::excel_grid_edge_bottom(),
+                _ => msg::excel_grid_edge_right(),
+            }
+            .to_string()
+        })
+        .collect();
+    if let Some((last, first)) = names.split_last() {
+        let edges = if first.is_empty() {
+            last.clone()
+        } else {
+            msg::excel_border_and(first.join(", "), last.as_str()).render()
+        };
+        parts.push(msg::excel_border_grid_edges(grid, edges).render());
+    }
+    parts.join(", ")
 }
 
 /// The cell's text color, black where Excel gives none.
@@ -1027,6 +1176,75 @@ mod tests {
         assert_eq!(
             SheetReading::Appearance.said(&place).as_deref(),
             Some("blank")
+        );
+        // A fill comes after the font's background, which stays white [obs, 1188/s20].
+        place.row = vec!["Mixed".into()];
+        if let Some(format) = place.format.as_mut() {
+            format.fill = Some(crate::color::Rgb::new(255, 255, 0));
+            format.pattern = 1;
+        }
+        let lines = appearance_lines(&place).unwrap_or_default();
+        assert_eq!(
+            lines.get(6..8),
+            Some(
+                &[
+                    "cell font background color White".to_owned(),
+                    "Yellow solid".to_owned()
+                ][..]
+            )
+        );
+    }
+
+    /// Alt+Shift+B on 1188's cells: none, four alike, one edge, all four apart [obs, 1184/s11,
+    /// 1188/s1, s4, s10, s13, s16, s19].
+    #[test]
+    fn a_cells_border() {
+        use crate::color::Rgb;
+        let border = |edge, line_style, weight, color: Rgb| crate::event::SheetBorder {
+            edge,
+            line_style,
+            weight,
+            color: Some(color),
+        };
+        let black = Rgb::new(0, 0, 0);
+        let said = |borders: Vec<crate::event::SheetBorder>| {
+            border_said(&crate::event::SheetDetails {
+                borders,
+                ..crate::event::SheetDetails::default()
+            })
+        };
+        assert_eq!(
+            said(Vec::new()),
+            "Black Thin Grid Line surrounding Border of active cell."
+        );
+        assert_eq!(
+            said((7..=10).map(|edge| border(edge, 1, 2, black)).collect()),
+            "Black Thin Continuous surrounding Border of active cell."
+        );
+        assert_eq!(
+            said(vec![border(9, 1, 4, Rgb::new(255, 0, 0))]),
+            "Red Thick Continuous Bottom Edge, Black Thin Grid Line top, left and right borders \
+             of active cell."
+        );
+        assert_eq!(
+            said(vec![border(8, -4119, 4, black)]),
+            "Black Thick Double Top Edge, Black Thin Grid Line bottom, left and right borders \
+             of active cell."
+        );
+        assert_eq!(
+            said(vec![border(7, -4115, 2, Rgb::new(0, 0, 255))]),
+            "Blue Thin Dash Left Edge, Black Thin Grid Line right, top and bottom borders of \
+             active cell."
+        );
+        assert_eq!(
+            said(vec![
+                border(7, 1, 2, black),
+                border(10, 1, -4138, Rgb::new(0, 0xB0, 0x50)),
+                border(8, -4118, 2, black),
+                border(9, -4119, 4, black),
+            ]),
+            "green Medium Continuous Right Edge, Black Thin Continuous Left Edge, Black Thick \
+             Double Bottom Edge, Black Thin Dot Top Edge"
         );
     }
 

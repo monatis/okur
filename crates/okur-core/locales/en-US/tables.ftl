@@ -299,6 +299,45 @@ excel-no-objects = Worksheet contains no objects.
 excel-no-charts = There are no charts on this worksheet.
 excel-collecting-hyperlinks = Please wait, collecting hyperlinks.
 excel-no-hyperlinks = No hyperlinks on worksheet.
+# Alt+Shift+B (Describe cell border): an edge with a line by its color, weight and style, the
+# edges without one as the gridlines; four alike, around the cell [obs, 1184/s11, 1188/s1, s4,
+# s10, s13, s16, s19].
+excel-border-around = { $line } surrounding Border of active cell.
+excel-border-edge = { $line } { $edge } Edge
+excel-border-grid = { $color } Thin Grid Line
+excel-border-grid-edges = { $grid } { $edges } borders of active cell.
+excel-border-and = { $first } and { $last }
+excel-edge-left = Left
+excel-edge-top = Top
+excel-edge-bottom = Bottom
+excel-edge-right = Right
+excel-grid-edge-left = left
+excel-grid-edge-top = top
+excel-grid-edge-bottom = bottom
+excel-grid-edge-right = right
+excel-border-hairline = Hairline
+excel-border-thin = Thin
+excel-border-medium = Medium
+excel-border-thick = Thick
+excel-border-continuous = Continuous
+excel-border-dash = Dash
+excel-border-dot = Dot
+excel-border-double = Double
+excel-border-dash-dot = Dash Dot
+excel-border-dash-dot-dot = Dash Dot Dot
+excel-border-slant-dash-dot = Slant Dash Dot
+# Office's standard colors by name, before the color table's: JAWS names Office's Green
+# (#00B050) "green" in Alt+Shift+B [obs, 1188/s19]; the others as Office names them [hyp].
+excel-office-dark-red = Dark Red
+excel-office-orange = Orange
+excel-office-light-green = Light Green
+excel-office-green = green
+excel-office-light-blue = Light Blue
+excel-office-blue = Blue
+excel-office-dark-blue = Dark Blue
+excel-office-purple = Purple
+# The appearance viewer's fill, after the font's background: "Yellow solid" [obs, 1188/s20].
+excel-cell-fill = { $color } solid
 # Insert+Ctrl+C with no chart selected (Read the current worksheet object) [obs, 1187/s7].
 excel-chart-not-active = The chart is not active. You must first press Insert+ALT+c to select it.
 # Equals in a cell (Formula input mode), as the key goes on to Excel [obs, 1187/s18].
