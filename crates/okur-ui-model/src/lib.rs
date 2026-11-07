@@ -354,6 +354,9 @@ pub enum ToUi {
         title: String,
         lines: Vec<String>,
         mark: TextSpan,
+        /// The status bar's text ("Ready", JAWS's), in Okur's language.
+        #[serde(default)]
+        status: String,
     },
     /// Move the viewer's mark.
     ViewerMark { mark: TextSpan },
@@ -568,6 +571,7 @@ mod tests {
                 column: 0,
                 length: 13,
             },
+            status: "Ready".into(),
         };
         let line = encode(&show).unwrap_or_default();
         assert!(!line.contains('\n'));

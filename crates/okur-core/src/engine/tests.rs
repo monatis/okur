@@ -2912,6 +2912,7 @@ fn the_virtual_viewer_shows_on_screen_and_marks_what_was_read() {
                 .map(str::to_owned)
                 .to_vec(),
             mark: span(0, 0, 13),
+            status: "Ready".to_owned(),
         }]
     );
     let down = KeyEvent::new(Key::DownArrow, Modifiers::none(), true);

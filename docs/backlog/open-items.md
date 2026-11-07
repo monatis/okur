@@ -37,7 +37,6 @@ places where Okur contradicts JAWS's documentation, and the order of work. P0:
 - **The rest of the message catalog groundwork** (M0, plan 2026-10-18 dialog round, step 2):
   - role and state marks still written by hand in `SpeechFormatter` and `linearize.rs`;
   - voice contexts;
-  - okur-ui's Virtual Viewer window title and its "Ready";
   - how JAWS's `ACCESS_KEY=a|b|c` fields map (check by changing the setting on old-pc).
 
 ## Reading settings

@@ -632,8 +632,6 @@ okur-core/src/pronounce.rs: *
 [pending]
 # Okur's words still written into code: M0 work left. Move each into locales/en-US and delete
 # its line here.
-okur-ui/src/win32.rs: "Ready"
-okur-ui/src/win32.rs: "Virtual Viewer"
 okur-core/src/engine/dictionary.rs: "change"
 okur-core/src/engine/dictionary.rs: "delete"
 okur-core/src/engine/dictionary.rs: "entries"

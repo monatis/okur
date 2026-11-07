@@ -429,7 +429,12 @@ unsafe extern "system" fn control_proc(
 
 fn handle(message: ToUi) {
     match message {
-        ToUi::ViewerShow { title, lines, mark } => show_viewer(&title, lines, mark),
+        ToUi::ViewerShow {
+            title,
+            lines,
+            mark,
+            status,
+        } => show_viewer(&title, &status, lines, mark),
         ToUi::ViewerMark { mark } => {
             VIEWER.with(|v| {
                 if let Ok(mut v) = v.try_borrow_mut() {
@@ -494,7 +499,7 @@ fn handle(message: ToUi) {
     }
 }
 
-fn show_viewer(title: &str, lines: Vec<String>, mark: TextSpan) {
+fn show_viewer(title: &str, status: &str, lines: Vec<String>, mark: TextSpan) {
     if handles().is_none() {
         create_viewer();
     }
@@ -510,10 +515,12 @@ fn show_viewer(title: &str, lines: Vec<String>, mark: TextSpan) {
         }
     });
     let title = wide(title);
+    let status = wide(status);
     // SAFETY: our own windows; the text buffers outlive the calls.
     unsafe {
         let _ = SetWindowTextW(h.frame, PCWSTR(title.as_ptr()));
         let _ = SetWindowTextW(h.edit, PCWSTR(text.as_ptr()));
+        let _ = SetWindowTextW(h.status, PCWSTR(status.as_ptr()));
         // Three quarters of the screen the user is working on, centred, as JAWS's.
         let monitor = MonitorFromWindow(GetForegroundWindow(), MONITOR_DEFAULTTOPRIMARY);
         let mut info = MONITORINFO {
@@ -566,7 +573,7 @@ fn create_viewer() {
         let Ok(frame) = CreateWindowExW(
             WS_EX_TOPMOST,
             w!("OkurVirtualViewer"),
-            w!("Virtual Viewer"),
+            PCWSTR::null(),
             WS_OVERLAPPEDWINDOW,
             0,
             0,
@@ -602,7 +609,7 @@ fn create_viewer() {
         let status = CreateWindowExW(
             WINDOW_EX_STYLE::default(),
             STATUSCLASSNAMEW,
-            w!("Ready"),
+            PCWSTR::null(),
             WS_CHILD | WS_VISIBLE | WINDOW_STYLE(SBARS_SIZEGRIP),
             0,
             0,

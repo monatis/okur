@@ -82,6 +82,8 @@ viewer-font-information = Font information:
 # name.
 viewer-hot-keys-link = List Okur Hot Keys
 viewer-close-hint = Press ESCAPE to close this message.
+# The Virtual Viewer window's status bar, as JAWS's shows it.
+viewer-status-ready = Ready
 
 ## Editing text
 

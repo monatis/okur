@@ -359,6 +359,7 @@ mod tests {
             title: String::new(),
             lines: Vec::new(),
             mark: okur_ui_model::TextSpan::default(),
+            status: String::new(),
         });
         open.heard(&FromUi::DialogClosed { id: 3 });
         open.told(&dialog(4));

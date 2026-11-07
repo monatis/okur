@@ -4239,6 +4239,7 @@ impl ScreenReaderEngine {
                     .map_or_else(|| msg::viewer_title().to_string(), str::to_owned),
                 lines: viewer.lines(),
                 mark: viewer.mark(),
+                status: msg::viewer_status_ready().to_string(),
             });
         }
     }
