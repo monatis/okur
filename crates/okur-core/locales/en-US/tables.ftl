@@ -352,6 +352,11 @@ excel-cell-marker-already = The current cell is already defined as a Cell Marker
 excel-cell-marker-entry = { $sheet } at Cell Marker { $cell }
 excel-no-cell-markers = There are no Cell Markers defined for this workbook.
 excel-cell-marker-first = First mark the cell at the start location with control+Windows+K, then move to the last cell to be included in the selection and press Insert+Space, M.
+# A drawn shape's kind in Excel's objects list (Ctrl+Shift+O): "rectangle C2-F7: Check totals"
+# [obs, 1197/s1]; the others [hyp].
+excel-shape-rectangle = rectangle
+excel-shape-rounded-rectangle = rounded rectangle
+excel-shape-oval = oval
 # Insert+Ctrl+C with no chart selected (Read the current worksheet object) [obs, 1187/s7].
 excel-chart-not-active = The chart is not active. You must first press Insert+ALT+c to select it.
 # Equals in a cell (Formula input mode), as the key goes on to Excel [obs, 1187/s18].

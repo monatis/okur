@@ -476,16 +476,32 @@ pub fn sheet_list(
             };
             let shapes = property(&sheet, collection).as_ref().and_then(object)?;
             let count = number(&shapes, "Count").unwrap_or(0).clamp(0, MAX_LISTED);
+            let corner = |shape: &IDispatch, which: &str| {
+                property(shape, which)
+                    .as_ref()
+                    .and_then(object)
+                    .and_then(|cell| address(&cell))
+                    .unwrap_or_default()
+            };
             (1..=count)
                 .filter_map(|index| crate::word_om::item(&shapes, index))
                 .filter_map(|shape| {
                     let name = text(&shape, "Name").trim().to_owned();
-                    let at = property(&shape, "TopLeftCell")
-                        .as_ref()
-                        .and_then(object)
-                        .and_then(|cell| address(&cell))
-                        .unwrap_or_default();
-                    (!name.is_empty()).then(|| entry(name, at))
+                    let at = corner(&shape, "TopLeftCell");
+                    if kind == okur_core::SheetListKind::Charts {
+                        return (!name.is_empty()).then(|| entry(name, at));
+                    }
+                    // A shape by its kind, the cells it covers and its text, "rectangle
+                    // C2-F7: Check totals" [obs, 1197/s1].
+                    let what = shape_kind(&shape).unwrap_or_else(|| name.clone());
+                    let shown = shape_text(&shape);
+                    let label = format!("{what} {at}-{}", corner(&shape, "BottomRightCell"));
+                    let label = if shown.is_empty() {
+                        label
+                    } else {
+                        format!("{label}: {shown}")
+                    };
+                    Some(entry(label, at))
                 })
                 .collect()
         }
@@ -637,6 +653,35 @@ fn sheet_details(window: &IDispatch, cell: &IDispatch) -> Option<okur_core::Shee
         formula: has_formula.then(|| formula_bar.clone()),
         formula_bar,
     })
+}
+
+/// A drawn shape's kind as JAWS names it, by its AutoShape type (`MsoAutoShapeType`):
+/// "rectangle" [obs, 1197/s1]; the others named alike [hyp: not recorded]; `None` for a shape
+/// that is no AutoShape or one not named here.
+fn shape_kind(shape: &IDispatch) -> Option<String> {
+    use okur_core::messages::msg;
+    Some(
+        match number(shape, "AutoShapeType")? {
+            1 => msg::excel_shape_rectangle(),
+            5 => msg::excel_shape_rounded_rectangle(),
+            9 => msg::excel_shape_oval(),
+            _ => return None,
+        }
+        .to_string(),
+    )
+}
+
+/// A shape's text (`TextFrame2.TextRange.Text`), its spaces single; empty without one.
+fn shape_text(shape: &IDispatch) -> String {
+    property(shape, "TextFrame2")
+        .as_ref()
+        .and_then(object)
+        .and_then(|frame| property(&frame, "TextRange").as_ref().and_then(object))
+        .map(|range| text(&range, "Text"))
+        .unwrap_or_default()
+        .split_whitespace()
+        .collect::<Vec<_>>()
+        .join(" ")
 }
 
 /// The edges of `cell`'s border that have a line, left, top, bottom and right

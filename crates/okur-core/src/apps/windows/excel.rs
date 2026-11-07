@@ -42,9 +42,6 @@ pub struct Excel {
     last_cell: Option<(u32, u32)>,
     /// A cell said once its titles come with the sheet's place.
     pending: Option<PendingTitles>,
-    /// The last cell said ended with a hyperlink's usage hint, which the next one does not
-    /// repeat [obs, 1191/s3].
-    link_hint_said: bool,
     /// A selecting key's change was said since the last cell: the cell is said again even
     /// where it has not moved [obs, 1186/s17].
     selection_said: bool,
@@ -185,11 +182,10 @@ impl AppModule for Excel {
             None => true,
         });
         // A cell with a hyperlink: "has hyperlink" after its text, and after its coordinates how
-        // to follow it, not twice in a row, "Docs | has hyperlink | A 2 | To activate press
-        // Enter.", then "Home page | has hyperlink | A 1" [obs, 1191/s2, s3].
+        // to follow it, "Docs | has hyperlink | A 2 | To activate press Enter." [obs, 1191/s2,
+        // 1195/s1, s3, s5].
         let (value, link) = link_value(focus.value.as_deref().unwrap_or_default());
-        let link_hint = link && !self.link_hint_said && cx.hints;
-        self.link_hint_said = link_hint;
+        let link_hint = link && cx.hints;
         // The key's own word, before the titles where they are said.
         let mut first = Vec::new();
         let mut lines = Vec::new();
@@ -397,46 +393,75 @@ mod tests {
     }
 
     /// A cell with a hyperlink: "has hyperlink" after its text, the hint after its coordinates,
-    /// not twice in a row, "Docs | has hyperlink | A 2 | To activate press Enter." then "Home
-    /// page | has hyperlink | A 1" [obs, 1191/s2, s3].
+    /// "Docs | has hyperlink | A 2 | To activate press Enter." [obs, 1191/s2, 1195/s1, s3, s5];
+    /// back onto the list it closed, the cell alone.
     #[test]
     fn a_cell_with_a_hyperlink_says_so() {
-        let cell = |name: &str, value: &str| {
-            let mut focus = FocusEvent::new(Role::TableCell);
-            focus.name = Some(name.into());
-            focus.value = Some(value.into());
-            focus.platform.window_class = Some(GRID_WINDOW.into());
-            focus
-        };
-        let down = Some((Key::DownArrow, crate::input::Modifiers::none()));
-        let up = Some((Key::UpArrow, crate::input::Modifiers::none()));
         let mut excel = Excel::default();
         assert_eq!(
             said(
                 &mut excel,
-                &cell("A2", "Docs , Contains Hyperlink"),
-                down,
+                &link_cell("A2", "Docs , Contains Hyperlink"),
+                down(),
                 false
             )
             .as_deref(),
             Some("Docs\nhas hyperlink\nA 2\nTo activate press Enter.")
         );
         assert_eq!(
+            excel
+                .focus_again(&link_cell("A2", "Docs , Contains Hyperlink"))
+                .as_deref(),
+            Some("Docs\nhas hyperlink\nA 2")
+        );
+    }
+
+    /// JAWS leaves the hint out on A1, in every trial of two recordings, though it says it on
+    /// every other cell with a link [obs, 1191/s3, 1195/s4]; and Excel's UI Automation calls the
+    /// plain cell under two links "Plain , Contains Hyperlink", its link with no address, where
+    /// JAWS says no "has hyperlink" but still the hint [obs, 1195/s2].
+    #[test]
+    #[ignore = "known gap: why JAWS leaves A1's hint out; Excel's linkless cell reported linked"]
+    fn jaws_leaves_a1_hint_out_and_reads_links_from_the_object_model() {
+        let mut excel = Excel::default();
+        assert_eq!(
             said(
                 &mut excel,
-                &cell("A1", "Home page , Contains Hyperlink"),
-                up,
+                &link_cell("A1", "Home page , Contains Hyperlink"),
+                up(),
                 false
             )
             .as_deref(),
             Some("Home page\nhas hyperlink\nA 1")
         );
         assert_eq!(
-            excel
-                .focus_again(&cell("A2", "Docs , Contains Hyperlink"))
-                .as_deref(),
-            Some("Docs\nhas hyperlink\nA 2")
+            said(
+                &mut excel,
+                &link_cell("A3", "Plain , Contains Hyperlink"),
+                down(),
+                false
+            )
+            .as_deref(),
+            Some("Plain\nA 3\nTo activate press Enter.")
         );
+    }
+
+    /// Down and Up alone.
+    fn down() -> Option<(Key, crate::input::Modifiers)> {
+        Some((Key::DownArrow, crate::input::Modifiers::none()))
+    }
+
+    fn up() -> Option<(Key, crate::input::Modifiers)> {
+        Some((Key::UpArrow, crate::input::Modifiers::none()))
+    }
+
+    /// A cell of Excel's grid named `name` whose value is `value`.
+    fn link_cell(name: &str, value: &str) -> FocusEvent {
+        let mut focus = FocusEvent::new(Role::TableCell);
+        focus.name = Some(name.into());
+        focus.value = Some(value.into());
+        focus.platform.window_class = Some(GRID_WINDOW.into());
+        focus
     }
 
     /// Ctrl+Z says "Undo" before the cell it gives back, "Undo | 7 | D 1" [obs, 1123/s8]; the
