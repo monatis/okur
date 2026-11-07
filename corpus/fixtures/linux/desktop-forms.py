@@ -85,11 +85,22 @@ def build(app):
     box.append(labelled("_Country:", country))
     box.append(country)
 
-    fruit = Gtk.ListBox()
-    fruit.set_selection_mode(Gtk.SelectionMode.SINGLE)
+    # The fruit list, Bananas selected; Tab leaves it, as WinForms' list box (GTK's list view's
+    # tab behavior "item"; its list box moves from row to row).
+    def label_setup(_factory, cell):
+        cell.set_child(Gtk.Label(xalign=0))
+
+    def label_bind(_factory, cell):
+        cell.get_child().set_label(cell.get_item().get_string())
+
+    labels = Gtk.SignalListItemFactory()
+    labels.connect("setup", label_setup)
+    labels.connect("bind", label_bind)
+    fruit_model = Gtk.StringList()
     for item in ("Apples", "Bananas", "Cherries"):
-        fruit.append(Gtk.Label(label=item, xalign=0))
-    fruit.select_row(fruit.get_row_at_index(1))
+        fruit_model.append(item)
+    fruit = Gtk.ListView(model=Gtk.SingleSelection(model=fruit_model, selected=1),
+                         factory=labels, tab_behavior=Gtk.ListTabBehavior.ITEM)
     box.append(labelled("_Fruit:", fruit))
     box.append(fruit)
 
@@ -123,14 +134,16 @@ def build(app):
     tree_factory = Gtk.SignalListItemFactory()
     tree_factory.connect("setup", tree_setup)
     tree_factory.connect("bind", tree_bind)
-    tree = Gtk.ListView(model=Gtk.SingleSelection(model=folders), factory=tree_factory)
+    tree = Gtk.ListView(model=Gtk.SingleSelection(model=folders), factory=tree_factory,
+                        tab_behavior=Gtk.ListTabBehavior.ITEM)
     box.append(tree)
 
     # The files' list in columns, Name and Size, its first row selected.
     rows = (("budget.xlsx", "24 KB"), ("notes.txt", "2 KB"), ("photo.jpg", "1.2 MB"))
     files = strings([name for name, _ in rows])
     sizes = dict(rows)
-    table = Gtk.ColumnView(model=Gtk.SingleSelection(model=files))
+    table = Gtk.ColumnView(model=Gtk.SingleSelection(model=files),
+                           tab_behavior=Gtk.ListTabBehavior.ITEM)
 
     def column(title, text_of):
         def setup(_factory, cell):
