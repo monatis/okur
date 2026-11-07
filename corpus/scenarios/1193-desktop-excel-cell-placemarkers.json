@@ -1,0 +1,95 @@
+{
+  "id": "1193-desktop-excel-cell-placemarkers",
+  "name": "JAWS commands for Excel (popapps.chm), cell PlaceMarkers: Insert+Space, M with none set; Right and Down to B2; Set cell PlaceMarker on Current Worksheet (Ctrl+Windows+K), and again on the same cell; Ctrl+End; Insert+Space, M (select from the PlaceMarker to the cell); Ctrl+Home; List all cell PlaceMarkers in workbook (Ctrl+Alt+Windows+K), Enter in JAWS's dialog (TypeKey); Ctrl+End; Move to cell PlaceMarker (Alt+Windows+K)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-excel.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "jaws_forget": [
+    "PersonalizedSettings\\excel_sr-excel-fixture.xlsx.JSI",
+    "excel.JCF"
+  ],
+  "launch": {
+    "window_title": "sr-excel-fixture.xlsx - Excel (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "M"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Ctrl+Win+K"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Ctrl+Win+K"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Ctrl+End"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "M"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Ctrl+Alt+Win+K"
+    },
+    {
+      "id": "s12",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Ctrl+End"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Alt+Win+K"
+    }
+  ]
+}
