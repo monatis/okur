@@ -354,8 +354,9 @@ and on the dev box alike. At the owner's request the question went to Microsoft 
   not twice in a row, a hypothesis 1195 should test); Insert+F7 "Select Hyperlink dialog | List
   box | Home page | 1 of 2". JAWS's Select Hyperlink dialog then took none of the recorder's keys
   (no focus events, only the recorder's own "Speech history cleared"), so 1191 now ends at
-  Insert+F7, and 1194 records the page breaks' list alone. In replay Okur names the list box
-  after the dialog ("Select Hyperlink List box"), still to find.
+  Insert+F7, and 1194 records the page breaks' list alone. Replay named the list box after the
+  dialog, as the converter does for JAWS's tray dialog (511/s4, same controls traced): the mirror now
+  takes the name from Okur's own dialog (`b5192874`).
 - **1193** (cell PlaceMarkers, Ctrl+Windows+K and the rest) and **1194** recorded or running
   when old-pc went offline (2026-11-07, "target_offline"); fetch both when it is back.
 - `okur-lab parity`: `JAWS parity (Ia2): 12651/13248 steps match exactly; 388 accepted
