@@ -153,6 +153,8 @@ mod windows_actions {
         SheetPlace(okur_core::actions::SheetCells),
         SheetList(okur_core::SheetListKind),
         SheetEntry(okur_core::SheetListKind, String),
+        /// The active cell's note written (Edit note's OK), taken away when empty.
+        SheetNote(String),
         /// The sheet tabs' context menu of the spreadsheet in front opened.
         SheetTabsMenu,
         /// The caret to a paragraph of the focused document (from 0), then the field's text.
@@ -255,6 +257,7 @@ mod windows_actions {
                 Request::SheetPlace(_) => "sheet place",
                 Request::SheetList(_) => "sheet list",
                 Request::SheetEntry(..) => "sheet entry",
+                Request::SheetNote(..) => "sheet note write",
                 Request::SheetTabsMenu => "sheet tabs menu",
                 Request::Paragraph(..) => "paragraph",
                 Request::Keys(_) => "keys",
@@ -635,6 +638,14 @@ mod windows_actions {
                                     column,
                                     entries,
                                 });
+                            }
+                            Request::SheetNote(text) => {
+                                use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
+                                // SAFETY: a plain query.
+                                let top = unsafe { GetForegroundWindow() };
+                                let written = crate::excel_om::grid_window(top)
+                                    .is_some_and(|grid| crate::excel_om::write_note(grid, &text));
+                                tracing::debug!(written, "sheet note written");
                             }
                             Request::SheetEntry(kind, target) => {
                                 use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
@@ -1269,6 +1280,10 @@ mod windows_actions {
 
         fn move_to_sheet_entry(&self, kind: okur_core::SheetListKind, target: &str) -> bool {
             self.send(Request::SheetEntry(kind, target.to_owned()))
+        }
+
+        fn write_sheet_note(&self, text: &str) -> bool {
+            self.send(Request::SheetNote(text.to_owned()))
         }
 
         fn open_sheet_tabs_menu(&self) -> bool {

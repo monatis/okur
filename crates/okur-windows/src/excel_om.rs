@@ -733,6 +733,39 @@ fn comment_text(comment: &IDispatch) -> String {
         .unwrap_or_default()
 }
 
+/// Gives the active cell of Excel's grid window `grid` the note `text` (`Comment.Text`, or
+/// `AddComment` where it has none), or takes its note away where `text` is empty
+/// (`Comment.Delete`). False where Excel's object model does not answer.
+pub fn write_note(grid: HWND, text: &str) -> bool {
+    use windows::core::BSTR;
+    use windows::Win32::System::Com::{DISPATCH_FLAGS, DISPATCH_METHOD};
+    let write = || -> Option<()> {
+        let window = word_window(grid)?;
+        let cell = object(&property(&window, "ActiveCell")?)?;
+        let note = property(&cell, "Comment").as_ref().and_then(object);
+        match (note, text.is_empty()) {
+            (Some(note), true) => {
+                invoke(&note, "Delete", DISPATCH_METHOD, &mut [])?;
+            }
+            (None, true) => {}
+            (Some(note), false) => {
+                let flags = DISPATCH_FLAGS(DISPATCH_METHOD.0 | DISPATCH_PROPERTYGET.0);
+                invoke(&note, "Text", flags, &mut [VARIANT::from(BSTR::from(text))])?;
+            }
+            (None, false) => {
+                invoke(
+                    &cell,
+                    "AddComment",
+                    DISPATCH_METHOD,
+                    &mut [VARIANT::from(BSTR::from(text))],
+                )?;
+            }
+        }
+        Some(())
+    };
+    write().is_some()
+}
+
 /// Goes to `target` of one of those lists in Excel's grid window `grid`: selects the cell it
 /// names, or activates the worksheet. False where Excel's object model does not answer.
 pub fn go_to(grid: HWND, kind: okur_core::SheetListKind, target: &str) -> bool {

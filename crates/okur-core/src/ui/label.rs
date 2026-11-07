@@ -2,6 +2,8 @@
 //! read in place of the page's own. Its controls are JAWS 2025's [obs, 688/s9]: the dialog's
 //! text "Enter a custom label for this item", a field of that name holding the element's
 //! label, OK (the default) and Cancel. OK keeps the label; an empty one takes it away.
+//! Excel's Edit note (Shift+F2 in a sheet) is the same dialog with its own words, "Edit note
+//! dialog | Add or Update Note: | Add or Update Note: edit" [obs, 1197/s5].
 
 use okur_ui_model::{Control, ControlKind, DialogSpec, FromUi, Value};
 
@@ -22,6 +24,8 @@ pub enum Outcome {
 pub struct LabelDialog {
     pub id: u32,
     text: String,
+    title: String,
+    prompt: String,
 }
 
 impl LabelDialog {
@@ -30,6 +34,18 @@ impl LabelDialog {
         Self {
             id,
             text: current.to_owned(),
+            title: msg::custom_label_title().to_string(),
+            prompt: msg::custom_label_prompt().to_string(),
+        }
+    }
+
+    /// Excel's Edit note for a cell whose note is `current` (empty for none).
+    pub fn note(id: u32, current: &str) -> Self {
+        Self {
+            id,
+            text: current.to_owned(),
+            title: msg::excel_note_title().to_string(),
+            prompt: msg::excel_note_prompt().to_string(),
         }
     }
 
@@ -41,10 +57,10 @@ impl LabelDialog {
             enabled: true,
             hidden: false,
         };
-        let prompt = msg::custom_label_prompt().to_string();
+        let prompt = self.prompt.clone();
         DialogSpec {
             id: self.id,
-            title: msg::custom_label_title().to_string(),
+            title: self.title.clone(),
             controls: vec![
                 control(
                     "prompt",

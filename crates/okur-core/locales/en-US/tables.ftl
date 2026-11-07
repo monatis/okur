@@ -363,6 +363,10 @@ excel-cell-marker-first = First mark the cell at the start location with control
 excel-shape-rectangle = rectangle
 excel-shape-rounded-rectangle = rounded rectangle
 excel-shape-oval = oval
+# Shift+F2 in a sheet: the cell's note, added or changed, "Edit note dialog | Add or Update Note: |
+# Add or Update Note: edit | Type in text." [obs, 1197/s5].
+excel-note-title = Edit note
+excel-note-prompt = Add or Update Note:
 # Insert+Ctrl+C with no chart selected (Read the current worksheet object) [obs, 1187/s7].
 excel-chart-not-active = The chart is not active. You must first press Insert+ALT+c to select it.
 # Equals in a cell (Formula input mode), as the key goes on to Excel [obs, 1187/s18].

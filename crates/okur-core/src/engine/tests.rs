@@ -10854,3 +10854,65 @@ fn excel_cell_placemarkers_are_set_and_listed() {
         ["The current cell is already defined as a Cell Marker."]
     );
 }
+
+/// Excel's Shift+F2: the cell's note asked for, then Edit note with it, "Edit note dialog | Add
+/// or Update Note: | Add or Update Note: edit" [obs, 1197/s5]; OK writes what was typed.
+#[test]
+fn excel_shift_f2_edits_the_cells_note() {
+    use crate::ui::{FromUi, ToUi, Value};
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    echo_off(&mut engine);
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let mut cell = FocusEvent::new(Role::TableCell)
+        .with_name("A1")
+        .with_window_title("Objects.xlsx - Excel");
+    cell.value = Some("Plan".into());
+    cell.app = Some("EXCEL.EXE".into());
+    cell.platform.window_class = Some("EXCEL7".into());
+    engine.handle_focus_event(&cell);
+    let shift = Modifiers {
+        shift: true,
+        ..Modifiers::none()
+    };
+    assert_eq!(
+        engine.handle_key_event(&KeyEvent::new(Key::F(2), shift, true)),
+        KeyAction::Consume
+    );
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(request, _)| request == "sheet note"));
+    engine.handle_accessibility_event(&AccessibilityEvent::SheetList {
+        kind: crate::event::SheetListKind::Note,
+        column: "A1".into(),
+        entries: Vec::new(),
+    });
+    let shown = ui.take();
+    let Some(ToUi::DialogShow { dialog }) = shown.first() else {
+        panic_free_fail(&format!("no dialog: {shown:?}"));
+        return;
+    };
+    assert_eq!(dialog.title, "Edit note");
+    let labels: Vec<&str> = dialog.controls.iter().map(|c| c.label.as_str()).collect();
+    assert_eq!(labels, ["", "Add or Update Note:", "OK", "Cancel"]);
+    let id = dialog.id;
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+        id,
+        control: "label".into(),
+        value: Value::Text("Check totals".into()),
+    }));
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id,
+        control: "ok".into(),
+    }));
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(request, _)| request == "sheet note write Check totals"));
+    assert!(ui.take().contains(&ToUi::DialogClose { id }));
+}

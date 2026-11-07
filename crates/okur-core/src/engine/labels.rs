@@ -78,6 +78,61 @@ impl ScreenReaderEngine {
         None
     }
 
+    /// Excel's Shift+F2 in a sheet: the active cell's note asked for, for Edit note. False
+    /// outside a sheet.
+    pub(super) fn ask_note_to_edit(&mut self) -> bool {
+        if self.sheet_focus().is_none() || self.ui.is_none() {
+            return false;
+        }
+        let asked = self
+            .actions
+            .as_ref()
+            .is_some_and(|actions| actions.read_sheet_list(crate::event::SheetListKind::Note));
+        if asked {
+            self.sheet_list_asked = Some(crate::event::SheetListKind::Note);
+            self.note_edit_asked = true;
+        }
+        asked
+    }
+
+    /// Edit note, holding the cell's note `current`.
+    pub(super) fn open_note_dialog(&mut self, current: &str) {
+        let Some(ui) = self.ui.as_ref() else {
+            return;
+        };
+        self.dialog_count += 1;
+        let dialog = LabelDialog::note(self.dialog_count, current);
+        ui.send(ToUi::DialogShow {
+            dialog: dialog.spec(),
+        });
+        self.note_dialog = Some(dialog);
+    }
+
+    /// Whether `message` is Edit note's.
+    pub(super) fn is_note_event(&self, message: &FromUi) -> bool {
+        self.note_dialog
+            .as_ref()
+            .is_some_and(|d| Some(d.id) == super::dialog_of(message))
+    }
+
+    /// What the user did to Edit note: OK writes the note through Excel, an empty one taking
+    /// it away; the cell's focus then says itself as the dialog goes.
+    pub(super) fn handle_note_event(&mut self, message: &FromUi) -> Option<String> {
+        let outcome = self.note_dialog.as_mut()?.handle(message);
+        if outcome == Outcome::Nothing {
+            return None;
+        }
+        let dialog = self.note_dialog.take()?;
+        if let Some(ui) = &self.ui {
+            ui.send(ToUi::DialogClose { id: dialog.id });
+        }
+        if let (Outcome::Label(text), Some(actions)) = (outcome, &self.actions) {
+            actions.write_sheet_note(&text);
+        }
+        self.returning_from_dialog();
+        None
+    }
+
     /// Whether `message` is Custom Label's.
     pub(super) fn is_label_event(&self, message: &FromUi) -> bool {
         self.label_dialog

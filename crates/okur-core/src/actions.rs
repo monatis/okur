@@ -295,6 +295,13 @@ pub trait ApplicationActions: Send {
         false
     }
 
+    /// Gives the active cell of the spreadsheet in front the note `text`, or takes its note
+    /// away where `text` is empty (Excel's Edit note, Shift+F2). False where it cannot.
+    fn write_sheet_note(&self, text: &str) -> bool {
+        let _ = text;
+        false
+    }
+
     /// Opens the sheet tabs' context menu of the spreadsheet in front (Excel's `Ply` command
     /// bar), which says itself as a menu does. Returns false when unsupported.
     fn open_sheet_tabs_menu(&self) -> bool {
@@ -777,6 +784,13 @@ impl ApplicationActions for RecordingActions {
     fn move_to_sheet_entry(&self, kind: crate::event::SheetListKind, target: &str) -> bool {
         if let Ok(mut log) = self.log.lock() {
             log.push((format!("{kind:?} {target}"), 0));
+        }
+        true
+    }
+
+    fn write_sheet_note(&self, text: &str) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push((format!("sheet note write {text}"), 0));
         }
         true
     }

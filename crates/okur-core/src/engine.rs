@@ -264,6 +264,10 @@ pub struct ScreenReaderEngine {
     label_store: Option<Box<dyn crate::labels::LabelStore>>,
     /// Custom Label while it is open, and the node it labels.
     label_dialog: Option<(crate::ui::label::LabelDialog, usize)>,
+    /// Excel's Edit note (Shift+F2) while it is open.
+    note_dialog: Option<crate::ui::label::LabelDialog>,
+    /// Shift+F2 asked Excel for the cell's note, to open Edit note with it.
+    note_edit_asked: bool,
     /// The Alt key is down: pressed on its own and not yet released (Alt held through
     /// Tabs in the task switcher).
     alt_held: bool,
@@ -703,6 +707,8 @@ impl ScreenReaderEngine {
             custom_labels: crate::labels::CustomLabels::default(),
             label_store: None,
             label_dialog: None,
+            note_dialog: None,
+            note_edit_asked: false,
             alt_held: false,
             pass_next_key: false,
             menus: crate::native_focus::Menus::default(),
@@ -1648,6 +1654,17 @@ impl ScreenReaderEngine {
                 && !m.insert
                 && !m.win
                 && self.open_sheet_list(crate::event::SheetListKind::Visible)
+            {
+                return KeyAction::Consume;
+            }
+            // Excel's Shift+F2: the cell's note in Okur's Edit note [obs, 1197/s5].
+            if event.key == Key::F(2)
+                && m.shift
+                && !m.ctrl
+                && !m.alt
+                && !m.insert
+                && !m.win
+                && self.ask_note_to_edit()
             {
                 return KeyAction::Consume;
             }
@@ -3179,6 +3196,7 @@ impl ScreenReaderEngine {
             _ if self.is_tray_event(message) => self.handle_tray_event(message),
             _ if self.is_jump_event(message) => self.handle_jump_event(message),
             _ if self.is_label_event(message) => self.handle_label_event(message),
+            _ if self.is_note_event(message) => self.handle_note_event(message),
             _ if self.is_placemarker_event(message) => self.handle_placemarker_event(message),
             _ if self.is_dictionary_event(message) => self.handle_dictionary_event(message),
             _ if self.is_key_labels_event(message) => self.handle_key_labels_event(message),
@@ -3729,6 +3747,15 @@ impl ScreenReaderEngine {
             return None;
         }
         self.sheet_list_asked = None;
+        // Shift+F2's Edit note, with the cell's note in it [obs, 1197/s5].
+        if kind == crate::event::SheetListKind::Note && std::mem::take(&mut self.note_edit_asked) {
+            let current = entries
+                .first()
+                .map(|note| note.label.clone())
+                .unwrap_or_default();
+            self.open_note_dialog(&current);
+            return None;
+        }
         // The active cell's note, or that it has none: "Includes Saturday mornings.", "No note
         // or comment visible for this cell." [obs, 1183/s3, s5].
         if kind == crate::event::SheetListKind::Note {
