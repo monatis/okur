@@ -51,7 +51,8 @@ def build(app):
     box.append(labelled("_Name:", name))
     box.append(name)
 
-    notes = Gtk.TextView()
+    # Tab leaves the field, as WinForms' multi-line TextBox (AcceptsTab off) lets it.
+    notes = Gtk.TextView(accepts_tab=False)
     scrolled = Gtk.ScrolledWindow(child=notes, min_content_height=44)
     box.append(labelled("N_otes:", notes))
     box.append(scrolled)
@@ -92,25 +93,59 @@ def build(app):
     box.append(labelled("_Fruit:", fruit))
     box.append(fruit)
 
-    # The folders' tree: Documents (Reports, Invoices) and Pictures, Documents selected.
-    folders = Gtk.TreeStore(str)
-    documents = folders.append(None, ["Documents"])
-    folders.append(documents, ["Reports"])
-    folders.append(documents, ["Invoices"])
-    folders.append(None, ["Pictures"])
-    tree = Gtk.TreeView(model=folders, headers_visible=False)
-    tree.append_column(Gtk.TreeViewColumn("Folder", Gtk.CellRendererText(), text=0))
-    tree.set_cursor(Gtk.TreePath.new_first(), None, False)
+    # The folders' tree: Documents (Reports, Invoices) and Pictures, Documents selected; GTK 4's
+    # list view over a tree list model (its deprecated TreeView shows no rows to AT-SPI).
+    children = {"Documents": ["Reports", "Invoices"]}
+
+    def strings(names):
+        model = Gtk.StringList()
+        for item in names:
+            model.append(item)
+        return model
+
+    def child_model(item):
+        names = children.get(item.get_string())
+        return strings(names) if names else None
+
+    folders = Gtk.TreeListModel.new(strings(["Documents", "Pictures"]), False, False, child_model)
+
+    def tree_setup(_factory, cell):
+        expander = Gtk.TreeExpander()
+        expander.set_child(Gtk.Label(xalign=0))
+        cell.set_child(expander)
+
+    def tree_bind(_factory, cell):
+        row = cell.get_item()
+        expander = cell.get_child()
+        expander.set_list_row(row)
+        expander.get_child().set_label(row.get_item().get_string())
+
+    tree_factory = Gtk.SignalListItemFactory()
+    tree_factory.connect("setup", tree_setup)
+    tree_factory.connect("bind", tree_bind)
+    tree = Gtk.ListView(model=Gtk.SingleSelection(model=folders), factory=tree_factory)
     box.append(tree)
 
     # The files' list in columns, Name and Size, its first row selected.
-    files = Gtk.ListStore(str, str)
-    for row in (("budget.xlsx", "24 KB"), ("notes.txt", "2 KB"), ("photo.jpg", "1.2 MB")):
-        files.append(list(row))
-    table = Gtk.TreeView(model=files)
-    for index, title in enumerate(("Name", "Size")):
-        table.append_column(Gtk.TreeViewColumn(title, Gtk.CellRendererText(), text=index))
-    table.set_cursor(Gtk.TreePath.new_first(), None, False)
+    rows = (("budget.xlsx", "24 KB"), ("notes.txt", "2 KB"), ("photo.jpg", "1.2 MB"))
+    files = strings([name for name, _ in rows])
+    sizes = dict(rows)
+    table = Gtk.ColumnView(model=Gtk.SingleSelection(model=files))
+
+    def column(title, text_of):
+        def setup(_factory, cell):
+            cell.set_child(Gtk.Label(xalign=0))
+
+        def bind(_factory, cell):
+            cell.get_child().set_label(text_of(cell.get_item().get_string()))
+
+        factory = Gtk.SignalListItemFactory()
+        factory.connect("setup", setup)
+        factory.connect("bind", bind)
+        return Gtk.ColumnViewColumn(title=title, factory=factory)
+
+    table.append_column(column("Name", lambda name: name))
+    table.append_column(column("Size", lambda name: sizes[name]))
     box.append(table)
 
     tabs = Gtk.Notebook()
