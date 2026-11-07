@@ -1610,12 +1610,15 @@ impl ScreenReaderEngine {
             self.speech.speak(&said, true);
             return true;
         };
-        // The selection is said as Excel reports it [hyp: not recorded yet].
+        // The selection said as a selecting key's, "select | B 2 | 12 | C 4 | 14" [obs,
+        // 1193/s9].
         if let Some(actions) = &self.actions {
-            actions.move_to_sheet_entry(
+            if actions.move_to_sheet_entry(
                 crate::event::SheetListKind::CellMarkers,
                 &format!("{marker}:{cell}"),
-            );
+            ) {
+                self.last_key_selects = true;
+            }
         }
         true
     }

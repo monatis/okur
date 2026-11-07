@@ -1061,9 +1061,14 @@ impl ScreenReaderEngine {
         }
         let place = place?;
         // A selecting key's change, "select | 8 | C 2" [obs, 1120, 1121].
+        // Or a command that selected, as Insert+Space, M from the cell PlaceMarker [obs,
+        // 1193/s9].
         let selecting = self
             .last_key
-            .and_then(|(key, m)| crate::spreadsheet::SelectionKey::of(key, m));
+            .and_then(|(key, m)| crate::spreadsheet::SelectionKey::of(key, m))
+            .or(self
+                .last_key_selects
+                .then_some(crate::spreadsheet::SelectionKey::Extend));
         if let Some(kind) = selecting {
             let before = self.sheet_selection.replace(place.selection.clone());
             let said = crate::spreadsheet::selection_said(before.as_deref(), place, kind)?;

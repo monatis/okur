@@ -154,10 +154,11 @@ impl AppModule for Excel {
         self.pending = None;
         // A selecting key leaves the focus on the active cell: the selection is read from
         // Excel's object model and said for what it changed [obs, 1120, 1121].
-        if cx
-            .key
-            .and_then(|(key, m)| SelectionKey::of(key, m))
-            .is_some()
+        if cx.selecting
+            || cx
+                .key
+                .and_then(|(key, m)| SelectionKey::of(key, m))
+                .is_some()
         {
             cx.note_window(focus);
             *cx.app_mode = crate::engine::AppMode::NativeControl;
