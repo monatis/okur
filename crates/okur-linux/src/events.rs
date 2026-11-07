@@ -47,6 +47,51 @@ fn snapshot(tree: AtspiTree) -> okur_linux_model::page::AtspiNode {
 /// How far up from a focused element a page's document is looked for.
 const PAGE_DEPTH: usize = 40;
 
+/// The most objects a native focus's subtree, and each surrounding subtree, is read with.
+const CONTROL_LIMIT: usize = 200;
+
+/// How far up from a native focus its window is looked for.
+const WINDOW_DEPTH: usize = 12;
+
+/// A focus outside a page with what surrounds it, as okur-linux-model's `native_focus` reads
+/// it: its own subtree, its parent's, and above it a list's, a column view's or a group box's
+/// (their items, columns, label), the other ancestors alone, up to its window. A few calls on
+/// the bus per object read.
+fn native_focus(provider: &LinuxProvider, element: &ElementData) -> okur_core::event::FocusEvent {
+    use xa11y_core::Provider;
+    let base = okur_linux_model::focus::focus_event(element);
+    let Ok(focus) = provider.atspi_tree(element, CONTROL_LIMIT) else {
+        return base;
+    };
+    let focus = snapshot(focus);
+    let mut ancestors = Vec::new();
+    let mut next = provider.get_parent(element).ok().flatten();
+    while let Some(parent) = next {
+        if ancestors.len() >= WINDOW_DEPTH {
+            break;
+        }
+        let whole = ancestors.is_empty()
+            || (ancestors.len() == 1
+                && parent
+                    .raw
+                    .get("atspi_role")
+                    .and_then(|r| r.as_str())
+                    .is_some_and(|r| matches!(r, "list" | "tree table" | "grouping")));
+        let limit = if whole { CONTROL_LIMIT } else { 1 };
+        next = provider.get_parent(&parent).ok().flatten();
+        let Ok(tree) = provider.atspi_tree(&parent, limit) else {
+            break;
+        };
+        let node = snapshot(tree);
+        let window = matches!(node.role.as_str(), "frame" | "dialog" | "window" | "alert");
+        ancestors.push(node);
+        if window {
+            break;
+        }
+    }
+    okur_linux_model::focus::native_focus(base, &focus, &ancestors)
+}
+
 /// An element's AT-SPI object, by its bus name and path.
 fn object_of(element: &ElementData) -> Option<String> {
     let raw = |key: &str| element.raw.get(key).and_then(|v| v.as_str());
@@ -229,7 +274,15 @@ impl EventSource for AtspiEventSource {
                                     return;
                                 }
                             }
-                            if let Some(event) = convert(&event, document.is_some()) {
+                            // A focus outside a page, read with what surrounds it.
+                            let native = event
+                                .target
+                                .as_ref()
+                                .filter(|_| focus && document.is_none())
+                                .map(|e| AccessibilityEvent::Focus(native_focus(&provider, e)));
+                            if let Some(event) =
+                                native.or_else(|| convert(&event, document.is_some()))
+                            {
                                 if !sink.send(event) {
                                     return;
                                 }

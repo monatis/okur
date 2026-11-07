@@ -4,6 +4,7 @@
 //! there is no JAWS on Linux to record, and the plan's invariants for GTK and Qt controls
 //! (docs/plans/2026-11-05-linux-first.md §2.4) are to settle how each is said.
 
+use crate::page::AtspiNode;
 use okur_core::aom::{NodeStates, Role};
 use okur_core::event::FocusEvent;
 use xa11y_core::{ElementData, Role as AtRole, Toggled};
@@ -96,6 +97,208 @@ pub fn focus_event(element: &ElementData) -> FocusEvent {
     event
 }
 
+/// A native control's focus (GTK's, a toolkit's outside a page) read with what surrounds it, as
+/// Windows reads the same control, so the engine says it alike (the plan's §2.4: SR Desktop
+/// Fixture's GTK replica beside JAWS's Windows evidence, probe-gtk-tree.sh). \`focus\` is the
+/// focused element's AT-SPI subtree, \`ancestors\` its ancestors' subtrees from its parent up,
+/// as far as its window. Fills in:
+/// - the window, the nearest frame or dialog's name;
+/// - a name GTK leaves empty (a list's item) from the first label within, and the mnemonic's
+///   underscore GTK leaves in a check box's or a button's name ("_Subscribe to updates");
+/// - the place among its peers of the same role, "2 of 3";
+/// - a list's item: its list, by the list's name ("Fruit:");
+/// - a radio button's group, by the label its group box shows ("Plan");
+/// - GTK's drop-down, focused on its toggle button: the combo box, its name and the item shown;
+/// - GTK's tree (a list view whose rows have an expander): the expander's row as a tree's item,
+///   open or closed;
+/// - a column view's row as a list view's item, its first cell its name and the others its
+///   columns;
+/// - a notebook focused itself: its selected page's tab.
+pub fn native_focus(
+    mut event: FocusEvent,
+    focus: &AtspiNode,
+    ancestors: &[AtspiNode],
+) -> FocusEvent {
+    use crate::page::state;
+    let parent = ancestors.first();
+    let grandparent = ancestors.get(1);
+    event.window_title = ancestors
+        .iter()
+        .find(|a| matches!(a.role.as_str(), "frame" | "dialog" | "window" | "alert"))
+        .map(|a| a.name.clone())
+        .filter(|n| !n.is_empty());
+    // GTK's mnemonic mark, where the control's own label shows the name without it.
+    if let Some(name) = event.name.clone().filter(|n| n.contains('_')) {
+        let plain = without_mnemonic(&name);
+        if first_label(focus).as_deref() == Some(plain.as_str()) {
+            event.name = Some(plain);
+        }
+    }
+    if event.name.is_none() {
+        event.name = first_label(focus);
+    }
+    // A notebook focused itself: its selected page's tab, "General Tab selected".
+    if focus.role == "grouping" {
+        if let Some(tab) = find(focus, &|n| n.role == "page tab" && n.has(state::SELECTED)) {
+            event.role = Role::Tab;
+            event.name = Some(tab.name.clone()).filter(|n| !n.is_empty());
+            event.states.selected = Some(true);
+            event.container_role = Some(Role::TabList);
+            event.container_name = None;
+            return event;
+        }
+    }
+    // GTK's drop-down: its toggle button has the focus, its label shows the item chosen.
+    if focus.role == "toggle button" && parent.is_some_and(|p| p.role == "combo box") {
+        event.role = Role::ComboBox;
+        event.name = parent.map(|p| p.name.clone()).filter(|n| !n.is_empty());
+        event.value = first_label(focus);
+        event.states.checked = None;
+        return event;
+    }
+    // GTK's tree: a list's item holding an expander, the expander focused.
+    let tree_row = focus.role == "button"
+        && parent.is_some_and(|p| p.role == "list item")
+        && grandparent.is_some_and(|list| {
+            list.role == "list"
+                && list.children.iter().any(|item| {
+                    item.children
+                        .iter()
+                        .any(|c| c.role == "button" && c.has(state::EXPANDABLE))
+                })
+        });
+    if tree_row {
+        event.role = Role::TreeItem;
+        event.states.expanded = focus
+            .has(state::EXPANDABLE)
+            .then(|| focus.has(state::EXPANDED));
+        event.states.selected = parent.map(|p| p.has(state::SELECTED));
+        if let (Some(item), Some(list)) = (parent, grandparent) {
+            place(&mut event, item, list);
+        }
+        event.container_role = Some(Role::Tree);
+        event.container_name = grandparent.map(|l| l.name.clone());
+        return event;
+    }
+    // A column view's row: a list view's item, its cells its columns.
+    if focus.role == "table row" && grandparent.is_some_and(|t| t.role == "tree table") {
+        let cells: Vec<String> = focus
+            .children
+            .iter()
+            .filter(|c| c.role == "table cell")
+            .map(|c| c.name.clone())
+            .collect();
+        event.role = Role::ListItem;
+        event.name = cells.first().cloned().filter(|n| !n.is_empty());
+        event.columns = cells
+            .into_iter()
+            .skip(1)
+            .filter(|c| !c.is_empty())
+            .collect();
+        event.container_is_list_view = true;
+        if let Some(rows) = parent {
+            place(&mut event, focus, rows);
+        }
+        event.container_role = Some(Role::List);
+        event.container_name = grandparent.map(|t| t.name.clone());
+        event.groups = vec![okur_core::GroupEntry::list(
+            event.container_name.clone().unwrap_or_default(),
+        )];
+        return event;
+    }
+    // A list's item, its list named.
+    if focus.role == "list item" {
+        if let Some(list) = parent.filter(|p| p.role == "list") {
+            place(&mut event, focus, list);
+            event.container_role = Some(Role::List);
+            event.container_name = Some(list.name.clone());
+            event.groups = vec![okur_core::GroupEntry::list(list.name.clone())];
+        }
+        return event;
+    }
+    // A radio button: its place in its group, the group by the label its box shows.
+    if focus.role == "radio button" {
+        if let Some(radios) = parent {
+            place(&mut event, focus, radios);
+        }
+        let group = ancestors
+            .iter()
+            .take(3)
+            .find(|a| a.role == "grouping")
+            .and_then(group_name);
+        if let Some(group) = group {
+            event.container_role = Some(Role::Group);
+            event.container_name = Some(group.clone());
+            event.groups = vec![okur_core::GroupEntry::group(group)];
+        }
+    }
+    event
+}
+
+/// \`node\`'s place among its parent's children of its role, from 1, and their count.
+fn place(event: &mut FocusEvent, node: &AtspiNode, parent: &AtspiNode) {
+    let peers: Vec<&AtspiNode> = parent
+        .children
+        .iter()
+        .filter(|c| c.role == node.role)
+        .collect();
+    let at = peers.iter().position(|p| {
+        p.name == node.name && p.states == node.states && first_label(p) == first_label(node)
+    });
+    if let Some(at) = at {
+        event.item_index = Some(at + 1);
+        event.item_count = Some(peers.len());
+    }
+}
+
+/// A group box's name: its own, else the label it shows first ("Plan").
+fn group_name(group: &AtspiNode) -> Option<String> {
+    Some(group.name.clone())
+        .filter(|n| !n.is_empty())
+        .or_else(|| {
+            group
+                .children
+                .iter()
+                .find(|c| c.role == "label")
+                .map(|label| label.name.clone())
+        })
+        .filter(|n| !n.is_empty())
+}
+
+/// The first label's text within \`node\`, depth first.
+fn first_label(node: &AtspiNode) -> Option<String> {
+    find(node, &|n| n.role == "label" && !n.name.is_empty()).map(|label| label.name.clone())
+}
+
+/// The first node within \`node\` (itself left out), depth first, that \`wanted\` takes.
+fn find<'a>(node: &'a AtspiNode, wanted: &dyn Fn(&AtspiNode) -> bool) -> Option<&'a AtspiNode> {
+    node.children.iter().find_map(|child| {
+        if wanted(child) {
+            Some(child)
+        } else {
+            find(child, wanted)
+        }
+    })
+}
+
+/// A name without GTK's mnemonic mark: "_Subscribe to updates" is "Subscribe to updates", a
+/// doubled one an underscore.
+fn without_mnemonic(name: &str) -> String {
+    let mut out = String::with_capacity(name.len());
+    let mut chars = name.chars().peekable();
+    while let Some(c) = chars.next() {
+        if c == '_' {
+            if chars.peek() == Some(&'_') {
+                out.push('_');
+                chars.next();
+            }
+            continue;
+        }
+        out.push(c);
+    }
+    out
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -131,5 +334,227 @@ mod tests {
         let mut field = ElementData::for_role(AtRole::TextField);
         field.value = Some("hello".to_owned());
         assert_eq!(focus_event(&field).value.as_deref(), Some("hello"));
+    }
+
+    /// An AT-SPI node of `role` named `name`, with `children`.
+    fn node(role: &str, name: &str, children: Vec<AtspiNode>) -> AtspiNode {
+        AtspiNode {
+            role: role.to_owned(),
+            name: name.to_owned(),
+            children,
+            ..AtspiNode::default()
+        }
+    }
+
+    fn with(mut node: AtspiNode, states: &[u32]) -> AtspiNode {
+        for s in states {
+            node.states |= 1u64 << s;
+        }
+        node
+    }
+
+    fn label(text: &str) -> AtspiNode {
+        node("label", text, Vec::new())
+    }
+
+    /// SR Desktop Fixture's GTK replica as probe-gtk-tree.sh read it: its window.
+    fn window() -> AtspiNode {
+        node("frame", "SR Desktop Fixture", Vec::new())
+    }
+
+    /// The check box keeps GTK's mnemonic mark in its name; its label shows it without
+    /// (probe-gtk-tree.sh); the window is named.
+    #[test]
+    fn a_check_box_loses_the_mnemonic_mark_and_names_its_window() {
+        use crate::page::state;
+        let check = with(
+            node(
+                "check box",
+                "_Subscribe to updates",
+                vec![node("panel", "", vec![]), label("Subscribe to updates")],
+            ),
+            &[state::CHECKED],
+        );
+        let mut event = FocusEvent::new(Role::CheckBox);
+        event.name = Some("_Subscribe to updates".into());
+        let event = native_focus(
+            event,
+            &check,
+            &[
+                node("panel", "", vec![]),
+                node("panel", "", vec![]),
+                window(),
+            ],
+        );
+        assert_eq!(event.name.as_deref(), Some("Subscribe to updates"));
+        assert_eq!(event.window_title.as_deref(), Some("SR Desktop Fixture"));
+        // A name with an underscore of its own keeps it.
+        let file = node("button", "my_file.txt", vec![label("my_file.txt")]);
+        let mut event = FocusEvent::new(Role::Button);
+        event.name = Some("my_file.txt".into());
+        assert_eq!(
+            native_focus(event, &file, &[]).name.as_deref(),
+            Some("my_file.txt")
+        );
+    }
+
+    /// The radio button in its group box: "Plan | Pro radio button checked | 2 of 3", as
+    /// Windows gives it [obs, 301/s4].
+    #[test]
+    fn a_radio_button_has_its_group_and_place() {
+        use crate::page::state;
+        let radio = |name: &str, on: bool| {
+            let r = node(
+                "radio button",
+                name,
+                vec![node("panel", "", vec![]), label(name)],
+            );
+            if on {
+                with(r, &[state::CHECKED])
+            } else {
+                r
+            }
+        };
+        let pro = radio("Pro", true);
+        let radios = node(
+            "panel",
+            "",
+            vec![radio("Free", false), pro.clone(), radio("Team", false)],
+        );
+        let group = node("grouping", "", vec![label("Plan"), radios.clone()]);
+        let mut event = FocusEvent::new(Role::RadioButton);
+        event.name = Some("Pro".into());
+        let event = native_focus(
+            event,
+            &pro,
+            &[radios, group, node("panel", "", vec![]), window()],
+        );
+        assert_eq!((event.item_index, event.item_count), (Some(2), Some(3)));
+        assert_eq!(event.container_role, Some(Role::Group));
+        assert_eq!(event.container_name.as_deref(), Some("Plan"));
+        assert_eq!(event.groups, vec![okur_core::GroupEntry::group("Plan")]);
+    }
+
+    /// GTK's drop-down focused on its toggle button: the combo box, named, with the item shown
+    /// [obs, 301/s5: "Country: Combo box | Germany"].
+    #[test]
+    fn a_drop_down_is_its_combo_box() {
+        let shown = node("panel", "", vec![node("panel", "", vec![label("Germany")])]);
+        let toggle = node("toggle button", "Country:", vec![shown]);
+        let combo = node("combo box", "Country:", vec![toggle.clone()]);
+        let mut event = FocusEvent::new(Role::Button);
+        event.name = Some("Country:".into());
+        let event = native_focus(event, &toggle, &[combo, window()]);
+        assert_eq!(event.role, Role::ComboBox);
+        assert_eq!(event.name.as_deref(), Some("Country:"));
+        assert_eq!(event.value.as_deref(), Some("Germany"));
+    }
+
+    /// A list's item, named by its label, in its named list [obs, 301/s6: "Fruit: List box |
+    /// Bananas | 2 of 3"].
+    #[test]
+    fn a_list_item_is_named_by_its_label_in_its_list() {
+        use crate::page::state;
+        let item = |text: &str| node("list item", "", vec![label(text)]);
+        let bananas = with(item("Bananas"), &[state::SELECTED]);
+        let list = node(
+            "list",
+            "Fruit:",
+            vec![item("Apples"), bananas.clone(), item("Cherries")],
+        );
+        let event = native_focus(FocusEvent::new(Role::ListItem), &bananas, &[list, window()]);
+        assert_eq!(event.name.as_deref(), Some("Bananas"));
+        assert_eq!((event.item_index, event.item_count), (Some(2), Some(3)));
+        assert_eq!(event.container_role, Some(Role::List));
+        assert_eq!(event.container_name.as_deref(), Some("Fruit:"));
+    }
+
+    /// GTK's tree, a list view whose rows have expanders: the row is a tree's item, closed
+    /// [obs, 301/s7: "Tree view | Documents closed | 1 of 2"].
+    #[test]
+    fn an_expanders_row_is_a_trees_item() {
+        use crate::page::state;
+        let documents = with(
+            node("button", "Documents", vec![label("Documents")]),
+            &[state::EXPANDABLE],
+        );
+        let first = with(
+            node("list item", "", vec![documents.clone()]),
+            &[state::SELECTED],
+        );
+        let second = node(
+            "list item",
+            "",
+            vec![node("button", "Pictures", vec![label("Pictures")])],
+        );
+        let list = node("list", "", vec![first.clone(), second]);
+        let mut event = FocusEvent::new(Role::Button);
+        event.name = Some("Documents".into());
+        let event = native_focus(event, &documents, &[first, list, window()]);
+        assert_eq!(event.role, Role::TreeItem);
+        assert_eq!(event.states.expanded, Some(false));
+        assert_eq!((event.item_index, event.item_count), (Some(1), Some(2)));
+        assert_eq!(event.container_role, Some(Role::Tree));
+    }
+
+    /// A column view's row: a list view's item, its other cells its columns [obs, 301/s8:
+    /// "List view | budget.xlsx | 24 KB | 1 of 3"].
+    #[test]
+    fn a_column_views_row_is_a_list_views_item() {
+        let row = |a: &str, b: &str| {
+            node(
+                "table row",
+                &format!("{a} {b}"),
+                vec![
+                    node("table cell", a, vec![label(a)]),
+                    node("table cell", b, vec![label(b)]),
+                ],
+            )
+        };
+        let first = row("budget.xlsx", "24 KB");
+        let rows = node(
+            "list",
+            "",
+            vec![
+                first.clone(),
+                row("notes.txt", "2 KB"),
+                row("photo.jpg", "1.2 MB"),
+            ],
+        );
+        let table = node(
+            "tree table",
+            "",
+            vec![node("table row", "Name Size", vec![]), rows.clone()],
+        );
+        let mut event = FocusEvent::new(Role::TableRow);
+        event.name = Some("budget.xlsx 24 KB".into());
+        let event = native_focus(event, &first, &[rows, table, window()]);
+        assert_eq!(event.role, Role::ListItem);
+        assert_eq!(event.name.as_deref(), Some("budget.xlsx"));
+        assert_eq!(event.columns, vec!["24 KB".to_owned()]);
+        assert!(event.container_is_list_view);
+        assert_eq!((event.item_index, event.item_count), (Some(1), Some(3)));
+    }
+
+    /// A notebook focused itself: its selected tab [obs, 301/s9: "General Tab selected"].
+    #[test]
+    fn a_notebook_is_its_selected_tab() {
+        use crate::page::state;
+        let tabs = node(
+            "page tab list",
+            "",
+            vec![
+                with(
+                    node("page tab", "General", vec![label("General")]),
+                    &[state::SELECTED],
+                ),
+                node("page tab", "Advanced", vec![label("Advanced")]),
+            ],
+        );
+        let notebook = node("grouping", "", vec![node("panel", "", vec![tabs])]);
+        let event = native_focus(FocusEvent::new(Role::Group), &notebook, &[window()]);
+        assert_eq!(event.role, Role::Tab);
+        assert_eq!(event.name.as_deref(), Some("General"));
+        assert_eq!(event.states.selected, Some(true));
     }
 }
