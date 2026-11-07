@@ -422,6 +422,9 @@ pub struct ScreenReaderEngine {
     sheet_name: String,
     /// The Move to Monitor Cell list's entries read so far, as each cell's text comes.
     monitor_entries: Vec<crate::event::SheetEntry>,
+    /// Excel's cell PlaceMarkers per workbook: one per worksheet, its cell's reference
+    /// (Ctrl+Windows+K).
+    cell_markers: std::collections::HashMap<String, Vec<(String, String)>>,
     /// One of Excel's lists was asked for, and is awaited.
     sheet_list_asked: Option<crate::event::SheetListKind>,
     /// A key for Word's revisions asked whether the document tracks its changes, which it
@@ -759,6 +762,7 @@ impl ScreenReaderEngine {
             sheet_asks: std::collections::VecDeque::new(),
             sheet_selection: None,
             sheet_titles: std::collections::HashMap::new(),
+            cell_markers: std::collections::HashMap::new(),
             region_edge: None,
             kept_titles: crate::spreadsheet::WorkbookTitles::default(),
             title_store: None,
@@ -1635,6 +1639,17 @@ impl ScreenReaderEngine {
                 && !m.insert
                 && !m.win
                 && self.open_sheet_list(crate::event::SheetListKind::Visible)
+            {
+                return KeyAction::Consume;
+            }
+            // Excel's cell PlaceMarkers: Ctrl+Windows+K sets one, Ctrl+Alt+Windows+K lists them
+            // [obs, 1193/s3, s7].
+            if event.key == Key::Alpha('K')
+                && m.win
+                && m.ctrl
+                && !m.shift
+                && !m.insert
+                && self.cell_marker_key(m.alt)
             {
                 return KeyAction::Consume;
             }
@@ -3731,9 +3746,9 @@ impl ScreenReaderEngine {
                 crate::event::SheetListKind::Charts => msg::excel_no_charts(),
                 crate::event::SheetListKind::Hyperlinks => msg::excel_no_hyperlinks(),
                 // Never asked of Excel: the engine opens the list itself; the note is said above.
-                crate::event::SheetListKind::Monitor | crate::event::SheetListKind::Note => {
-                    return None
-                }
+                crate::event::SheetListKind::Monitor
+                | crate::event::SheetListKind::Note
+                | crate::event::SheetListKind::CellMarkers => return None,
             }
             .to_string();
             // After what was said as the list was gathered, not over it.

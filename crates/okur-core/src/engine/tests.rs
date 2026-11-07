@@ -10786,3 +10786,71 @@ fn manage_key_labels_changes_settings_center() {
         }]
     );
 }
+
+/// Excel's cell PlaceMarkers: Ctrl+Alt+Windows+K with none, "There are no Cell Markers defined
+/// for this workbook."; Insert+Space, M with none, how to set one; Ctrl+Windows+K, "Setting Cell
+/// Marker at B2.", again on the cell, "The current cell is already defined as a Cell Marker."
+/// [obs, 1193/s3, s7, s10, trials 1 and 2].
+#[test]
+fn excel_cell_placemarkers_are_set_and_listed() {
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    echo_off(&mut engine);
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let mut cell = FocusEvent::new(Role::TableCell)
+        .with_name("B2")
+        .with_window_title("Hours.xlsx - Excel");
+    cell.value = Some("12".into());
+    cell.app = Some("EXCEL.EXE".into());
+    cell.platform.window_class = Some("EXCEL7".into());
+    engine.handle_focus_event(&cell);
+    speech.take();
+    let win_k = |ctrl: bool, alt: bool| {
+        KeyEvent::new(
+            Key::Alpha('K'),
+            Modifiers {
+                ctrl,
+                alt,
+                win: true,
+                ..Modifiers::none()
+            },
+            true,
+        )
+    };
+    assert_eq!(
+        engine.handle_key_event(&win_k(true, true)),
+        KeyAction::Consume
+    );
+    assert_eq!(
+        speech.take(),
+        ["There are no Cell Markers defined for this workbook."]
+    );
+    let insert_space = KeyEvent::new(
+        Key::Space,
+        Modifiers {
+            insert: true,
+            ..Modifiers::none()
+        },
+        true,
+    );
+    engine.handle_key_event(&insert_space);
+    engine.handle_key_event(&KeyEvent::new(Key::Alpha('M'), Modifiers::none(), true));
+    let said = speech.take();
+    assert!(
+        said.iter()
+            .any(|s| s.starts_with("First mark the cell at the start location")),
+        "{said:?}"
+    );
+    assert_eq!(
+        engine.handle_key_event(&win_k(true, false)),
+        KeyAction::Consume
+    );
+    assert_eq!(speech.take(), ["Setting Cell Marker at B2."]);
+    engine.handle_key_event(&win_k(true, false));
+    assert_eq!(
+        speech.take(),
+        ["The current cell is already defined as a Cell Marker."]
+    );
+}

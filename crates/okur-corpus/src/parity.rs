@@ -1863,8 +1863,9 @@ impl ScreenReads {
                         SheetListKind::Objects => lists.objects.clone(),
                         SheetListKind::Charts => lists.charts.clone(),
                         SheetListKind::Hyperlinks => lists.hyperlinks.clone(),
-                        // Never asked of Excel: the engine reads each monitor cell.
-                        SheetListKind::Monitor => None,
+                        // Never asked of Excel: the engine reads each monitor cell, and keeps
+                        // the cell PlaceMarkers.
+                        SheetListKind::Monitor | SheetListKind::CellMarkers => None,
                     })
                     .unwrap_or_default();
                 deliver(okur_core::AccessibilityEvent::SheetList {

@@ -344,6 +344,14 @@ excel-office-dark-blue = Dark Blue
 excel-office-purple = Purple
 # The appearance viewer's fill, after the font's background: "Yellow solid" [obs, 1188/s20].
 excel-cell-fill = { $color } solid
+# Excel's cell PlaceMarkers: Ctrl+Windows+K sets one, on the cell already one says so;
+# Ctrl+Alt+Windows+K's list entry and, with none, its message; Insert+Space, M without one
+# [obs, 1193/s3, s7, s10].
+excel-cell-marker-set = Setting Cell Marker at { $cell }.
+excel-cell-marker-already = The current cell is already defined as a Cell Marker.
+excel-cell-marker-entry = { $sheet } at Cell Marker { $cell }
+excel-no-cell-markers = There are no Cell Markers defined for this workbook.
+excel-cell-marker-first = First mark the cell at the start location with control+Windows+K, then move to the last cell to be included in the selection and press Insert+Space, M.
 # Insert+Ctrl+C with no chart selected (Read the current worksheet object) [obs, 1187/s7].
 excel-chart-not-active = The chart is not active. You must first press Insert+ALT+c to select it.
 # Equals in a cell (Formula input mode), as the key goes on to Excel [obs, 1187/s18].

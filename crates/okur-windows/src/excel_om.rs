@@ -403,8 +403,8 @@ pub fn sheet_list(
             }
             found
         }
-        // The monitor cells are the engine's: it reads each cell itself.
-        okur_core::SheetListKind::Monitor => Vec::new(),
+        // The monitor cells and the cell PlaceMarkers are the engine's.
+        okur_core::SheetListKind::Monitor | okur_core::SheetListKind::CellMarkers => Vec::new(),
         // The window's cells with notes (legacy comments), "B2: Includes Saturday mornings."
         // [obs, 1183/s6]; for Note, the active cell's note alone, its text [obs, 1183/s3].
         okur_core::SheetListKind::Notes | okur_core::SheetListKind::Note => {
@@ -696,11 +696,28 @@ pub fn go_to(grid: HWND, kind: okur_core::SheetListKind, target: &str) -> bool {
             )?)?;
             invoke(&named, "Activate", DISPATCH_METHOD, &mut [])?;
         } else {
+            // A cell on another worksheet, "Hours!B2" (a cell PlaceMarker): that worksheet
+            // first.
+            let (sheet, cell) = match target.rsplit_once('!') {
+                Some((name, cell)) => {
+                    let book = object(&property(&sheet, "Parent")?)?;
+                    let sheets = object(&property(&book, "Worksheets")?)?;
+                    let named = object(&invoke(
+                        &sheets,
+                        "Item",
+                        DISPATCH_PROPERTYGET,
+                        &mut [VARIANT::from(BSTR::from(name))],
+                    )?)?;
+                    invoke(&named, "Activate", DISPATCH_METHOD, &mut [])?;
+                    (named, cell)
+                }
+                None => (sheet, target),
+            };
             let range = object(&invoke(
                 &sheet,
                 "Range",
                 DISPATCH_PROPERTYGET,
-                &mut [VARIANT::from(BSTR::from(target))],
+                &mut [VARIANT::from(BSTR::from(cell))],
             )?)?;
             invoke(&range, "Select", DISPATCH_METHOD, &mut [])?;
         }

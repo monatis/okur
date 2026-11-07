@@ -183,6 +183,9 @@ pub enum SheetListKind {
     /// The worksheet's hyperlinks (Insert+F7, Select hyperlink): none, "No hyperlinks on
     /// worksheet." [obs, 1187/s9].
     Hyperlinks,
+    /// The workbook's cell PlaceMarkers, "Hours at Cell Marker B2" (Ctrl+Alt+Windows+K, JAWS's
+    /// List of Cell Markers) [obs, 1193/s7]: the engine keeps them; Excel is not asked.
+    CellMarkers,
 }
 
 impl SheetListKind {
@@ -201,6 +204,7 @@ impl SheetListKind {
             Self::Objects => "sheet objects",
             Self::Charts => "sheet charts",
             Self::Hyperlinks => "sheet hyperlinks",
+            Self::CellMarkers => "sheet cell markers",
         }
     }
 }

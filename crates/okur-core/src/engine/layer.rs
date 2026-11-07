@@ -67,6 +67,11 @@ impl ScreenReaderEngine {
             Key::Alpha('X') if plain => {
                 let _ = self.open_flexible_web();
             }
+            // Excel's: the cells from the worksheet's cell PlaceMarker to the active cell
+            // selected [obs, 1193/s10 without one].
+            Key::Alpha('M') if plain => {
+                let _ = self.select_from_cell_marker();
+            }
             _ => {}
         }
         Some(KeyAction::Consume)

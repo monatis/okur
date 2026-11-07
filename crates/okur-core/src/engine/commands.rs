@@ -1515,6 +1515,117 @@ impl ScreenReaderEngine {
         true
     }
 
+    /// Excel's Ctrl+Windows+K, a cell PlaceMarker at the active cell, one per worksheet: "Setting
+    /// Cell Marker at B2.", or that the cell is one [obs, 1193/s3]; with Alt, the workbook's
+    /// listed, "Hours at Cell Marker B2", or that there are none [obs, 1193/s7]. False outside
+    /// a sheet.
+    pub(super) fn cell_marker_key(&mut self, list: bool) -> bool {
+        let Some(focus) = self.sheet_focus() else {
+            return false;
+        };
+        let book = focus
+            .window_title
+            .as_deref()
+            .map(crate::spreadsheet::workbook)
+            .unwrap_or_default()
+            .to_owned();
+        let sheet = self.sheet_name.clone();
+        if list {
+            let entries: Vec<crate::event::SheetEntry> = self
+                .cell_markers
+                .get(&book)
+                .map(|markers| {
+                    markers
+                        .iter()
+                        .map(|(sheet, cell)| crate::event::SheetEntry {
+                            label: msg::excel_cell_marker_entry(sheet.as_str(), cell.as_str())
+                                .render(),
+                            target: format!("{sheet}!{cell}"),
+                        })
+                        .collect()
+                })
+                .unwrap_or_default();
+            if entries.is_empty() {
+                let said = msg::excel_no_cell_markers().to_string();
+                self.speech.speak(&said, true);
+                return true;
+            }
+            let dialog = crate::ui::lists::ListDialog::sheet_list(
+                self.dialog_count + 1,
+                crate::event::SheetListKind::CellMarkers,
+                "",
+                &entries,
+            );
+            let mode = self.app_mode;
+            let _ = self.show_list(dialog, mode);
+            return true;
+        }
+        // The active cell: a cell by its reference, the grid's empty cell by the place last
+        // read.
+        let cell = if Self::is_sheet_cell(&focus) {
+            focus.name.as_deref().map(str::trim).map(str::to_owned)
+        } else {
+            self.sheet_last.as_ref().map(|(address, _)| address.clone())
+        };
+        let Some(cell) = cell.filter(|c| !c.is_empty()) else {
+            return true;
+        };
+        let markers = self.cell_markers.entry(book).or_default();
+        let said = if markers.iter().any(|(s, c)| *s == sheet && *c == cell) {
+            msg::excel_cell_marker_already().to_string()
+        } else {
+            markers.retain(|(s, _)| *s != sheet);
+            markers.push((sheet, cell.clone()));
+            msg::excel_cell_marker_set(cell.as_str()).render()
+        };
+        self.speech.speak(&said, true);
+        true
+    }
+
+    /// Insert+Space, M in a sheet: the cells from the worksheet's cell PlaceMarker to the active
+    /// cell selected; without one, how to set it, "First mark the cell at the start location
+    /// with control+Windows+K, ..." [obs, 1193/s10]. False outside a sheet.
+    pub(super) fn select_from_cell_marker(&mut self) -> bool {
+        let Some(focus) = self.sheet_focus() else {
+            return false;
+        };
+        let book = focus
+            .window_title
+            .as_deref()
+            .map(crate::spreadsheet::workbook)
+            .unwrap_or_default();
+        let marker = self.cell_markers.get(book).and_then(|markers| {
+            markers
+                .iter()
+                .find(|(sheet, _)| *sheet == self.sheet_name)
+                .map(|(_, cell)| cell.clone())
+        });
+        let cell = if Self::is_sheet_cell(&focus) {
+            focus.name.as_deref().map(str::trim).map(str::to_owned)
+        } else {
+            self.sheet_last.as_ref().map(|(address, _)| address.clone())
+        };
+        let (Some(marker), Some(cell)) = (marker, cell) else {
+            let said = msg::excel_cell_marker_first().to_string();
+            self.speech.speak(&said, true);
+            return true;
+        };
+        // The selection is said as Excel reports it [hyp: not recorded yet].
+        if let Some(actions) = &self.actions {
+            actions.move_to_sheet_entry(
+                crate::event::SheetListKind::CellMarkers,
+                &format!("{marker}:{cell}"),
+            );
+        }
+        true
+    }
+
+    /// Whether `focus` is one of a sheet's cells, its name its reference, not the grid of an
+    /// empty one.
+    fn is_sheet_cell(focus: &crate::event::FocusEvent) -> bool {
+        focus.role == crate::aom::Role::TableCell
+    }
+
     /// The worksheet named for Move to Monitor Cell with none set.
     pub(super) fn no_monitor_cells(
         &mut self,

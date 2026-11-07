@@ -45,6 +45,9 @@ list-dialog-charts = Charts
 # Excel's hyperlinks (Insert+F7): "Select Hyperlink dialog | List box | Home page | 1 of 2" [obs,
 # 1191/s4].
 list-dialog-hyperlinks = Select Hyperlink
+# Excel's cell PlaceMarkers, Ctrl+Alt+Windows+K: "List of Cell Markers dialog | List1 List view |
+# Hours at Cell Marker B2 | 1 of 1" [obs, 1193/s7].
+list-dialog-cell-markers = List of Cell Markers
 # Word's revisions, Insert+Shift+R in a document [hyp: 1107 records JAWS's title].
 list-dialog-revisions = Revisions
 # Windows+Semicolon in a document of Word's: the notes the Virtual Viewer shows, JAWS's items in

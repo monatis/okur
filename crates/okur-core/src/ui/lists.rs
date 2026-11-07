@@ -872,6 +872,7 @@ impl ListDialog {
                     crate::event::SheetListKind::Objects => msg::list_dialog_worksheet_objects(),
                     crate::event::SheetListKind::Charts => msg::list_dialog_charts(),
                     crate::event::SheetListKind::Hyperlinks => msg::list_dialog_hyperlinks(),
+                    crate::event::SheetListKind::CellMarkers => msg::list_dialog_cell_markers(),
                 },
                 vec![
                     // Move to Monitor Cell's is a list box without a name, "dialog | List box |
