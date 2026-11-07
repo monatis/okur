@@ -4157,6 +4157,12 @@ impl ScreenReaderEngine {
                 let features = self.list_dialog.take();
                 let opened = match feature.list() {
                     Some(kind) => self.open_list(kind),
+                    // The PlaceMarker List, the page's own (JAWS 2025 help, Virtual HTML
+                    // Features: PlaceMarkers opens it); it opens from the page.
+                    None if feature == crate::ui::lists::HtmlFeature::PlaceMarkers => {
+                        self.app_mode = self.list_return_mode;
+                        self.open_placemarker_list()
+                    }
                     None => {
                         let speech = msg::html_feature_not_yet(feature.name().as_str()).to_string();
                         self.speech.speak(&speech, true);
@@ -4166,7 +4172,7 @@ impl ScreenReaderEngine {
                 if let (Some(features), Some(ui)) = (features, &self.ui) {
                     ui.send(crate::ui::ToUi::DialogClose { id: features.id });
                 }
-                if self.list_dialog.is_none() {
+                if self.list_dialog.is_none() && self.placemarker_list.is_none() {
                     self.returning_from_dialog();
                 }
                 opened

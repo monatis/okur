@@ -714,7 +714,9 @@ mod tests {
         let empty = okur_core::labels::CustomLabels::default();
         LabelStore::save(&store, &empty);
         LabelStore::save(&store, &empty);
-        SettingsStore::flush(&store);
+        // Waited for as long as a loaded machine needs: the exit's short wait failed under the
+        // whole suite's load (the gate, 2026-11-07), as the settings' test once did.
+        assert!(store.flush_within(std::time::Duration::from_secs(30)));
         assert!(root.join(LABELS).exists());
         assert_eq!(SettingsFolder::at(&root).load_labels(), empty);
         let _ = std::fs::remove_dir_all(&root);

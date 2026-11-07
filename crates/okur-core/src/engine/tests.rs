@@ -5129,6 +5129,18 @@ fn virtual_html_features_opens_the_chosen_list() {
     let (id, said) = open(&mut engine, 0);
     assert_eq!(said.as_deref(), Some("Okur has no Anchors List yet."));
     assert_eq!(ui.take(), [ToUi::DialogClose { id }]);
+    // PlaceMarkers, the 17th: the page's PlaceMarker List in its place (JAWS 2025 help).
+    let (id, _) = open(&mut engine, 16);
+    let titles: Vec<String> = ui
+        .take()
+        .iter()
+        .map(|m| match m {
+            ToUi::DialogShow { dialog } => format!("show {}", dialog.title),
+            ToUi::DialogClose { id: closed } if *closed == id => "close features".to_owned(),
+            other => format!("{other:?}"),
+        })
+        .collect();
+    assert_eq!(titles, ["show PlaceMarker List", "close features"]);
 }
 
 /// Insert+F5 opens a real Select a Form Field. OK moves to the chosen field and focuses it,

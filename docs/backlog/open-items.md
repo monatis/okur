@@ -27,9 +27,6 @@ places where Okur contradicts JAWS's documentation, and the order of work. P0:
   Virtual HTML Features says "Okur has no … yet" for them. Each needs its recording first.
   Smart Glance items were recorded (243: "9 p.m.", "most", "Branch"), but which text JAWS
   counts as highlighted is not known.
-- **Virtual HTML Features' PlaceMarkers item** still says "Okur has no PlaceMarkers yet"
-  (`Feature::list` in `crates/okur-core/src/ui/lists.rs` has no list for it), though the
-  PlaceMarker List exists (`d58d8f71`): it should open that list, as JAWS's does.
 - **Flexible Web's View or Change Where Rules are Applied** (751): Space on a rule's check box
   says nothing in the replay, where JAWS says the item before and after ("Okur start rule Site
   not checked 1 of 1 | checked | ... checked 1 of 1", s9): the replay's mirror of Okur's list
