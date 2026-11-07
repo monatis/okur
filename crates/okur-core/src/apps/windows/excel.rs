@@ -110,6 +110,10 @@ impl AppModule for Excel {
             lines.push(msg::excel_has_hyperlink().to_string());
         }
         lines.push(coordinates);
+        // And how to follow it, as a list closes back onto it [obs, 1191/s6].
+        if link {
+            lines.push(msg::hint_activate_enter().to_string());
+        }
         Some(lines.join("\n"))
     }
 
@@ -203,6 +207,9 @@ impl AppModule for Excel {
             && at.is_some()
             && at == before
             && !after_selection
+            // An empty cell between (the grid itself had the focus, its cell unknown here):
+            // the cell is said, "First cell | Home page | ... | A 1" [obs, 1191/s10].
+            && !self.from_blank
         {
             return FocusResponse::Speak(crate::announcement::Announcement::from_text(
                 &first.join("\n"),
@@ -395,7 +402,7 @@ mod tests {
 
     /// A cell with a hyperlink: "has hyperlink" after its text, the hint after its coordinates,
     /// "Docs | has hyperlink | A 2 | To activate press Enter." [obs, 1191/s2, 1195/s1, s3, s5];
-    /// back onto the list it closed, the cell alone.
+    /// a list closing back onto it, the same [obs, 1191/s6].
     #[test]
     fn a_cell_with_a_hyperlink_says_so() {
         let mut excel = Excel::default();
@@ -413,7 +420,7 @@ mod tests {
             excel
                 .focus_again(&link_cell("A2", "Docs , Contains Hyperlink"))
                 .as_deref(),
-            Some("Docs\nhas hyperlink\nA 2")
+            Some("Docs\nhas hyperlink\nA 2\nTo activate press Enter.")
         );
     }
 

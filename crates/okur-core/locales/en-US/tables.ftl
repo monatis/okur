@@ -299,10 +299,16 @@ excel-no-notes = No cells with notes or comments.
 # is none: page breaks (Ctrl+Shift+B), objects (Ctrl+Shift+O), charts (Insert+Alt+C) and
 # hyperlinks (Insert+F7) [obs, 1187/s3, s5, s8, s9].
 excel-collecting-page-breaks = Collecting cells at PageBreaks.
+# A page break's direction after its cell in the list, "A21:  horizontal" [obs, 1191/s7].
+excel-page-break-horizontal = horizontal
+excel-page-break-vertical = vertical
 excel-no-page-breaks = no horizontal or vertical page breaks.
 excel-collecting-objects = Please wait, collecting objects.
 excel-no-objects = Worksheet contains no objects.
 excel-no-charts = There are no charts on this worksheet.
+# Insert+Alt+C with no chart but other objects [obs, 1197/s4].
+excel-objects-no-chart = The worksheet contains { $count } objects.
+excel-objects-select-hint = To select an object on the worksheet  use control+Shift+O.
 excel-collecting-hyperlinks = Please wait, collecting hyperlinks.
 excel-no-hyperlinks = No hyperlinks on worksheet.
 # Alt+Shift+B (Describe cell border): an edge with a line by its color, weight and style, the

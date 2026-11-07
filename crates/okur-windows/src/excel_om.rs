@@ -446,11 +446,18 @@ pub fn sheet_list(
             found
         }
         // The cells where the worksheet's pages break, across then down (`HPageBreaks`,
-        // `VPageBreaks`, each break's `Location`), by their references [hyp: no page break
-        // recorded yet].
+        // `VPageBreaks`, each break's `Location`), by their references and which way they
+        // break, "A21:  horizontal" [obs, 1191/s7].
         okur_core::SheetListKind::PageBreaks => {
+            use okur_core::messages::msg;
             let mut found = Vec::new();
-            for breaks in ["HPageBreaks", "VPageBreaks"] {
+            for (breaks, way) in [
+                (
+                    "HPageBreaks",
+                    msg::excel_page_break_horizontal().to_string(),
+                ),
+                ("VPageBreaks", msg::excel_page_break_vertical().to_string()),
+            ] {
                 let Some(breaks) = property(&sheet, breaks).as_ref().and_then(object) else {
                     continue;
                 };
@@ -460,7 +467,7 @@ pub fn sheet_list(
                         .and_then(|b| property(&b, "Location").as_ref().and_then(object))
                         .and_then(|location| address(&location));
                     if let Some(at) = at {
-                        found.push(entry(at.clone(), at));
+                        found.push(entry(format!("{at}:  {way}"), at));
                     }
                 }
             }
@@ -483,8 +490,12 @@ pub fn sheet_list(
                     .and_then(|cell| address(&cell))
                     .unwrap_or_default()
             };
+            /// `Shape.Type` of a note's box (`msoComment`), which JAWS does not list [obs,
+            /// 1197's trace after Shift+F2].
+            const COMMENT: i32 = 4;
             (1..=count)
                 .filter_map(|index| crate::word_om::item(&shapes, index))
+                .filter(|shape| number(shape, "Type") != Some(COMMENT))
                 .filter_map(|shape| {
                     let name = text(&shape, "Name").trim().to_owned();
                     let at = corner(&shape, "TopLeftCell");

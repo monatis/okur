@@ -37,10 +37,11 @@ list-dialog-move-to-worksheet = Move to Worksheet
 list-dialog-cells-with-notes = Cells with Notes
 # Excel's monitor cells, Ctrl+Shift+M: "B2: 12 | 1 of 1" [obs, 1135/s6].
 list-dialog-move-to-monitor-cell = Move to Monitor Cell
-# Excel's page breaks (Ctrl+Shift+B) and charts (Insert+Alt+C), named by JAWS's help's
-# descriptions [hyp: none recorded with entries]; its objects (Ctrl+Shift+O) as JAWS's dialog,
-# "Select an object dialog | List1 List view | rectangle C2-F7: Check totals" [obs, 1197/s1].
-list-dialog-cells-at-page-breaks = Cells at Page Breaks
+# Excel's charts (Insert+Alt+C), named by JAWS's help's description [hyp: none recorded with
+# entries]; its objects (Ctrl+Shift+O) and page breaks (Ctrl+Shift+B) as JAWS's dialogs,
+# "Select an object dialog | List1 List view | rectangle C2-F7: Check totals", "Cells at
+# PageBreaks dialog | List1 List view | A21:  horizontal" [obs, 1197/s1, 1191/s7].
+list-dialog-cells-at-page-breaks = Cells at PageBreaks
 list-dialog-worksheet-objects = Select an object
 list-dialog-charts = Charts
 # Excel's hyperlinks (Insert+F7): "Select Hyperlink dialog | List box | Home page | 1 of 2" [obs,

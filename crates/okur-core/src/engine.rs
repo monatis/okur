@@ -425,6 +425,9 @@ pub struct ScreenReaderEngine {
     /// Excel's cell PlaceMarkers per workbook: one per worksheet, its cell's reference
     /// (Ctrl+Windows+K).
     cell_markers: std::collections::HashMap<String, Vec<(String, String)>>,
+    /// Insert+Alt+C found no chart and asked for the worksheet's objects, to say how many there
+    /// are [obs, 1197/s4].
+    charts_asked_objects: bool,
     /// One of Excel's lists was asked for, and is awaited.
     sheet_list_asked: Option<crate::event::SheetListKind>,
     /// A key for Word's revisions asked whether the document tracks its changes, which it
@@ -763,6 +766,7 @@ impl ScreenReaderEngine {
             sheet_selection: None,
             sheet_titles: std::collections::HashMap::new(),
             cell_markers: std::collections::HashMap::new(),
+            charts_asked_objects: false,
             region_edge: None,
             kept_titles: crate::spreadsheet::WorkbookTitles::default(),
             title_store: None,
@@ -3732,6 +3736,34 @@ impl ScreenReaderEngine {
                 .first()
                 .map(|note| note.label.clone())
                 .unwrap_or_else(|| msg::excel_no_note().to_string());
+            self.speech.speak(&said, true);
+            return Some(said);
+        }
+        // Insert+Alt+C: without a chart, the other objects counted, "The worksheet contains 1
+        // objects. | To select an object on the worksheet use control+Shift+O." [obs, 1197/s4];
+        // with none at all, that there is no chart [obs, 1187/s8].
+        if kind == crate::event::SheetListKind::Charts && entries.is_empty() {
+            let asked = self.actions.as_ref().is_some_and(|actions| {
+                actions.read_sheet_list(crate::event::SheetListKind::Objects)
+            });
+            if asked {
+                self.sheet_list_asked = Some(crate::event::SheetListKind::Objects);
+                self.charts_asked_objects = true;
+                return None;
+            }
+        }
+        if kind == crate::event::SheetListKind::Objects
+            && std::mem::take(&mut self.charts_asked_objects)
+        {
+            let said = if entries.is_empty() {
+                msg::excel_no_charts().to_string()
+            } else {
+                format!(
+                    "{}\n{}",
+                    msg::excel_objects_no_chart(entries.len()).render(),
+                    msg::excel_objects_select_hint()
+                )
+            };
             self.speech.speak(&said, true);
             return Some(said);
         }
