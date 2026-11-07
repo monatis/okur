@@ -17,8 +17,9 @@ before the second drop. Neither has been fetched:
 - `round-1194` (1191 cut at Insert+F7, and a page-break scenario since deleted: its keys in
   JAWS's dialog were plain keys, which JAWS's elevated dialogs refuse). Do not import 1194.
 
-Queued next, not started: round 1195 (`Dropbox/sr-harness/round-1195-in`, start script in the
-session's scratchpad as `start-1195.ps1`, hashes in it): 1191 again with JAWS's dialogs walked
+Queued next, not started: round 1195 (`Dropbox/sr-harness/round-1195-in`, its start script,
+`start-1195.ps1`, beside it, with the hashes it checks: run it on old-pc through `opendesk exec`
+as an encoded command): 1191 again with JAWS's dialogs walked
 by `jaws_function` `TypeKey("Down")`, `TypeKey("Escape")`, `TypeKey("Enter")` (as 511/s5 does);
 1195, the hyperlink hint's sequence (Down, Down, Up, Up, Down over A1 link, A2 link, A3 plain);
 1196, the custom summary (Ctrl+Insert+Tab, Add with `TypeKey("Alt+A")` and `TypeString`, OK,
