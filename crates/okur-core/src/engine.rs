@@ -4265,14 +4265,13 @@ impl ScreenReaderEngine {
                 self.returning_from_dialog();
                 // An application that says its focus itself says it (Excel's cell, "22 | B 4"
                 // [obs, 521/s10]).
-                let again = self
-                    .list_return_focus
-                    .take()
+                let returning = self.list_return_focus.take().filter(|_| in_document);
+                let again = returning
                     .as_ref()
-                    .filter(|_| in_document)
                     .and_then(|focus| self.apps.iter().find_map(|app| app.focus_again(focus)));
-                if let Some(again) = again {
+                if let (Some(again), Some(focus)) = (again, returning) {
                     self.speech.speak(&again, true);
+                    self.said_again(&focus);
                     return Some(again);
                 }
                 // Word's document is named as the focus comes back to it: "Edit" [obs, 519/s4].

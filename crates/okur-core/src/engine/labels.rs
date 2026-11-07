@@ -130,7 +130,12 @@ impl ScreenReaderEngine {
             actions.write_sheet_note(&text);
         }
         self.returning_from_dialog();
-        None
+        // The cell, as the dialog gives the focus back to it, "Plan | A 1" [obs, 1197/s6].
+        let cell = self.sheet_focus()?;
+        let again = self.apps.iter().find_map(|app| app.focus_again(&cell))?;
+        self.speech.speak(&again, true);
+        self.said_again(&cell);
+        Some(again)
     }
 
     /// Whether `message` is Custom Label's.

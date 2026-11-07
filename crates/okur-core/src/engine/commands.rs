@@ -1623,6 +1623,14 @@ impl ScreenReaderEngine {
         true
     }
 
+    /// `focus` said again as Okur's window closed back onto it: its own report as it comes
+    /// back is a repeat, not said twice.
+    pub(super) fn said_again(&mut self, focus: &crate::event::FocusEvent) {
+        let _ = self.native_focus.focus(focus);
+        self.last_native_focus = Some(focus.clone());
+        self.key_since_focus = false;
+    }
+
     /// Whether `focus` is one of a sheet's cells, its name its reference, not the grid of an
     /// empty one.
     fn is_sheet_cell(focus: &crate::event::FocusEvent) -> bool {
