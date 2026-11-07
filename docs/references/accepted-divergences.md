@@ -1567,7 +1567,8 @@ A step can be in more than one entry; all of its entries apply.
   `584-form-state-changes-advanced/s8`, `621-web-form-tab-hints-no-key/s7`,
   `622-form-tab-order-beginner-set/s5`, `714-form-tab-order-forms-mode-2/s5`,
   `736-form-tab-order-tutor-off/s5`, `737-form-tab-order-control-type-off/s5`,
-  `739-form-tab-order-position-off/s5`, `2986-aria-combobox-select-only-t1-tab-vc/s1`,
+  `739-form-tab-order-position-off/s5`, `1167-web-key-labels-changed/s8`,
+  `2986-aria-combobox-select-only-t1-tab-vc/s1`,
   `2990-aria-combobox-select-only-t2-shift-tab-vc/s1`,
   `2992-aria-combobox-select-only-t3-tab-pc/s1`,
   `2993-aria-combobox-select-only-t4-shift-tab-pc/s1`,
@@ -1762,6 +1763,16 @@ A step can be in more than one entry; all of its entries apply.
   Page" is the property sheet page JAWS's dialog is built in, said twice; Okur's dialog is one
   page whose list is named for what it holds. The rows, buttons and hints are JAWS's.
 - Decided by the agent, 2026-11-06.
+
+### A page field's selection said before the field
+
+- Steps: `1167-web-key-labels-changed/s9`.
+- Difference: Shift+Tab from a select back into a field whose text Chrome selects as it takes the
+  focus: JAWS says "selected | Izmir a | City Edit | Izmir a | Type in text."; Okur says the field.
+- Why: Chrome reports the field's selection before its focus, and JAWS reads that selection as
+  if it were made in the control it is leaving. Tab into a field with text says no selection
+  (`1151-web-spelling-unchecked-field/s7`), so this is the events' order, not a behavior.
+- Decided by the agent, 2026-11-07.
 
 ### Excel's totals setters finish their sentence
 

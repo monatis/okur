@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 12651,
+  "matched_steps": 12653,
   "total_steps": 13248,
   "accepted_divergences": 388,
   "errors": [],
@@ -2475,8 +2475,8 @@
     "1167-web-key-labels-changed/s5": "match",
     "1167-web-key-labels-changed/s6": "match",
     "1167-web-key-labels-changed/s7": "match",
-    "1167-web-key-labels-changed/s8": "mismatch",
-    "1167-web-key-labels-changed/s9": "mismatch",
+    "1167-web-key-labels-changed/s8": "match",
+    "1167-web-key-labels-changed/s9": "match",
     "1168-web-key-labels-letters-muted/s1": "match",
     "1168-web-key-labels-letters-muted/s10": "match",
     "1168-web-key-labels-letters-muted/s11": "match",

@@ -207,6 +207,13 @@ divergences! {
      which end alike (614).",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-20";
 
+    Difference::JawsAlsoSays("selected\nIzmir a") => ["1167-web-key-labels-changed/s9"],
+    "Shift+Tab back into a page's field whose text the browser selects: Chrome reports the \
+     selection before the field's focus, and JAWS says it first, \"selected | Izmir a\", then \
+     the field; Tab into a field with text says no selection (1151/s7). An order of events, \
+     not a behavior: Okur says the field.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-11-07";
+
     Difference::JawsAlsoSays("Space run at column 17") => ["614-desktop-text-analysis-rules/s27"],
     "The same accident past the end of \"Mixed Case wORD.\" (614/s23's entry).",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-20";
@@ -1550,6 +1557,7 @@ divergences! {
         "736-form-tab-order-tutor-off/s5",
         "737-form-tab-order-control-type-off/s5",
         "739-form-tab-order-position-off/s5",
+        "1167-web-key-labels-changed/s8",
         "2986-aria-combobox-select-only-t1-tab-vc/s1",
         "2990-aria-combobox-select-only-t2-shift-tab-vc/s1",
         "2992-aria-combobox-select-only-t3-tab-pc/s1",
