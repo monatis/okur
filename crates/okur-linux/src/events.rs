@@ -148,7 +148,12 @@ fn read_native(provider: &LinuxProvider, element: &ElementData) -> Option<Native
         window_states = ?ancestors.last().map(|a| a.states),
         "native focus read"
     );
-    Some(NativeRead { focus, ancestors })
+    let read_ms = u64::try_from(started.elapsed().as_millis()).unwrap_or(u64::MAX);
+    Some(NativeRead {
+        focus,
+        ancestors,
+        read_ms,
+    })
 }
 
 /// The objects in `node`'s tree, itself included.
@@ -200,14 +205,12 @@ fn read_page(provider: &LinuxProvider, document: &AtspiObject, objects: &PageObj
         Err(_) => 0,
     };
     let root = snapshot(tree);
-    tracing::debug!(
-        ms = started.elapsed().as_millis(),
-        objects = count(&root),
-        "page read"
-    );
+    let read_ms = u64::try_from(started.elapsed().as_millis()).unwrap_or(u64::MAX);
+    tracing::debug!(ms = read_ms, objects = count(&root), "page read");
     PageRead {
         document: key_of(document),
         base,
+        read_ms,
         root,
     }
 }

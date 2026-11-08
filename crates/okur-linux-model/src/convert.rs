@@ -21,6 +21,9 @@ use crate::page::{to_aom_from, AtspiNode};
 pub struct NativeRead {
     pub focus: AtspiNode,
     pub ancestors: Vec<AtspiNode>,
+    /// How long the read took, in milliseconds: what a focus costs on the bus.
+    #[serde(default)]
+    pub read_ms: u64,
 }
 
 /// A page read for the engine: its document's key, the base its objects are numbered from, its
@@ -30,6 +33,9 @@ pub struct PageRead {
     pub document: String,
     pub base: i32,
     pub root: AtspiNode,
+    /// How long the read took, in milliseconds: what the event thread waited on.
+    #[serde(default)]
+    pub read_ms: u64,
 }
 
 /// What the driver read for one AT-SPI event.
@@ -316,6 +322,7 @@ mod tests {
         NativeRead {
             focus,
             ancestors: vec![window()],
+            read_ms: 0,
         }
     }
 
@@ -361,6 +368,7 @@ mod tests {
         let behind = NativeRead {
             focus: node("push button", "OK", &[]),
             ancestors: vec![node("frame", "Chat", &[])],
+            read_ms: 0,
         };
         let events = converter.convert_read(&record(EventKind::FocusChanged, button, Some(behind)));
         assert!(events.is_empty());
@@ -411,6 +419,7 @@ mod tests {
             document: ":1.5/doc".to_owned(),
             base: 1 << 20,
             root: node("document web", "News", &[]),
+            read_ms: 0,
         }];
         let events = converter.convert_read(&page);
         assert!(matches!(
