@@ -52,3 +52,36 @@ bash skills/linux-lab/scripts/job.sh start probe1 'bash /mnt/d/okur-linux/a11y-s
 bash skills/linux-lab/scripts/job.sh wait probe1 90   # in the background: until done, then the exit and the log's last 90 lines
 bash skills/linux-lab/scripts/job.sh log probe1       # the log so far
 ```
+
+## Live runs, traces and their replay
+
+Okur's live runs of the corpus's scenarios on Linux. Each run is `okur run --engine no-speech`,
+with a settings folder of its own: the settings JAWS recorded the scenario with
+(`okur-lab reference-settings --evidence`). It keeps its speech log and its trace, what the driver
+read for each AT-SPI event. A run is Okur's speech, never evidence.
+
+```bash
+# the check (clippy and the Linux crates' tests), then runs, in one job (ids: corpus/live/linux/*.json)
+bash skills/linux-lab/scripts/job.sh start runs1 "bash /mnt/d/okur-linux/check-linux.sh; bash /mnt/d/okur-linux/a11y-stack.sh bash /mnt/d/okur-linux/live-web.sh 01-doc-say-all 301-desktop-tab-order ..."
+# the runs and their traces, in one archive (about half a minute for 83 runs)
+bash skills/linux-lab/scripts/fetch-runs.sh 01-doc-say-all 301-desktop-tab-order ...
+# against JAWS's evidence, a baseline that may only improve; commit the runs and it apart from code
+cargo run --bin okur-lab -- live-baseline linux [--write]
+# each run replayed from its trace through the converter and the engine, against the run and JAWS
+cargo run --bin okur-lab -- live-replay linux [--only <id prefix>] [--pages-after-focus] [--recorded-settings]
+```
+
+- The replay says what the run said on all but a run's Say All after a page load. Its speech
+  reports no marks, so a Say All does not go down the page as the silent synthesizer's does live.
+- `--recorded-settings` and `--pages-after-focus` try a change on the runs before the lab runs it.
+- Before committing traces, check them for anything but fixture content (application names,
+  addresses, e-mail addresses).
+
+## Probes
+
+- `probe-read-speed.sh <fixtures>`: a page read whole, in order and in parallel, three rounds each,
+  with whether both reads gave the same tree.
+- `capture-atspi-snapshots.sh` and `fetch-snapshots.sh`: AT-SPI snapshots of the HTML fixtures,
+  for `okur-lab parity --api atspi`.
+- The other `probe-*.sh` scripts are earlier questions (Chrome, GTK, X11 grabs, speech): read each
+  one's header before running it.
