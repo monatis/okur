@@ -82,6 +82,35 @@ def build(app):
 
     country = Gtk.DropDown.new_from_strings(["Turkey", "Germany", "Brazil"])
     country.set_selected(1)
+
+    # Closed, Down and Up choose the next and the previous country and Alt+Down opens the
+    # list, as in WinForms' combo box (GTK's drop-down leaves the arrows to move the focus).
+    def country_key(_controller, keyval, _keycode, state):
+        count = country.get_model().get_n_items()
+        chosen = country.get_selected()
+        if state & Gdk.ModifierType.ALT_MASK:
+            if keyval == Gdk.KEY_Down:
+                country.activate()
+                return True
+            return False
+        if keyval == Gdk.KEY_Down and chosen + 1 < count:
+            country.set_selected(chosen + 1)
+            return True
+        if keyval == Gdk.KEY_Up and chosen > 0:
+            country.set_selected(chosen - 1)
+            return True
+        return keyval in (Gdk.KEY_Down, Gdk.KEY_Up)
+
+    # On its button, which has the focus while it is closed: its open list is a child of the
+    # drop-down too, where the arrows move through the list.
+    button = country.get_first_child()
+    while button is not None and not isinstance(button, Gtk.ToggleButton):
+        button = button.get_next_sibling()
+    if button is None:
+        raise RuntimeError("GTK's drop-down has no toggle button")
+    country_keys = Gtk.EventControllerKey(propagation_phase=Gtk.PropagationPhase.CAPTURE)
+    country_keys.connect("key-pressed", country_key)
+    button.add_controller(country_keys)
     box.append(labelled("_Country:", country))
     box.append(country)
 
