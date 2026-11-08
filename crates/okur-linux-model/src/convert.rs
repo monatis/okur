@@ -103,6 +103,10 @@ pub struct Converter {
     last_page: Option<String>,
     /// The focused control outside a page, as its focus event's snapshot had it.
     native_element: Option<ElementData>,
+    /// The active window's title, from its activation and its renaming: a page's focus is in
+    /// it, "Structural Navigation Reference Fixture - Google Chrome", as Windows' focus events
+    /// carry their top-level window's title (Say Title's "Title is ..." [obs, 625/s1]).
+    window_title: Option<String>,
 }
 
 impl Converter {
@@ -167,9 +171,23 @@ impl Converter {
         }
         let target = record.target.as_ref();
         let object = target.and_then(object_key);
+        let name = || {
+            target
+                .and_then(|t| t.name.clone())
+                .filter(|n| !n.is_empty())
+        };
         match record.kind {
-            EventKind::WindowActivated => self.track.window_activated(object.clone()),
+            EventKind::WindowActivated => {
+                self.track.window_activated(object.clone());
+                self.window_title = name();
+            }
             EventKind::WindowDeactivated => self.track.window_deactivated(),
+            // The active window renamed: a browser's, as its page changes.
+            EventKind::NameChanged
+                if object.is_some() && object.as_deref() == self.track.active_window() =>
+            {
+                self.window_title = name();
+            }
             _ => {}
         }
         let app = Some(record.app.clone()).filter(|a| !a.is_empty());
@@ -239,7 +257,13 @@ impl Converter {
         let converted = if outside_page && target.is_some() {
             native
         } else {
-            native.or_else(|| plain(record, in_page, app))
+            native.or_else(|| {
+                // A page's focus is in the active window, where its application has it.
+                let window = self.window_title.clone().filter(|_| {
+                    in_page && same_application(object.as_deref(), self.track.active_window())
+                });
+                plain(record, in_page, app, window)
+            })
         };
         events.extend(converted);
         events
@@ -287,11 +311,26 @@ fn native_control(
 /// A focus, or the focused control's change, as its event's snapshot has it: a page's (`in_page`,
 /// where the virtual cursor reads and takes the keys, as the focus chain that holds a document
 /// tells it on Windows).
-fn plain(record: &AtspiRecord, in_page: bool, app: Option<String>) -> Option<AccessibilityEvent> {
+/// Whether two objects' keys (bus name and path) are of one application, by their bus names.
+fn same_application(a: Option<&str>, b: Option<&str>) -> bool {
+    let bus = |key: &str| key.split('/').next().map(str::to_owned);
+    match (a.and_then(bus), b.and_then(bus)) {
+        (Some(a), Some(b)) => a == b,
+        _ => false,
+    }
+}
+
+fn plain(
+    record: &AtspiRecord,
+    in_page: bool,
+    app: Option<String>,
+    window_title: Option<String>,
+) -> Option<AccessibilityEvent> {
     let element = record.target.as_ref()?;
     let mut control = focus_event(element);
     control.in_document = in_page;
     control.app = app;
+    control.window_title = window_title;
     match record.kind {
         EventKind::FocusChanged => Some(AccessibilityEvent::Focus(control)),
         _ if is_control_change(&record.kind, element.states.focused) => {

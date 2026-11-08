@@ -97,6 +97,11 @@ pub enum Reread {
 
 impl FocusTrack {
     /// `window` activated: another window than the last forgets the focused object.
+    /// The window activated last, by its object.
+    pub fn active_window(&self) -> Option<&str> {
+        self.window.as_deref()
+    }
+
     pub fn window_activated(&mut self, window: Option<String>) {
         if window != self.window {
             self.object = None;
