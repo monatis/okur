@@ -448,7 +448,7 @@ impl Run<'_> {
                 Ok(Event::XinputKeyPress(event)) => self.grabbed(&event),
                 Ok(Event::XinputRawKeyPress(event)) => self.raw(&event, true),
                 Ok(Event::XinputRawKeyRelease(event)) => self.raw(&event, false),
-                Ok(Event::CreateNotify(event)) if event.parent != self.wake => {
+                Ok(Event::CreateNotify(event)) if event.window != self.wake => {
                     grab_window(
                         self.conn,
                         &self.keymap,
