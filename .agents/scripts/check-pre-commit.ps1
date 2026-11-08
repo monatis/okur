@@ -91,10 +91,10 @@ $installedTargets = @(& rustup target list --installed 2>$null)
 if ($installedTargets -contains $linuxTarget) {
     Push-Location $workspaceRoot
     try {
-        $linuxOutput = & cargo clippy --target $linuxTarget -p okur-linux -p okur-linux-model -p xa11y-linux --all-targets -- -D warnings -D clippy::indexing_slicing -D clippy::string_slice 2>&1
+        $linuxOutput = & cargo clippy --target $linuxTarget -p okur -p okur-linux -p okur-linux-model -p xa11y-linux --all-targets -- -D warnings -D clippy::indexing_slicing -D clippy::string_slice 2>&1
         if ($LASTEXITCODE -ne 0) {
             $tail = ($linuxOutput | Select-Object -Last 40) -join "`n"
-            $failureReasons += "[Linux Gate] cargo clippy for $linuxTarget failed on the Linux crates (okur-linux, okur-linux-model, xa11y-linux):`n$tail"
+            $failureReasons += "[Linux Gate] cargo clippy for $linuxTarget failed on the Linux crates (okur, okur-linux, okur-linux-model, xa11y-linux):`n$tail"
         }
     } finally {
         Pop-Location

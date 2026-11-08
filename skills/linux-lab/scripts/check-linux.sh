@@ -7,7 +7,7 @@
 set -uo pipefail
 cd ~/okur
 export CARGO_BUILD_JOBS="${CARGO_BUILD_JOBS:-4}" RUST_TEST_THREADS="${RUST_TEST_THREADS:-4}"
-crates=(-p okur-linux -p okur-linux-model -p xa11y-linux)
+crates=(-p okur -p okur-linux -p okur-linux-model -p xa11y-linux)
 if ! cargo clippy -q "${crates[@]}" --all-targets -- -D warnings \
     -D clippy::indexing_slicing -D clippy::string_slice; then
     echo "LINUX CHECK FAIL: clippy"

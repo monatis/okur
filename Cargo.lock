@@ -917,6 +917,7 @@ version = "0.1.0"
 dependencies = [
  "clap",
  "okur-core",
+ "okur-linux",
  "okur-runtime",
  "okur-windows",
  "okur-windows-model",

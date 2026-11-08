@@ -6,7 +6,7 @@
 #   bash /mnt/d/okur-linux/a11y-stack.sh bash /mnt/d/okur-linux/probe-second-run.sh
 set -uo pipefail
 cd ~/okur
-cargo build -q -p okur-linux --example okur_linux || exit 1
+cargo build -q -p okur --bin okur || exit 1
 a11y=$(busctl --user call org.a11y.Bus /org/a11y/bus org.a11y.Bus GetAddress | sed 's/^s "//; s/"$//')
 registered() {
     busctl --address="$a11y" call org.a11y.atspi.Registry /org/a11y/atspi/registry \
@@ -15,8 +15,8 @@ registered() {
 echo "registered before any Okur: $(registered)"
 for run in 1 2; do
     out=$(mktemp -d)
-    RUST_LOG=okur_linux=debug ./target/debug/examples/okur_linux --no-speech 30 \
-        --speech-log "$out/speech.jsonl" > "$out/okur" 2>&1 &
+    RUST_LOG=okur_linux=debug timeout 30 ./target/debug/okur run --engine no-speech \
+        --settings "$out/settings" --speech-log "$out/speech.jsonl" > "$out/okur" 2>&1 &
     okur=$!
     sleep 4
     echo "run $run, registered after Okur subscribed: $(registered)"

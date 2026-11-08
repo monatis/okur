@@ -136,6 +136,7 @@ pub async fn main() -> i32 {
                 settings: None,
                 start,
                 console: false,
+                event_trace: None,
             })
             .await;
             0

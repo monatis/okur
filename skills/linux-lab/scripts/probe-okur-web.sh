@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Okur on Linux reading a page (crates/okur-linux/examples/okur_linux.rs, the plan's §2.3): Chrome
+# Okur on Linux reading a page (`okur run`, the plan's §2.3): Chrome
 # on doc-reading.html with Okur running (the silent synthesizer, its speech log kept), then Down
 # twice and H in the virtual cursor. Passes when Okur said the page's heading and a paragraph of
 # it: the page reached the engine as its AOM, and the keys moved through it. The speech log is
@@ -7,10 +7,10 @@
 #   bash /mnt/d/okur-linux/a11y-stack.sh bash /mnt/d/okur-linux/probe-okur-web.sh
 set -uo pipefail
 cd ~/okur
-cargo build -q -p okur-linux --example okur_linux || exit 1
+cargo build -q -p okur --bin okur || exit 1
 out=$(mktemp -d)
-RUST_LOG=okur_linux=debug ./target/debug/examples/okur_linux --no-speech 45 \
-    --speech-log "$out/speech.jsonl" > "$out/okur" 2>&1 &
+RUST_LOG=okur_linux=debug timeout 45 ./target/debug/okur run --engine no-speech \
+    --settings "$out/settings" --speech-log "$out/speech.jsonl" > "$out/okur" 2>&1 &
 okur=$!
 sleep 4
 profile=$(mktemp -d)

@@ -2,8 +2,8 @@
 
 #[tokio::main]
 async fn main() {
-    #[cfg(windows)]
+    #[cfg(any(windows, target_os = "linux"))]
     std::process::exit(okur::cli::main().await);
-    #[cfg(not(windows))]
+    #[cfg(not(any(windows, target_os = "linux")))]
     std::process::exit(okur::not_on_this_system());
 }

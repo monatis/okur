@@ -1,22 +1,22 @@
-//! The live screen reader: `okur run` and `okur-sr.exe` both run it.
-//!
-//! As a process it follows `docs/references/startup-and-secure-screens-proposal.md`, §5.6:
-//! one copy per desktop (an automatic start steps aside for a copy already running, a manual
-//! start replaces it), a control pipe through which it is asked to quit, the system's
-//! screen-reader flag raised while it runs, last in Windows' shutdown order, and a hidden
-//! window that hears the session end. Every way out (Ctrl+C in the console, the control pipe's
-//! `quit`, the end of the session) goes down one exit path ([`ExitReason`]). The screen reader
-//! itself, from its speech to its last words, is `okur_runtime::host::run`'s.
+//! The live screen reader, on every system Okur has a driver for: `okur run` runs it, and on
+//! Windows `okur-sr.exe` too. What is the same everywhere is here: the settings folder and its
+//! layers with the run's options over them, the speech log, a fixture, and the runtime's
+//! `okur_runtime::host::run`, which is the screen reader itself, from its speech to its last
+//! words. What a system adds around it is its module's [`System`]: on Windows
+//! ([`crate::windows`]) one copy per desktop, the control pipe, the screen-reader flag and the
+//! session's end (`docs/references/startup-and-secure-screens-proposal.md`, §5.6); on Linux
+//! ([`crate::linux`]) the X11 keyboard, the desktop's AT-SPI events and speech-dispatcher. Every
+//! way out goes down one exit path ([`ExitReason`]).
 
 use okur_core::{AomNode, Role, VirtualBuffer};
-use okur_runtime::host::{say_to_console, Config, ExitSender, Exits, Platform};
+use okur_runtime::host::{say_to_console, Config, Exits};
 use okur_runtime::SpeechLog;
 use std::path::Path;
-use std::sync::Mutex;
 
 pub use okur_runtime::host::ExitReason;
 
-use crate::startup::{self, StartFacts, StartKind};
+use crate::startup::StartKind;
+use crate::system::{self, System};
 
 /// `okur run`'s options that change a setting for the run.
 #[derive(Debug, Clone, Default)]
@@ -39,7 +39,7 @@ impl RunOptions {
         use okur_core::settings::registry::set_named;
         use okur_core::settings::LiveRegionAppend;
         if let Some(engine) = self.engine {
-            settings.voice.synthesizer = okur_windows::synthesizer_named(&engine)?;
+            settings.voice.synthesizer = system::synthesizer_named(&engine)?;
         }
         if self.voice.is_some() {
             settings.voice.voice = self.voice;
@@ -116,77 +116,26 @@ pub struct RunConfig {
     pub start: StartKind,
     /// Print the banner and what is said (the console program).
     pub console: bool,
+    /// Where the system's driver writes what it read for each event, where it keeps such a
+    /// record (Linux: `okur-lab live-replay linux` replays it).
+    pub event_trace: Option<String>,
 }
 
-/// Logs as [`okur_runtime::logging::init_logging`] does, with Windows' driver and the
+/// Logs as [`okur_runtime::logging::init_logging`] does, with the system's driver and the
 /// programs among the screen reader's crates, and the installed reader's (`kept`) log in
 /// [`crate::folders::kept_log`].
 pub fn init_logging(debug_log: Option<&str>, kept: bool) {
     let kept = kept.then(crate::folders::kept_log).flatten();
-    okur_runtime::logging::init_logging(debug_log, kept, &["okur_windows", "okur"]);
+    okur_runtime::logging::init_logging(debug_log, kept, system::LOG_TARGETS);
 }
 
 /// Ends the process after an error before the screen reader ran.
-fn fail(console: bool, message: &str) -> ! {
+pub(crate) fn fail(console: bool, message: &str) -> ! {
     if console {
         eprintln!("{message}");
     }
     tracing::error!("{message}");
     std::process::exit(1)
-}
-
-/// Serves this desktop's control pipe. A copy this one replaced lets the desktop's lock go
-/// moments before its process, and its pipe, are gone: the pipe is tried again for a second.
-fn serve_control(
-    session: u32,
-    desktop: &str,
-    status: &crate::control::Status,
-    exit: &ExitSender,
-) -> Option<okur_windows::instance::ControlServer> {
-    let name = okur_windows::instance::pipe_name(session, desktop);
-    let mut last_error = String::new();
-    for _ in 0..10 {
-        let (status, exit) = (status.clone(), exit.clone());
-        match okur_windows::instance::ControlServer::start(
-            &name,
-            Box::new(move |line| {
-                crate::control::answer(line, &status, &|| exit.send(ExitReason::ControlPipe))
-            }),
-        ) {
-            Ok(server) => return Some(server),
-            Err(e) => last_error = e,
-        }
-        std::thread::sleep(std::time::Duration::from_millis(100));
-    }
-    tracing::warn!("no control pipe: {last_error}");
-    None
-}
-
-/// Takes this desktop for the screen reader, or says why it ends without a sound.
-fn take_desktop(
-    start: StartKind,
-) -> Result<okur_windows::instance::InstanceLock, startup::SilentExit> {
-    let desktop = okur_windows::desktop::thread_desktop().unwrap_or_default();
-    let facts = StartFacts {
-        kind: start,
-        both_shifts_held: okur_windows::process::both_shifts_held(
-            &okur_windows::process::SystemKeyState,
-        ),
-        secure_desktop: okur_windows::desktop::is_secure_desktop(&desktop),
-        system_account: okur_windows::elevation::current()
-            .sid
-            .is_some_and(|sid| sid == "S-1-5-18"),
-    };
-    let taken = startup::preflight(&facts).and_then(|()| {
-        startup::take_desktop(
-            start,
-            &mut crate::control::SystemInstances::for_this_desktop(),
-        )
-    });
-    if let Err(why) = &taken {
-        tracing::info!(?start, %desktop, "Okur does not start: {}", why.describe());
-    }
-    taken
 }
 
 /// Runs the screen reader until it is asked to stop, then exits the process.
@@ -198,28 +147,14 @@ pub async fn run(config: RunConfig) {
         settings: settings_folder,
         start,
         console,
+        event_trace,
     } = config;
     okur_runtime::host::log_panics();
-    // The sign-in start goes on only as the user, or the machine, chose.
-    let start_options = okur_windows::start_options::RegistryStartOptions::system();
-    if start == crate::startup::StartKind::SignIn && !start_options.starts_after_sign_in() {
-        let why = crate::startup::SilentExit::NotAfterSignIn;
-        tracing::info!(reason = why.describe(), "not started");
-        if console {
-            eprintln!("Okur does not start: {}.", why.describe());
-        }
+    // The system's say on whether this start goes on (on Windows, the sign-in start as the
+    // user chose, one copy per desktop).
+    let Some(mut system) = System::start(start, console) else {
         return;
-    }
-    let instance_lock = match take_desktop(start) {
-        Ok(lock) => lock,
-        Err(why) => {
-            if console {
-                eprintln!("Okur does not start: {}.", why.describe());
-            }
-            return;
-        }
     };
-    okur_windows::process::shut_down_last();
 
     // The first start for this user, before Okur has a settings folder of theirs, opens the
     // Startup Wizard, as JAWS's runs once it is installed; the folder is made then, so the
@@ -273,56 +208,9 @@ pub async fn run(config: RunConfig) {
 
     // Every way out comes here: the runtime takes it from the first.
     let exits = Exits::new();
-    // The control pipe: `quit` from the installer, `okur quit`, or a copy taking over.
-    let session = okur_windows::desktop::session_id().unwrap_or(0);
-    let desktop = okur_windows::desktop::thread_desktop().unwrap_or_default();
-    let status = crate::control::Status::of_this_process(session, &desktop);
-    let _control = serve_control(session, &desktop, &status, &exits.sender());
-    // Windows ending the session: the window's thread waits, briefly, for the exit path,
-    // since Windows may end the process once it returns.
-    let (ended_tx, ended_rx) = std::sync::mpsc::channel::<()>();
-    let ended_rx = Mutex::new(ended_rx);
-    let session_exit = exits.sender();
-    let session_end = okur_windows::process::EndSessionWatcher::start(Box::new(move || {
-        session_exit.send(ExitReason::EndSession);
-        if let Ok(ended) = ended_rx.lock() {
-            let _ = ended.recv_timeout(std::time::Duration::from_secs(3));
-        }
-    }));
-    if session_end.is_none() {
-        tracing::warn!("no window hears the session end");
-    }
-    // An application running as administrator shows nothing to an Okur below High integrity
-    // (Windows Settings' Rename dialog); JAWS runs elevated, the installed Okur with UI Access.
-    if !okur_windows::elevation::reads_elevated_windows() {
-        let note = "Okur is not running as administrator: windows of applications \
-                    that are (Settings' \"Rename this PC\", an elevated terminal) cannot \
-                    be read. Start Okur from an administrator terminal to read them.";
-        if console {
-            println!("[Okur] {note}");
-        }
-        tracing::warn!("{note}");
-    }
-    // Applications that adapt to a screen reader know one runs.
-    let screen_reader_flag = okur_windows::process::ScreenReaderFlag::raise();
-
-    // Windows' own: the low-level keyboard hook, WinEvents and UI Automation, OneCore's and
-    // SAPI 5's voices, okur-ui below UI Access when Okur has it, the application actions, Say
-    // System Time (Insert+F12) in the user's locale formats and a notification rule's sound.
-    let platform = Platform {
-        keyboard_hook: Box::new(okur_windows::hook::windows::WindowsKeyboardHook::new()),
-        event_source: Box::new(
-            okur_windows::events::windows::WindowsAccessibilityEventListener::new(),
-        ),
-        synthesizers: std::sync::Arc::new(okur_windows::WindowsSynthesizers),
-        ui_spawner: Box::new(okur_windows::ui_spawner::WindowsUiSpawner::for_this_process()),
-        actions: Some(Box::new(|events| {
-            Box::new(okur_windows::actions::WindowsActions::start(Some(events)))
-        })),
-        clock: Some(Box::new(okur_windows::clock::WindowsClock)),
-        sounds: Some(Box::new(okur_windows::sound::WindowsSounds)),
-        start_options: Some(Box::new(start_options)),
-    };
+    // What the system asks to stop Okur by, and tells while it runs.
+    system.serve(&exits, console);
+    let platform = system.platform(event_trace);
     let config = Config {
         settings,
         layers,
@@ -338,9 +226,7 @@ pub async fn run(config: RunConfig) {
         Err(e) => fail(console, &format!("Failed to install keyboard hook: {e}")),
     };
     tracing::debug!(?reason, "the screen reader stopped");
-    drop(screen_reader_flag);
-    instance_lock.release();
-    let _ = ended_tx.send(());
+    system.stop();
     if console {
         println!("Okur stopped.");
     }

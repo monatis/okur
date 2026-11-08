@@ -3,7 +3,8 @@
 §2.2): the run file `okur-lab live-parity` compares with JAWS's evidence of the same scenario,
 as `run-scenario.ps1 -Reader okur` writes on Windows. Never evidence.
 
-Okur runs (the example okur_linux, its silent synthesizer, its speech log kept) beside Chrome on
+Okur runs (`okur run`, its silent synthesizer, its speech log and its trace kept, a settings folder
+of its own) beside Chrome on
 the scenario's fixture page; the scenario's reset keys and then each step's keys are sent by
 XTest (python-xlib, by keycode), and each step's speech is what Okur's log says between its key and the quiet
 after it. Key steps, and JAWS scripts by the key Okur binds to them (okur-core's example
@@ -15,8 +16,7 @@ desktop fixture without one is skipped.
 
     python3 run-scenario-linux.py <scenario.json> <run.json>
 
-Run inside the headless desktop (a11y-stack.sh), from ~/okur, after
-`cargo build -p okur-linux --example okur_linux`.
+Run inside the headless desktop (a11y-stack.sh), from ~/okur, after `cargo build -p okur --bin okur`.
 """
 
 import atexit
@@ -28,7 +28,9 @@ import sys
 import tempfile
 import time
 
-OKUR = "./target/debug/examples/okur_linux"
+OKUR = "./target/debug/okur"
+# JAWS's VirtualCursorVerbosityLevel as Okur's web_verbosity setting.
+WEB_VERBOSITY = {"0": "low", "1": "medium", "2": "high"}
 XA11Y = "./target/debug/xa11y"
 SCRIPT_KEY = "./target/debug/examples/script_key"
 
@@ -223,8 +225,10 @@ def main():
     atexit.register(stop, started, profile)
     # What Okur read for each event, kept beside the run for okur-lab live-replay linux.
     trace = out_path[:-len(".json")] + ".trace.jsonl" if out_path.endswith(".json") else None
-    okur = subprocess.Popen([OKUR, "--no-speech", "3600", "--speech-log", log,
-                             *(["--web-verbosity", level] if level else []),
+    verbosity = WEB_VERBOSITY.get(str(level).strip()) if level is not None else None
+    okur = subprocess.Popen([OKUR, "run", "--engine", "no-speech", "--speech-log", log,
+                             "--settings", os.path.join(work, "settings"),
+                             *(["--set", "web_verbosity=" + verbosity] if verbosity else []),
                              *(["--trace", trace] if trace else [])],
                             stdin=subprocess.DEVNULL, stdout=okur_out, stderr=subprocess.STDOUT,
                             env={**os.environ, "RUST_LOG": os.environ.get("RUST_LOG", "okur_linux=debug")})

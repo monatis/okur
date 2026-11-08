@@ -1,6 +1,6 @@
-//! The console program `okur.exe`: `okur run` starts Okur; `okur quit` asks
-//! the Okur on this desktop to quit; `okur doctor` says what Windows grants it; `okur voices`
-//! lists the synthesizers' voices. The verification harness is `okur-lab.exe` (crates/okur-lab).
+//! The console program `okur`: `okur run` starts Okur; `okur voices` lists the synthesizers'
+//! voices; on Windows `okur quit` asks the Okur on this desktop to quit and `okur doctor` says
+//! what Windows grants it. The verification harness is `okur-lab` (crates/okur-lab).
 
 use clap::{Parser, Subcommand};
 use okur_runtime::TtsManager;
@@ -23,8 +23,8 @@ enum Commands {
     /// Run Okur, the live screen reader. Its settings are the ones its settings dialog
     /// (Insert+6 or Insert+V) saved; the options below change them for this run only.
     Run {
-        /// TTS synthesizer engine: auto (OneCore, else SAPI 5, else none), onecore, sapi5, or
-        /// no-speech
+        /// TTS synthesizer engine: auto (on Windows OneCore, else SAPI 5, else none; on Linux
+        /// speech-dispatcher), no-speech, and on Windows onecore or sapi5
         #[arg(short, long)]
         engine: Option<String>,
 
@@ -81,14 +81,21 @@ enum Commands {
         /// never changes the user's settings
         #[arg(long)]
         settings: Option<String>,
+
+        /// Write what the driver read for each accessibility event to this file, a JSON line
+        /// each, for `okur-lab live-replay linux` (off by default)
+        #[cfg(target_os = "linux")]
+        #[arg(long)]
+        trace: Option<String>,
     },
     /// List available voices from the synthesizer
     Voices {
-        /// TTS synthesizer engine: auto (default: OneCore, else SAPI 5, else none), onecore,
-        /// sapi5, or no-speech
+        /// TTS synthesizer engine: auto (the default: on Windows OneCore, else SAPI 5, else none;
+        /// on Linux speech-dispatcher), no-speech, and on Windows onecore or sapi5
         #[arg(short, long, default_value = "auto")]
         engine: String,
     },
+    #[cfg(windows)]
     /// Print what Windows grants this process, or another: session, desktop, account,
     /// integrity, UI Access, elevation, the executable's signature and manifest, and Okur's
     /// Ease of Access registration (read only)
@@ -97,6 +104,7 @@ enum Commands {
         #[arg(long)]
         pid: Option<u32>,
     },
+    #[cfg(windows)]
     /// Ask the Okur running on this desktop to quit, without its question
     Quit,
 }
@@ -113,7 +121,7 @@ fn init_logging(cli: &Cli) {
 pub async fn main() -> i32 {
     let cli = Cli::parse();
     init_logging(&cli);
-    okur_windows::init();
+    crate::system::init();
 
     match cli.command {
         Some(Commands::Run {
@@ -130,7 +138,13 @@ pub async fn main() -> i32 {
             typing_echo,
             set,
             settings: settings_folder,
+            #[cfg(target_os = "linux")]
+            trace,
         }) => {
+            #[cfg(target_os = "linux")]
+            let event_trace = trace;
+            #[cfg(not(target_os = "linux"))]
+            let event_trace = None;
             // The live screen reader, as `okur-sr.exe` runs it, with this console.
             crate::run::run(crate::run::RunConfig {
                 options: crate::run::RunOptions {
@@ -149,12 +163,15 @@ pub async fn main() -> i32 {
                 settings: settings_folder,
                 start: crate::startup::StartKind::Manual,
                 console: true,
+                event_trace,
             })
             .await;
         }
+        #[cfg(windows)]
         Some(Commands::Doctor { pid }) => {
             print!("{}", crate::doctor::render(&crate::doctor::gather(pid)));
         }
+        #[cfg(windows)]
         Some(Commands::Quit) => match crate::control::quit_this_desktop() {
             Ok(said) => println!("{said}"),
             Err(e) => {
@@ -163,19 +180,16 @@ pub async fn main() -> i32 {
             }
         },
         Some(Commands::Voices { engine }) => {
-            let engine_type = okur_windows::synthesizer_named(&engine).unwrap_or_else(|e| {
+            let engine_type = crate::system::synthesizer_named(&engine).unwrap_or_else(|e| {
                 eprintln!("Error: {}", e);
                 std::process::exit(1);
             });
 
-            let tts = TtsManager::new(
-                std::sync::Arc::new(okur_windows::WindowsSynthesizers),
-                engine_type,
-            )
-            .unwrap_or_else(|e| {
-                eprintln!("Failed to initialize TTS engine: {}", e);
-                std::process::exit(1);
-            });
+            let tts =
+                TtsManager::new(crate::system::synthesizers(), engine_type).unwrap_or_else(|e| {
+                    eprintln!("Failed to initialize TTS engine: {}", e);
+                    std::process::exit(1);
+                });
 
             println!("Available Voices for [{}] synthesizer:", tts.engine_name());
             for (idx, voice) in tts.get_voices().iter().enumerate() {

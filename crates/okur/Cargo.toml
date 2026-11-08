@@ -50,3 +50,6 @@ serde_json = { workspace = true }
 
 [target.'cfg(windows)'.dependencies]
 okur-windows = { workspace = true }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+okur-linux = { workspace = true }
