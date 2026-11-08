@@ -81,6 +81,10 @@ fn web_roles(node: &AtspiNode) -> (WebRole, Option<WebMark>) {
     match node.role.as_str() {
         "document web" | "document frame" | "article" => (WebRole::Document, None),
         "landmark" | "form" | "paragraph" | "caption" | "label" | "grouping" => grouping(None),
+        // A group (a fieldset, role="group") and a log are panels to Chrome's AT-SPI, a generic
+        // container a section: a grouping of its own, as IA2's grouping without its section role
+        // (signup-form's "Membership type", web-structures' "Messages").
+        "panel" | "log" => grouping(None),
         "heading" => grouping(Some(WebMark::Heading)),
         "block quote" => grouping(Some(WebMark::BlockQuote)),
         "content deletion" => grouping(Some(WebMark::ContentDeletion)),
@@ -151,6 +155,22 @@ fn web_states(node: &AtspiNode) -> WebStates {
     }
 }
 
+/// The name of the item chosen in a combo box's own menu or list (selected), as its value.
+fn chosen_item(node: &AtspiNode) -> Option<String> {
+    node.children.iter().find_map(|child| {
+        let items = matches!(child.role.as_str(), "menu" | "list box" | "list");
+        items
+            .then(|| {
+                child
+                    .children
+                    .iter()
+                    .find(|item| item.has(state::SELECTED) && !item.name.is_empty())
+                    .map(|item| item.name.clone())
+            })
+            .flatten()
+    })
+}
+
 /// `node` and its subtree as okur-model's web nodes, each with its place in the tree, depth
 /// first from 1, as its unique id: what acting on a page's node finds its object by (the Linux
 /// driver numbers the objects it read the same way).
@@ -166,7 +186,12 @@ fn numbered(node: &AtspiNode, next: &mut i32) -> WebNode {
     // A field's value is its text; a link's and the document's, their address.
     let value = match role {
         WebRole::Text if node.has(state::EDITABLE) => node.text.clone(),
-        WebRole::ComboBox => node.text.clone().filter(|t| !t.contains('\u{fffc}')),
+        // A select's text is its menu's mark: its value is the item chosen in it ("Northside").
+        WebRole::ComboBox => node
+            .text
+            .clone()
+            .filter(|t| !t.is_empty() && !t.contains('\u{fffc}'))
+            .or_else(|| chosen_item(node)),
         WebRole::Link | WebRole::Document => node.uri.clone(),
         _ => None,
     };
@@ -230,6 +255,47 @@ mod tests {
         node.attributes
             .insert("display".to_owned(), "block".to_owned());
         node
+    }
+
+    /// A fieldset is a panel to Chrome's AT-SPI, a group to the engine; a select's value is the
+    /// item chosen in its menu (signup-form's AT-SPI snapshot).
+    #[test]
+    fn a_fieldset_is_a_group_and_a_select_says_its_item() {
+        let fieldset = block(
+            node(
+                "panel",
+                "Membership type",
+                vec![node("radio button", "Adult", vec![])],
+            ),
+            "fieldset",
+        );
+        let item = |name: &str| node("menu item", name, vec![]);
+        let mut chosen = item("Northside");
+        chosen.states |= 1 << state::SELECTED;
+        let mut select = node(
+            "combo box",
+            "Home branch",
+            vec![node(
+                "menu",
+                "",
+                vec![item("Central"), chosen, item("Eastgate")],
+            )],
+        );
+        select.text = Some("\u{fffc}".to_owned());
+        let page = node("document web", "Sign up", vec![fieldset, select]);
+        let aom = to_aom(&page);
+        let group = aom.children.first();
+        assert_eq!(group.map(|g| g.role.clone()), Some(Role::Group));
+        assert_eq!(
+            group
+                .and_then(|g| g.attributes.get("aria_role"))
+                .map(String::as_str),
+            Some("group")
+        );
+        assert_eq!(
+            aom.children.get(1).and_then(|c| c.value.clone()).as_deref(),
+            Some("Northside")
+        );
     }
 
     /// doc-reading.html as Chrome 157 gives it over AT-SPI (the lab's probe-atspi-tree.sh).
