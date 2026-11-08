@@ -21,6 +21,31 @@ pub fn focus_event(element: &ElementData) -> FocusEvent {
     event
 }
 
+/// The most objects a native focus's subtree, and each surrounding subtree read whole, is read
+/// with ([`ancestor_limit`]).
+pub const CONTROL_LIMIT: usize = 200;
+
+/// How many of a native focus's ancestors are read, at most, on the way to its window.
+pub const WINDOW_DEPTH: usize = 12;
+
+/// Whether an AT-SPI role is a window's: where a native focus's read of its ancestors ends.
+pub fn is_window(role: &str) -> bool {
+    matches!(role, "frame" | "dialog" | "window" | "alert")
+}
+
+/// The read plan for a native focus's ancestors, what [`native_focus`] needs of each: the
+/// parent whole (its peers, for their place), and above it a list's, a column view's or a
+/// group box's (their items, columns, label); every other ancestor alone. The most objects
+/// read for the ancestor `index` above the focus (0 its parent) of AT-SPI role `role`.
+pub fn ancestor_limit(index: usize, role: &str) -> usize {
+    let whole = index == 0 || (index == 1 && matches!(role, "list" | "tree table" | "grouping"));
+    if whole {
+        CONTROL_LIMIT
+    } else {
+        1
+    }
+}
+
 /// Whether a focus read with its ancestors (`native_focus`'s) is in the active window: a focus
 /// moving in a window behind (a chat application in the background) is not said, as JAWS says
 /// the window in front's. A focus whose window was not reached is taken as active. GTK's frames
@@ -29,7 +54,7 @@ pub fn in_active_window(ancestors: &[AtspiNode]) -> bool {
     use crate::page::state;
     ancestors
         .iter()
-        .find(|a| matches!(a.role.as_str(), "frame" | "dialog" | "window" | "alert"))
+        .find(|a| is_window(&a.role))
         .is_none_or(|window| window.has(state::ACTIVE))
 }
 
@@ -255,6 +280,18 @@ fn without_mnemonic(name: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// The parent is read whole, and a list's, a column view's or a group box's above it; the
+    /// rest alone; the read ends at a window, a page's dialog's too.
+    #[test]
+    fn the_read_plan_for_a_native_focus() {
+        assert_eq!(ancestor_limit(0, "panel"), CONTROL_LIMIT);
+        assert_eq!(ancestor_limit(1, "list"), CONTROL_LIMIT);
+        assert_eq!(ancestor_limit(1, "grouping"), CONTROL_LIMIT);
+        assert_eq!(ancestor_limit(1, "panel"), 1);
+        assert_eq!(ancestor_limit(2, "list"), 1);
+        assert!(is_window("frame") && is_window("dialog") && !is_window("panel"));
+    }
 
     use xa11y_core::Role as AtRole;
 

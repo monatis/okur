@@ -10,6 +10,7 @@ use std::thread::JoinHandle;
 use std::time::Duration;
 
 use okur_linux_model::convert::{AtspiRecord, Converter, NativeRead, PageRead};
+use okur_linux_model::focus::{ancestor_limit, is_window, CONTROL_LIMIT, WINDOW_DEPTH};
 use okur_runtime::events::{EventSink, EventSource};
 use okur_runtime::RuntimeError;
 use xa11y_core::{ElementData, EventKind, RecvStatus, Role};
@@ -98,17 +99,6 @@ fn snapshot(tree: AtspiTree) -> okur_linux_model::page::AtspiNode {
 /// How far up from a focused element a page's document is looked for.
 const PAGE_DEPTH: usize = 40;
 
-/// The most objects a native focus's subtree, and each surrounding subtree, is read with.
-const CONTROL_LIMIT: usize = 200;
-
-/// How far up from a native focus its window is looked for.
-const WINDOW_DEPTH: usize = 12;
-
-/// Whether an AT-SPI role is a window's, where a native focus's read ends.
-fn is_window(role: &str) -> bool {
-    matches!(role, "frame" | "dialog" | "window" | "alert")
-}
-
 /// `object`'s ancestors from its parent up, to its window at most: the walk a native focus's
 /// read takes when no walk was made for it.
 fn walk_to_window(provider: &LinuxProvider, object: &AtspiObject) -> Vec<AtspiObject> {
@@ -129,9 +119,9 @@ fn walk_to_window(provider: &LinuxProvider, object: &AtspiObject) -> Vec<AtspiOb
 }
 
 /// A focus outside a page read with what surrounds it, for okur-linux-model's `native_focus`:
-/// its own subtree, its parent's, and above it a list's, a column view's or a group box's (their
-/// items, columns, label), the other ancestors alone, up to its window. A few calls on the bus
-/// per object read; none for an element whose object is not named. `walked`: its ancestors
+/// its own subtree, and its ancestors up to its window as the model's read plan has them
+/// (`ancestor_limit`). A few calls on the bus per object read; none for an element whose
+/// object is not named. `walked`: its ancestors
 /// as the look for its page walked them, from its parent up, which the read takes instead of
 /// walking them again (the code review of 2026-11-08, finding 16).
 fn read_native(
@@ -154,10 +144,7 @@ fn read_native(
         if ancestors.len() >= WINDOW_DEPTH {
             break;
         }
-        let whole = ancestors.is_empty()
-            || (ancestors.len() == 1
-                && matches!(parent.role.as_str(), "list" | "tree table" | "grouping"));
-        let limit = if whole { CONTROL_LIMIT } else { 1 };
+        let limit = ancestor_limit(ancestors.len(), &parent.role);
         let node = snapshot(provider.atspi_tree(&parent, limit));
         let window = is_window(&node.role);
         ancestors.push(node);
