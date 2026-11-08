@@ -43,6 +43,7 @@ fn snapshot(tree: AtspiTree) -> okur_linux_model::page::AtspiNode {
         text_attributes: tree.text_attributes.into_iter().collect(),
         path: tree.path,
         relations: tree.relations,
+        description: tree.description,
         uri: tree.uri,
         children: tree.children.into_iter().map(snapshot).collect(),
     }

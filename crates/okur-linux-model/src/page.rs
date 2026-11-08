@@ -59,6 +59,9 @@ pub struct AtspiNode {
     /// The text attributes of its text's first run, as Chrome gives them over AT-SPI.
     #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
     pub text_attributes: BTreeMap<String, String>,
+    /// Its description (aria-describedby, aria-description, title), as Chrome gives it.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
     /// Its object's path, which relations name their targets by.
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub path: String,
@@ -301,6 +304,7 @@ fn numbered(node: &AtspiNode, next: &mut i32, ids: &HashMap<&str, i32>) -> WebNo
         text: node.text.clone(),
         text_attributes: Some(text_attributes(&node.text_attributes)).filter(|a| !a.is_empty()),
         unique_id: Some(unique_id),
+        description: node.description.clone(),
         relations,
         children: node
             .children

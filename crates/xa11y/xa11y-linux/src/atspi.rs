@@ -4215,6 +4215,8 @@ pub struct AtspiTree {
     /// Its relations: each one's AT-SPI type (its number) and its targets' paths, in the same
     /// application (a label's, a description's, a flow's, an error message's).
     pub relations: Vec<(u32, Vec<String>)>,
+    /// Its description, read where its object attributes say it has one.
+    pub description: Option<String>,
     /// An address: a link's (its Hyperlink interface's URI), or a document's (its Document
     /// interface's `URI` attribute), as Chrome gives them.
     pub uri: Option<String>,
@@ -4446,6 +4448,7 @@ impl LinuxProvider {
             states: self.state_bits(aref).0,
             text: None,
             text_attributes: HashMap::new(),
+            description: None,
             relations: self.get_relations(aref),
             uri,
             bus_name: aref.bus_name.clone(),
@@ -4453,6 +4456,11 @@ impl LinuxProvider {
             children: Vec::new(),
         };
         node.text = self.get_text_content(aref);
+        // Its description where Chrome says it has one (`description-from`: aria-describedby,
+        // aria-description, title), one call no other object costs.
+        if node.attributes.contains_key("description-from") {
+            node.description = self.get_description(aref).ok().filter(|d| !d.is_empty());
+        }
         if node.text.is_some() {
             node.text_attributes = self.get_text_attributes(aref).unwrap_or_default();
         }
