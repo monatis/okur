@@ -235,6 +235,8 @@ fn text_attributes(atk: &BTreeMap<String, String>) -> BTreeMap<String, String> {
             )),
             "fg-color" => rgb(value).map(|v| ("color", v)),
             "bg-color" => rgb(value).map(|v| ("background-color", v)),
+            // Raised and lowered text, named as IA2 names it ("super", "sub": edits.html's 23).
+            "text-position" => Some(("text-position", value.clone())),
             _ => None,
         };
         if let Some((key, value)) = renamed {
