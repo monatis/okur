@@ -1,0 +1,117 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Document Reading Reference Fixture",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "7a68ca85fbfbc6deab6e587dc60a7c85a913437047c97fa9a807d3bc9786cbe8",
+    "captured_at_unix_ms": 1794146223915,
+    "node_count": 9,
+    "capture_ms": 33
+  },
+  "root": {
+    "role": "document web",
+    "name": "Document Reading Reference Fixture",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼￼￼￼",
+    "uri": "file:///root/okur/corpus/fixtures/doc-reading.html",
+    "children": [
+      {
+        "role": "heading",
+        "name": "The Accessibility Engine Specification",
+        "attributes": {
+          "display": "block",
+          "level": "1",
+          "name-from": "contents",
+          "tag": "h1",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "The Accessibility Engine Specification",
+        "children": [
+          {
+            "role": "static",
+            "name": "The Accessibility Engine Specification",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "The Accessibility Engine Specification"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "The screen reader engine parses the document object model into a clean virtual buffer.",
+        "children": [
+          {
+            "role": "static",
+            "name": "The screen reader engine parses the document object model into a clean virtual buffer.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "The screen reader engine parses the document object model into a clean virtual buffer."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Engine components operate deterministically across synthetic speech pipelines. Speed and accuracy remain paramount.",
+        "children": [
+          {
+            "role": "static",
+            "name": "Engine components operate deterministically across synthetic speech pipelines. Speed and accuracy remain paramount.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Engine components operate deterministically across synthetic speech pipelines. Speed and accuracy remain paramount."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Rust provides memory safety without garbage collection latency. This ensures predictable audio delivery.",
+        "children": [
+          {
+            "role": "static",
+            "name": "Rust provides memory safety without garbage collection latency. This ensures predictable audio delivery.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Rust provides memory safety without garbage collection latency. This ensures predictable audio delivery."
+          }
+        ]
+      }
+    ]
+  }
+}

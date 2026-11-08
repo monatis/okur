@@ -1,0 +1,286 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Structures Fixture Two",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "ac1b4cdc175797af8ac3af19ece116233ae6fd004e9d877e2853dafddff5da8f",
+    "captured_at_unix_ms": 1794146359611,
+    "node_count": 24,
+    "capture_ms": 75
+  },
+  "root": {
+    "role": "document web",
+    "name": "Structures Fixture Two",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼￼￼￼￼￼￼￼￼￼￼",
+    "uri": "file:///root/okur/corpus/fixtures/web-structures-2.html",
+    "children": [
+      {
+        "role": "heading",
+        "name": "Structures Fixture Two",
+        "attributes": {
+          "display": "block",
+          "level": "1",
+          "name-from": "contents",
+          "tag": "h1",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Structures Fixture Two",
+        "children": [
+          {
+            "role": "static",
+            "name": "Structures Fixture Two",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Structures Fixture Two"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Each structure below has one line of its own text.",
+        "children": [
+          {
+            "role": "static",
+            "name": "Each structure below has one line of its own text.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Each structure below has one line of its own text."
+          }
+        ]
+      },
+      {
+        "role": "internal frame",
+        "name": "Weather frame",
+        "attributes": {
+          "display": "inline",
+          "explicit-name": "true",
+          "name-from": "tooltip",
+          "tag": "iframe",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "document web",
+            "attributes": {
+              "tag": "#document",
+              "text-align": "left"
+            },
+            "states": 1124075776,
+            "text": "￼",
+            "uri": "about:srcdoc",
+            "children": [
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Frame text",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Frame text",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Frame text"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Between the frame and the clickable text.",
+        "children": [
+          {
+            "role": "static",
+            "name": "Between the frame and the clickable text.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Between the frame and the clickable text."
+          }
+        ]
+      },
+      {
+        "role": "section",
+        "attributes": {
+          "display": "block",
+          "tag": "div",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Clickable text",
+        "children": [
+          {
+            "role": "static",
+            "name": "Clickable text",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Clickable text"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Between the clickable text and the described button.",
+        "children": [
+          {
+            "role": "static",
+            "name": "Between the clickable text and the described button.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Between the clickable text and the described button."
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "Save",
+        "attributes": {
+          "description-from": "aria-describedby",
+          "display": "inline-block",
+          "name-from": "contents",
+          "tag": "button",
+          "text-align": "center"
+        },
+        "states": 1124075776,
+        "text": "Save"
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "id": "hint",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Saves the form for later",
+        "children": [
+          {
+            "role": "static",
+            "name": "Saves the form for later",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Saves the form for later"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "description-from": "aria-describedby",
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Described paragraph",
+        "children": [
+          {
+            "role": "static",
+            "name": "Described paragraph",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Described paragraph"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "id": "aside",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "The paragraph's description",
+        "children": [
+          {
+            "role": "static",
+            "name": "The paragraph's description",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "The paragraph's description"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "The end of the structures.",
+        "children": [
+          {
+            "role": "static",
+            "name": "The end of the structures.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "The end of the structures."
+          }
+        ]
+      }
+    ]
+  }
+}

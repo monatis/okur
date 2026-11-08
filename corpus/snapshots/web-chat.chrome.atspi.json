@@ -1,0 +1,429 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Web Chat",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "7cffa8086cde56610a5c00b4ad40f127d472b4fb98cf4c601e52c6609793cd4e",
+    "captured_at_unix_ms": 1794146350964,
+    "node_count": 33,
+    "capture_ms": 96
+  },
+  "root": {
+    "role": "document web",
+    "name": "Web Chat",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼￼",
+    "uri": "file:///root/okur/corpus/fixtures/web-chat.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "header",
+          "text-align": "left",
+          "xml-roles": "banner"
+        },
+        "states": 1124073728,
+        "text": "￼￼",
+        "children": [
+          {
+            "role": "toggle button",
+            "name": "Chats",
+            "attributes": {
+              "display": "inline-block",
+              "name-from": "contents",
+              "tag": "button",
+              "text-align": "center"
+            },
+            "states": 1125124352,
+            "text": "Chats"
+          },
+          {
+            "role": "toggle button",
+            "name": "Status",
+            "attributes": {
+              "display": "inline-block",
+              "name-from": "contents",
+              "tag": "button",
+              "text-align": "center"
+            },
+            "states": 1124075776,
+            "text": "Status"
+          }
+        ]
+      },
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼￼￼",
+        "children": [
+          {
+            "role": "heading",
+            "name": "Web Chat",
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Web Chat",
+            "children": [
+              {
+                "role": "static",
+                "name": "Web Chat",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Web Chat"
+              }
+            ]
+          },
+          {
+            "role": "heading",
+            "name": "Messages",
+            "attributes": {
+              "display": "block",
+              "level": "2",
+              "name-from": "contents",
+              "tag": "h2",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Messages",
+            "children": [
+              {
+                "role": "static",
+                "name": "Messages",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Messages"
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "id": "messages",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼",
+            "children": [
+              {
+                "role": "table row",
+                "attributes": {
+                  "display": "block",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "row"
+                },
+                "states": 1124073728,
+                "text": "￼",
+                "children": [
+                  {
+                    "role": "section",
+                    "attributes": {
+                      "class": "message",
+                      "display": "block",
+                      "tag": "div",
+                      "text-align": "left"
+                    },
+                    "states": 1124075776,
+                    "text": "￼",
+                    "children": [
+                      {
+                        "role": "section",
+                        "name": "You Good morning 09:00 Read",
+                        "attributes": {
+                          "display": "block",
+                          "explicit-name": "true",
+                          "name-from": "attribute",
+                          "tag": "div",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "￼￼￼",
+                        "children": [
+                          {
+                            "role": "section",
+                            "name": "You:",
+                            "attributes": {
+                              "display": "inline",
+                              "explicit-name": "true",
+                              "name-from": "attribute",
+                              "tag": "span",
+                              "text-align": "left"
+                            },
+                            "states": 1090519296
+                          },
+                          {
+                            "role": "section",
+                            "attributes": {
+                              "display": "block",
+                              "tag": "div",
+                              "text-align": "left"
+                            },
+                            "states": 1124073728,
+                            "text": "Good morning",
+                            "children": [
+                              {
+                                "role": "static",
+                                "name": "Good morning",
+                                "attributes": {
+                                  "name-from": "contents"
+                                },
+                                "states": 1124073728,
+                                "text": "Good morning"
+                              }
+                            ]
+                          },
+                          {
+                            "role": "button",
+                            "name": "09:00 Read",
+                            "attributes": {
+                              "display": "block",
+                              "name-from": "contents",
+                              "tag": "div",
+                              "text-align": "left",
+                              "xml-roles": "button"
+                            },
+                            "states": 1124073728,
+                            "text": "09:00 Read"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "table row",
+                "attributes": {
+                  "display": "block",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "row"
+                },
+                "states": 1124073728,
+                "text": "￼",
+                "children": [
+                  {
+                    "role": "section",
+                    "attributes": {
+                      "class": "message",
+                      "display": "block",
+                      "tag": "div",
+                      "text-align": "left"
+                    },
+                    "states": 1124075776,
+                    "text": "￼",
+                    "children": [
+                      {
+                        "role": "section",
+                        "name": "You See you at noon 09:05 Read",
+                        "attributes": {
+                          "display": "block",
+                          "explicit-name": "true",
+                          "name-from": "attribute",
+                          "tag": "div",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "￼￼",
+                        "children": [
+                          {
+                            "role": "section",
+                            "attributes": {
+                              "display": "block",
+                              "tag": "div",
+                              "text-align": "left"
+                            },
+                            "states": 1124073728,
+                            "text": "See you at noon",
+                            "children": [
+                              {
+                                "role": "static",
+                                "name": "See you at noon",
+                                "attributes": {
+                                  "name-from": "contents"
+                                },
+                                "states": 1124073728,
+                                "text": "See you at noon"
+                              }
+                            ]
+                          },
+                          {
+                            "role": "button",
+                            "name": "09:05 Read",
+                            "attributes": {
+                              "display": "block",
+                              "name-from": "contents",
+                              "tag": "div",
+                              "text-align": "left",
+                              "xml-roles": "button"
+                            },
+                            "states": 1124073728,
+                            "text": "09:05 Read"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "table row",
+                "attributes": {
+                  "display": "block",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "row"
+                },
+                "states": 1124073728,
+                "text": "￼",
+                "children": [
+                  {
+                    "role": "section",
+                    "attributes": {
+                      "class": "message",
+                      "display": "block",
+                      "tag": "div",
+                      "text-align": "left"
+                    },
+                    "states": 1124075776,
+                    "text": "￼",
+                    "children": [
+                      {
+                        "role": "section",
+                        "name": "You Bring the notes 09:10 Read",
+                        "attributes": {
+                          "display": "block",
+                          "explicit-name": "true",
+                          "name-from": "attribute",
+                          "tag": "div",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "￼￼",
+                        "children": [
+                          {
+                            "role": "section",
+                            "attributes": {
+                              "display": "block",
+                              "tag": "div",
+                              "text-align": "left"
+                            },
+                            "states": 1124073728,
+                            "text": "Bring the notes",
+                            "children": [
+                              {
+                                "role": "static",
+                                "name": "Bring the notes",
+                                "attributes": {
+                                  "name-from": "contents"
+                                },
+                                "states": 1124073728,
+                                "text": "Bring the notes"
+                              }
+                            ]
+                          },
+                          {
+                            "role": "button",
+                            "name": "09:10 Read",
+                            "attributes": {
+                              "display": "block",
+                              "name-from": "contents",
+                              "tag": "div",
+                              "text-align": "left",
+                              "xml-roles": "button"
+                            },
+                            "states": 1124073728,
+                            "text": "09:10 Read"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "heading",
+            "name": "Compose",
+            "attributes": {
+              "display": "block",
+              "level": "2",
+              "name-from": "contents",
+              "tag": "h2",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Compose",
+            "children": [
+              {
+                "role": "static",
+                "name": "Compose",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Compose"
+              }
+            ]
+          },
+          {
+            "role": "entry",
+            "name": "Type a message",
+            "attributes": {
+              "display": "block",
+              "explicit-name": "true",
+              "name-from": "attribute",
+              "tag": "div",
+              "text-align": "left",
+              "text-model": "a1",
+              "xml-roles": "textbox"
+            },
+            "states": 276002113920,
+            "text": "\n",
+            "children": [
+              {
+                "role": "static",
+                "name": "\n",
+                "attributes": {
+                  "name-from": "contents",
+                  "text-align": "left"
+                },
+                "states": 1124073856,
+                "text": "\n"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

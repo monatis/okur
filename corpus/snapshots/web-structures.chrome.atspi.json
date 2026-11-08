@@ -1,0 +1,593 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Structures Fixture",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "d0c074772e3aa267b6679197051e1ef859606783970820af562211904fb1009e",
+    "captured_at_unix_ms": 1794146368227,
+    "node_count": 45,
+    "capture_ms": 139
+  },
+  "root": {
+    "role": "document web",
+    "name": "Structures Fixture",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼￼￼￼￼￼￼￼￼￼￼￼￼",
+    "uri": "file:///root/okur/corpus/fixtures/web-structures.html",
+    "children": [
+      {
+        "role": "heading",
+        "name": "Structures Fixture",
+        "attributes": {
+          "display": "block",
+          "level": "1",
+          "name-from": "contents",
+          "tag": "h1",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Structures Fixture",
+        "children": [
+          {
+            "role": "static",
+            "name": "Structures Fixture",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Structures Fixture"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Each structure below has one line of its own text.",
+        "children": [
+          {
+            "role": "static",
+            "name": "Each structure below has one line of its own text.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Each structure below has one line of its own text."
+          }
+        ]
+      },
+      {
+        "role": "panel",
+        "attributes": {
+          "display": "block",
+          "tag": "figure",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼￼",
+        "children": [
+          {
+            "role": "image",
+            "name": "A small square",
+            "attributes": {
+              "display": "inline",
+              "explicit-name": "true",
+              "name-from": "attribute",
+              "src": "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
+              "tag": "img",
+              "text-align": "left"
+            },
+            "states": 1124073728
+          },
+          {
+            "role": "caption",
+            "attributes": {
+              "display": "block",
+              "tag": "figcaption",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Figure caption text",
+            "children": [
+              {
+                "role": "static",
+                "name": "Figure caption text",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Figure caption text"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "panel",
+        "name": "Updates",
+        "attributes": {
+          "display": "block",
+          "explicit-name": "true",
+          "name-from": "attribute",
+          "setsize": "2",
+          "tag": "div",
+          "text-align": "left",
+          "xml-roles": "feed"
+        },
+        "states": 1124073728,
+        "text": "￼￼",
+        "children": [
+          {
+            "role": "article",
+            "name": "First update",
+            "attributes": {
+              "display": "block",
+              "explicit-name": "true",
+              "name-from": "attribute",
+              "posinset": "1",
+              "setsize": "2",
+              "tag": "article",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼",
+            "children": [
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "First update text",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "First update text",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "First update text"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "article",
+            "name": "Second update",
+            "attributes": {
+              "display": "block",
+              "explicit-name": "true",
+              "name-from": "attribute",
+              "posinset": "2",
+              "setsize": "2",
+              "tag": "article",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼",
+            "children": [
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Second update text",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Second update text",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Second update text"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "log",
+        "name": "Messages",
+        "attributes": {
+          "atomic": "false",
+          "container-atomic": "false",
+          "container-busy": "false",
+          "container-live": "polite",
+          "container-relevant": "additions text",
+          "display": "block",
+          "explicit-name": "true",
+          "live": "polite",
+          "name-from": "attribute",
+          "relevant": "additions text",
+          "tag": "div",
+          "text-align": "left",
+          "xml-roles": "log"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "paragraph",
+            "attributes": {
+              "atomic": "false",
+              "container-atomic": "false",
+              "container-busy": "false",
+              "container-live": "polite",
+              "container-relevant": "additions text",
+              "display": "block",
+              "relevant": "additions text",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Log entry text",
+            "children": [
+              {
+                "role": "static",
+                "name": "Log entry text",
+                "attributes": {
+                  "atomic": "false",
+                  "container-atomic": "false",
+                  "container-busy": "false",
+                  "container-live": "polite",
+                  "container-relevant": "additions text",
+                  "name-from": "contents",
+                  "relevant": "additions text"
+                },
+                "states": 1124073728,
+                "text": "Log entry text"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "comment",
+        "attributes": {
+          "display": "block",
+          "tag": "div",
+          "text-align": "left",
+          "xml-roles": "note"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Note text",
+            "children": [
+              {
+                "role": "static",
+                "name": "Note text",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Note text"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "tool bar",
+        "name": "Formatting",
+        "attributes": {
+          "display": "block",
+          "explicit-name": "true",
+          "name-from": "attribute",
+          "tag": "div",
+          "text-align": "left",
+          "xml-roles": "toolbar"
+        },
+        "states": 1124090112,
+        "text": "￼￼",
+        "children": [
+          {
+            "role": "button",
+            "name": "Bold",
+            "attributes": {
+              "display": "inline-block",
+              "name-from": "contents",
+              "tag": "button",
+              "text-align": "center"
+            },
+            "states": 1124075776,
+            "text": "Bold"
+          },
+          {
+            "role": "button",
+            "name": "Italic",
+            "attributes": {
+              "display": "inline-block",
+              "name-from": "contents",
+              "tag": "button",
+              "text-align": "center"
+            },
+            "states": 1124075776,
+            "text": "Italic"
+          }
+        ]
+      },
+      {
+        "role": "section",
+        "name": "Notes field",
+        "attributes": {
+          "display": "block",
+          "explicit-name": "true",
+          "name-from": "attribute",
+          "tag": "div",
+          "text-align": "left",
+          "text-model": "a1"
+        },
+        "states": 276002113920,
+        "text": "￼",
+        "children": [
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073856,
+            "text": "Editable text",
+            "children": [
+              {
+                "role": "static",
+                "name": "Editable text",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073856,
+                "text": "Editable text"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "panel",
+        "name": "Delivery",
+        "attributes": {
+          "display": "block",
+          "explicit-name": "true",
+          "name-from": "related-element",
+          "setsize": "0",
+          "tag": "fieldset",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼￼",
+        "children": [
+          {
+            "role": "label",
+            "attributes": {
+              "display": "block",
+              "tag": "legend",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Delivery",
+            "children": [
+              {
+                "role": "static",
+                "name": "Delivery",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Delivery"
+              }
+            ]
+          },
+          {
+            "role": "check box",
+            "name": "Express",
+            "attributes": {
+              "checkable": "true",
+              "display": "inline-block",
+              "explicit-name": "true",
+              "name-from": "related-element",
+              "tag": "input",
+              "text-align": "left"
+            },
+            "states": 2200147331328
+          }
+        ]
+      },
+      {
+        "role": "landmark",
+        "name": "Contact form",
+        "attributes": {
+          "display": "block",
+          "explicit-name": "true",
+          "name-from": "attribute",
+          "tag": "form",
+          "text-align": "left",
+          "xml-roles": "form"
+        },
+        "states": 1124073728,
+        "text": "￼￼",
+        "children": [
+          {
+            "role": "label",
+            "attributes": {
+              "display": "inline",
+              "tag": "label",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Email",
+            "children": [
+              {
+                "role": "static",
+                "name": "Email",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Email"
+              }
+            ]
+          },
+          {
+            "role": "entry",
+            "name": "Email",
+            "attributes": {
+              "display": "inline-block",
+              "explicit-name": "true",
+              "id": "email",
+              "name-from": "related-element",
+              "tag": "input",
+              "text-align": "left",
+              "text-input-type": "text",
+              "text-model": "a1"
+            },
+            "states": 276069091712
+          }
+        ]
+      },
+      {
+        "role": "landmark",
+        "name": "Opening hours",
+        "attributes": {
+          "display": "block",
+          "explicit-name": "true",
+          "name-from": "attribute",
+          "tag": "section",
+          "text-align": "left",
+          "xml-roles": "region"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Region text",
+            "children": [
+              {
+                "role": "static",
+                "name": "Region text",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Region text"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "landmark",
+        "name": "Site search",
+        "attributes": {
+          "display": "block",
+          "explicit-name": "true",
+          "name-from": "attribute",
+          "tag": "div",
+          "text-align": "left",
+          "xml-roles": "search"
+        },
+        "states": 1124073728,
+        "text": "￼￼",
+        "children": [
+          {
+            "role": "label",
+            "attributes": {
+              "display": "inline",
+              "tag": "label",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Search",
+            "children": [
+              {
+                "role": "static",
+                "name": "Search",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Search"
+              }
+            ]
+          },
+          {
+            "role": "entry",
+            "name": "Search",
+            "attributes": {
+              "display": "inline-block",
+              "explicit-name": "true",
+              "id": "query",
+              "name-from": "related-element",
+              "tag": "input",
+              "text-align": "left",
+              "text-input-type": "text",
+              "text-model": "a1"
+            },
+            "states": 276069091712
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "The end of the structures.",
+        "children": [
+          {
+            "role": "static",
+            "name": "The end of the structures.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "The end of the structures."
+          }
+        ]
+      }
+    ]
+  }
+}

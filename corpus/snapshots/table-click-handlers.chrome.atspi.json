@@ -1,0 +1,529 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Branch Tables",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "c981e3e7d9cce53b8fd1909dd9b278ef9676ab85c48b23ca53ca7fe7b3a788c7",
+    "captured_at_unix_ms": 1794146315487,
+    "node_count": 43,
+    "capture_ms": 143
+  },
+  "root": {
+    "role": "document web",
+    "name": "Branch Tables",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼￼￼￼￼￼￼",
+    "uri": "file:///root/okur/corpus/fixtures/table-click-handlers.html",
+    "children": [
+      {
+        "role": "heading",
+        "name": "Branch tables",
+        "attributes": {
+          "display": "block",
+          "level": "1",
+          "name-from": "contents",
+          "tag": "h1",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Branch tables",
+        "children": [
+          {
+            "role": "static",
+            "name": "Branch tables",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Branch tables"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Two plain tables. The page answers clicks anywhere, as many sites do; the second table also answers clicks itself.",
+        "children": [
+          {
+            "role": "static",
+            "name": "Two plain tables. The page answers clicks anywhere, as many sites do; the second table also answers clicks itself.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Two plain tables. The page answers clicks anywhere, as many sites do; the second table also answers clicks itself."
+          }
+        ]
+      },
+      {
+        "role": "heading",
+        "name": "Branch hours",
+        "attributes": {
+          "display": "block",
+          "level": "2",
+          "name-from": "contents",
+          "tag": "h2",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Branch hours",
+        "children": [
+          {
+            "role": "static",
+            "name": "Branch hours",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Branch hours"
+          }
+        ]
+      },
+      {
+        "role": "table",
+        "attributes": {
+          "display": "table",
+          "tag": "table",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼",
+        "children": [
+          {
+            "role": "table row",
+            "attributes": {
+              "display": "table-row",
+              "tag": "tr",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼",
+            "children": [
+              {
+                "role": "column header",
+                "name": "Branch",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "0",
+                  "tag": "th",
+                  "text-align": "center"
+                },
+                "states": 1124073728,
+                "text": "Branch",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Branch",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Branch"
+                  }
+                ]
+              },
+              {
+                "role": "column header",
+                "name": "Opens",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "1",
+                  "tag": "th",
+                  "text-align": "center"
+                },
+                "states": 1124073728,
+                "text": "Opens",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Opens",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Opens"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "table row",
+            "attributes": {
+              "display": "table-row",
+              "tag": "tr",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼",
+            "children": [
+              {
+                "role": "table cell",
+                "name": "Central",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "2",
+                  "tag": "td",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Central",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Central",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Central"
+                  }
+                ]
+              },
+              {
+                "role": "table cell",
+                "name": "9 am",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "3",
+                  "tag": "td",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "9 am",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "9 am",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "9 am"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "table row",
+            "attributes": {
+              "display": "table-row",
+              "tag": "tr",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼",
+            "children": [
+              {
+                "role": "table cell",
+                "name": "Riverside",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "4",
+                  "tag": "td",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Riverside",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Riverside",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Riverside"
+                  }
+                ]
+              },
+              {
+                "role": "table cell",
+                "name": "10 am",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "5",
+                  "tag": "td",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "10 am",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "10 am",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "10 am"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "heading",
+        "name": "Book returns",
+        "attributes": {
+          "display": "block",
+          "level": "2",
+          "name-from": "contents",
+          "tag": "h2",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Book returns",
+        "children": [
+          {
+            "role": "static",
+            "name": "Book returns",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Book returns"
+          }
+        ]
+      },
+      {
+        "role": "table",
+        "attributes": {
+          "display": "table",
+          "id": "returns",
+          "tag": "table",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼",
+        "children": [
+          {
+            "role": "table row",
+            "attributes": {
+              "display": "table-row",
+              "tag": "tr",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼",
+            "children": [
+              {
+                "role": "column header",
+                "name": "Book",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "0",
+                  "tag": "th",
+                  "text-align": "center"
+                },
+                "states": 1124073728,
+                "text": "Book",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Book",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Book"
+                  }
+                ]
+              },
+              {
+                "role": "column header",
+                "name": "Due",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "1",
+                  "tag": "th",
+                  "text-align": "center"
+                },
+                "states": 1124073728,
+                "text": "Due",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Due",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Due"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "table row",
+            "attributes": {
+              "display": "table-row",
+              "tag": "tr",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼",
+            "children": [
+              {
+                "role": "table cell",
+                "name": "Atlas",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "2",
+                  "tag": "td",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Atlas",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Atlas",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Atlas"
+                  }
+                ]
+              },
+              {
+                "role": "table cell",
+                "name": "Monday",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "3",
+                  "tag": "td",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Monday",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Monday",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Monday"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "table row",
+            "attributes": {
+              "display": "table-row",
+              "tag": "tr",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼",
+            "children": [
+              {
+                "role": "table cell",
+                "name": "Poems",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "4",
+                  "tag": "td",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Poems",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Poems",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Poems"
+                  }
+                ]
+              },
+              {
+                "role": "table cell",
+                "name": "Friday",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "5",
+                  "tag": "td",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Friday",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Friday",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Friday"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "End of tables.",
+        "children": [
+          {
+            "role": "static",
+            "name": "End of tables.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "End of tables."
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,284 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Described Elements",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "3c5e470c48c7391f066604d67a8eace4d7bf49a8249827af7d244432d25940e4",
+    "captured_at_unix_ms": 1794146219655,
+    "node_count": 22,
+    "capture_ms": 77
+  },
+  "root": {
+    "role": "document web",
+    "name": "Described Elements",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼",
+    "uri": "file:///root/okur/corpus/fixtures/described-elements.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼￼￼￼￼￼",
+        "children": [
+          {
+            "role": "heading",
+            "name": "Described elements",
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Described elements",
+            "children": [
+              {
+                "role": "static",
+                "name": "Described elements",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Described elements"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "A plain line before them.",
+            "children": [
+              {
+                "role": "static",
+                "name": "A plain line before them.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "A plain line before them."
+              }
+            ]
+          },
+          {
+            "role": "heading",
+            "name": "Shipping options",
+            "attributes": {
+              "description-from": "aria-describedby",
+              "display": "block",
+              "level": "2",
+              "name-from": "contents",
+              "tag": "h2",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Shipping options",
+            "children": [
+              {
+                "role": "static",
+                "name": "Shipping options",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Shipping options"
+              }
+            ]
+          },
+          {
+            "role": "button",
+            "name": "Delete account",
+            "attributes": {
+              "description-from": "aria-describedby",
+              "display": "inline-block",
+              "name-from": "contents",
+              "tag": "button",
+              "text-align": "center"
+            },
+            "states": 1124075776,
+            "text": "Delete account"
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "id": "delete-note",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "This cannot be undone.",
+            "children": [
+              {
+                "role": "static",
+                "name": "This cannot be undone.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "This cannot be undone."
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼",
+            "children": [
+              {
+                "role": "link",
+                "name": "Skip ahead",
+                "attributes": {
+                  "description": "Jumps to the end of the page",
+                  "description-from": "aria-description",
+                  "display": "inline",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "states": 1124075776,
+                "text": "Skip ahead",
+                "uri": "file:///root/okur/corpus/fixtures/described-elements.html#end",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Skip ahead",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Skip ahead"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "dialog",
+            "name": "Address Added",
+            "attributes": {
+              "description-from": "aria-describedby",
+              "display": "block",
+              "explicit-name": "true",
+              "name-from": "related-element",
+              "tag": "div",
+              "text-align": "left",
+              "xml-roles": "dialog"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼",
+            "children": [
+              {
+                "role": "heading",
+                "name": "Address Added",
+                "attributes": {
+                  "display": "block",
+                  "id": "added-title",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Address Added",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Address Added",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Address Added"
+                  }
+                ]
+              },
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "id": "added-note",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "The address you provided has been added.",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "The address you provided has been added.",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "The address you provided has been added."
+                  }
+                ]
+              },
+              {
+                "role": "button",
+                "name": "OK",
+                "attributes": {
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "states": 1124075776,
+                "text": "OK"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "id": "end",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "The end.",
+            "children": [
+              {
+                "role": "static",
+                "name": "The end.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "The end."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

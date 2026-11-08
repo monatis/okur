@@ -1,0 +1,513 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Weekend Events - Riverside Gazette",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "bb945f2e01eb05e3157cb94569e5b81bb92179260d445aa0b91c1b13932810c5",
+    "captured_at_unix_ms": 1794146232882,
+    "node_count": 41,
+    "capture_ms": 132
+  },
+  "root": {
+    "role": "document web",
+    "name": "Weekend Events - Riverside Gazette",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼￼￼",
+    "uri": "file:///root/okur/corpus/fixtures/flexible-web.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "header",
+          "text-align": "left",
+          "xml-roles": "banner"
+        },
+        "states": 1124073728,
+        "text": "￼￼",
+        "children": [
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Riverside Gazette",
+            "children": [
+              {
+                "role": "static",
+                "name": "Riverside Gazette",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Riverside Gazette"
+              }
+            ]
+          },
+          {
+            "role": "landmark",
+            "name": "Sections",
+            "attributes": {
+              "display": "block",
+              "explicit-name": "true",
+              "name-from": "attribute",
+              "tag": "nav",
+              "text-align": "left",
+              "xml-roles": "navigation"
+            },
+            "states": 1124073728,
+            "text": "￼",
+            "children": [
+              {
+                "role": "list",
+                "attributes": {
+                  "display": "block",
+                  "setsize": "3",
+                  "tag": "ul",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼￼￼",
+                "children": [
+                  {
+                    "role": "list item",
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "1",
+                      "setsize": "3",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• ￼",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "• ",
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "• "
+                      },
+                      {
+                        "role": "link",
+                        "name": "News",
+                        "attributes": {
+                          "display": "inline",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "states": 1124075776,
+                        "text": "News",
+                        "uri": "file:///root/okur/corpus/fixtures/flexible-web.html#news",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "News",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "News"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "role": "list item",
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "2",
+                      "setsize": "3",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• ￼",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "• ",
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "• "
+                      },
+                      {
+                        "role": "link",
+                        "name": "Events",
+                        "attributes": {
+                          "display": "inline",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "states": 1124075776,
+                        "text": "Events",
+                        "uri": "file:///root/okur/corpus/fixtures/flexible-web.html#events",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "Events",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "Events"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "role": "list item",
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "3",
+                      "setsize": "3",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• ￼",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "• ",
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "• "
+                      },
+                      {
+                        "role": "link",
+                        "name": "Sports",
+                        "attributes": {
+                          "display": "inline",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "states": 1124075776,
+                        "text": "Sports",
+                        "uri": "file:///root/okur/corpus/fixtures/flexible-web.html#sports",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "Sports",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "Sports"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "landmark",
+        "name": "Advertisement",
+        "attributes": {
+          "display": "block",
+          "explicit-name": "true",
+          "name-from": "attribute",
+          "tag": "aside",
+          "text-align": "left",
+          "xml-roles": "complementary"
+        },
+        "states": 1124073728,
+        "text": "￼￼",
+        "children": [
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Spring sale at Main Street Shoes: two pairs for the price of one.",
+            "children": [
+              {
+                "role": "static",
+                "name": "Spring sale at Main Street Shoes: two pairs for the price of one.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Spring sale at Main Street Shoes: two pairs for the price of one."
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼",
+            "children": [
+              {
+                "role": "link",
+                "name": "See the sale",
+                "attributes": {
+                  "display": "inline",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "states": 1124075776,
+                "text": "See the sale",
+                "uri": "file:///root/okur/corpus/fixtures/flexible-web.html#sale",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "See the sale",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "See the sale"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼￼￼￼￼￼",
+        "children": [
+          {
+            "role": "heading",
+            "name": "Weekend events",
+            "attributes": {
+              "display": "block",
+              "id": "events",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Weekend events",
+            "children": [
+              {
+                "role": "static",
+                "name": "Weekend events",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Weekend events"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Three events open to everyone this weekend.",
+            "children": [
+              {
+                "role": "static",
+                "name": "Three events open to everyone this weekend.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Three events open to everyone this weekend."
+              }
+            ]
+          },
+          {
+            "role": "heading",
+            "name": "Saturday market",
+            "attributes": {
+              "display": "block",
+              "level": "2",
+              "name-from": "contents",
+              "tag": "h2",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Saturday market",
+            "children": [
+              {
+                "role": "static",
+                "name": "Saturday market",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Saturday market"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "The farmers' market opens at eight in Mill Square.",
+            "children": [
+              {
+                "role": "static",
+                "name": "The farmers' market opens at eight in Mill Square.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "The farmers' market opens at eight in Mill Square."
+              }
+            ]
+          },
+          {
+            "role": "heading",
+            "name": "River clean-up",
+            "attributes": {
+              "display": "block",
+              "level": "2",
+              "name-from": "contents",
+              "tag": "h2",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "River clean-up",
+            "children": [
+              {
+                "role": "static",
+                "name": "River clean-up",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "River clean-up"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Volunteers meet at the boat ramp at ten on Saturday.",
+            "children": [
+              {
+                "role": "static",
+                "name": "Volunteers meet at the boat ramp at ten on Saturday.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Volunteers meet at the boat ramp at ten on Saturday."
+              }
+            ]
+          },
+          {
+            "role": "heading",
+            "name": "Sunday concert",
+            "attributes": {
+              "display": "block",
+              "level": "2",
+              "name-from": "contents",
+              "tag": "h2",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Sunday concert",
+            "children": [
+              {
+                "role": "static",
+                "name": "Sunday concert",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Sunday concert"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "The town band plays in the park at four.",
+            "children": [
+              {
+                "role": "static",
+                "name": "The town band plays in the park at four.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "The town band plays in the park at four."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

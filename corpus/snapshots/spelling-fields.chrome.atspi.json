@@ -1,0 +1,171 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Spelling Fields Fixture",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "9c5450b0d7ce5d1e01ed8fde4a3070b89ae7bb8bdae3081b373f89e81383236c",
+    "captured_at_unix_ms": 1794146306914,
+    "node_count": 13,
+    "capture_ms": 44
+  },
+  "root": {
+    "role": "document web",
+    "name": "Spelling Fields Fixture",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼￼￼￼",
+    "uri": "file:///root/okur/corpus/fixtures/spelling-fields.html",
+    "children": [
+      {
+        "role": "heading",
+        "name": "Spelling fields",
+        "attributes": {
+          "display": "block",
+          "level": "1",
+          "name-from": "contents",
+          "tag": "h1",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Spelling fields",
+        "children": [
+          {
+            "role": "static",
+            "name": "Spelling fields",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Spelling fields"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼￼",
+        "children": [
+          {
+            "role": "label",
+            "attributes": {
+              "display": "inline",
+              "tag": "label",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Checked",
+            "children": [
+              {
+                "role": "static",
+                "name": "Checked",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Checked"
+              }
+            ]
+          },
+          {
+            "role": "entry",
+            "name": "Checked",
+            "attributes": {
+              "display": "inline-block",
+              "explicit-name": "true",
+              "id": "checked",
+              "name-from": "related-element",
+              "tag": "input",
+              "text-align": "left",
+              "text-input-type": "text",
+              "text-model": "a1"
+            },
+            "states": 276069091712
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼￼",
+        "children": [
+          {
+            "role": "label",
+            "attributes": {
+              "display": "inline",
+              "tag": "label",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Unchecked",
+            "children": [
+              {
+                "role": "static",
+                "name": "Unchecked",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Unchecked"
+              }
+            ]
+          },
+          {
+            "role": "entry",
+            "name": "Unchecked",
+            "attributes": {
+              "display": "inline-block",
+              "explicit-name": "true",
+              "id": "unchecked",
+              "name-from": "related-element",
+              "tag": "input",
+              "text-align": "left",
+              "text-input-type": "text",
+              "text-model": "a1"
+            },
+            "states": 276069091712
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Plain text with teh word.",
+        "children": [
+          {
+            "role": "static",
+            "name": "Plain text with teh word.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Plain text with teh word."
+          }
+        ]
+      }
+    ]
+  }
+}

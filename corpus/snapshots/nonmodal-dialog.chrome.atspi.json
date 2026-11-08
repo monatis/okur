@@ -1,0 +1,243 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Non-modal Dialog",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "597b58fdb218d0460fca4fa1bc712a3657ec28c90abb948b3504ed6cda6704a6",
+    "captured_at_unix_ms": 1794146259205,
+    "node_count": 19,
+    "capture_ms": 61
+  },
+  "root": {
+    "role": "document web",
+    "name": "Non-modal Dialog",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼",
+    "uri": "file:///root/okur/corpus/fixtures/nonmodal-dialog.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼￼￼￼",
+        "children": [
+          {
+            "role": "heading",
+            "name": "Non-modal dialog",
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Non-modal dialog",
+            "children": [
+              {
+                "role": "static",
+                "name": "Non-modal dialog",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Non-modal dialog"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "A line before the dialog.",
+            "children": [
+              {
+                "role": "static",
+                "name": "A line before the dialog.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "A line before the dialog."
+              }
+            ]
+          },
+          {
+            "role": "button",
+            "name": "Open settings",
+            "attributes": {
+              "display": "inline-block",
+              "name-from": "contents",
+              "tag": "button",
+              "text-align": "center"
+            },
+            "states": 1124075776,
+            "text": "Open settings"
+          },
+          {
+            "role": "dialog",
+            "name": "Settings",
+            "attributes": {
+              "display": "block",
+              "explicit-name": "true",
+              "name-from": "related-element",
+              "tag": "div",
+              "text-align": "left",
+              "xml-roles": "dialog"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼￼",
+            "children": [
+              {
+                "role": "heading",
+                "name": "Settings",
+                "attributes": {
+                  "display": "block",
+                  "id": "settings-title",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Settings",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Settings",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Settings"
+                  }
+                ]
+              },
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Choose your options.",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Choose your options.",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Choose your options."
+                  }
+                ]
+              },
+              {
+                "role": "button",
+                "name": "Save",
+                "attributes": {
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "states": 1124075776,
+                "text": "Save"
+              },
+              {
+                "role": "button",
+                "name": "Close",
+                "attributes": {
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "states": 1124075776,
+                "text": "Close"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "A line after the dialog.",
+            "children": [
+              {
+                "role": "static",
+                "name": "A line after the dialog.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "A line after the dialog."
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼",
+            "children": [
+              {
+                "role": "link",
+                "name": "Back to top",
+                "attributes": {
+                  "display": "inline",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "states": 1124075776,
+                "text": "Back to top",
+                "uri": "file:///root/okur/corpus/fixtures/nonmodal-dialog.html#top",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Back to top",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Back to top"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

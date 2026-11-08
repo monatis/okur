@@ -1,0 +1,493 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Headings in Sections - Headings Fixture",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "4c7de4399adf7dd75e74ce10e320e1f3dd09e40da0aeccae3b978263d984c3ad",
+    "captured_at_unix_ms": 1794146245801,
+    "node_count": 42,
+    "capture_ms": 130
+  },
+  "root": {
+    "role": "document web",
+    "name": "Headings in Sections - Headings Fixture",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼",
+    "uri": "file:///root/okur/corpus/fixtures/headings-sections.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼",
+        "children": [
+          {
+            "role": "heading",
+            "name": "User guide",
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "User guide",
+            "children": [
+              {
+                "role": "static",
+                "name": "User guide",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "User guide"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "This guide has two parts.",
+            "children": [
+              {
+                "role": "static",
+                "name": "This guide has two parts.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "This guide has two parts."
+              }
+            ]
+          },
+          {
+            "role": "heading",
+            "name": "Install",
+            "attributes": {
+              "display": "block",
+              "level": "2",
+              "name-from": "contents",
+              "tag": "h2",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Install",
+            "children": [
+              {
+                "role": "static",
+                "name": "Install",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Install"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Choose your system.",
+            "children": [
+              {
+                "role": "static",
+                "name": "Choose your system.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Choose your system."
+              }
+            ]
+          },
+          {
+            "role": "heading",
+            "name": "Windows",
+            "attributes": {
+              "display": "block",
+              "level": "3",
+              "name-from": "contents",
+              "tag": "h3",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Windows",
+            "children": [
+              {
+                "role": "static",
+                "name": "Windows",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Windows"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Run the installer.",
+            "children": [
+              {
+                "role": "static",
+                "name": "Run the installer.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Run the installer."
+              }
+            ]
+          },
+          {
+            "role": "heading",
+            "name": "macOS",
+            "attributes": {
+              "display": "block",
+              "level": "3",
+              "name-from": "contents",
+              "tag": "h3",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "macOS",
+            "children": [
+              {
+                "role": "static",
+                "name": "macOS",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "macOS"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Open the disk image.",
+            "children": [
+              {
+                "role": "static",
+                "name": "Open the disk image.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Open the disk image."
+              }
+            ]
+          },
+          {
+            "role": "heading",
+            "name": "Configure",
+            "attributes": {
+              "display": "block",
+              "level": "2",
+              "name-from": "contents",
+              "tag": "h2",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Configure",
+            "children": [
+              {
+                "role": "static",
+                "name": "Configure",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Configure"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Settings are kept per user.",
+            "children": [
+              {
+                "role": "static",
+                "name": "Settings are kept per user.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Settings are kept per user."
+              }
+            ]
+          },
+          {
+            "role": "heading",
+            "name": "Voices",
+            "attributes": {
+              "display": "block",
+              "level": "3",
+              "name-from": "contents",
+              "tag": "h3",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Voices",
+            "children": [
+              {
+                "role": "static",
+                "name": "Voices",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Voices"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Pick a voice and a rate.",
+            "children": [
+              {
+                "role": "static",
+                "name": "Pick a voice and a rate.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Pick a voice and a rate."
+              }
+            ]
+          },
+          {
+            "role": "heading",
+            "name": "Reference",
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Reference",
+            "children": [
+              {
+                "role": "static",
+                "name": "Reference",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Reference"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Every command in one place.",
+            "children": [
+              {
+                "role": "static",
+                "name": "Every command in one place.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Every command in one place."
+              }
+            ]
+          },
+          {
+            "role": "heading",
+            "name": "Commands",
+            "attributes": {
+              "display": "block",
+              "level": "2",
+              "name-from": "contents",
+              "tag": "h2",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Commands",
+            "children": [
+              {
+                "role": "static",
+                "name": "Commands",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Commands"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Keys by task.",
+            "children": [
+              {
+                "role": "static",
+                "name": "Keys by task.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Keys by task."
+              }
+            ]
+          },
+          {
+            "role": "heading",
+            "name": "Reading",
+            "attributes": {
+              "display": "block",
+              "level": "3",
+              "name-from": "contents",
+              "tag": "h3",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Reading",
+            "children": [
+              {
+                "role": "static",
+                "name": "Reading",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Reading"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Lines, words and characters.",
+            "children": [
+              {
+                "role": "static",
+                "name": "Lines, words and characters.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Lines, words and characters."
+              }
+            ]
+          },
+          {
+            "role": "heading",
+            "name": "Settings",
+            "attributes": {
+              "display": "block",
+              "level": "2",
+              "name-from": "contents",
+              "tag": "h2",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Settings",
+            "children": [
+              {
+                "role": "static",
+                "name": "Settings",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Settings"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "The settings files.",
+            "children": [
+              {
+                "role": "static",
+                "name": "The settings files.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "The settings files."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

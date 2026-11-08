@@ -1,0 +1,217 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Progress Bars Fixture",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "e3014a88a86c2e228a95708a26bc101ae70ada778573da442339a2bec640544a",
+    "captured_at_unix_ms": 1794146276414,
+    "node_count": 17,
+    "capture_ms": 61
+  },
+  "root": {
+    "role": "document web",
+    "name": "Progress Bars Fixture",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼￼￼￼￼￼",
+    "uri": "file:///root/okur/corpus/fixtures/progress-bars.html",
+    "children": [
+      {
+        "role": "heading",
+        "name": "Progress bars",
+        "attributes": {
+          "display": "block",
+          "level": "1",
+          "name-from": "contents",
+          "tag": "h1",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Progress bars",
+        "children": [
+          {
+            "role": "static",
+            "name": "Progress bars",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Progress bars"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "A button starts both bars below on one schedule.",
+        "children": [
+          {
+            "role": "static",
+            "name": "A button starts both bars below on one schedule.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "A button starts both bars below on one schedule."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "button",
+            "name": "Start upload",
+            "attributes": {
+              "display": "inline-block",
+              "id": "start",
+              "name-from": "contents",
+              "tag": "button",
+              "text-align": "center"
+            },
+            "states": 1124075776,
+            "text": "Start upload"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼￼",
+        "children": [
+          {
+            "role": "label",
+            "attributes": {
+              "display": "inline",
+              "tag": "label",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Upload",
+            "children": [
+              {
+                "role": "static",
+                "name": "Upload",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Upload"
+              }
+            ]
+          },
+          {
+            "role": "progress bar",
+            "name": "Upload",
+            "attributes": {
+              "display": "inline-block",
+              "explicit-name": "true",
+              "id": "upload",
+              "name-from": "related-element",
+              "tag": "progress",
+              "text-align": "left",
+              "valuetext": "0"
+            },
+            "states": 1124073728
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼￼",
+        "children": [
+          {
+            "role": "section",
+            "attributes": {
+              "display": "inline",
+              "id": "sync-label",
+              "tag": "span",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Sync",
+            "children": [
+              {
+                "role": "static",
+                "name": "Sync",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Sync"
+              }
+            ]
+          },
+          {
+            "role": "progress bar",
+            "name": "Sync",
+            "attributes": {
+              "display": "inline-block",
+              "explicit-name": "true",
+              "id": "sync",
+              "name-from": "related-element",
+              "tag": "span",
+              "text-align": "left",
+              "valuetext": "0",
+              "xml-roles": "progressbar"
+            },
+            "states": 1124073728
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Text after the bars.",
+        "children": [
+          {
+            "role": "static",
+            "name": "Text after the bars.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Text after the bars."
+          }
+        ]
+      }
+    ]
+  }
+}

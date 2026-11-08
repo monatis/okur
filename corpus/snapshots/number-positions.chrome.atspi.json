@@ -1,0 +1,564 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Number Positions",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "a6287e6f4150df8d0354b5b427cb153fd54fe0cd27d99ea98373e797cba9c226",
+    "captured_at_unix_ms": 1794146263631,
+    "node_count": 53,
+    "capture_ms": 167
+  },
+  "root": {
+    "role": "document web",
+    "name": "Number Positions",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼￼￼￼￼￼￼￼￼￼￼",
+    "uri": "file:///root/okur/corpus/fixtures/number-positions.html",
+    "children": [
+      {
+        "role": "heading",
+        "name": "Raised and lowered numbers",
+        "attributes": {
+          "display": "block",
+          "level": "1",
+          "name-from": "contents",
+          "tag": "h1",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Raised and lowered numbers",
+        "children": [
+          {
+            "role": "static",
+            "name": "Raised and lowered numbers",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Raised and lowered numbers"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Two cubed is 2￼ in short.",
+        "children": [
+          {
+            "role": "static",
+            "name": "Two cubed is 2",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Two cubed is 2"
+          },
+          {
+            "role": "superscript",
+            "attributes": {
+              "display": "inline",
+              "tag": "sup",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "3",
+            "children": [
+              {
+                "role": "static",
+                "name": "3",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "3"
+              }
+            ]
+          },
+          {
+            "role": "static",
+            "name": " in short.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": " in short."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "A mole holds 10￼ particles.",
+        "children": [
+          {
+            "role": "static",
+            "name": "A mole holds 10",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "A mole holds 10"
+          },
+          {
+            "role": "superscript",
+            "attributes": {
+              "display": "inline",
+              "tag": "sup",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "23",
+            "children": [
+              {
+                "role": "static",
+                "name": "23",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "23"
+              }
+            ]
+          },
+          {
+            "role": "static",
+            "name": " particles.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": " particles."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "A micrometre is 10￼ metres.",
+        "children": [
+          {
+            "role": "static",
+            "name": "A micrometre is 10",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "A micrometre is 10"
+          },
+          {
+            "role": "superscript",
+            "attributes": {
+              "display": "inline",
+              "tag": "sup",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "-6",
+            "children": [
+              {
+                "role": "static",
+                "name": "-6",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "-6"
+              }
+            ]
+          },
+          {
+            "role": "static",
+            "name": " metres.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": " metres."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "The power x￼ grows fast.",
+        "children": [
+          {
+            "role": "static",
+            "name": "The power x",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "The power x"
+          },
+          {
+            "role": "superscript",
+            "attributes": {
+              "display": "inline",
+              "tag": "sup",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "10",
+            "children": [
+              {
+                "role": "static",
+                "name": "10",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "10"
+              }
+            ]
+          },
+          {
+            "role": "static",
+            "name": " grows fast.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": " grows fast."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "The 21￼ century began in 2001.",
+        "children": [
+          {
+            "role": "static",
+            "name": "The 21",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "The 21"
+          },
+          {
+            "role": "superscript",
+            "attributes": {
+              "display": "inline",
+              "tag": "sup",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "st",
+            "children": [
+              {
+                "role": "static",
+                "name": "st",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "st"
+              }
+            ]
+          },
+          {
+            "role": "static",
+            "name": " century began in 2001.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": " century began in 2001."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Binary 101￼ is five.",
+        "children": [
+          {
+            "role": "static",
+            "name": "Binary 101",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Binary 101"
+          },
+          {
+            "role": "subscript",
+            "attributes": {
+              "display": "inline",
+              "tag": "sub",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "2",
+            "children": [
+              {
+                "role": "static",
+                "name": "2",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "2"
+              }
+            ]
+          },
+          {
+            "role": "static",
+            "name": " is five.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": " is five."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Hex FF￼ is 255.",
+        "children": [
+          {
+            "role": "static",
+            "name": "Hex FF",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Hex FF"
+          },
+          {
+            "role": "subscript",
+            "attributes": {
+              "display": "inline",
+              "tag": "sub",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "16",
+            "children": [
+              {
+                "role": "static",
+                "name": "16",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "16"
+              }
+            ]
+          },
+          {
+            "role": "static",
+            "name": " is 255.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": " is 255."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "The value 5￼ is decimal.",
+        "children": [
+          {
+            "role": "static",
+            "name": "The value 5",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "The value 5"
+          },
+          {
+            "role": "subscript",
+            "attributes": {
+              "display": "inline",
+              "tag": "sub",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "10",
+            "children": [
+              {
+                "role": "static",
+                "name": "10",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "10"
+              }
+            ]
+          },
+          {
+            "role": "static",
+            "name": " is decimal.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": " is decimal."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Sulfuric acid is H￼SO￼.",
+        "children": [
+          {
+            "role": "static",
+            "name": "Sulfuric acid is H",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Sulfuric acid is H"
+          },
+          {
+            "role": "subscript",
+            "attributes": {
+              "display": "inline",
+              "tag": "sub",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "2",
+            "children": [
+              {
+                "role": "static",
+                "name": "2",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "2"
+              }
+            ]
+          },
+          {
+            "role": "static",
+            "name": "SO",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "SO"
+          },
+          {
+            "role": "subscript",
+            "attributes": {
+              "display": "inline",
+              "tag": "sub",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "4",
+            "children": [
+              {
+                "role": "static",
+                "name": "4",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "4"
+              }
+            ]
+          },
+          {
+            "role": "static",
+            "name": ".",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Another plain line at the end.",
+        "children": [
+          {
+            "role": "static",
+            "name": "Another plain line at the end.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Another plain line at the end."
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,940 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Virtual Cursor Keys - Keys Fixture",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "93d11fa2031ff1122ff0a780c37aaa812f47246f4557f050efeb628e35a71b04",
+    "captured_at_unix_ms": 1794146337487,
+    "node_count": 80,
+    "capture_ms": 208
+  },
+  "root": {
+    "role": "document web",
+    "name": "Virtual Cursor Keys - Keys Fixture",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼￼￼",
+    "uri": "file:///root/okur/corpus/fixtures/virtual-keys.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "header",
+          "text-align": "left",
+          "xml-roles": "banner"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "landmark",
+            "name": "Site",
+            "attributes": {
+              "display": "block",
+              "explicit-name": "true",
+              "name-from": "attribute",
+              "tag": "nav",
+              "text-align": "left",
+              "xml-roles": "navigation"
+            },
+            "states": 1124073728,
+            "text": "￼",
+            "children": [
+              {
+                "role": "list",
+                "attributes": {
+                  "display": "block",
+                  "setsize": "3",
+                  "tag": "ul",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼￼￼",
+                "children": [
+                  {
+                    "role": "list item",
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "1",
+                      "setsize": "3",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• ￼",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "• ",
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "• "
+                      },
+                      {
+                        "role": "link",
+                        "name": "Paragraphs",
+                        "attributes": {
+                          "display": "inline",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "states": 1124075776,
+                        "text": "Paragraphs",
+                        "uri": "file:///root/okur/corpus/fixtures/virtual-keys.html#paragraphs",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "Paragraphs",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "Paragraphs"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "role": "list item",
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "2",
+                      "setsize": "3",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• ￼",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "• ",
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "• "
+                      },
+                      {
+                        "role": "link",
+                        "name": "Contact",
+                        "attributes": {
+                          "display": "inline",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "states": 1124075776,
+                        "text": "Contact",
+                        "uri": "file:///root/okur/corpus/fixtures/virtual-keys.html#contact",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "Contact",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "Contact"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "role": "list item",
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "3",
+                      "setsize": "3",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• ￼",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "• ",
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "• "
+                      },
+                      {
+                        "role": "link",
+                        "name": "Lists",
+                        "attributes": {
+                          "display": "inline",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "states": 1124075776,
+                        "text": "Lists",
+                        "uri": "file:///root/okur/corpus/fixtures/virtual-keys.html#lists",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "Lists",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "Lists"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼",
+        "children": [
+          {
+            "role": "heading",
+            "name": "Virtual cursor keys",
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Virtual cursor keys",
+            "children": [
+              {
+                "role": "static",
+                "name": "Virtual cursor keys",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Virtual cursor keys"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Text before any link in the page.",
+            "children": [
+              {
+                "role": "static",
+                "name": "Text before any link in the page.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Text before any link in the page."
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼",
+            "children": [
+              {
+                "role": "link",
+                "name": "A link alone in its paragraph",
+                "attributes": {
+                  "display": "inline",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "states": 1124075776,
+                "text": "A link alone in its paragraph",
+                "uri": "file:///root/okur/corpus/fixtures/virtual-keys.html#paragraphs",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "A link alone in its paragraph",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "A link alone in its paragraph"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Some text with ￼ and more text after it.",
+            "children": [
+              {
+                "role": "static",
+                "name": "Some text with ",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Some text with "
+              },
+              {
+                "role": "link",
+                "name": "a link inside it",
+                "attributes": {
+                  "display": "inline",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "states": 1124075776,
+                "text": "a link inside it",
+                "uri": "file:///root/okur/corpus/fixtures/virtual-keys.html#contact",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "a link inside it",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "a link inside it"
+                  }
+                ]
+              },
+              {
+                "role": "static",
+                "name": " and more text after it.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": " and more text after it."
+              }
+            ]
+          },
+          {
+            "role": "separator",
+            "attributes": {
+              "display": "block",
+              "tag": "hr",
+              "text-align": "left"
+            },
+            "states": 1124090112
+          },
+          {
+            "role": "heading",
+            "name": "Paragraphs",
+            "attributes": {
+              "display": "block",
+              "id": "paragraphs",
+              "level": "2",
+              "name-from": "contents",
+              "tag": "h2",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Paragraphs",
+            "children": [
+              {
+                "role": "static",
+                "name": "Paragraphs",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Paragraphs"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "The first paragraph has two sentences. This is the second sentence of it.",
+            "children": [
+              {
+                "role": "static",
+                "name": "The first paragraph has two sentences. This is the second sentence of it.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "The first paragraph has two sentences. This is the second sentence of it."
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "The second paragraph is short.",
+            "children": [
+              {
+                "role": "static",
+                "name": "The second paragraph is short.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "The second paragraph is short."
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "A division holds this text.",
+            "children": [
+              {
+                "role": "static",
+                "name": "A division holds this text.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "A division holds this text."
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Another division, with a span inside it.",
+            "children": [
+              {
+                "role": "static",
+                "name": "Another division, with ",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Another division, with "
+              },
+              {
+                "role": "static",
+                "name": "a span inside",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "a span inside"
+              },
+              {
+                "role": "static",
+                "name": " it.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": " it."
+              }
+            ]
+          },
+          {
+            "role": "separator",
+            "attributes": {
+              "display": "block",
+              "tag": "hr",
+              "text-align": "left"
+            },
+            "states": 1124090112
+          },
+          {
+            "role": "heading",
+            "name": "Contact",
+            "attributes": {
+              "display": "block",
+              "id": "contact",
+              "level": "2",
+              "name-from": "contents",
+              "tag": "h2",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Contact",
+            "children": [
+              {
+                "role": "static",
+                "name": "Contact",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Contact"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Write to ￼ or call.",
+            "children": [
+              {
+                "role": "static",
+                "name": "Write to ",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Write to "
+              },
+              {
+                "role": "link",
+                "name": "help@example.org",
+                "attributes": {
+                  "display": "inline",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "states": 1124075776,
+                "text": "help@example.org",
+                "uri": "mailto:help@example.org",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "help@example.org",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "help@example.org"
+                  }
+                ]
+              },
+              {
+                "role": "static",
+                "name": " or call.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": " or call."
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼ in a paragraph, and ￼ too.",
+            "children": [
+              {
+                "role": "static",
+                "attributes": {
+                  "display": "inline",
+                  "tag": "mark",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "A highlighted phrase",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "A highlighted phrase",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "A highlighted phrase"
+                  }
+                ]
+              },
+              {
+                "role": "static",
+                "name": " in a paragraph, and ",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": " in a paragraph, and "
+              },
+              {
+                "role": "static",
+                "attributes": {
+                  "display": "inline",
+                  "tag": "strong",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "bold words",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "bold words",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "bold words"
+                  }
+                ]
+              },
+              {
+                "role": "static",
+                "name": " too.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": " too."
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "A clickable division",
+            "children": [
+              {
+                "role": "static",
+                "name": "A clickable division",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "A clickable division"
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "This part flows to the lists.",
+            "children": [
+              {
+                "role": "static",
+                "name": "This part flows to the lists.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "This part flows to the lists."
+              }
+            ]
+          },
+          {
+            "role": "heading",
+            "name": "Lists",
+            "attributes": {
+              "display": "block",
+              "id": "lists",
+              "level": "2",
+              "name-from": "contents",
+              "tag": "h2",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Lists",
+            "children": [
+              {
+                "role": "static",
+                "name": "Lists",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Lists"
+              }
+            ]
+          },
+          {
+            "role": "list",
+            "attributes": {
+              "display": "block",
+              "setsize": "2",
+              "tag": "ul",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼",
+            "children": [
+              {
+                "role": "list item",
+                "attributes": {
+                  "display": "list-item",
+                  "level": "1",
+                  "posinset": "1",
+                  "setsize": "2",
+                  "tag": "li",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "• First item",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "• ",
+                    "attributes": {
+                      "display": "inline-block",
+                      "name-from": "contents",
+                      "tag": "::marker",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• "
+                  },
+                  {
+                    "role": "static",
+                    "name": "First item",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "First item"
+                  }
+                ]
+              },
+              {
+                "role": "list item",
+                "attributes": {
+                  "display": "list-item",
+                  "level": "1",
+                  "posinset": "2",
+                  "setsize": "2",
+                  "tag": "li",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "• Second item",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "• ",
+                    "attributes": {
+                      "display": "inline-block",
+                      "name-from": "contents",
+                      "tag": "::marker",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• "
+                  },
+                  {
+                    "role": "static",
+                    "name": "Second item",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Second item"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "list",
+            "attributes": {
+              "display": "block",
+              "setsize": "2",
+              "tag": "ol",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼",
+            "children": [
+              {
+                "role": "list item",
+                "attributes": {
+                  "display": "list-item",
+                  "level": "1",
+                  "posinset": "1",
+                  "setsize": "2",
+                  "tag": "li",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "1. Step one",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "1. ",
+                    "attributes": {
+                      "display": "inline-block",
+                      "name-from": "contents",
+                      "tag": "::marker",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "1. "
+                  },
+                  {
+                    "role": "static",
+                    "name": "Step one",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Step one"
+                  }
+                ]
+              },
+              {
+                "role": "list item",
+                "attributes": {
+                  "display": "list-item",
+                  "level": "1",
+                  "posinset": "2",
+                  "setsize": "2",
+                  "tag": "li",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "2. Step two",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "2. ",
+                    "attributes": {
+                      "display": "inline-block",
+                      "name-from": "contents",
+                      "tag": "::marker",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "2. "
+                  },
+                  {
+                    "role": "static",
+                    "name": "Step two",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Step two"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "footer",
+          "text-align": "left",
+          "xml-roles": "contentinfo"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "The page ends here.",
+            "children": [
+              {
+                "role": "static",
+                "name": "The page ends here.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "The page ends here."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

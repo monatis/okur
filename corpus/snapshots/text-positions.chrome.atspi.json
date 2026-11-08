@@ -1,0 +1,402 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Text Positions",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "d78ec005619f7d4cfa8bdafae63c5f6ad3cd0ef2ac1e6201cb6932bbe53c8283",
+    "captured_at_unix_ms": 1794146328916,
+    "node_count": 37,
+    "capture_ms": 109
+  },
+  "root": {
+    "role": "document web",
+    "name": "Text Positions",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼￼￼￼￼￼￼￼￼",
+    "uri": "file:///root/okur/corpus/fixtures/text-positions.html",
+    "children": [
+      {
+        "role": "heading",
+        "name": "Raised and lowered text",
+        "attributes": {
+          "display": "block",
+          "level": "1",
+          "name-from": "contents",
+          "tag": "h1",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Raised and lowered text",
+        "children": [
+          {
+            "role": "static",
+            "name": "Raised and lowered text",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Raised and lowered text"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "A plain line with nothing raised.",
+        "children": [
+          {
+            "role": "static",
+            "name": "A plain line with nothing raised.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "A plain line with nothing raised."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "A mole holds 6 × 10￼ particles.",
+        "children": [
+          {
+            "role": "static",
+            "name": "A mole holds 6 × 10",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "A mole holds 6 × 10"
+          },
+          {
+            "role": "superscript",
+            "attributes": {
+              "display": "inline",
+              "tag": "sup",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "23",
+            "children": [
+              {
+                "role": "static",
+                "name": "23",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "23"
+              }
+            ]
+          },
+          {
+            "role": "static",
+            "name": " particles.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": " particles."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "The sum runs to x￼ at most.",
+        "children": [
+          {
+            "role": "static",
+            "name": "The sum runs to x",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "The sum runs to x"
+          },
+          {
+            "role": "superscript",
+            "attributes": {
+              "display": "inline",
+              "tag": "sup",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "n",
+            "children": [
+              {
+                "role": "static",
+                "name": "n",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "n"
+              }
+            ]
+          },
+          {
+            "role": "static",
+            "name": " at most.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": " at most."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Footnote mark￼ after a word.",
+        "children": [
+          {
+            "role": "static",
+            "name": "Footnote mark",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Footnote mark"
+          },
+          {
+            "role": "superscript",
+            "attributes": {
+              "display": "inline",
+              "tag": "sup",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "a",
+            "children": [
+              {
+                "role": "static",
+                "name": "a",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "a"
+              }
+            ]
+          },
+          {
+            "role": "static",
+            "name": " after a word.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": " after a word."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "The scale uses log￼ steps.",
+        "children": [
+          {
+            "role": "static",
+            "name": "The scale uses log",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "The scale uses log"
+          },
+          {
+            "role": "subscript",
+            "attributes": {
+              "display": "inline",
+              "tag": "sub",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "10",
+            "children": [
+              {
+                "role": "static",
+                "name": "10",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "10"
+              }
+            ]
+          },
+          {
+            "role": "static",
+            "name": " steps.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": " steps."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Each term x￼ is counted once.",
+        "children": [
+          {
+            "role": "static",
+            "name": "Each term x",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Each term x"
+          },
+          {
+            "role": "subscript",
+            "attributes": {
+              "display": "inline",
+              "tag": "sub",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "i",
+            "children": [
+              {
+                "role": "static",
+                "name": "i",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "i"
+              }
+            ]
+          },
+          {
+            "role": "static",
+            "name": " is counted once.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": " is counted once."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "The entry a￼ sits in row i.",
+        "children": [
+          {
+            "role": "static",
+            "name": "The entry a",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "The entry a"
+          },
+          {
+            "role": "subscript",
+            "attributes": {
+              "display": "inline",
+              "tag": "sub",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "ij",
+            "children": [
+              {
+                "role": "static",
+                "name": "ij",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "ij"
+              }
+            ]
+          },
+          {
+            "role": "static",
+            "name": " sits in row i.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": " sits in row i."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Another plain line at the end.",
+        "children": [
+          {
+            "role": "static",
+            "name": "Another plain line at the end.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Another plain line at the end."
+          }
+        ]
+      }
+    ]
+  }
+}

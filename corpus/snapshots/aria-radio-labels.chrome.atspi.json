@@ -1,0 +1,528 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Radio Group Labels",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "c18b9b364b6ab449bfcd74832468085951dab8c490f9035fb03d5842b21ea70b",
+    "captured_at_unix_ms": 1794146178871,
+    "node_count": 36,
+    "capture_ms": 107
+  },
+  "root": {
+    "role": "document web",
+    "name": "Radio Group Labels",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼",
+    "uri": "file:///root/okur/corpus/fixtures/aria-radio-labels.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼￼￼￼￼￼￼￼",
+        "children": [
+          {
+            "role": "heading",
+            "name": "Radio group labels",
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Radio group labels",
+            "children": [
+              {
+                "role": "static",
+                "name": "Radio group labels",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Radio group labels"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Each group has its second radio button checked.",
+            "children": [
+              {
+                "role": "static",
+                "name": "Each group has its second radio button checked.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Each group has its second radio button checked."
+              }
+            ]
+          },
+          {
+            "role": "panel",
+            "name": "Hotel",
+            "attributes": {
+              "display": "block",
+              "explicit-name": "true",
+              "name-from": "related-element",
+              "setsize": "3",
+              "tag": "div",
+              "text-align": "left",
+              "xml-roles": "radiogroup"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼￼",
+            "children": [
+              {
+                "role": "heading",
+                "name": "Hotel",
+                "attributes": {
+                  "display": "block",
+                  "id": "label-h",
+                  "level": "3",
+                  "name-from": "contents",
+                  "tag": "h3",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Hotel",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Hotel",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Hotel"
+                  }
+                ]
+              },
+              {
+                "role": "radio button",
+                "name": "Hotel one",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "1",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147331328,
+                "text": "Hotel one"
+              },
+              {
+                "role": "radio button",
+                "name": "Hotel two",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "2",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147331344,
+                "text": "Hotel two"
+              },
+              {
+                "role": "radio button",
+                "name": "Hotel three",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "3",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147331328,
+                "text": "Hotel three"
+              }
+            ]
+          },
+          {
+            "role": "heading",
+            "name": "India",
+            "attributes": {
+              "display": "block",
+              "id": "label-i",
+              "level": "3",
+              "name-from": "contents",
+              "tag": "h3",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "India",
+            "children": [
+              {
+                "role": "static",
+                "name": "India",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "India"
+              }
+            ]
+          },
+          {
+            "role": "panel",
+            "name": "India",
+            "attributes": {
+              "display": "block",
+              "explicit-name": "true",
+              "name-from": "related-element",
+              "setsize": "3",
+              "tag": "div",
+              "text-align": "left",
+              "xml-roles": "radiogroup"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼",
+            "children": [
+              {
+                "role": "radio button",
+                "name": "India one",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "1",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147331328,
+                "text": "India one"
+              },
+              {
+                "role": "radio button",
+                "name": "India two",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "2",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147331344,
+                "text": "India two"
+              },
+              {
+                "role": "radio button",
+                "name": "India three",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "3",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147331328,
+                "text": "India three"
+              }
+            ]
+          },
+          {
+            "role": "panel",
+            "name": "Juliett",
+            "attributes": {
+              "display": "block",
+              "explicit-name": "true",
+              "name-from": "related-element",
+              "setsize": "3",
+              "tag": "div",
+              "text-align": "left",
+              "xml-roles": "radiogroup"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼￼",
+            "children": [
+              {
+                "role": "section",
+                "attributes": {
+                  "display": "block",
+                  "id": "label-j",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Juliett",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Juliett",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Juliett"
+                  }
+                ]
+              },
+              {
+                "role": "radio button",
+                "name": "Juliett one",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "1",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147331328,
+                "text": "Juliett one"
+              },
+              {
+                "role": "radio button",
+                "name": "Juliett two",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "2",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147331344,
+                "text": "Juliett two"
+              },
+              {
+                "role": "radio button",
+                "name": "Juliett three",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "3",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147331328,
+                "text": "Juliett three"
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "id": "label-k",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Kilo",
+            "children": [
+              {
+                "role": "static",
+                "name": "Kilo",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Kilo"
+              }
+            ]
+          },
+          {
+            "role": "panel",
+            "name": "Kilo",
+            "attributes": {
+              "display": "block",
+              "explicit-name": "true",
+              "name-from": "related-element",
+              "setsize": "3",
+              "tag": "div",
+              "text-align": "left",
+              "xml-roles": "radiogroup"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼",
+            "children": [
+              {
+                "role": "radio button",
+                "name": "Kilo one",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "1",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147331328,
+                "text": "Kilo one"
+              },
+              {
+                "role": "radio button",
+                "name": "Kilo two",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "2",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147331344,
+                "text": "Kilo two"
+              },
+              {
+                "role": "radio button",
+                "name": "Kilo three",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "3",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147331328,
+                "text": "Kilo three"
+              }
+            ]
+          },
+          {
+            "role": "panel",
+            "name": "Lima",
+            "attributes": {
+              "display": "block",
+              "explicit-name": "true",
+              "name-from": "attribute",
+              "setsize": "3",
+              "tag": "div",
+              "text-align": "left",
+              "xml-roles": "radiogroup"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼",
+            "children": [
+              {
+                "role": "radio button",
+                "name": "Lima one",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "1",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147331328,
+                "text": "Lima one"
+              },
+              {
+                "role": "radio button",
+                "name": "Lima two",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "2",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147331344,
+                "text": "Lima two"
+              },
+              {
+                "role": "radio button",
+                "name": "Lima three",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "3",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147331328,
+                "text": "Lima three"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "End of the groups.",
+            "children": [
+              {
+                "role": "static",
+                "name": "End of the groups.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "End of the groups."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

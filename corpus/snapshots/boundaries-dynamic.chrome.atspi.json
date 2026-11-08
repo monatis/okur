@@ -1,0 +1,233 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Boundaries and Dynamic Updates Fixture",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "4caaa7092df80f075b4fd5bfa8f3fbbdba558f90188e4f3711aec05dd9c71953",
+    "captured_at_unix_ms": 1794146187649,
+    "node_count": 17,
+    "capture_ms": 55
+  },
+  "root": {
+    "role": "document web",
+    "name": "Boundaries and Dynamic Updates Fixture",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼￼￼￼￼￼￼￼",
+    "uri": "file:///root/okur/corpus/fixtures/boundaries-dynamic.html",
+    "children": [
+      {
+        "role": "heading",
+        "name": "First Boundary Heading",
+        "attributes": {
+          "display": "block",
+          "level": "1",
+          "name-from": "contents",
+          "tag": "h1",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "First Boundary Heading",
+        "children": [
+          {
+            "role": "static",
+            "name": "First Boundary Heading",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "First Boundary Heading"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "First paragraph content.",
+        "children": [
+          {
+            "role": "static",
+            "name": "First paragraph content.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "First paragraph content."
+          }
+        ]
+      },
+      {
+        "role": "heading",
+        "name": "Second Boundary Heading",
+        "attributes": {
+          "display": "block",
+          "level": "2",
+          "name-from": "contents",
+          "tag": "h2",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Second Boundary Heading",
+        "children": [
+          {
+            "role": "static",
+            "name": "Second Boundary Heading",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Second Boundary Heading"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Final content paragraph on this page.",
+        "children": [
+          {
+            "role": "static",
+            "name": "Final content paragraph on this page.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Final content paragraph on this page."
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "System Details",
+        "attributes": {
+          "display": "inline-block",
+          "id": "btn-disclosure",
+          "name-from": "contents",
+          "tag": "button",
+          "text-align": "center"
+        },
+        "states": 1124076288,
+        "text": "System Details"
+      },
+      {
+        "role": "page tab list",
+        "name": "Settings",
+        "attributes": {
+          "display": "block",
+          "explicit-name": "true",
+          "name-from": "attribute",
+          "setsize": "2",
+          "tag": "div",
+          "text-align": "left",
+          "xml-roles": "tablist"
+        },
+        "states": 1124090112,
+        "text": "￼￼",
+        "children": [
+          {
+            "role": "page tab",
+            "name": "General",
+            "attributes": {
+              "display": "inline-block",
+              "id": "tab-1",
+              "name-from": "contents",
+              "posinset": "1",
+              "setsize": "2",
+              "tag": "button",
+              "text-align": "center",
+              "xml-roles": "tab"
+            },
+            "states": 1136658688,
+            "text": "General"
+          },
+          {
+            "role": "page tab",
+            "name": "Advanced",
+            "attributes": {
+              "display": "inline-block",
+              "id": "tab-2",
+              "name-from": "contents",
+              "posinset": "2",
+              "setsize": "2",
+              "tag": "button",
+              "text-align": "center",
+              "xml-roles": "tab"
+            },
+            "states": 1128270080,
+            "text": "Advanced"
+          }
+        ]
+      },
+      {
+        "role": "scroll pane",
+        "name": "General",
+        "attributes": {
+          "display": "block",
+          "explicit-name": "true",
+          "id": "panel-1",
+          "name-from": "related-element",
+          "tag": "div",
+          "text-align": "left",
+          "xml-roles": "tabpanel"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "General settings configuration content.",
+            "children": [
+              {
+                "role": "static",
+                "name": "General settings configuration content.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "General settings configuration content."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "button",
+        "name": "Footer Action",
+        "attributes": {
+          "display": "inline-block",
+          "id": "btn-footer",
+          "name-from": "contents",
+          "tag": "button",
+          "text-align": "center"
+        },
+        "states": 1124075776,
+        "text": "Footer Action"
+      }
+    ]
+  }
+}

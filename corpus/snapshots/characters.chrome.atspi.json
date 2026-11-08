@@ -1,0 +1,136 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Character Review - Characters Fixture",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "323de35dd193a55f34aebe9f855d6fa252a90154cf8ddbbf3bba54fd5b985cca",
+    "captured_at_unix_ms": 1794146192065,
+    "node_count": 10,
+    "capture_ms": 39
+  },
+  "root": {
+    "role": "document web",
+    "name": "Character Review - Characters Fixture",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼",
+    "uri": "file:///root/okur/corpus/fixtures/characters.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼",
+        "children": [
+          {
+            "role": "heading",
+            "name": "Character review",
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Character review",
+            "children": [
+              {
+                "role": "static",
+                "name": "Character review",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Character review"
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "pre",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "a !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ B\n\tx  = 1.5; a.b end.\né€—“”‘’…•→©°½çşğıİ×÷±≠≤λ 😀",
+            "children": [
+              {
+                "role": "static",
+                "name": "a !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ B\n\tx  = 1.5; a.b end.\né€—“”‘’…•→©°½çşğıİ×÷±≠≤λ 😀",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "a !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ B\n\tx  = 1.5; a.b end.\né€—“”‘’…•→©°½çşğıİ×÷±≠≤λ 😀"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼",
+            "children": [
+              {
+                "role": "label",
+                "attributes": {
+                  "display": "inline",
+                  "tag": "label",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Code",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Code",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Code"
+                  }
+                ]
+              },
+              {
+                "role": "entry",
+                "name": "Code",
+                "attributes": {
+                  "display": "inline-block",
+                  "explicit-name": "true",
+                  "id": "code",
+                  "name-from": "related-element",
+                  "tag": "textarea",
+                  "text-align": "left",
+                  "text-model": "a1"
+                },
+                "states": 276002113920,
+                "text": "a !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ B\n\tx  = 1.5; a.b end.\né€—“”‘’…•→©°½çşğıİ×÷±≠≤λ 😀"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

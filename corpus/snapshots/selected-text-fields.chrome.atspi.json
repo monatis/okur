@@ -1,0 +1,214 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Selected Text Fields",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "de915086b6952066baa348ff61b65adfcb20ca1fc90ae28bb29fbc00a9289271",
+    "captured_at_unix_ms": 1794146289407,
+    "node_count": 16,
+    "capture_ms": 51
+  },
+  "root": {
+    "role": "document web",
+    "name": "Selected Text Fields",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼",
+    "uri": "file:///root/okur/corpus/fixtures/selected-text-fields.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼￼",
+        "children": [
+          {
+            "role": "heading",
+            "name": "Selected text in fields",
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Selected text in fields",
+            "children": [
+              {
+                "role": "static",
+                "name": "Selected text in fields",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Selected text in fields"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼",
+            "children": [
+              {
+                "role": "label",
+                "attributes": {
+                  "display": "inline",
+                  "tag": "label",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "State",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "State",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "State"
+                  }
+                ]
+              },
+              {
+                "role": "entry",
+                "name": "State",
+                "attributes": {
+                  "display": "inline-block",
+                  "explicit-name": "true",
+                  "id": "state",
+                  "name-from": "related-element",
+                  "tag": "input",
+                  "text-align": "left",
+                  "text-input-type": "text",
+                  "text-model": "a1"
+                },
+                "states": 276069091712,
+                "text": "Alabama"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼",
+            "children": [
+              {
+                "role": "label",
+                "attributes": {
+                  "display": "inline",
+                  "tag": "label",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "City",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "City",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "City"
+                  }
+                ]
+              },
+              {
+                "role": "entry",
+                "name": "City",
+                "attributes": {
+                  "display": "inline-block",
+                  "explicit-name": "true",
+                  "id": "city",
+                  "name-from": "related-element",
+                  "tag": "input",
+                  "text-align": "left",
+                  "text-input-type": "text",
+                  "text-model": "a1"
+                },
+                "states": 276069091712,
+                "text": "Montgomery"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼",
+            "children": [
+              {
+                "role": "label",
+                "attributes": {
+                  "display": "inline",
+                  "tag": "label",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Zip",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Zip",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Zip"
+                  }
+                ]
+              },
+              {
+                "role": "entry",
+                "name": "Zip",
+                "attributes": {
+                  "display": "inline-block",
+                  "explicit-name": "true",
+                  "id": "zip",
+                  "name-from": "related-element",
+                  "tag": "input",
+                  "text-align": "left",
+                  "text-input-type": "text",
+                  "text-model": "a1"
+                },
+                "states": 276069091712,
+                "text": "36104"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

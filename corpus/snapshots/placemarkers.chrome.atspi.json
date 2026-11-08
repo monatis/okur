@@ -1,0 +1,223 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Reading Room Rules - Riverside Library",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "639d9fa01dc8d5f8045875b3483dfe783e44e285a7b84877d8f7e409aeecde2c",
+    "captured_at_unix_ms": 1794146272263,
+    "node_count": 18,
+    "capture_ms": 65
+  },
+  "root": {
+    "role": "document web",
+    "name": "Reading Room Rules - Riverside Library",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼",
+    "uri": "file:///root/okur/corpus/fixtures/placemarkers.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼￼￼￼￼￼",
+        "children": [
+          {
+            "role": "heading",
+            "name": "Reading room rules",
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Reading room rules",
+            "children": [
+              {
+                "role": "static",
+                "name": "Reading room rules",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Reading room rules"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Quiet study is welcome in the reading room on every floor.",
+            "children": [
+              {
+                "role": "static",
+                "name": "Quiet study is welcome in the reading room on every floor.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Quiet study is welcome in the reading room on every floor."
+              }
+            ]
+          },
+          {
+            "role": "heading",
+            "name": "Food and drink",
+            "attributes": {
+              "display": "block",
+              "level": "2",
+              "name-from": "contents",
+              "tag": "h2",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Food and drink",
+            "children": [
+              {
+                "role": "static",
+                "name": "Food and drink",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Food and drink"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Water in a closed bottle is allowed; meals are not.",
+            "children": [
+              {
+                "role": "static",
+                "name": "Water in a closed bottle is allowed; meals are not.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Water in a closed bottle is allowed; meals are not."
+              }
+            ]
+          },
+          {
+            "role": "heading",
+            "name": "Devices",
+            "attributes": {
+              "display": "block",
+              "level": "2",
+              "name-from": "contents",
+              "tag": "h2",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Devices",
+            "children": [
+              {
+                "role": "static",
+                "name": "Devices",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Devices"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Phones stay silent, and calls are taken in the lobby.",
+            "children": [
+              {
+                "role": "static",
+                "name": "Phones stay silent, and calls are taken in the lobby.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Phones stay silent, and calls are taken in the lobby."
+              }
+            ]
+          },
+          {
+            "role": "heading",
+            "name": "Opening hours",
+            "attributes": {
+              "display": "block",
+              "level": "2",
+              "name-from": "contents",
+              "tag": "h2",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Opening hours",
+            "children": [
+              {
+                "role": "static",
+                "name": "Opening hours",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Opening hours"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "The reading room opens at nine and closes at eight.",
+            "children": [
+              {
+                "role": "static",
+                "name": "The reading room opens at nine and closes at eight.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "The reading room opens at nine and closes at eight."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,1557 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "City Library Expands Evening Hours - Riverside Gazette",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "b3567efa1f8f22dfc3fbc0347978c42909d2921a59b1559fdb51dac6120b0fa4",
+    "captured_at_unix_ms": 1794146254714,
+    "node_count": 128,
+    "capture_ms": 359
+  },
+  "root": {
+    "role": "document web",
+    "name": "City Library Expands Evening Hours - Riverside Gazette",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼￼￼￼",
+    "uri": "file:///root/okur/corpus/fixtures/news-article.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "header",
+          "text-align": "left",
+          "xml-roles": "banner"
+        },
+        "states": 1124073728,
+        "text": "￼￼",
+        "children": [
+          {
+            "role": "link",
+            "name": "Riverside Gazette",
+            "attributes": {
+              "display": "inline",
+              "name-from": "contents",
+              "tag": "a",
+              "text-align": "left"
+            },
+            "states": 1124075776,
+            "text": "Riverside Gazette",
+            "uri": "file:///root/okur/corpus/fixtures/news-article.html#top",
+            "children": [
+              {
+                "role": "static",
+                "name": "Riverside Gazette",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Riverside Gazette"
+              }
+            ]
+          },
+          {
+            "role": "landmark",
+            "name": "Primary",
+            "attributes": {
+              "display": "block",
+              "explicit-name": "true",
+              "name-from": "attribute",
+              "tag": "nav",
+              "text-align": "left",
+              "xml-roles": "navigation"
+            },
+            "states": 1124073728,
+            "text": "￼",
+            "children": [
+              {
+                "role": "list",
+                "attributes": {
+                  "display": "block",
+                  "setsize": "4",
+                  "tag": "ul",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼￼￼￼",
+                "children": [
+                  {
+                    "role": "list item",
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "1",
+                      "setsize": "4",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• ￼",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "• ",
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "• "
+                      },
+                      {
+                        "role": "link",
+                        "name": "News",
+                        "attributes": {
+                          "display": "inline",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "states": 1124075776,
+                        "text": "News",
+                        "uri": "file:///root/okur/corpus/fixtures/news-article.html#news",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "News",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "News"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "role": "list item",
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "2",
+                      "setsize": "4",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• ￼",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "• ",
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "• "
+                      },
+                      {
+                        "role": "link",
+                        "name": "Sports",
+                        "attributes": {
+                          "display": "inline",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "states": 1124075776,
+                        "text": "Sports",
+                        "uri": "file:///root/okur/corpus/fixtures/news-article.html#sports",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "Sports",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "Sports"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "role": "list item",
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "3",
+                      "setsize": "4",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• ￼",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "• ",
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "• "
+                      },
+                      {
+                        "role": "link",
+                        "name": "Culture",
+                        "attributes": {
+                          "display": "inline",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "states": 1124075776,
+                        "text": "Culture",
+                        "uri": "file:///root/okur/corpus/fixtures/news-article.html#culture",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "Culture",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "Culture"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "role": "list item",
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "4",
+                      "setsize": "4",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• ￼",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "• ",
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "• "
+                      },
+                      {
+                        "role": "link",
+                        "name": "Opinion",
+                        "attributes": {
+                          "display": "inline",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "states": 1124075776,
+                        "text": "Opinion",
+                        "uri": "file:///root/okur/corpus/fixtures/news-article.html#opinion",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "Opinion",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "Opinion"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "article",
+            "attributes": {
+              "display": "block",
+              "tag": "article",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼￼￼￼￼￼￼￼￼￼￼",
+            "children": [
+              {
+                "role": "heading",
+                "name": "City Library Expands Evening Hours",
+                "attributes": {
+                  "display": "block",
+                  "level": "1",
+                  "name-from": "contents",
+                  "tag": "h1",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "City Library Expands Evening Hours",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "City Library Expands Evening Hours",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "City Library Expands Evening Hours"
+                  }
+                ]
+              },
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "By ￼, published ￼",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "By ",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "By "
+                  },
+                  {
+                    "role": "link",
+                    "name": "Maria Lopez",
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1124075776,
+                    "text": "Maria Lopez",
+                    "uri": "file:///root/okur/corpus/fixtures/news-article.html#author",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Maria Lopez",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Maria Lopez"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "static",
+                    "name": ", published ",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": ", published "
+                  },
+                  {
+                    "role": "static",
+                    "attributes": {
+                      "datetime": "2026-03-14",
+                      "display": "inline",
+                      "tag": "time",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "March 14, 2026",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "March 14, 2026",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "March 14, 2026"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "The Riverside City Library will stay open until ￼ on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which ￼ respondents asked for later hours.",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "The Riverside City Library will stay open until ",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "The Riverside City Library will stay open until "
+                  },
+                  {
+                    "role": "static",
+                    "attributes": {
+                      "display": "inline",
+                      "tag": "strong",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "9 p.m.",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "9 p.m.",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "9 p.m."
+                      }
+                    ]
+                  },
+                  {
+                    "role": "static",
+                    "name": " on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which ",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": " on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which "
+                  },
+                  {
+                    "role": "static",
+                    "attributes": {
+                      "display": "inline",
+                      "tag": "em",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "most",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "most",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "most"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "static",
+                    "name": " respondents asked for later hours.",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": " respondents asked for later hours."
+                  }
+                ]
+              },
+              {
+                "role": "image",
+                "name": "Front entrance of the Riverside City Library at dusk",
+                "attributes": {
+                  "display": "inline",
+                  "explicit-name": "true",
+                  "name-from": "attribute",
+                  "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60'%3E%3Crect width='120' height='60' fill='%23468'/%3E%3C/svg%3E",
+                  "tag": "img",
+                  "text-align": "left"
+                },
+                "states": 1124073728
+              },
+              {
+                "role": "heading",
+                "name": "What changes",
+                "attributes": {
+                  "display": "block",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "What changes",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "What changes",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "What changes"
+                  }
+                ]
+              },
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Membership costs $5.99 a month, e.g. for adults; children join free. Questions go to help@riverside-library.org — or call 555-0142. Attendance rose 3.5% last year, and staff say they can't wait.",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Membership costs $5.99 a month, e.g. for adults; children join free. Questions go to help@riverside-library.org — or call 555-0142. Attendance rose 3.5% last year, and staff say they can't wait.",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Membership costs $5.99 a month, e.g. for adults; children join free. Questions go to help@riverside-library.org — or call 555-0142. Attendance rose 3.5% last year, and staff say they can't wait."
+                  }
+                ]
+              },
+              {
+                "role": "list",
+                "attributes": {
+                  "display": "block",
+                  "setsize": "3",
+                  "tag": "ul",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼￼￼",
+                "children": [
+                  {
+                    "role": "list item",
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "1",
+                      "setsize": "3",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• Weekday hours: 9 a.m. to 9 p.m.",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "• ",
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "• "
+                      },
+                      {
+                        "role": "static",
+                        "name": "Weekday hours: 9 a.m. to 9 p.m.",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Weekday hours: 9 a.m. to 9 p.m."
+                      }
+                    ]
+                  },
+                  {
+                    "role": "list item",
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "2",
+                      "setsize": "3",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• Weekend hours, which do not change:￼",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "• ",
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "• "
+                      },
+                      {
+                        "role": "static",
+                        "name": "Weekend hours, which do not change:",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Weekend hours, which do not change:"
+                      },
+                      {
+                        "role": "list",
+                        "attributes": {
+                          "display": "block",
+                          "setsize": "2",
+                          "tag": "ul",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "￼￼",
+                        "children": [
+                          {
+                            "role": "list item",
+                            "attributes": {
+                              "display": "list-item",
+                              "level": "2",
+                              "posinset": "1",
+                              "setsize": "2",
+                              "tag": "li",
+                              "text-align": "left"
+                            },
+                            "states": 1124073728,
+                            "text": "◦ Saturday: 10 a.m. to 6 p.m.",
+                            "children": [
+                              {
+                                "role": "static",
+                                "name": "◦ ",
+                                "attributes": {
+                                  "display": "inline-block",
+                                  "name-from": "contents",
+                                  "tag": "::marker",
+                                  "text-align": "left"
+                                },
+                                "states": 1124073728,
+                                "text": "◦ "
+                              },
+                              {
+                                "role": "static",
+                                "name": "Saturday: 10 a.m. to 6 p.m.",
+                                "attributes": {
+                                  "name-from": "contents"
+                                },
+                                "states": 1124073728,
+                                "text": "Saturday: 10 a.m. to 6 p.m."
+                              }
+                            ]
+                          },
+                          {
+                            "role": "list item",
+                            "attributes": {
+                              "display": "list-item",
+                              "level": "2",
+                              "posinset": "2",
+                              "setsize": "2",
+                              "tag": "li",
+                              "text-align": "left"
+                            },
+                            "states": 1124073728,
+                            "text": "◦ Sunday: noon to 5 p.m.",
+                            "children": [
+                              {
+                                "role": "static",
+                                "name": "◦ ",
+                                "attributes": {
+                                  "display": "inline-block",
+                                  "name-from": "contents",
+                                  "tag": "::marker",
+                                  "text-align": "left"
+                                },
+                                "states": 1124073728,
+                                "text": "◦ "
+                              },
+                              {
+                                "role": "static",
+                                "name": "Sunday: noon to 5 p.m.",
+                                "attributes": {
+                                  "name-from": "contents"
+                                },
+                                "states": 1124073728,
+                                "text": "Sunday: noon to 5 p.m."
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "role": "list item",
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "3",
+                      "setsize": "3",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• New ￼ open in May.",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "• ",
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "• "
+                      },
+                      {
+                        "role": "static",
+                        "name": "New ",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "New "
+                      },
+                      {
+                        "role": "link",
+                        "name": "study rooms",
+                        "attributes": {
+                          "display": "inline",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "states": 1124075776,
+                        "text": "study rooms",
+                        "uri": "file:///root/okur/corpus/fixtures/news-article.html#study-rooms",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "study rooms",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "study rooms"
+                          }
+                        ]
+                      },
+                      {
+                        "role": "static",
+                        "name": " open in May.",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": " open in May."
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "heading",
+                "name": "Opening schedule",
+                "attributes": {
+                  "display": "block",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Opening schedule",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Opening schedule",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Opening schedule"
+                  }
+                ]
+              },
+              {
+                "role": "table",
+                "name": "Branch hours after the change",
+                "attributes": {
+                  "display": "table",
+                  "explicit-name": "true",
+                  "name-from": "caption",
+                  "tag": "table",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼￼￼￼",
+                "children": [
+                  {
+                    "role": "caption",
+                    "attributes": {
+                      "display": "table-caption",
+                      "tag": "caption",
+                      "text-align": "center"
+                    },
+                    "states": 1124073728,
+                    "text": "Branch hours after the change",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Branch hours after the change",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Branch hours after the change"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "table row",
+                    "attributes": {
+                      "display": "table-row",
+                      "tag": "tr",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "￼￼￼",
+                    "children": [
+                      {
+                        "role": "column header",
+                        "name": "Branch",
+                        "attributes": {
+                          "display": "table-cell",
+                          "name-from": "contents",
+                          "table-cell-index": "0",
+                          "tag": "th",
+                          "text-align": "center"
+                        },
+                        "states": 1124073728,
+                        "text": "Branch",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "Branch",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "Branch"
+                          }
+                        ]
+                      },
+                      {
+                        "role": "column header",
+                        "name": "Weekdays",
+                        "attributes": {
+                          "display": "table-cell",
+                          "name-from": "contents",
+                          "table-cell-index": "1",
+                          "tag": "th",
+                          "text-align": "center"
+                        },
+                        "states": 1124073728,
+                        "text": "Weekdays",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "Weekdays",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "Weekdays"
+                          }
+                        ]
+                      },
+                      {
+                        "role": "column header",
+                        "name": "Details",
+                        "attributes": {
+                          "display": "table-cell",
+                          "name-from": "contents",
+                          "table-cell-index": "2",
+                          "tag": "th",
+                          "text-align": "center"
+                        },
+                        "states": 1124073728,
+                        "text": "Details",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "Details",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "Details"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "role": "table row",
+                    "attributes": {
+                      "display": "table-row",
+                      "tag": "tr",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "￼￼￼",
+                    "children": [
+                      {
+                        "role": "row header",
+                        "name": "Central",
+                        "attributes": {
+                          "display": "table-cell",
+                          "name-from": "contents",
+                          "table-cell-index": "3",
+                          "tag": "th",
+                          "text-align": "center"
+                        },
+                        "states": 1124073728,
+                        "text": "Central",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "Central",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "Central"
+                          }
+                        ]
+                      },
+                      {
+                        "role": "table cell",
+                        "name": "9 a.m. to 9 p.m.",
+                        "attributes": {
+                          "display": "table-cell",
+                          "name-from": "contents",
+                          "table-cell-index": "4",
+                          "tag": "td",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "9 a.m. to 9 p.m.",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "9 a.m. to 9 p.m.",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "9 a.m. to 9 p.m."
+                          }
+                        ]
+                      },
+                      {
+                        "role": "table cell",
+                        "name": "Directions",
+                        "attributes": {
+                          "display": "table-cell",
+                          "name-from": "contents",
+                          "table-cell-index": "5",
+                          "tag": "td",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "￼",
+                        "children": [
+                          {
+                            "role": "link",
+                            "name": "Directions",
+                            "attributes": {
+                              "display": "inline",
+                              "name-from": "contents",
+                              "tag": "a",
+                              "text-align": "left"
+                            },
+                            "states": 1124075776,
+                            "text": "Directions",
+                            "uri": "file:///root/okur/corpus/fixtures/news-article.html#central",
+                            "children": [
+                              {
+                                "role": "static",
+                                "name": "Directions",
+                                "attributes": {
+                                  "name-from": "contents"
+                                },
+                                "states": 1124073728,
+                                "text": "Directions"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "role": "table row",
+                    "attributes": {
+                      "display": "table-row",
+                      "tag": "tr",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "￼￼￼",
+                    "children": [
+                      {
+                        "role": "row header",
+                        "name": "Northside",
+                        "attributes": {
+                          "display": "table-cell",
+                          "name-from": "contents",
+                          "table-cell-index": "6",
+                          "tag": "th",
+                          "text-align": "center"
+                        },
+                        "states": 1124073728,
+                        "text": "Northside",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "Northside",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "Northside"
+                          }
+                        ]
+                      },
+                      {
+                        "role": "table cell",
+                        "name": "10 a.m. to 8 p.m.",
+                        "attributes": {
+                          "display": "table-cell",
+                          "name-from": "contents",
+                          "table-cell-index": "7",
+                          "tag": "td",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "10 a.m. to 8 p.m.",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "10 a.m. to 8 p.m.",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "10 a.m. to 8 p.m."
+                          }
+                        ]
+                      },
+                      {
+                        "role": "table cell",
+                        "name": "Directions",
+                        "attributes": {
+                          "display": "table-cell",
+                          "name-from": "contents",
+                          "table-cell-index": "8",
+                          "tag": "td",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "￼",
+                        "children": [
+                          {
+                            "role": "link",
+                            "name": "Directions",
+                            "attributes": {
+                              "display": "inline",
+                              "name-from": "contents",
+                              "tag": "a",
+                              "text-align": "left"
+                            },
+                            "states": 1124075776,
+                            "text": "Directions",
+                            "uri": "file:///root/okur/corpus/fixtures/news-article.html#northside",
+                            "children": [
+                              {
+                                "role": "static",
+                                "name": "Directions",
+                                "attributes": {
+                                  "name-from": "contents"
+                                },
+                                "states": 1124073728,
+                                "text": "Directions"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "heading",
+                "name": "What readers said",
+                "attributes": {
+                  "display": "block",
+                  "level": "3",
+                  "name-from": "contents",
+                  "tag": "h3",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "What readers said",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "What readers said",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "What readers said"
+                  }
+                ]
+              },
+              {
+                "role": "block quote",
+                "attributes": {
+                  "display": "block",
+                  "tag": "blockquote",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼",
+                "children": [
+                  {
+                    "role": "paragraph",
+                    "attributes": {
+                      "display": "block",
+                      "tag": "p",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "Finally, I can study after work.",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Finally, I can study after work.",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Finally, I can study after work."
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "The library board will review attendance in the fall. A long-standing complaint among students and working parents was that the reading rooms closed before most people finished their day, so the extended schedule is intended to make the collections, the public computers, and the quiet study spaces available at the times when the community actually needs them, according to the library director.",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "The library board will review attendance in the fall. A long-standing complaint among students and working parents was that the reading rooms closed before most people finished their day, so the extended schedule is intended to make the collections, the public computers, and the quiet study spaces available at the times when the community actually needs them, according to the library director.",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "The library board will review attendance in the fall. A long-standing complaint among students and working parents was that the reading rooms closed before most people finished their day, so the extended schedule is intended to make the collections, the public computers, and the quiet study spaces available at the times when the community actually needs them, according to the library director."
+                  }
+                ]
+              },
+              {
+                "role": "list",
+                "attributes": {
+                  "display": "block",
+                  "setsize": "3",
+                  "tag": "ol",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼￼￼",
+                "children": [
+                  {
+                    "role": "list item",
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "1",
+                      "setsize": "3",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "1. Board vote in March",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "1. ",
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "1. "
+                      },
+                      {
+                        "role": "static",
+                        "name": "Board vote in March",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Board vote in March"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "list item",
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "2",
+                      "setsize": "3",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "2. Hiring in April",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "2. ",
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "2. "
+                      },
+                      {
+                        "role": "static",
+                        "name": "Hiring in April",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Hiring in April"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "list item",
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "3",
+                      "setsize": "3",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "states": 1090519296,
+                    "text": "3. Review in October",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "3. ",
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "states": 1090519296,
+                        "text": "3. "
+                      },
+                      {
+                        "role": "static",
+                        "name": "Review in October",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1090519296,
+                        "text": "Review in October"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "landmark",
+        "name": "Related stories",
+        "attributes": {
+          "display": "block",
+          "explicit-name": "true",
+          "name-from": "attribute",
+          "tag": "aside",
+          "text-align": "left",
+          "xml-roles": "complementary"
+        },
+        "states": 1090519296,
+        "text": "￼￼",
+        "children": [
+          {
+            "role": "heading",
+            "name": "Related stories",
+            "attributes": {
+              "display": "block",
+              "level": "2",
+              "name-from": "contents",
+              "tag": "h2",
+              "text-align": "left"
+            },
+            "states": 1090519296,
+            "text": "Related stories",
+            "children": [
+              {
+                "role": "static",
+                "name": "Related stories",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1090519296,
+                "text": "Related stories"
+              }
+            ]
+          },
+          {
+            "role": "list",
+            "attributes": {
+              "display": "block",
+              "setsize": "2",
+              "tag": "ul",
+              "text-align": "left"
+            },
+            "states": 1090519296,
+            "text": "￼￼",
+            "children": [
+              {
+                "role": "list item",
+                "attributes": {
+                  "display": "list-item",
+                  "level": "1",
+                  "posinset": "1",
+                  "setsize": "2",
+                  "tag": "li",
+                  "text-align": "left"
+                },
+                "states": 1090519296,
+                "text": "• ￼",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "• ",
+                    "attributes": {
+                      "display": "inline-block",
+                      "name-from": "contents",
+                      "tag": "::marker",
+                      "text-align": "left"
+                    },
+                    "states": 1090519296,
+                    "text": "• "
+                  },
+                  {
+                    "role": "link",
+                    "name": "Council approves library budget",
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1090521344,
+                    "text": "Council approves library budget",
+                    "uri": "file:///root/okur/corpus/fixtures/news-article.html#budget",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Council approves library budget",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1090519296,
+                        "text": "Council approves library budget"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "list item",
+                "attributes": {
+                  "display": "list-item",
+                  "level": "1",
+                  "posinset": "2",
+                  "setsize": "2",
+                  "tag": "li",
+                  "text-align": "left"
+                },
+                "states": 1090519296,
+                "text": "• ￼",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "• ",
+                    "attributes": {
+                      "display": "inline-block",
+                      "name-from": "contents",
+                      "tag": "::marker",
+                      "text-align": "left"
+                    },
+                    "states": 1090519296,
+                    "text": "• "
+                  },
+                  {
+                    "role": "link",
+                    "name": "Spring book fair returns",
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1090521344,
+                    "text": "Spring book fair returns",
+                    "uri": "file:///root/okur/corpus/fixtures/news-article.html#bookfair",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Spring book fair returns",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1090519296,
+                        "text": "Spring book fair returns"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "footer",
+          "text-align": "left",
+          "xml-roles": "contentinfo"
+        },
+        "states": 1090519296,
+        "text": "￼",
+        "children": [
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1090519296,
+            "text": "© 2026 Riverside Gazette. ￼",
+            "children": [
+              {
+                "role": "static",
+                "name": "© 2026 Riverside Gazette. ",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1090519296,
+                "text": "© 2026 Riverside Gazette. "
+              },
+              {
+                "role": "link",
+                "name": "Contact us",
+                "attributes": {
+                  "display": "inline",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "states": 1090521344,
+                "text": "Contact us",
+                "uri": "file:///root/okur/corpus/fixtures/news-article.html#contact",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Contact us",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1090519296,
+                    "text": "Contact us"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

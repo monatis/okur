@@ -1,0 +1,72 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Phonetic Alphabet - Reading Fixture",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "162059c1d28ae1fbcdf8c4205d08b1e579aac5b3579a4f9e1d7f34b3dde40039",
+    "captured_at_unix_ms": 1794146267902,
+    "node_count": 5,
+    "capture_ms": 20
+  },
+  "root": {
+    "role": "document web",
+    "name": "Phonetic Alphabet - Reading Fixture",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼￼",
+    "uri": "file:///root/okur/corpus/fixtures/phonetic-alphabet.html",
+    "children": [
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "abcdefghijklmnopqrstuvwxyz",
+        "children": [
+          {
+            "role": "static",
+            "name": "abcdefghijklmnopqrstuvwxyz",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "abcdefghijklmnopqrstuvwxyz"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "ABC",
+        "children": [
+          {
+            "role": "static",
+            "name": "ABC",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "ABC"
+          }
+        ]
+      }
+    ]
+  }
+}

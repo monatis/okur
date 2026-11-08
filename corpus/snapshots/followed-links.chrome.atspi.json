@@ -1,0 +1,254 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Library News - Riverside Library",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "ec88eef2075c2776865de1d013b707cf40154f214a242ea5f16adecf2ff5663d",
+    "captured_at_unix_ms": 1794146237285,
+    "node_count": 19,
+    "capture_ms": 58
+  },
+  "root": {
+    "role": "document web",
+    "name": "Library News - Riverside Library",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼",
+    "uri": "file:///root/okur/corpus/fixtures/followed-links.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼",
+        "children": [
+          {
+            "role": "heading",
+            "name": "Library news",
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Library news",
+            "children": [
+              {
+                "role": "static",
+                "name": "Library news",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Library news"
+              }
+            ]
+          },
+          {
+            "role": "list",
+            "attributes": {
+              "display": "block",
+              "setsize": "3",
+              "tag": "ul",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼",
+            "children": [
+              {
+                "role": "list item",
+                "attributes": {
+                  "display": "list-item",
+                  "level": "1",
+                  "posinset": "1",
+                  "setsize": "3",
+                  "tag": "li",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "• ￼",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "• ",
+                    "attributes": {
+                      "display": "inline-block",
+                      "name-from": "contents",
+                      "tag": "::marker",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• "
+                  },
+                  {
+                    "role": "link",
+                    "name": "City Library Expands Evening Hours",
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1124075776,
+                    "text": "City Library Expands Evening Hours",
+                    "uri": "file:///root/okur/corpus/fixtures/news-article.html",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "City Library Expands Evening Hours",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "City Library Expands Evening Hours"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "list item",
+                "attributes": {
+                  "display": "list-item",
+                  "level": "1",
+                  "posinset": "2",
+                  "setsize": "3",
+                  "tag": "li",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "• ￼",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "• ",
+                    "attributes": {
+                      "display": "inline-block",
+                      "name-from": "contents",
+                      "tag": "::marker",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• "
+                  },
+                  {
+                    "role": "link",
+                    "name": "Spring catalog",
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1124075776,
+                    "text": "Spring catalog",
+                    "uri": "file:///root/okur/corpus/fixtures/never-opened-catalog.html",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Spring catalog",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Spring catalog"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "list item",
+                "attributes": {
+                  "display": "list-item",
+                  "level": "1",
+                  "posinset": "3",
+                  "setsize": "3",
+                  "tag": "li",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "• ￼",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "• ",
+                    "attributes": {
+                      "display": "inline-block",
+                      "name-from": "contents",
+                      "tag": "::marker",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• "
+                  },
+                  {
+                    "role": "link",
+                    "name": "Volunteer form",
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1124075776,
+                    "text": "Volunteer form",
+                    "uri": "file:///root/okur/corpus/fixtures/never-opened-volunteers.html",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Volunteer form",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Volunteer form"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Follow a story to read it in full.",
+            "children": [
+              {
+                "role": "static",
+                "name": "Follow a story to read it in full.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Follow a story to read it in full."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

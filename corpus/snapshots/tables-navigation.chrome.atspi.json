@@ -1,0 +1,522 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Tables Navigation Reference Fixture",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "685ca0b777b5b0184d58c505d3161eb348ec6356d7f5b27ad25eddaccdc03c86",
+    "captured_at_unix_ms": 1794146320072,
+    "node_count": 42,
+    "capture_ms": 123
+  },
+  "root": {
+    "role": "document web",
+    "name": "Tables Navigation Reference Fixture",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼￼",
+    "uri": "file:///root/okur/corpus/fixtures/tables-navigation.html",
+    "children": [
+      {
+        "role": "heading",
+        "name": "Quarterly Financial Summary",
+        "attributes": {
+          "display": "block",
+          "level": "1",
+          "name-from": "contents",
+          "tag": "h1",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Quarterly Financial Summary",
+        "children": [
+          {
+            "role": "static",
+            "name": "Quarterly Financial Summary",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Quarterly Financial Summary"
+          }
+        ]
+      },
+      {
+        "role": "table",
+        "name": "Q3 Financial Summary Table",
+        "attributes": {
+          "display": "table",
+          "explicit-name": "true",
+          "name-from": "caption",
+          "tag": "table",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼￼￼",
+        "children": [
+          {
+            "role": "caption",
+            "attributes": {
+              "display": "table-caption",
+              "tag": "caption",
+              "text-align": "center"
+            },
+            "states": 1124073728,
+            "text": "Q3 Financial Summary Table",
+            "children": [
+              {
+                "role": "static",
+                "name": "Q3 Financial Summary Table",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Q3 Financial Summary Table"
+              }
+            ]
+          },
+          {
+            "role": "table row",
+            "attributes": {
+              "display": "table-row",
+              "tag": "tr",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼￼",
+            "children": [
+              {
+                "role": "column header",
+                "name": "Quarter",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "0",
+                  "tag": "th",
+                  "text-align": "center"
+                },
+                "states": 1124073728,
+                "text": "Quarter",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Quarter",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Quarter"
+                  }
+                ]
+              },
+              {
+                "role": "column header",
+                "name": "Revenue",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "1",
+                  "tag": "th",
+                  "text-align": "center"
+                },
+                "states": 1124073728,
+                "text": "Revenue",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Revenue",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Revenue"
+                  }
+                ]
+              },
+              {
+                "role": "column header",
+                "name": "Expenses",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "2",
+                  "tag": "th",
+                  "text-align": "center"
+                },
+                "states": 1124073728,
+                "text": "Expenses",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Expenses",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Expenses"
+                  }
+                ]
+              },
+              {
+                "role": "column header",
+                "name": "Profit",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "3",
+                  "tag": "th",
+                  "text-align": "center"
+                },
+                "states": 1124073728,
+                "text": "Profit",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Profit",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Profit"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "table row",
+            "attributes": {
+              "display": "table-row",
+              "tag": "tr",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼￼",
+            "children": [
+              {
+                "role": "row header",
+                "name": "Q1",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "4",
+                  "tag": "th",
+                  "text-align": "center"
+                },
+                "states": 1124073728,
+                "text": "Q1",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Q1",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Q1"
+                  }
+                ]
+              },
+              {
+                "role": "table cell",
+                "name": "$10,000",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "5",
+                  "tag": "td",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "$10,000",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "$10,000",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "$10,000"
+                  }
+                ]
+              },
+              {
+                "role": "table cell",
+                "name": "$7,000",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "6",
+                  "tag": "td",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "$7,000",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "$7,000",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "$7,000"
+                  }
+                ]
+              },
+              {
+                "role": "table cell",
+                "name": "$3\u0002�{.���00",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "7",
+                  "tag": "td",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "$3\u0002�{.���00",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "$3\u0002�{.���00",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "$3\u0002�{.���00"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "table row",
+            "attributes": {
+              "display": "table-row",
+              "tag": "tr",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼￼",
+            "children": [
+              {
+                "role": "row header",
+                "name": "Q2",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "8",
+                  "tag": "th",
+                  "text-align": "center"
+                },
+                "states": 1124073728,
+                "text": "Q2",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Q2",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Q2"
+                  }
+                ]
+              },
+              {
+                "role": "table cell",
+                "name": "$14,000",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "9",
+                  "tag": "td",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "$14,000",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "$14,000",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "$14,000"
+                  }
+                ]
+              },
+              {
+                "role": "table cell",
+                "name": "$8,500",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "10",
+                  "tag": "td",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "$8,500",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "$8,500",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "$8,500"
+                  }
+                ]
+              },
+              {
+                "role": "table cell",
+                "name": "$5,500",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "11",
+                  "tag": "td",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "$5,500",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "$5,500",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "$5,500"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "table row",
+            "attributes": {
+              "display": "table-row",
+              "tag": "tr",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼￼",
+            "children": [
+              {
+                "role": "row header",
+                "name": "Q3",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "12",
+                  "tag": "th",
+                  "text-align": "center"
+                },
+                "states": 1124073728,
+                "text": "Q3",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Q3",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Q3"
+                  }
+                ]
+              },
+              {
+                "role": "table cell",
+                "name": "$18,000",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "13",
+                  "tag": "td",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "$18,000",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "$18,000",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "$18,000"
+                  }
+                ]
+              },
+              {
+                "role": "table cell",
+                "name": "$9,200",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "14",
+                  "tag": "td",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "$9,200",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "$9,200",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "$9,200"
+                  }
+                ]
+              },
+              {
+                "role": "table cell",
+                "name": "$8,800",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "15",
+                  "tag": "td",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "$8,800",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "$8,800",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "$8,800"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

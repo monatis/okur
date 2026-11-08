@@ -1,0 +1,263 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Türkçe Metin",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "5ee3058dcc516736010abbe605ad519cf7f9203b95c61190e6817e5f69ad4da6",
+    "captured_at_unix_ms": 1794146333138,
+    "node_count": 21,
+    "capture_ms": 60
+  },
+  "root": {
+    "role": "document web",
+    "name": "Türkçe Metin",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼￼￼￼￼￼￼",
+    "uri": "file:///root/okur/corpus/fixtures/turkish-text.html",
+    "children": [
+      {
+        "role": "heading",
+        "name": "Çağrı ve Işık",
+        "attributes": {
+          "display": "block",
+          "level": "1",
+          "name-from": "contents",
+          "tag": "h1",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Çağrı ve Işık",
+        "children": [
+          {
+            "role": "static",
+            "name": "Çağrı ve Işık",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Çağrı ve Işık"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Şehirde ılık bir öğleden sonra.",
+        "children": [
+          {
+            "role": "static",
+            "name": "Şehirde ılık bir öğleden sonra.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Şehirde ılık bir öğleden sonra."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "İstanbul, Ödemiş, Ünye, Ağrı",
+        "children": [
+          {
+            "role": "static",
+            "name": "İstanbul, Ödemiş, Ünye, Ağrı",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "İstanbul, Ödemiş, Ünye, Ağrı"
+          }
+        ]
+      },
+      {
+        "role": "list",
+        "attributes": {
+          "display": "block",
+          "setsize": "2",
+          "tag": "ul",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼￼",
+        "children": [
+          {
+            "role": "list item",
+            "attributes": {
+              "display": "list-item",
+              "level": "1",
+              "posinset": "1",
+              "setsize": "2",
+              "tag": "li",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "• çiğ börek",
+            "children": [
+              {
+                "role": "static",
+                "name": "• ",
+                "attributes": {
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "::marker",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "• "
+              },
+              {
+                "role": "static",
+                "name": "çiğ börek",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "çiğ börek"
+              }
+            ]
+          },
+          {
+            "role": "list item",
+            "attributes": {
+              "display": "list-item",
+              "level": "1",
+              "posinset": "2",
+              "setsize": "2",
+              "tag": "li",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "• şeker",
+            "children": [
+              {
+                "role": "static",
+                "name": "• ",
+                "attributes": {
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "::marker",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "• "
+              },
+              {
+                "role": "static",
+                "name": "şeker",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "şeker"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "link",
+            "name": "Sonraki bölüm",
+            "attributes": {
+              "display": "inline",
+              "name-from": "contents",
+              "tag": "a",
+              "text-align": "left"
+            },
+            "states": 1124075776,
+            "text": "Sonraki bölüm",
+            "uri": "file:///root/okur/corpus/fixtures/turkish-text.html#son",
+            "children": [
+              {
+                "role": "static",
+                "name": "Sonraki bölüm",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Sonraki bölüm"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "heading",
+        "name": "Son",
+        "attributes": {
+          "display": "block",
+          "id": "son",
+          "level": "2",
+          "name-from": "contents",
+          "tag": "h2",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Son",
+        "children": [
+          {
+            "role": "static",
+            "name": "Son",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Son"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "ÇĞİÖŞÜ çğıöşü",
+        "children": [
+          {
+            "role": "static",
+            "name": "ÇĞİÖŞÜ çğıöşü",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "ÇĞİÖŞÜ çğıöşü"
+          }
+        ]
+      }
+    ]
+  }
+}

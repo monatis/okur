@@ -1,0 +1,188 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Web Menus",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "e142e5ba076ebe9ea2a177900f98de0d8d7e62135005e4bd10bad01f92eac4da",
+    "captured_at_unix_ms": 1794146355323,
+    "node_count": 13,
+    "capture_ms": 42
+  },
+  "root": {
+    "role": "document web",
+    "name": "Web Menus",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼￼￼￼￼",
+    "uri": "file:///root/okur/corpus/fixtures/web-menus.html",
+    "children": [
+      {
+        "role": "heading",
+        "name": "Web Menus",
+        "attributes": {
+          "display": "block",
+          "level": "1",
+          "name-from": "contents",
+          "tag": "h1",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Web Menus",
+        "children": [
+          {
+            "role": "static",
+            "name": "Web Menus",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Web Menus"
+          }
+        ]
+      },
+      {
+        "role": "menu bar",
+        "name": "Main menu",
+        "attributes": {
+          "display": "flex",
+          "explicit-name": "true",
+          "name-from": "attribute",
+          "setsize": "3",
+          "tag": "ul",
+          "text-align": "left",
+          "xml-roles": "menubar"
+        },
+        "states": 1124090112,
+        "text": "￼￼￼",
+        "children": [
+          {
+            "role": "menu item",
+            "name": "File",
+            "attributes": {
+              "display": "inline",
+              "haspopup": "menu",
+              "name-from": "contents",
+              "posinset": "1",
+              "setsize": "3",
+              "tag": "span",
+              "text-align": "left",
+              "xml-roles": "menuitem"
+            },
+            "states": 4399170587392,
+            "text": "File"
+          },
+          {
+            "role": "menu item",
+            "name": "Edit",
+            "attributes": {
+              "display": "inline",
+              "haspopup": "menu",
+              "name-from": "contents",
+              "posinset": "2",
+              "setsize": "3",
+              "tag": "span",
+              "text-align": "left",
+              "xml-roles": "menuitem"
+            },
+            "states": 4399170587392,
+            "text": "Edit"
+          },
+          {
+            "role": "menu item",
+            "name": "Help",
+            "attributes": {
+              "display": "inline",
+              "name-from": "contents",
+              "posinset": "3",
+              "setsize": "3",
+              "tag": "span",
+              "text-align": "left",
+              "xml-roles": "menuitem"
+            },
+            "states": 1124075776,
+            "text": "Help"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "label",
+            "attributes": {
+              "display": "inline",
+              "tag": "label",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Notes",
+            "children": [
+              {
+                "role": "static",
+                "name": "Notes",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Notes"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "entry",
+        "name": "Notes",
+        "attributes": {
+          "display": "inline-block",
+          "explicit-name": "true",
+          "id": "editor",
+          "name-from": "related-element",
+          "tag": "textarea",
+          "text-align": "left",
+          "text-model": "a1"
+        },
+        "states": 276002113920,
+        "text": "First line of notes."
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "id": "chosen",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Chosen: none",
+        "children": [
+          {
+            "role": "static",
+            "name": "Chosen: none",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Chosen: none"
+          }
+        ]
+      }
+    ]
+  }
+}

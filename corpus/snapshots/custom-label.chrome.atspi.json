@@ -1,0 +1,154 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Book Pickup - Riverside Library",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "27916f23f111a301e8c331dd1f684792ab3feb50f5ed8bb81bc3b610a164e2c7",
+    "captured_at_unix_ms": 1794146215263,
+    "node_count": 11,
+    "capture_ms": 38
+  },
+  "root": {
+    "role": "document web",
+    "name": "Book Pickup - Riverside Library",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼",
+    "uri": "file:///root/okur/corpus/fixtures/custom-label.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼￼",
+        "children": [
+          {
+            "role": "heading",
+            "name": "Book pickup",
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Book pickup",
+            "children": [
+              {
+                "role": "static",
+                "name": "Book pickup",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Book pickup"
+              }
+            ]
+          },
+          {
+            "role": "form",
+            "attributes": {
+              "display": "block",
+              "tag": "form",
+              "text-align": "left",
+              "xml-roles": "form"
+            },
+            "states": 1124073728,
+            "text": "￼￼",
+            "children": [
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼￼",
+                "children": [
+                  {
+                    "role": "label",
+                    "attributes": {
+                      "display": "inline",
+                      "tag": "label",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "Branch",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Branch",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Branch"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "entry",
+                    "name": "Branch",
+                    "attributes": {
+                      "display": "inline-block",
+                      "explicit-name": "true",
+                      "html-input-name": "pickup-branch",
+                      "id": "pickup-branch",
+                      "name-from": "related-element",
+                      "tag": "input",
+                      "text-align": "left",
+                      "text-input-type": "text",
+                      "text-model": "a1"
+                    },
+                    "states": 276069091712
+                  }
+                ]
+              },
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼",
+                "children": [
+                  {
+                    "role": "button",
+                    "name": "Reserve",
+                    "attributes": {
+                      "display": "inline-block",
+                      "id": "reserve",
+                      "name-from": "contents",
+                      "tag": "button",
+                      "text-align": "center"
+                    },
+                    "states": 1124075776,
+                    "text": "Reserve"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

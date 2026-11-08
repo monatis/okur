@@ -1,0 +1,743 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Radio Group Variants",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "c074ae9edb3e8353813ebea09f72136e1f6fb88e818e8266edb5dae156360ae9",
+    "captured_at_unix_ms": 1794146183279,
+    "node_count": 50,
+    "capture_ms": 134
+  },
+  "root": {
+    "role": "document web",
+    "name": "Radio Group Variants",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼",
+    "uri": "file:///root/okur/corpus/fixtures/aria-radio-place.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼￼￼￼￼￼￼￼￼￼￼",
+        "children": [
+          {
+            "role": "heading",
+            "name": "Radio group variants",
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Radio group variants",
+            "children": [
+              {
+                "role": "static",
+                "name": "Radio group variants",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Radio group variants"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Each group has its second radio button checked.",
+            "children": [
+              {
+                "role": "static",
+                "name": "Each group has its second radio button checked.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Each group has its second radio button checked."
+              }
+            ]
+          },
+          {
+            "role": "panel",
+            "name": "Alpha",
+            "attributes": {
+              "display": "block",
+              "explicit-name": "true",
+              "name-from": "related-element",
+              "setsize": "3",
+              "tag": "div",
+              "text-align": "left",
+              "xml-roles": "radiogroup"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼￼",
+            "children": [
+              {
+                "role": "heading",
+                "name": "Alpha",
+                "attributes": {
+                  "display": "block",
+                  "id": "label-a",
+                  "level": "3",
+                  "name-from": "contents",
+                  "tag": "h3",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Alpha",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Alpha",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Alpha"
+                  }
+                ]
+              },
+              {
+                "role": "radio button",
+                "name": "Alpha one",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "1",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147331328,
+                "text": "Alpha one"
+              },
+              {
+                "role": "radio button",
+                "name": "Alpha two",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "2",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147331344,
+                "text": "Alpha two"
+              },
+              {
+                "role": "radio button",
+                "name": "Alpha three",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "3",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147331328,
+                "text": "Alpha three"
+              }
+            ]
+          },
+          {
+            "role": "heading",
+            "name": "Bravo",
+            "attributes": {
+              "display": "block",
+              "id": "label-b",
+              "level": "3",
+              "name-from": "contents",
+              "tag": "h3",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Bravo",
+            "children": [
+              {
+                "role": "static",
+                "name": "Bravo",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Bravo"
+              }
+            ]
+          },
+          {
+            "role": "panel",
+            "name": "Bravo",
+            "attributes": {
+              "display": "block",
+              "explicit-name": "true",
+              "name-from": "related-element",
+              "setsize": "3",
+              "tag": "div",
+              "text-align": "left",
+              "xml-roles": "radiogroup"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼",
+            "children": [
+              {
+                "role": "radio button",
+                "name": "Bravo one",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "1",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147331328,
+                "text": "Bravo one"
+              },
+              {
+                "role": "radio button",
+                "name": "Bravo two",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "2",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147331344,
+                "text": "Bravo two"
+              },
+              {
+                "role": "radio button",
+                "name": "Bravo three",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "3",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147331328,
+                "text": "Bravo three"
+              }
+            ]
+          },
+          {
+            "role": "panel",
+            "name": "Charlie",
+            "attributes": {
+              "display": "block",
+              "explicit-name": "true",
+              "name-from": "related-element",
+              "setsize": "3",
+              "tag": "div",
+              "text-align": "left",
+              "xml-roles": "radiogroup"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼￼",
+            "children": [
+              {
+                "role": "heading",
+                "name": "Charlie",
+                "attributes": {
+                  "display": "block",
+                  "id": "label-c",
+                  "level": "3",
+                  "name-from": "contents",
+                  "tag": "h3",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Charlie",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Charlie",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Charlie"
+                  }
+                ]
+              },
+              {
+                "role": "radio button",
+                "name": "Charlie one",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "1",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147329280,
+                "text": "Charlie one"
+              },
+              {
+                "role": "radio button",
+                "name": "Charlie two",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "2",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147329296,
+                "text": "Charlie two"
+              },
+              {
+                "role": "radio button",
+                "name": "Charlie three",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "3",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147329280,
+                "text": "Charlie three"
+              }
+            ]
+          },
+          {
+            "role": "panel",
+            "name": "Delta",
+            "attributes": {
+              "display": "block",
+              "explicit-name": "true",
+              "name-from": "related-element",
+              "setsize": "3",
+              "tag": "div",
+              "text-align": "left",
+              "xml-roles": "radiogroup"
+            },
+            "states": 1124075776,
+            "text": "￼￼￼￼",
+            "children": [
+              {
+                "role": "heading",
+                "name": "Delta",
+                "attributes": {
+                  "display": "block",
+                  "id": "label-d",
+                  "level": "3",
+                  "name-from": "contents",
+                  "tag": "h3",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Delta",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Delta",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Delta"
+                  }
+                ]
+              },
+              {
+                "role": "radio button",
+                "name": "Delta one",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "1",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147329280,
+                "text": "Delta one"
+              },
+              {
+                "role": "radio button",
+                "name": "Delta two",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "2",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147329296,
+                "text": "Delta two"
+              },
+              {
+                "role": "radio button",
+                "name": "Delta three",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "3",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147329280,
+                "text": "Delta three"
+              }
+            ]
+          },
+          {
+            "role": "heading",
+            "name": "Echo",
+            "attributes": {
+              "display": "block",
+              "id": "label-e",
+              "level": "3",
+              "name-from": "contents",
+              "tag": "h3",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Echo",
+            "children": [
+              {
+                "role": "static",
+                "name": "Echo",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Echo"
+              }
+            ]
+          },
+          {
+            "role": "panel",
+            "name": "Echo",
+            "attributes": {
+              "display": "block",
+              "explicit-name": "true",
+              "name-from": "related-element",
+              "setsize": "3",
+              "tag": "div",
+              "text-align": "left",
+              "xml-roles": "radiogroup"
+            },
+            "states": 1124075776,
+            "text": "￼￼￼",
+            "children": [
+              {
+                "role": "radio button",
+                "name": "Echo one",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "1",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147329280,
+                "text": "Echo one"
+              },
+              {
+                "role": "radio button",
+                "name": "Echo two",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "2",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147329296,
+                "text": "Echo two"
+              },
+              {
+                "role": "radio button",
+                "name": "Echo three",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "3",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147329280,
+                "text": "Echo three"
+              }
+            ]
+          },
+          {
+            "role": "heading",
+            "name": "Foxtrot",
+            "attributes": {
+              "display": "block",
+              "id": "label-f",
+              "level": "3",
+              "name-from": "contents",
+              "tag": "h3",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Foxtrot",
+            "children": [
+              {
+                "role": "static",
+                "name": "Foxtrot",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Foxtrot"
+              }
+            ]
+          },
+          {
+            "role": "panel",
+            "name": "Foxtrot",
+            "attributes": {
+              "display": "block",
+              "explicit-name": "true",
+              "name-from": "related-element",
+              "setsize": "3",
+              "tag": "div",
+              "text-align": "left",
+              "xml-roles": "radiogroup"
+            },
+            "states": 1124075776,
+            "text": "￼￼￼",
+            "children": [
+              {
+                "role": "radio button",
+                "name": "Foxtrot one",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "id": "f1",
+                  "name-from": "contents",
+                  "posinset": "1",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147331328,
+                "text": "Foxtrot one"
+              },
+              {
+                "role": "radio button",
+                "name": "Foxtrot two",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "id": "f2",
+                  "name-from": "contents",
+                  "posinset": "2",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147331344,
+                "text": "Foxtrot two"
+              },
+              {
+                "role": "radio button",
+                "name": "Foxtrot three",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "id": "f3",
+                  "name-from": "contents",
+                  "posinset": "3",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200147331328,
+                "text": "Foxtrot three"
+              }
+            ]
+          },
+          {
+            "role": "panel",
+            "name": "Golf",
+            "attributes": {
+              "display": "block",
+              "explicit-name": "true",
+              "name-from": "related-element",
+              "setsize": "3",
+              "tag": "div",
+              "text-align": "left",
+              "xml-roles": "radiogroup"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼￼",
+            "children": [
+              {
+                "role": "heading",
+                "name": "Golf",
+                "attributes": {
+                  "display": "block",
+                  "id": "label-g",
+                  "level": "3",
+                  "name-from": "contents",
+                  "tag": "h3",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Golf",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Golf",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Golf"
+                  }
+                ]
+              },
+              {
+                "role": "radio button",
+                "name": "Golf one",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "1",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200113776896,
+                "text": "Golf one"
+              },
+              {
+                "role": "radio button",
+                "name": "Golf two",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "id": "g2",
+                  "name-from": "contents",
+                  "posinset": "2",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200113776912,
+                "text": "Golf two"
+              },
+              {
+                "role": "radio button",
+                "name": "Golf three",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "block",
+                  "name-from": "contents",
+                  "posinset": "3",
+                  "setsize": "3",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "radio"
+                },
+                "states": 2200113776896,
+                "text": "Golf three"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1090519296,
+            "text": "End of the groups.",
+            "children": [
+              {
+                "role": "static",
+                "name": "End of the groups.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1090519296,
+                "text": "End of the groups."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,291 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Edits and Marks",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "3bab5ebf98cd834069ec7c5ddd49e44b302707220075d645b9cbedf6e93443f2",
+    "captured_at_unix_ms": 1794146228391,
+    "node_count": 26,
+    "capture_ms": 80
+  },
+  "root": {
+    "role": "document web",
+    "name": "Edits and Marks",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼￼￼￼￼￼",
+    "uri": "file:///root/okur/corpus/fixtures/edits.html",
+    "children": [
+      {
+        "role": "heading",
+        "name": "Edits and marks",
+        "attributes": {
+          "display": "block",
+          "level": "1",
+          "name-from": "contents",
+          "tag": "h1",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Edits and marks",
+        "children": [
+          {
+            "role": "static",
+            "name": "Edits and marks",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Edits and marks"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "The price was ￼ ￼ dollars.",
+        "children": [
+          {
+            "role": "static",
+            "name": "The price was ",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "The price was "
+          },
+          {
+            "role": "content deletion",
+            "attributes": {
+              "display": "inline",
+              "tag": "del",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "twelve",
+            "children": [
+              {
+                "role": "static",
+                "name": "twelve",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "twelve"
+              }
+            ]
+          },
+          {
+            "role": "static",
+            "name": " ",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": " "
+          },
+          {
+            "role": "content insertion",
+            "attributes": {
+              "display": "inline",
+              "tag": "ins",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "ten",
+            "children": [
+              {
+                "role": "static",
+                "name": "ten",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "ten"
+              }
+            ]
+          },
+          {
+            "role": "static",
+            "name": " dollars.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": " dollars."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "content insertion",
+            "attributes": {
+              "display": "inline",
+              "tag": "ins",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "A whole line inserted.",
+            "children": [
+              {
+                "role": "static",
+                "name": "A whole line inserted.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "A whole line inserted."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Search for ￼ found it.",
+        "children": [
+          {
+            "role": "static",
+            "name": "Search for ",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Search for "
+          },
+          {
+            "role": "static",
+            "attributes": {
+              "display": "inline",
+              "tag": "mark",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "library",
+            "children": [
+              {
+                "role": "static",
+                "name": "library",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "library"
+              }
+            ]
+          },
+          {
+            "role": "static",
+            "name": " found it.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": " found it."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "A mole holds 10￼ particles.",
+        "children": [
+          {
+            "role": "static",
+            "name": "A mole holds 10",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "A mole holds 10"
+          },
+          {
+            "role": "superscript",
+            "attributes": {
+              "display": "inline",
+              "tag": "sup",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "23",
+            "children": [
+              {
+                "role": "static",
+                "name": "23",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "23"
+              }
+            ]
+          },
+          {
+            "role": "static",
+            "name": " particles.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": " particles."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Another plain line at the end.",
+        "children": [
+          {
+            "role": "static",
+            "name": "Another plain line at the end.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Another plain line at the end."
+          }
+        ]
+      }
+    ]
+  }
+}

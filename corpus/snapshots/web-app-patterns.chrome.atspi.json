@@ -1,0 +1,1435 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Web App Patterns",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "f8305f4a493bcca6966c5446363fd5993e3304fa415df45ec0820f7e420b7ef8",
+    "captured_at_unix_ms": 1794146346261,
+    "node_count": 113,
+    "capture_ms": 317
+  },
+  "root": {
+    "role": "document web",
+    "name": "Web App Patterns",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼",
+    "uri": "file:///root/okur/corpus/fixtures/web-app-patterns.html",
+    "children": [
+      {
+        "role": "heading",
+        "name": "Web App Patterns",
+        "attributes": {
+          "display": "block",
+          "level": "1",
+          "name-from": "contents",
+          "tag": "h1",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Web App Patterns",
+        "children": [
+          {
+            "role": "static",
+            "name": "Web App Patterns",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Web App Patterns"
+          }
+        ]
+      },
+      {
+        "role": "heading",
+        "name": "Current links",
+        "attributes": {
+          "display": "block",
+          "level": "2",
+          "name-from": "contents",
+          "tag": "h2",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Current links",
+        "children": [
+          {
+            "role": "static",
+            "name": "Current links",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Current links"
+          }
+        ]
+      },
+      {
+        "role": "list",
+        "attributes": {
+          "display": "block",
+          "setsize": "3",
+          "tag": "ul",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼",
+        "children": [
+          {
+            "role": "list item",
+            "attributes": {
+              "display": "list-item",
+              "level": "1",
+              "posinset": "1",
+              "setsize": "3",
+              "tag": "li",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "• ￼",
+            "children": [
+              {
+                "role": "static",
+                "name": "• ",
+                "attributes": {
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "::marker",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "• "
+              },
+              {
+                "role": "link",
+                "name": "Overview",
+                "attributes": {
+                  "current": "page",
+                  "display": "inline",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "states": 1124075778,
+                "text": "Overview",
+                "uri": "file:///root/okur/corpus/fixtures/web-app-patterns.html#overview",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Overview",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Overview"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "list item",
+            "attributes": {
+              "display": "list-item",
+              "level": "1",
+              "posinset": "2",
+              "setsize": "3",
+              "tag": "li",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "• ￼",
+            "children": [
+              {
+                "role": "static",
+                "name": "• ",
+                "attributes": {
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "::marker",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "• "
+              },
+              {
+                "role": "link",
+                "name": "Settings",
+                "attributes": {
+                  "display": "inline",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "states": 1124075776,
+                "text": "Settings",
+                "uri": "file:///root/okur/corpus/fixtures/web-app-patterns.html#",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Settings",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Settings"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "list item",
+            "attributes": {
+              "display": "list-item",
+              "level": "1",
+              "posinset": "3",
+              "setsize": "3",
+              "tag": "li",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "• ￼",
+            "children": [
+              {
+                "role": "static",
+                "name": "• ",
+                "attributes": {
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "::marker",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "• "
+              },
+              {
+                "role": "link",
+                "name": "Step two",
+                "attributes": {
+                  "current": "step",
+                  "display": "inline",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "states": 1124075778,
+                "text": "Step two",
+                "uri": "file:///root/okur/corpus/fixtures/web-app-patterns.html#step2",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Step two",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Step two"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "heading",
+        "name": "Described controls",
+        "attributes": {
+          "display": "block",
+          "level": "2",
+          "name-from": "contents",
+          "tag": "h2",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Described controls",
+        "children": [
+          {
+            "role": "static",
+            "name": "Described controls",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Described controls"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "button",
+            "name": "Next slide",
+            "attributes": {
+              "display": "inline-block",
+              "name-from": "contents",
+              "roledescription": "slide control",
+              "tag": "button",
+              "text-align": "center"
+            },
+            "states": 1124075776,
+            "text": "Next slide"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "link",
+            "name": "Rust",
+            "attributes": {
+              "display": "inline",
+              "name-from": "contents",
+              "roledescription": "chip",
+              "tag": "a",
+              "text-align": "left"
+            },
+            "states": 1124075776,
+            "text": "Rust",
+            "uri": "file:///root/okur/corpus/fixtures/web-app-patterns.html#rust",
+            "children": [
+              {
+                "role": "static",
+                "name": "Rust",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Rust"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "check box",
+            "name": "Wrap",
+            "attributes": {
+              "checkable": "true",
+              "display": "inline-block",
+              "explicit-name": "true",
+              "id": "wrap",
+              "name-from": "related-element",
+              "roledescription": "toggle",
+              "tag": "input",
+              "text-align": "left"
+            },
+            "states": 2200147331328
+          }
+        ]
+      },
+      {
+        "role": "heading",
+        "name": "Popup buttons",
+        "attributes": {
+          "display": "block",
+          "level": "2",
+          "name-from": "contents",
+          "tag": "h2",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Popup buttons",
+        "children": [
+          {
+            "role": "static",
+            "name": "Popup buttons",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Popup buttons"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "button",
+            "name": "Outline",
+            "attributes": {
+              "display": "inline-block",
+              "explicit-name": "true",
+              "haspopup": "menu",
+              "name-from": "attribute",
+              "tag": "button",
+              "text-align": "center"
+            },
+            "states": 4399170586880
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "button",
+            "name": "Actions",
+            "attributes": {
+              "display": "inline-block",
+              "haspopup": "menu",
+              "name-from": "contents",
+              "tag": "button",
+              "text-align": "center"
+            },
+            "states": 4399170587392,
+            "text": "Actions"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "button",
+            "name": "Pick one",
+            "attributes": {
+              "display": "inline-block",
+              "haspopup": "listbox",
+              "name-from": "contents",
+              "tag": "button",
+              "text-align": "center"
+            },
+            "states": 4399170586880,
+            "text": "Pick one"
+          }
+        ]
+      },
+      {
+        "role": "heading",
+        "name": "Fruit search",
+        "attributes": {
+          "display": "block",
+          "level": "2",
+          "name-from": "contents",
+          "tag": "h2",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Fruit search",
+        "children": [
+          {
+            "role": "static",
+            "name": "Fruit search",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Fruit search"
+          }
+        ]
+      },
+      {
+        "role": "label",
+        "attributes": {
+          "display": "inline",
+          "tag": "label",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Fruit",
+        "children": [
+          {
+            "role": "static",
+            "name": "Fruit",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Fruit"
+          }
+        ]
+      },
+      {
+        "role": "combo box",
+        "name": "Fruit",
+        "attributes": {
+          "autocomplete": "list",
+          "display": "inline-block",
+          "explicit-name": "true",
+          "haspopup": "listbox",
+          "id": "q",
+          "name-from": "related-element",
+          "tag": "input",
+          "text-align": "left",
+          "text-input-type": "text",
+          "text-model": "a1",
+          "xml-roles": "combobox"
+        },
+        "states": 4811554556800
+      },
+      {
+        "role": "heading",
+        "name": "Tab from here",
+        "attributes": {
+          "display": "block",
+          "level": "2",
+          "name-from": "contents",
+          "tag": "h2",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Tab from here",
+        "children": [
+          {
+            "role": "static",
+            "name": "Tab from here",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Tab from here"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "button",
+            "name": "Start",
+            "attributes": {
+              "display": "inline-block",
+              "name-from": "contents",
+              "tag": "button",
+              "text-align": "center"
+            },
+            "states": 1124075776,
+            "text": "Start"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "link",
+            "name": "Skipped link",
+            "attributes": {
+              "display": "inline",
+              "name-from": "contents",
+              "tag": "a",
+              "text-align": "left"
+            },
+            "states": 1124075776,
+            "text": "Skipped link",
+            "uri": "file:///root/okur/corpus/fixtures/web-app-patterns.html#skipped",
+            "children": [
+              {
+                "role": "static",
+                "name": "Skipped link",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Skipped link"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "panel",
+        "name": "Featured",
+        "attributes": {
+          "display": "block",
+          "explicit-name": "true",
+          "name-from": "attribute",
+          "setsize": "0",
+          "tag": "div",
+          "text-align": "left",
+          "xml-roles": "group"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Group text",
+            "children": [
+              {
+                "role": "static",
+                "name": "Group text",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Group text"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼￼",
+        "children": [
+          {
+            "role": "label",
+            "attributes": {
+              "display": "inline",
+              "tag": "label",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Notes",
+            "children": [
+              {
+                "role": "static",
+                "name": "Notes",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Notes"
+              }
+            ]
+          },
+          {
+            "role": "entry",
+            "name": "Notes",
+            "attributes": {
+              "display": "inline-block",
+              "explicit-name": "true",
+              "id": "notes",
+              "name-from": "related-element",
+              "tag": "textarea",
+              "text-align": "left",
+              "text-model": "a1"
+            },
+            "states": 276002113920,
+            "text": "the lazy dog, then reads std::io again"
+          }
+        ]
+      },
+      {
+        "role": "heading",
+        "name": "Repository files",
+        "attributes": {
+          "display": "block",
+          "level": "2",
+          "name-from": "contents",
+          "tag": "h2",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Repository files",
+        "children": [
+          {
+            "role": "static",
+            "name": "Repository files",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Repository files"
+          }
+        ]
+      },
+      {
+        "role": "landmark",
+        "name": "Files",
+        "attributes": {
+          "display": "block",
+          "explicit-name": "true",
+          "name-from": "attribute",
+          "tag": "nav",
+          "text-align": "left",
+          "xml-roles": "navigation"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "list",
+            "attributes": {
+              "display": "block",
+              "setsize": "1",
+              "tag": "ul",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼",
+            "children": [
+              {
+                "role": "list item",
+                "attributes": {
+                  "display": "list-item",
+                  "level": "1",
+                  "posinset": "1",
+                  "setsize": "1",
+                  "tag": "li",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "• ￼",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "• ",
+                    "attributes": {
+                      "display": "inline-block",
+                      "name-from": "contents",
+                      "tag": "::marker",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• "
+                  },
+                  {
+                    "role": "link",
+                    "name": "README",
+                    "attributes": {
+                      "current": "page",
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1124075778,
+                    "text": "README",
+                    "uri": "file:///root/okur/corpus/fixtures/web-app-patterns.html#readme",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "README",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "README"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "heading",
+        "name": "Workbench region",
+        "attributes": {
+          "display": "block",
+          "level": "2",
+          "name-from": "contents",
+          "tag": "h2",
+          "text-align": "left"
+        },
+        "states": 1090519296,
+        "text": "Workbench region",
+        "children": [
+          {
+            "role": "static",
+            "name": "Workbench region",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1090519296,
+            "text": "Workbench region"
+          }
+        ]
+      },
+      {
+        "role": "embedded",
+        "name": "Workbench",
+        "attributes": {
+          "display": "block",
+          "explicit-name": "true",
+          "name-from": "attribute",
+          "tag": "div",
+          "text-align": "left",
+          "xml-roles": "application"
+        },
+        "states": 1090519296,
+        "text": "￼￼￼",
+        "children": [
+          {
+            "role": "button",
+            "name": "First tool",
+            "attributes": {
+              "display": "inline-block",
+              "name-from": "contents",
+              "tag": "button",
+              "text-align": "center"
+            },
+            "states": 1090521344,
+            "text": "First tool"
+          },
+          {
+            "role": "button",
+            "name": "Second tool",
+            "attributes": {
+              "display": "inline-block",
+              "name-from": "contents",
+              "tag": "button",
+              "text-align": "center"
+            },
+            "states": 1090521344,
+            "text": "Second tool"
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "id": "keys",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1090519296,
+            "text": "Keys:",
+            "children": [
+              {
+                "role": "static",
+                "name": "Keys:",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1090519296,
+                "text": "Keys:"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1090519296,
+        "text": "End of page",
+        "children": [
+          {
+            "role": "static",
+            "name": "End of page",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1090519296,
+            "text": "End of page"
+          }
+        ]
+      },
+      {
+        "role": "heading",
+        "name": "Files table",
+        "attributes": {
+          "display": "block",
+          "level": "2",
+          "name-from": "contents",
+          "tag": "h2",
+          "text-align": "left"
+        },
+        "states": 1090519296,
+        "text": "Files table",
+        "children": [
+          {
+            "role": "static",
+            "name": "Files table",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1090519296,
+            "text": "Files table"
+          }
+        ]
+      },
+      {
+        "role": "table",
+        "attributes": {
+          "display": "table",
+          "tag": "table",
+          "text-align": "left"
+        },
+        "states": 1090519296,
+        "text": "￼￼￼￼",
+        "children": [
+          {
+            "role": "table row",
+            "attributes": {
+              "display": "table-row",
+              "tag": "tr",
+              "text-align": "left"
+            },
+            "states": 1090519296,
+            "text": "￼￼",
+            "children": [
+              {
+                "role": "column header",
+                "name": "Name",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "0",
+                  "tag": "th",
+                  "text-align": "center"
+                },
+                "states": 1090519296,
+                "text": "Name",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Name",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1090519296,
+                    "text": "Name"
+                  }
+                ]
+              },
+              {
+                "role": "column header",
+                "name": "Message",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "1",
+                  "tag": "th",
+                  "text-align": "center"
+                },
+                "states": 1090519296,
+                "text": "Message",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Message",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1090519296,
+                    "text": "Message"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "table row",
+            "attributes": {
+              "display": "table-row",
+              "tag": "tr",
+              "text-align": "left"
+            },
+            "states": 1090519296,
+            "text": "￼￼",
+            "children": [
+              {
+                "role": "table cell",
+                "name": "alpha.rs",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "2",
+                  "tag": "td",
+                  "text-align": "left"
+                },
+                "states": 1090519296,
+                "text": "￼",
+                "children": [
+                  {
+                    "role": "link",
+                    "name": "alpha.rs",
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1090521344,
+                    "text": "alpha.rs",
+                    "uri": "file:///root/okur/corpus/fixtures/web-app-patterns.html#alpha",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "alpha.rs",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1090519296,
+                        "text": "alpha.rs"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "table cell",
+                "name": "first commit",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "3",
+                  "tag": "td",
+                  "text-align": "left"
+                },
+                "states": 1090519296,
+                "text": "￼",
+                "children": [
+                  {
+                    "role": "link",
+                    "name": "first commit",
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1090521344,
+                    "text": "first commit",
+                    "uri": "file:///root/okur/corpus/fixtures/web-app-patterns.html#first",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "first commit",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1090519296,
+                        "text": "first commit"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "table row",
+            "attributes": {
+              "display": "table-row",
+              "tag": "tr",
+              "text-align": "left"
+            },
+            "states": 1090519296,
+            "text": "￼￼",
+            "children": [
+              {
+                "role": "table cell",
+                "name": "beta.rs",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "4",
+                  "tag": "td",
+                  "text-align": "left"
+                },
+                "states": 1090519296,
+                "text": "￼",
+                "children": [
+                  {
+                    "role": "link",
+                    "name": "beta.rs",
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1090521344,
+                    "text": "beta.rs",
+                    "uri": "file:///root/okur/corpus/fixtures/web-app-patterns.html#beta",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "beta.rs",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1090519296,
+                        "text": "beta.rs"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "table cell",
+                "name": "no link",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "5",
+                  "tag": "td",
+                  "text-align": "left"
+                },
+                "states": 1090519296,
+                "text": "no link",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "no link",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1090519296,
+                    "text": "no link"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "table row",
+            "attributes": {
+              "display": "table-row",
+              "tag": "tr",
+              "text-align": "left"
+            },
+            "states": 1090519296,
+            "text": "￼￼",
+            "children": [
+              {
+                "role": "table cell",
+                "name": "gamma.rs",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "6",
+                  "tag": "td",
+                  "text-align": "left"
+                },
+                "states": 1090519296,
+                "text": "￼",
+                "children": [
+                  {
+                    "role": "link",
+                    "name": "gamma.rs",
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1090521344,
+                    "text": "gamma.rs",
+                    "uri": "file:///root/okur/corpus/fixtures/web-app-patterns.html#gamma",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "gamma.rs",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1090519296,
+                        "text": "gamma.rs"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "table cell",
+                "name": "third commit",
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "7",
+                  "tag": "td",
+                  "text-align": "left"
+                },
+                "states": 1090519296,
+                "text": "￼",
+                "children": [
+                  {
+                    "role": "link",
+                    "name": "third commit",
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1090521344,
+                    "text": "third commit",
+                    "uri": "file:///root/okur/corpus/fixtures/web-app-patterns.html#third",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "third commit",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1090519296,
+                        "text": "third commit"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "heading",
+        "name": "Landmarks",
+        "attributes": {
+          "display": "block",
+          "level": "2",
+          "name-from": "contents",
+          "tag": "h2",
+          "text-align": "left"
+        },
+        "states": 1090519296,
+        "text": "Landmarks",
+        "children": [
+          {
+            "role": "static",
+            "name": "Landmarks",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1090519296,
+            "text": "Landmarks"
+          }
+        ]
+      },
+      {
+        "role": "landmark",
+        "name": "Related",
+        "attributes": {
+          "display": "block",
+          "explicit-name": "true",
+          "name-from": "attribute",
+          "tag": "aside",
+          "text-align": "left",
+          "xml-roles": "complementary"
+        },
+        "states": 1090519296,
+        "text": "￼",
+        "children": [
+          {
+            "role": "link",
+            "name": "Aside link",
+            "attributes": {
+              "display": "inline",
+              "name-from": "contents",
+              "tag": "a",
+              "text-align": "left"
+            },
+            "states": 1090521344,
+            "text": "Aside link",
+            "uri": "file:///root/okur/corpus/fixtures/web-app-patterns.html#aside",
+            "children": [
+              {
+                "role": "static",
+                "name": "Aside link",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1090519296,
+                "text": "Aside link"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "landmark",
+        "name": "Site",
+        "attributes": {
+          "display": "block",
+          "explicit-name": "true",
+          "name-from": "attribute",
+          "tag": "form",
+          "text-align": "left",
+          "xml-roles": "search"
+        },
+        "states": 1090519296,
+        "text": "￼",
+        "children": [
+          {
+            "role": "link",
+            "name": "Search link",
+            "attributes": {
+              "display": "inline",
+              "name-from": "contents",
+              "tag": "a",
+              "text-align": "left"
+            },
+            "states": 1090521344,
+            "text": "Search link",
+            "uri": "file:///root/okur/corpus/fixtures/web-app-patterns.html#search",
+            "children": [
+              {
+                "role": "static",
+                "name": "Search link",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1090519296,
+                "text": "Search link"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "landmark",
+        "name": "Updates",
+        "attributes": {
+          "display": "block",
+          "explicit-name": "true",
+          "name-from": "attribute",
+          "tag": "section",
+          "text-align": "left",
+          "xml-roles": "region"
+        },
+        "states": 1090519296,
+        "text": "￼",
+        "children": [
+          {
+            "role": "link",
+            "name": "Region link",
+            "attributes": {
+              "display": "inline",
+              "name-from": "contents",
+              "tag": "a",
+              "text-align": "left"
+            },
+            "states": 1090521344,
+            "text": "Region link",
+            "uri": "file:///root/okur/corpus/fixtures/web-app-patterns.html#region",
+            "children": [
+              {
+                "role": "static",
+                "name": "Region link",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1090519296,
+                "text": "Region link"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "footer",
+          "text-align": "left",
+          "xml-roles": "contentinfo"
+        },
+        "states": 1090519296,
+        "text": "￼",
+        "children": [
+          {
+            "role": "link",
+            "name": "Footer link",
+            "attributes": {
+              "display": "inline",
+              "name-from": "contents",
+              "tag": "a",
+              "text-align": "left"
+            },
+            "states": 1090521344,
+            "text": "Footer link",
+            "uri": "file:///root/okur/corpus/fixtures/web-app-patterns.html#footer",
+            "children": [
+              {
+                "role": "static",
+                "name": "Footer link",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1090519296,
+                "text": "Footer link"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

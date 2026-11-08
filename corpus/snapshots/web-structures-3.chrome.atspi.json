@@ -1,0 +1,274 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Structures Fixture Three",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "b3a306636c844d69086810641bae278871fa57fbecca652935248c7201d07093",
+    "captured_at_unix_ms": 1794146363833,
+    "node_count": 23,
+    "capture_ms": 70
+  },
+  "root": {
+    "role": "document web",
+    "name": "Structures Fixture Three",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼￼￼￼￼￼￼￼",
+    "uri": "file:///root/okur/corpus/fixtures/web-structures-3.html",
+    "children": [
+      {
+        "role": "heading",
+        "name": "Structures Fixture Three",
+        "attributes": {
+          "display": "block",
+          "level": "1",
+          "name-from": "contents",
+          "tag": "h1",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Structures Fixture Three",
+        "children": [
+          {
+            "role": "static",
+            "name": "Structures Fixture Three",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Structures Fixture Three"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Before the titled frame.",
+        "children": [
+          {
+            "role": "static",
+            "name": "Before the titled frame.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Before the titled frame."
+          }
+        ]
+      },
+      {
+        "role": "internal frame",
+        "name": "News frame",
+        "attributes": {
+          "display": "inline",
+          "explicit-name": "true",
+          "name-from": "tooltip",
+          "tag": "iframe",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "document web",
+            "attributes": {
+              "tag": "#document",
+              "text-align": "left"
+            },
+            "states": 1124075776,
+            "text": "￼￼",
+            "uri": "about:srcdoc",
+            "children": [
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "First frame line",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "First frame line",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "First frame line"
+                  }
+                ]
+              },
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Second frame line",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Second frame line",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Second frame line"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Between the frames.",
+        "children": [
+          {
+            "role": "static",
+            "name": "Between the frames.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Between the frames."
+          }
+        ]
+      },
+      {
+        "role": "internal frame",
+        "attributes": {
+          "display": "inline",
+          "tag": "iframe",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "document web",
+            "attributes": {
+              "tag": "#document",
+              "text-align": "left"
+            },
+            "states": 1124075776,
+            "text": "￼",
+            "uri": "about:srcdoc",
+            "children": [
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Untitled frame text",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Untitled frame text",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Untitled frame text"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Before the titled text.",
+        "children": [
+          {
+            "role": "static",
+            "name": "Before the titled text.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Before the titled text."
+          }
+        ]
+      },
+      {
+        "role": "section",
+        "attributes": {
+          "description-from": "tooltip",
+          "display": "block",
+          "tag": "div",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Titled text",
+        "children": [
+          {
+            "role": "static",
+            "name": "Titled text",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Titled text"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "The end of the structures.",
+        "children": [
+          {
+            "role": "static",
+            "name": "The end of the structures.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "The end of the structures."
+          }
+        ]
+      }
+    ]
+  }
+}

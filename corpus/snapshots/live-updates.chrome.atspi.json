@@ -1,0 +1,188 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Team Chat - Live Updates Fixture",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "f835db9342e5a065f6230c519a3525ac5d8d636460bd0e6e7c6d78491bc54d58",
+    "captured_at_unix_ms": 1794146250147,
+    "node_count": 12,
+    "capture_ms": 42
+  },
+  "root": {
+    "role": "document web",
+    "name": "Team Chat - Live Updates Fixture",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼",
+    "uri": "file:///root/okur/corpus/fixtures/live-updates.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼￼￼",
+        "children": [
+          {
+            "role": "heading",
+            "name": "Team chat",
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Team chat",
+            "children": [
+              {
+                "role": "static",
+                "name": "Team chat",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Team chat"
+              }
+            ]
+          },
+          {
+            "role": "log",
+            "name": "Messages",
+            "attributes": {
+              "atomic": "false",
+              "container-atomic": "false",
+              "container-busy": "false",
+              "container-live": "polite",
+              "container-relevant": "additions text",
+              "display": "block",
+              "explicit-name": "true",
+              "id": "log",
+              "live": "polite",
+              "name-from": "attribute",
+              "relevant": "additions text",
+              "tag": "div",
+              "text-align": "left",
+              "xml-roles": "log"
+            },
+            "states": 1124073728,
+            "text": "￼",
+            "children": [
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "atomic": "false",
+                  "container-atomic": "false",
+                  "container-busy": "false",
+                  "container-live": "polite",
+                  "container-relevant": "additions text",
+                  "display": "block",
+                  "relevant": "additions text",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Ada: Good morning",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Ada: Good morning",
+                    "attributes": {
+                      "atomic": "false",
+                      "container-atomic": "false",
+                      "container-busy": "false",
+                      "container-live": "polite",
+                      "container-relevant": "additions text",
+                      "name-from": "contents",
+                      "relevant": "additions text"
+                    },
+                    "states": 1124073728,
+                    "text": "Ada: Good morning"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼",
+            "children": [
+              {
+                "role": "button",
+                "name": "Send message",
+                "attributes": {
+                  "display": "inline-block",
+                  "id": "send",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "states": 1124075776,
+                "text": "Send message"
+              }
+            ]
+          },
+          {
+            "role": "status bar",
+            "attributes": {
+              "atomic": "true",
+              "container-atomic": "true",
+              "container-busy": "false",
+              "container-live": "polite",
+              "container-relevant": "additions text",
+              "display": "block",
+              "id": "status",
+              "live": "polite",
+              "relevant": "additions text",
+              "tag": "div",
+              "text-align": "left",
+              "xml-roles": "status"
+            },
+            "states": 1124073728
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "End of chat",
+            "children": [
+              {
+                "role": "static",
+                "name": "End of chat",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "End of chat"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

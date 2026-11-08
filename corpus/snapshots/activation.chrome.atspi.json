@@ -1,0 +1,497 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Activation Fixture",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "f9b85f7c2f7242756f2872a11c4ae9cfef44f61f544c93031f95015f6ad1bf8b",
+    "captured_at_unix_ms": 1794146170139,
+    "node_count": 38,
+    "capture_ms": 105
+  },
+  "root": {
+    "role": "document web",
+    "name": "Activation Fixture",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼￼￼￼￼￼￼￼￼￼￼￼￼",
+    "uri": "file:///root/okur/corpus/fixtures/activation.html",
+    "children": [
+      {
+        "role": "heading",
+        "name": "Activation",
+        "attributes": {
+          "display": "block",
+          "level": "1",
+          "name-from": "contents",
+          "tag": "h1",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Activation",
+        "children": [
+          {
+            "role": "static",
+            "name": "Activation",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Activation"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Plain text before the controls.",
+        "children": [
+          {
+            "role": "static",
+            "name": "Plain text before the controls.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Plain text before the controls."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "button",
+            "name": "Count",
+            "attributes": {
+              "display": "inline-block",
+              "id": "count",
+              "name-from": "contents",
+              "tag": "button",
+              "text-align": "center"
+            },
+            "states": 1124075776,
+            "text": "Count"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "button",
+            "name": "Custom button",
+            "attributes": {
+              "display": "inline",
+              "id": "custom",
+              "name-from": "contents",
+              "tag": "span",
+              "text-align": "left",
+              "xml-roles": "button"
+            },
+            "states": 1124075776,
+            "text": "Custom button"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "check box",
+            "name": "Subscribe",
+            "attributes": {
+              "checkable": "true",
+              "display": "inline-block",
+              "explicit-name": "true",
+              "id": "subscribe",
+              "name-from": "related-element",
+              "tag": "input",
+              "text-align": "left"
+            },
+            "states": 2200147331328
+          }
+        ]
+      },
+      {
+        "role": "panel",
+        "name": "Size",
+        "attributes": {
+          "display": "block",
+          "explicit-name": "true",
+          "name-from": "related-element",
+          "setsize": "0",
+          "tag": "fieldset",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼",
+        "children": [
+          {
+            "role": "label",
+            "attributes": {
+              "display": "block",
+              "tag": "legend",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Size",
+            "children": [
+              {
+                "role": "static",
+                "name": "Size",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Size"
+              }
+            ]
+          },
+          {
+            "role": "radio button",
+            "name": "Small",
+            "attributes": {
+              "checkable": "true",
+              "display": "inline-block",
+              "explicit-name": "true",
+              "html-input-name": "size",
+              "id": "small",
+              "name-from": "related-element",
+              "posinset": "1",
+              "setsize": "2",
+              "tag": "input",
+              "text-align": "left"
+            },
+            "states": 2200147331328
+          },
+          {
+            "role": "radio button",
+            "name": "Medium",
+            "attributes": {
+              "checkable": "true",
+              "display": "inline-block",
+              "explicit-name": "true",
+              "html-input-name": "size",
+              "id": "medium",
+              "name-from": "related-element",
+              "posinset": "2",
+              "setsize": "2",
+              "tag": "input",
+              "text-align": "left"
+            },
+            "states": 2200147331328
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "check box",
+            "name": "Notify me",
+            "attributes": {
+              "checkable": "true",
+              "display": "inline",
+              "id": "notify",
+              "name-from": "contents",
+              "tag": "span",
+              "text-align": "left",
+              "xml-roles": "checkbox"
+            },
+            "states": 2200147331328,
+            "text": "Notify me"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼￼",
+        "children": [
+          {
+            "role": "label",
+            "attributes": {
+              "display": "inline",
+              "tag": "label",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "City",
+            "children": [
+              {
+                "role": "static",
+                "name": "City",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "City"
+              }
+            ]
+          },
+          {
+            "role": "entry",
+            "name": "City",
+            "attributes": {
+              "display": "inline-block",
+              "explicit-name": "true",
+              "id": "city",
+              "name-from": "related-element",
+              "tag": "input",
+              "text-align": "left",
+              "text-input-type": "text",
+              "text-model": "a1"
+            },
+            "states": 276069091712,
+            "text": "Izmir"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼￼",
+        "children": [
+          {
+            "role": "label",
+            "attributes": {
+              "display": "inline",
+              "tag": "label",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Color",
+            "children": [
+              {
+                "role": "static",
+                "name": "Color",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Color"
+              }
+            ]
+          },
+          {
+            "role": "combo box",
+            "name": "Color",
+            "attributes": {
+              "display": "inline-block",
+              "explicit-name": "true",
+              "haspopup": "menu",
+              "id": "color",
+              "name-from": "related-element",
+              "posinset": "1",
+              "setsize": "2",
+              "tag": "select",
+              "text-align": "left"
+            },
+            "states": 4399170587392,
+            "text": "￼",
+            "children": [
+              {
+                "role": "menu",
+                "attributes": {
+                  "display": "none",
+                  "hidden": "true",
+                  "ispopup": "auto",
+                  "setsize": "2",
+                  "tag": "div"
+                },
+                "states": 16777472,
+                "text": "￼￼",
+                "children": [
+                  {
+                    "role": "menu item",
+                    "name": "Red",
+                    "attributes": {
+                      "display": "block",
+                      "name-from": "contents",
+                      "posinset": "1",
+                      "setsize": "2",
+                      "tag": "option"
+                    },
+                    "states": 1136658688,
+                    "text": "Red"
+                  },
+                  {
+                    "role": "menu item",
+                    "name": "Green",
+                    "attributes": {
+                      "display": "block",
+                      "hidden": "true",
+                      "name-from": "contents",
+                      "posinset": "2",
+                      "setsize": "2",
+                      "tag": "option"
+                    },
+                    "states": 20973824,
+                    "text": "Green"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "link",
+            "name": "Show status",
+            "attributes": {
+              "display": "inline",
+              "id": "show",
+              "name-from": "contents",
+              "tag": "a",
+              "text-align": "left"
+            },
+            "states": 1124075776,
+            "text": "Show status",
+            "uri": "file:///root/okur/corpus/fixtures/activation.html#status",
+            "children": [
+              {
+                "role": "static",
+                "name": "Show status",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Show status"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "id": "status",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Nothing activated yet.",
+        "children": [
+          {
+            "role": "static",
+            "name": "Nothing activated yet.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Nothing activated yet."
+          }
+        ]
+      },
+      {
+        "role": "heading",
+        "name": "Event log",
+        "attributes": {
+          "display": "block",
+          "level": "2",
+          "name-from": "contents",
+          "tag": "h2",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Event log",
+        "children": [
+          {
+            "role": "static",
+            "name": "Event log",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Event log"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "id": "log",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "No events.",
+        "children": [
+          {
+            "role": "static",
+            "name": "No events.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "No events."
+          }
+        ]
+      }
+    ]
+  }
+}

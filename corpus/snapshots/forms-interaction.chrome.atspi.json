@@ -1,0 +1,233 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Forms and Interaction Reference Fixture",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "18fce31741084133ec7f31cd746e51f3cf00a36df7d5b92a1d5af35410748d5f",
+    "captured_at_unix_ms": 1794146241549,
+    "node_count": 17,
+    "capture_ms": 61
+  },
+  "root": {
+    "role": "document web",
+    "name": "Forms and Interaction Reference Fixture",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼￼",
+    "uri": "file:///root/okur/corpus/fixtures/forms-interaction.html",
+    "children": [
+      {
+        "role": "heading",
+        "name": "Account Registration Form",
+        "attributes": {
+          "display": "block",
+          "level": "1",
+          "name-from": "contents",
+          "tag": "h1",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Account Registration Form",
+        "children": [
+          {
+            "role": "static",
+            "name": "Account Registration Form",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Account Registration Form"
+          }
+        ]
+      },
+      {
+        "role": "form",
+        "attributes": {
+          "display": "block",
+          "id": "user-form",
+          "tag": "form",
+          "text-align": "left",
+          "xml-roles": "form"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼￼",
+        "children": [
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼",
+            "children": [
+              {
+                "role": "label",
+                "attributes": {
+                  "display": "inline",
+                  "tag": "label",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Full Name:",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Full Name:",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Full Name:"
+                  }
+                ]
+              },
+              {
+                "role": "entry",
+                "name": "Full Name:",
+                "attributes": {
+                  "display": "inline-block",
+                  "explicit-name": "true",
+                  "html-input-name": "full-name",
+                  "id": "full-name",
+                  "name-from": "related-element",
+                  "tag": "input",
+                  "text-align": "left",
+                  "text-input-type": "text",
+                  "text-model": "a1"
+                },
+                "states": 276069091712,
+                "text": "Jane Doe"
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼",
+            "children": [
+              {
+                "role": "label",
+                "attributes": {
+                  "display": "inline",
+                  "tag": "label",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Email Address:",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Email Address:",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Email Address:"
+                  }
+                ]
+              },
+              {
+                "role": "entry",
+                "name": "Email Address:",
+                "attributes": {
+                  "display": "inline-block",
+                  "explicit-name": "true",
+                  "html-input-name": "email-addr",
+                  "id": "email-addr",
+                  "name-from": "related-element",
+                  "tag": "input",
+                  "text-align": "left",
+                  "text-input-type": "text",
+                  "text-model": "a1"
+                },
+                "states": 276069091712,
+                "text": "jane@example.com"
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼",
+            "children": [
+              {
+                "role": "check box",
+                "name": "I accept terms and conditions",
+                "attributes": {
+                  "checkable": "true",
+                  "display": "inline-block",
+                  "explicit-name": "true",
+                  "html-input-name": "terms",
+                  "id": "terms-agree",
+                  "name-from": "related-element",
+                  "tag": "input",
+                  "text-align": "left"
+                },
+                "states": 2200147331328
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼",
+            "children": [
+              {
+                "role": "button",
+                "name": "Save Preferences",
+                "attributes": {
+                  "display": "inline-block",
+                  "id": "save-btn",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "states": 1124075776,
+                "text": "Save Preferences"
+              },
+              {
+                "role": "button",
+                "name": "Submit Application",
+                "attributes": {
+                  "display": "inline-block",
+                  "id": "submit-btn",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "states": 550879889664,
+                "text": "Submit Application"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

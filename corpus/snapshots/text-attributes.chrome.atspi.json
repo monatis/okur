@@ -1,0 +1,492 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Text Attributes",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "db06808d39316b7ad8f5f84093d7bd2c35abdec31d5b7b1272593babeae2a157",
+    "captured_at_unix_ms": 1794146324544,
+    "node_count": 46,
+    "capture_ms": 130
+  },
+  "root": {
+    "role": "document web",
+    "name": "Text Attributes",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼￼￼￼￼￼￼￼￼￼￼",
+    "uri": "file:///root/okur/corpus/fixtures/text-attributes.html",
+    "children": [
+      {
+        "role": "heading",
+        "name": "Text attributes",
+        "attributes": {
+          "display": "block",
+          "level": "1",
+          "name-from": "contents",
+          "tag": "h1",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Text attributes",
+        "children": [
+          {
+            "role": "static",
+            "name": "Text attributes",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Text attributes"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "A plain line with nothing marked.",
+        "children": [
+          {
+            "role": "static",
+            "name": "A plain line with nothing marked.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "A plain line with nothing marked."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "The price was ￼, now ten.",
+        "children": [
+          {
+            "role": "static",
+            "name": "The price was ",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "The price was "
+          },
+          {
+            "role": "content deletion",
+            "attributes": {
+              "display": "inline",
+              "tag": "s",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "twelve dollars",
+            "children": [
+              {
+                "role": "static",
+                "name": "twelve dollars",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "twelve dollars"
+              }
+            ]
+          },
+          {
+            "role": "static",
+            "name": ", now ten.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": ", now ten."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "content deletion",
+            "attributes": {
+              "display": "inline",
+              "tag": "s",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "A whole line struck through.",
+            "children": [
+              {
+                "role": "static",
+                "name": "A whole line struck through.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "A whole line struck through."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "The meeting is on Monday on Tuesday.",
+        "children": [
+          {
+            "role": "static",
+            "name": "The meeting is ",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "The meeting is "
+          },
+          {
+            "role": "static",
+            "name": "on Monday",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "on Monday"
+          },
+          {
+            "role": "static",
+            "name": " on Tuesday.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": " on Tuesday."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Einstein's E = mc￼ dates from 1905.",
+        "children": [
+          {
+            "role": "static",
+            "name": "Einstein's E = mc",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Einstein's E = mc"
+          },
+          {
+            "role": "superscript",
+            "attributes": {
+              "display": "inline",
+              "tag": "sup",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "2",
+            "children": [
+              {
+                "role": "static",
+                "name": "2",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "2"
+              }
+            ]
+          },
+          {
+            "role": "static",
+            "name": " dates from 1905.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": " dates from 1905."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "The 1￼ and 2￼ floors are open.",
+        "children": [
+          {
+            "role": "static",
+            "name": "The 1",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "The 1"
+          },
+          {
+            "role": "superscript",
+            "attributes": {
+              "display": "inline",
+              "tag": "sup",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "st",
+            "children": [
+              {
+                "role": "static",
+                "name": "st",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "st"
+              }
+            ]
+          },
+          {
+            "role": "static",
+            "name": " and 2",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": " and 2"
+          },
+          {
+            "role": "superscript",
+            "attributes": {
+              "display": "inline",
+              "tag": "sup",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "nd",
+            "children": [
+              {
+                "role": "static",
+                "name": "nd",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "nd"
+              }
+            ]
+          },
+          {
+            "role": "static",
+            "name": " floors are open.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": " floors are open."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Water is H￼O and salt is NaCl.",
+        "children": [
+          {
+            "role": "static",
+            "name": "Water is H",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Water is H"
+          },
+          {
+            "role": "subscript",
+            "attributes": {
+              "display": "inline",
+              "tag": "sub",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "2",
+            "children": [
+              {
+                "role": "static",
+                "name": "2",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "2"
+              }
+            ]
+          },
+          {
+            "role": "static",
+            "name": "O and salt is NaCl.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "O and salt is NaCl."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Carbon dioxide is CO￼.",
+        "children": [
+          {
+            "role": "static",
+            "name": "Carbon dioxide is CO",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Carbon dioxide is CO"
+          },
+          {
+            "role": "subscript",
+            "attributes": {
+              "display": "inline",
+              "tag": "sub",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "2",
+            "children": [
+              {
+                "role": "static",
+                "name": "2",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "2"
+              }
+            ]
+          },
+          {
+            "role": "static",
+            "name": ".",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "A line with a shadowed word in it.",
+        "children": [
+          {
+            "role": "static",
+            "name": "A line with a ",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "A line with a "
+          },
+          {
+            "role": "static",
+            "name": "shadowed word",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "shadowed word"
+          },
+          {
+            "role": "static",
+            "name": " in it.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": " in it."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Another plain line at the end.",
+        "children": [
+          {
+            "role": "static",
+            "name": "Another plain line at the end.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Another plain line at the end."
+          }
+        ]
+      }
+    ]
+  }
+}

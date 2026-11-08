@@ -1,0 +1,229 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Event Notes - Riverside Library",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "3e88cc28875d7e727855d792dc7f409df1716642aa5278f2ffb55dcd14ae35f1",
+    "captured_at_unix_ms": 1794146206745,
+    "node_count": 17,
+    "capture_ms": 56
+  },
+  "root": {
+    "role": "document web",
+    "name": "Event Notes - Riverside Library",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼",
+    "uri": "file:///root/okur/corpus/fixtures/colored-fields.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼￼",
+        "children": [
+          {
+            "role": "heading",
+            "name": "Event notes",
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Event notes",
+            "children": [
+              {
+                "role": "static",
+                "name": "Event notes",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Event notes"
+              }
+            ]
+          },
+          {
+            "role": "form",
+            "attributes": {
+              "display": "block",
+              "tag": "form",
+              "text-align": "left",
+              "xml-roles": "form"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼",
+            "children": [
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼￼",
+                "children": [
+                  {
+                    "role": "label",
+                    "attributes": {
+                      "display": "inline",
+                      "tag": "label",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "Note",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Note",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Note"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "entry",
+                    "name": "Note",
+                    "attributes": {
+                      "display": "inline-block",
+                      "explicit-name": "true",
+                      "html-input-name": "note",
+                      "id": "note",
+                      "name-from": "related-element",
+                      "tag": "input",
+                      "text-align": "left",
+                      "text-input-type": "text",
+                      "text-model": "a1"
+                    },
+                    "states": 276069091712,
+                    "text": "Bring a lamp"
+                  }
+                ]
+              },
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼￼",
+                "children": [
+                  {
+                    "role": "label",
+                    "attributes": {
+                      "display": "inline",
+                      "tag": "label",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "Reply",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Reply",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Reply"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "entry",
+                    "name": "Reply",
+                    "attributes": {
+                      "display": "inline-block",
+                      "explicit-name": "true",
+                      "html-input-name": "reply",
+                      "id": "reply",
+                      "name-from": "related-element",
+                      "tag": "input",
+                      "text-align": "left",
+                      "text-input-type": "text",
+                      "text-model": "a1"
+                    },
+                    "states": 276069091712,
+                    "text": "Will do"
+                  }
+                ]
+              },
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼￼",
+                "children": [
+                  {
+                    "role": "label",
+                    "attributes": {
+                      "display": "inline",
+                      "tag": "label",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "Plain",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Plain",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Plain"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "entry",
+                    "name": "Plain",
+                    "attributes": {
+                      "display": "inline-block",
+                      "explicit-name": "true",
+                      "html-input-name": "plain",
+                      "id": "plain",
+                      "name-from": "related-element",
+                      "tag": "input",
+                      "text-align": "left",
+                      "text-input-type": "text",
+                      "text-model": "a1"
+                    },
+                    "states": 276069091712
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

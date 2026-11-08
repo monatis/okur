@@ -1,0 +1,639 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Structural Navigation Reference Fixture",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "dd74a3e0285db898ce8a785a5da59a730a7a0e95bc6e1396d2e21e0c91d9948d",
+    "captured_at_unix_ms": 1794146311248,
+    "node_count": 51,
+    "capture_ms": 153
+  },
+  "root": {
+    "role": "document web",
+    "name": "Structural Navigation Reference Fixture",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼￼￼￼",
+    "uri": "file:///root/okur/corpus/fixtures/structural-navigation.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "header",
+          "text-align": "left",
+          "xml-roles": "banner"
+        },
+        "states": 1124073728,
+        "text": "￼￼",
+        "children": [
+          {
+            "role": "heading",
+            "name": "System Documentation",
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "System Documentation",
+            "children": [
+              {
+                "role": "static",
+                "name": "System Documentation",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "System Documentation"
+              }
+            ]
+          },
+          {
+            "role": "landmark",
+            "name": "Main Navigation",
+            "attributes": {
+              "display": "block",
+              "explicit-name": "true",
+              "name-from": "attribute",
+              "tag": "nav",
+              "text-align": "left",
+              "xml-roles": "navigation"
+            },
+            "states": 1124073728,
+            "text": "￼",
+            "children": [
+              {
+                "role": "list",
+                "attributes": {
+                  "display": "block",
+                  "setsize": "3",
+                  "tag": "ul",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼￼￼",
+                "children": [
+                  {
+                    "role": "list item",
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "1",
+                      "setsize": "3",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• ￼",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "• ",
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "• "
+                      },
+                      {
+                        "role": "link",
+                        "name": "Overview Link",
+                        "attributes": {
+                          "display": "inline",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "states": 1124075776,
+                        "text": "Overview Link",
+                        "uri": "file:///root/okur/corpus/fixtures/structural-navigation.html#overview",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "Overview Link",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "Overview Link"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "role": "list item",
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "2",
+                      "setsize": "3",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• ￼",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "• ",
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "• "
+                      },
+                      {
+                        "role": "link",
+                        "name": "Architecture Link",
+                        "attributes": {
+                          "display": "inline",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "states": 1124075776,
+                        "text": "Architecture Link",
+                        "uri": "file:///root/okur/corpus/fixtures/structural-navigation.html#architecture",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "Architecture Link",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "Architecture Link"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "role": "list item",
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "3",
+                      "setsize": "3",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• ￼",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "• ",
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "• "
+                      },
+                      {
+                        "role": "link",
+                        "name": "Download Link",
+                        "attributes": {
+                          "display": "inline",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "states": 1124075776,
+                        "text": "Download Link",
+                        "uri": "file:///root/okur/corpus/fixtures/structural-navigation.html#download",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "Download Link",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "Download Link"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼￼",
+        "children": [
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "id": "overview",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼￼",
+            "children": [
+              {
+                "role": "heading",
+                "name": "Section Overview",
+                "attributes": {
+                  "display": "block",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Section Overview",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Section Overview",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Section Overview"
+                  }
+                ]
+              },
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "This section outlines high-level concepts for synthetic speech evaluation.",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "This section outlines high-level concepts for synthetic speech evaluation.",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "This section outlines high-level concepts for synthetic speech evaluation."
+                  }
+                ]
+              },
+              {
+                "role": "heading",
+                "name": "Subsection Details",
+                "attributes": {
+                  "display": "block",
+                  "level": "3",
+                  "name-from": "contents",
+                  "tag": "h3",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Subsection Details",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Subsection Details",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Subsection Details"
+                  }
+                ]
+              },
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Details covering buffer generation and quick navigation keys.",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Details covering buffer generation and quick navigation keys.",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Details covering buffer generation and quick navigation keys."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "id": "architecture",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼",
+            "children": [
+              {
+                "role": "heading",
+                "name": "Architecture Guide",
+                "attributes": {
+                  "display": "block",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Architecture Guide",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Architecture Guide",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Architecture Guide"
+                  }
+                ]
+              },
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Architecture description with ordered components:",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Architecture description with ordered components:",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Architecture description with ordered components:"
+                  }
+                ]
+              },
+              {
+                "role": "list",
+                "attributes": {
+                  "display": "block",
+                  "setsize": "3",
+                  "tag": "ol",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼￼￼",
+                "children": [
+                  {
+                    "role": "list item",
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "1",
+                      "setsize": "3",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "1. DOM Ingestion Layer",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "1. ",
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "1. "
+                      },
+                      {
+                        "role": "static",
+                        "name": "DOM Ingestion Layer",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "DOM Ingestion Layer"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "list item",
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "2",
+                      "setsize": "3",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "2. Virtual Buffer Engine",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "2. ",
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "2. "
+                      },
+                      {
+                        "role": "static",
+                        "name": "Virtual Buffer Engine",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Virtual Buffer Engine"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "list item",
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "3",
+                      "setsize": "3",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "3. Speech Synthesis Output",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "3. ",
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "3. "
+                      },
+                      {
+                        "role": "static",
+                        "name": "Speech Synthesis Output",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Speech Synthesis Output"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "landmark",
+        "name": "Quick Reference",
+        "attributes": {
+          "display": "block",
+          "explicit-name": "true",
+          "name-from": "attribute",
+          "tag": "aside",
+          "text-align": "left",
+          "xml-roles": "complementary"
+        },
+        "states": 1124073728,
+        "text": "￼￼",
+        "children": [
+          {
+            "role": "heading",
+            "name": "Helpful Resources",
+            "attributes": {
+              "display": "block",
+              "level": "2",
+              "name-from": "contents",
+              "tag": "h2",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Helpful Resources",
+            "children": [
+              {
+                "role": "static",
+                "name": "Helpful Resources",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Helpful Resources"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Reference documentation and guidelines.",
+            "children": [
+              {
+                "role": "static",
+                "name": "Reference documentation and guidelines.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Reference documentation and guidelines."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "footer",
+          "text-align": "left",
+          "xml-roles": "contentinfo"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Copyright 2026 Accessibility Lab.",
+            "children": [
+              {
+                "role": "static",
+                "name": "Copyright 2026 Accessibility Lab.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Copyright 2026 Accessibility Lab."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

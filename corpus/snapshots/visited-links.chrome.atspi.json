@@ -1,0 +1,402 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Reading List - Riverside Library",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "ede950c617c16ef858d37587a30a8d1a7e28c24210c612d7ca0240e14d1b3035",
+    "captured_at_unix_ms": 1794146341760,
+    "node_count": 31,
+    "capture_ms": 99
+  },
+  "root": {
+    "role": "document web",
+    "name": "Reading List - Riverside Library",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼",
+    "uri": "file:///root/okur/corpus/fixtures/visited-links.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼￼￼",
+        "children": [
+          {
+            "role": "heading",
+            "name": "Reading list",
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Reading list",
+            "children": [
+              {
+                "role": "static",
+                "name": "Reading list",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Reading list"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Pages you have opened before are marked as visited.",
+            "children": [
+              {
+                "role": "static",
+                "name": "Pages you have opened before are marked as visited.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Pages you have opened before are marked as visited."
+              }
+            ]
+          },
+          {
+            "role": "list",
+            "attributes": {
+              "display": "block",
+              "setsize": "5",
+              "tag": "ul",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼￼￼",
+            "children": [
+              {
+                "role": "list item",
+                "attributes": {
+                  "display": "list-item",
+                  "level": "1",
+                  "posinset": "1",
+                  "setsize": "5",
+                  "tag": "li",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "• ￼",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "• ",
+                    "attributes": {
+                      "display": "inline-block",
+                      "name-from": "contents",
+                      "tag": "::marker",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• "
+                  },
+                  {
+                    "role": "link",
+                    "name": "This reading list",
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1124075776,
+                    "text": "This reading list",
+                    "uri": "file:///root/okur/corpus/fixtures/visited-links.html",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "This reading list",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "This reading list"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "list item",
+                "attributes": {
+                  "display": "list-item",
+                  "level": "1",
+                  "posinset": "2",
+                  "setsize": "5",
+                  "tag": "li",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "• ￼",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "• ",
+                    "attributes": {
+                      "display": "inline-block",
+                      "name-from": "contents",
+                      "tag": "::marker",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• "
+                  },
+                  {
+                    "role": "link",
+                    "name": "Spring catalog",
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1124075776,
+                    "text": "Spring catalog",
+                    "uri": "file:///root/okur/corpus/fixtures/never-opened-catalog.html",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Spring catalog",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Spring catalog"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "list item",
+                "attributes": {
+                  "display": "list-item",
+                  "level": "1",
+                  "posinset": "3",
+                  "setsize": "5",
+                  "tag": "li",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "• ￼",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "• ",
+                    "attributes": {
+                      "display": "inline-block",
+                      "name-from": "contents",
+                      "tag": "::marker",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• "
+                  },
+                  {
+                    "role": "link",
+                    "name": "City Library Expands Evening Hours",
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1124075776,
+                    "text": "City Library Expands Evening Hours",
+                    "uri": "file:///root/okur/corpus/fixtures/news-article.html",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "City Library Expands Evening Hours",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "City Library Expands Evening Hours"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "list item",
+                "attributes": {
+                  "display": "list-item",
+                  "level": "1",
+                  "posinset": "4",
+                  "setsize": "5",
+                  "tag": "li",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "• ￼",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "• ",
+                    "attributes": {
+                      "display": "inline-block",
+                      "name-from": "contents",
+                      "tag": "::marker",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• "
+                  },
+                  {
+                    "role": "link",
+                    "name": "Volunteer form",
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1124075776,
+                    "text": "Volunteer form",
+                    "uri": "file:///root/okur/corpus/fixtures/never-opened-volunteers.html",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Volunteer form",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Volunteer form"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "list item",
+                "attributes": {
+                  "display": "list-item",
+                  "level": "1",
+                  "posinset": "5",
+                  "setsize": "5",
+                  "tag": "li",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "• ￼",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "• ",
+                    "attributes": {
+                      "display": "inline-block",
+                      "name-from": "contents",
+                      "tag": "::marker",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• "
+                  },
+                  {
+                    "role": "link",
+                    "name": "Opening hours",
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1124075776,
+                    "text": "Opening hours",
+                    "uri": "file:///root/okur/corpus/fixtures/visited-links.html#hours",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Opening hours",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Opening hours"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "heading",
+            "name": "Opening hours",
+            "attributes": {
+              "display": "block",
+              "id": "hours",
+              "level": "2",
+              "name-from": "contents",
+              "tag": "h2",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Opening hours",
+            "children": [
+              {
+                "role": "static",
+                "name": "Opening hours",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Opening hours"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Monday to Friday, 9 a.m. to 9 p.m.",
+            "children": [
+              {
+                "role": "static",
+                "name": "Monday to Friday, 9 a.m. to 9 p.m.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Monday to Friday, 9 a.m. to 9 p.m."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

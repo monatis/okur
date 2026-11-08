@@ -1,0 +1,476 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Same and Different Elements",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "fe70a7dbabf4fe783cb7dbe20fb3d819ba982d25a6b3cea9896338003fbbcbab",
+    "captured_at_unix_ms": 1794146284946,
+    "node_count": 40,
+    "capture_ms": 127
+  },
+  "root": {
+    "role": "document web",
+    "name": "Same and Different Elements",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼￼￼￼￼￼￼￼￼￼￼￼",
+    "uri": "file:///root/okur/corpus/fixtures/same-element.html",
+    "children": [
+      {
+        "role": "heading",
+        "name": "Same and different elements",
+        "attributes": {
+          "display": "block",
+          "level": "1",
+          "name-from": "contents",
+          "tag": "h1",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Same and different elements",
+        "children": [
+          {
+            "role": "static",
+            "name": "Same and different elements",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Same and different elements"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "The first paragraph.",
+        "children": [
+          {
+            "role": "static",
+            "name": "The first paragraph.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "The first paragraph."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "The second paragraph.",
+        "children": [
+          {
+            "role": "static",
+            "name": "The second paragraph.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "The second paragraph."
+          }
+        ]
+      },
+      {
+        "role": "list",
+        "attributes": {
+          "display": "block",
+          "setsize": "2",
+          "tag": "ul",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼￼",
+        "children": [
+          {
+            "role": "list item",
+            "attributes": {
+              "display": "list-item",
+              "level": "1",
+              "posinset": "1",
+              "setsize": "2",
+              "tag": "li",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "• Apple",
+            "children": [
+              {
+                "role": "static",
+                "name": "• ",
+                "attributes": {
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "::marker",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "• "
+              },
+              {
+                "role": "static",
+                "name": "Apple",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Apple"
+              }
+            ]
+          },
+          {
+            "role": "list item",
+            "attributes": {
+              "display": "list-item",
+              "level": "1",
+              "posinset": "2",
+              "setsize": "2",
+              "tag": "li",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "• Pear",
+            "children": [
+              {
+                "role": "static",
+                "name": "• ",
+                "attributes": {
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "::marker",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "• "
+              },
+              {
+                "role": "static",
+                "name": "Pear",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Pear"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "A paragraph between two lists.",
+        "children": [
+          {
+            "role": "static",
+            "name": "A paragraph between two lists.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "A paragraph between two lists."
+          }
+        ]
+      },
+      {
+        "role": "list",
+        "attributes": {
+          "display": "block",
+          "setsize": "1",
+          "tag": "ul",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "list item",
+            "attributes": {
+              "display": "list-item",
+              "level": "1",
+              "posinset": "1",
+              "setsize": "1",
+              "tag": "li",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "• Plum",
+            "children": [
+              {
+                "role": "static",
+                "name": "• ",
+                "attributes": {
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "::marker",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "• "
+              },
+              {
+                "role": "static",
+                "name": "Plum",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Plum"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "heading",
+        "name": "Links",
+        "attributes": {
+          "display": "block",
+          "level": "2",
+          "name-from": "contents",
+          "tag": "h2",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Links",
+        "children": [
+          {
+            "role": "static",
+            "name": "Links",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Links"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Text with ￼ in it.",
+        "children": [
+          {
+            "role": "static",
+            "name": "Text with ",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Text with "
+          },
+          {
+            "role": "link",
+            "name": "a first link",
+            "attributes": {
+              "display": "inline",
+              "name-from": "contents",
+              "tag": "a",
+              "text-align": "left"
+            },
+            "states": 1124075776,
+            "text": "a first link",
+            "uri": "file:///root/okur/corpus/fixtures/same-element.html#one",
+            "children": [
+              {
+                "role": "static",
+                "name": "a first link",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "a first link"
+              }
+            ]
+          },
+          {
+            "role": "static",
+            "name": " in it.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": " in it."
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "link",
+            "name": "A second link",
+            "attributes": {
+              "display": "inline",
+              "name-from": "contents",
+              "tag": "a",
+              "text-align": "left"
+            },
+            "states": 1124075776,
+            "text": "A second link",
+            "uri": "file:///root/okur/corpus/fixtures/same-element.html#two",
+            "children": [
+              {
+                "role": "static",
+                "name": "A second link",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "A second link"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "link",
+            "name": "A link to another page",
+            "attributes": {
+              "display": "inline",
+              "name-from": "contents",
+              "tag": "a",
+              "text-align": "left"
+            },
+            "states": 1124075776,
+            "text": "A link to another page",
+            "uri": "file:///root/okur/corpus/fixtures/other-page.html",
+            "children": [
+              {
+                "role": "static",
+                "name": "A link to another page",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "A link to another page"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "heading",
+        "name": "Last part",
+        "attributes": {
+          "display": "block",
+          "level": "2",
+          "name-from": "contents",
+          "tag": "h2",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "Last part",
+        "children": [
+          {
+            "role": "static",
+            "name": "Last part",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Last part"
+          }
+        ]
+      },
+      {
+        "role": "paragraph",
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "The ￼ paragraph.",
+        "children": [
+          {
+            "role": "static",
+            "name": "The ",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "The "
+          },
+          {
+            "role": "static",
+            "attributes": {
+              "display": "inline",
+              "tag": "strong",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "last",
+            "children": [
+              {
+                "role": "static",
+                "name": "last",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "last"
+              }
+            ]
+          },
+          {
+            "role": "static",
+            "name": " paragraph.",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": " paragraph."
+          }
+        ]
+      }
+    ]
+  }
+}
