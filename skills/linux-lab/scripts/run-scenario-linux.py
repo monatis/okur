@@ -201,6 +201,12 @@ def main():
         chrome = subprocess.Popen(["python3", replica], stdout=subprocess.DEVNULL,
                                   stderr=subprocess.DEVNULL)
         time.sleep(6)
+        # Its window in front with the keyboard's focus, as the Windows runner brings the
+        # fixture forward: the window manager's focus for a new window came too late in some
+        # runs, and GTK takes no key in a window without it (the lab's 301, 2026-11-08, once
+        # the hook's grabs stopped moving the focus with every key).
+        subprocess.run(["xdotool", "search", "--sync", "--onlyvisible", "--pid", str(chrome.pid),
+                        "windowactivate", "--sync", "%1"], capture_output=True, timeout=30)
     else:
         chrome = subprocess.Popen(["google-chrome", "--no-sandbox", "--no-first-run",
                                    "--disable-gpu", f"--user-data-dir={profile}",
