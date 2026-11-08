@@ -651,8 +651,7 @@ impl EventSource for AtspiEventSource {
                             if let (true, Some(element), Some(document)) =
                                 (focus, target, document.as_ref())
                             {
-                                let on_document = okur_linux_model::convert::is_document(element);
-                                if converter.wants_page(on_document, &key_of(document)) {
+                                if converter.wants_page(element, &key_of(document)) {
                                     ask_page(
                                         document,
                                         at_ms,

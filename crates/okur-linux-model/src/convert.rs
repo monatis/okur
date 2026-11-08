@@ -126,10 +126,24 @@ impl Converter {
                 .is_twin(target.and_then(object_key).as_deref(), at_ms)
     }
 
-    /// Whether the page whose document is `document` is read as the focus lands in it: on its
-    /// document (a load, or Tab coming back to it), or in a page other than the one read last.
-    pub fn wants_page(&self, on_document: bool, document: &str) -> bool {
-        on_document || self.last_page.as_deref() != Some(document)
+    /// Whether the page whose document is `document` is read as the focus lands on `element`
+    /// in it: on its document (a load, or Tab coming back to it), in a page other than the one
+    /// read last, or on an object the page given last does not hold. That page changed since it
+    /// was read (a dialog opened, its content hidden until then; a list grew), and is read again
+    /// before the focus, as Windows reads a page again as it changes [obs, 2681: the focus on
+    /// the opened dialog's heading].
+    pub fn wants_page(&self, element: &ElementData, document: &str) -> bool {
+        let on_document = is_document(element);
+        let read_last = self.last_page.as_deref() == Some(document);
+        let changed = read_last
+            && !on_document
+            && !self.page_ids.is_empty()
+            && element
+                .raw
+                .get("object_path")
+                .and_then(|path| path.as_str())
+                .is_some_and(|path| !self.page_ids.contains_key(path));
+        on_document || !read_last || changed
     }
 
     /// The page whose document is `document` asked of the page reader: a focus in it before it
@@ -701,7 +715,8 @@ mod tests {
     fn a_page_read_later_is_its_own_record() {
         let mut converter = Converter::default();
         converter.page_asked(":1.5/doc");
-        assert!(!converter.wants_page(false, ":1.5/doc"));
+        let link = element(ElementRole::Link, "News", "/link", true);
+        assert!(!converter.wants_page(&link, ":1.5/doc"));
         let page = AtspiRecord::page(
             5,
             PageRead {
@@ -737,8 +752,29 @@ mod tests {
             [AccessibilityEvent::DocumentLoaded { title, .. }, AccessibilityEvent::Focus(f)]
                 if title == "News" && f.in_document
         ));
-        assert!(!converter.wants_page(false, ":1.5/doc"));
-        assert!(converter.wants_page(true, ":1.5/doc"));
-        assert!(converter.wants_page(false, ":1.5/other"));
+        let document = element(ElementRole::WebArea, "News", "/doc", true);
+        // The page read holds no object but its document: a focus on another is in a page
+        // changed since, read again.
+        let mut held = node("document web", "News", &[]);
+        held.path = "/doc".to_owned();
+        let mut known = node("link", "News", &[]);
+        known.path = "/link".to_owned();
+        held.children.push(known);
+        let again = AtspiRecord::page(
+            1,
+            PageRead {
+                document: ":1.5/doc".to_owned(),
+                base: 0,
+                root: held,
+                read_ms: 0,
+            },
+        );
+        let _ = converter.convert_read(&again);
+        let link = element(ElementRole::Link, "News", "/link", true);
+        let opened = element(ElementRole::Heading, "Add Delivery Address", "/new", true);
+        assert!(!converter.wants_page(&link, ":1.5/doc"));
+        assert!(converter.wants_page(&document, ":1.5/doc"));
+        assert!(converter.wants_page(&link, ":1.5/other"));
+        assert!(converter.wants_page(&opened, ":1.5/doc"));
     }
 }
