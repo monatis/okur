@@ -5,7 +5,7 @@
   "platform": "linux",
   "web_verbosity": null,
   "chrome": "google-chrome",
-  "commit": "3b2aacec7"
+  "commit": "3c555f36"
  },
  "trials": [
   {
@@ -14,8 +14,8 @@
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794144297534,
-     "t_end_ms": 1794144298538,
+     "t_start_ms": 1794151022732,
+     "t_end_ms": 1794151023736,
      "action": {
       "type": "keyboard",
       "command": "{DOWN}"
@@ -28,8 +28,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794144298538,
-     "t_end_ms": 1794144299542,
+     "t_start_ms": 1794151023736,
+     "t_end_ms": 1794151024740,
      "action": {
       "type": "keyboard",
       "command": "{DOWN}"
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794144299542,
-     "t_end_ms": 1794144300546,
+     "t_start_ms": 1794151024740,
+     "t_end_ms": 1794151025744,
      "action": {
       "type": "keyboard",
       "command": "{DOWN}"
@@ -56,8 +56,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794144300547,
-     "t_end_ms": 1794144301550,
+     "t_start_ms": 1794151025744,
+     "t_end_ms": 1794151026748,
      "action": {
       "type": "keyboard",
       "command": "{DOWN}"

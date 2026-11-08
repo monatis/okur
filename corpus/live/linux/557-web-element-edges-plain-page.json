@@ -5,7 +5,7 @@
   "platform": "linux",
   "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "3b2aacec7"
+  "commit": "3c555f36"
  },
  "trials": [
   {
@@ -14,8 +14,8 @@
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794144495689,
-     "t_end_ms": 1794144496693,
+     "t_start_ms": 1794151221548,
+     "t_end_ms": 1794151222552,
      "action": {
       "type": "key",
       "command": "Shift+Period"
@@ -28,8 +28,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794144496693,
-     "t_end_ms": 1794144497697,
+     "t_start_ms": 1794151222552,
+     "t_end_ms": 1794151223556,
      "action": {
       "type": "key",
       "command": "Down"
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794144497697,
-     "t_end_ms": 1794144498701,
+     "t_start_ms": 1794151223556,
+     "t_end_ms": 1794151224561,
      "action": {
       "type": "key",
       "command": "Shift+Period"
@@ -56,8 +56,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794144498701,
-     "t_end_ms": 1794144499706,
+     "t_start_ms": 1794151224561,
+     "t_end_ms": 1794151225565,
      "action": {
       "type": "key",
       "command": "Shift+Comma"
@@ -70,8 +70,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794144499706,
-     "t_end_ms": 1794144500711,
+     "t_start_ms": 1794151225565,
+     "t_end_ms": 1794151226570,
      "action": {
       "type": "key",
       "command": "Alt+Win+End"
@@ -84,8 +84,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794144500711,
-     "t_end_ms": 1794144501716,
+     "t_start_ms": 1794151226570,
+     "t_end_ms": 1794151227575,
      "action": {
       "type": "key",
       "command": "Alt+Win+Home"
@@ -98,8 +98,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794144501716,
-     "t_end_ms": 1794144502720,
+     "t_start_ms": 1794151227575,
+     "t_end_ms": 1794151228580,
      "action": {
       "type": "key",
       "command": "Down"

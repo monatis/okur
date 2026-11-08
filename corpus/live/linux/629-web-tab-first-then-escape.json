@@ -5,7 +5,7 @@
   "platform": "linux",
   "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "3b2aacec7"
+  "commit": "3c555f36"
  },
  "trials": [
   {
@@ -14,8 +14,8 @@
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794144678029,
-     "t_end_ms": 1794144679133,
+     "t_start_ms": 1794151404520,
+     "t_end_ms": 1794151405624,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -28,8 +28,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794144679133,
-     "t_end_ms": 1794144680137,
+     "t_start_ms": 1794151405624,
+     "t_end_ms": 1794151406628,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794144680137,
-     "t_end_ms": 1794144681240,
+     "t_start_ms": 1794151406628,
+     "t_end_ms": 1794151407732,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -56,8 +56,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794144681240,
-     "t_end_ms": 1794144682244,
+     "t_start_ms": 1794151407732,
+     "t_end_ms": 1794151408736,
      "action": {
       "type": "key",
       "command": "Escape"

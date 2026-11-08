@@ -5,7 +5,7 @@
   "platform": "linux",
   "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "3b2aacec7"
+  "commit": "3c555f36"
  },
  "trials": [
   {
@@ -14,8 +14,8 @@
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794142715157,
-     "t_end_ms": 1794142716161,
+     "t_start_ms": 1794149426339,
+     "t_end_ms": 1794149427343,
      "action": {
       "type": "key",
       "command": "2"
@@ -28,8 +28,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794142716161,
-     "t_end_ms": 1794142717165,
+     "t_start_ms": 1794149427343,
+     "t_end_ms": 1794149428347,
      "action": {
       "type": "key",
       "command": "2"
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794142717165,
-     "t_end_ms": 1794142718168,
+     "t_start_ms": 1794149428347,
+     "t_end_ms": 1794149429351,
      "action": {
       "type": "key",
       "command": "2"
@@ -56,8 +56,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794142718168,
-     "t_end_ms": 1794142719172,
+     "t_start_ms": 1794149429351,
+     "t_end_ms": 1794149430354,
      "action": {
       "type": "key",
       "command": "2"
@@ -70,8 +70,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794142719172,
-     "t_end_ms": 1794142720177,
+     "t_start_ms": 1794149430354,
+     "t_end_ms": 1794149431358,
      "action": {
       "type": "key",
       "command": "3"
@@ -84,8 +84,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794142720177,
-     "t_end_ms": 1794142721181,
+     "t_start_ms": 1794149431358,
+     "t_end_ms": 1794149432363,
      "action": {
       "type": "key",
       "command": "3"
@@ -98,8 +98,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794142721181,
-     "t_end_ms": 1794142722185,
+     "t_start_ms": 1794149432363,
+     "t_end_ms": 1794149433367,
      "action": {
       "type": "key",
       "command": "1"
@@ -112,8 +112,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794142722185,
-     "t_end_ms": 1794142723190,
+     "t_start_ms": 1794149433367,
+     "t_end_ms": 1794149434371,
      "action": {
       "type": "key",
       "command": "1"

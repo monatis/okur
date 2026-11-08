@@ -5,7 +5,7 @@
   "platform": "linux",
   "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "3b2aacec7"
+  "commit": "3c555f36"
  },
  "trials": [
   {
@@ -14,8 +14,8 @@
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794143967039,
-     "t_end_ms": 1794143968043,
+     "t_start_ms": 1794150690098,
+     "t_end_ms": 1794150691102,
      "action": {
       "type": "key",
       "command": "C"
@@ -28,8 +28,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794143968043,
-     "t_end_ms": 1794143969147,
+     "t_start_ms": 1794150691102,
+     "t_end_ms": 1794150692306,
      "action": {
       "type": "key",
       "command": "Space"
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794143969147,
-     "t_end_ms": 1794143970251,
+     "t_start_ms": 1794150692306,
+     "t_end_ms": 1794150693409,
      "action": {
       "type": "key",
       "command": "Down"
@@ -56,8 +56,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794143970251,
-     "t_end_ms": 1794143971255,
+     "t_start_ms": 1794150693409,
+     "t_end_ms": 1794150694413,
      "action": {
       "type": "key",
       "command": "Down"
@@ -70,8 +70,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794143971255,
-     "t_end_ms": 1794143972360,
+     "t_start_ms": 1794150694413,
+     "t_end_ms": 1794150695516,
      "action": {
       "type": "key",
       "command": "Up"
@@ -84,8 +84,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794143972360,
-     "t_end_ms": 1794143973465,
+     "t_start_ms": 1794150695516,
+     "t_end_ms": 1794150696621,
      "action": {
       "type": "key",
       "command": "Enter"
@@ -98,8 +98,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794143973465,
-     "t_end_ms": 1794143974569,
+     "t_start_ms": 1794150696621,
+     "t_end_ms": 1794150697725,
      "action": {
       "type": "key",
       "command": "Space"
@@ -112,8 +112,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794143974569,
-     "t_end_ms": 1794143975674,
+     "t_start_ms": 1794150697725,
+     "t_end_ms": 1794150698830,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -126,8 +126,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794143975674,
-     "t_end_ms": 1794143976679,
+     "t_start_ms": 1794150698830,
+     "t_end_ms": 1794150699835,
      "action": {
       "type": "key",
       "command": "Insert+Up"

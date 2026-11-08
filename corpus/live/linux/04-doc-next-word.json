@@ -5,7 +5,7 @@
   "platform": "linux",
   "web_verbosity": null,
   "chrome": "google-chrome",
-  "commit": "3b2aacec7"
+  "commit": "3c555f36"
  },
  "trials": [
   {
@@ -14,8 +14,8 @@
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794142362472,
-     "t_end_ms": 1794142363477,
+     "t_start_ms": 1794149071999,
+     "t_end_ms": 1794149073003,
      "action": {
       "type": "keyboard",
       "command": "^{RIGHT}"

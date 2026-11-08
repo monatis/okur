@@ -5,7 +5,7 @@
   "platform": "linux",
   "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "3b2aacec7"
+  "commit": "3c555f36"
  },
  "trials": [
   {
@@ -14,8 +14,8 @@
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794142487540,
-     "t_end_ms": 1794142488544,
+     "t_start_ms": 1794149197647,
+     "t_end_ms": 1794149198651,
      "action": {
       "type": "key",
       "command": "Down"
@@ -28,8 +28,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794142488544,
-     "t_end_ms": 1794142489548,
+     "t_start_ms": 1794149198651,
+     "t_end_ms": 1794149199655,
      "action": {
       "type": "key",
       "command": "Down"
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794142489548,
-     "t_end_ms": 1794142490552,
+     "t_start_ms": 1794149199655,
+     "t_end_ms": 1794149200658,
      "action": {
       "type": "key",
       "command": "Down"
@@ -56,8 +56,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794142490552,
-     "t_end_ms": 1794142491556,
+     "t_start_ms": 1794149200658,
+     "t_end_ms": 1794149201662,
      "action": {
       "type": "key",
       "command": "Down"
@@ -70,8 +70,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794142491556,
-     "t_end_ms": 1794142492559,
+     "t_start_ms": 1794149201662,
+     "t_end_ms": 1794149202666,
      "action": {
       "type": "key",
       "command": "Down"
@@ -84,8 +84,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794142492559,
-     "t_end_ms": 1794142493564,
+     "t_start_ms": 1794149202666,
+     "t_end_ms": 1794149203670,
      "action": {
       "type": "key",
       "command": "Down"
@@ -98,8 +98,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794142493564,
-     "t_end_ms": 1794142494568,
+     "t_start_ms": 1794149203670,
+     "t_end_ms": 1794149204674,
      "action": {
       "type": "key",
       "command": "Down"
@@ -112,8 +112,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794142494568,
-     "t_end_ms": 1794142495572,
+     "t_start_ms": 1794149204674,
+     "t_end_ms": 1794149205679,
      "action": {
       "type": "key",
       "command": "Down"
@@ -126,8 +126,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794142495572,
-     "t_end_ms": 1794142496576,
+     "t_start_ms": 1794149205679,
+     "t_end_ms": 1794149206683,
      "action": {
       "type": "key",
       "command": "Down"
@@ -140,8 +140,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794142496576,
-     "t_end_ms": 1794142497580,
+     "t_start_ms": 1794149206683,
+     "t_end_ms": 1794149207688,
      "action": {
       "type": "key",
       "command": "Down"
@@ -154,8 +154,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794142497580,
-     "t_end_ms": 1794142498584,
+     "t_start_ms": 1794149207688,
+     "t_end_ms": 1794149208692,
      "action": {
       "type": "key",
       "command": "Down"
@@ -168,8 +168,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794142498584,
-     "t_end_ms": 1794142499588,
+     "t_start_ms": 1794149208692,
+     "t_end_ms": 1794149209697,
      "action": {
       "type": "key",
       "command": "Down"
@@ -182,8 +182,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794142499588,
-     "t_end_ms": 1794142500592,
+     "t_start_ms": 1794149209697,
+     "t_end_ms": 1794149210702,
      "action": {
       "type": "key",
       "command": "Down"
@@ -196,8 +196,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794142500592,
-     "t_end_ms": 1794142501596,
+     "t_start_ms": 1794149210702,
+     "t_end_ms": 1794149211706,
      "action": {
       "type": "key",
       "command": "Down"
@@ -210,8 +210,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794142501596,
-     "t_end_ms": 1794142502599,
+     "t_start_ms": 1794149211706,
+     "t_end_ms": 1794149212711,
      "action": {
       "type": "key",
       "command": "Down"
@@ -224,8 +224,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794142502599,
-     "t_end_ms": 1794142503603,
+     "t_start_ms": 1794149212711,
+     "t_end_ms": 1794149213715,
      "action": {
       "type": "key",
       "command": "Down"
@@ -238,8 +238,8 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794142503603,
-     "t_end_ms": 1794142504607,
+     "t_start_ms": 1794149213715,
+     "t_end_ms": 1794149214719,
      "action": {
       "type": "key",
       "command": "Down"
@@ -252,8 +252,8 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794142504607,
-     "t_end_ms": 1794142505611,
+     "t_start_ms": 1794149214719,
+     "t_end_ms": 1794149215723,
      "action": {
       "type": "key",
       "command": "Down"
@@ -266,8 +266,8 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794142505611,
-     "t_end_ms": 1794142506615,
+     "t_start_ms": 1794149215723,
+     "t_end_ms": 1794149216727,
      "action": {
       "type": "key",
       "command": "Down"
@@ -280,8 +280,8 @@
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794142506615,
-     "t_end_ms": 1794142507620,
+     "t_start_ms": 1794149216727,
+     "t_end_ms": 1794149217732,
      "action": {
       "type": "key",
       "command": "Down"
@@ -294,8 +294,8 @@
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794142507620,
-     "t_end_ms": 1794142508624,
+     "t_start_ms": 1794149217732,
+     "t_end_ms": 1794149218736,
      "action": {
       "type": "key",
       "command": "Down"
@@ -308,8 +308,8 @@
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794142508624,
-     "t_end_ms": 1794142509628,
+     "t_start_ms": 1794149218736,
+     "t_end_ms": 1794149219740,
      "action": {
       "type": "key",
       "command": "Down"
@@ -322,8 +322,8 @@
     },
     {
      "step_id": "s23",
-     "t_start_ms": 1794142509628,
-     "t_end_ms": 1794142510632,
+     "t_start_ms": 1794149219740,
+     "t_end_ms": 1794149220745,
      "action": {
       "type": "key",
       "command": "Down"
@@ -336,8 +336,8 @@
     },
     {
      "step_id": "s24",
-     "t_start_ms": 1794142510632,
-     "t_end_ms": 1794142511637,
+     "t_start_ms": 1794149220745,
+     "t_end_ms": 1794149221849,
      "action": {
       "type": "key",
       "command": "Down"
@@ -350,8 +350,8 @@
     },
     {
      "step_id": "s25",
-     "t_start_ms": 1794142511637,
-     "t_end_ms": 1794142512641,
+     "t_start_ms": 1794149221849,
+     "t_end_ms": 1794149222853,
      "action": {
       "type": "key",
       "command": "Down"
@@ -364,8 +364,8 @@
     },
     {
      "step_id": "s26",
-     "t_start_ms": 1794142512641,
-     "t_end_ms": 1794142513645,
+     "t_start_ms": 1794149222853,
+     "t_end_ms": 1794149223858,
      "action": {
       "type": "key",
       "command": "Down"
@@ -378,8 +378,8 @@
     },
     {
      "step_id": "s27",
-     "t_start_ms": 1794142513645,
-     "t_end_ms": 1794142514649,
+     "t_start_ms": 1794149223858,
+     "t_end_ms": 1794149224862,
      "action": {
       "type": "key",
       "command": "Down"
@@ -392,8 +392,8 @@
     },
     {
      "step_id": "s28",
-     "t_start_ms": 1794142514649,
-     "t_end_ms": 1794142515653,
+     "t_start_ms": 1794149224862,
+     "t_end_ms": 1794149225866,
      "action": {
       "type": "key",
       "command": "Down"
@@ -406,8 +406,8 @@
     },
     {
      "step_id": "s29",
-     "t_start_ms": 1794142515653,
-     "t_end_ms": 1794142516657,
+     "t_start_ms": 1794149225866,
+     "t_end_ms": 1794149226871,
      "action": {
       "type": "key",
       "command": "Down"
@@ -420,8 +420,8 @@
     },
     {
      "step_id": "s30",
-     "t_start_ms": 1794142516657,
-     "t_end_ms": 1794142517661,
+     "t_start_ms": 1794149226871,
+     "t_end_ms": 1794149227875,
      "action": {
       "type": "key",
       "command": "Down"
@@ -434,8 +434,8 @@
     },
     {
      "step_id": "s31",
-     "t_start_ms": 1794142517661,
-     "t_end_ms": 1794142518666,
+     "t_start_ms": 1794149227875,
+     "t_end_ms": 1794149228879,
      "action": {
       "type": "key",
       "command": "Down"
@@ -448,8 +448,8 @@
     },
     {
      "step_id": "s32",
-     "t_start_ms": 1794142518666,
-     "t_end_ms": 1794142519671,
+     "t_start_ms": 1794149228879,
+     "t_end_ms": 1794149229883,
      "action": {
       "type": "key",
       "command": "Down"
@@ -462,8 +462,8 @@
     },
     {
      "step_id": "s33",
-     "t_start_ms": 1794142519671,
-     "t_end_ms": 1794142520675,
+     "t_start_ms": 1794149229883,
+     "t_end_ms": 1794149230888,
      "action": {
       "type": "key",
       "command": "Down"
@@ -476,8 +476,8 @@
     },
     {
      "step_id": "s34",
-     "t_start_ms": 1794142520675,
-     "t_end_ms": 1794142521680,
+     "t_start_ms": 1794149230888,
+     "t_end_ms": 1794149231893,
      "action": {
       "type": "key",
       "command": "Down"
@@ -490,8 +490,8 @@
     },
     {
      "step_id": "s35",
-     "t_start_ms": 1794142521680,
-     "t_end_ms": 1794142522684,
+     "t_start_ms": 1794149231893,
+     "t_end_ms": 1794149232898,
      "action": {
       "type": "key",
       "command": "Down"
@@ -504,8 +504,8 @@
     },
     {
      "step_id": "s36",
-     "t_start_ms": 1794142522684,
-     "t_end_ms": 1794142523688,
+     "t_start_ms": 1794149232898,
+     "t_end_ms": 1794149233902,
      "action": {
       "type": "key",
       "command": "Down"
@@ -518,8 +518,8 @@
     },
     {
      "step_id": "s37",
-     "t_start_ms": 1794142523688,
-     "t_end_ms": 1794142524693,
+     "t_start_ms": 1794149233902,
+     "t_end_ms": 1794149234907,
      "action": {
       "type": "key",
       "command": "Down"
@@ -532,8 +532,8 @@
     },
     {
      "step_id": "s38",
-     "t_start_ms": 1794142524693,
-     "t_end_ms": 1794142525698,
+     "t_start_ms": 1794149234907,
+     "t_end_ms": 1794149235911,
      "action": {
       "type": "key",
       "command": "Down"
@@ -546,8 +546,8 @@
     },
     {
      "step_id": "s39",
-     "t_start_ms": 1794142525698,
-     "t_end_ms": 1794142526702,
+     "t_start_ms": 1794149235911,
+     "t_end_ms": 1794149236915,
      "action": {
       "type": "key",
       "command": "Down"
@@ -560,8 +560,8 @@
     },
     {
      "step_id": "s40",
-     "t_start_ms": 1794142526702,
-     "t_end_ms": 1794142527706,
+     "t_start_ms": 1794149236915,
+     "t_end_ms": 1794149238019,
      "action": {
       "type": "key",
       "command": "Down"
@@ -574,8 +574,8 @@
     },
     {
      "step_id": "s41",
-     "t_start_ms": 1794142527706,
-     "t_end_ms": 1794142528710,
+     "t_start_ms": 1794149238019,
+     "t_end_ms": 1794149239023,
      "action": {
       "type": "key",
       "command": "Down"
@@ -588,8 +588,8 @@
     },
     {
      "step_id": "s42",
-     "t_start_ms": 1794142528710,
-     "t_end_ms": 1794142529714,
+     "t_start_ms": 1794149239023,
+     "t_end_ms": 1794149240027,
      "action": {
       "type": "key",
       "command": "Down"
@@ -602,8 +602,8 @@
     },
     {
      "step_id": "s43",
-     "t_start_ms": 1794142529714,
-     "t_end_ms": 1794142530718,
+     "t_start_ms": 1794149240027,
+     "t_end_ms": 1794149241031,
      "action": {
       "type": "key",
       "command": "Down"
@@ -616,8 +616,8 @@
     },
     {
      "step_id": "s44",
-     "t_start_ms": 1794142530718,
-     "t_end_ms": 1794142531722,
+     "t_start_ms": 1794149241031,
+     "t_end_ms": 1794149242036,
      "action": {
       "type": "key",
       "command": "Down"
@@ -630,8 +630,8 @@
     },
     {
      "step_id": "s45",
-     "t_start_ms": 1794142531722,
-     "t_end_ms": 1794142532726,
+     "t_start_ms": 1794149242036,
+     "t_end_ms": 1794149243040,
      "action": {
       "type": "key",
       "command": "Down"
@@ -644,8 +644,8 @@
     },
     {
      "step_id": "s46",
-     "t_start_ms": 1794142532726,
-     "t_end_ms": 1794142533730,
+     "t_start_ms": 1794149243040,
+     "t_end_ms": 1794149244044,
      "action": {
       "type": "key",
       "command": "Down"
@@ -658,8 +658,8 @@
     },
     {
      "step_id": "s47",
-     "t_start_ms": 1794142533730,
-     "t_end_ms": 1794142534734,
+     "t_start_ms": 1794149244044,
+     "t_end_ms": 1794149245048,
      "action": {
       "type": "key",
       "command": "Down"
@@ -672,8 +672,8 @@
     },
     {
      "step_id": "s48",
-     "t_start_ms": 1794142534734,
-     "t_end_ms": 1794142535838,
+     "t_start_ms": 1794149245048,
+     "t_end_ms": 1794149246052,
      "action": {
       "type": "key",
       "command": "Down"
@@ -686,8 +686,8 @@
     },
     {
      "step_id": "s49",
-     "t_start_ms": 1794142535838,
-     "t_end_ms": 1794142536843,
+     "t_start_ms": 1794149246052,
+     "t_end_ms": 1794149247055,
      "action": {
       "type": "key",
       "command": "Down"
@@ -700,8 +700,8 @@
     },
     {
      "step_id": "s50",
-     "t_start_ms": 1794142536843,
-     "t_end_ms": 1794142537847,
+     "t_start_ms": 1794149247055,
+     "t_end_ms": 1794149248059,
      "action": {
       "type": "key",
       "command": "Down"
@@ -714,8 +714,8 @@
     },
     {
      "step_id": "s51",
-     "t_start_ms": 1794142537847,
-     "t_end_ms": 1794142538852,
+     "t_start_ms": 1794149248059,
+     "t_end_ms": 1794149249063,
      "action": {
       "type": "key",
       "command": "Down"
@@ -728,8 +728,8 @@
     },
     {
      "step_id": "s52",
-     "t_start_ms": 1794142538852,
-     "t_end_ms": 1794142539856,
+     "t_start_ms": 1794149249063,
+     "t_end_ms": 1794149250067,
      "action": {
       "type": "key",
       "command": "Down"
@@ -742,8 +742,8 @@
     },
     {
      "step_id": "s53",
-     "t_start_ms": 1794142539856,
-     "t_end_ms": 1794142540860,
+     "t_start_ms": 1794149250067,
+     "t_end_ms": 1794149251072,
      "action": {
       "type": "key",
       "command": "Down"
@@ -756,8 +756,8 @@
     },
     {
      "step_id": "s54",
-     "t_start_ms": 1794142540860,
-     "t_end_ms": 1794142541864,
+     "t_start_ms": 1794149251072,
+     "t_end_ms": 1794149252076,
      "action": {
       "type": "key",
       "command": "Down"
@@ -770,8 +770,8 @@
     },
     {
      "step_id": "s55",
-     "t_start_ms": 1794142541864,
-     "t_end_ms": 1794142542868,
+     "t_start_ms": 1794149252076,
+     "t_end_ms": 1794149253080,
      "action": {
       "type": "key",
       "command": "Down"
@@ -784,8 +784,8 @@
     },
     {
      "step_id": "s56",
-     "t_start_ms": 1794142542868,
-     "t_end_ms": 1794142543872,
+     "t_start_ms": 1794149253080,
+     "t_end_ms": 1794149254084,
      "action": {
       "type": "key",
       "command": "Down"
@@ -798,8 +798,8 @@
     },
     {
      "step_id": "s57",
-     "t_start_ms": 1794142543872,
-     "t_end_ms": 1794142544876,
+     "t_start_ms": 1794149254084,
+     "t_end_ms": 1794149255088,
      "action": {
       "type": "key",
       "command": "Down"
@@ -812,8 +812,8 @@
     },
     {
      "step_id": "s58",
-     "t_start_ms": 1794142544876,
-     "t_end_ms": 1794142545880,
+     "t_start_ms": 1794149255088,
+     "t_end_ms": 1794149256092,
      "action": {
       "type": "key",
       "command": "Down"
@@ -826,8 +826,8 @@
     },
     {
      "step_id": "s59",
-     "t_start_ms": 1794142545880,
-     "t_end_ms": 1794142546885,
+     "t_start_ms": 1794149256092,
+     "t_end_ms": 1794149257096,
      "action": {
       "type": "key",
       "command": "Down"
@@ -840,8 +840,8 @@
     },
     {
      "step_id": "s60",
-     "t_start_ms": 1794142546885,
-     "t_end_ms": 1794142547889,
+     "t_start_ms": 1794149257096,
+     "t_end_ms": 1794149258101,
      "action": {
       "type": "key",
       "command": "Down"
@@ -854,8 +854,8 @@
     },
     {
      "step_id": "s61",
-     "t_start_ms": 1794142547889,
-     "t_end_ms": 1794142548893,
+     "t_start_ms": 1794149258101,
+     "t_end_ms": 1794149259105,
      "action": {
       "type": "key",
       "command": "Down"
@@ -868,8 +868,8 @@
     },
     {
      "step_id": "s62",
-     "t_start_ms": 1794142548893,
-     "t_end_ms": 1794142549898,
+     "t_start_ms": 1794149259105,
+     "t_end_ms": 1794149260109,
      "action": {
       "type": "key",
       "command": "Down"
@@ -882,8 +882,8 @@
     },
     {
      "step_id": "s63",
-     "t_start_ms": 1794142549898,
-     "t_end_ms": 1794142550901,
+     "t_start_ms": 1794149260109,
+     "t_end_ms": 1794149261114,
      "action": {
       "type": "key",
       "command": "Down"
@@ -896,8 +896,8 @@
     },
     {
      "step_id": "s64",
-     "t_start_ms": 1794142550901,
-     "t_end_ms": 1794142551906,
+     "t_start_ms": 1794149261114,
+     "t_end_ms": 1794149262117,
      "action": {
       "type": "key",
       "command": "Down"
@@ -910,8 +910,8 @@
     },
     {
      "step_id": "s65",
-     "t_start_ms": 1794142551906,
-     "t_end_ms": 1794142552910,
+     "t_start_ms": 1794149262117,
+     "t_end_ms": 1794149263121,
      "action": {
       "type": "key",
       "command": "Down"
@@ -924,8 +924,8 @@
     },
     {
      "step_id": "s66",
-     "t_start_ms": 1794142552910,
-     "t_end_ms": 1794142553913,
+     "t_start_ms": 1794149263121,
+     "t_end_ms": 1794149264125,
      "action": {
       "type": "key",
       "command": "Down"
@@ -938,8 +938,8 @@
     },
     {
      "step_id": "s67",
-     "t_start_ms": 1794142553914,
-     "t_end_ms": 1794142554918,
+     "t_start_ms": 1794149264126,
+     "t_end_ms": 1794149265130,
      "action": {
       "type": "key",
       "command": "Down"
@@ -952,8 +952,8 @@
     },
     {
      "step_id": "s68",
-     "t_start_ms": 1794142554918,
-     "t_end_ms": 1794142555922,
+     "t_start_ms": 1794149265130,
+     "t_end_ms": 1794149266134,
      "action": {
       "type": "key",
       "command": "Down"
@@ -966,8 +966,8 @@
     },
     {
      "step_id": "s69",
-     "t_start_ms": 1794142555922,
-     "t_end_ms": 1794142556927,
+     "t_start_ms": 1794149266134,
+     "t_end_ms": 1794149267138,
      "action": {
       "type": "key",
       "command": "Down"
@@ -980,8 +980,8 @@
     },
     {
      "step_id": "s70",
-     "t_start_ms": 1794142556927,
-     "t_end_ms": 1794142557932,
+     "t_start_ms": 1794149267138,
+     "t_end_ms": 1794149268142,
      "action": {
       "type": "key",
       "command": "Down"
@@ -994,8 +994,8 @@
     },
     {
      "step_id": "s71",
-     "t_start_ms": 1794142557932,
-     "t_end_ms": 1794142558937,
+     "t_start_ms": 1794149268142,
+     "t_end_ms": 1794149269146,
      "action": {
       "type": "key",
       "command": "Down"
@@ -1008,8 +1008,8 @@
     },
     {
      "step_id": "s72",
-     "t_start_ms": 1794142558937,
-     "t_end_ms": 1794142559941,
+     "t_start_ms": 1794149269146,
+     "t_end_ms": 1794149270150,
      "action": {
       "type": "key",
       "command": "Down"
@@ -1022,8 +1022,8 @@
     },
     {
      "step_id": "s73",
-     "t_start_ms": 1794142559941,
-     "t_end_ms": 1794142560946,
+     "t_start_ms": 1794149270150,
+     "t_end_ms": 1794149271154,
      "action": {
       "type": "key",
       "command": "Down"
@@ -1036,8 +1036,8 @@
     },
     {
      "step_id": "s74",
-     "t_start_ms": 1794142560946,
-     "t_end_ms": 1794142561950,
+     "t_start_ms": 1794149271154,
+     "t_end_ms": 1794149272159,
      "action": {
       "type": "key",
       "command": "Down"

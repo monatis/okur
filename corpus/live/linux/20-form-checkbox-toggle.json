@@ -5,7 +5,7 @@
   "platform": "linux",
   "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "3b2aacec7"
+  "commit": "3c555f36"
  },
  "trials": [
   {
@@ -14,8 +14,8 @@
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794143310976,
-     "t_end_ms": 1794143311979,
+     "t_start_ms": 1794150025964,
+     "t_end_ms": 1794150026968,
      "action": {
       "type": "key",
       "command": "X"
@@ -28,14 +28,14 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794143311979,
-     "t_end_ms": 1794143313084,
+     "t_start_ms": 1794150026968,
+     "t_end_ms": 1794150028081,
      "action": {
       "type": "key",
       "command": "Space"
      },
      "observation": {
-      "speech_raw": "Forms and Interaction Reference Fixture\nI accept terms and conditions  \u001d check box \u001e   \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
+      "speech_raw": "Forms and Interaction Reference Fixture\nI accept terms and conditions  \u001d check box \u001e   \u001dnot checked\u001e \nTo check press Spacebar.\n \u001dchecked\u001e ",
       "settled": true
      },
      "step_success": true

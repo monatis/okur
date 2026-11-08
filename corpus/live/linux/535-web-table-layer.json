@@ -5,7 +5,7 @@
   "platform": "linux",
   "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "3b2aacec7"
+  "commit": "3c555f36"
  },
  "trials": [
   {
@@ -14,8 +14,8 @@
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794144429269,
-     "t_end_ms": 1794144430273,
+     "t_start_ms": 1794151154742,
+     "t_end_ms": 1794151155746,
      "action": {
       "type": "key",
       "command": "T"
@@ -28,8 +28,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794144430273,
-     "t_end_ms": 1794144431277,
+     "t_start_ms": 1794151155746,
+     "t_end_ms": 1794151156750,
      "action": {
       "type": "key",
       "command": "Down"
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794144431277,
-     "t_end_ms": 1794144432280,
+     "t_start_ms": 1794151156750,
+     "t_end_ms": 1794151157753,
      "action": {
       "type": "key",
       "command": "Down"
@@ -56,8 +56,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794144432280,
-     "t_end_ms": 1794144433285,
+     "t_start_ms": 1794151157753,
+     "t_end_ms": 1794151158758,
      "action": {
       "type": "key",
       "command": "Insert+Space"
@@ -70,8 +70,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794144433285,
-     "t_end_ms": 1794144434289,
+     "t_start_ms": 1794151158758,
+     "t_end_ms": 1794151159761,
      "action": {
       "type": "key",
       "command": "T"
@@ -84,8 +84,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794144434289,
-     "t_end_ms": 1794144435294,
+     "t_start_ms": 1794151159761,
+     "t_end_ms": 1794151160765,
      "action": {
       "type": "key",
       "command": "Right"
@@ -98,8 +98,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794144435294,
-     "t_end_ms": 1794144436298,
+     "t_start_ms": 1794151160765,
+     "t_end_ms": 1794151161769,
      "action": {
       "type": "key",
       "command": "Down"
@@ -112,8 +112,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794144436298,
-     "t_end_ms": 1794144437302,
+     "t_start_ms": 1794151161769,
+     "t_end_ms": 1794151162774,
      "action": {
       "type": "key",
       "command": "Numpad5"
@@ -126,8 +126,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794144437302,
-     "t_end_ms": 1794144438307,
+     "t_start_ms": 1794151162774,
+     "t_end_ms": 1794151163778,
      "action": {
       "type": "key",
       "command": "Left"
@@ -140,8 +140,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794144438307,
-     "t_end_ms": 1794144439310,
+     "t_start_ms": 1794151163778,
+     "t_end_ms": 1794151164782,
      "action": {
       "type": "key",
       "command": "Up"
@@ -154,8 +154,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794144439310,
-     "t_end_ms": 1794144440315,
+     "t_start_ms": 1794151164782,
+     "t_end_ms": 1794151165788,
      "action": {
       "type": "key",
       "command": "Ctrl+End"
@@ -168,8 +168,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794144440315,
-     "t_end_ms": 1794144441320,
+     "t_start_ms": 1794151165788,
+     "t_end_ms": 1794151166793,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -182,8 +182,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794144441320,
-     "t_end_ms": 1794144442325,
+     "t_start_ms": 1794151166793,
+     "t_end_ms": 1794151167798,
      "action": {
       "type": "key",
       "command": "Ctrl+Down"
@@ -196,8 +196,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794144442325,
-     "t_end_ms": 1794144443330,
+     "t_start_ms": 1794151167798,
+     "t_end_ms": 1794151168803,
      "action": {
       "type": "key",
       "command": "Shift+Up"
@@ -210,8 +210,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794144443330,
-     "t_end_ms": 1794144444335,
+     "t_start_ms": 1794151168803,
+     "t_end_ms": 1794151169808,
      "action": {
       "type": "key",
       "command": "Shift+Numpad5"
@@ -224,8 +224,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794144444335,
-     "t_end_ms": 1794144445340,
+     "t_start_ms": 1794151169808,
+     "t_end_ms": 1794151170812,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -238,8 +238,8 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794144445340,
-     "t_end_ms": 1794144446345,
+     "t_start_ms": 1794151170812,
+     "t_end_ms": 1794151171817,
      "action": {
       "type": "key",
       "command": "Insert+Up"

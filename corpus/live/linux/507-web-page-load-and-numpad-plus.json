@@ -5,7 +5,7 @@
   "platform": "linux",
   "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "3b2aacec7"
+  "commit": "3c555f36"
  },
  "trials": [
   {
@@ -14,8 +14,8 @@
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794144363182,
-     "t_end_ms": 1794144364487,
+     "t_start_ms": 1794151088372,
+     "t_end_ms": 1794151089677,
      "action": {
       "type": "key",
       "command": "Ctrl+R"
@@ -28,8 +28,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794144364487,
-     "t_end_ms": 1794144365492,
+     "t_start_ms": 1794151089677,
+     "t_end_ms": 1794151090681,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794144365492,
-     "t_end_ms": 1794144366496,
+     "t_start_ms": 1794151090681,
+     "t_end_ms": 1794151091686,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -56,8 +56,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794144366496,
-     "t_end_ms": 1794144367500,
+     "t_start_ms": 1794151091686,
+     "t_end_ms": 1794151092690,
      "action": {
       "type": "key",
       "command": "E"
@@ -70,8 +70,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794144367500,
-     "t_end_ms": 1794144368605,
+     "t_start_ms": 1794151092690,
+     "t_end_ms": 1794151093795,
      "action": {
       "type": "key",
       "command": "Enter"
@@ -84,8 +84,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794144368605,
-     "t_end_ms": 1794144369609,
+     "t_start_ms": 1794151093795,
+     "t_end_ms": 1794151094799,
      "action": {
       "type": "key",
       "command": "NumpadPlus"
@@ -98,8 +98,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794144369609,
-     "t_end_ms": 1794144370613,
+     "t_start_ms": 1794151094799,
+     "t_end_ms": 1794151095804,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -112,8 +112,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794144370613,
-     "t_end_ms": 1794144371718,
+     "t_start_ms": 1794151095804,
+     "t_end_ms": 1794151096809,
      "action": {
       "type": "key",
       "command": "Down"

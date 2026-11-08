@@ -5,7 +5,7 @@
   "platform": "linux",
   "web_verbosity": null,
   "chrome": "google-chrome",
-  "commit": "3b2aacec7"
+  "commit": "3c555f36"
  },
  "trials": [
   {
@@ -14,8 +14,8 @@
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794142287736,
-     "t_end_ms": 1794142288741,
+     "t_start_ms": 1794148996792,
+     "t_end_ms": 1794148997797,
      "action": {
       "type": "jaws_script",
       "command": "SayAll"
