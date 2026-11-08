@@ -1132,6 +1132,31 @@ fn a_field_focused_inside_a_dialog_just_named_does_not_cut_it_off() {
     assert_eq!(interrupts(&speech).last(), Some(&true));
 }
 
+/// Two windows of one title, which the platform names apart (Linux's frames), are two windows:
+/// the focus moving to the second says its title as a new window does; another focus in it does
+/// not (the structure plan's step 4).
+#[test]
+fn two_windows_of_one_title_are_told_apart_by_their_ids() {
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    let focus_in = |window: &str, role: Role, name: &str| {
+        let mut focus = FocusEvent::new(role)
+            .with_name(name)
+            .with_window_title("Untitled - Editor");
+        focus.platform.window_id = Some(window.to_owned());
+        focus
+    };
+    engine.handle_focus_event(&focus_in(":1.5/w1", Role::Edit, "Text"));
+    speech.take();
+    engine.handle_focus_event(&focus_in(":1.5/w2", Role::Edit, "Text"));
+    let second = speech.take().join(" | ");
+    assert!(second.contains("Untitled - Editor"), "{second}");
+    engine.handle_focus_event(&focus_in(":1.5/w2", Role::Button, "Find"));
+    let third = speech.take().join(" | ");
+    assert!(!third.contains("Untitled - Editor"), "{third}");
+}
+
 /// Say Window in a window that is not a dialog box asks the platform for the window's
 /// controls and says them as they arrive, the window first [obs, 1136/s3].
 #[test]

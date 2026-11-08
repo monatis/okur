@@ -61,8 +61,8 @@ impl AppModule for Explorer {
             && cx.window_title.as_deref() != focus.window_title.as_deref();
         let first_entry = *cx.app_mode != MODE || window_changed;
         *cx.app_mode = MODE;
-        let from_other_app = cx.window_kind.is_none()
-            || cx.window_kind.as_deref() != focus.platform.top_window_class.as_deref();
+        let from_other_app =
+            cx.window_kind.is_none() || cx.window_kind.as_deref() != focus.platform.window_key();
         cx.note_window(focus);
         if let Some(title) = &focus.window_title {
             self.window_title = Some(title.clone());

@@ -259,6 +259,16 @@ fn native_control(
     }
     let mut control = native_focus(focus_event(element), &read.focus, &read.ancestors);
     control.app = app;
+    // Its window by the window's object, its application's bus name and its path: two windows
+    // of one title are two windows.
+    let bus = element.raw.get("bus_name").and_then(|v| v.as_str());
+    control.platform.window_id = read
+        .ancestors
+        .iter()
+        .find(|a| crate::focus::is_window(&a.role))
+        .filter(|window| !window.path.is_empty())
+        .zip(bus)
+        .map(|(window, bus)| format!("{bus}{}", window.path));
     Some(control)
 }
 

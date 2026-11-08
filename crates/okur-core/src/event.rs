@@ -1141,6 +1141,21 @@ pub struct PlatformIds {
     /// is "CommandSearchTextBox").
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub automation_id: Option<String>,
+    /// The top-level window itself, opaque, where the platform names it (Linux: its frame's
+    /// AT-SPI object). It tells apart two windows of one title and class (two editors'
+    /// "Untitled"), which [`Self::top_window_class`] cannot.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub window_id: Option<String>,
+}
+
+impl PlatformIds {
+    /// What a window change is a change of: the window itself where the platform names it,
+    /// else its class (the structure plan's step 4, 2026-11-08).
+    pub fn window_key(&self) -> Option<&str> {
+        self.window_id
+            .as_deref()
+            .or(self.top_window_class.as_deref())
+    }
 }
 
 impl FocusEvent {

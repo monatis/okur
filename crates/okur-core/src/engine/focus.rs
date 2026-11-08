@@ -491,7 +491,7 @@ impl ScreenReaderEngine {
             // browser (toolbar, address bar), so that focus does not announce a new window.
             if let Some(title) = &focus.window_title {
                 self.last_window_title = Some(title.clone());
-                self.last_window_kind = focus.platform.top_window_class.clone();
+                self.last_window_kind = focus.platform.window_key().map(str::to_owned);
             }
 
             let target_id = self.page_node_for(focus);
@@ -1229,12 +1229,12 @@ impl ScreenReaderEngine {
         }
 
         let window_changed = if let Some(ref wt) = focus.window_title {
+            let window = focus.platform.window_key();
             let changed = self.last_window_title.as_ref() != Some(wt)
-                || (focus.platform.top_window_class.is_some()
-                    && self.last_window_kind != focus.platform.top_window_class);
+                || (window.is_some() && self.last_window_kind.as_deref() != window);
             if changed {
                 self.last_window_title = Some(wt.clone());
-                self.last_window_kind = focus.platform.top_window_class.clone();
+                self.last_window_kind = window.map(str::to_owned);
             }
             changed
         } else {

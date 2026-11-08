@@ -81,7 +81,7 @@ impl AppContext<'_> {
     pub fn note_window(&mut self, focus: &FocusEvent) {
         if let Some(window) = &focus.window_title {
             *self.window_title = Some(window.clone());
-            *self.window_kind = focus.platform.top_window_class.clone();
+            *self.window_kind = focus.platform.window_key().map(str::to_owned);
         }
     }
 }
