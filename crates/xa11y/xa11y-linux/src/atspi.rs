@@ -2775,7 +2775,8 @@ pub(crate) fn map_atspi_role(role_name: &str) -> Role {
         "window" | "frame" => Role::Window,
         "dialog" | "file chooser" => Role::Dialog,
         "alert" | "notification" | "info bar" => Role::Alert,
-        "push button" | "push button menu" => Role::Button,
+        // libatspi 2.60 names role 43 "button", older ones "push button".
+        "push button" | "button" | "push button menu" => Role::Button,
         "toggle button" => Role::Switch,
         "check box" | "check menu item" => Role::CheckBox,
         "radio button" | "radio menu item" => Role::RadioButton,
@@ -3106,6 +3107,7 @@ fn is_actionable_atspi_role(role: &str) -> bool {
     matches!(
         role,
         "push button"
+            | "button"
             | "toggle button"
             | "check box"
             | "radio button"
@@ -3786,6 +3788,8 @@ mod tests {
         for &(number, name) in ATSPI_ROLE_ENUM {
             match name {
                 "invalid" | "extended" => assert_eq!(atspi_role_name(number), None),
+                // The enum's "push button", which libatspi 2.60 names "button".
+                "push button" => assert_eq!(atspi_role_name(number), Some("button")),
                 _ => assert_eq!(atspi_role_name(number), Some(name), "role {number}"),
             }
         }
