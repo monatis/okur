@@ -83,6 +83,27 @@ def build(app):
     country = Gtk.DropDown.new_from_strings(["Turkey", "Germany", "Brazil"])
     country.set_selected(1)
 
+    def descendant(widget, kind):
+        """The first widget of `kind` within `widget`, depth first."""
+        child = widget.get_first_child()
+        while child is not None:
+            if isinstance(child, kind):
+                return child
+            found = descendant(child, kind)
+            if found is not None:
+                return found
+            child = child.get_next_sibling()
+        return None
+
+    # WinForms' list opens on the chosen item, GTK's on its first: the open list is put on the
+    # chosen one, as the Windows fixture's opens (304/s11, JAWS: "Open List Box Germany 2 of 3").
+    def open_on_chosen():
+        items = descendant(country, Gtk.ListView)
+        if items is not None:
+            items.scroll_to(country.get_selected(),
+                            Gtk.ListScrollFlags.FOCUS | Gtk.ListScrollFlags.SELECT, None)
+        return False
+
     # Closed, Down and Up choose the next and the previous country and Alt+Down opens the
     # list, as in WinForms' combo box (GTK's drop-down leaves the arrows to move the focus).
     def country_key(_controller, keyval, _keycode, state):
@@ -91,6 +112,7 @@ def build(app):
         if state & Gdk.ModifierType.ALT_MASK:
             if keyval == Gdk.KEY_Down:
                 country.activate()
+                GLib.idle_add(open_on_chosen)
                 return True
             return False
         if keyval == Gdk.KEY_Down and chosen + 1 < count:
