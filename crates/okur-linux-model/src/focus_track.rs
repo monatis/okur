@@ -7,11 +7,13 @@
 //!   box [obs, 304/s1]) is compared with the state last said;
 //! - read otherwise, it is said: GTK's notebook keeps the focus as Right selects its next tab
 //!   [obs, 303/s13];
-//! - another window activated forgets the object, so a focus coming back from elsewhere is said;
-//!   the same window activated again keeps it;
+//! - a window left forgets the object, so the focus is said as the user comes back to it, and
+//!   another window activated too (the hook once made GTK leave and enter its window around
+//!   every key: that was the hook's, fixed in eb0f0ced);
 //! - something changing within the focused control (a label renamed, an object selected without
 //!   the focus) has it read again: said as a focus when it reads as another control, as its
-//!   value changing when only that changed (GTK's drop-down's item [obs, 304/s9]).
+//!   value changing when only that changed (GTK's drop-down's item [obs, 304/s9]); a change in
+//!   another application (a clock's label, a browser's tab title) is not the focus's.
 
 use okur_core::aom::Role;
 use okur_core::event::FocusEvent;
@@ -76,6 +78,22 @@ impl FocusTrack {
             self.object = None;
         }
         self.window = window;
+    }
+
+    /// The active window left: the focus coming back to the same object is said.
+    pub fn window_deactivated(&mut self) {
+        self.object = None;
+        self.window = None;
+    }
+
+    /// Whether `object` (an event's) is in the application that has the focus outside a page:
+    /// its bus name is the focused object's.
+    pub fn in_focused_application(&self, object: Option<&str>) -> bool {
+        let bus = |o: &str| o.split('/').next().map(str::to_owned);
+        self.is_native()
+            && object
+                .and_then(bus)
+                .is_some_and(|b| self.object.as_deref().and_then(bus).is_some_and(|f| f == b))
     }
 
     /// A focus event for `object` outside a page, read as `read`: whether it is said. The object
@@ -192,19 +210,33 @@ mod tests {
         assert!(track.native_focus(object("notebook"), &read(Role::Tab, "Advanced", None)));
     }
 
-    /// The same window activated again (the hook's grabs once did it around every key) keeps
-    /// the focus; another window's activation forgets it.
+    /// Leaving the window and coming back says the focus again, as JAWS says the window and its
+    /// focus; another window's activation forgets it too.
     #[test]
-    fn only_another_window_forgets_the_focus() {
+    fn a_window_left_forgets_the_focus() {
         let mut track = FocusTrack::default();
         let name = read(Role::Edit, "Name:", Some("Ada"));
         track.window_activated(object("fixture"));
         assert!(track.native_focus(object("name"), &name));
-        track.window_activated(object("fixture"));
         assert!(!track.native_focus(object("name"), &name));
+        track.window_deactivated();
+        track.window_activated(object("fixture"));
+        assert!(track.native_focus(object("name"), &name));
         track.window_activated(object("terminal"));
         track.window_activated(object("fixture"));
         assert!(track.native_focus(object("name"), &name));
+    }
+
+    /// A label renamed in another application (a clock, a browser's tab) is not within the
+    /// focused control.
+    #[test]
+    fn only_the_focused_application_changes_the_focus() {
+        let mut track = FocusTrack::default();
+        assert!(!track.in_focused_application(Some(":1.5/org/a11y/label")));
+        assert!(track.native_focus(object("country"), &read(Role::ComboBox, "Country:", None)));
+        assert!(track.in_focused_application(Some(":1.5/org/a11y/label")));
+        assert!(!track.in_focused_application(Some(":1.9/org/a11y/clock")));
+        assert!(!track.in_focused_application(None));
     }
 
     /// A focus in a page between two outside it: the second is said.

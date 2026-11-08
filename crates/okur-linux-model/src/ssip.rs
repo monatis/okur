@@ -18,7 +18,8 @@ pub fn ssip_volume(okur: u16) -> i32 {
 
 /// A message's text as SSML, which speech-dispatcher takes with `SSML_MODE on`: the text
 /// escaped, a mark before it when it is one part of a reading, so the server says when the
-/// part begins.
+/// part begins. Okur's markers around a role or a state (U+001D, U+001E), which SAPI and OneCore
+/// leave out too, and the other control characters XML does not allow are left out.
 pub fn ssml(text: &str, mark: Option<u64>) -> String {
     let mut out = String::with_capacity(text.len() + 32);
     out.push_str("<speak>");
@@ -31,6 +32,8 @@ pub fn ssml(text: &str, mark: Option<u64>) -> String {
             '<' => out.push_str("&lt;"),
             '>' => out.push_str("&gt;"),
             '"' => out.push_str("&quot;"),
+            '\t' | '\n' | '\r' => out.push(c),
+            c if c.is_control() => {}
             c => out.push(c),
         }
     }
@@ -124,6 +127,16 @@ mod tests {
         assert_eq!(
             ssml("Hello", Some(7)),
             "<speak><mark name=\"7\"/>Hello</speak>"
+        );
+    }
+
+    /// A focus's speech carries Okur's markers around its role and state ("Subscribe to
+    /// updates ‹check box› ‹checked›"); XML allows neither, nor the other control characters.
+    #[test]
+    fn ssml_leaves_out_okurs_markers_and_control_characters() {
+        assert_eq!(
+            ssml("OK \u{1d}Button\u{1e}\nTo activate\u{7}", None),
+            "<speak>OK Button\nTo activate</speak>"
         );
     }
 

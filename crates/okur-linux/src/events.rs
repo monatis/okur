@@ -350,9 +350,13 @@ impl EventSource for AtspiEventSource {
                             // The focus's repeats and a control's own changes told from a focus
                             // move: okur_linux_model::focus_track's rules.
                             let object = event.target.as_ref().and_then(object_of);
-                            if event.kind == EventKind::WindowActivated {
-                                tracing::debug!(window = ?object, "AT-SPI window activated");
-                                track.window_activated(object.clone());
+                            match event.kind {
+                                EventKind::WindowActivated => {
+                                    tracing::debug!(window = ?object, "AT-SPI window activated");
+                                    track.window_activated(object.clone());
+                                }
+                                EventKind::WindowDeactivated => track.window_deactivated(),
+                                _ => {}
                             }
                             // A focus outside a page, and its control's change, read with what
                             // surrounds it: the change names the control as its focus did.
@@ -392,7 +396,7 @@ impl EventSource for AtspiEventSource {
                             let inside = okur_linux_model::focus_track::is_inside_change(
                                 &event.kind,
                                 focused(&event),
-                            );
+                            ) && track.in_focused_application(object.as_deref());
                             if inside {
                                 if let Some(element) = native_element.as_ref() {
                                     let control = native_focus(&provider, element);
