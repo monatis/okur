@@ -949,6 +949,7 @@ version = "0.1.0"
 dependencies = [
  "okur-core",
  "okur-linux-model",
+ "okur-model",
  "okur-windows-model",
  "serde",
  "serde_json",
@@ -984,6 +985,7 @@ version = "0.1.0"
 dependencies = [
  "okur-core",
  "okur-linux-model",
+ "okur-model",
  "okur-runtime",
  "serde_json",
  "tokio",
@@ -999,11 +1001,21 @@ name = "okur-linux-model"
 version = "0.1.0"
 dependencies = [
  "okur-core",
+ "okur-model",
  "okur-windows-model",
  "serde",
  "serde_json",
  "xa11y-core",
  "xa11y-windows",
+]
+
+[[package]]
+name = "okur-model"
+version = "0.1.0"
+dependencies = [
+ "okur-core",
+ "serde",
+ "xa11y-core",
 ]
 
 [[package]]
@@ -1060,6 +1072,7 @@ name = "okur-windows"
 version = "0.1.0"
 dependencies = [
  "okur-core",
+ "okur-model",
  "okur-runtime",
  "okur-ui-model",
  "okur-windows-model",
@@ -1080,6 +1093,7 @@ name = "okur-windows-model"
 version = "0.1.0"
 dependencies = [
  "okur-core",
+ "okur-model",
  "serde",
  "serde_json",
  "xa11y-windows",

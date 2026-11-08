@@ -11,6 +11,7 @@ license.workspace = true
 # builds and is tested on every OS.
 
 [dependencies]
+okur-model = { workspace = true }
 okur-core = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }

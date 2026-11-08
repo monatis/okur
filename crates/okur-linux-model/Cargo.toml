@@ -15,6 +15,7 @@ serde = { workspace = true }
 xa11y-core = { workspace = true }
 # Chrome builds its AT-SPI and its IA2 objects from the same node: a page read over AT-SPI is
 # given as IA2 objects to the conversion Windows parity checks (page.rs).
+okur-model = { workspace = true }
 okur-windows-model = { workspace = true }
 xa11y-windows = { workspace = true }
 

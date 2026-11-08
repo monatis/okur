@@ -32,7 +32,7 @@ fn main() {
         .map(|name| name.trim_matches('"').to_owned())
         .unwrap_or_default();
     let snapshot = okur_linux_model::page::AtspiSnapshot {
-        provenance: okur_linux_model::page::SnapshotProvenance {
+        provenance: okur_model::snapshot::SnapshotProvenance {
             format_version: 1,
             tool_version: format!("okur-linux {}", env!("CARGO_PKG_VERSION")),
             host: read("/etc/hostname").trim().to_owned(),

@@ -2,8 +2,8 @@
 //! `okur_windows_model::ia2_snapshot::Ia2Snapshot`.
 
 use crate::uia_capture::{os_version, window_text};
+use okur_model::snapshot::{SnapshotProvenance, SNAPSHOT_FORMAT_VERSION};
 use okur_windows_model::ia2_snapshot::Ia2Snapshot;
-use okur_windows_model::uia_snapshot::{SnapshotProvenance, SNAPSHOT_FORMAT_VERSION};
 
 /// Captures the document of the foreground Chromium window through MSAA + IA2.
 pub fn capture_foreground_document(

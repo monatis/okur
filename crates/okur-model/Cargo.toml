@@ -1,0 +1,16 @@
+[package]
+name = "okur-model"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+# What every platform's model shares (docs/references/linux-and-structure-review-2026-11-08.md,
+# the structure's recommendation 5, the owner's choice of 2026-11-08): a snapshot's provenance,
+# an xa11y element as the engine's focus event. No platform API: built and tested on every OS,
+# and okur-windows-model, okur-linux-model and a macOS model take it alike.
+
+[dependencies]
+okur-core = { workspace = true }
+serde = { workspace = true }
+xa11y-core = { workspace = true }

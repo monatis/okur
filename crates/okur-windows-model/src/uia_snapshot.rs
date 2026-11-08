@@ -8,10 +8,8 @@
 //!
 //! The data types compile on every platform; only capture is Windows-specific.
 
+use okur_model::snapshot::SnapshotProvenance;
 use serde::{Deserialize, Serialize};
-
-/// Bumped whenever the captured property set or its meaning changes.
-pub const SNAPSHOT_FORMAT_VERSION: u32 = 1;
 
 /// One UIA element with the properties the screen reader uses.
 ///
@@ -137,27 +135,6 @@ impl UiaNode {
     pub fn node_count(&self) -> usize {
         1 + self.children.iter().map(UiaNode::node_count).sum::<usize>()
     }
-}
-
-/// Where and how a snapshot was captured.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct SnapshotProvenance {
-    pub format_version: u32,
-    /// `okur-windows` crate version that performed the capture.
-    pub tool_version: String,
-    pub host: String,
-    pub os_version: String,
-    pub window_title: String,
-    pub window_class: String,
-    /// Executable file version of the captured process (e.g. Chrome's version).
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub process_version: Option<String>,
-    /// Fixture the page was loaded from, when the capture was made for the corpus.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub fixture_sha256: Option<String>,
-    pub captured_at_unix_ms: u128,
-    pub node_count: usize,
-    pub capture_ms: u128,
 }
 
 /// A captured document tree plus its provenance.

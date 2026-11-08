@@ -105,7 +105,7 @@ pub fn load(path: &Path) -> Result<Loaded, String> {
 mod tests {
     use super::*;
     use okur_linux_model::page::{state, AtspiNode, AtspiSnapshot};
-    use okur_windows_model::uia_snapshot::SnapshotProvenance;
+    use okur_model::snapshot::SnapshotProvenance;
 
     fn node(role: &str, name: &str, children: Vec<AtspiNode>) -> AtspiNode {
         AtspiNode {

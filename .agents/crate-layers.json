@@ -26,13 +26,18 @@
     "okur-ui-model": { "kind": "neutral", "allow": [] },
     "okur-core": { "kind": "neutral", "allow": ["okur-ui-model"] },
     "okur-runtime": { "kind": "neutral", "allow": ["okur-core", "okur-ui-model"] },
-    "okur-windows-model": { "kind": "neutral", "allow": ["okur-core", "xa11y-windows"] },
+    "okur-model": { "kind": "neutral", "allow": ["okur-core", "xa11y-core"] },
+    "okur-windows-model": {
+      "kind": "neutral",
+      "allow": ["okur-core", "okur-model", "xa11y-windows"]
+    },
     "okur-windows": {
       "kind": "platform",
       "allow": [
         "okur-core",
         "okur-runtime",
         "okur-ui-model",
+        "okur-model",
         "okur-windows-model",
         "xa11y",
         "xa11y-windows"
@@ -40,7 +45,7 @@
     },
     "okur-linux-model": {
       "kind": "neutral",
-      "allow": ["okur-core", "okur-windows-model", "xa11y-core", "xa11y-windows"]
+      "allow": ["okur-core", "okur-model", "okur-windows-model", "xa11y-core", "xa11y-windows"]
     },
     "okur-linux": {
       "kind": "platform",
@@ -48,6 +53,7 @@
         "okur-core",
         "okur-runtime",
         "okur-ui-model",
+        "okur-model",
         "okur-linux-model",
         "xa11y",
         "xa11y-core",
@@ -57,7 +63,7 @@
     "okur-corpus": {
       "kind": "lab",
       "portable": true,
-      "allow": ["okur-core", "okur-windows-model", "okur-linux-model"]
+      "allow": ["okur-core", "okur-model", "okur-windows-model", "okur-linux-model"]
     },
     "okur": {
       "kind": "program",

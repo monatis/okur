@@ -5,7 +5,7 @@
 //! display (`tag`, `display` attributes), visited state, hypertext with embedded objects, and
 //! the browser's rendered line ranges per text object.
 
-use crate::uia_snapshot::SnapshotProvenance;
+use okur_model::snapshot::SnapshotProvenance;
 use serde::{Deserialize, Serialize};
 
 pub use xa11y_windows::ia2::Ia2Node;

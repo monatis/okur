@@ -2,9 +2,8 @@
 //! document, the taskbar and the tray, into `okur_windows_model::uia_snapshot`'s nodes.
 
 use crate::PlatformError;
-use okur_windows_model::uia_snapshot::{
-    SnapshotProvenance, UiaNode, UiaSnapshot, SNAPSHOT_FORMAT_VERSION,
-};
+use okur_model::snapshot::{SnapshotProvenance, SNAPSHOT_FORMAT_VERSION};
+use okur_windows_model::uia_snapshot::{UiaNode, UiaSnapshot};
 use windows::core::BSTR;
 use windows::Win32::System::Com::{CoCreateInstance, CLSCTX_INPROC_SERVER};
 use windows::Win32::System::Variant::VARIANT;

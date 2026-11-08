@@ -239,12 +239,9 @@ fn numbered(node: &AtspiNode, next: &mut i32) -> Ia2Node {
 /// snapshots carry, replayed on every OS through [`to_aom`].
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AtspiSnapshot {
-    pub provenance: SnapshotProvenance,
+    pub provenance: okur_model::snapshot::SnapshotProvenance,
     pub root: AtspiNode,
 }
-
-/// Where and how a snapshot was captured, as Windows' snapshots say it.
-pub use okur_windows_model::uia_snapshot::SnapshotProvenance;
 
 /// A page's AT-SPI tree as the engine's AOM, through the IA2 objects Chrome gives on Windows.
 pub fn to_aom(root: &AtspiNode) -> AomNode {
