@@ -15,16 +15,15 @@ fn main() {
         );
         std::process::exit(2);
     };
-    let started = std::time::Instant::now();
-    let root =
+    let (root, reading) =
         match okur_linux::events::capture_page(address_end, std::time::Duration::from_secs(60)) {
-            Ok(root) => root,
+            Ok(read) => read,
             Err(error) => {
                 eprintln!("atspi_snapshot: {error}");
                 std::process::exit(1);
             }
         };
-    let capture_ms = started.elapsed().as_millis();
+    let capture_ms = reading.as_millis();
     let node_count = count(&root);
     let read = |path: &str| std::fs::read_to_string(path).unwrap_or_default();
     let os_version = read("/etc/os-release")

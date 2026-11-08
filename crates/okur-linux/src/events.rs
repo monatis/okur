@@ -189,11 +189,12 @@ fn control_change(event: &Event) -> bool {
 
 /// The page whose address ends with `address_end`, read whole as Okur reads a page, as Chrome
 /// gives the focus to it, for the Linux lab's snapshots (`examples/atspi_snapshot.rs`, the
-/// plan's §2.3); an error if no focus reached it in `wait`. Start it before Chrome.
+/// plan's §2.3), with the time reading it took; an error if no focus reached it in `wait`.
+/// Start it before Chrome.
 pub fn capture_page(
     address_end: &str,
     wait: Duration,
-) -> Result<okur_linux_model::page::AtspiNode, RuntimeError> {
+) -> Result<(okur_linux_model::page::AtspiNode, Duration), RuntimeError> {
     let provider = LinuxProvider::new().map_err(|e| source_error("the bus", e))?;
     let subscription = provider
         .subscribe_desktop()
@@ -223,10 +224,11 @@ pub fn capture_page(
         if !address.is_some_and(|a| a.ends_with(address_end)) {
             continue;
         }
+        let reading = std::time::Instant::now();
         let tree = provider
             .atspi_tree(&document, PAGE_LIMIT)
             .map_err(|e| source_error("the page", e))?;
-        return Ok(snapshot(tree));
+        return Ok((snapshot(tree), reading.elapsed()));
     }
     Err(source_error(
         "the page",
