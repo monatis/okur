@@ -5,21 +5,30 @@
   "platform": "linux",
   "web_verbosity": null,
   "chrome": "google-chrome",
-  "commit": "3c555f36"
+  "commit": "f0b3a66d"
  },
  "trials": [
   {
    "trial_index": 1,
    "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794162256126
+    }
+   ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794149947630,
-     "t_end_ms": 1794149948634,
+     "t_start_ms": 1794162257496,
+     "t_end_ms": 1794162258500,
      "action": {
       "type": "jaws_script",
       "command": "MoveToNextList"
      },
+     "keys": [
+      "L"
+     ],
      "observation": {
       "speech_raw": "list of 3 items",
       "settled": true
@@ -28,12 +37,15 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794149948634,
-     "t_end_ms": 1794149949638,
+     "t_start_ms": 1794162258500,
+     "t_end_ms": 1794162259503,
      "action": {
       "type": "jaws_script",
       "command": "MoveToNextListItem"
      },
+     "keys": [
+      "I"
+     ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Overview Link",
       "settled": true

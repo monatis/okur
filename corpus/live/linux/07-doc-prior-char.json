@@ -5,21 +5,30 @@
   "platform": "linux",
   "web_verbosity": null,
   "chrome": "google-chrome",
-  "commit": "3c555f36"
+  "commit": "f0b3a66d"
  },
  "trials": [
   {
    "trial_index": 1,
    "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794161454952
+    }
+   ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794149147149,
-     "t_end_ms": 1794149148153,
+     "t_start_ms": 1794161456318,
+     "t_end_ms": 1794161457321,
      "action": {
       "type": "keyboard",
       "command": "{RIGHT}"
      },
+     "keys": [
+      "Right"
+     ],
      "observation": {
       "speech_raw": "o",
       "settled": true
@@ -28,12 +37,15 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794149148153,
-     "t_end_ms": 1794149149156,
+     "t_start_ms": 1794161457321,
+     "t_end_ms": 1794161458325,
      "action": {
       "type": "keyboard",
       "command": "{LEFT}"
      },
+     "keys": [
+      "Left"
+     ],
      "observation": {
       "speech_raw": "D",
       "settled": true

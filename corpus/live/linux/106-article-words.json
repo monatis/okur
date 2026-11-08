@@ -5,21 +5,38 @@
   "platform": "linux",
   "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "3c555f36"
+  "commit": "f0b3a66d"
  },
  "trials": [
   {
    "trial_index": 1,
    "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794161802917
+    },
+    {
+     "key": "2",
+     "t_ms": 1794161803273
+    },
+    {
+     "key": "Down",
+     "t_ms": 1794161803574
+    }
+   ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794149495666,
-     "t_end_ms": 1794149496670,
+     "t_start_ms": 1794161804879,
+     "t_end_ms": 1794161805883,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": "costs",
       "settled": true
@@ -28,12 +45,15 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794149496670,
-     "t_end_ms": 1794149497674,
+     "t_start_ms": 1794161805883,
+     "t_end_ms": 1794161806887,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": "$5.99",
       "settled": true
@@ -42,12 +62,15 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794149497674,
-     "t_end_ms": 1794149498678,
+     "t_start_ms": 1794161806887,
+     "t_end_ms": 1794161807892,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": "a",
       "settled": true
@@ -56,12 +79,15 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794149498678,
-     "t_end_ms": 1794149499683,
+     "t_start_ms": 1794161807893,
+     "t_end_ms": 1794161808897,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": "month,",
       "settled": true
@@ -70,12 +96,15 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794149499683,
-     "t_end_ms": 1794149500689,
+     "t_start_ms": 1794161808897,
+     "t_end_ms": 1794161809901,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": "e",
       "settled": true
@@ -84,12 +113,15 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794149500689,
-     "t_end_ms": 1794149501694,
+     "t_start_ms": 1794161809901,
+     "t_end_ms": 1794161810906,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": ".",
       "settled": true
@@ -98,12 +130,15 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794149501694,
-     "t_end_ms": 1794149502699,
+     "t_start_ms": 1794161810906,
+     "t_end_ms": 1794161811911,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": "g",
       "settled": true
@@ -112,12 +147,15 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794149502699,
-     "t_end_ms": 1794149503705,
+     "t_start_ms": 1794161811911,
+     "t_end_ms": 1794161812916,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": ".",
       "settled": true
@@ -126,12 +164,15 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794149503705,
-     "t_end_ms": 1794149504710,
+     "t_start_ms": 1794161812916,
+     "t_end_ms": 1794161813921,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": "for",
       "settled": true
@@ -140,12 +181,15 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794149504710,
-     "t_end_ms": 1794149505715,
+     "t_start_ms": 1794161813921,
+     "t_end_ms": 1794161814925,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": "adults;",
       "settled": true
@@ -154,12 +198,15 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794149505715,
-     "t_end_ms": 1794149506720,
+     "t_start_ms": 1794161814925,
+     "t_end_ms": 1794161815930,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": "children",
       "settled": true
@@ -168,12 +215,15 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794149506720,
-     "t_end_ms": 1794149507724,
+     "t_start_ms": 1794161815930,
+     "t_end_ms": 1794161816935,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": "join",
       "settled": true
@@ -182,12 +232,15 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794149507724,
-     "t_end_ms": 1794149508730,
+     "t_start_ms": 1794161816935,
+     "t_end_ms": 1794161817940,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": "free",
       "settled": true
@@ -196,12 +249,15 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794149508730,
-     "t_end_ms": 1794149509735,
+     "t_start_ms": 1794161817940,
+     "t_end_ms": 1794161818945,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": ".",
       "settled": true
@@ -210,12 +266,15 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794149509735,
-     "t_end_ms": 1794149510740,
+     "t_start_ms": 1794161818945,
+     "t_end_ms": 1794161819950,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": "Questions",
       "settled": true
@@ -224,12 +283,15 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794149510740,
-     "t_end_ms": 1794149511745,
+     "t_start_ms": 1794161819950,
+     "t_end_ms": 1794161820955,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": "go",
       "settled": true
@@ -238,12 +300,15 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794149511745,
-     "t_end_ms": 1794149512750,
+     "t_start_ms": 1794161820955,
+     "t_end_ms": 1794161821960,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": "to",
       "settled": true
@@ -252,12 +317,15 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794149512750,
-     "t_end_ms": 1794149513755,
+     "t_start_ms": 1794161821960,
+     "t_end_ms": 1794161822965,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": "help@riverside",
       "settled": true
@@ -266,12 +334,15 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794149513755,
-     "t_end_ms": 1794149514760,
+     "t_start_ms": 1794161822965,
+     "t_end_ms": 1794161823970,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": "-",
       "settled": true
@@ -280,12 +351,15 @@
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794149514760,
-     "t_end_ms": 1794149515765,
+     "t_start_ms": 1794161823970,
+     "t_end_ms": 1794161824975,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": "library",
       "settled": true
@@ -294,12 +368,15 @@
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794149515765,
-     "t_end_ms": 1794149516769,
+     "t_start_ms": 1794161824975,
+     "t_end_ms": 1794161825981,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": ".",
       "settled": true
@@ -308,12 +385,15 @@
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794149516769,
-     "t_end_ms": 1794149517774,
+     "t_start_ms": 1794161825981,
+     "t_end_ms": 1794161826986,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": "org",
       "settled": true
@@ -322,12 +402,15 @@
     },
     {
      "step_id": "s23",
-     "t_start_ms": 1794149517774,
-     "t_end_ms": 1794149518779,
+     "t_start_ms": 1794161826986,
+     "t_end_ms": 1794161827991,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": "\u2014",
       "settled": true
@@ -336,12 +419,15 @@
     },
     {
      "step_id": "s24",
-     "t_start_ms": 1794149518779,
-     "t_end_ms": 1794149519885,
+     "t_start_ms": 1794161827991,
+     "t_end_ms": 1794161828996,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": "or",
       "settled": true
@@ -350,12 +436,15 @@
     },
     {
      "step_id": "s25",
-     "t_start_ms": 1794149519885,
-     "t_end_ms": 1794149520890,
+     "t_start_ms": 1794161828996,
+     "t_end_ms": 1794161830001,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": "call",
       "settled": true
@@ -364,12 +453,15 @@
     },
     {
      "step_id": "s26",
-     "t_start_ms": 1794149520890,
-     "t_end_ms": 1794149521895,
+     "t_start_ms": 1794161830001,
+     "t_end_ms": 1794161831007,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": "555-0142",
       "settled": true
@@ -378,12 +470,15 @@
     },
     {
      "step_id": "s27",
-     "t_start_ms": 1794149521895,
-     "t_end_ms": 1794149522900,
+     "t_start_ms": 1794161831007,
+     "t_end_ms": 1794161832013,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": ".",
       "settled": true
@@ -392,12 +487,15 @@
     },
     {
      "step_id": "s28",
-     "t_start_ms": 1794149522900,
-     "t_end_ms": 1794149523905,
+     "t_start_ms": 1794161832013,
+     "t_end_ms": 1794161833018,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": "Attendance",
       "settled": true
@@ -406,12 +504,15 @@
     },
     {
      "step_id": "s29",
-     "t_start_ms": 1794149523905,
-     "t_end_ms": 1794149524909,
+     "t_start_ms": 1794161833018,
+     "t_end_ms": 1794161834023,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": "rose",
       "settled": true
@@ -420,12 +521,15 @@
     },
     {
      "step_id": "s30",
-     "t_start_ms": 1794149524909,
-     "t_end_ms": 1794149525914,
+     "t_start_ms": 1794161834023,
+     "t_end_ms": 1794161835028,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": "3.5%",
       "settled": true
@@ -434,12 +538,15 @@
     },
     {
      "step_id": "s31",
-     "t_start_ms": 1794149525914,
-     "t_end_ms": 1794149526919,
+     "t_start_ms": 1794161835028,
+     "t_end_ms": 1794161836033,
      "action": {
       "type": "key",
       "command": "Ctrl+Left"
      },
+     "keys": [
+      "Ctrl+Left"
+     ],
      "observation": {
       "speech_raw": "rose",
       "settled": true
@@ -448,12 +555,15 @@
     },
     {
      "step_id": "s32",
-     "t_start_ms": 1794149526919,
-     "t_end_ms": 1794149527924,
+     "t_start_ms": 1794161836033,
+     "t_end_ms": 1794161837039,
      "action": {
       "type": "key",
       "command": "Ctrl+Left"
      },
+     "keys": [
+      "Ctrl+Left"
+     ],
      "observation": {
       "speech_raw": "Attendance",
       "settled": true
@@ -462,12 +572,15 @@
     },
     {
      "step_id": "s33",
-     "t_start_ms": 1794149527924,
-     "t_end_ms": 1794149528929,
+     "t_start_ms": 1794161837039,
+     "t_end_ms": 1794161838044,
      "action": {
       "type": "key",
       "command": "Ctrl+Left"
      },
+     "keys": [
+      "Ctrl+Left"
+     ],
      "observation": {
       "speech_raw": ".",
       "settled": true

@@ -5,21 +5,30 @@
   "platform": "linux",
   "web_verbosity": null,
   "chrome": "google-chrome",
-  "commit": "3c555f36"
+  "commit": "f0b3a66d"
  },
  "trials": [
   {
    "trial_index": 1,
    "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794162563427
+    }
+   ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794150254846,
-     "t_end_ms": 1794150255850,
+     "t_start_ms": 1794162564793,
+     "t_end_ms": 1794162565796,
      "action": {
       "type": "jaws_script",
       "command": "MoveToNextTable"
      },
+     "keys": [
+      "T"
+     ],
      "observation": {
       "speech_raw": "table with 4 columns and 4 rows\nQ3 Financial Summary Table\nColumn 1, Row 1\nQuarter",
       "settled": true

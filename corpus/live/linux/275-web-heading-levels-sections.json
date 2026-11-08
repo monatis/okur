@@ -5,21 +5,30 @@
   "platform": "linux",
   "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "3c555f36"
+  "commit": "f0b3a66d"
  },
  "trials": [
   {
    "trial_index": 1,
    "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794162958195
+    }
+   ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794150651122,
-     "t_end_ms": 1794150652126,
+     "t_start_ms": 1794162959559,
+     "t_end_ms": 1794162960563,
      "action": {
       "type": "key",
       "command": "2"
      },
+     "keys": [
+      "2"
+     ],
      "observation": {
       "speech_raw": "User guide \u001d heading level 1 \u001e \nInstall\n \u001d heading level 2 \u001e",
       "settled": true
@@ -28,12 +37,15 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794150652126,
-     "t_end_ms": 1794150653130,
+     "t_start_ms": 1794162960564,
+     "t_end_ms": 1794162961567,
      "action": {
       "type": "key",
       "command": "2"
      },
+     "keys": [
+      "2"
+     ],
      "observation": {
       "speech_raw": "Configure\n \u001d heading level 2 \u001e",
       "settled": true
@@ -42,12 +54,15 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794150653130,
-     "t_end_ms": 1794150654133,
+     "t_start_ms": 1794162961567,
+     "t_end_ms": 1794162962571,
      "action": {
       "type": "key",
       "command": "2"
      },
+     "keys": [
+      "2"
+     ],
      "observation": {
       "speech_raw": "Reference \u001d heading level 1 \u001e \nCommands\n \u001d heading level 2 \u001e",
       "settled": true
@@ -56,12 +71,15 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794150654133,
-     "t_end_ms": 1794150655137,
+     "t_start_ms": 1794162962571,
+     "t_end_ms": 1794162963575,
      "action": {
       "type": "key",
       "command": "2"
      },
+     "keys": [
+      "2"
+     ],
      "observation": {
       "speech_raw": "Settings\n \u001d heading level 2 \u001e",
       "settled": true
@@ -70,12 +88,15 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794150655137,
-     "t_end_ms": 1794150656142,
+     "t_start_ms": 1794162963575,
+     "t_end_ms": 1794162964580,
      "action": {
       "type": "key",
       "command": "2"
      },
+     "keys": [
+      "2"
+     ],
      "observation": {
       "speech_raw": "No more headings at level2 in this section.",
       "settled": true
@@ -84,12 +105,15 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794150656142,
-     "t_end_ms": 1794150657146,
+     "t_start_ms": 1794162964580,
+     "t_end_ms": 1794162965584,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
      },
+     "keys": [
+      "Ctrl+Home"
+     ],
      "observation": {
       "speech_raw": "Headings in Sections - Headings Fixture",
       "settled": true
@@ -98,12 +122,15 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794150657146,
-     "t_end_ms": 1794150658151,
+     "t_start_ms": 1794162965584,
+     "t_end_ms": 1794162966589,
      "action": {
       "type": "key",
       "command": "3"
      },
+     "keys": [
+      "3"
+     ],
      "observation": {
       "speech_raw": "User guide \u001d heading level 1 \u001e \nInstall \u001d heading level 2 \u001e \nWindows\n \u001d heading level 3 \u001e",
       "settled": true
@@ -112,12 +139,15 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794150658151,
-     "t_end_ms": 1794150659155,
+     "t_start_ms": 1794162966589,
+     "t_end_ms": 1794162967593,
      "action": {
       "type": "key",
       "command": "3"
      },
+     "keys": [
+      "3"
+     ],
      "observation": {
       "speech_raw": "macOS\n \u001d heading level 3 \u001e",
       "settled": true
@@ -126,12 +156,15 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794150659155,
-     "t_end_ms": 1794150660160,
+     "t_start_ms": 1794162967593,
+     "t_end_ms": 1794162968697,
      "action": {
       "type": "key",
       "command": "3"
      },
+     "keys": [
+      "3"
+     ],
      "observation": {
       "speech_raw": "Configure \u001d heading level 2 \u001e \nVoices\n \u001d heading level 3 \u001e",
       "settled": true
@@ -140,12 +173,15 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794150660160,
-     "t_end_ms": 1794150661164,
+     "t_start_ms": 1794162968697,
+     "t_end_ms": 1794162969702,
      "action": {
       "type": "key",
       "command": "3"
      },
+     "keys": [
+      "3"
+     ],
      "observation": {
       "speech_raw": "Reference \u001d heading level 1 \u001e \nCommands \u001d heading level 2 \u001e \nReading\n \u001d heading level 3 \u001e",
       "settled": true
@@ -154,12 +190,15 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794150661164,
-     "t_end_ms": 1794150662170,
+     "t_start_ms": 1794162969702,
+     "t_end_ms": 1794162970707,
      "action": {
       "type": "key",
       "command": "Shift+3"
      },
+     "keys": [
+      "Shift+3"
+     ],
      "observation": {
       "speech_raw": "Reference \u001d heading level 1 \u001e \nVoices\n \u001d heading level 3 \u001e",
       "settled": true
@@ -168,12 +207,15 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794150662170,
-     "t_end_ms": 1794150663175,
+     "t_start_ms": 1794162970707,
+     "t_end_ms": 1794162971712,
      "action": {
       "type": "key",
       "command": "Shift+2"
      },
+     "keys": [
+      "Shift+2"
+     ],
      "observation": {
       "speech_raw": "Configure\n \u001d heading level 2 \u001e",
       "settled": true
@@ -182,12 +224,15 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794150663175,
-     "t_end_ms": 1794150664181,
+     "t_start_ms": 1794162971712,
+     "t_end_ms": 1794162972717,
      "action": {
       "type": "key",
       "command": "Shift+2"
      },
+     "keys": [
+      "Shift+2"
+     ],
      "observation": {
       "speech_raw": "Install\n \u001d heading level 2 \u001e",
       "settled": true
@@ -196,12 +241,15 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794150664181,
-     "t_end_ms": 1794150665185,
+     "t_start_ms": 1794162972717,
+     "t_end_ms": 1794162973722,
      "action": {
       "type": "key",
       "command": "1"
      },
+     "keys": [
+      "1"
+     ],
      "observation": {
       "speech_raw": "Reference\n \u001d heading level 1 \u001e",
       "settled": true
@@ -210,12 +258,15 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794150665185,
-     "t_end_ms": 1794150666189,
+     "t_start_ms": 1794162973722,
+     "t_end_ms": 1794162974726,
      "action": {
       "type": "key",
       "command": "Shift+1"
      },
+     "keys": [
+      "Shift+1"
+     ],
      "observation": {
       "speech_raw": "User guide\n \u001d heading level 1 \u001e",
       "settled": true

@@ -5,21 +5,34 @@
   "platform": "linux",
   "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "3c555f36"
+  "commit": "f0b3a66d"
  },
  "trials": [
   {
    "trial_index": 1,
    "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Escape",
+     "t_ms": 1794162932102
+    },
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794162932464
+    }
+   ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794150625285,
-     "t_end_ms": 1794150626290,
+     "t_start_ms": 1794162933769,
+     "t_end_ms": 1794162934773,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+Apostrophe"
      },
+     "keys": [
+      "Ctrl+Insert+Apostrophe"
+     ],
      "observation": {
       "speech_raw": "no tabs were found",
       "settled": true
@@ -28,12 +41,15 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794150626290,
-     "t_end_ms": 1794150627294,
+     "t_start_ms": 1794162934773,
+     "t_end_ms": 1794162935777,
      "action": {
       "type": "key",
       "command": "Escape"
      },
+     "keys": [
+      "Escape"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true

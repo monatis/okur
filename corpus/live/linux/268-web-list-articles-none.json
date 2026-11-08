@@ -5,21 +5,34 @@
   "platform": "linux",
   "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "3c555f36"
+  "commit": "f0b3a66d"
  },
  "trials": [
   {
    "trial_index": 1,
    "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Escape",
+     "t_ms": 1794162800708
+    },
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794162801065
+    }
+   ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794150494181,
-     "t_end_ms": 1794150495186,
+     "t_start_ms": 1794162802369,
+     "t_end_ms": 1794162803375,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+O"
      },
+     "keys": [
+      "Ctrl+Insert+O"
+     ],
      "observation": {
       "speech_raw": "no articles were found",
       "settled": true
@@ -28,12 +41,15 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794150495186,
-     "t_end_ms": 1794150496190,
+     "t_start_ms": 1794162803375,
+     "t_end_ms": 1794162804379,
      "action": {
       "type": "key",
       "command": "Escape"
      },
+     "keys": [
+      "Escape"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true

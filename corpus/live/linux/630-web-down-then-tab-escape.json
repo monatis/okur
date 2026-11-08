@@ -5,21 +5,30 @@
   "platform": "linux",
   "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "3c555f36"
+  "commit": "f0b3a66d"
  },
  "trials": [
   {
    "trial_index": 1,
    "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794163841297
+    }
+   ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794151432532,
-     "t_end_ms": 1794151433535,
+     "t_start_ms": 1794163842662,
+     "t_end_ms": 1794163843666,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "main region",
       "settled": true
@@ -28,12 +37,15 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794151433535,
-     "t_end_ms": 1794151434639,
+     "t_start_ms": 1794163843666,
+     "t_end_ms": 1794163844770,
      "action": {
       "type": "key",
       "command": "Tab"
      },
+     "keys": [
+      "Tab"
+     ],
      "observation": {
       "speech_raw": "Create Your Account - Riverside Library\n \u001d MainRegion \u001e \n \u001d FormRegion \u001e \nFull name \u001d Edit \u001e \n \u001dRequired\u001e \nblank\nType in text.",
       "settled": true
@@ -42,12 +54,15 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794151434639,
-     "t_end_ms": 1794151435643,
+     "t_start_ms": 1794163844770,
+     "t_end_ms": 1794163845774,
      "action": {
       "type": "key",
       "command": "Escape"
      },
+     "keys": [
+      "Escape"
+     ],
      "observation": {
       "speech_raw": "virtual PC Cursor",
       "settled": true

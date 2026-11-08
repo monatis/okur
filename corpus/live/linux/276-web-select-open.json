@@ -5,49 +5,64 @@
   "platform": "linux",
   "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "3c555f36"
+  "commit": "f0b3a66d"
  },
  "trials": [
   {
    "trial_index": 1,
    "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794162997143
+    }
+   ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794150690098,
-     "t_end_ms": 1794150691102,
+     "t_start_ms": 1794162998507,
+     "t_end_ms": 1794162999512,
      "action": {
       "type": "key",
       "command": "C"
      },
+     "keys": [
+      "C"
+     ],
      "observation": {
-      "speech_raw": "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e ",
+      "speech_raw": "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794150691102,
-     "t_end_ms": 1794150692306,
+     "t_start_ms": 1794162999512,
+     "t_end_ms": 1794163000715,
      "action": {
       "type": "key",
       "command": "Space"
      },
+     "keys": [
+      "Space"
+     ],
      "observation": {
-      "speech_raw": "Create Your Account - Riverside Library\nHome branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nTo change the selection use the Arrow keys.\nNorthside\nTo move through items press up or down arrow.",
+      "speech_raw": "Create Your Account - Riverside Library\nHome branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside\nTo change the selection use the Arrow keys.\nNorthside\nTo move through items press up or down arrow.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794150692306,
-     "t_end_ms": 1794150693409,
+     "t_start_ms": 1794163000715,
+     "t_end_ms": 1794163001820,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "Eastgate",
       "settled": true
@@ -56,12 +71,15 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794150693409,
-     "t_end_ms": 1794150694413,
+     "t_start_ms": 1794163001820,
+     "t_end_ms": 1794163002824,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true
@@ -70,12 +88,15 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794150694413,
-     "t_end_ms": 1794150695516,
+     "t_start_ms": 1794163002824,
+     "t_end_ms": 1794163003928,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "Northside",
       "settled": true
@@ -84,26 +105,32 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794150695516,
-     "t_end_ms": 1794150696621,
+     "t_start_ms": 1794163003928,
+     "t_end_ms": 1794163005033,
      "action": {
       "type": "key",
       "command": "Enter"
      },
+     "keys": [
+      "Enter"
+     ],
      "observation": {
-      "speech_raw": "Leaving menus\nHome branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nTo change the selection use the Arrow keys.",
+      "speech_raw": "Leaving menus\nHome branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside\nTo change the selection use the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794150696621,
-     "t_end_ms": 1794150697725,
+     "t_start_ms": 1794163005033,
+     "t_end_ms": 1794163006137,
      "action": {
       "type": "key",
       "command": "Space"
      },
+     "keys": [
+      "Space"
+     ],
      "observation": {
       "speech_raw": "Northside\nTo move through items press up or down arrow.",
       "settled": true
@@ -112,28 +139,34 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794150697725,
-     "t_end_ms": 1794150698830,
+     "t_start_ms": 1794163006137,
+     "t_end_ms": 1794163007242,
      "action": {
       "type": "key",
       "command": "Escape"
      },
+     "keys": [
+      "Escape"
+     ],
      "observation": {
-      "speech_raw": "Leaving menus\nHome branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nTo change the selection use the Arrow keys.",
+      "speech_raw": "Leaving menus\nHome branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside\nTo change the selection use the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794150698830,
-     "t_end_ms": 1794150699835,
+     "t_start_ms": 1794163007242,
+     "t_end_ms": 1794163008247,
      "action": {
       "type": "key",
       "command": "Insert+Up"
      },
+     "keys": [
+      "Insert+Up"
+     ],
      "observation": {
-      "speech_raw": "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e ",
+      "speech_raw": "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside",
       "settled": true
      },
      "step_success": true

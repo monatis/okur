@@ -5,21 +5,30 @@
   "platform": "linux",
   "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "3c555f36"
+  "commit": "f0b3a66d"
  },
  "trials": [
   {
    "trial_index": 1,
    "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794163895012
+    }
+   ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794151486615,
-     "t_end_ms": 1794151487719,
+     "t_start_ms": 1794163896376,
+     "t_end_ms": 1794163897480,
      "action": {
       "type": "key",
       "command": "F5"
      },
+     "keys": [
+      "F5"
+     ],
      "observation": {
       "speech_raw": "Document Reading Reference Fixture  \u001d document \u001e\nPage has 1heading and no links\nDocument Reading Reference Fixture\n \u001d heading level 1 \u001e The Accessibility Engine Specification\nThe screen reader engine parses the document object model into a clean virtual buffer.\nEngine components operate deterministically across synthetic speech pipelines. Speed and accuracy remain paramount.\nRust provides memory safety without garbage collection latency. This ensures predictable audio delivery.\ndelivery",
       "settled": true
@@ -28,12 +37,15 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794151487719,
-     "t_end_ms": 1794151488724,
+     "t_start_ms": 1794163897480,
+     "t_end_ms": 1794163898485,
      "action": {
       "type": "key",
       "command": "Insert+Up"
      },
+     "keys": [
+      "Insert+Up"
+     ],
      "observation": {
       "speech_raw": "Rust provides memory safety without garbage collection latency. This ensures predictable audio delivery.",
       "settled": true
@@ -42,12 +54,15 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794151488724,
-     "t_end_ms": 1794151489727,
+     "t_start_ms": 1794163898485,
+     "t_end_ms": 1794163899488,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "Rust provides memory safety without garbage collection latency. This ensures predictable audio delivery.",
       "settled": true

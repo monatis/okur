@@ -5,21 +5,30 @@
   "platform": "linux",
   "web_verbosity": null,
   "chrome": "google-chrome",
-  "commit": "3c555f36"
+  "commit": "f0b3a66d"
  },
  "trials": [
   {
    "trial_index": 1,
    "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794162281909
+    }
+   ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794149973373,
-     "t_end_ms": 1794149974377,
+     "t_start_ms": 1794162283274,
+     "t_end_ms": 1794162284277,
      "action": {
       "type": "jaws_script",
       "command": "MoveToNextRegion"
      },
+     "keys": [
+      "R"
+     ],
      "observation": {
       "speech_raw": "Main Navigation navigation region",
       "settled": true
@@ -28,12 +37,15 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794149974377,
-     "t_end_ms": 1794149975381,
+     "t_start_ms": 1794162284277,
+     "t_end_ms": 1794162285281,
      "action": {
       "type": "jaws_script",
       "command": "MoveToNextRegion"
      },
+     "keys": [
+      "R"
+     ],
      "observation": {
       "speech_raw": "main region",
       "settled": true

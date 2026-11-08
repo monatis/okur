@@ -5,21 +5,30 @@
   "platform": "linux",
   "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "3c555f36"
+  "commit": "f0b3a66d"
  },
  "trials": [
   {
    "trial_index": 1,
    "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794162334725
+    }
+   ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794150025964,
-     "t_end_ms": 1794150026968,
+     "t_start_ms": 1794162336091,
+     "t_end_ms": 1794162337094,
      "action": {
       "type": "key",
       "command": "X"
      },
+     "keys": [
+      "X"
+     ],
      "observation": {
       "speech_raw": "I accept terms and conditions  \u001d check box \u001e   \u001dnot checked\u001e ",
       "settled": true
@@ -28,12 +37,15 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794150026968,
-     "t_end_ms": 1794150028081,
+     "t_start_ms": 1794162337094,
+     "t_end_ms": 1794162338199,
      "action": {
       "type": "key",
       "command": "Space"
      },
+     "keys": [
+      "Space"
+     ],
      "observation": {
       "speech_raw": "Forms and Interaction Reference Fixture\nI accept terms and conditions  \u001d check box \u001e   \u001dnot checked\u001e \nTo check press Spacebar.\n \u001dchecked\u001e ",
       "settled": true

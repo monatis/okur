@@ -5,21 +5,30 @@
   "platform": "linux",
   "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "3c555f36"
+  "commit": "f0b3a66d"
  },
  "trials": [
   {
    "trial_index": 1,
    "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794162025415
+    }
+   ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794149716768,
-     "t_end_ms": 1794149717773,
+     "t_start_ms": 1794162026776,
+     "t_end_ms": 1794162027780,
      "action": {
       "type": "key",
       "command": "R"
      },
+     "keys": [
+      "R"
+     ],
      "observation": {
       "speech_raw": "banner",
       "settled": true
@@ -28,12 +37,15 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794149717773,
-     "t_end_ms": 1794149718776,
+     "t_start_ms": 1794162027780,
+     "t_end_ms": 1794162028784,
      "action": {
       "type": "key",
       "command": "R"
      },
+     "keys": [
+      "R"
+     ],
      "observation": {
       "speech_raw": "Primary navigation region",
       "settled": true
@@ -42,12 +54,15 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794149718776,
-     "t_end_ms": 1794149719780,
+     "t_start_ms": 1794162028784,
+     "t_end_ms": 1794162029787,
      "action": {
       "type": "key",
       "command": "R"
      },
+     "keys": [
+      "R"
+     ],
      "observation": {
       "speech_raw": "main region",
       "settled": true
@@ -56,12 +71,15 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794149719780,
-     "t_end_ms": 1794149720784,
+     "t_start_ms": 1794162029787,
+     "t_end_ms": 1794162030791,
      "action": {
       "type": "key",
       "command": "R"
      },
+     "keys": [
+      "R"
+     ],
      "observation": {
       "speech_raw": "Related stories complementary information",
       "settled": true
@@ -70,12 +88,15 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794149720784,
-     "t_end_ms": 1794149721788,
+     "t_start_ms": 1794162030791,
+     "t_end_ms": 1794162031795,
      "action": {
       "type": "key",
       "command": "R"
      },
+     "keys": [
+      "R"
+     ],
      "observation": {
       "speech_raw": "content information",
       "settled": true
@@ -84,12 +105,15 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794149721788,
-     "t_end_ms": 1794149722793,
+     "t_start_ms": 1794162031795,
+     "t_end_ms": 1794162032799,
      "action": {
       "type": "key",
       "command": "R"
      },
+     "keys": [
+      "R"
+     ],
      "observation": {
       "speech_raw": "wrapping to top\nbanner",
       "settled": true
@@ -98,12 +122,15 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794149722793,
-     "t_end_ms": 1794149723797,
+     "t_start_ms": 1794162032799,
+     "t_end_ms": 1794162033804,
      "action": {
       "type": "key",
       "command": "R"
      },
+     "keys": [
+      "R"
+     ],
      "observation": {
       "speech_raw": "Primary navigation region",
       "settled": true
@@ -112,12 +139,15 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794149723797,
-     "t_end_ms": 1794149724802,
+     "t_start_ms": 1794162033804,
+     "t_end_ms": 1794162034808,
      "action": {
       "type": "key",
       "command": "Semicolon"
      },
+     "keys": [
+      "Semicolon"
+     ],
      "observation": {
       "speech_raw": "There are no onMouseOver elements on this page.",
       "settled": true
@@ -126,12 +156,15 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794149724802,
-     "t_end_ms": 1794149725906,
+     "t_start_ms": 1794162034808,
+     "t_end_ms": 1794162035811,
      "action": {
       "type": "key",
       "command": "Semicolon"
      },
+     "keys": [
+      "Semicolon"
+     ],
      "observation": {
       "speech_raw": "There are no onMouseOver elements on this page.",
       "settled": true
@@ -140,12 +173,15 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794149725906,
-     "t_end_ms": 1794149726910,
+     "t_start_ms": 1794162035811,
+     "t_end_ms": 1794162036815,
      "action": {
       "type": "key",
       "command": "Semicolon"
      },
+     "keys": [
+      "Semicolon"
+     ],
      "observation": {
       "speech_raw": "There are no onMouseOver elements on this page.",
       "settled": true
@@ -154,12 +190,15 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794149726910,
-     "t_end_ms": 1794149727914,
+     "t_start_ms": 1794162036815,
+     "t_end_ms": 1794162037819,
      "action": {
       "type": "key",
       "command": "Semicolon"
      },
+     "keys": [
+      "Semicolon"
+     ],
      "observation": {
       "speech_raw": "There are no onMouseOver elements on this page.",
       "settled": true
@@ -168,12 +207,15 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794149727914,
-     "t_end_ms": 1794149728918,
+     "t_start_ms": 1794162037819,
+     "t_end_ms": 1794162038824,
      "action": {
       "type": "key",
       "command": "Semicolon"
      },
+     "keys": [
+      "Semicolon"
+     ],
      "observation": {
       "speech_raw": "There are no onMouseOver elements on this page.",
       "settled": true
@@ -182,12 +224,15 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794149728918,
-     "t_end_ms": 1794149729922,
+     "t_start_ms": 1794162038824,
+     "t_end_ms": 1794162039827,
      "action": {
       "type": "key",
       "command": "Semicolon"
      },
+     "keys": [
+      "Semicolon"
+     ],
      "observation": {
       "speech_raw": "There are no onMouseOver elements on this page.",
       "settled": true
@@ -196,12 +241,15 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794149729922,
-     "t_end_ms": 1794149730927,
+     "t_start_ms": 1794162039827,
+     "t_end_ms": 1794162040830,
      "action": {
       "type": "key",
       "command": "Semicolon"
      },
+     "keys": [
+      "Semicolon"
+     ],
      "observation": {
       "speech_raw": "There are no onMouseOver elements on this page.",
       "settled": true

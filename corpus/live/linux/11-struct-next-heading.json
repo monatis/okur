@@ -5,21 +5,30 @@
   "platform": "linux",
   "web_verbosity": null,
   "chrome": "google-chrome",
-  "commit": "3c555f36"
+  "commit": "f0b3a66d"
  },
  "trials": [
   {
    "trial_index": 1,
    "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794161999172
+    }
+   ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794149690997,
-     "t_end_ms": 1794149692001,
+     "t_start_ms": 1794162000682,
+     "t_end_ms": 1794162001685,
      "action": {
       "type": "jaws_script",
       "command": "MoveToNextHeading"
      },
+     "keys": [
+      "H"
+     ],
      "observation": {
       "speech_raw": "System Documentation\n \u001d heading level 1 \u001e",
       "settled": true
@@ -28,12 +37,15 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794149692001,
-     "t_end_ms": 1794149693004,
+     "t_start_ms": 1794162001685,
+     "t_end_ms": 1794162002689,
      "action": {
       "type": "jaws_script",
       "command": "MoveToNextHeading"
      },
+     "keys": [
+      "H"
+     ],
      "observation": {
       "speech_raw": "Section Overview\n \u001d heading level 2 \u001e",
       "settled": true

@@ -5,21 +5,30 @@
   "platform": "linux",
   "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "3c555f36"
+  "commit": "f0b3a66d"
  },
  "trials": [
   {
    "trial_index": 1,
    "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794162134927
+    }
+   ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794149826591,
-     "t_end_ms": 1794149827595,
+     "t_start_ms": 1794162136291,
+     "t_end_ms": 1794162137294,
      "action": {
       "type": "key",
       "command": "G"
      },
+     "keys": [
+      "G"
+     ],
      "observation": {
       "speech_raw": "Front entrance of the Riverside City Library at dusk\n \u001d Graphic \u001e ",
       "settled": true
@@ -28,12 +37,15 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794149827595,
-     "t_end_ms": 1794149828599,
+     "t_start_ms": 1794162137294,
+     "t_end_ms": 1794162138298,
      "action": {
       "type": "key",
       "command": "G"
      },
+     "keys": [
+      "G"
+     ],
      "observation": {
       "speech_raw": "wrapping to top\nFront entrance of the Riverside City Library at dusk\n \u001d Graphic \u001e ",
       "settled": true
@@ -42,12 +54,15 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794149828599,
-     "t_end_ms": 1794149829603,
+     "t_start_ms": 1794162138298,
+     "t_end_ms": 1794162139302,
      "action": {
       "type": "key",
       "command": "Insert+Up"
      },
+     "keys": [
+      "Insert+Up"
+     ],
      "observation": {
       "speech_raw": "Front entrance of the Riverside City Library at dusk\n \u001d Graphic \u001e ",
       "settled": true

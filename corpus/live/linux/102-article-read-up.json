@@ -5,21 +5,30 @@
   "platform": "linux",
   "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "3c555f36"
+  "commit": "f0b3a66d"
  },
  "trials": [
   {
    "trial_index": 1,
    "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794161603633
+    }
+   ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794149296028,
-     "t_end_ms": 1794149297031,
+     "t_start_ms": 1794161604994,
+     "t_end_ms": 1794161605997,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Contact us",
       "settled": true
@@ -28,12 +37,15 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794149297031,
-     "t_end_ms": 1794149298034,
+     "t_start_ms": 1794161605997,
+     "t_end_ms": 1794161607000,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "\u00a9 2026 Riverside Gazette. ",
       "settled": true
@@ -42,12 +54,15 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794149298034,
-     "t_end_ms": 1794149299038,
+     "t_start_ms": 1794161607000,
+     "t_end_ms": 1794161608004,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "content information",
       "settled": true
@@ -56,12 +71,15 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794149299038,
-     "t_end_ms": 1794149300042,
+     "t_start_ms": 1794161608004,
+     "t_end_ms": 1794161609008,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "Related stories complementary information end",
       "settled": true
@@ -70,12 +88,15 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794149300042,
-     "t_end_ms": 1794149301046,
+     "t_start_ms": 1794161609008,
+     "t_end_ms": 1794161610011,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "list end",
       "settled": true
@@ -84,12 +105,15 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794149301046,
-     "t_end_ms": 1794149302051,
+     "t_start_ms": 1794161610011,
+     "t_end_ms": 1794161611014,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Spring book fair returns",
       "settled": true
@@ -98,12 +122,15 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794149302051,
-     "t_end_ms": 1794149303055,
+     "t_start_ms": 1794161611014,
+     "t_end_ms": 1794161612017,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Council approves library budget",
       "settled": true
@@ -112,12 +139,15 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794149303055,
-     "t_end_ms": 1794149304059,
+     "t_start_ms": 1794161612017,
+     "t_end_ms": 1794161613021,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "list of 2 items",
       "settled": true
@@ -126,12 +156,15 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794149304059,
-     "t_end_ms": 1794149305064,
+     "t_start_ms": 1794161613021,
+     "t_end_ms": 1794161614024,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": " \u001d heading level 2 \u001e Related stories",
       "settled": true
@@ -140,12 +173,15 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794149305064,
-     "t_end_ms": 1794149306068,
+     "t_start_ms": 1794161614024,
+     "t_end_ms": 1794161615027,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "Related stories complementary information",
       "settled": true
@@ -154,12 +190,15 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794149306068,
-     "t_end_ms": 1794149307073,
+     "t_start_ms": 1794161615027,
+     "t_end_ms": 1794161616030,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "main region end",
       "settled": true
@@ -168,12 +207,15 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794149307073,
-     "t_end_ms": 1794149308077,
+     "t_start_ms": 1794161616030,
+     "t_end_ms": 1794161617033,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "article end",
       "settled": true
@@ -182,12 +224,15 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794149308077,
-     "t_end_ms": 1794149309081,
+     "t_start_ms": 1794161617033,
+     "t_end_ms": 1794161618036,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "list end",
       "settled": true
@@ -196,12 +241,15 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794149309081,
-     "t_end_ms": 1794149310085,
+     "t_start_ms": 1794161618036,
+     "t_end_ms": 1794161619039,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "3. Review in October",
       "settled": true
@@ -210,12 +258,15 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794149310085,
-     "t_end_ms": 1794149311090,
+     "t_start_ms": 1794161619039,
+     "t_end_ms": 1794161620043,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "2. Hiring in April",
       "settled": true
@@ -224,12 +275,15 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794149311090,
-     "t_end_ms": 1794149312094,
+     "t_start_ms": 1794161620043,
+     "t_end_ms": 1794161621047,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "1. Board vote in March",
       "settled": true
@@ -238,12 +292,15 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794149312094,
-     "t_end_ms": 1794149313098,
+     "t_start_ms": 1794161621047,
+     "t_end_ms": 1794161622051,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "list of 3 items",
       "settled": true
@@ -252,12 +309,15 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794149313098,
-     "t_end_ms": 1794149314103,
+     "t_start_ms": 1794161622051,
+     "t_end_ms": 1794161623055,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "at the times when the community actually needs them, according to the library director.",
       "settled": true
@@ -266,12 +326,15 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794149314103,
-     "t_end_ms": 1794149315108,
+     "t_start_ms": 1794161623055,
+     "t_end_ms": 1794161624059,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "most people finished their day, so the extended schedule is intended to make the collections, the public computers, and the quiet study spaces available",
       "settled": true
@@ -280,12 +343,15 @@
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794149315108,
-     "t_end_ms": 1794149316112,
+     "t_start_ms": 1794161624059,
+     "t_end_ms": 1794161625062,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "The library board will review attendance in the fall. A long-standing complaint among students and working parents was that the reading rooms closed before",
       "settled": true
@@ -294,12 +360,15 @@
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794149316112,
-     "t_end_ms": 1794149317116,
+     "t_start_ms": 1794161625062,
+     "t_end_ms": 1794161626065,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "block quote end",
       "settled": true
@@ -308,12 +377,15 @@
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794149317116,
-     "t_end_ms": 1794149318120,
+     "t_start_ms": 1794161626065,
+     "t_end_ms": 1794161627068,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "Finally, I can study after work.",
       "settled": true
@@ -322,12 +394,15 @@
     },
     {
      "step_id": "s23",
-     "t_start_ms": 1794149318120,
-     "t_end_ms": 1794149319124,
+     "t_start_ms": 1794161627068,
+     "t_end_ms": 1794161628070,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "block quote",
       "settled": true
@@ -336,12 +411,15 @@
     },
     {
      "step_id": "s24",
-     "t_start_ms": 1794149319124,
-     "t_end_ms": 1794149320129,
+     "t_start_ms": 1794161628070,
+     "t_end_ms": 1794161629173,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": " \u001d heading level 3 \u001e What readers said",
       "settled": true
@@ -350,12 +428,15 @@
     },
     {
      "step_id": "s25",
-     "t_start_ms": 1794149320129,
-     "t_end_ms": 1794149321133,
+     "t_start_ms": 1794161629173,
+     "t_end_ms": 1794161630176,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "table end",
       "settled": true
@@ -364,12 +445,15 @@
     },
     {
      "step_id": "s26",
-     "t_start_ms": 1794149321133,
-     "t_end_ms": 1794149322138,
+     "t_start_ms": 1794161630176,
+     "t_end_ms": 1794161631180,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Directions",
       "settled": true
@@ -378,12 +462,15 @@
     },
     {
      "step_id": "s27",
-     "t_start_ms": 1794149322138,
-     "t_end_ms": 1794149323142,
+     "t_start_ms": 1794161631180,
+     "t_end_ms": 1794161632183,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "10 a.m. to 8 p.m.",
       "settled": true
@@ -392,12 +479,15 @@
     },
     {
      "step_id": "s28",
-     "t_start_ms": 1794149323142,
-     "t_end_ms": 1794149324146,
+     "t_start_ms": 1794161632183,
+     "t_end_ms": 1794161633187,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "Northside",
       "settled": true
@@ -406,12 +496,15 @@
     },
     {
      "step_id": "s29",
-     "t_start_ms": 1794149324146,
-     "t_end_ms": 1794149325151,
+     "t_start_ms": 1794161633187,
+     "t_end_ms": 1794161634192,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Directions",
       "settled": true
@@ -420,12 +513,15 @@
     },
     {
      "step_id": "s30",
-     "t_start_ms": 1794149325151,
-     "t_end_ms": 1794149326155,
+     "t_start_ms": 1794161634192,
+     "t_end_ms": 1794161635196,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "9 a.m. to 9 p.m.",
       "settled": true
@@ -434,12 +530,15 @@
     },
     {
      "step_id": "s31",
-     "t_start_ms": 1794149326155,
-     "t_end_ms": 1794149327159,
+     "t_start_ms": 1794161635196,
+     "t_end_ms": 1794161636201,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "Central",
       "settled": true
@@ -448,12 +547,15 @@
     },
     {
      "step_id": "s32",
-     "t_start_ms": 1794149327159,
-     "t_end_ms": 1794149328164,
+     "t_start_ms": 1794161636201,
+     "t_end_ms": 1794161637205,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "Details",
       "settled": true
@@ -462,12 +564,15 @@
     },
     {
      "step_id": "s33",
-     "t_start_ms": 1794149328164,
-     "t_end_ms": 1794149329168,
+     "t_start_ms": 1794161637205,
+     "t_end_ms": 1794161638210,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "Weekdays",
       "settled": true
@@ -476,12 +581,15 @@
     },
     {
      "step_id": "s34",
-     "t_start_ms": 1794149329168,
-     "t_end_ms": 1794149330173,
+     "t_start_ms": 1794161638210,
+     "t_end_ms": 1794161639214,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "Branch",
       "settled": true
@@ -490,12 +598,15 @@
     },
     {
      "step_id": "s35",
-     "t_start_ms": 1794149330173,
-     "t_end_ms": 1794149331178,
+     "t_start_ms": 1794161639214,
+     "t_end_ms": 1794161640219,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "Branch hours after the change",
       "settled": true
@@ -504,12 +615,15 @@
     },
     {
      "step_id": "s36",
-     "t_start_ms": 1794149331178,
-     "t_end_ms": 1794149332182,
+     "t_start_ms": 1794161640219,
+     "t_end_ms": 1794161641223,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "table with 3 columns and 3 rows",
       "settled": true
@@ -518,12 +632,15 @@
     },
     {
      "step_id": "s37",
-     "t_start_ms": 1794149332182,
-     "t_end_ms": 1794149333186,
+     "t_start_ms": 1794161641223,
+     "t_end_ms": 1794161642226,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": " \u001d heading level 2 \u001e Opening schedule",
       "settled": true
@@ -532,12 +649,15 @@
     },
     {
      "step_id": "s38",
-     "t_start_ms": 1794149333186,
-     "t_end_ms": 1794149334191,
+     "t_start_ms": 1794161642226,
+     "t_end_ms": 1794161643229,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "list end",
       "settled": true
@@ -546,12 +666,15 @@
     },
     {
      "step_id": "s39",
-     "t_start_ms": 1794149334191,
-     "t_end_ms": 1794149335195,
+     "t_start_ms": 1794161643229,
+     "t_end_ms": 1794161644232,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": " open in May.",
       "settled": true
@@ -560,12 +683,15 @@
     },
     {
      "step_id": "s40",
-     "t_start_ms": 1794149335195,
-     "t_end_ms": 1794149336200,
+     "t_start_ms": 1794161644232,
+     "t_end_ms": 1794161645235,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e study rooms",
       "settled": true
@@ -574,12 +700,15 @@
     },
     {
      "step_id": "s41",
-     "t_start_ms": 1794149336200,
-     "t_end_ms": 1794149337205,
+     "t_start_ms": 1794161645235,
+     "t_end_ms": 1794161646238,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "\u2022 New ",
       "settled": true
@@ -588,12 +717,15 @@
     },
     {
      "step_id": "s42",
-     "t_start_ms": 1794149337205,
-     "t_end_ms": 1794149338209,
+     "t_start_ms": 1794161646238,
+     "t_end_ms": 1794161647241,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "list end nesting level 1",
       "settled": true
@@ -602,12 +734,15 @@
     },
     {
      "step_id": "s43",
-     "t_start_ms": 1794149338209,
-     "t_end_ms": 1794149339213,
+     "t_start_ms": 1794161647241,
+     "t_end_ms": 1794161648245,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "\u25e6 Sunday: noon to 5 p.m.",
       "settled": true
@@ -616,12 +751,15 @@
     },
     {
      "step_id": "s44",
-     "t_start_ms": 1794149339213,
-     "t_end_ms": 1794149340216,
+     "t_start_ms": 1794161648245,
+     "t_end_ms": 1794161649247,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "\u25e6 Saturday: 10 a.m. to 6 p.m.",
       "settled": true
@@ -630,12 +768,15 @@
     },
     {
      "step_id": "s45",
-     "t_start_ms": 1794149340216,
-     "t_end_ms": 1794149341220,
+     "t_start_ms": 1794161649247,
+     "t_end_ms": 1794161650352,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "list of 2 items nesting level 1",
       "settled": true
@@ -644,12 +785,15 @@
     },
     {
      "step_id": "s46",
-     "t_start_ms": 1794149341220,
-     "t_end_ms": 1794149342224,
+     "t_start_ms": 1794161650352,
+     "t_end_ms": 1794161651356,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "\u2022 Weekend hours, which do not change:",
       "settled": true
@@ -658,12 +802,15 @@
     },
     {
      "step_id": "s47",
-     "t_start_ms": 1794149342224,
-     "t_end_ms": 1794149343229,
+     "t_start_ms": 1794161651356,
+     "t_end_ms": 1794161652360,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "\u2022 Weekday hours: 9 a.m. to 9 p.m.",
       "settled": true
@@ -672,12 +819,15 @@
     },
     {
      "step_id": "s48",
-     "t_start_ms": 1794149343229,
-     "t_end_ms": 1794149344233,
+     "t_start_ms": 1794161652360,
+     "t_end_ms": 1794161653365,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "list of 3 items",
       "settled": true
@@ -686,12 +836,15 @@
     },
     {
      "step_id": "s49",
-     "t_start_ms": 1794149344233,
-     "t_end_ms": 1794149345238,
+     "t_start_ms": 1794161653365,
+     "t_end_ms": 1794161654369,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "last year, and staff say they can't wait.",
       "settled": true
@@ -700,12 +853,15 @@
     },
     {
      "step_id": "s50",
-     "t_start_ms": 1794149345238,
-     "t_end_ms": 1794149346342,
+     "t_start_ms": 1794161654369,
+     "t_end_ms": 1794161655373,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "Membership costs $5.99 a month, e.g. for adults; children join free. Questions go to help@riverside-library.org \u2014 or call 555-0142. Attendance rose 3.5%",
       "settled": true
@@ -714,12 +870,15 @@
     },
     {
      "step_id": "s51",
-     "t_start_ms": 1794149346342,
-     "t_end_ms": 1794149347347,
+     "t_start_ms": 1794161655373,
+     "t_end_ms": 1794161656376,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": " \u001d heading level 2 \u001e What changes",
       "settled": true
@@ -728,12 +887,15 @@
     },
     {
      "step_id": "s52",
-     "t_start_ms": 1794149347347,
-     "t_end_ms": 1794149348350,
+     "t_start_ms": 1794161656376,
+     "t_end_ms": 1794161657381,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "Front entrance of the Riverside City Library at dusk\n \u001d Graphic \u001e ",
       "settled": true
@@ -742,12 +904,15 @@
     },
     {
      "step_id": "s53",
-     "t_start_ms": 1794149348350,
-     "t_end_ms": 1794149349354,
+     "t_start_ms": 1794161657381,
+     "t_end_ms": 1794161658385,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "most respondents asked for later hours.",
       "settled": true
@@ -756,12 +921,15 @@
     },
     {
      "step_id": "s54",
-     "t_start_ms": 1794149349354,
-     "t_end_ms": 1794149350358,
+     "t_start_ms": 1794161658385,
+     "t_end_ms": 1794161659389,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "The Riverside City Library will stay open until 9 p.m. on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which",
       "settled": true
@@ -770,12 +938,15 @@
     },
     {
      "step_id": "s55",
-     "t_start_ms": 1794149350358,
-     "t_end_ms": 1794149351363,
+     "t_start_ms": 1794161659389,
+     "t_end_ms": 1794161660393,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "published March 14, 2026",
       "settled": true
@@ -784,12 +955,15 @@
     },
     {
      "step_id": "s56",
-     "t_start_ms": 1794149351363,
-     "t_end_ms": 1794149352368,
+     "t_start_ms": 1794161660393,
+     "t_end_ms": 1794161661396,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Maria Lopez,",
       "settled": true
@@ -798,12 +972,15 @@
     },
     {
      "step_id": "s57",
-     "t_start_ms": 1794149352368,
-     "t_end_ms": 1794149353372,
+     "t_start_ms": 1794161661396,
+     "t_end_ms": 1794161662401,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "By ",
       "settled": true
@@ -812,12 +989,15 @@
     },
     {
      "step_id": "s58",
-     "t_start_ms": 1794149353372,
-     "t_end_ms": 1794149354376,
+     "t_start_ms": 1794161662401,
+     "t_end_ms": 1794161663405,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e City Library Expands Evening Hours",
       "settled": true
@@ -826,12 +1006,15 @@
     },
     {
      "step_id": "s59",
-     "t_start_ms": 1794149354376,
-     "t_end_ms": 1794149355380,
+     "t_start_ms": 1794161663405,
+     "t_end_ms": 1794161664410,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "article",
       "settled": true
@@ -840,12 +1023,15 @@
     },
     {
      "step_id": "s60",
-     "t_start_ms": 1794149355380,
-     "t_end_ms": 1794149356384,
+     "t_start_ms": 1794161664410,
+     "t_end_ms": 1794161665414,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "main region",
       "settled": true
@@ -854,12 +1040,15 @@
     },
     {
      "step_id": "s61",
-     "t_start_ms": 1794149356384,
-     "t_end_ms": 1794149357388,
+     "t_start_ms": 1794161665414,
+     "t_end_ms": 1794161666418,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "banner end",
       "settled": true
@@ -868,12 +1057,15 @@
     },
     {
      "step_id": "s62",
-     "t_start_ms": 1794149357388,
-     "t_end_ms": 1794149358393,
+     "t_start_ms": 1794161666418,
+     "t_end_ms": 1794161667423,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "Primary navigation region end",
       "settled": true
@@ -882,12 +1074,15 @@
     },
     {
      "step_id": "s63",
-     "t_start_ms": 1794149358393,
-     "t_end_ms": 1794149359396,
+     "t_start_ms": 1794161667423,
+     "t_end_ms": 1794161668526,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "list end",
       "settled": true
@@ -896,12 +1091,15 @@
     },
     {
      "step_id": "s64",
-     "t_start_ms": 1794149359396,
-     "t_end_ms": 1794149360401,
+     "t_start_ms": 1794161668526,
+     "t_end_ms": 1794161669530,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Opinion",
       "settled": true
@@ -910,12 +1108,15 @@
     },
     {
      "step_id": "s65",
-     "t_start_ms": 1794149360401,
-     "t_end_ms": 1794149361405,
+     "t_start_ms": 1794161669530,
+     "t_end_ms": 1794161670534,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Culture",
       "settled": true
@@ -924,12 +1125,15 @@
     },
     {
      "step_id": "s66",
-     "t_start_ms": 1794149361405,
-     "t_end_ms": 1794149362409,
+     "t_start_ms": 1794161670534,
+     "t_end_ms": 1794161671539,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Sports",
       "settled": true
@@ -938,12 +1142,15 @@
     },
     {
      "step_id": "s67",
-     "t_start_ms": 1794149362409,
-     "t_end_ms": 1794149363413,
+     "t_start_ms": 1794161671539,
+     "t_end_ms": 1794161672544,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e News",
       "settled": true
@@ -952,12 +1159,15 @@
     },
     {
      "step_id": "s68",
-     "t_start_ms": 1794149363413,
-     "t_end_ms": 1794149364416,
+     "t_start_ms": 1794161672544,
+     "t_end_ms": 1794161673549,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "list of 4 items",
       "settled": true
@@ -966,12 +1176,15 @@
     },
     {
      "step_id": "s69",
-     "t_start_ms": 1794149364416,
-     "t_end_ms": 1794149365420,
+     "t_start_ms": 1794161673549,
+     "t_end_ms": 1794161674553,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "Primary navigation region",
       "settled": true
@@ -980,12 +1193,15 @@
     },
     {
      "step_id": "s70",
-     "t_start_ms": 1794149365420,
-     "t_end_ms": 1794149366424,
+     "t_start_ms": 1794161674553,
+     "t_end_ms": 1794161675557,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Riverside Gazette",
       "settled": true
@@ -994,12 +1210,15 @@
     },
     {
      "step_id": "s71",
-     "t_start_ms": 1794149366424,
-     "t_end_ms": 1794149367428,
+     "t_start_ms": 1794161675557,
+     "t_end_ms": 1794161676561,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "banner",
       "settled": true
@@ -1008,12 +1227,15 @@
     },
     {
      "step_id": "s72",
-     "t_start_ms": 1794149367428,
-     "t_end_ms": 1794149368433,
+     "t_start_ms": 1794161676561,
+     "t_end_ms": 1794161677565,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
       "settled": true
@@ -1022,12 +1244,15 @@
     },
     {
      "step_id": "s73",
-     "t_start_ms": 1794149368433,
-     "t_end_ms": 1794149369437,
+     "t_start_ms": 1794161677565,
+     "t_end_ms": 1794161678569,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
       "settled": true
@@ -1036,12 +1261,15 @@
     },
     {
      "step_id": "s74",
-     "t_start_ms": 1794149369437,
-     "t_end_ms": 1794149370441,
+     "t_start_ms": 1794161678569,
+     "t_end_ms": 1794161679673,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
       "settled": true

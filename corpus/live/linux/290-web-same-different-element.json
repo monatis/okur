@@ -5,21 +5,30 @@
   "platform": "linux",
   "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "3c555f36"
+  "commit": "f0b3a66d"
  },
  "trials": [
   {
    "trial_index": 1,
    "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794163121295
+    }
+   ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794150813612,
-     "t_end_ms": 1794150814615,
+     "t_start_ms": 1794163122663,
+     "t_end_ms": 1794163123667,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "banner",
       "settled": true
@@ -28,12 +37,15 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794150814615,
-     "t_end_ms": 1794150815619,
+     "t_start_ms": 1794163123667,
+     "t_end_ms": 1794163124671,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "Site navigation region",
       "settled": true
@@ -42,12 +54,15 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794150815619,
-     "t_end_ms": 1794150816623,
+     "t_start_ms": 1794163124671,
+     "t_end_ms": 1794163125675,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "list of 3 items",
       "settled": true
@@ -56,12 +71,15 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794150816623,
-     "t_end_ms": 1794150817627,
+     "t_start_ms": 1794163125675,
+     "t_end_ms": 1794163126678,
      "action": {
       "type": "key",
       "command": "S"
      },
+     "keys": [
+      "S"
+     ],
      "observation": {
       "speech_raw": "No more elements of same type found",
       "settled": true
@@ -70,12 +88,15 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794150817627,
-     "t_end_ms": 1794150818633,
+     "t_start_ms": 1794163126678,
+     "t_end_ms": 1794163127682,
      "action": {
       "type": "key",
       "command": "S"
      },
+     "keys": [
+      "S"
+     ],
      "observation": {
       "speech_raw": "No more elements of same type found",
       "settled": true
@@ -84,12 +105,15 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794150818633,
-     "t_end_ms": 1794150819637,
+     "t_start_ms": 1794163127682,
+     "t_end_ms": 1794163128687,
      "action": {
       "type": "key",
       "command": "S"
      },
+     "keys": [
+      "S"
+     ],
      "observation": {
       "speech_raw": "No more elements of same type found",
       "settled": true
@@ -98,12 +122,15 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794150819637,
-     "t_end_ms": 1794150820641,
+     "t_start_ms": 1794163128687,
+     "t_end_ms": 1794163129691,
      "action": {
       "type": "key",
       "command": "D"
      },
+     "keys": [
+      "D"
+     ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Paragraphs",
       "settled": true
@@ -112,12 +139,15 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794150820641,
-     "t_end_ms": 1794150821646,
+     "t_start_ms": 1794163129691,
+     "t_end_ms": 1794163130696,
      "action": {
       "type": "key",
       "command": "D"
      },
+     "keys": [
+      "D"
+     ],
      "observation": {
       "speech_raw": "Paragraphs  \u001d same page link \u001e ",
       "settled": true
@@ -126,12 +156,15 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794150821646,
-     "t_end_ms": 1794150822650,
+     "t_start_ms": 1794163130696,
+     "t_end_ms": 1794163131701,
      "action": {
       "type": "key",
       "command": "Shift+S"
      },
+     "keys": [
+      "Shift+S"
+     ],
      "observation": {
       "speech_raw": "wrapping to bottom\na link inside it  \u001d same page link \u001e ",
       "settled": true
@@ -140,12 +173,15 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794150822650,
-     "t_end_ms": 1794150823655,
+     "t_start_ms": 1794163131701,
+     "t_end_ms": 1794163132707,
      "action": {
       "type": "key",
       "command": "Shift+D"
      },
+     "keys": [
+      "Shift+D"
+     ],
      "observation": {
       "speech_raw": "Some text with",
       "settled": true
@@ -154,12 +190,15 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794150823655,
-     "t_end_ms": 1794150824661,
+     "t_start_ms": 1794163132707,
+     "t_end_ms": 1794163133713,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+Right"
      },
+     "keys": [
+      "Ctrl+Insert+Right"
+     ],
      "observation": {
       "speech_raw": "a link inside it  \u001d same page link \u001e ",
       "settled": true
@@ -168,12 +207,15 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794150824661,
-     "t_end_ms": 1794150825668,
+     "t_start_ms": 1794163133713,
+     "t_end_ms": 1794163134719,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+Right"
      },
+     "keys": [
+      "Ctrl+Insert+Right"
+     ],
      "observation": {
       "speech_raw": "and more text after it.",
       "settled": true
@@ -182,12 +224,15 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794150825668,
-     "t_end_ms": 1794150826674,
+     "t_start_ms": 1794163134719,
+     "t_end_ms": 1794163135724,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+Left"
      },
+     "keys": [
+      "Ctrl+Insert+Left"
+     ],
      "observation": {
       "speech_raw": "a link inside it  \u001d same page link \u001e ",
       "settled": true
@@ -196,12 +241,15 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794150826674,
-     "t_end_ms": 1794150827680,
+     "t_start_ms": 1794163135724,
+     "t_end_ms": 1794163136730,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+Up"
      },
+     "keys": [
+      "Ctrl+Insert+Up"
+     ],
      "observation": {
       "speech_raw": "A link alone in its paragraph  \u001d same page link \u001e ",
       "settled": true

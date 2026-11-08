@@ -5,21 +5,30 @@
   "platform": "linux",
   "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "3c555f36"
+  "commit": "f0b3a66d"
  },
  "trials": [
   {
    "trial_index": 1,
    "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794163661070
+    }
+   ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794151252278,
-     "t_end_ms": 1794151253281,
+     "t_start_ms": 1794163662429,
+     "t_end_ms": 1794163663433,
      "action": {
       "type": "key",
       "command": "Z"
      },
+     "keys": [
+      "Z"
+     ],
      "observation": {
       "speech_raw": "A division holds this text.",
       "settled": true
@@ -28,12 +37,15 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794151253281,
-     "t_end_ms": 1794151254285,
+     "t_start_ms": 1794163663433,
+     "t_end_ms": 1794163664437,
      "action": {
       "type": "key",
       "command": "Z"
      },
+     "keys": [
+      "Z"
+     ],
      "observation": {
       "speech_raw": "Another division, with a span inside it.",
       "settled": true
@@ -42,12 +54,15 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794151254285,
-     "t_end_ms": 1794151255289,
+     "t_start_ms": 1794163664437,
+     "t_end_ms": 1794163665441,
      "action": {
       "type": "key",
       "command": "Z"
      },
+     "keys": [
+      "Z"
+     ],
      "observation": {
       "speech_raw": "A clickable division",
       "settled": true
@@ -56,40 +71,49 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794151255289,
-     "t_end_ms": 1794151256292,
+     "t_start_ms": 1794163665441,
+     "t_end_ms": 1794163666445,
      "action": {
       "type": "key",
       "command": "Z"
      },
+     "keys": [
+      "Z"
+     ],
      "observation": {
-      "speech_raw": "This part flows to the lists.",
+      "speech_raw": "This part flows to the lists.\nHas Flows To",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794151256292,
-     "t_end_ms": 1794151257296,
+     "t_start_ms": 1794163666445,
+     "t_end_ms": 1794163667450,
      "action": {
       "type": "key",
       "command": "Insert+Up"
      },
+     "keys": [
+      "Insert+Up"
+     ],
      "observation": {
-      "speech_raw": "This part flows to the lists.",
+      "speech_raw": "This part flows to the lists.\nHas Flows To",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794151257296,
-     "t_end_ms": 1794151258301,
+     "t_start_ms": 1794163667450,
+     "t_end_ms": 1794163668454,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "A clickable division",
       "settled": true
@@ -98,82 +122,100 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794151258301,
-     "t_end_ms": 1794151259305,
+     "t_start_ms": 1794163668454,
+     "t_end_ms": 1794163669458,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
-      "speech_raw": "This part flows to the lists.",
+      "speech_raw": "This part flows to the lists.\nHas Flows To",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794151259305,
-     "t_end_ms": 1794151260308,
+     "t_start_ms": 1794163669458,
+     "t_end_ms": 1794163670462,
      "action": {
       "type": "key",
       "command": "Equals"
      },
+     "keys": [
+      "Equals"
+     ],
      "observation": {
-      "speech_raw": "No more flows found",
+      "speech_raw": " \u001d heading level 2 \u001e Lists\nHas Flows From",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794151260308,
-     "t_end_ms": 1794151261313,
+     "t_start_ms": 1794163670462,
+     "t_end_ms": 1794163671466,
      "action": {
       "type": "key",
       "command": "Insert+Up"
      },
+     "keys": [
+      "Insert+Up"
+     ],
      "observation": {
-      "speech_raw": "This part flows to the lists.",
+      "speech_raw": " \u001d heading level 2 \u001e Lists\nHas Flows From",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794151261313,
-     "t_end_ms": 1794151262318,
+     "t_start_ms": 1794163671466,
+     "t_end_ms": 1794163672472,
      "action": {
       "type": "key",
       "command": "Shift+Equals"
      },
+     "keys": [
+      "Shift+Equals"
+     ],
      "observation": {
-      "speech_raw": "No more flows found",
+      "speech_raw": "This part flows to the lists.\nHas Flows To",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794151262318,
-     "t_end_ms": 1794151263322,
+     "t_start_ms": 1794163672472,
+     "t_end_ms": 1794163673476,
      "action": {
       "type": "key",
       "command": "Equals"
      },
+     "keys": [
+      "Equals"
+     ],
      "observation": {
-      "speech_raw": "No more flows found",
+      "speech_raw": " \u001d heading level 2 \u001e Lists\nHas Flows From",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794151263322,
-     "t_end_ms": 1794151264326,
+     "t_start_ms": 1794163673476,
+     "t_end_ms": 1794163674481,
      "action": {
       "type": "key",
       "command": "Equals"
      },
+     "keys": [
+      "Equals"
+     ],
      "observation": {
       "speech_raw": "No more flows found",
       "settled": true

@@ -5,21 +5,30 @@
   "platform": "linux",
   "web_verbosity": null,
   "chrome": "google-chrome",
-  "commit": "3c555f36"
+  "commit": "f0b3a66d"
  },
  "trials": [
   {
    "trial_index": 1,
    "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794161404488
+    }
+   ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794149096687,
-     "t_end_ms": 1794149097692,
+     "t_start_ms": 1794161405853,
+     "t_end_ms": 1794161406858,
      "action": {
       "type": "keyboard",
       "command": "^{RIGHT}"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": "Reading",
       "settled": true
@@ -28,12 +37,15 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794149097692,
-     "t_end_ms": 1794149098697,
+     "t_start_ms": 1794161406858,
+     "t_end_ms": 1794161407863,
      "action": {
       "type": "keyboard",
       "command": "^{LEFT}"
      },
+     "keys": [
+      "Ctrl+Left"
+     ],
      "observation": {
       "speech_raw": "Document",
       "settled": true

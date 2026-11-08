@@ -5,21 +5,30 @@
   "platform": "linux",
   "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "3c555f36"
+  "commit": "f0b3a66d"
  },
  "trials": [
   {
    "trial_index": 1,
    "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794163776391
+    }
+   ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794151367684,
-     "t_end_ms": 1794151368689,
+     "t_start_ms": 1794163777752,
+     "t_end_ms": 1794163778756,
      "action": {
       "type": "key",
       "command": "Insert+T"
      },
+     "keys": [
+      "Insert+T"
+     ],
      "observation": {
       "speech_raw": "Title is\nStructural Navigation Reference Fixture",
       "settled": true
@@ -28,12 +37,15 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794151368689,
-     "t_end_ms": 1794151369693,
+     "t_start_ms": 1794163778756,
+     "t_end_ms": 1794163779761,
      "action": {
       "type": "key",
       "command": "H"
      },
+     "keys": [
+      "H"
+     ],
      "observation": {
       "speech_raw": "System Documentation\n \u001d heading level 1 \u001e",
       "settled": true
@@ -42,12 +54,15 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794151369693,
-     "t_end_ms": 1794151370697,
+     "t_start_ms": 1794163779761,
+     "t_end_ms": 1794163780766,
      "action": {
       "type": "key",
       "command": "Insert+T"
      },
+     "keys": [
+      "Insert+T"
+     ],
      "observation": {
       "speech_raw": "Title is\nStructural Navigation Reference Fixture\nbanner\nlevel 2\nheading is System Documentation",
       "settled": true
@@ -56,12 +71,15 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794151370698,
-     "t_end_ms": 1794151371702,
+     "t_start_ms": 1794163780766,
+     "t_end_ms": 1794163781770,
      "action": {
       "type": "key",
       "command": "H"
      },
+     "keys": [
+      "H"
+     ],
      "observation": {
       "speech_raw": "Section Overview\n \u001d heading level 2 \u001e",
       "settled": true
@@ -70,12 +88,15 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794151371702,
-     "t_end_ms": 1794151372706,
+     "t_start_ms": 1794163781770,
+     "t_end_ms": 1794163782774,
      "action": {
       "type": "key",
       "command": "Insert+T"
      },
+     "keys": [
+      "Insert+T"
+     ],
      "observation": {
       "speech_raw": "Title is\nStructural Navigation Reference Fixture\nmain region\nlevel 2\nheading is Section Overview",
       "settled": true
@@ -84,12 +105,15 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794151372706,
-     "t_end_ms": 1794151373711,
+     "t_start_ms": 1794163782774,
+     "t_end_ms": 1794163783778,
      "action": {
       "type": "key",
       "command": "H"
      },
+     "keys": [
+      "H"
+     ],
      "observation": {
       "speech_raw": "Subsection Details\n \u001d heading level 3 \u001e",
       "settled": true
@@ -98,12 +122,15 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794151373711,
-     "t_end_ms": 1794151374715,
+     "t_start_ms": 1794163783778,
+     "t_end_ms": 1794163784782,
      "action": {
       "type": "key",
       "command": "Insert+T"
      },
+     "keys": [
+      "Insert+T"
+     ],
      "observation": {
       "speech_raw": "Title is\nStructural Navigation Reference Fixture\nmain region\nlevel 2\nheading is Subsection Details",
       "settled": true
@@ -112,12 +139,15 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794151374715,
-     "t_end_ms": 1794151375720,
+     "t_start_ms": 1794163784782,
+     "t_end_ms": 1794163785786,
      "action": {
       "type": "key",
       "command": "H"
      },
+     "keys": [
+      "H"
+     ],
      "observation": {
       "speech_raw": "Architecture Guide\n \u001d heading level 2 \u001e",
       "settled": true
@@ -126,12 +156,15 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794151375720,
-     "t_end_ms": 1794151376725,
+     "t_start_ms": 1794163785786,
+     "t_end_ms": 1794163786791,
      "action": {
       "type": "key",
       "command": "Insert+T"
      },
+     "keys": [
+      "Insert+T"
+     ],
      "observation": {
       "speech_raw": "Title is\nStructural Navigation Reference Fixture\nmain region\nlevel 2\nheading is Architecture Guide",
       "settled": true
@@ -140,12 +173,15 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794151376725,
-     "t_end_ms": 1794151377729,
+     "t_start_ms": 1794163786791,
+     "t_end_ms": 1794163787795,
      "action": {
       "type": "key",
       "command": "H"
      },
+     "keys": [
+      "H"
+     ],
      "observation": {
       "speech_raw": "Helpful Resources\n \u001d heading level 2 \u001e",
       "settled": true
@@ -154,12 +190,15 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794151377729,
-     "t_end_ms": 1794151378735,
+     "t_start_ms": 1794163787795,
+     "t_end_ms": 1794163788800,
      "action": {
       "type": "key",
       "command": "Insert+T"
      },
+     "keys": [
+      "Insert+T"
+     ],
      "observation": {
       "speech_raw": "Title is\nStructural Navigation Reference Fixture\nQuick Reference complementary information\nlevel 2\nheading is Helpful Resources",
       "settled": true
@@ -168,12 +207,15 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794151378735,
-     "t_end_ms": 1794151379740,
+     "t_start_ms": 1794163788800,
+     "t_end_ms": 1794163789805,
      "action": {
       "type": "key",
       "command": "Ctrl+End"
      },
+     "keys": [
+      "Ctrl+End"
+     ],
      "observation": {
       "speech_raw": "content information end",
       "settled": true
@@ -182,12 +224,15 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794151379740,
-     "t_end_ms": 1794151380745,
+     "t_start_ms": 1794163789805,
+     "t_end_ms": 1794163790811,
      "action": {
       "type": "key",
       "command": "Insert+T"
      },
+     "keys": [
+      "Insert+T"
+     ],
      "observation": {
       "speech_raw": "Title is\nStructural Navigation Reference Fixture\ncontent information\nlevel 2",
       "settled": true

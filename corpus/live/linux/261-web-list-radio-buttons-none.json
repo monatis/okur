@@ -5,21 +5,34 @@
   "platform": "linux",
   "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "3c555f36"
+  "commit": "f0b3a66d"
  },
  "trials": [
   {
    "trial_index": 1,
    "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Escape",
+     "t_ms": 1794162617373
+    },
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794162617734
+    }
+   ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794150309184,
-     "t_end_ms": 1794150310189,
+     "t_start_ms": 1794162619040,
+     "t_end_ms": 1794162620045,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+A"
      },
+     "keys": [
+      "Ctrl+Insert+A"
+     ],
      "observation": {
       "speech_raw": "no radio buttons were found",
       "settled": true
@@ -28,12 +41,15 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794150310189,
-     "t_end_ms": 1794150311192,
+     "t_start_ms": 1794162620045,
+     "t_end_ms": 1794162621049,
      "action": {
       "type": "key",
       "command": "Escape"
      },
+     "keys": [
+      "Escape"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true

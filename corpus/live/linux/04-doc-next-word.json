@@ -5,21 +5,30 @@
   "platform": "linux",
   "web_verbosity": null,
   "chrome": "google-chrome",
-  "commit": "3c555f36"
+  "commit": "f0b3a66d"
  },
  "trials": [
   {
    "trial_index": 1,
    "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794161379702
+    }
+   ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794149071999,
-     "t_end_ms": 1794149073003,
+     "t_start_ms": 1794161381072,
+     "t_end_ms": 1794161382077,
      "action": {
       "type": "keyboard",
       "command": "^{RIGHT}"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": "Reading",
       "settled": true

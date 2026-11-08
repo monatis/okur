@@ -5,21 +5,30 @@
   "platform": "linux",
   "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "3c555f36"
+  "commit": "f0b3a66d"
  },
  "trials": [
   {
    "trial_index": 1,
    "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794164033536
+    }
+   ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794151625254,
-     "t_end_ms": 1794151626258,
+     "t_start_ms": 1794164034899,
+     "t_end_ms": 1794164035903,
      "action": {
       "type": "key",
       "command": "Left"
      },
+     "keys": [
+      "Left"
+     ],
      "observation": {
       "speech_raw": "V",
       "settled": true
@@ -28,12 +37,15 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794151626258,
-     "t_end_ms": 1794151627262,
+     "t_start_ms": 1794164035903,
+     "t_end_ms": 1794164036907,
      "action": {
       "type": "key",
       "command": "Left"
      },
+     "keys": [
+      "Left"
+     ],
      "observation": {
       "speech_raw": "V",
       "settled": true
@@ -42,12 +54,15 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794151627262,
-     "t_end_ms": 1794151628266,
+     "t_start_ms": 1794164036907,
+     "t_end_ms": 1794164037912,
      "action": {
       "type": "key",
       "command": "Ctrl+Left"
      },
+     "keys": [
+      "Ctrl+Left"
+     ],
      "observation": {
       "speech_raw": "Virtual",
       "settled": true
@@ -56,12 +71,15 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794151628266,
-     "t_end_ms": 1794151629270,
+     "t_start_ms": 1794164037912,
+     "t_end_ms": 1794164038916,
      "action": {
       "type": "key",
       "command": "Ctrl+Left"
      },
+     "keys": [
+      "Ctrl+Left"
+     ],
      "observation": {
       "speech_raw": "Virtual",
       "settled": true
@@ -70,12 +88,15 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794151629270,
-     "t_end_ms": 1794151630274,
+     "t_start_ms": 1794164038916,
+     "t_end_ms": 1794164039920,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "Virtual Cursor Keys - Keys Fixture",
       "settled": true
@@ -84,12 +105,15 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794151630274,
-     "t_end_ms": 1794151631279,
+     "t_start_ms": 1794164039920,
+     "t_end_ms": 1794164040924,
      "action": {
       "type": "key",
       "command": "Up"
      },
+     "keys": [
+      "Up"
+     ],
      "observation": {
       "speech_raw": "Virtual Cursor Keys - Keys Fixture",
       "settled": true
@@ -98,12 +122,15 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794151631279,
-     "t_end_ms": 1794151632285,
+     "t_start_ms": 1794164040924,
+     "t_end_ms": 1794164041929,
      "action": {
       "type": "key",
       "command": "Ctrl+End"
      },
+     "keys": [
+      "Ctrl+End"
+     ],
      "observation": {
       "speech_raw": "content information end",
       "settled": true
@@ -112,12 +139,15 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794151632285,
-     "t_end_ms": 1794151633288,
+     "t_start_ms": 1794164041929,
+     "t_end_ms": 1794164042933,
      "action": {
       "type": "key",
       "command": "End"
      },
+     "keys": [
+      "End"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true
@@ -126,12 +156,15 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794151633288,
-     "t_end_ms": 1794151634293,
+     "t_start_ms": 1794164042933,
+     "t_end_ms": 1794164043937,
      "action": {
       "type": "key",
       "command": "Right"
      },
+     "keys": [
+      "Right"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true
@@ -140,12 +173,15 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794151634293,
-     "t_end_ms": 1794151635297,
+     "t_start_ms": 1794164043937,
+     "t_end_ms": 1794164044941,
      "action": {
       "type": "key",
       "command": "Right"
      },
+     "keys": [
+      "Right"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true
@@ -154,12 +190,15 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794151635297,
-     "t_end_ms": 1794151636302,
+     "t_start_ms": 1794164044941,
+     "t_end_ms": 1794164045946,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true
@@ -168,12 +207,15 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794151636302,
-     "t_end_ms": 1794151637307,
+     "t_start_ms": 1794164045946,
+     "t_end_ms": 1794164046951,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
+     "keys": [
+      "Ctrl+Right"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true
@@ -182,12 +224,15 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794151637307,
-     "t_end_ms": 1794151638311,
+     "t_start_ms": 1794164046951,
+     "t_end_ms": 1794164047956,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "content information end",
       "settled": true
@@ -196,12 +241,15 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794151638311,
-     "t_end_ms": 1794151639315,
+     "t_start_ms": 1794164047956,
+     "t_end_ms": 1794164048960,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "content information end",
       "settled": true
@@ -210,12 +258,15 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794151639315,
-     "t_end_ms": 1794151640320,
+     "t_start_ms": 1794164048960,
+     "t_end_ms": 1794164049965,
      "action": {
       "type": "key",
       "command": "Insert+Up"
      },
+     "keys": [
+      "Insert+Up"
+     ],
      "observation": {
       "speech_raw": "content information end",
       "settled": true

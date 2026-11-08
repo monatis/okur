@@ -5,21 +5,30 @@
   "platform": "linux",
   "web_verbosity": null,
   "chrome": "google-chrome",
-  "commit": "3c555f36"
+  "commit": "f0b3a66d"
  },
  "trials": [
   {
    "trial_index": 1,
    "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794163330715
+    }
+   ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794151022732,
-     "t_end_ms": 1794151023736,
+     "t_start_ms": 1794163332085,
+     "t_end_ms": 1794163333089,
      "action": {
       "type": "keyboard",
       "command": "{DOWN}"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e First Boundary Heading",
       "settled": true
@@ -28,12 +37,15 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794151023736,
-     "t_end_ms": 1794151024740,
+     "t_start_ms": 1794163333089,
+     "t_end_ms": 1794163334093,
      "action": {
       "type": "keyboard",
       "command": "{DOWN}"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "First paragraph content.",
       "settled": true
@@ -42,12 +54,15 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794151024740,
-     "t_end_ms": 1794151025744,
+     "t_start_ms": 1794163334093,
+     "t_end_ms": 1794163335096,
      "action": {
       "type": "keyboard",
       "command": "{DOWN}"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": " \u001d heading level 2 \u001e Second Boundary Heading",
       "settled": true
@@ -56,12 +71,15 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794151025744,
-     "t_end_ms": 1794151026748,
+     "t_start_ms": 1794163335096,
+     "t_end_ms": 1794163336100,
      "action": {
       "type": "keyboard",
       "command": "{DOWN}"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "Final content paragraph on this page.",
       "settled": true

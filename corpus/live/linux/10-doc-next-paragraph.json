@@ -5,21 +5,30 @@
   "platform": "linux",
   "web_verbosity": null,
   "chrome": "google-chrome",
-  "commit": "3c555f36"
+  "commit": "f0b3a66d"
  },
  "trials": [
   {
    "trial_index": 1,
    "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794161480634
+    }
+   ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794149172853,
-     "t_end_ms": 1794149173857,
+     "t_start_ms": 1794161481992,
+     "t_end_ms": 1794161482997,
      "action": {
       "type": "keyboard",
       "command": "^{DOWN}"
      },
+     "keys": [
+      "Ctrl+Down"
+     ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e The Accessibility Engine Specification",
       "settled": true

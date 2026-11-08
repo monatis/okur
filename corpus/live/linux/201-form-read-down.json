@@ -5,21 +5,30 @@
   "platform": "linux",
   "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "3c555f36"
+  "commit": "f0b3a66d"
  },
  "trials": [
   {
    "trial_index": 1,
    "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794162360714
+    }
+   ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794150052191,
-     "t_end_ms": 1794150053194,
+     "t_start_ms": 1794162362077,
+     "t_end_ms": 1794162363081,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "main region",
       "settled": true
@@ -28,12 +37,15 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794150053194,
-     "t_end_ms": 1794150054198,
+     "t_start_ms": 1794162363081,
+     "t_end_ms": 1794162364085,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e Create your account",
       "settled": true
@@ -42,12 +54,15 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794150054198,
-     "t_end_ms": 1794150055202,
+     "t_start_ms": 1794162364085,
+     "t_end_ms": 1794162365089,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "Fields marked required must be filled in.",
       "settled": true
@@ -56,12 +71,15 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794150055202,
-     "t_end_ms": 1794150056205,
+     "t_start_ms": 1794162365089,
+     "t_end_ms": 1794162366092,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "Full name",
       "settled": true
@@ -70,12 +88,15 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794150056205,
-     "t_end_ms": 1794150057209,
+     "t_start_ms": 1794162366092,
+     "t_end_ms": 1794162367096,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "Full name \u001d Edit \u001e \n \u001dRequired\u001e",
       "settled": true
@@ -84,12 +105,15 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794150057209,
-     "t_end_ms": 1794150058213,
+     "t_start_ms": 1794162367096,
+     "t_end_ms": 1794162368099,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true
@@ -98,12 +122,15 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794150058213,
-     "t_end_ms": 1794150059217,
+     "t_start_ms": 1794162368099,
+     "t_end_ms": 1794162369103,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true
@@ -112,12 +139,15 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794150059217,
-     "t_end_ms": 1794150060221,
+     "t_start_ms": 1794162369103,
+     "t_end_ms": 1794162370106,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true
@@ -126,12 +156,15 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794150060221,
-     "t_end_ms": 1794150061226,
+     "t_start_ms": 1794162370106,
+     "t_end_ms": 1794162371109,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true
@@ -140,12 +173,15 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794150061226,
-     "t_end_ms": 1794150062230,
+     "t_start_ms": 1794162371109,
+     "t_end_ms": 1794162372112,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true
@@ -154,12 +190,15 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794150062230,
-     "t_end_ms": 1794150063234,
+     "t_start_ms": 1794162372112,
+     "t_end_ms": 1794162373115,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true
@@ -168,12 +207,15 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794150063234,
-     "t_end_ms": 1794150064238,
+     "t_start_ms": 1794162373115,
+     "t_end_ms": 1794162374119,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true
@@ -182,12 +224,15 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794150064238,
-     "t_end_ms": 1794150065242,
+     "t_start_ms": 1794162374119,
+     "t_end_ms": 1794162375122,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true
@@ -196,12 +241,15 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794150065242,
-     "t_end_ms": 1794150066247,
+     "t_start_ms": 1794162375122,
+     "t_end_ms": 1794162376125,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true
@@ -210,12 +258,15 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794150066247,
-     "t_end_ms": 1794150067251,
+     "t_start_ms": 1794162376125,
+     "t_end_ms": 1794162377128,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true
@@ -224,12 +275,15 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794150067251,
-     "t_end_ms": 1794150068255,
+     "t_start_ms": 1794162377128,
+     "t_end_ms": 1794162378132,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true
@@ -238,12 +292,15 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794150068255,
-     "t_end_ms": 1794150069259,
+     "t_start_ms": 1794162378132,
+     "t_end_ms": 1794162379135,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true
@@ -252,12 +309,15 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794150069259,
-     "t_end_ms": 1794150070264,
+     "t_start_ms": 1794162379135,
+     "t_end_ms": 1794162380138,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true
@@ -266,12 +326,15 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794150070264,
-     "t_end_ms": 1794150071268,
+     "t_start_ms": 1794162380138,
+     "t_end_ms": 1794162381141,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true
@@ -280,12 +343,15 @@
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794150071268,
-     "t_end_ms": 1794150072272,
+     "t_start_ms": 1794162381141,
+     "t_end_ms": 1794162382145,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true
@@ -294,12 +360,15 @@
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794150072272,
-     "t_end_ms": 1794150073277,
+     "t_start_ms": 1794162382145,
+     "t_end_ms": 1794162383148,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true
@@ -308,12 +377,15 @@
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794150073277,
-     "t_end_ms": 1794150074281,
+     "t_start_ms": 1794162383148,
+     "t_end_ms": 1794162384151,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true
@@ -322,12 +394,15 @@
     },
     {
      "step_id": "s23",
-     "t_start_ms": 1794150074281,
-     "t_end_ms": 1794150075286,
+     "t_start_ms": 1794162384151,
+     "t_end_ms": 1794162385155,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true
@@ -336,12 +411,15 @@
     },
     {
      "step_id": "s24",
-     "t_start_ms": 1794150075286,
-     "t_end_ms": 1794150076390,
+     "t_start_ms": 1794162385155,
+     "t_end_ms": 1794162386159,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true
@@ -350,12 +428,15 @@
     },
     {
      "step_id": "s25",
-     "t_start_ms": 1794150076390,
-     "t_end_ms": 1794150077394,
+     "t_start_ms": 1794162386159,
+     "t_end_ms": 1794162387162,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true
@@ -364,12 +445,15 @@
     },
     {
      "step_id": "s26",
-     "t_start_ms": 1794150077394,
-     "t_end_ms": 1794150078399,
+     "t_start_ms": 1794162387162,
+     "t_end_ms": 1794162388165,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true
@@ -378,12 +462,15 @@
     },
     {
      "step_id": "s27",
-     "t_start_ms": 1794150078399,
-     "t_end_ms": 1794150079403,
+     "t_start_ms": 1794162388165,
+     "t_end_ms": 1794162389168,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true

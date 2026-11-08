@@ -5,21 +5,30 @@
   "platform": "linux",
   "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "3c555f36"
+  "commit": "f0b3a66d"
  },
  "trials": [
   {
    "trial_index": 1,
    "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794163459048
+    }
+   ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794151050477,
-     "t_end_ms": 1794151051481,
+     "t_start_ms": 1794163460412,
+     "t_end_ms": 1794163461416,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e The Accessibility Engine Specification",
       "settled": true
@@ -28,12 +37,15 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794151051481,
-     "t_end_ms": 1794151052485,
+     "t_start_ms": 1794163461416,
+     "t_end_ms": 1794163462420,
      "action": {
       "type": "key",
       "command": "Shift+Right"
      },
+     "keys": [
+      "Shift+Right"
+     ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e \nT\nselected",
       "settled": true
@@ -42,12 +54,15 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794151052485,
-     "t_end_ms": 1794151053490,
+     "t_start_ms": 1794163462420,
+     "t_end_ms": 1794163463424,
      "action": {
       "type": "key",
       "command": "Shift+Right"
      },
+     "keys": [
+      "Shift+Right"
+     ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e \nh\nselected",
       "settled": true
@@ -56,12 +71,15 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794151053490,
-     "t_end_ms": 1794151054494,
+     "t_start_ms": 1794163463424,
+     "t_end_ms": 1794163464429,
      "action": {
       "type": "key",
       "command": "Insert+Shift+Down"
      },
+     "keys": [
+      "Insert+Shift+Down"
+     ],
      "observation": {
       "speech_raw": "Selection is\nTh",
       "settled": true
@@ -70,12 +88,15 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794151054494,
-     "t_end_ms": 1794151055500,
+     "t_start_ms": 1794163464429,
+     "t_end_ms": 1794163465434,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+Right"
      },
+     "keys": [
+      "Ctrl+Shift+Right"
+     ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e e \nselected",
       "settled": true
@@ -84,12 +105,15 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794151055500,
-     "t_end_ms": 1794151056505,
+     "t_start_ms": 1794163465434,
+     "t_end_ms": 1794163466440,
      "action": {
       "type": "key",
       "command": "Shift+End"
      },
+     "keys": [
+      "Shift+End"
+     ],
      "observation": {
       "speech_raw": "selected\n \u001d heading level 1 \u001e Accessibility Engine Specification",
       "settled": true
@@ -98,12 +122,15 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794151056505,
-     "t_end_ms": 1794151057510,
+     "t_start_ms": 1794163466440,
+     "t_end_ms": 1794163467445,
      "action": {
       "type": "key",
       "command": "Shift+Down"
      },
+     "keys": [
+      "Shift+Down"
+     ],
      "observation": {
       "speech_raw": "selected\n \u001d heading level 1 \u001e The Accessibility Engine Specification",
       "settled": true
@@ -112,12 +139,15 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794151057510,
-     "t_end_ms": 1794151058515,
+     "t_start_ms": 1794163467445,
+     "t_end_ms": 1794163468451,
      "action": {
       "type": "key",
       "command": "Insert+Shift+Down"
      },
+     "keys": [
+      "Insert+Shift+Down"
+     ],
      "observation": {
       "speech_raw": "Selection is\nThe Accessibility Engine Specification",
       "settled": true
@@ -126,12 +156,15 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794151058515,
-     "t_end_ms": 1794151059521,
+     "t_start_ms": 1794163468451,
+     "t_end_ms": 1794163469456,
      "action": {
       "type": "key",
       "command": "Ctrl+C"
      },
+     "keys": [
+      "Ctrl+C"
+     ],
      "observation": {
       "speech_raw": "Copied selection to clipboard",
       "settled": true
@@ -140,12 +173,15 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794151059521,
-     "t_end_ms": 1794151060525,
+     "t_start_ms": 1794163469456,
+     "t_end_ms": 1794163470460,
      "action": {
       "type": "key",
       "command": "Down"
      },
+     "keys": [
+      "Down"
+     ],
      "observation": {
       "speech_raw": "Engine components operate deterministically across synthetic speech pipelines. Speed and accuracy remain paramount.",
       "settled": true
@@ -154,12 +190,15 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794151060525,
-     "t_end_ms": 1794151061530,
+     "t_start_ms": 1794163470460,
+     "t_end_ms": 1794163471465,
      "action": {
       "type": "key",
       "command": "Shift+Home"
      },
+     "keys": [
+      "Shift+Home"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true
@@ -168,12 +207,15 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794151061530,
-     "t_end_ms": 1794151062536,
+     "t_start_ms": 1794163471465,
+     "t_end_ms": 1794163472471,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+Home"
      },
+     "keys": [
+      "Ctrl+Shift+Home"
+     ],
      "observation": {
       "speech_raw": "selected\nDocument Reading Reference Fixture\n \u001d heading level 1 \u001e The Accessibility Engine Specification\nThe screen reader engine parses the document object model into a clean virtual buffer.",
       "settled": true
@@ -182,12 +224,15 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794151062536,
-     "t_end_ms": 1794151063541,
+     "t_start_ms": 1794163472471,
+     "t_end_ms": 1794163473476,
      "action": {
       "type": "key",
       "command": "Ctrl+A"
      },
+     "keys": [
+      "Ctrl+A"
+     ],
      "observation": {
       "speech_raw": "Unselected\nDocument Reading Reference Fixture\n \u001d heading level 1 \u001e The Accessibility Engine Specification\nThe screen reader engine parses the document object model into a clean virtual buffer.\nselected\nEngine components operate deterministically across synthetic speech pipelines. Speed and accuracy remain paramount.\nRust provides memory safety without garbage collection latency. This ensures predictable audio delivery.",
       "settled": true
@@ -196,12 +241,15 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794151063541,
-     "t_end_ms": 1794151064545,
+     "t_start_ms": 1794163473476,
+     "t_end_ms": 1794163474481,
      "action": {
       "type": "key",
       "command": "Ctrl+C"
      },
+     "keys": [
+      "Ctrl+C"
+     ],
      "observation": {
       "speech_raw": "Copied selection to clipboard",
       "settled": true

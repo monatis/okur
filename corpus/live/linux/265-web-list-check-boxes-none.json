@@ -5,21 +5,34 @@
   "platform": "linux",
   "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "3c555f36"
+  "commit": "f0b3a66d"
  },
  "trials": [
   {
    "trial_index": 1,
    "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Escape",
+     "t_ms": 1794162722453
+    },
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794162722810
+    }
+   ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794150414396,
-     "t_end_ms": 1794150415401,
+     "t_start_ms": 1794162724115,
+     "t_end_ms": 1794162725121,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+X"
      },
+     "keys": [
+      "Ctrl+Insert+X"
+     ],
      "observation": {
       "speech_raw": "no Check boxes were found",
       "settled": true
@@ -28,12 +41,15 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794150415401,
-     "t_end_ms": 1794150416404,
+     "t_start_ms": 1794162725121,
+     "t_end_ms": 1794162726125,
      "action": {
       "type": "key",
       "command": "Escape"
      },
+     "keys": [
+      "Escape"
+     ],
      "observation": {
       "speech_raw": "",
       "settled": true
