@@ -59,6 +59,15 @@ pub struct AtspiRecord {
 }
 
 impl AtspiRecord {
+    /// A page read off the event thread, given to the engine when it is read: a record of its
+    /// own, a load with no object (the code review of 2026-11-08, finding 6).
+    pub fn page(at_ms: u64, page: PageRead) -> Self {
+        Self {
+            pages: vec![page],
+            ..Self::bare(at_ms, EventKind::DocumentLoaded, String::new(), None)
+        }
+    }
+
     /// A record of an event for which nothing was read.
     pub fn bare(at_ms: u64, kind: EventKind, app: String, target: Option<ElementData>) -> Self {
         Self {
@@ -112,6 +121,12 @@ impl Converter {
         on_document || self.last_page.as_deref() != Some(document)
     }
 
+    /// The page whose document is `document` asked of the page reader: a focus in it before it
+    /// comes does not ask again.
+    pub fn page_asked(&mut self, document: &str) {
+        self.last_page = Some(document.to_owned());
+    }
+
     /// Whether the event's object is read with what surrounds it: a focus, or the focused
     /// control's change, outside a page.
     pub fn wants_native(kind: &EventKind, target: Option<&ElementData>, in_page: bool) -> bool {
@@ -159,6 +174,11 @@ impl Converter {
         let native = target
             .filter(|_| outside_page)
             .and_then(|element| match &record.native {
+                // The focus moved on before it was read (fast Tabs): its newer focus event
+                // follows, and this one is not said (the code review of 2026-11-08, 3c). The
+                // lab's traces at f0b3a66d: every focus read but each desktop fixture's first,
+                // its window's object before any key, has FOCUSED.
+                Some(read) if focus && !read.focus.has(crate::page::state::FOCUSED) => None,
                 Some(read) => native_control(element, read, app.clone()),
                 // Not read (its object unnamed): as its event's snapshot has it.
                 None => {
@@ -336,7 +356,7 @@ mod tests {
         let focus = record(
             EventKind::FocusChanged,
             check.clone(),
-            Some(read(node("check box", "Remember me", &[]))),
+            Some(read(node("check box", "Remember me", &[state::FOCUSED]))),
         );
         let events = converter.convert_read(&focus);
         assert!(matches!(
@@ -351,12 +371,39 @@ mod tests {
                 value: true,
             },
             check,
-            Some(read(node("check box", "Remember me", &[state::CHECKED]))),
+            Some(read(node(
+                "check box",
+                "Remember me",
+                &[state::FOCUSED, state::CHECKED],
+            ))),
         );
         assert!(matches!(
             converter.convert_read(&checked).as_slice(),
             [AccessibilityEvent::Change { kind: ChangeKind::State, control }]
                 if control.states.checked == Some(true)
+        ));
+    }
+
+    /// A focus read after the focus moved on, its fresh object no longer focused, is not said:
+    /// the newer focus follows.
+    #[test]
+    fn a_focus_gone_before_its_read_is_not_said() {
+        let mut converter = Converter::default();
+        let button = element(ElementRole::Button, "OK", "/ok", true);
+        let gone = record(
+            EventKind::FocusChanged,
+            button.clone(),
+            Some(read(node("push button", "OK", &[]))),
+        );
+        assert!(converter.convert_read(&gone).is_empty());
+        let here = record(
+            EventKind::FocusChanged,
+            button,
+            Some(read(node("push button", "OK", &[state::FOCUSED]))),
+        );
+        assert!(matches!(
+            converter.convert_read(&here).as_slice(),
+            [AccessibilityEvent::Focus(_)]
         ));
     }
 
@@ -381,7 +428,7 @@ mod tests {
         let mut converter = Converter::default();
         let country = element(ElementRole::ComboBox, "Country:", "/country", true);
         let shown = |item: &str| {
-            let mut combo = node("combo box", "Country:", &[]);
+            let mut combo = node("combo box", "Country:", &[state::FOCUSED]);
             combo
                 .attributes
                 .insert("valuetext".to_owned(), item.to_owned());
@@ -405,6 +452,28 @@ mod tests {
         assert!(converter
             .wants_reread(&EventKind::NameChanged, Some(&other))
             .is_none());
+    }
+
+    /// A page read off the event thread comes as a record of its own: the engine is given the
+    /// page alone; asked for, it is not asked again for a focus in it.
+    #[test]
+    fn a_page_read_later_is_its_own_record() {
+        let mut converter = Converter::default();
+        converter.page_asked(":1.5/doc");
+        assert!(!converter.wants_page(false, ":1.5/doc"));
+        let page = AtspiRecord::page(
+            5,
+            PageRead {
+                document: ":1.5/doc".to_owned(),
+                base: 0,
+                root: node("document web", "News", &[]),
+                read_ms: 40,
+            },
+        );
+        assert!(matches!(
+            converter.convert_read(&page).as_slice(),
+            [AccessibilityEvent::DocumentLoaded { title, .. }] if title == "News"
+        ));
     }
 
     /// A page read is given to the engine first, numbered from its base; the page read last is

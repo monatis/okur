@@ -259,6 +259,43 @@ fn source_error(what: &str, error: impl std::fmt::Display) -> RuntimeError {
     RuntimeError::EventSource(format!("AT-SPI: {what}: {error}"))
 }
 
+/// Pages read off the event thread (the code review of 2026-11-08, finding 6). A page is read
+/// whole at about 3 ms an object: on the event thread, its focus and every event after it
+/// waited for the read. The reader takes the documents asked of it, the latest of those
+/// waiting (the focus moved on from the others), on a bus connection of its own, and hands
+/// each page back; the event thread gives the engine its focus at once and the page when it
+/// comes (`okur-lab live-replay linux --pages-after-focus` said the same as the runs, 418 of
+/// 418 steps, before this was built).
+struct PageReader {
+    asks: std::sync::mpsc::Sender<AtspiObject>,
+    pages: std::sync::mpsc::Receiver<PageRead>,
+}
+
+impl PageReader {
+    /// The reader, on a thread of its own, which ends once its asker is gone and the read in
+    /// hand is done.
+    fn start(objects: PageObjects) -> Result<Self, RuntimeError> {
+        let provider =
+            LinuxProvider::new().map_err(|e| source_error("the page reader's bus", e))?;
+        let (asks, asked) = std::sync::mpsc::channel::<AtspiObject>();
+        let (read, pages) = std::sync::mpsc::channel();
+        std::thread::spawn(move || {
+            while let Ok(mut document) = asked.recv() {
+                while let Ok(later) = asked.try_recv() {
+                    document = later;
+                }
+                if read
+                    .send(read_page(&provider, &document, &objects))
+                    .is_err()
+                {
+                    return;
+                }
+            }
+        });
+        Ok(Self { asks, pages })
+    }
+}
+
 /// Milliseconds since the Unix epoch: a record's time, on the clock the lab's runner stamps its
 /// steps with, so a replay finds each step's records.
 fn unix_ms() -> u64 {
@@ -399,6 +436,10 @@ impl EventSource for AtspiEventSource {
                 // from what is read for it here (okur_linux_model::convert).
                 let mut converter = Converter::default();
                 let objects = objects;
+                // Pages read off this thread; read here, as before, when the reader has no bus.
+                let reader = PageReader::start(Arc::clone(&objects))
+                    .map_err(|e| tracing::warn!("pages read on the event thread: {e}"))
+                    .ok();
                 let mut write = |record: &AtspiRecord| {
                     if let Some(out) = trace.as_mut() {
                         if let Err(e) = write_record(out, record) {
@@ -408,7 +449,19 @@ impl EventSource for AtspiEventSource {
                     }
                 };
                 while !stop.load(Ordering::SeqCst) {
-                    match subscription.recv_status(Duration::from_millis(100)) {
+                    // The pages the reader read, each a record of its own, given to the
+                    // engine as they come.
+                    for page in reader.iter().flat_map(|r| r.pages.try_iter()) {
+                        let record = AtspiRecord::page(unix_ms(), page);
+                        write(&record);
+                        for said in converter.convert_read(&record) {
+                            if !sink.send(said) {
+                                return;
+                            }
+                        }
+                    }
+                    // Short, so that a page read while the bus is quiet comes at once.
+                    match subscription.recv_status(Duration::from_millis(20)) {
                         RecvStatus::Event(event) => {
                             tracing::trace!(
                                 kind = ?event.kind,
@@ -444,12 +497,24 @@ impl EventSource for AtspiEventSource {
                                 None => (None, Vec::new()),
                             };
                             let mut pages = Vec::new();
+                            // A page is asked of the reader, the page reader's when it runs,
+                            // else read here.
+                            let mut page =
+                                |document: &AtspiObject, converter: &mut Converter| match &reader {
+                                    Some(reader) => {
+                                        converter.page_asked(&key_of(document));
+                                        if reader.asks.send(document.clone()).is_err() {
+                                            tracing::warn!("the page reader is gone");
+                                        }
+                                    }
+                                    None => pages.push(read_page(&provider, document, &objects)),
+                                };
                             if let (true, Some(element), Some(document)) =
                                 (focus, target, document.as_ref())
                             {
                                 let on_document = okur_linux_model::convert::is_document(element);
                                 if converter.wants_page(on_document, &key_of(document)) {
-                                    pages.push(read_page(&provider, document, &objects));
+                                    page(document, &mut converter);
                                 }
                             }
                             // A page that finished loading, a reload's too, is read again: the
@@ -460,7 +525,7 @@ impl EventSource for AtspiEventSource {
                                     .filter(|d| shown_page(&provider, d))
                                     .and_then(AtspiObject::of)
                                 {
-                                    pages.push(read_page(&provider, &document, &objects));
+                                    page(&document, &mut converter);
                                 }
                             }
                             let native = target
