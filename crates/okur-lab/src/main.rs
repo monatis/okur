@@ -519,6 +519,10 @@ enum Commands {
         /// gave Okur
         #[arg(long)]
         recorded_settings: bool,
+        /// Write corpus/live/linux-replay-baseline.json: the replayed steps that match JAWS,
+        /// which may only grow
+        #[arg(long, conflicts_with_all = ["only", "pages_after_focus", "recorded_settings"])]
+        write: bool,
     },
     /// Write the reference machine's settings (old-pc's JAWS configuration) as a settings
     /// folder, for `run --settings` in a live run there
@@ -1385,6 +1389,7 @@ async fn main() {
             pages_after_focus,
             only,
             recorded_settings,
+            write,
         }) => {
             if platform != "linux" {
                 eprintln!("Error: only Linux's runs keep a trace (not {platform:?})");
@@ -1426,6 +1431,23 @@ async fn main() {
             );
             if !report.errors.is_empty() {
                 std::process::exit(1);
+            }
+            // The baseline, of the replay as the runs were made; checked when nothing changes
+            // the replay.
+            if only.is_empty() && !pages_after_focus && !recorded_settings {
+                let dir = Path::new(&corpus_dir);
+                let baseline = okur_corpus::linux_replay::BASELINE;
+                let against = report.against_jaws_report();
+                let result = if write {
+                    okur_corpus::live::write_baseline(dir, baseline, &against, false)
+                        .map(|()| println!("Wrote corpus/live/{baseline}-baseline.json"))
+                } else {
+                    okur_corpus::live::check_baseline(dir, baseline, &against)
+                };
+                if let Err(e) = result {
+                    eprintln!("Error: {e}");
+                    std::process::exit(1);
+                }
             }
         }
         Some(Commands::ReferenceSettings {

@@ -205,6 +205,15 @@ fn baseline_path(corpus_dir: &std::path::Path, platform: &str) -> std::path::Pat
         .join(format!("{platform}-baseline.json"))
 }
 
+/// The command that writes `platform`'s baseline: a replay's (`linux-replay`) by
+/// `live-replay`, a platform's live runs' by `live-baseline`.
+fn regenerate(platform: &str) -> String {
+    match platform.strip_suffix("-replay") {
+        Some(replayed) => format!("live-replay {replayed} --write"),
+        None => format!("live-baseline {platform} --write"),
+    }
+}
+
 /// Renders the baseline exactly as stored on disk.
 pub fn render_baseline(platform: &str, report: &LiveReport) -> Result<String, String> {
     let steps: std::collections::BTreeMap<&str, &str> = report
@@ -221,8 +230,8 @@ pub fn render_baseline(platform: &str, report: &LiveReport) -> Result<String, St
         .collect();
     let baseline = serde_json::json!({
         "notice": format!(
-            "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- live-baseline \
-             {platform} --write"
+            "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- {}",
+            regenerate(platform)
         ),
         "platform": platform,
         "runs": report.runs,
@@ -273,8 +282,9 @@ pub fn check_baseline(
         .replace("\r\n", "\n");
     if committed != render_baseline(platform, report)? {
         return Err(format!(
-            "corpus/live/{platform}-baseline.json is stale: review `cargo run --bin okur-lab -- \
-             live-baseline {platform}`, then regenerate with --write"
+            "corpus/live/{platform}-baseline.json is stale: review and regenerate with \
+             `cargo run --bin okur-lab -- {}`",
+            regenerate(platform)
         ));
     }
     Ok(())

@@ -18,6 +18,11 @@ use std::path::Path;
 /// The platform whose runs are replayed.
 const PLATFORM: &str = "linux";
 
+/// The replay's baseline, beside the live runs' (`corpus/live/linux-replay-baseline.json`): the
+/// replayed steps that match JAWS, which may only grow. A change to the converter or the engine
+/// that costs Linux a step fails the corpus test without the lab.
+pub const BASELINE: &str = "linux-replay";
+
 /// A quiet moment, after which the host gives the engine an idle tick (its event loop's
 /// `idle`): speech held until no event supersedes it is said then.
 const IDLE_MS: u64 = 150;
@@ -67,6 +72,16 @@ pub struct ReplayReport {
 }
 
 impl ReplayReport {
+    /// The replayed speech against JAWS's evidence, as the live runs' report is kept, for its
+    /// baseline (`crate::live::check_baseline` with [`BASELINE`]).
+    pub fn against_jaws_report(&self) -> live::LiveReport {
+        live::LiveReport {
+            runs: self.runs,
+            steps: self.against_jaws.clone(),
+            errors: self.errors.clone(),
+        }
+    }
+
     pub fn faithful(&self) -> usize {
         self.steps.iter().filter(|s| s.faithful()).count()
     }

@@ -69,6 +69,24 @@ mod tests {
         assert_eq!(live::check_baseline(&dir, "linux", &report), Ok(()));
     }
 
+    /// Linux's live runs replayed from their traces (`okur-lab live-replay linux`) against
+    /// JAWS's evidence: a change to the converter or the engine that costs a step fails here,
+    /// without the lab.
+    #[test]
+    fn linux_replay_matches_its_baseline() {
+        let dir = corpus_dir();
+        let report = linux_replay::run(&dir, linux_replay::ReplayOptions::default());
+        assert!(
+            report.errors.is_empty(),
+            "runs could not be replayed: {:?}",
+            report.errors
+        );
+        assert_eq!(
+            live::check_baseline(&dir, linux_replay::BASELINE, &report.against_jaws_report()),
+            Ok(())
+        );
+    }
+
     /// Engine speech vs. recorded JAWS speech, every scenario on the pages as Linux gives them
     /// (the AT-SPI snapshots the Linux lab captured), ratcheted apart from IA2's in
     /// parity-baseline-atspi.json; `cargo run --bin okur-lab -- parity --api atspi` for the
