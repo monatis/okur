@@ -2,6 +2,7 @@
 //! (`okur-linux`) and replay: nothing here calls Linux, so it builds and is tested on every OS.
 
 pub mod focus;
+pub mod focus_track;
 pub mod keys;
 pub mod page;
 pub mod ssip;

@@ -10,6 +10,7 @@ use std::thread::JoinHandle;
 use std::time::Duration;
 
 use okur_core::event::AccessibilityEvent;
+use okur_linux_model::focus_track::{FocusTrack, Reread};
 use okur_runtime::events::{EventSink, EventSource};
 use okur_runtime::RuntimeError;
 use xa11y_core::{ElementData, Event, EventKind, RecvStatus, Role, StateFlag};
@@ -248,14 +249,10 @@ impl EventSource for AtspiEventSource {
                 // The subscription lives in this thread: dropped here, it deregisters its
                 // events and ends its own reader.
                 let mut last_page = None;
-                // The object that took the focus last, and the window activated last (their bus
-                // names and paths).
-                let mut focused_object: Option<String> = None;
-                let mut active_window: Option<String> = None;
-                // What the last focus outside a page read as: its role and name.
-                let mut focus_said: Option<(okur_core::Role, Option<String>)> = None;
-                // The focused control outside a page, and the value it was said with.
-                let mut native_focused: Option<(ElementData, Option<String>)> = None;
+                // The focus as the engine was last told of it, and the control outside a page
+                // that has it.
+                let mut track = FocusTrack::default();
+                let mut native_element: Option<ElementData> = None;
                 let objects = objects;
                 while !stop.load(Ordering::SeqCst) {
                     match subscription.recv_status(Duration::from_millis(100)) {
@@ -302,30 +299,12 @@ impl EventSource for AtspiEventSource {
                                     return;
                                 }
                             }
-                            // A focus event for the object that has the focus already, read as it
-                            // was (its role and name), is no move: GTK 4 sends one with its Focus and one with its focused state, and
-                            // one more after each key the hook grabs, which X reports to the
-                            // window as its focus leaving for the grab and coming back (GTK
-                            // deactivates and activates the window around every key: the lab's
-                            // 304, where the change on Space was compared with the state the
-                            // repeated focus brought). Read otherwise it is said: a notebook keeps
-                            // the focus as Right selects its next tab [obs, 303/s13]. Another window
-                            // activated forgets it, so a focus coming back from elsewhere is said.
+                            // The focus's repeats and a control's own changes told from a focus
+                            // move: okur_linux_model::focus_track's rules.
                             let object = event.target.as_ref().and_then(object_of);
-                            let mut again = false;
-                            match event.kind {
-                                EventKind::WindowActivated => {
-                                    tracing::debug!(window = ?object, "AT-SPI window activated");
-                                    if object != active_window {
-                                        focused_object = None;
-                                    }
-                                    active_window = object.clone();
-                                }
-                                EventKind::FocusChanged => {
-                                    again = object.is_some() && object == focused_object;
-                                    focused_object = object;
-                                }
-                                _ => {}
+                            if event.kind == EventKind::WindowActivated {
+                                tracing::debug!(window = ?object, "AT-SPI window activated");
+                                track.window_activated(object.clone());
                             }
                             // A focus outside a page, and its control's change, read with what
                             // surrounds it: the change names the control as its focus did.
@@ -346,16 +325,14 @@ impl EventSource for AtspiEventSource {
                                     }
                                 });
                             if let Some(AccessibilityEvent::Focus(read)) = &native {
-                                let said = (read.role.clone(), read.name.clone());
-                                if again && focus_said.as_ref() == Some(&said) {
+                                if !track.native_focus(object.clone(), read) {
                                     tracing::debug!(name = ?read.name, "AT-SPI focus repeated");
                                     continue;
                                 }
-                                focus_said = Some(said);
-                                native_focused =
-                                    event.target.clone().map(|e| (e, read.value.clone()));
+                                native_element = event.target.clone();
                             } else if focus && document.is_some() {
-                                native_focused = None;
+                                track.page_focus(object.clone());
+                                native_element = None;
                             }
                             // A label renamed, or an object selected without the focus: the focused
                             // control may read otherwise. Read again, it is said as a focus when
@@ -373,21 +350,15 @@ impl EventSource for AtspiEventSource {
                                             value: true,
                                         });
                             if inside {
-                                if let Some((element, value)) = native_focused.as_mut() {
+                                if let Some(element) = native_element.as_ref() {
                                     let control = native_focus(&provider, element);
-                                    let said = (control.role.clone(), control.name.clone());
-                                    let reread = if focus_said.as_ref() != Some(&said) {
-                                        focus_said = Some(said);
-                                        value.clone_from(&control.value);
-                                        Some(AccessibilityEvent::Focus(control))
-                                    } else if control.value != *value {
-                                        value.clone_from(&control.value);
-                                        Some(AccessibilityEvent::Change {
+                                    let reread = match track.reread(&control) {
+                                        Reread::Focus => Some(AccessibilityEvent::Focus(control)),
+                                        Reread::Value => Some(AccessibilityEvent::Change {
                                             kind: okur_core::event::ChangeKind::Value,
                                             control,
-                                        })
-                                    } else {
-                                        None
+                                        }),
+                                        Reread::Same => None,
                                     };
                                     if let Some(reread) = reread {
                                         if !sink.send(reread) {
