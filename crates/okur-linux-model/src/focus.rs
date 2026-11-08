@@ -127,6 +127,21 @@ pub fn native_focus(
         .find(|a| matches!(a.role.as_str(), "frame" | "dialog" | "window" | "alert"))
         .map(|a| a.name.clone())
         .filter(|n| !n.is_empty());
+    // The control as read now, not as its event's snapshot had it: read again as something
+    // within it changed, it may have another name or state ("Play" become "Pause"; the code
+    // review of 2026-11-08).
+    if !focus.name.is_empty() {
+        event.name = Some(focus.name.clone());
+    }
+    if event.states.checked.is_some() {
+        let pressed = focus.role == "toggle button" && focus.has(state::PRESSED);
+        event.states.checked = Some(focus.has(state::CHECKED) || pressed);
+        event.states.mixed = focus.has(state::INDETERMINATE);
+    }
+    event.states.selected = focus.has(state::SELECTED).then_some(true);
+    if focus.has(state::EXPANDABLE) {
+        event.states.expanded = Some(focus.has(state::EXPANDED));
+    }
     // GTK's mnemonic mark, where the control's own label shows the name without it.
     if let Some(name) = event.name.clone().filter(|n| n.contains('_')) {
         let plain = without_mnemonic(&name);
@@ -454,6 +469,31 @@ mod tests {
         assert_eq!(
             said(&event),
             fold("Plan \nPro  \u{1d} radio button \u{1e}   \u{1d}checked\u{1e} \n2 of 3\nTo change the selection press Up or Down Arrow.")
+        );
+    }
+
+    /// A control read again takes its name and states as read now, not as its focus event's
+    /// snapshot had them: a button renamed in place, a check box unchecked.
+    #[test]
+    fn a_control_is_read_as_it_is_now() {
+        use crate::page::state;
+        let mut event = FocusEvent::new(Role::Button);
+        event.name = Some("Play".into());
+        let pause = node("push button", "Pause", vec![label("Pause")]);
+        assert_eq!(
+            native_focus(event, &pause, &[window()]).name.as_deref(),
+            Some("Pause")
+        );
+        let mut event = FocusEvent::new(Role::CheckBox);
+        event.name = Some("Remember me".into());
+        event.states.checked = Some(true);
+        let unchecked = node("check box", "Remember me", vec![label("Remember me")]);
+        let read = native_focus(event.clone(), &unchecked, &[window()]);
+        assert_eq!(read.states.checked, Some(false));
+        let checked = with(unchecked, &[state::CHECKED]);
+        assert_eq!(
+            native_focus(event, &checked, &[window()]).states.checked,
+            Some(true)
         );
     }
 
