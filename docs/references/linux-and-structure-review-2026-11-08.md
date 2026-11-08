@@ -45,7 +45,8 @@ file:line references are to that commit.
    - Open: a tree cut at 200 objects is marked.
 5. **(14)** CapsLock as the Okur key is never grabbed, so X toggles Caps Lock.
    - Built (9a6b6816, ebaf1373): while Okur runs, Caps Lock's keys lose their keysym and their modifier, and Okur toggles Caps Lock through XKB when the engine passes a press on.
-   - Clearing the modifier alone was not enough (probe-capslock.sh: one press still locked). Waiting for the probe's second run.
+   - Clearing the modifier alone was not enough (probe-capslock.sh: one press still locked).
+   - Done: `probe-capslock.sh` at 0e7ad2a0 in the lab: "CAPSLOCK PASS". One press left Caps Lock off; two quick ones turned it on ("Caps lock on"); two more turned it off. After Okur stopped, the key had its Caps_Lock keysym and the Lock modifier back.
 6. **(15, rest)**
    - Done: a key grab another program holds is warned of (4d58202f).
    - Open: mark a read with per-node errors as partial.
