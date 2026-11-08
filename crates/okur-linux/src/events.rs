@@ -16,16 +16,63 @@ use okur_runtime::RuntimeError;
 use xa11y_core::{ElementData, Event, EventKind, RecvStatus, Role};
 use xa11y_linux::{A11yStatus, AtspiObject, AtspiTree, LinuxProvider};
 
-/// The objects of the page read last, its application's bus name and each object's path, in the
-/// order the page's nodes are numbered ([`okur_linux_model::page::atspi_to_web`], depth first from 1):
-/// what acting on a page's node finds its object by ([`crate::actions::LinuxActions`]).
-pub type PageObjects = Arc<Mutex<Vec<(String, String)>>>;
+/// The objects of the last pages read, each its application's bus name and its path, by the id
+/// the page's node was numbered with ([`okur_linux_model::page::atspi_to_web_from`], depth first
+/// from the page's base): what acting on a page's node finds its object by
+/// ([`crate::actions::LinuxActions`]).
+pub type PageObjects = Arc<Mutex<PageIds>>;
+
+/// The ids a page read gives its objects, and the objects of the last pages by them.
+#[derive(Debug, Default)]
+pub struct PageIds {
+    /// The base the next page read numbers from.
+    next_base: i32,
+    /// The bases of the pages whose objects are kept, oldest first.
+    kept: std::collections::VecDeque<i32>,
+    pub by_id: std::collections::BTreeMap<i32, (String, String)>,
+}
+
+/// How far apart pages' ids start: more than a page read keeps ([`PAGE_LIMIT`]).
+const PAGE_ID_STRIDE: i32 = 1 << 20;
+
+/// How many pages' objects are kept.
+const PAGES_KEPT: i32 = 4;
+
+impl PageIds {
+    /// The base a new page read numbers from; the objects of pages before the last few go.
+    fn next_page(&mut self) -> i32 {
+        let base = self.next_base;
+        // Wrapping before i32's end: ids start again at 0 after 2000 pages.
+        self.next_base = if base >= 2000 * PAGE_ID_STRIDE {
+            0
+        } else {
+            base + PAGE_ID_STRIDE
+        };
+        let range = |start: i32| start..=start.saturating_add(PAGE_ID_STRIDE);
+        // The page this one's ids were last given to, after the ids wrapped, and the oldest
+        // page past the ones kept.
+        self.by_id.retain(|id, _| !range(base).contains(id));
+        self.kept.retain(|kept| *kept != base);
+        self.kept.push_back(base);
+        while self.kept.len() > usize::try_from(PAGES_KEPT).unwrap_or(4) {
+            if let Some(oldest) = self.kept.pop_front() {
+                self.by_id.retain(|id, _| !range(oldest).contains(id));
+            }
+        }
+        base
+    }
+}
 
 /// `tree`'s objects, depth first, as the page's nodes are numbered.
-fn objects_of(tree: &AtspiTree, out: &mut Vec<(String, String)>) {
-    out.push((tree.bus_name.clone(), tree.path.clone()));
+fn objects_of(
+    tree: &AtspiTree,
+    next: &mut i32,
+    out: &mut std::collections::BTreeMap<i32, (String, String)>,
+) {
+    *next += 1;
+    out.insert(*next, (tree.bus_name.clone(), tree.path.clone()));
     for child in &tree.children {
-        objects_of(child, out);
+        objects_of(child, next, out);
     }
 }
 
@@ -175,12 +222,18 @@ fn page(
     *last = Some(object);
     let started = std::time::Instant::now();
     let tree = provider.atspi_tree(document, PAGE_LIMIT);
-    let mut read = Vec::new();
-    objects_of(&tree, &mut read);
-    if let Ok(mut objects) = objects.lock() {
-        *objects = read;
-    }
-    let root = okur_linux_model::page::to_aom(&snapshot(tree));
+    // Numbered apart from the pages before it, so an action finds this page's object even
+    // after another page was read.
+    let base = match objects.lock() {
+        Ok(mut objects) => {
+            let base = objects.next_page();
+            let mut next = base;
+            objects_of(&tree, &mut next, &mut objects.by_id);
+            base
+        }
+        Err(_) => 0,
+    };
+    let root = okur_linux_model::page::to_aom_from(&snapshot(tree), base);
     tracing::debug!(ms = started.elapsed().as_millis(), "page read");
     let title = root.name.clone().unwrap_or_default();
     Some(AccessibilityEvent::DocumentLoaded { title, root })
@@ -548,5 +601,33 @@ mod tests {
         assert!(matches!(outside, Some(AccessibilityEvent::Focus(f)) if !f.in_document));
         let other = Event::new(EventKind::Announcement, "chrome", 1);
         assert!(convert(&other, true).is_none());
+    }
+}
+
+#[cfg(test)]
+mod page_id_tests {
+    use super::*;
+
+    /// Each page read numbers its objects from a base of its own; the last pages' objects are
+    /// kept, an older page's go.
+    #[test]
+    fn a_pages_objects_keep_their_ids_after_another_page_is_read() {
+        let mut ids = PageIds::default();
+        let mut bases = Vec::new();
+        for page in 0..6 {
+            let base = ids.next_page();
+            ids.by_id
+                .insert(base + 1, (":1.5".to_owned(), format!("/page/{page}")));
+            bases.push(base);
+        }
+        assert_eq!(
+            bases
+                .windows(2)
+                .filter(|w| matches!(w, [a, b] if b - a == PAGE_ID_STRIDE))
+                .count(),
+            5
+        );
+        let kept: Vec<&String> = ids.by_id.values().map(|(_, path)| path).collect();
+        assert_eq!(kept, ["/page/2", "/page/3", "/page/4", "/page/5"]);
     }
 }

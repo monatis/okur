@@ -75,9 +75,9 @@ impl LinuxActions {
 
     /// The object of `node`: its application's bus name and its path.
     fn object(&self, node: &AomNode) -> Option<(String, String)> {
-        let id: usize = node.attributes.get(UNIQUE_ID_ATTR)?.parse().ok()?;
+        let id: i32 = node.attributes.get(UNIQUE_ID_ATTR)?.parse().ok()?;
         let objects = self.objects.lock().ok()?;
-        objects.get(id.checked_sub(1)?).cloned()
+        objects.by_id.get(&id).cloned()
     }
 }
 

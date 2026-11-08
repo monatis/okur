@@ -194,10 +194,17 @@ fn chosen_item(node: &AtspiNode) -> Option<String> {
 /// first from 1, as its unique id: what acting on a page's node finds its object by (the Linux
 /// driver numbers the objects it read the same way).
 pub fn atspi_to_web(node: &AtspiNode) -> WebNode {
+    atspi_to_web_from(node, 0)
+}
+
+/// [`atspi_to_web`], numbered from `base` + 1: each page the live driver reads numbers its
+/// objects apart from the pages before it, so an action finds its own page's object even after
+/// another page was read (the code review of 2026-11-08, finding 9).
+pub fn atspi_to_web_from(node: &AtspiNode, base: i32) -> WebNode {
     let mut ids = HashMap::new();
-    let mut next = 0;
+    let mut next = base;
     number_paths(node, &mut next, &mut ids);
-    let mut next = 0;
+    let mut next = base;
     numbered(node, &mut next, &ids)
 }
 
@@ -329,6 +336,11 @@ pub struct AtspiSnapshot {
 /// A page's AT-SPI tree as the engine's AOM: okur-model's conversion of a page's web nodes.
 pub fn to_aom(root: &AtspiNode) -> AomNode {
     web_to_aom(&atspi_to_web(root))
+}
+
+/// [`to_aom`], its objects numbered from `base` + 1 ([`atspi_to_web_from`]).
+pub fn to_aom_from(root: &AtspiNode, base: i32) -> AomNode {
+    web_to_aom(&atspi_to_web_from(root, base))
 }
 
 #[cfg(test)]
