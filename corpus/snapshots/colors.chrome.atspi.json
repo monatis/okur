@@ -8,9 +8,9 @@
     "window_class": "",
     "process_version": "Google Chrome 157.0.8103.38 ",
     "fixture_sha256": "62dd9f753bf24d2f1575859a5dfe80eea451e32cbcdf09a03deb6e2c53345043",
-    "captured_at_unix_ms": 1794146210975,
+    "captured_at_unix_ms": 1794153395021,
     "node_count": 21,
-    "capture_ms": 66
+    "capture_ms": 102
   },
   "root": {
     "role": "document web",
@@ -23,6 +23,24 @@
     },
     "states": 1124079872,
     "text": "￼￼￼￼￼￼￼￼￼￼",
+    "text_attributes": {
+      "bg-color": "255,255,255",
+      "direction": "lr",
+      "family-name": "Liberation Serif",
+      "fg-color": "0,0,0",
+      "language": "en",
+      "size": "24pt",
+      "weight": "700"
+    },
+    "path": "/org/a11y/atspi/accessible/12",
+    "relations": [
+      [
+        14,
+        [
+          "/org/a11y/atspi/accessible/1"
+        ]
+      ]
+    ],
     "uri": "file:///root/okur/corpus/fixtures/colors.html",
     "children": [
       {
@@ -37,6 +55,16 @@
         },
         "states": 1124073728,
         "text": "Text colors",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,0",
+          "language": "en",
+          "size": "24pt",
+          "weight": "700"
+        },
+        "path": "/org/a11y/atspi/accessible/13",
         "children": [
           {
             "role": "static",
@@ -45,7 +73,17 @@
               "name-from": "contents"
             },
             "states": 1124073728,
-            "text": "Text colors"
+            "text": "Text colors",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "24pt",
+              "weight": "700"
+            },
+            "path": "/org/a11y/atspi/accessible/23"
           }
         ]
       },
@@ -58,6 +96,15 @@
         },
         "states": 1124073728,
         "text": "Pure red text.",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "255,0,0",
+          "language": "en",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/14",
         "children": [
           {
             "role": "static",
@@ -66,7 +113,16 @@
               "name-from": "contents"
             },
             "states": 1124073728,
-            "text": "Pure red text."
+            "text": "Pure red text.",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "255,0,0",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/24"
           }
         ]
       },
@@ -79,6 +135,15 @@
         },
         "states": 1124073728,
         "text": "Link blue text.",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,238",
+          "language": "en",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/15",
         "children": [
           {
             "role": "static",
@@ -87,7 +152,16 @@
               "name-from": "contents"
             },
             "states": 1124073728,
-            "text": "Link blue text."
+            "text": "Link blue text.",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,238",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/25"
           }
         ]
       },
@@ -100,6 +174,15 @@
         },
         "states": 1124073728,
         "text": "Navy text.",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,128",
+          "language": "en",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/16",
         "children": [
           {
             "role": "static",
@@ -108,7 +191,16 @@
               "name-from": "contents"
             },
             "states": 1124073728,
-            "text": "Navy text."
+            "text": "Navy text.",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,128",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/26"
           }
         ]
       },
@@ -121,6 +213,15 @@
         },
         "states": 1124073728,
         "text": "Dark green text.",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,128,0",
+          "language": "en",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/17",
         "children": [
           {
             "role": "static",
@@ -129,7 +230,16 @@
               "name-from": "contents"
             },
             "states": 1124073728,
-            "text": "Dark green text."
+            "text": "Dark green text.",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,128,0",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/27"
           }
         ]
       },
@@ -142,6 +252,15 @@
         },
         "states": 1124073728,
         "text": "Gray text.",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "128,128,128",
+          "language": "en",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/18",
         "children": [
           {
             "role": "static",
@@ -150,7 +269,16 @@
               "name-from": "contents"
             },
             "states": 1124073728,
-            "text": "Gray text."
+            "text": "Gray text.",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "128,128,128",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/28"
           }
         ]
       },
@@ -163,6 +291,15 @@
         },
         "states": 1124073728,
         "text": "An unnamed color.",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "18,52,86",
+          "language": "en",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/19",
         "children": [
           {
             "role": "static",
@@ -171,7 +308,16 @@
               "name-from": "contents"
             },
             "states": 1124073728,
-            "text": "An unnamed color."
+            "text": "An unnamed color.",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "18,52,86",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/29"
           }
         ]
       },
@@ -184,6 +330,15 @@
         },
         "states": 1124073728,
         "text": "White on black.",
+        "text_attributes": {
+          "bg-color": "0,0,0",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "255,255,255",
+          "language": "en",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/20",
         "children": [
           {
             "role": "static",
@@ -192,7 +347,16 @@
               "name-from": "contents"
             },
             "states": 1124073728,
-            "text": "White on black."
+            "text": "White on black.",
+            "text_attributes": {
+              "bg-color": "0,0,0",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "255,255,255",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/30"
           }
         ]
       },
@@ -205,6 +369,15 @@
         },
         "states": 1124073728,
         "text": "On a yellow background.",
+        "text_attributes": {
+          "bg-color": "255,255,0",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,0",
+          "language": "en",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/21",
         "children": [
           {
             "role": "static",
@@ -213,7 +386,16 @@
               "name-from": "contents"
             },
             "states": 1124073728,
-            "text": "On a yellow background."
+            "text": "On a yellow background.",
+            "text_attributes": {
+              "bg-color": "255,255,0",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/31"
           }
         ]
       },
@@ -226,6 +408,15 @@
         },
         "states": 1124073728,
         "text": "Text in the page's own colors.",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,0",
+          "language": "en",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/22",
         "children": [
           {
             "role": "static",
@@ -234,7 +425,16 @@
               "name-from": "contents"
             },
             "states": 1124073728,
-            "text": "Text in the page's own colors."
+            "text": "Text in the page's own colors.",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/32"
           }
         ]
       }

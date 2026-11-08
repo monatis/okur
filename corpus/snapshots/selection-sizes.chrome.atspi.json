@@ -8,9 +8,9 @@
     "window_class": "",
     "process_version": "Google Chrome 157.0.8103.38 ",
     "fixture_sha256": "6410ceb02b6220c87d511509c9ccc573311c7dce1eff21af3f6a497b80cfca61",
-    "captured_at_unix_ms": 1794146293647,
+    "captured_at_unix_ms": 1794153478168,
     "node_count": 31,
-    "capture_ms": 92
+    "capture_ms": 134
   },
   "root": {
     "role": "document web",
@@ -23,6 +23,23 @@
     },
     "states": 1124079872,
     "text": "￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼",
+    "text_attributes": {
+      "bg-color": "255,255,255",
+      "direction": "lr",
+      "family-name": "Liberation Serif",
+      "fg-color": "0,0,0",
+      "language": "en",
+      "size": "12pt"
+    },
+    "path": "/org/a11y/atspi/accessible/12",
+    "relations": [
+      [
+        14,
+        [
+          "/org/a11y/atspi/accessible/1"
+        ]
+      ]
+    ],
     "uri": "file:///root/okur/corpus/fixtures/selection-sizes.html",
     "children": [
       {
@@ -34,6 +51,15 @@
         },
         "states": 1124073728,
         "text": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,0",
+          "language": "en",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/13",
         "children": [
           {
             "role": "static",
@@ -42,7 +68,16 @@
               "name-from": "contents"
             },
             "states": 1124073728,
-            "text": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo."
+            "text": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/28"
           }
         ]
       },
@@ -55,6 +90,15 @@
         },
         "states": 1124073728,
         "text": "Paragraph 02 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,0",
+          "language": "en",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/14",
         "children": [
           {
             "role": "static",
@@ -63,7 +107,16 @@
               "name-from": "contents"
             },
             "states": 1124073728,
-            "text": "Paragraph 02 of fifteen, eighty characters each: alpha bravo charlie delta echo."
+            "text": "Paragraph 02 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/29"
           }
         ]
       },
@@ -76,6 +129,15 @@
         },
         "states": 1124073728,
         "text": "Paragraph 03 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,0",
+          "language": "en",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/15",
         "children": [
           {
             "role": "static",
@@ -84,7 +146,16 @@
               "name-from": "contents"
             },
             "states": 1124073728,
-            "text": "Paragraph 03 of fifteen, eighty characters each: alpha bravo charlie delta echo."
+            "text": "Paragraph 03 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/30"
           }
         ]
       },
@@ -97,6 +168,15 @@
         },
         "states": 1124073728,
         "text": "Paragraph 04 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,0",
+          "language": "en",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/16",
         "children": [
           {
             "role": "static",
@@ -105,7 +185,16 @@
               "name-from": "contents"
             },
             "states": 1124073728,
-            "text": "Paragraph 04 of fifteen, eighty characters each: alpha bravo charlie delta echo."
+            "text": "Paragraph 04 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/31"
           }
         ]
       },
@@ -118,6 +207,15 @@
         },
         "states": 1124073728,
         "text": "Paragraph 05 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,0",
+          "language": "en",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/17",
         "children": [
           {
             "role": "static",
@@ -126,7 +224,16 @@
               "name-from": "contents"
             },
             "states": 1124073728,
-            "text": "Paragraph 05 of fifteen, eighty characters each: alpha bravo charlie delta echo."
+            "text": "Paragraph 05 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/32"
           }
         ]
       },
@@ -139,6 +246,15 @@
         },
         "states": 1124073728,
         "text": "Paragraph 06 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,0",
+          "language": "en",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/18",
         "children": [
           {
             "role": "static",
@@ -147,7 +263,16 @@
               "name-from": "contents"
             },
             "states": 1124073728,
-            "text": "Paragraph 06 of fifteen, eighty characters each: alpha bravo charlie delta echo."
+            "text": "Paragraph 06 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/33"
           }
         ]
       },
@@ -160,6 +285,15 @@
         },
         "states": 1124073728,
         "text": "Paragraph 07 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,0",
+          "language": "en",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/19",
         "children": [
           {
             "role": "static",
@@ -168,7 +302,16 @@
               "name-from": "contents"
             },
             "states": 1124073728,
-            "text": "Paragraph 07 of fifteen, eighty characters each: alpha bravo charlie delta echo."
+            "text": "Paragraph 07 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/34"
           }
         ]
       },
@@ -181,6 +324,15 @@
         },
         "states": 1124073728,
         "text": "Paragraph 08 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,0",
+          "language": "en",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/20",
         "children": [
           {
             "role": "static",
@@ -189,7 +341,16 @@
               "name-from": "contents"
             },
             "states": 1124073728,
-            "text": "Paragraph 08 of fifteen, eighty characters each: alpha bravo charlie delta echo."
+            "text": "Paragraph 08 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/35"
           }
         ]
       },
@@ -202,6 +363,15 @@
         },
         "states": 1124073728,
         "text": "Paragraph 09 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,0",
+          "language": "en",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/21",
         "children": [
           {
             "role": "static",
@@ -210,7 +380,16 @@
               "name-from": "contents"
             },
             "states": 1124073728,
-            "text": "Paragraph 09 of fifteen, eighty characters each: alpha bravo charlie delta echo."
+            "text": "Paragraph 09 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/36"
           }
         ]
       },
@@ -223,6 +402,15 @@
         },
         "states": 1124073728,
         "text": "Paragraph 10 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,0",
+          "language": "en",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/22",
         "children": [
           {
             "role": "static",
@@ -231,7 +419,16 @@
               "name-from": "contents"
             },
             "states": 1124073728,
-            "text": "Paragraph 10 of fifteen, eighty characters each: alpha bravo charlie delta echo."
+            "text": "Paragraph 10 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/37"
           }
         ]
       },
@@ -244,6 +441,15 @@
         },
         "states": 1124073728,
         "text": "Paragraph 11 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,0",
+          "language": "en",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/23",
         "children": [
           {
             "role": "static",
@@ -252,7 +458,16 @@
               "name-from": "contents"
             },
             "states": 1124073728,
-            "text": "Paragraph 11 of fifteen, eighty characters each: alpha bravo charlie delta echo."
+            "text": "Paragraph 11 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/38"
           }
         ]
       },
@@ -265,6 +480,15 @@
         },
         "states": 1124073728,
         "text": "Paragraph 12 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,0",
+          "language": "en",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/24",
         "children": [
           {
             "role": "static",
@@ -273,7 +497,16 @@
               "name-from": "contents"
             },
             "states": 1124073728,
-            "text": "Paragraph 12 of fifteen, eighty characters each: alpha bravo charlie delta echo."
+            "text": "Paragraph 12 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/39"
           }
         ]
       },
@@ -286,6 +519,15 @@
         },
         "states": 1124073728,
         "text": "Paragraph 13 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,0",
+          "language": "en",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/25",
         "children": [
           {
             "role": "static",
@@ -294,7 +536,16 @@
               "name-from": "contents"
             },
             "states": 1124073728,
-            "text": "Paragraph 13 of fifteen, eighty characters each: alpha bravo charlie delta echo."
+            "text": "Paragraph 13 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/40"
           }
         ]
       },
@@ -307,6 +558,15 @@
         },
         "states": 1124073728,
         "text": "Paragraph 14 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,0",
+          "language": "en",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/26",
         "children": [
           {
             "role": "static",
@@ -315,7 +575,16 @@
               "name-from": "contents"
             },
             "states": 1124073728,
-            "text": "Paragraph 14 of fifteen, eighty characters each: alpha bravo charlie delta echo."
+            "text": "Paragraph 14 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/41"
           }
         ]
       },
@@ -328,6 +597,15 @@
         },
         "states": 1124073728,
         "text": "Paragraph 15 of fifteen, eighty characters each: the very end of all of it here.",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,0",
+          "language": "en",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/27",
         "children": [
           {
             "role": "static",
@@ -336,7 +614,16 @@
               "name-from": "contents"
             },
             "states": 1124073728,
-            "text": "Paragraph 15 of fifteen, eighty characters each: the very end of all of it here."
+            "text": "Paragraph 15 of fifteen, eighty characters each: the very end of all of it here.",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/42"
           }
         ]
       }

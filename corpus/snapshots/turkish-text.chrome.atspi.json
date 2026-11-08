@@ -8,9 +8,9 @@
     "window_class": "",
     "process_version": "Google Chrome 157.0.8103.38 ",
     "fixture_sha256": "5ee3058dcc516736010abbe605ad519cf7f9203b95c61190e6817e5f69ad4da6",
-    "captured_at_unix_ms": 1794146333138,
+    "captured_at_unix_ms": 1794153518102,
     "node_count": 21,
-    "capture_ms": 60
+    "capture_ms": 91
   },
   "root": {
     "role": "document web",
@@ -23,6 +23,24 @@
     },
     "states": 1124079872,
     "text": "￼￼￼￼￼￼￼",
+    "text_attributes": {
+      "bg-color": "255,255,255",
+      "direction": "lr",
+      "family-name": "Liberation Serif",
+      "fg-color": "0,0,0",
+      "language": "tr",
+      "size": "24pt",
+      "weight": "700"
+    },
+    "path": "/org/a11y/atspi/accessible/12",
+    "relations": [
+      [
+        14,
+        [
+          "/org/a11y/atspi/accessible/1"
+        ]
+      ]
+    ],
     "uri": "file:///root/okur/corpus/fixtures/turkish-text.html",
     "children": [
       {
@@ -37,6 +55,16 @@
         },
         "states": 1124073728,
         "text": "Çağrı ve Işık",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,0",
+          "language": "tr",
+          "size": "24pt",
+          "weight": "700"
+        },
+        "path": "/org/a11y/atspi/accessible/13",
         "children": [
           {
             "role": "static",
@@ -45,7 +73,17 @@
               "name-from": "contents"
             },
             "states": 1124073728,
-            "text": "Çağrı ve Işık"
+            "text": "Çağrı ve Işık",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "tr",
+              "size": "24pt",
+              "weight": "700"
+            },
+            "path": "/org/a11y/atspi/accessible/20"
           }
         ]
       },
@@ -58,6 +96,15 @@
         },
         "states": 1124073728,
         "text": "Şehirde ılık bir öğleden sonra.",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,0",
+          "language": "tr",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/14",
         "children": [
           {
             "role": "static",
@@ -66,7 +113,16 @@
               "name-from": "contents"
             },
             "states": 1124073728,
-            "text": "Şehirde ılık bir öğleden sonra."
+            "text": "Şehirde ılık bir öğleden sonra.",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "tr",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/21"
           }
         ]
       },
@@ -79,6 +135,15 @@
         },
         "states": 1124073728,
         "text": "İstanbul, Ödemiş, Ünye, Ağrı",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,0",
+          "language": "tr",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/15",
         "children": [
           {
             "role": "static",
@@ -87,7 +152,16 @@
               "name-from": "contents"
             },
             "states": 1124073728,
-            "text": "İstanbul, Ödemiş, Ünye, Ağrı"
+            "text": "İstanbul, Ödemiş, Ünye, Ağrı",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "tr",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/22"
           }
         ]
       },
@@ -101,6 +175,15 @@
         },
         "states": 1124073728,
         "text": "￼￼",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,0",
+          "language": "tr",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/16",
         "children": [
           {
             "role": "list item",
@@ -114,6 +197,15 @@
             },
             "states": 1124073728,
             "text": "• çiğ börek",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "tr",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/23",
             "children": [
               {
                 "role": "static",
@@ -125,7 +217,16 @@
                   "text-align": "left"
                 },
                 "states": 1124073728,
-                "text": "• "
+                "text": "• ",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "tr",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/25"
               },
               {
                 "role": "static",
@@ -134,7 +235,16 @@
                   "name-from": "contents"
                 },
                 "states": 1124073728,
-                "text": "çiğ börek"
+                "text": "çiğ börek",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "tr",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/26"
               }
             ]
           },
@@ -150,6 +260,15 @@
             },
             "states": 1124073728,
             "text": "• şeker",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "tr",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/24",
             "children": [
               {
                 "role": "static",
@@ -161,7 +280,16 @@
                   "text-align": "left"
                 },
                 "states": 1124073728,
-                "text": "• "
+                "text": "• ",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "tr",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/27"
               },
               {
                 "role": "static",
@@ -170,7 +298,16 @@
                   "name-from": "contents"
                 },
                 "states": 1124073728,
-                "text": "şeker"
+                "text": "şeker",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "tr",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/28"
               }
             ]
           }
@@ -185,6 +322,16 @@
         },
         "states": 1124073728,
         "text": "￼",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,238",
+          "language": "tr",
+          "size": "12pt",
+          "underline": "single"
+        },
+        "path": "/org/a11y/atspi/accessible/17",
         "children": [
           {
             "role": "link",
@@ -197,6 +344,16 @@
             },
             "states": 1124075776,
             "text": "Sonraki bölüm",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,238",
+              "language": "tr",
+              "size": "12pt",
+              "underline": "single"
+            },
+            "path": "/org/a11y/atspi/accessible/29",
             "uri": "file:///root/okur/corpus/fixtures/turkish-text.html#son",
             "children": [
               {
@@ -206,7 +363,17 @@
                   "name-from": "contents"
                 },
                 "states": 1124073728,
-                "text": "Sonraki bölüm"
+                "text": "Sonraki bölüm",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,238",
+                  "language": "tr",
+                  "size": "12pt",
+                  "underline": "single"
+                },
+                "path": "/org/a11y/atspi/accessible/30"
               }
             ]
           }
@@ -225,6 +392,16 @@
         },
         "states": 1124073728,
         "text": "Son",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,0",
+          "language": "tr",
+          "size": "18pt",
+          "weight": "700"
+        },
+        "path": "/org/a11y/atspi/accessible/18",
         "children": [
           {
             "role": "static",
@@ -233,7 +410,17 @@
               "name-from": "contents"
             },
             "states": 1124073728,
-            "text": "Son"
+            "text": "Son",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "tr",
+              "size": "18pt",
+              "weight": "700"
+            },
+            "path": "/org/a11y/atspi/accessible/31"
           }
         ]
       },
@@ -246,6 +433,15 @@
         },
         "states": 1124073728,
         "text": "ÇĞİÖŞÜ çğıöşü",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,0",
+          "language": "tr",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/19",
         "children": [
           {
             "role": "static",
@@ -254,7 +450,16 @@
               "name-from": "contents"
             },
             "states": 1124073728,
-            "text": "ÇĞİÖŞÜ çğıöşü"
+            "text": "ÇĞİÖŞÜ çğıöşü",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "tr",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/32"
           }
         ]
       }

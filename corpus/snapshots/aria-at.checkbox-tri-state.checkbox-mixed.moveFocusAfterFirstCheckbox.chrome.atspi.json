@@ -8,9 +8,9 @@
     "window_class": "",
     "process_version": "Google Chrome 157.0.8103.38 ",
     "fixture_sha256": "4bef7a28805dcb3dcb8b6d3ec873ef0e0ea5ce4b8e6786a10d5783d2dcd7f595",
-    "captured_at_unix_ms": 1794147729353,
+    "captured_at_unix_ms": 1794152210754,
     "node_count": 41,
-    "capture_ms": 140
+    "capture_ms": 162
   },
   "root": {
     "role": "document web",
@@ -23,6 +23,23 @@
     },
     "states": 1124075776,
     "text": "￼",
+    "text_attributes": {
+      "bg-color": "255,255,255",
+      "direction": "lr",
+      "family-name": "Liberation Sans",
+      "fg-color": "0,0,0",
+      "language": "en",
+      "size": "12pt"
+    },
+    "path": "/org/a11y/atspi/accessible/15",
+    "relations": [
+      [
+        14,
+        [
+          "/org/a11y/atspi/accessible/1"
+        ]
+      ]
+    ],
     "uri": "file:///root/okur/corpus/fixtures/aria-at/checkbox-tri-state/checkbox-mixed.moveFocusAfterFirstCheckbox.html",
     "children": [
       {
@@ -35,6 +52,15 @@
         },
         "states": 1124073728,
         "text": "￼￼￼￼",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Sans",
+          "fg-color": "0,90,156",
+          "language": "en",
+          "size": "20.5pt"
+        },
+        "path": "/org/a11y/atspi/accessible/17",
         "children": [
           {
             "role": "heading",
@@ -48,6 +74,15 @@
             },
             "states": 1124073728,
             "text": "Checkbox Example (Mixed-State)",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Sans",
+              "fg-color": "0,90,156",
+              "language": "en",
+              "size": "20.5pt"
+            },
+            "path": "/org/a11y/atspi/accessible/18",
             "children": [
               {
                 "role": "static",
@@ -56,7 +91,16 @@
                   "name-from": "contents"
                 },
                 "states": 1124073728,
-                "text": "Checkbox Example (Mixed-State)"
+                "text": "Checkbox Example (Mixed-State)",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "0,90,156",
+                  "language": "en",
+                  "size": "20.5pt"
+                },
+                "path": "/org/a11y/atspi/accessible/21"
               }
             ]
           },
@@ -69,6 +113,15 @@
             },
             "states": 1124073728,
             "text": "￼￼",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Sans",
+              "fg-color": "0,90,156",
+              "language": "en",
+              "size": "17pt"
+            },
+            "path": "/org/a11y/atspi/accessible/19",
             "children": [
               {
                 "role": "heading",
@@ -82,6 +135,15 @@
                 },
                 "states": 1124073728,
                 "text": "About This Example",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "0,90,156",
+                  "language": "en",
+                  "size": "17pt"
+                },
+                "path": "/org/a11y/atspi/accessible/22",
                 "children": [
                   {
                     "role": "static",
@@ -90,7 +152,16 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "About This Example"
+                    "text": "About This Example",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "0,90,156",
+                      "language": "en",
+                      "size": "17pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/24"
                   }
                 ]
               },
@@ -103,6 +174,15 @@
                 },
                 "states": 1124073728,
                 "text": "This example demonstrates using the ￼ to create a tri-state, or mixed-state, checkbox. In this implementation, the mixed-state checkbox represents the state of a set of standard HTML checkboxes. If none of the checkboxes in the set are checked, the mixed state checkbox is not checked, and if all members of the set are checked, the mixed state checkbox is checked. If the set contains both some checked and unchecked checkboxes, the mixed state checkbox is partially checked. Activating the tri-state checkbox changes the states of the checkboxes in the set.",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/23",
                 "children": [
                   {
                     "role": "static",
@@ -111,7 +191,16 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "This example demonstrates using the "
+                    "text": "This example demonstrates using the ",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/25"
                   },
                   {
                     "role": "link",
@@ -124,6 +213,16 @@
                     },
                     "states": 1124075776,
                     "text": "Checkbox Pattern",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "3,69,117",
+                      "language": "en",
+                      "size": "12pt",
+                      "underline": "single"
+                    },
+                    "path": "/org/a11y/atspi/accessible/26",
                     "uri": "https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/",
                     "children": [
                       {
@@ -133,7 +232,17 @@
                           "name-from": "contents"
                         },
                         "states": 1124073728,
-                        "text": "Checkbox Pattern"
+                        "text": "Checkbox Pattern",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "3,69,117",
+                          "language": "en",
+                          "size": "12pt",
+                          "underline": "single"
+                        },
+                        "path": "/org/a11y/atspi/accessible/28"
                       }
                     ]
                   },
@@ -144,7 +253,16 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": " to create a tri-state, or mixed-state, checkbox. In this implementation, the mixed-state checkbox represents the state of a set of standard HTML checkboxes. If none of the checkboxes in the set are checked, the mixed state checkbox is not checked, and if all members of the set are checked, the mixed state checkbox is checked. If the set contains both some checked and unchecked checkboxes, the mixed state checkbox is partially checked. Activating the tri-state checkbox changes the states of the checkboxes in the set."
+                    "text": " to create a tri-state, or mixed-state, checkbox. In this implementation, the mixed-state checkbox represents the state of a set of standard HTML checkboxes. If none of the checkboxes in the set are checked, the mixed state checkbox is not checked, and if all members of the set are checked, the mixed state checkbox is checked. If the set contains both some checked and unchecked checkboxes, the mixed state checkbox is partially checked. Activating the tri-state checkbox changes the states of the checkboxes in the set.",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/27"
                   }
                 ]
               }
@@ -159,6 +277,15 @@
             },
             "states": 1124073728,
             "text": "￼￼￼￼",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Sans",
+              "fg-color": "0,90,156",
+              "language": "en",
+              "size": "17pt"
+            },
+            "path": "/org/a11y/atspi/accessible/20",
             "children": [
               {
                 "role": "heading",
@@ -173,6 +300,24 @@
                 },
                 "states": 1124073728,
                 "text": "Example",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "0,90,156",
+                  "language": "en",
+                  "size": "17pt"
+                },
+                "path": "/org/a11y/atspi/accessible/29",
+                "relations": [
+                  [
+                    1,
+                    [
+                      "/org/a11y/atspi/accessible/30",
+                      "/org/a11y/atspi/accessible/32"
+                    ]
+                  ]
+                ],
                 "children": [
                   {
                     "role": "static",
@@ -181,7 +326,16 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "Example"
+                    "text": "Example",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "0,90,156",
+                      "language": "en",
+                      "size": "17pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/33"
                   }
                 ]
               },
@@ -197,7 +351,16 @@
                   "text-align": "left",
                   "xml-roles": "separator"
                 },
-                "states": 1124090112
+                "states": 1124090112,
+                "path": "/org/a11y/atspi/accessible/30",
+                "relations": [
+                  [
+                    2,
+                    [
+                      "/org/a11y/atspi/accessible/29"
+                    ]
+                  ]
+                ]
               },
               {
                 "role": "section",
@@ -209,6 +372,15 @@
                 },
                 "states": 1124073728,
                 "text": "￼￼",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/31",
                 "children": [
                   {
                     "role": "paragraph",
@@ -219,6 +391,16 @@
                     },
                     "states": 1124073728,
                     "text": "￼",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "3,69,117",
+                      "language": "en",
+                      "size": "12pt",
+                      "underline": "single"
+                    },
+                    "path": "/org/a11y/atspi/accessible/34",
                     "children": [
                       {
                         "role": "link",
@@ -232,6 +414,16 @@
                         },
                         "states": 1124075776,
                         "text": "Navigate forwards from here",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "3,69,117",
+                          "language": "en",
+                          "size": "12pt",
+                          "underline": "single"
+                        },
+                        "path": "/org/a11y/atspi/accessible/36",
                         "uri": "file:///root/okur/corpus/fixtures/aria-at/checkbox-tri-state/checkbox-mixed.moveFocusAfterFirstCheckbox.html#beforelink",
                         "children": [
                           {
@@ -241,7 +433,17 @@
                               "name-from": "contents"
                             },
                             "states": 1124073728,
-                            "text": "Navigate forwards from here"
+                            "text": "Navigate forwards from here",
+                            "text_attributes": {
+                              "bg-color": "255,255,255",
+                              "direction": "lr",
+                              "family-name": "Liberation Sans",
+                              "fg-color": "3,69,117",
+                              "language": "en",
+                              "size": "12pt",
+                              "underline": "single"
+                            },
+                            "path": "/org/a11y/atspi/accessible/37"
                           }
                         ]
                       }
@@ -261,6 +463,23 @@
                     },
                     "states": 1124073728,
                     "text": "￼￼￼￼",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/35",
+                    "relations": [
+                      [
+                        2,
+                        [
+                          "/org/a11y/atspi/accessible/38"
+                        ]
+                      ]
+                    ],
                     "children": [
                       {
                         "role": "label",
@@ -271,6 +490,23 @@
                         },
                         "states": 1124073728,
                         "text": "Sandwich Condiments",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "0,0,0",
+                          "language": "en",
+                          "size": "12pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/38",
+                        "relations": [
+                          [
+                            1,
+                            [
+                              "/org/a11y/atspi/accessible/35"
+                            ]
+                          ]
+                        ],
                         "children": [
                           {
                             "role": "static",
@@ -279,7 +515,16 @@
                               "name-from": "contents"
                             },
                             "states": 1124073728,
-                            "text": "Sandwich Condiments"
+                            "text": "Sandwich Condiments",
+                            "text_attributes": {
+                              "bg-color": "255,255,255",
+                              "direction": "lr",
+                              "family-name": "Liberation Sans",
+                              "fg-color": "0,0,0",
+                              "language": "en",
+                              "size": "12pt"
+                            },
+                            "path": "/org/a11y/atspi/accessible/42"
                           }
                         ]
                       },
@@ -297,13 +542,34 @@
                         },
                         "states": 2204442298624,
                         "text": "￼All condiments",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "0,0,0",
+                          "language": "en",
+                          "size": "12pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/39",
+                        "relations": [
+                          [
+                            3,
+                            [
+                              "/org/a11y/atspi/accessible/43",
+                              "/org/a11y/atspi/accessible/44",
+                              "/org/a11y/atspi/accessible/45",
+                              "/org/a11y/atspi/accessible/46"
+                            ]
+                          ]
+                        ],
                         "children": [
                           {
                             "role": "image",
                             "attributes": {
                               "text-align": "left"
                             },
-                            "states": 1124073728
+                            "states": 1124073728,
+                            "path": "/org/a11y/atspi/accessible/47"
                           },
                           {
                             "role": "static",
@@ -312,7 +578,16 @@
                               "name-from": "contents"
                             },
                             "states": 1124073728,
-                            "text": "All condiments"
+                            "text": "All condiments",
+                            "text_attributes": {
+                              "bg-color": "255,255,255",
+                              "direction": "lr",
+                              "family-name": "Liberation Sans",
+                              "fg-color": "0,0,0",
+                              "language": "en",
+                              "size": "12pt"
+                            },
+                            "path": "/org/a11y/atspi/accessible/48"
                           }
                         ]
                       },
@@ -325,6 +600,16 @@
                         },
                         "states": 1124073728,
                         "text": "￼",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "3,69,117",
+                          "language": "en",
+                          "size": "12pt",
+                          "underline": "single"
+                        },
+                        "path": "/org/a11y/atspi/accessible/40",
                         "children": [
                           {
                             "role": "link",
@@ -338,6 +623,16 @@
                             },
                             "states": 1124075776,
                             "text": "Navigate backwards from here",
+                            "text_attributes": {
+                              "bg-color": "255,255,255",
+                              "direction": "lr",
+                              "family-name": "Liberation Sans",
+                              "fg-color": "3,69,117",
+                              "language": "en",
+                              "size": "12pt",
+                              "underline": "single"
+                            },
+                            "path": "/org/a11y/atspi/accessible/49",
                             "uri": "file:///root/okur/corpus/fixtures/aria-at/checkbox-tri-state/checkbox-mixed.moveFocusAfterFirstCheckbox.html#afterlink",
                             "children": [
                               {
@@ -347,7 +642,17 @@
                                   "name-from": "contents"
                                 },
                                 "states": 1124073728,
-                                "text": "Navigate backwards from here"
+                                "text": "Navigate backwards from here",
+                                "text_attributes": {
+                                  "bg-color": "255,255,255",
+                                  "direction": "lr",
+                                  "family-name": "Liberation Sans",
+                                  "fg-color": "3,69,117",
+                                  "language": "en",
+                                  "size": "12pt",
+                                  "underline": "single"
+                                },
+                                "path": "/org/a11y/atspi/accessible/50"
                               }
                             ]
                           }
@@ -364,6 +669,15 @@
                         },
                         "states": 1124073728,
                         "text": "￼￼￼￼",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "0,0,0",
+                          "language": "en",
+                          "size": "12pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/41",
                         "children": [
                           {
                             "role": "list item",
@@ -377,6 +691,15 @@
                             },
                             "states": 1124073728,
                             "text": "￼",
+                            "text_attributes": {
+                              "bg-color": "255,255,255",
+                              "direction": "lr",
+                              "family-name": "Liberation Sans",
+                              "fg-color": "0,0,0",
+                              "language": "en",
+                              "size": "10pt"
+                            },
+                            "path": "/org/a11y/atspi/accessible/51",
                             "children": [
                               {
                                 "role": "check box",
@@ -390,7 +713,16 @@
                                   "tag": "input",
                                   "text-align": "left"
                                 },
-                                "states": 2200147331328
+                                "states": 2200147331328,
+                                "path": "/org/a11y/atspi/accessible/43",
+                                "relations": [
+                                  [
+                                    4,
+                                    [
+                                      "/org/a11y/atspi/accessible/39"
+                                    ]
+                                  ]
+                                ]
                               }
                             ]
                           },
@@ -406,6 +738,15 @@
                             },
                             "states": 1124073728,
                             "text": "￼",
+                            "text_attributes": {
+                              "bg-color": "255,255,255",
+                              "direction": "lr",
+                              "family-name": "Liberation Sans",
+                              "fg-color": "0,0,0",
+                              "language": "en",
+                              "size": "10pt"
+                            },
+                            "path": "/org/a11y/atspi/accessible/52",
                             "children": [
                               {
                                 "role": "check box",
@@ -419,7 +760,16 @@
                                   "tag": "input",
                                   "text-align": "left"
                                 },
-                                "states": 2200147331344
+                                "states": 2200147331344,
+                                "path": "/org/a11y/atspi/accessible/44",
+                                "relations": [
+                                  [
+                                    4,
+                                    [
+                                      "/org/a11y/atspi/accessible/39"
+                                    ]
+                                  ]
+                                ]
                               }
                             ]
                           },
@@ -435,6 +785,15 @@
                             },
                             "states": 1124073728,
                             "text": "￼",
+                            "text_attributes": {
+                              "bg-color": "255,255,255",
+                              "direction": "lr",
+                              "family-name": "Liberation Sans",
+                              "fg-color": "0,0,0",
+                              "language": "en",
+                              "size": "10pt"
+                            },
+                            "path": "/org/a11y/atspi/accessible/53",
                             "children": [
                               {
                                 "role": "check box",
@@ -448,7 +807,16 @@
                                   "tag": "input",
                                   "text-align": "left"
                                 },
-                                "states": 2200147331328
+                                "states": 2200147331328,
+                                "path": "/org/a11y/atspi/accessible/45",
+                                "relations": [
+                                  [
+                                    4,
+                                    [
+                                      "/org/a11y/atspi/accessible/39"
+                                    ]
+                                  ]
+                                ]
                               }
                             ]
                           },
@@ -464,6 +832,15 @@
                             },
                             "states": 1124073728,
                             "text": "￼",
+                            "text_attributes": {
+                              "bg-color": "255,255,255",
+                              "direction": "lr",
+                              "family-name": "Liberation Sans",
+                              "fg-color": "0,0,0",
+                              "language": "en",
+                              "size": "10pt"
+                            },
+                            "path": "/org/a11y/atspi/accessible/54",
                             "children": [
                               {
                                 "role": "check box",
@@ -477,7 +854,16 @@
                                   "tag": "input",
                                   "text-align": "left"
                                 },
-                                "states": 2200147331328
+                                "states": 2200147331328,
+                                "path": "/org/a11y/atspi/accessible/46",
+                                "relations": [
+                                  [
+                                    4,
+                                    [
+                                      "/org/a11y/atspi/accessible/39"
+                                    ]
+                                  ]
+                                ]
                               }
                             ]
                           }
@@ -499,7 +885,16 @@
                   "text-align": "left",
                   "xml-roles": "separator"
                 },
-                "states": 1124090112
+                "states": 1124090112,
+                "path": "/org/a11y/atspi/accessible/32",
+                "relations": [
+                  [
+                    2,
+                    [
+                      "/org/a11y/atspi/accessible/29"
+                    ]
+                  ]
+                ]
               }
             ]
           },
@@ -512,6 +907,15 @@
             },
             "states": 1124073728,
             "text": "￼",
+            "text_attributes": {
+              "bg-color": "239,239,239",
+              "direction": "lr",
+              "family-name": "Liberation Sans",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "10pt"
+            },
+            "path": "/org/a11y/atspi/accessible/16",
             "children": [
               {
                 "role": "button",
@@ -524,7 +928,16 @@
                   "text-align": "center"
                 },
                 "states": 1124079872,
-                "text": "Run Test Setup"
+                "text": "Run Test Setup",
+                "text_attributes": {
+                  "bg-color": "239,239,239",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "10pt"
+                },
+                "path": "/org/a11y/atspi/accessible/14"
               }
             ]
           }

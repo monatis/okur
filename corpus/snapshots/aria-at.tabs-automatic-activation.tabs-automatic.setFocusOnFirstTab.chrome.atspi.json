@@ -8,9 +8,9 @@
     "window_class": "",
     "process_version": "Google Chrome 157.0.8103.38 ",
     "fixture_sha256": "7d19bc4f505e13945bd8e705387f92ab8390d597e82249fbc27120d2fac36feb",
-    "captured_at_unix_ms": 1794148701790,
+    "captured_at_unix_ms": 1794153208609,
     "node_count": 56,
-    "capture_ms": 170
+    "capture_ms": 216
   },
   "root": {
     "role": "document web",
@@ -23,6 +23,23 @@
     },
     "states": 1124075776,
     "text": "￼",
+    "text_attributes": {
+      "bg-color": "255,255,255",
+      "direction": "lr",
+      "family-name": "Liberation Sans",
+      "fg-color": "0,0,0",
+      "language": "en",
+      "size": "12pt"
+    },
+    "path": "/org/a11y/atspi/accessible/17",
+    "relations": [
+      [
+        14,
+        [
+          "/org/a11y/atspi/accessible/1"
+        ]
+      ]
+    ],
     "uri": "file:///root/okur/corpus/fixtures/aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnFirstTab.html",
     "children": [
       {
@@ -35,6 +52,15 @@
         },
         "states": 1124073728,
         "text": "￼￼￼￼",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Sans",
+          "fg-color": "0,90,156",
+          "language": "en",
+          "size": "20.5pt"
+        },
+        "path": "/org/a11y/atspi/accessible/19",
         "children": [
           {
             "role": "heading",
@@ -48,6 +74,15 @@
             },
             "states": 1090519296,
             "text": "Example of Tabs with Automatic Activation",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Sans",
+              "fg-color": "0,90,156",
+              "language": "en",
+              "size": "20.5pt"
+            },
+            "path": "/org/a11y/atspi/accessible/20",
             "children": [
               {
                 "role": "static",
@@ -56,7 +91,16 @@
                   "name-from": "contents"
                 },
                 "states": 1090519296,
-                "text": "Example of Tabs with Automatic Activation"
+                "text": "Example of Tabs with Automatic Activation",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "0,90,156",
+                  "language": "en",
+                  "size": "20.5pt"
+                },
+                "path": "/org/a11y/atspi/accessible/23"
               }
             ]
           },
@@ -69,6 +113,15 @@
             },
             "states": 1124073728,
             "text": "￼￼￼￼",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Sans",
+              "fg-color": "0,90,156",
+              "language": "en",
+              "size": "17pt"
+            },
+            "path": "/org/a11y/atspi/accessible/21",
             "children": [
               {
                 "role": "heading",
@@ -82,6 +135,15 @@
                 },
                 "states": 1124073728,
                 "text": "About This Example",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "0,90,156",
+                  "language": "en",
+                  "size": "17pt"
+                },
+                "path": "/org/a11y/atspi/accessible/24",
                 "children": [
                   {
                     "role": "static",
@@ -90,7 +152,16 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "About This Example"
+                    "text": "About This Example",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "0,90,156",
+                      "language": "en",
+                      "size": "17pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/28"
                   }
                 ]
               },
@@ -103,6 +174,15 @@
                 },
                 "states": 1124073728,
                 "text": "This example section demonstrates a tabs widget that implements the ￼. In this example, a tab is automatically activated and its associated panel is displayed when the tab receives focus. It is recommended that authors consider implementing automatic activation of tabs ￼ circumstances where panels can be displayed instantly, i.e., all panel content is present in the DOM. For additional guidance, see ￼.",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/25",
                 "children": [
                   {
                     "role": "static",
@@ -111,7 +191,16 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "This example section demonstrates a tabs widget that implements the "
+                    "text": "This example section demonstrates a tabs widget that implements the ",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/29"
                   },
                   {
                     "role": "link",
@@ -124,6 +213,16 @@
                     },
                     "states": 1124075776,
                     "text": "Tabs Pattern",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "3,69,117",
+                      "language": "en",
+                      "size": "12pt",
+                      "underline": "single"
+                    },
+                    "path": "/org/a11y/atspi/accessible/30",
                     "uri": "file:///root/okur/corpus/fixtures/aria-at/tabs-pattern.html",
                     "children": [
                       {
@@ -133,7 +232,17 @@
                           "name-from": "contents"
                         },
                         "states": 1124073728,
-                        "text": "Tabs Pattern"
+                        "text": "Tabs Pattern",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "3,69,117",
+                          "language": "en",
+                          "size": "12pt",
+                          "underline": "single"
+                        },
+                        "path": "/org/a11y/atspi/accessible/36"
                       }
                     ]
                   },
@@ -144,7 +253,16 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": ". In this example, a tab is automatically activated and its associated panel is displayed when the tab receives focus. It is recommended that authors consider implementing automatic activation of tabs "
+                    "text": ". In this example, a tab is automatically activated and its associated panel is displayed when the tab receives focus. It is recommended that authors consider implementing automatic activation of tabs ",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/31"
                   },
                   {
                     "role": "static",
@@ -155,6 +273,16 @@
                     },
                     "states": 1124073728,
                     "text": "only in",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt",
+                      "weight": "700"
+                    },
+                    "path": "/org/a11y/atspi/accessible/32",
                     "children": [
                       {
                         "role": "static",
@@ -163,7 +291,17 @@
                           "name-from": "contents"
                         },
                         "states": 1124073728,
-                        "text": "only in"
+                        "text": "only in",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "0,0,0",
+                          "language": "en",
+                          "size": "12pt",
+                          "weight": "700"
+                        },
+                        "path": "/org/a11y/atspi/accessible/37"
                       }
                     ]
                   },
@@ -174,7 +312,16 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": " circumstances where panels can be displayed instantly, i.e., all panel content is present in the DOM. For additional guidance, see "
+                    "text": " circumstances where panels can be displayed instantly, i.e., all panel content is present in the DOM. For additional guidance, see ",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/33"
                   },
                   {
                     "role": "link",
@@ -187,6 +334,16 @@
                     },
                     "states": 1124075776,
                     "text": "Deciding When to Make Selection Automatically Follow Focus",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "3,69,117",
+                      "language": "en",
+                      "size": "12pt",
+                      "underline": "single"
+                    },
+                    "path": "/org/a11y/atspi/accessible/34",
                     "uri": "file:///root/okur/corpus/practices/keyboard-interface/keyboard-interface-practice.html#kbd_selection_follows_focus",
                     "children": [
                       {
@@ -196,7 +353,17 @@
                           "name-from": "contents"
                         },
                         "states": 1124073728,
-                        "text": "Deciding When to Make Selection Automatically Follow Focus"
+                        "text": "Deciding When to Make Selection Automatically Follow Focus",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "3,69,117",
+                          "language": "en",
+                          "size": "12pt",
+                          "underline": "single"
+                        },
+                        "path": "/org/a11y/atspi/accessible/38"
                       }
                     ]
                   },
@@ -207,7 +374,16 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "."
+                    "text": ".",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/35"
                   }
                 ]
               },
@@ -220,6 +396,15 @@
                 },
                 "states": 1124073728,
                 "text": "Similar examples include:",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/26",
                 "children": [
                   {
                     "role": "static",
@@ -228,7 +413,16 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "Similar examples include:"
+                    "text": "Similar examples include:",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/39"
                   }
                 ]
               },
@@ -242,6 +436,15 @@
                 },
                 "states": 1124073728,
                 "text": "￼",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/27",
                 "children": [
                   {
                     "role": "list item",
@@ -255,6 +458,15 @@
                     },
                     "states": 1124073728,
                     "text": "• ￼: A tabs widget where users activate a tab and display its panel by pressing Space or Enter.",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/40",
                     "children": [
                       {
                         "role": "static",
@@ -266,7 +478,16 @@
                           "text-align": "left"
                         },
                         "states": 1124073728,
-                        "text": "• "
+                        "text": "• ",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "0,0,0",
+                          "language": "en",
+                          "size": "12pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/41"
                       },
                       {
                         "role": "link",
@@ -279,6 +500,16 @@
                         },
                         "states": 1124075776,
                         "text": "Example of Tabs with Manual Activation",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "3,69,117",
+                          "language": "en",
+                          "size": "12pt",
+                          "underline": "single"
+                        },
+                        "path": "/org/a11y/atspi/accessible/42",
                         "uri": "file:///root/okur/corpus/fixtures/aria-at/tabs-automatic-activation/tabs-manual.html",
                         "children": [
                           {
@@ -288,7 +519,17 @@
                               "name-from": "contents"
                             },
                             "states": 1124073728,
-                            "text": "Example of Tabs with Manual Activation"
+                            "text": "Example of Tabs with Manual Activation",
+                            "text_attributes": {
+                              "bg-color": "255,255,255",
+                              "direction": "lr",
+                              "family-name": "Liberation Sans",
+                              "fg-color": "3,69,117",
+                              "language": "en",
+                              "size": "12pt",
+                              "underline": "single"
+                            },
+                            "path": "/org/a11y/atspi/accessible/48"
                           }
                         ]
                       },
@@ -299,7 +540,16 @@
                           "name-from": "contents"
                         },
                         "states": 1124073728,
-                        "text": ": A tabs widget where users activate a tab and display its panel by pressing "
+                        "text": ": A tabs widget where users activate a tab and display its panel by pressing ",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "0,0,0",
+                          "language": "en",
+                          "size": "12pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/43"
                       },
                       {
                         "role": "static",
@@ -308,7 +558,16 @@
                           "name-from": "contents"
                         },
                         "states": 1124073728,
-                        "text": "Space"
+                        "text": "Space",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "DejaVu Sans Mono",
+                          "fg-color": "0,0,0",
+                          "language": "en",
+                          "size": "10pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/44"
                       },
                       {
                         "role": "static",
@@ -317,7 +576,16 @@
                           "name-from": "contents"
                         },
                         "states": 1124073728,
-                        "text": " or "
+                        "text": " or ",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "0,0,0",
+                          "language": "en",
+                          "size": "12pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/45"
                       },
                       {
                         "role": "static",
@@ -326,7 +594,16 @@
                           "name-from": "contents"
                         },
                         "states": 1124073728,
-                        "text": "Enter"
+                        "text": "Enter",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "DejaVu Sans Mono",
+                          "fg-color": "0,0,0",
+                          "language": "en",
+                          "size": "10pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/46"
                       },
                       {
                         "role": "static",
@@ -335,7 +612,16 @@
                           "name-from": "contents"
                         },
                         "states": 1124073728,
-                        "text": "."
+                        "text": ".",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "0,0,0",
+                          "language": "en",
+                          "size": "12pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/47"
                       }
                     ]
                   }
@@ -352,6 +638,15 @@
             },
             "states": 1124073728,
             "text": "￼￼￼￼￼",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Sans",
+              "fg-color": "0,90,156",
+              "language": "en",
+              "size": "17pt"
+            },
+            "path": "/org/a11y/atspi/accessible/22",
             "children": [
               {
                 "role": "heading",
@@ -366,6 +661,24 @@
                 },
                 "states": 1124073728,
                 "text": "Example",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "0,90,156",
+                  "language": "en",
+                  "size": "17pt"
+                },
+                "path": "/org/a11y/atspi/accessible/49",
+                "relations": [
+                  [
+                    1,
+                    [
+                      "/org/a11y/atspi/accessible/50",
+                      "/org/a11y/atspi/accessible/53"
+                    ]
+                  ]
+                ],
                 "children": [
                   {
                     "role": "static",
@@ -374,7 +687,16 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "Example"
+                    "text": "Example",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "0,90,156",
+                      "language": "en",
+                      "size": "17pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/54"
                   }
                 ]
               },
@@ -390,7 +712,16 @@
                   "text-align": "left",
                   "xml-roles": "separator"
                 },
-                "states": 1124090112
+                "states": 1124090112,
+                "path": "/org/a11y/atspi/accessible/50",
+                "relations": [
+                  [
+                    2,
+                    [
+                      "/org/a11y/atspi/accessible/49"
+                    ]
+                  ]
+                ]
               },
               {
                 "role": "section",
@@ -402,6 +733,15 @@
                 },
                 "states": 1124073728,
                 "text": "￼￼￼￼",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "0,90,156",
+                  "language": "en",
+                  "size": "14.5pt"
+                },
+                "path": "/org/a11y/atspi/accessible/51",
                 "children": [
                   {
                     "role": "heading",
@@ -416,6 +756,23 @@
                     },
                     "states": 1124073728,
                     "text": "Danish Composers",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "0,90,156",
+                      "language": "en",
+                      "size": "14.5pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/55",
+                    "relations": [
+                      [
+                        1,
+                        [
+                          "/org/a11y/atspi/accessible/15"
+                        ]
+                      ]
+                    ],
                     "children": [
                       {
                         "role": "static",
@@ -424,7 +781,16 @@
                           "name-from": "contents"
                         },
                         "states": 1124073728,
-                        "text": "Danish Composers"
+                        "text": "Danish Composers",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "0,90,156",
+                          "language": "en",
+                          "size": "14.5pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/58"
                       }
                     ]
                   },
@@ -437,6 +803,16 @@
                     },
                     "states": 1124073728,
                     "text": "￼",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "3,69,117",
+                      "language": "en",
+                      "size": "12pt",
+                      "underline": "single"
+                    },
+                    "path": "/org/a11y/atspi/accessible/56",
                     "children": [
                       {
                         "role": "link",
@@ -450,6 +826,16 @@
                         },
                         "states": 1124075776,
                         "text": "Navigate forwards from here",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "3,69,117",
+                          "language": "en",
+                          "size": "12pt",
+                          "underline": "single"
+                        },
+                        "path": "/org/a11y/atspi/accessible/59",
                         "uri": "file:///root/okur/corpus/fixtures/aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnFirstTab.html#beforelink",
                         "children": [
                           {
@@ -459,7 +845,17 @@
                               "name-from": "contents"
                             },
                             "states": 1124073728,
-                            "text": "Navigate forwards from here"
+                            "text": "Navigate forwards from here",
+                            "text_attributes": {
+                              "bg-color": "255,255,255",
+                              "direction": "lr",
+                              "family-name": "Liberation Sans",
+                              "fg-color": "3,69,117",
+                              "language": "en",
+                              "size": "12pt",
+                              "underline": "single"
+                            },
+                            "path": "/org/a11y/atspi/accessible/60"
                           }
                         ]
                       }
@@ -480,6 +876,24 @@
                     },
                     "states": 1124090112,
                     "text": "￼￼￼￼",
+                    "text_attributes": {
+                      "bg-color": "251,252,254",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "10pt",
+                      "weight": "700"
+                    },
+                    "path": "/org/a11y/atspi/accessible/15",
+                    "relations": [
+                      [
+                        2,
+                        [
+                          "/org/a11y/atspi/accessible/55"
+                        ]
+                      ]
+                    ],
                     "children": [
                       {
                         "role": "page tab",
@@ -495,7 +909,31 @@
                           "xml-roles": "tab"
                         },
                         "states": 1136658688,
-                        "text": "Maria Ahlefeldt"
+                        "text": "Maria Ahlefeldt",
+                        "text_attributes": {
+                          "bg-color": "251,252,254",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "0,0,0",
+                          "language": "en",
+                          "size": "10pt",
+                          "weight": "700"
+                        },
+                        "path": "/org/a11y/atspi/accessible/16",
+                        "relations": [
+                          [
+                            3,
+                            [
+                              "/org/a11y/atspi/accessible/57"
+                            ]
+                          ],
+                          [
+                            1,
+                            [
+                              "/org/a11y/atspi/accessible/57"
+                            ]
+                          ]
+                        ]
                       },
                       {
                         "role": "page tab",
@@ -511,7 +949,17 @@
                           "xml-roles": "tab"
                         },
                         "states": 1128270080,
-                        "text": "Carl Andersen"
+                        "text": "Carl Andersen",
+                        "text_attributes": {
+                          "bg-color": "237,239,243",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "0,0,0",
+                          "language": "en",
+                          "size": "10pt",
+                          "weight": "700"
+                        },
+                        "path": "/org/a11y/atspi/accessible/61"
                       },
                       {
                         "role": "page tab",
@@ -527,7 +975,17 @@
                           "xml-roles": "tab"
                         },
                         "states": 1128270080,
-                        "text": "Ida da Fonseca"
+                        "text": "Ida da Fonseca",
+                        "text_attributes": {
+                          "bg-color": "237,239,243",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "0,0,0",
+                          "language": "en",
+                          "size": "10pt",
+                          "weight": "700"
+                        },
+                        "path": "/org/a11y/atspi/accessible/62"
                       },
                       {
                         "role": "page tab",
@@ -543,7 +1001,17 @@
                           "xml-roles": "tab"
                         },
                         "states": 1128270080,
-                        "text": "Peter Müller"
+                        "text": "Peter Müller",
+                        "text_attributes": {
+                          "bg-color": "237,239,243",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "0,0,0",
+                          "language": "en",
+                          "size": "10pt",
+                          "weight": "700"
+                        },
+                        "path": "/org/a11y/atspi/accessible/63"
                       }
                     ]
                   },
@@ -561,6 +1029,29 @@
                     },
                     "states": 1124075776,
                     "text": "￼",
+                    "text_attributes": {
+                      "bg-color": "251,252,254",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/57",
+                    "relations": [
+                      [
+                        4,
+                        [
+                          "/org/a11y/atspi/accessible/16"
+                        ]
+                      ],
+                      [
+                        2,
+                        [
+                          "/org/a11y/atspi/accessible/16"
+                        ]
+                      ]
+                    ],
                     "children": [
                       {
                         "role": "paragraph",
@@ -571,6 +1062,15 @@
                         },
                         "states": 1124073728,
                         "text": "Maria Theresia Ahlefeldt (16 January 1755 – 20 December 1810) was a Danish, (originally German), composer. She is known as the first female composer in Denmark. Maria Theresia composed music for several ballets, operas, and plays of the royal theatre. She was given good critic as a composer and described as a “virkelig Tonekunstnerinde” ('a True Artist of Music').",
+                        "text_attributes": {
+                          "bg-color": "251,252,254",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "0,0,0",
+                          "language": "en",
+                          "size": "12pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/64",
                         "children": [
                           {
                             "role": "static",
@@ -579,7 +1079,16 @@
                               "name-from": "contents"
                             },
                             "states": 1124073728,
-                            "text": "Maria Theresia Ahlefeldt (16 January 1755 – 20 December 1810) was a Danish, (originally German), composer. She is known as the first female composer in Denmark. Maria Theresia composed music for several ballets, operas, and plays of the royal theatre. She was given good critic as a composer and described as a “"
+                            "text": "Maria Theresia Ahlefeldt (16 January 1755 – 20 December 1810) was a Danish, (originally German), composer. She is known as the first female composer in Denmark. Maria Theresia composed music for several ballets, operas, and plays of the royal theatre. She was given good critic as a composer and described as a “",
+                            "text_attributes": {
+                              "bg-color": "251,252,254",
+                              "direction": "lr",
+                              "family-name": "Liberation Sans",
+                              "fg-color": "0,0,0",
+                              "language": "en",
+                              "size": "12pt"
+                            },
+                            "path": "/org/a11y/atspi/accessible/65"
                           },
                           {
                             "role": "static",
@@ -588,7 +1097,16 @@
                               "name-from": "contents"
                             },
                             "states": 1124073728,
-                            "text": "virkelig Tonekunstnerinde"
+                            "text": "virkelig Tonekunstnerinde",
+                            "text_attributes": {
+                              "bg-color": "251,252,254",
+                              "direction": "lr",
+                              "family-name": "Liberation Sans",
+                              "fg-color": "0,0,0",
+                              "language": "da",
+                              "size": "12pt"
+                            },
+                            "path": "/org/a11y/atspi/accessible/66"
                           },
                           {
                             "role": "static",
@@ -597,7 +1115,16 @@
                               "name-from": "contents"
                             },
                             "states": 1124073728,
-                            "text": "” ('a True Artist of Music')."
+                            "text": "” ('a True Artist of Music').",
+                            "text_attributes": {
+                              "bg-color": "251,252,254",
+                              "direction": "lr",
+                              "family-name": "Liberation Sans",
+                              "fg-color": "0,0,0",
+                              "language": "en",
+                              "size": "12pt"
+                            },
+                            "path": "/org/a11y/atspi/accessible/67"
                           }
                         ]
                       }
@@ -614,6 +1141,16 @@
                 },
                 "states": 1124073728,
                 "text": "￼",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "3,69,117",
+                  "language": "en",
+                  "size": "12pt",
+                  "underline": "single"
+                },
+                "path": "/org/a11y/atspi/accessible/52",
                 "children": [
                   {
                     "role": "link",
@@ -627,6 +1164,16 @@
                     },
                     "states": 1124075776,
                     "text": "Navigate backwards from here",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "3,69,117",
+                      "language": "en",
+                      "size": "12pt",
+                      "underline": "single"
+                    },
+                    "path": "/org/a11y/atspi/accessible/68",
                     "uri": "file:///root/okur/corpus/fixtures/aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnFirstTab.html#afterlink",
                     "children": [
                       {
@@ -636,7 +1183,17 @@
                           "name-from": "contents"
                         },
                         "states": 1124073728,
-                        "text": "Navigate backwards from here"
+                        "text": "Navigate backwards from here",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "3,69,117",
+                          "language": "en",
+                          "size": "12pt",
+                          "underline": "single"
+                        },
+                        "path": "/org/a11y/atspi/accessible/69"
                       }
                     ]
                   }
@@ -654,7 +1211,16 @@
                   "text-align": "left",
                   "xml-roles": "separator"
                 },
-                "states": 1124090112
+                "states": 1124090112,
+                "path": "/org/a11y/atspi/accessible/53",
+                "relations": [
+                  [
+                    2,
+                    [
+                      "/org/a11y/atspi/accessible/49"
+                    ]
+                  ]
+                ]
               }
             ]
           },
@@ -667,6 +1233,15 @@
             },
             "states": 1124073728,
             "text": "￼",
+            "text_attributes": {
+              "bg-color": "239,239,239",
+              "direction": "lr",
+              "family-name": "Liberation Sans",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "10pt"
+            },
+            "path": "/org/a11y/atspi/accessible/18",
             "children": [
               {
                 "role": "button",
@@ -679,7 +1254,16 @@
                   "text-align": "center"
                 },
                 "states": 1124079872,
-                "text": "Run Test Setup"
+                "text": "Run Test Setup",
+                "text_attributes": {
+                  "bg-color": "239,239,239",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "10pt"
+                },
+                "path": "/org/a11y/atspi/accessible/14"
               }
             ]
           }

@@ -8,9 +8,9 @@
     "window_class": "",
     "process_version": "Google Chrome 157.0.8103.38 ",
     "fixture_sha256": "685ca0b777b5b0184d58c505d3161eb348ec6356d7f5b27ad25eddaccdc03c86",
-    "captured_at_unix_ms": 1794146320072,
+    "captured_at_unix_ms": 1794153505241,
     "node_count": 42,
-    "capture_ms": 123
+    "capture_ms": 167
   },
   "root": {
     "role": "document web",
@@ -23,6 +23,24 @@
     },
     "states": 1124079872,
     "text": "￼￼",
+    "text_attributes": {
+      "bg-color": "255,255,255",
+      "direction": "lr",
+      "family-name": "Liberation Serif",
+      "fg-color": "0,0,0",
+      "language": "en",
+      "size": "24pt",
+      "weight": "700"
+    },
+    "path": "/org/a11y/atspi/accessible/12",
+    "relations": [
+      [
+        14,
+        [
+          "/org/a11y/atspi/accessible/1"
+        ]
+      ]
+    ],
     "uri": "file:///root/okur/corpus/fixtures/tables-navigation.html",
     "children": [
       {
@@ -37,6 +55,16 @@
         },
         "states": 1124073728,
         "text": "Quarterly Financial Summary",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,0",
+          "language": "en",
+          "size": "24pt",
+          "weight": "700"
+        },
+        "path": "/org/a11y/atspi/accessible/13",
         "children": [
           {
             "role": "static",
@@ -45,7 +73,17 @@
               "name-from": "contents"
             },
             "states": 1124073728,
-            "text": "Quarterly Financial Summary"
+            "text": "Quarterly Financial Summary",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "24pt",
+              "weight": "700"
+            },
+            "path": "/org/a11y/atspi/accessible/15"
           }
         ]
       },
@@ -61,6 +99,23 @@
         },
         "states": 1124073728,
         "text": "￼￼￼￼￼",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,0",
+          "language": "en",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/14",
+        "relations": [
+          [
+            2,
+            [
+              "/org/a11y/atspi/accessible/16"
+            ]
+          ]
+        ],
         "children": [
           {
             "role": "caption",
@@ -71,6 +126,23 @@
             },
             "states": 1124073728,
             "text": "Q3 Financial Summary Table",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/16",
+            "relations": [
+              [
+                1,
+                [
+                  "/org/a11y/atspi/accessible/14"
+                ]
+              ]
+            ],
             "children": [
               {
                 "role": "static",
@@ -79,7 +151,16 @@
                   "name-from": "contents"
                 },
                 "states": 1124073728,
-                "text": "Q3 Financial Summary Table"
+                "text": "Q3 Financial Summary Table",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/21"
               }
             ]
           },
@@ -92,6 +173,16 @@
             },
             "states": 1124073728,
             "text": "￼￼￼￼",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt",
+              "weight": "700"
+            },
+            "path": "/org/a11y/atspi/accessible/17",
             "children": [
               {
                 "role": "column header",
@@ -105,6 +196,16 @@
                 },
                 "states": 1124073728,
                 "text": "Quarter",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt",
+                  "weight": "700"
+                },
+                "path": "/org/a11y/atspi/accessible/22",
                 "children": [
                   {
                     "role": "static",
@@ -113,7 +214,17 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "Quarter"
+                    "text": "Quarter",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Serif",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt",
+                      "weight": "700"
+                    },
+                    "path": "/org/a11y/atspi/accessible/26"
                   }
                 ]
               },
@@ -129,6 +240,16 @@
                 },
                 "states": 1124073728,
                 "text": "Revenue",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt",
+                  "weight": "700"
+                },
+                "path": "/org/a11y/atspi/accessible/23",
                 "children": [
                   {
                     "role": "static",
@@ -137,7 +258,17 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "Revenue"
+                    "text": "Revenue",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Serif",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt",
+                      "weight": "700"
+                    },
+                    "path": "/org/a11y/atspi/accessible/27"
                   }
                 ]
               },
@@ -153,6 +284,16 @@
                 },
                 "states": 1124073728,
                 "text": "Expenses",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt",
+                  "weight": "700"
+                },
+                "path": "/org/a11y/atspi/accessible/24",
                 "children": [
                   {
                     "role": "static",
@@ -161,7 +302,17 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "Expenses"
+                    "text": "Expenses",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Serif",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt",
+                      "weight": "700"
+                    },
+                    "path": "/org/a11y/atspi/accessible/28"
                   }
                 ]
               },
@@ -177,6 +328,16 @@
                 },
                 "states": 1124073728,
                 "text": "Profit",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt",
+                  "weight": "700"
+                },
+                "path": "/org/a11y/atspi/accessible/25",
                 "children": [
                   {
                     "role": "static",
@@ -185,7 +346,17 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "Profit"
+                    "text": "Profit",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Serif",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt",
+                      "weight": "700"
+                    },
+                    "path": "/org/a11y/atspi/accessible/29"
                   }
                 ]
               }
@@ -200,6 +371,16 @@
             },
             "states": 1124073728,
             "text": "￼￼￼￼",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt",
+              "weight": "700"
+            },
+            "path": "/org/a11y/atspi/accessible/18",
             "children": [
               {
                 "role": "row header",
@@ -213,6 +394,16 @@
                 },
                 "states": 1124073728,
                 "text": "Q1",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt",
+                  "weight": "700"
+                },
+                "path": "/org/a11y/atspi/accessible/30",
                 "children": [
                   {
                     "role": "static",
@@ -221,7 +412,17 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "Q1"
+                    "text": "Q1",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Serif",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt",
+                      "weight": "700"
+                    },
+                    "path": "/org/a11y/atspi/accessible/34"
                   }
                 ]
               },
@@ -237,6 +438,15 @@
                 },
                 "states": 1124073728,
                 "text": "$10,000",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/31",
                 "children": [
                   {
                     "role": "static",
@@ -245,7 +455,16 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "$10,000"
+                    "text": "$10,000",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Serif",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/35"
                   }
                 ]
               },
@@ -261,6 +480,15 @@
                 },
                 "states": 1124073728,
                 "text": "$7,000",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/32",
                 "children": [
                   {
                     "role": "static",
@@ -269,7 +497,16 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "$7,000"
+                    "text": "$7,000",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Serif",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/36"
                   }
                 ]
               },
@@ -285,6 +522,15 @@
                 },
                 "states": 1124073728,
                 "text": "$3\u0002�{.���00",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/33",
                 "children": [
                   {
                     "role": "static",
@@ -293,7 +539,16 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "$3\u0002�{.���00"
+                    "text": "$3\u0002�{.���00",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Serif",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/37"
                   }
                 ]
               }
@@ -308,6 +563,16 @@
             },
             "states": 1124073728,
             "text": "￼￼￼￼",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt",
+              "weight": "700"
+            },
+            "path": "/org/a11y/atspi/accessible/19",
             "children": [
               {
                 "role": "row header",
@@ -321,6 +586,16 @@
                 },
                 "states": 1124073728,
                 "text": "Q2",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt",
+                  "weight": "700"
+                },
+                "path": "/org/a11y/atspi/accessible/38",
                 "children": [
                   {
                     "role": "static",
@@ -329,7 +604,17 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "Q2"
+                    "text": "Q2",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Serif",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt",
+                      "weight": "700"
+                    },
+                    "path": "/org/a11y/atspi/accessible/42"
                   }
                 ]
               },
@@ -345,6 +630,15 @@
                 },
                 "states": 1124073728,
                 "text": "$14,000",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/39",
                 "children": [
                   {
                     "role": "static",
@@ -353,7 +647,16 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "$14,000"
+                    "text": "$14,000",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Serif",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/43"
                   }
                 ]
               },
@@ -369,6 +672,15 @@
                 },
                 "states": 1124073728,
                 "text": "$8,500",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/40",
                 "children": [
                   {
                     "role": "static",
@@ -377,7 +689,16 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "$8,500"
+                    "text": "$8,500",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Serif",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/44"
                   }
                 ]
               },
@@ -393,6 +714,15 @@
                 },
                 "states": 1124073728,
                 "text": "$5,500",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/41",
                 "children": [
                   {
                     "role": "static",
@@ -401,7 +731,16 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "$5,500"
+                    "text": "$5,500",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Serif",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/45"
                   }
                 ]
               }
@@ -416,6 +755,16 @@
             },
             "states": 1124073728,
             "text": "￼￼￼￼",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt",
+              "weight": "700"
+            },
+            "path": "/org/a11y/atspi/accessible/20",
             "children": [
               {
                 "role": "row header",
@@ -429,6 +778,16 @@
                 },
                 "states": 1124073728,
                 "text": "Q3",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt",
+                  "weight": "700"
+                },
+                "path": "/org/a11y/atspi/accessible/46",
                 "children": [
                   {
                     "role": "static",
@@ -437,7 +796,17 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "Q3"
+                    "text": "Q3",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Serif",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt",
+                      "weight": "700"
+                    },
+                    "path": "/org/a11y/atspi/accessible/50"
                   }
                 ]
               },
@@ -453,6 +822,15 @@
                 },
                 "states": 1124073728,
                 "text": "$18,000",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/47",
                 "children": [
                   {
                     "role": "static",
@@ -461,7 +839,16 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "$18,000"
+                    "text": "$18,000",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Serif",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/51"
                   }
                 ]
               },
@@ -477,6 +864,15 @@
                 },
                 "states": 1124073728,
                 "text": "$9,200",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/48",
                 "children": [
                   {
                     "role": "static",
@@ -485,7 +881,16 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "$9,200"
+                    "text": "$9,200",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Serif",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/52"
                   }
                 ]
               },
@@ -501,6 +906,15 @@
                 },
                 "states": 1124073728,
                 "text": "$8,800",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/49",
                 "children": [
                   {
                     "role": "static",
@@ -509,7 +923,16 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "$8,800"
+                    "text": "$8,800",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Serif",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/53"
                   }
                 ]
               }

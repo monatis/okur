@@ -8,22 +8,38 @@
     "window_class": "",
     "process_version": "Google Chrome 157.0.8103.38 ",
     "fixture_sha256": "345b452bf0bc665085629fe4ac3d0ce183d859dcbf42dcc3b32fd89e415fa423",
-    "captured_at_unix_ms": 1794148345313,
+    "captured_at_unix_ms": 1794152838341,
     "node_count": 38,
-    "capture_ms": 109
+    "capture_ms": 137
   },
   "root": {
     "role": "document web",
     "name": "Quantity Spin Button Example",
     "attributes": {
-      "busy": "true",
       "explicit-name": "true",
       "name-from": "related-element",
       "tag": "#document",
       "text-align": "left"
     },
-    "states": 1124075784,
+    "states": 1124075776,
     "text": "￼",
+    "text_attributes": {
+      "bg-color": "255,255,255",
+      "direction": "lr",
+      "family-name": "Liberation Sans",
+      "fg-color": "0,0,0",
+      "language": "en",
+      "size": "12pt"
+    },
+    "path": "/org/a11y/atspi/accessible/18",
+    "relations": [
+      [
+        14,
+        [
+          "/org/a11y/atspi/accessible/1"
+        ]
+      ]
+    ],
     "uri": "file:///root/okur/corpus/fixtures/aria-at/quantity-spin-button/quantity-spinbutton.setFocusOnAdultsSpinbutton.html",
     "children": [
       {
@@ -36,6 +52,15 @@
         },
         "states": 1124073728,
         "text": "￼￼",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Sans",
+          "fg-color": "0,0,0",
+          "language": "en",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/20",
         "children": [
           {
             "role": "section",
@@ -47,6 +72,15 @@
             },
             "states": 1124073728,
             "text": "￼",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "DejaVu Sans",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/21",
             "children": [
               {
                 "role": "panel",
@@ -61,6 +95,24 @@
                 },
                 "states": 1124073728,
                 "text": "￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "DejaVu Sans",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "14.5pt",
+                  "weight": "700"
+                },
+                "path": "/org/a11y/atspi/accessible/22",
+                "relations": [
+                  [
+                    2,
+                    [
+                      "/org/a11y/atspi/accessible/23"
+                    ]
+                  ]
+                ],
                 "children": [
                   {
                     "role": "label",
@@ -71,6 +123,24 @@
                     },
                     "states": 1124073728,
                     "text": "Guests",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "DejaVu Sans",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "14.5pt",
+                      "weight": "700"
+                    },
+                    "path": "/org/a11y/atspi/accessible/23",
+                    "relations": [
+                      [
+                        1,
+                        [
+                          "/org/a11y/atspi/accessible/22"
+                        ]
+                      ]
+                    ],
                     "children": [
                       {
                         "role": "static",
@@ -79,7 +149,17 @@
                           "name-from": "contents"
                         },
                         "states": 1124073728,
-                        "text": "Guests"
+                        "text": "Guests",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "DejaVu Sans",
+                          "fg-color": "0,0,0",
+                          "language": "en",
+                          "size": "14.5pt",
+                          "weight": "700"
+                        },
+                        "path": "/org/a11y/atspi/accessible/41"
                       }
                     ]
                   },
@@ -92,6 +172,23 @@
                     },
                     "states": 1124073728,
                     "text": "Adults",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "DejaVu Sans",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "14.5pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/24",
+                    "relations": [
+                      [
+                        1,
+                        [
+                          "/org/a11y/atspi/accessible/14"
+                        ]
+                      ]
+                    ],
                     "children": [
                       {
                         "role": "static",
@@ -100,7 +197,16 @@
                           "name-from": "contents"
                         },
                         "states": 1124073728,
-                        "text": "Adults"
+                        "text": "Adults",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "DejaVu Sans",
+                          "fg-color": "0,0,0",
+                          "language": "en",
+                          "size": "14.5pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/42"
                       }
                     ]
                   },
@@ -114,7 +220,16 @@
                       "tag": "button",
                       "text-align": "center"
                     },
-                    "states": 1107298304
+                    "states": 1107298304,
+                    "path": "/org/a11y/atspi/accessible/25",
+                    "relations": [
+                      [
+                        3,
+                        [
+                          "/org/a11y/atspi/accessible/14"
+                        ]
+                      ]
+                    ]
                   },
                   {
                     "role": "paragraph",
@@ -125,6 +240,16 @@
                     },
                     "states": 1124073728,
                     "text": "￼",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "DejaVu Sans",
+                      "fg-color": "3,69,117",
+                      "language": "en",
+                      "size": "17pt",
+                      "underline": "single"
+                    },
+                    "path": "/org/a11y/atspi/accessible/26",
                     "children": [
                       {
                         "role": "link",
@@ -138,6 +263,16 @@
                         },
                         "states": 1124075776,
                         "text": "Navigate forwards from here",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "DejaVu Sans",
+                          "fg-color": "3,69,117",
+                          "language": "en",
+                          "size": "17pt",
+                          "underline": "single"
+                        },
+                        "path": "/org/a11y/atspi/accessible/43",
                         "uri": "file:///root/okur/corpus/fixtures/aria-at/quantity-spin-button/quantity-spinbutton.setFocusOnAdultsSpinbutton.html#beforelink",
                         "children": [
                           {
@@ -147,7 +282,17 @@
                               "name-from": "contents"
                             },
                             "states": 1124073728,
-                            "text": "Navigate forwards from here"
+                            "text": "Navigate forwards from here",
+                            "text_attributes": {
+                              "bg-color": "255,255,255",
+                              "direction": "lr",
+                              "family-name": "DejaVu Sans",
+                              "fg-color": "3,69,117",
+                              "language": "en",
+                              "size": "17pt",
+                              "underline": "single"
+                            },
+                            "path": "/org/a11y/atspi/accessible/44"
                           }
                         ]
                       }
@@ -169,7 +314,32 @@
                       "xml-roles": "spinbutton"
                     },
                     "states": 276069091712,
-                    "text": "1"
+                    "text": "1",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "DejaVu Sans",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "17pt",
+                      "weight": "700"
+                    },
+                    "path": "/org/a11y/atspi/accessible/14",
+                    "relations": [
+                      [
+                        4,
+                        [
+                          "/org/a11y/atspi/accessible/25",
+                          "/org/a11y/atspi/accessible/28"
+                        ]
+                      ],
+                      [
+                        2,
+                        [
+                          "/org/a11y/atspi/accessible/24"
+                        ]
+                      ]
+                    ]
                   },
                   {
                     "role": "paragraph",
@@ -180,6 +350,16 @@
                     },
                     "states": 1124073728,
                     "text": "￼",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "DejaVu Sans",
+                      "fg-color": "3,69,117",
+                      "language": "en",
+                      "size": "17pt",
+                      "underline": "single"
+                    },
+                    "path": "/org/a11y/atspi/accessible/27",
                     "children": [
                       {
                         "role": "link",
@@ -193,6 +373,16 @@
                         },
                         "states": 1124075776,
                         "text": "Navigate backwards from here",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "DejaVu Sans",
+                          "fg-color": "3,69,117",
+                          "language": "en",
+                          "size": "17pt",
+                          "underline": "single"
+                        },
+                        "path": "/org/a11y/atspi/accessible/45",
                         "uri": "file:///root/okur/corpus/fixtures/aria-at/quantity-spin-button/quantity-spinbutton.setFocusOnAdultsSpinbutton.html#afterlink",
                         "children": [
                           {
@@ -202,7 +392,17 @@
                               "name-from": "contents"
                             },
                             "states": 1124073728,
-                            "text": "Navigate backwards from here"
+                            "text": "Navigate backwards from here",
+                            "text_attributes": {
+                              "bg-color": "255,255,255",
+                              "direction": "lr",
+                              "family-name": "DejaVu Sans",
+                              "fg-color": "3,69,117",
+                              "language": "en",
+                              "size": "17pt",
+                              "underline": "single"
+                            },
+                            "path": "/org/a11y/atspi/accessible/46"
                           }
                         ]
                       }
@@ -218,7 +418,16 @@
                       "tag": "button",
                       "text-align": "center"
                     },
-                    "states": 1124075776
+                    "states": 1124075776,
+                    "path": "/org/a11y/atspi/accessible/28",
+                    "relations": [
+                      [
+                        3,
+                        [
+                          "/org/a11y/atspi/accessible/14"
+                        ]
+                      ]
+                    ]
                   },
                   {
                     "role": "section",
@@ -230,6 +439,15 @@
                     },
                     "states": 1124073728,
                     "text": "1 to 8",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "DejaVu Sans",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/29",
                     "children": [
                       {
                         "role": "static",
@@ -238,7 +456,16 @@
                           "name-from": "contents"
                         },
                         "states": 1124073728,
-                        "text": "1 to 8"
+                        "text": "1 to 8",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "DejaVu Sans",
+                          "fg-color": "0,0,0",
+                          "language": "en",
+                          "size": "12pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/47"
                       }
                     ]
                   },
@@ -257,7 +484,8 @@
                       "tag": "output",
                       "text-align": "left"
                     },
-                    "states": 1124073728
+                    "states": 1124073728,
+                    "path": "/org/a11y/atspi/accessible/30"
                   },
                   {
                     "role": "label",
@@ -268,6 +496,23 @@
                     },
                     "states": 1124073728,
                     "text": "Kids",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "DejaVu Sans",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "14.5pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/31",
+                    "relations": [
+                      [
+                        1,
+                        [
+                          "/org/a11y/atspi/accessible/15"
+                        ]
+                      ]
+                    ],
                     "children": [
                       {
                         "role": "static",
@@ -276,7 +521,16 @@
                           "name-from": "contents"
                         },
                         "states": 1124073728,
-                        "text": "Kids"
+                        "text": "Kids",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "DejaVu Sans",
+                          "fg-color": "0,0,0",
+                          "language": "en",
+                          "size": "14.5pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/48"
                       }
                     ]
                   },
@@ -290,7 +544,16 @@
                       "tag": "button",
                       "text-align": "center"
                     },
-                    "states": 1107298304
+                    "states": 1107298304,
+                    "path": "/org/a11y/atspi/accessible/32",
+                    "relations": [
+                      [
+                        3,
+                        [
+                          "/org/a11y/atspi/accessible/15"
+                        ]
+                      ]
+                    ]
                   },
                   {
                     "role": "spin button",
@@ -308,7 +571,32 @@
                       "xml-roles": "spinbutton"
                     },
                     "states": 276069091712,
-                    "text": "0"
+                    "text": "0",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "DejaVu Sans",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "17pt",
+                      "weight": "700"
+                    },
+                    "path": "/org/a11y/atspi/accessible/15",
+                    "relations": [
+                      [
+                        4,
+                        [
+                          "/org/a11y/atspi/accessible/32",
+                          "/org/a11y/atspi/accessible/33"
+                        ]
+                      ],
+                      [
+                        2,
+                        [
+                          "/org/a11y/atspi/accessible/31"
+                        ]
+                      ]
+                    ]
                   },
                   {
                     "role": "button",
@@ -320,7 +608,16 @@
                       "tag": "button",
                       "text-align": "center"
                     },
-                    "states": 1124075776
+                    "states": 1124075776,
+                    "path": "/org/a11y/atspi/accessible/33",
+                    "relations": [
+                      [
+                        3,
+                        [
+                          "/org/a11y/atspi/accessible/15"
+                        ]
+                      ]
+                    ]
                   },
                   {
                     "role": "section",
@@ -332,6 +629,15 @@
                     },
                     "states": 1124073728,
                     "text": "0 to 8",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "DejaVu Sans",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/34",
                     "children": [
                       {
                         "role": "static",
@@ -340,7 +646,16 @@
                           "name-from": "contents"
                         },
                         "states": 1124073728,
-                        "text": "0 to 8"
+                        "text": "0 to 8",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "DejaVu Sans",
+                          "fg-color": "0,0,0",
+                          "language": "en",
+                          "size": "12pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/49"
                       }
                     ]
                   },
@@ -359,7 +674,8 @@
                       "tag": "output",
                       "text-align": "left"
                     },
-                    "states": 1124073728
+                    "states": 1124073728,
+                    "path": "/org/a11y/atspi/accessible/35"
                   },
                   {
                     "role": "label",
@@ -370,6 +686,23 @@
                     },
                     "states": 1124073728,
                     "text": "Animals",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "DejaVu Sans",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "14.5pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/36",
+                    "relations": [
+                      [
+                        1,
+                        [
+                          "/org/a11y/atspi/accessible/16"
+                        ]
+                      ]
+                    ],
                     "children": [
                       {
                         "role": "static",
@@ -378,7 +711,16 @@
                           "name-from": "contents"
                         },
                         "states": 1124073728,
-                        "text": "Animals"
+                        "text": "Animals",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "DejaVu Sans",
+                          "fg-color": "0,0,0",
+                          "language": "en",
+                          "size": "14.5pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/50"
                       }
                     ]
                   },
@@ -392,7 +734,16 @@
                       "tag": "button",
                       "text-align": "center"
                     },
-                    "states": 1107298304
+                    "states": 1107298304,
+                    "path": "/org/a11y/atspi/accessible/37",
+                    "relations": [
+                      [
+                        3,
+                        [
+                          "/org/a11y/atspi/accessible/16"
+                        ]
+                      ]
+                    ]
                   },
                   {
                     "role": "spin button",
@@ -410,7 +761,32 @@
                       "xml-roles": "spinbutton"
                     },
                     "states": 276069091712,
-                    "text": "0"
+                    "text": "0",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "DejaVu Sans",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "17pt",
+                      "weight": "700"
+                    },
+                    "path": "/org/a11y/atspi/accessible/16",
+                    "relations": [
+                      [
+                        4,
+                        [
+                          "/org/a11y/atspi/accessible/37",
+                          "/org/a11y/atspi/accessible/38"
+                        ]
+                      ],
+                      [
+                        2,
+                        [
+                          "/org/a11y/atspi/accessible/36"
+                        ]
+                      ]
+                    ]
                   },
                   {
                     "role": "button",
@@ -422,7 +798,16 @@
                       "tag": "button",
                       "text-align": "center"
                     },
-                    "states": 1124075776
+                    "states": 1124075776,
+                    "path": "/org/a11y/atspi/accessible/38",
+                    "relations": [
+                      [
+                        3,
+                        [
+                          "/org/a11y/atspi/accessible/16"
+                        ]
+                      ]
+                    ]
                   },
                   {
                     "role": "section",
@@ -434,6 +819,15 @@
                     },
                     "states": 1124073728,
                     "text": "0 to 12",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "DejaVu Sans",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/39",
                     "children": [
                       {
                         "role": "static",
@@ -442,7 +836,16 @@
                           "name-from": "contents"
                         },
                         "states": 1124073728,
-                        "text": "0 to 12"
+                        "text": "0 to 12",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "DejaVu Sans",
+                          "fg-color": "0,0,0",
+                          "language": "en",
+                          "size": "12pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/51"
                       }
                     ]
                   },
@@ -461,7 +864,8 @@
                       "tag": "output",
                       "text-align": "left"
                     },
-                    "states": 1124073728
+                    "states": 1124073728,
+                    "path": "/org/a11y/atspi/accessible/40"
                   }
                 ]
               }
@@ -476,6 +880,15 @@
             },
             "states": 1124073728,
             "text": "￼",
+            "text_attributes": {
+              "bg-color": "239,239,239",
+              "direction": "lr",
+              "family-name": "Liberation Sans",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "10pt"
+            },
+            "path": "/org/a11y/atspi/accessible/19",
             "children": [
               {
                 "role": "button",
@@ -488,7 +901,16 @@
                   "text-align": "center"
                 },
                 "states": 1124079872,
-                "text": "Run Test Setup"
+                "text": "Run Test Setup",
+                "text_attributes": {
+                  "bg-color": "239,239,239",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "10pt"
+                },
+                "path": "/org/a11y/atspi/accessible/17"
               }
             ]
           }

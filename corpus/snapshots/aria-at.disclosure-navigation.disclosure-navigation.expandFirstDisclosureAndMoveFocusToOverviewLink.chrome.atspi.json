@@ -8,9 +8,9 @@
     "window_class": "",
     "process_version": "Google Chrome 157.0.8103.38 ",
     "fixture_sha256": "ab0f6488522bf834c751c4570a9e76b2cf5dadc556b822c6a9d196796aa7f4b4",
-    "captured_at_unix_ms": 1794147998601,
+    "captured_at_unix_ms": 1794152485212,
     "node_count": 34,
-    "capture_ms": 99
+    "capture_ms": 126
   },
   "root": {
     "role": "document web",
@@ -23,6 +23,23 @@
     },
     "states": 1124075776,
     "text": "￼",
+    "text_attributes": {
+      "bg-color": "255,255,255",
+      "direction": "lr",
+      "family-name": "Liberation Serif",
+      "fg-color": "0,0,0",
+      "language": "en",
+      "size": "12pt"
+    },
+    "path": "/org/a11y/atspi/accessible/13",
+    "relations": [
+      [
+        14,
+        [
+          "/org/a11y/atspi/accessible/1"
+        ]
+      ]
+    ],
     "uri": "file:///root/okur/corpus/fixtures/aria-at/disclosure-navigation/disclosure-navigation.expandFirstDisclosureAndMoveFocusToOverviewLink.html",
     "children": [
       {
@@ -35,6 +52,16 @@
         },
         "states": 1124073728,
         "text": "￼￼￼￼",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,0",
+          "language": "en",
+          "size": "24pt",
+          "weight": "700"
+        },
+        "path": "/org/a11y/atspi/accessible/15",
         "children": [
           {
             "role": "heading",
@@ -48,6 +75,16 @@
             },
             "states": 1124073728,
             "text": "Example Disclosure Navigation Menu",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "24pt",
+              "weight": "700"
+            },
+            "path": "/org/a11y/atspi/accessible/16",
             "children": [
               {
                 "role": "static",
@@ -56,7 +93,17 @@
                   "name-from": "contents"
                 },
                 "states": 1124073728,
-                "text": "Example Disclosure Navigation Menu"
+                "text": "Example Disclosure Navigation Menu",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "24pt",
+                  "weight": "700"
+                },
+                "path": "/org/a11y/atspi/accessible/19"
               }
             ]
           },
@@ -69,6 +116,15 @@
             },
             "states": 1124073728,
             "text": "The following example demonstrates using the ￼ to show and hide dropdown lists of links in a navigation bar for a mythical university web site. Each disclosure button represents a section of the web site, and expanding it shows a list of links to pages within that section.",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/17",
             "children": [
               {
                 "role": "static",
@@ -77,7 +133,16 @@
                   "name-from": "contents"
                 },
                 "states": 1124073728,
-                "text": "The following example demonstrates using the "
+                "text": "The following example demonstrates using the ",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/20"
               },
               {
                 "role": "link",
@@ -90,6 +155,16 @@
                 },
                 "states": 1124075776,
                 "text": "disclosure design pattern",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,238",
+                  "language": "en",
+                  "size": "12pt",
+                  "underline": "single"
+                },
+                "path": "/org/a11y/atspi/accessible/21",
                 "uri": "https://w3c.github.io/aria-practices/#disclosure",
                 "children": [
                   {
@@ -99,7 +174,17 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "disclosure design pattern"
+                    "text": "disclosure design pattern",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Serif",
+                      "fg-color": "0,0,238",
+                      "language": "en",
+                      "size": "12pt",
+                      "underline": "single"
+                    },
+                    "path": "/org/a11y/atspi/accessible/23"
                   }
                 ]
               },
@@ -110,7 +195,16 @@
                   "name-from": "contents"
                 },
                 "states": 1124073728,
-                "text": " to show and hide dropdown lists of links in a navigation bar for a mythical university web site. Each disclosure button represents a section of the web site, and expanding it shows a list of links to pages within that section."
+                "text": " to show and hide dropdown lists of links in a navigation bar for a mythical university web site. Each disclosure button represents a section of the web site, and expanding it shows a list of links to pages within that section.",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/22"
               }
             ]
           },
@@ -123,6 +217,16 @@
             },
             "states": 1124073728,
             "text": "￼￼￼￼￼",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "18pt",
+              "weight": "700"
+            },
+            "path": "/org/a11y/atspi/accessible/18",
             "children": [
               {
                 "role": "heading",
@@ -137,6 +241,25 @@
                 },
                 "states": 1124073728,
                 "text": "Example",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "18pt",
+                  "weight": "700"
+                },
+                "path": "/org/a11y/atspi/accessible/24",
+                "relations": [
+                  [
+                    1,
+                    [
+                      "/org/a11y/atspi/accessible/25",
+                      "/org/a11y/atspi/accessible/28"
+                    ]
+                  ]
+                ],
                 "children": [
                   {
                     "role": "static",
@@ -145,7 +268,17 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "Example"
+                    "text": "Example",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Serif",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "18pt",
+                      "weight": "700"
+                    },
+                    "path": "/org/a11y/atspi/accessible/29"
                   }
                 ]
               },
@@ -161,7 +294,16 @@
                   "text-align": "left",
                   "xml-roles": "separator"
                 },
-                "states": 1124090112
+                "states": 1124090112,
+                "path": "/org/a11y/atspi/accessible/25",
+                "relations": [
+                  [
+                    2,
+                    [
+                      "/org/a11y/atspi/accessible/24"
+                    ]
+                  ]
+                ]
               },
               {
                 "role": "link",
@@ -175,6 +317,16 @@
                 },
                 "states": 1124075776,
                 "text": "Navigate forwards from here",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,238",
+                  "language": "en",
+                  "size": "12pt",
+                  "underline": "single"
+                },
+                "path": "/org/a11y/atspi/accessible/26",
                 "uri": "file:///root/okur/corpus/fixtures/aria-at/disclosure-navigation/disclosure-navigation.expandFirstDisclosureAndMoveFocusToOverviewLink.html#beforelink",
                 "children": [
                   {
@@ -184,7 +336,17 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "Navigate forwards from here"
+                    "text": "Navigate forwards from here",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Serif",
+                      "fg-color": "0,0,238",
+                      "language": "en",
+                      "size": "12pt",
+                      "underline": "single"
+                    },
+                    "path": "/org/a11y/atspi/accessible/30"
                   }
                 ]
               },
@@ -198,6 +360,15 @@
                 },
                 "states": 1124073728,
                 "text": "￼￼￼",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/27",
                 "children": [
                   {
                     "role": "landmark",
@@ -212,6 +383,15 @@
                     },
                     "states": 1124073728,
                     "text": "￼",
+                    "text_attributes": {
+                      "bg-color": "238,238,238",
+                      "direction": "lr",
+                      "family-name": "Liberation Serif",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/31",
                     "children": [
                       {
                         "role": "list",
@@ -225,6 +405,15 @@
                         },
                         "states": 1124073728,
                         "text": "￼￼￼",
+                        "text_attributes": {
+                          "bg-color": "238,238,238",
+                          "direction": "lr",
+                          "family-name": "Liberation Serif",
+                          "fg-color": "0,0,0",
+                          "language": "en",
+                          "size": "12pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/34",
                         "children": [
                           {
                             "role": "list item",
@@ -238,6 +427,15 @@
                             },
                             "states": 1124073728,
                             "text": "￼",
+                            "text_attributes": {
+                              "bg-color": "238,238,238",
+                              "direction": "lr",
+                              "family-name": "Liberation Sans",
+                              "fg-color": "0,0,0",
+                              "language": "en",
+                              "size": "10pt"
+                            },
+                            "path": "/org/a11y/atspi/accessible/35",
                             "children": [
                               {
                                 "role": "button",
@@ -249,7 +447,16 @@
                                   "text-align": "center"
                                 },
                                 "states": 1124076288,
-                                "text": "About"
+                                "text": "About",
+                                "text_attributes": {
+                                  "bg-color": "238,238,238",
+                                  "direction": "lr",
+                                  "family-name": "Liberation Sans",
+                                  "fg-color": "0,0,0",
+                                  "language": "en",
+                                  "size": "10pt"
+                                },
+                                "path": "/org/a11y/atspi/accessible/38"
                               }
                             ]
                           },
@@ -265,6 +472,15 @@
                             },
                             "states": 1124073728,
                             "text": "￼",
+                            "text_attributes": {
+                              "bg-color": "238,238,238",
+                              "direction": "lr",
+                              "family-name": "Liberation Sans",
+                              "fg-color": "0,0,0",
+                              "language": "en",
+                              "size": "10pt"
+                            },
+                            "path": "/org/a11y/atspi/accessible/36",
                             "children": [
                               {
                                 "role": "button",
@@ -276,7 +492,16 @@
                                   "text-align": "center"
                                 },
                                 "states": 1124076288,
-                                "text": "Admissions"
+                                "text": "Admissions",
+                                "text_attributes": {
+                                  "bg-color": "238,238,238",
+                                  "direction": "lr",
+                                  "family-name": "Liberation Sans",
+                                  "fg-color": "0,0,0",
+                                  "language": "en",
+                                  "size": "10pt"
+                                },
+                                "path": "/org/a11y/atspi/accessible/39"
                               }
                             ]
                           },
@@ -292,6 +517,15 @@
                             },
                             "states": 1124073728,
                             "text": "￼",
+                            "text_attributes": {
+                              "bg-color": "238,238,238",
+                              "direction": "lr",
+                              "family-name": "Liberation Sans",
+                              "fg-color": "0,0,0",
+                              "language": "en",
+                              "size": "10pt"
+                            },
+                            "path": "/org/a11y/atspi/accessible/37",
                             "children": [
                               {
                                 "role": "button",
@@ -303,7 +537,16 @@
                                   "text-align": "center"
                                 },
                                 "states": 1124076288,
-                                "text": "Academics"
+                                "text": "Academics",
+                                "text_attributes": {
+                                  "bg-color": "238,238,238",
+                                  "direction": "lr",
+                                  "family-name": "Liberation Sans",
+                                  "fg-color": "0,0,0",
+                                  "language": "en",
+                                  "size": "10pt"
+                                },
+                                "path": "/org/a11y/atspi/accessible/40"
                               }
                             ]
                           }
@@ -323,6 +566,16 @@
                     },
                     "states": 1124075776,
                     "text": "Navigate backwards from here",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Serif",
+                      "fg-color": "0,0,238",
+                      "language": "en",
+                      "size": "12pt",
+                      "underline": "single"
+                    },
+                    "path": "/org/a11y/atspi/accessible/32",
                     "uri": "file:///root/okur/corpus/fixtures/aria-at/disclosure-navigation/disclosure-navigation.expandFirstDisclosureAndMoveFocusToOverviewLink.html#afterlink",
                     "children": [
                       {
@@ -332,7 +585,17 @@
                           "name-from": "contents"
                         },
                         "states": 1124073728,
-                        "text": "Navigate backwards from here"
+                        "text": "Navigate backwards from here",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "Liberation Serif",
+                          "fg-color": "0,0,238",
+                          "language": "en",
+                          "size": "12pt",
+                          "underline": "single"
+                        },
+                        "path": "/org/a11y/atspi/accessible/41"
                       }
                     ]
                   },
@@ -351,6 +614,16 @@
                     },
                     "states": 1124075776,
                     "text": "￼￼",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Serif",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "14pt",
+                      "weight": "700"
+                    },
+                    "path": "/org/a11y/atspi/accessible/33",
                     "children": [
                       {
                         "role": "heading",
@@ -365,6 +638,16 @@
                         },
                         "states": 1124073728,
                         "text": "Mythical University",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "Liberation Serif",
+                          "fg-color": "0,0,0",
+                          "language": "en",
+                          "size": "14pt",
+                          "weight": "700"
+                        },
+                        "path": "/org/a11y/atspi/accessible/42",
                         "children": [
                           {
                             "role": "static",
@@ -373,7 +656,17 @@
                               "name-from": "contents"
                             },
                             "states": 1124073728,
-                            "text": "Mythical University"
+                            "text": "Mythical University",
+                            "text_attributes": {
+                              "bg-color": "255,255,255",
+                              "direction": "lr",
+                              "family-name": "Liberation Serif",
+                              "fg-color": "0,0,0",
+                              "language": "en",
+                              "size": "14pt",
+                              "weight": "700"
+                            },
+                            "path": "/org/a11y/atspi/accessible/44"
                           }
                         ]
                       },
@@ -386,6 +679,15 @@
                         },
                         "states": 1124073728,
                         "text": "Sample content section. Activating a link above will update and navigate to this region.",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "Liberation Serif",
+                          "fg-color": "0,0,0",
+                          "language": "en",
+                          "size": "12pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/43",
                         "children": [
                           {
                             "role": "static",
@@ -394,7 +696,16 @@
                               "name-from": "contents"
                             },
                             "states": 1124073728,
-                            "text": "Sample content section. Activating a link above will update and navigate to this region."
+                            "text": "Sample content section. Activating a link above will update and navigate to this region.",
+                            "text_attributes": {
+                              "bg-color": "255,255,255",
+                              "direction": "lr",
+                              "family-name": "Liberation Serif",
+                              "fg-color": "0,0,0",
+                              "language": "en",
+                              "size": "12pt"
+                            },
+                            "path": "/org/a11y/atspi/accessible/45"
                           }
                         ]
                       }
@@ -414,7 +725,16 @@
                   "text-align": "left",
                   "xml-roles": "separator"
                 },
-                "states": 1124090112
+                "states": 1124090112,
+                "path": "/org/a11y/atspi/accessible/28",
+                "relations": [
+                  [
+                    2,
+                    [
+                      "/org/a11y/atspi/accessible/24"
+                    ]
+                  ]
+                ]
               }
             ]
           },
@@ -427,6 +747,15 @@
             },
             "states": 1124073728,
             "text": "￼",
+            "text_attributes": {
+              "bg-color": "239,239,239",
+              "direction": "lr",
+              "family-name": "Liberation Sans",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "10pt"
+            },
+            "path": "/org/a11y/atspi/accessible/14",
             "children": [
               {
                 "role": "button",
@@ -439,7 +768,16 @@
                   "text-align": "center"
                 },
                 "states": 1124079872,
-                "text": "Run Test Setup"
+                "text": "Run Test Setup",
+                "text_attributes": {
+                  "bg-color": "239,239,239",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "10pt"
+                },
+                "path": "/org/a11y/atspi/accessible/12"
               }
             ]
           }

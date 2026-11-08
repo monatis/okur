@@ -8,9 +8,9 @@
     "window_class": "",
     "process_version": "Google Chrome 157.0.8103.38 ",
     "fixture_sha256": "9492862a08761bd5727fc13907abe5f7fcb25911edf5c40e9b41e2e558e9a8f3",
-    "captured_at_unix_ms": 1794148246700,
+    "captured_at_unix_ms": 1794152736812,
     "node_count": 26,
-    "capture_ms": 87
+    "capture_ms": 105
   },
   "root": {
     "role": "document web",
@@ -23,6 +23,23 @@
     },
     "states": 1124075776,
     "text": "￼",
+    "text_attributes": {
+      "bg-color": "255,255,255",
+      "direction": "lr",
+      "family-name": "Liberation Sans",
+      "fg-color": "0,0,0",
+      "language": "en",
+      "size": "12pt"
+    },
+    "path": "/org/a11y/atspi/accessible/15",
+    "relations": [
+      [
+        14,
+        [
+          "/org/a11y/atspi/accessible/1"
+        ]
+      ]
+    ],
     "uri": "file:///root/okur/corpus/fixtures/aria-at/menu-button-navigation/menu-button-links.setFocusBeforeMenuButton.html",
     "children": [
       {
@@ -35,6 +52,15 @@
         },
         "states": 1124073728,
         "text": "￼￼￼￼",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Sans",
+          "fg-color": "0,90,156",
+          "language": "en",
+          "size": "20.5pt"
+        },
+        "path": "/org/a11y/atspi/accessible/17",
         "children": [
           {
             "role": "heading",
@@ -48,6 +74,15 @@
             },
             "states": 1124073728,
             "text": "Navigation Menu Button Example",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Sans",
+              "fg-color": "0,90,156",
+              "language": "en",
+              "size": "20.5pt"
+            },
+            "path": "/org/a11y/atspi/accessible/18",
             "children": [
               {
                 "role": "static",
@@ -56,7 +91,16 @@
                   "name-from": "contents"
                 },
                 "states": 1124073728,
-                "text": "Navigation Menu Button Example"
+                "text": "Navigation Menu Button Example",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "0,90,156",
+                  "language": "en",
+                  "size": "20.5pt"
+                },
+                "path": "/org/a11y/atspi/accessible/21"
               }
             ]
           },
@@ -69,6 +113,15 @@
             },
             "states": 1124073728,
             "text": "￼",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Sans",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/19",
             "children": [
               {
                 "role": "paragraph",
@@ -79,6 +132,15 @@
                 },
                 "states": 1124073728,
                 "text": "This example demonstrates the ￼ for a button that displays a menu of link targets. The menu items are made from HTML links, so they maintain their HTML link behaviors. That is, activating a menuitem loads the link target, and the browser's link context menu and associated actions are available.",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/22",
                 "children": [
                   {
                     "role": "static",
@@ -87,7 +149,16 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "This example demonstrates the "
+                    "text": "This example demonstrates the ",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/23"
                   },
                   {
                     "role": "link",
@@ -100,6 +171,16 @@
                     },
                     "states": 1124075776,
                     "text": "Menu Button Pattern",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "3,69,117",
+                      "language": "en",
+                      "size": "12pt",
+                      "underline": "single"
+                    },
+                    "path": "/org/a11y/atspi/accessible/24",
                     "uri": "file:///root/okur/corpus/fixtures/aria-at/menu-button-pattern.html",
                     "children": [
                       {
@@ -109,7 +190,17 @@
                           "name-from": "contents"
                         },
                         "states": 1124073728,
-                        "text": "Menu Button Pattern"
+                        "text": "Menu Button Pattern",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "3,69,117",
+                          "language": "en",
+                          "size": "12pt",
+                          "underline": "single"
+                        },
+                        "path": "/org/a11y/atspi/accessible/26"
                       }
                     ]
                   },
@@ -120,7 +211,16 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": " for a button that displays a menu of link targets. The menu items are made from HTML links, so they maintain their HTML link behaviors. That is, activating a menuitem loads the link target, and the browser's link context menu and associated actions are available."
+                    "text": " for a button that displays a menu of link targets. The menu items are made from HTML links, so they maintain their HTML link behaviors. That is, activating a menuitem loads the link target, and the browser's link context menu and associated actions are available.",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/25"
                   }
                 ]
               }
@@ -135,6 +235,15 @@
             },
             "states": 1124073728,
             "text": "￼￼￼￼￼",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Sans",
+              "fg-color": "0,90,156",
+              "language": "en",
+              "size": "17pt"
+            },
+            "path": "/org/a11y/atspi/accessible/20",
             "children": [
               {
                 "role": "heading",
@@ -149,6 +258,24 @@
                 },
                 "states": 1124073728,
                 "text": "Example",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "0,90,156",
+                  "language": "en",
+                  "size": "17pt"
+                },
+                "path": "/org/a11y/atspi/accessible/27",
+                "relations": [
+                  [
+                    1,
+                    [
+                      "/org/a11y/atspi/accessible/28",
+                      "/org/a11y/atspi/accessible/31"
+                    ]
+                  ]
+                ],
                 "children": [
                   {
                     "role": "static",
@@ -157,7 +284,16 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "Example"
+                    "text": "Example",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "0,90,156",
+                      "language": "en",
+                      "size": "17pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/32"
                   }
                 ]
               },
@@ -173,7 +309,16 @@
                   "text-align": "left",
                   "xml-roles": "separator"
                 },
-                "states": 1124090112
+                "states": 1124090112,
+                "path": "/org/a11y/atspi/accessible/28",
+                "relations": [
+                  [
+                    2,
+                    [
+                      "/org/a11y/atspi/accessible/27"
+                    ]
+                  ]
+                ]
               },
               {
                 "role": "link",
@@ -187,6 +332,16 @@
                 },
                 "states": 1124075776,
                 "text": "Navigate forwards from here",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "3,69,117",
+                  "language": "en",
+                  "size": "12pt",
+                  "underline": "single"
+                },
+                "path": "/org/a11y/atspi/accessible/29",
                 "uri": "file:///root/okur/corpus/fixtures/aria-at/menu-button-navigation/menu-button-links.setFocusBeforeMenuButton.html#beforelink",
                 "children": [
                   {
@@ -196,7 +351,17 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "Navigate forwards from here"
+                    "text": "Navigate forwards from here",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "3,69,117",
+                      "language": "en",
+                      "size": "12pt",
+                      "underline": "single"
+                    },
+                    "path": "/org/a11y/atspi/accessible/33"
                   }
                 ]
               },
@@ -210,6 +375,15 @@
                 },
                 "states": 1124073728,
                 "text": "￼￼",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "13pt"
+                },
+                "path": "/org/a11y/atspi/accessible/30",
                 "children": [
                   {
                     "role": "section",
@@ -221,6 +395,15 @@
                     },
                     "states": 1124073728,
                     "text": "￼",
+                    "text_attributes": {
+                      "bg-color": "3,69,117",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "255,255,255",
+                      "language": "en",
+                      "size": "12pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/34",
                     "children": [
                       {
                         "role": "button",
@@ -235,6 +418,15 @@
                         },
                         "states": 4399170587392,
                         "text": "WAI-ARIA Quick Links ￼",
+                        "text_attributes": {
+                          "bg-color": "3,69,117",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "255,255,255",
+                          "language": "en",
+                          "size": "12pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/36",
                         "children": [
                           {
                             "role": "static",
@@ -243,7 +435,16 @@
                               "name-from": "contents"
                             },
                             "states": 1124073728,
-                            "text": "WAI-ARIA Quick Links "
+                            "text": "WAI-ARIA Quick Links ",
+                            "text_attributes": {
+                              "bg-color": "3,69,117",
+                              "direction": "lr",
+                              "family-name": "Liberation Sans",
+                              "fg-color": "255,255,255",
+                              "language": "en",
+                              "size": "12pt"
+                            },
+                            "path": "/org/a11y/atspi/accessible/37"
                           },
                           {
                             "role": "image",
@@ -253,7 +454,8 @@
                               "tag": "svg",
                               "text-align": "center"
                             },
-                            "states": 1124073728
+                            "states": 1124073728,
+                            "path": "/org/a11y/atspi/accessible/38"
                           }
                         ]
                       }
@@ -271,6 +473,16 @@
                     },
                     "states": 1124075776,
                     "text": "Navigate backwards from here",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "3,69,117",
+                      "language": "en",
+                      "size": "12pt",
+                      "underline": "single"
+                    },
+                    "path": "/org/a11y/atspi/accessible/35",
                     "uri": "file:///root/okur/corpus/fixtures/aria-at/menu-button-navigation/menu-button-links.setFocusBeforeMenuButton.html#afterlink",
                     "children": [
                       {
@@ -280,7 +492,17 @@
                           "name-from": "contents"
                         },
                         "states": 1124073728,
-                        "text": "Navigate backwards from here"
+                        "text": "Navigate backwards from here",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "3,69,117",
+                          "language": "en",
+                          "size": "12pt",
+                          "underline": "single"
+                        },
+                        "path": "/org/a11y/atspi/accessible/39"
                       }
                     ]
                   }
@@ -298,7 +520,16 @@
                   "text-align": "left",
                   "xml-roles": "separator"
                 },
-                "states": 1124090112
+                "states": 1124090112,
+                "path": "/org/a11y/atspi/accessible/31",
+                "relations": [
+                  [
+                    2,
+                    [
+                      "/org/a11y/atspi/accessible/27"
+                    ]
+                  ]
+                ]
               }
             ]
           },
@@ -311,6 +542,15 @@
             },
             "states": 1124073728,
             "text": "￼",
+            "text_attributes": {
+              "bg-color": "239,239,239",
+              "direction": "lr",
+              "family-name": "Liberation Sans",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "10pt"
+            },
+            "path": "/org/a11y/atspi/accessible/16",
             "children": [
               {
                 "role": "button",
@@ -323,7 +563,16 @@
                   "text-align": "center"
                 },
                 "states": 1124079872,
-                "text": "Run Test Setup"
+                "text": "Run Test Setup",
+                "text_attributes": {
+                  "bg-color": "239,239,239",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "10pt"
+                },
+                "path": "/org/a11y/atspi/accessible/14"
               }
             ]
           }

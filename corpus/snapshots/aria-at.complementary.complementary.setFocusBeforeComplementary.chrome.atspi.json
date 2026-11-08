@@ -8,9 +8,9 @@
     "window_class": "",
     "process_version": "Google Chrome 157.0.8103.38 ",
     "fixture_sha256": "b879c6539bcc192ae5f9b544ce99335ca805c929168abd6d8b127d98027a1ad0",
-    "captured_at_unix_ms": 1794147919486,
+    "captured_at_unix_ms": 1794152405415,
     "node_count": 45,
-    "capture_ms": 134
+    "capture_ms": 172
   },
   "root": {
     "role": "document web",
@@ -23,6 +23,23 @@
     },
     "states": 1124075776,
     "text": "￼￼",
+    "text_attributes": {
+      "bg-color": "255,255,255",
+      "direction": "lr",
+      "family-name": "Liberation Sans",
+      "fg-color": "51,51,51",
+      "language": "en",
+      "size": "13.5pt"
+    },
+    "path": "/org/a11y/atspi/accessible/13",
+    "relations": [
+      [
+        14,
+        [
+          "/org/a11y/atspi/accessible/1"
+        ]
+      ]
+    ],
     "uri": "file:///root/okur/corpus/fixtures/aria-at/complementary/complementary.setFocusBeforeComplementary.html",
     "children": [
       {
@@ -35,6 +52,15 @@
         },
         "states": 1124073728,
         "text": "￼￼￼",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Sans",
+          "fg-color": "51,122,183",
+          "language": "en",
+          "size": "13.5pt"
+        },
+        "path": "/org/a11y/atspi/accessible/17",
         "children": [
           {
             "role": "link",
@@ -48,6 +74,15 @@
             },
             "states": 1124075776,
             "text": "Navigate forwards from here",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Sans",
+              "fg-color": "51,122,183",
+              "language": "en",
+              "size": "13.5pt"
+            },
+            "path": "/org/a11y/atspi/accessible/18",
             "uri": "file:///root/okur/corpus/fixtures/aria-at/complementary/complementary.setFocusBeforeComplementary.html#beforelink",
             "children": [
               {
@@ -57,7 +92,16 @@
                   "name-from": "contents"
                 },
                 "states": 1124073728,
-                "text": "Navigate forwards from here"
+                "text": "Navigate forwards from here",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "51,122,183",
+                  "language": "en",
+                  "size": "13.5pt"
+                },
+                "path": "/org/a11y/atspi/accessible/21"
               }
             ]
           },
@@ -74,6 +118,24 @@
             },
             "states": 1124073728,
             "text": "￼￼￼￼￼",
+            "text_attributes": {
+              "bg-color": "244,244,244",
+              "direction": "lr",
+              "family-name": "Liberation Sans",
+              "fg-color": "51,122,183",
+              "language": "en",
+              "size": "13.5pt",
+              "underline": "single"
+            },
+            "path": "/org/a11y/atspi/accessible/19",
+            "relations": [
+              [
+                2,
+                [
+                  "/org/a11y/atspi/accessible/22"
+                ]
+              ]
+            ],
             "children": [
               {
                 "role": "link",
@@ -87,6 +149,16 @@
                 },
                 "states": 1124075776,
                 "text": "Top",
+                "text_attributes": {
+                  "bg-color": "244,244,244",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "51,122,183",
+                  "language": "en",
+                  "size": "13.5pt",
+                  "underline": "single"
+                },
+                "path": "/org/a11y/atspi/accessible/23",
                 "uri": "file:///root/okur/corpus/fixtures/aria-at/complementary/complementary.setFocusBeforeComplementary.html#top",
                 "children": [
                   {
@@ -96,7 +168,17 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "Top"
+                    "text": "Top",
+                    "text_attributes": {
+                      "bg-color": "244,244,244",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "51,122,183",
+                      "language": "en",
+                      "size": "13.5pt",
+                      "underline": "single"
+                    },
+                    "path": "/org/a11y/atspi/accessible/27"
                   }
                 ]
               },
@@ -113,6 +195,23 @@
                 },
                 "states": 1124073728,
                 "text": "Landmarks",
+                "text_attributes": {
+                  "bg-color": "244,244,244",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "51,51,51",
+                  "language": "en",
+                  "size": "18pt"
+                },
+                "path": "/org/a11y/atspi/accessible/22",
+                "relations": [
+                  [
+                    1,
+                    [
+                      "/org/a11y/atspi/accessible/19"
+                    ]
+                  ]
+                ],
                 "children": [
                   {
                     "role": "static",
@@ -121,7 +220,16 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "Landmarks"
+                    "text": "Landmarks",
+                    "text_attributes": {
+                      "bg-color": "244,244,244",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "51,51,51",
+                      "language": "en",
+                      "size": "18pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/28"
                   }
                 ]
               },
@@ -134,6 +242,15 @@
                 },
                 "states": 1124073728,
                 "text": "The following landmarks are defined on this page:",
+                "text_attributes": {
+                  "bg-color": "244,244,244",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "51,51,51",
+                  "language": "en",
+                  "size": "13.5pt"
+                },
+                "path": "/org/a11y/atspi/accessible/24",
                 "children": [
                   {
                     "role": "static",
@@ -142,7 +259,16 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "The following landmarks are defined on this page:"
+                    "text": "The following landmarks are defined on this page:",
+                    "text_attributes": {
+                      "bg-color": "244,244,244",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "51,51,51",
+                      "language": "en",
+                      "size": "13.5pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/29"
                   }
                 ]
               },
@@ -156,6 +282,15 @@
                 },
                 "states": 1124073728,
                 "text": "￼￼￼￼￼￼",
+                "text_attributes": {
+                  "bg-color": "244,244,244",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "51,51,51",
+                  "language": "en",
+                  "size": "13.5pt"
+                },
+                "path": "/org/a11y/atspi/accessible/25",
                 "children": [
                   {
                     "role": "list item",
@@ -169,6 +304,15 @@
                     },
                     "states": 1124073728,
                     "text": "• Banner",
+                    "text_attributes": {
+                      "bg-color": "244,244,244",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "51,51,51",
+                      "language": "en",
+                      "size": "13.5pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/30",
                     "children": [
                       {
                         "role": "static",
@@ -180,7 +324,16 @@
                           "text-align": "left"
                         },
                         "states": 1124073728,
-                        "text": "• "
+                        "text": "• ",
+                        "text_attributes": {
+                          "bg-color": "244,244,244",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "51,51,51",
+                          "language": "en",
+                          "size": "13.5pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/36"
                       },
                       {
                         "role": "static",
@@ -189,7 +342,16 @@
                           "name-from": "contents"
                         },
                         "states": 1124073728,
-                        "text": "Banner"
+                        "text": "Banner",
+                        "text_attributes": {
+                          "bg-color": "244,244,244",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "51,51,51",
+                          "language": "en",
+                          "size": "13.5pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/37"
                       }
                     ]
                   },
@@ -205,6 +367,15 @@
                     },
                     "states": 1124073728,
                     "text": "• Complementary",
+                    "text_attributes": {
+                      "bg-color": "244,244,244",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "51,51,51",
+                      "language": "en",
+                      "size": "13.5pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/31",
                     "children": [
                       {
                         "role": "static",
@@ -216,7 +387,16 @@
                           "text-align": "left"
                         },
                         "states": 1124073728,
-                        "text": "• "
+                        "text": "• ",
+                        "text_attributes": {
+                          "bg-color": "244,244,244",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "51,51,51",
+                          "language": "en",
+                          "size": "13.5pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/38"
                       },
                       {
                         "role": "static",
@@ -225,7 +405,16 @@
                           "name-from": "contents"
                         },
                         "states": 1124073728,
-                        "text": "Complementary"
+                        "text": "Complementary",
+                        "text_attributes": {
+                          "bg-color": "244,244,244",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "51,51,51",
+                          "language": "en",
+                          "size": "13.5pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/39"
                       }
                     ]
                   },
@@ -241,6 +430,15 @@
                     },
                     "states": 1124073728,
                     "text": "• Contentinfo",
+                    "text_attributes": {
+                      "bg-color": "244,244,244",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "51,51,51",
+                      "language": "en",
+                      "size": "13.5pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/32",
                     "children": [
                       {
                         "role": "static",
@@ -252,7 +450,16 @@
                           "text-align": "left"
                         },
                         "states": 1124073728,
-                        "text": "• "
+                        "text": "• ",
+                        "text_attributes": {
+                          "bg-color": "244,244,244",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "51,51,51",
+                          "language": "en",
+                          "size": "13.5pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/40"
                       },
                       {
                         "role": "static",
@@ -261,7 +468,16 @@
                           "name-from": "contents"
                         },
                         "states": 1124073728,
-                        "text": "Contentinfo"
+                        "text": "Contentinfo",
+                        "text_attributes": {
+                          "bg-color": "244,244,244",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "51,51,51",
+                          "language": "en",
+                          "size": "13.5pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/41"
                       }
                     ]
                   },
@@ -277,6 +493,15 @@
                     },
                     "states": 1124073728,
                     "text": "• Main",
+                    "text_attributes": {
+                      "bg-color": "244,244,244",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "51,51,51",
+                      "language": "en",
+                      "size": "13.5pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/33",
                     "children": [
                       {
                         "role": "static",
@@ -288,7 +513,16 @@
                           "text-align": "left"
                         },
                         "states": 1124073728,
-                        "text": "• "
+                        "text": "• ",
+                        "text_attributes": {
+                          "bg-color": "244,244,244",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "51,51,51",
+                          "language": "en",
+                          "size": "13.5pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/42"
                       },
                       {
                         "role": "static",
@@ -297,7 +531,16 @@
                           "name-from": "contents"
                         },
                         "states": 1124073728,
-                        "text": "Main"
+                        "text": "Main",
+                        "text_attributes": {
+                          "bg-color": "244,244,244",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "51,51,51",
+                          "language": "en",
+                          "size": "13.5pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/43"
                       }
                     ]
                   },
@@ -313,6 +556,15 @@
                     },
                     "states": 1124073728,
                     "text": "• Navigation",
+                    "text_attributes": {
+                      "bg-color": "244,244,244",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "51,51,51",
+                      "language": "en",
+                      "size": "13.5pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/34",
                     "children": [
                       {
                         "role": "static",
@@ -324,7 +576,16 @@
                           "text-align": "left"
                         },
                         "states": 1124073728,
-                        "text": "• "
+                        "text": "• ",
+                        "text_attributes": {
+                          "bg-color": "244,244,244",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "51,51,51",
+                          "language": "en",
+                          "size": "13.5pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/44"
                       },
                       {
                         "role": "static",
@@ -333,7 +594,16 @@
                           "name-from": "contents"
                         },
                         "states": 1124073728,
-                        "text": "Navigation"
+                        "text": "Navigation",
+                        "text_attributes": {
+                          "bg-color": "244,244,244",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "51,51,51",
+                          "language": "en",
+                          "size": "13.5pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/45"
                       }
                     ]
                   },
@@ -349,6 +619,15 @@
                     },
                     "states": 1124073728,
                     "text": "• Region",
+                    "text_attributes": {
+                      "bg-color": "244,244,244",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "51,51,51",
+                      "language": "en",
+                      "size": "13.5pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/35",
                     "children": [
                       {
                         "role": "static",
@@ -360,7 +639,16 @@
                           "text-align": "left"
                         },
                         "states": 1124073728,
-                        "text": "• "
+                        "text": "• ",
+                        "text_attributes": {
+                          "bg-color": "244,244,244",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "51,51,51",
+                          "language": "en",
+                          "size": "13.5pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/46"
                       },
                       {
                         "role": "static",
@@ -369,7 +657,16 @@
                           "name-from": "contents"
                         },
                         "states": 1124073728,
-                        "text": "Region"
+                        "text": "Region",
+                        "text_attributes": {
+                          "bg-color": "244,244,244",
+                          "direction": "lr",
+                          "family-name": "Liberation Sans",
+                          "fg-color": "51,51,51",
+                          "language": "en",
+                          "size": "13.5pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/47"
                       }
                     ]
                   }
@@ -387,6 +684,16 @@
                 },
                 "states": 1124075776,
                 "text": "Bottom",
+                "text_attributes": {
+                  "bg-color": "244,244,244",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "51,122,183",
+                  "language": "en",
+                  "size": "13.5pt",
+                  "underline": "single"
+                },
+                "path": "/org/a11y/atspi/accessible/26",
                 "uri": "file:///root/okur/corpus/fixtures/aria-at/complementary/complementary.setFocusBeforeComplementary.html#bottom",
                 "children": [
                   {
@@ -396,7 +703,17 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "Bottom"
+                    "text": "Bottom",
+                    "text_attributes": {
+                      "bg-color": "244,244,244",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "51,122,183",
+                      "language": "en",
+                      "size": "13.5pt",
+                      "underline": "single"
+                    },
+                    "path": "/org/a11y/atspi/accessible/48"
                   }
                 ]
               }
@@ -414,6 +731,15 @@
             },
             "states": 1124075776,
             "text": "Navigate backwards from here",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Sans",
+              "fg-color": "51,122,183",
+              "language": "en",
+              "size": "13.5pt"
+            },
+            "path": "/org/a11y/atspi/accessible/20",
             "uri": "file:///root/okur/corpus/fixtures/aria-at/complementary/complementary.setFocusBeforeComplementary.html#afterlink",
             "children": [
               {
@@ -423,7 +749,16 @@
                   "name-from": "contents"
                 },
                 "states": 1124073728,
-                "text": "Navigate backwards from here"
+                "text": "Navigate backwards from here",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "51,122,183",
+                  "language": "en",
+                  "size": "13.5pt"
+                },
+                "path": "/org/a11y/atspi/accessible/49"
               }
             ]
           }
@@ -439,6 +774,15 @@
         },
         "states": 1124073728,
         "text": "￼",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Sans",
+          "fg-color": "51,51,51",
+          "language": "en",
+          "size": "13.5pt"
+        },
+        "path": "/org/a11y/atspi/accessible/16",
         "children": [
           {
             "role": "landmark",
@@ -450,6 +794,15 @@
             },
             "states": 1124073728,
             "text": "￼￼￼",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Sans",
+              "fg-color": "51,51,51",
+              "language": "en",
+              "size": "23.5pt"
+            },
+            "path": "/org/a11y/atspi/accessible/15",
             "children": [
               {
                 "role": "heading",
@@ -464,6 +817,15 @@
                 },
                 "states": 1124073728,
                 "text": "Complementary Landmark",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "51,51,51",
+                  "language": "en",
+                  "size": "23.5pt"
+                },
+                "path": "/org/a11y/atspi/accessible/50",
                 "children": [
                   {
                     "role": "static",
@@ -472,7 +834,16 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "Complementary Landmark"
+                    "text": "Complementary Landmark",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "51,51,51",
+                      "language": "en",
+                      "size": "23.5pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/52"
                   }
                 ]
               },
@@ -485,6 +856,15 @@
                 },
                 "states": 1124073728,
                 "text": "A ￼ landmark is a supporting section of the document, designed to be complementary to the main content at a similar level in the DOM hierarchy, but remains meaningful when separated from the main content.",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "51,51,51",
+                  "language": "en",
+                  "size": "13.5pt"
+                },
+                "path": "/org/a11y/atspi/accessible/51",
                 "children": [
                   {
                     "role": "static",
@@ -493,7 +873,16 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "A "
+                    "text": "A ",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "51,51,51",
+                      "language": "en",
+                      "size": "13.5pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/53"
                   },
                   {
                     "role": "static",
@@ -504,6 +893,15 @@
                     },
                     "states": 1124073728,
                     "text": "complementary",
+                    "text_attributes": {
+                      "bg-color": "249,242,244",
+                      "direction": "lr",
+                      "family-name": "Liberation Mono",
+                      "fg-color": "199,37,78",
+                      "language": "en",
+                      "size": "12pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/54",
                     "children": [
                       {
                         "role": "static",
@@ -512,7 +910,16 @@
                           "name-from": "contents"
                         },
                         "states": 1124073728,
-                        "text": "complementary"
+                        "text": "complementary",
+                        "text_attributes": {
+                          "bg-color": "249,242,244",
+                          "direction": "lr",
+                          "family-name": "Liberation Mono",
+                          "fg-color": "199,37,78",
+                          "language": "en",
+                          "size": "12pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/56"
                       }
                     ]
                   },
@@ -523,7 +930,16 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": " landmark is a supporting section of the document, designed to be complementary to the main content at a similar level in the DOM hierarchy, but remains meaningful when separated from the main content."
+                    "text": " landmark is a supporting section of the document, designed to be complementary to the main content at a similar level in the DOM hierarchy, but remains meaningful when separated from the main content.",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "51,51,51",
+                      "language": "en",
+                      "size": "13.5pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/55"
                   }
                 ]
               },
@@ -536,6 +952,15 @@
                 },
                 "states": 1124073728,
                 "text": "￼",
+                "text_attributes": {
+                  "bg-color": "239,239,239",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "51,51,51",
+                  "language": "en",
+                  "size": "13.5pt"
+                },
+                "path": "/org/a11y/atspi/accessible/14",
                 "children": [
                   {
                     "role": "button",
@@ -548,7 +973,16 @@
                       "text-align": "center"
                     },
                     "states": 1124079872,
-                    "text": "Run Test Setup"
+                    "text": "Run Test Setup",
+                    "text_attributes": {
+                      "bg-color": "239,239,239",
+                      "direction": "lr",
+                      "family-name": "Liberation Sans",
+                      "fg-color": "51,51,51",
+                      "language": "en",
+                      "size": "13.5pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/12"
                   }
                 ]
               }

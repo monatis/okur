@@ -8,9 +8,9 @@
     "window_class": "",
     "process_version": "Google Chrome 157.0.8103.38 ",
     "fixture_sha256": "bb945f2e01eb05e3157cb94569e5b81bb92179260d445aa0b91c1b13932810c5",
-    "captured_at_unix_ms": 1794146232882,
+    "captured_at_unix_ms": 1794153416731,
     "node_count": 41,
-    "capture_ms": 132
+    "capture_ms": 167
   },
   "root": {
     "role": "document web",
@@ -23,6 +23,23 @@
     },
     "states": 1124079872,
     "text": "￼￼￼",
+    "text_attributes": {
+      "bg-color": "255,255,255",
+      "direction": "lr",
+      "family-name": "Liberation Serif",
+      "fg-color": "0,0,0",
+      "language": "en",
+      "size": "12pt"
+    },
+    "path": "/org/a11y/atspi/accessible/12",
+    "relations": [
+      [
+        14,
+        [
+          "/org/a11y/atspi/accessible/1"
+        ]
+      ]
+    ],
     "uri": "file:///root/okur/corpus/fixtures/flexible-web.html",
     "children": [
       {
@@ -35,6 +52,15 @@
         },
         "states": 1124073728,
         "text": "￼￼",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,0",
+          "language": "en",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/13",
         "children": [
           {
             "role": "paragraph",
@@ -45,6 +71,15 @@
             },
             "states": 1124073728,
             "text": "Riverside Gazette",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/16",
             "children": [
               {
                 "role": "static",
@@ -53,7 +88,16 @@
                   "name-from": "contents"
                 },
                 "states": 1124073728,
-                "text": "Riverside Gazette"
+                "text": "Riverside Gazette",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/18"
               }
             ]
           },
@@ -70,6 +114,15 @@
             },
             "states": 1124073728,
             "text": "￼",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/17",
             "children": [
               {
                 "role": "list",
@@ -81,6 +134,15 @@
                 },
                 "states": 1124073728,
                 "text": "￼￼￼",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/19",
                 "children": [
                   {
                     "role": "list item",
@@ -94,6 +156,15 @@
                     },
                     "states": 1124073728,
                     "text": "• ￼",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Serif",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/20",
                     "children": [
                       {
                         "role": "static",
@@ -105,7 +176,16 @@
                           "text-align": "left"
                         },
                         "states": 1124073728,
-                        "text": "• "
+                        "text": "• ",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "Liberation Serif",
+                          "fg-color": "0,0,0",
+                          "language": "en",
+                          "size": "12pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/23"
                       },
                       {
                         "role": "link",
@@ -118,6 +198,16 @@
                         },
                         "states": 1124075776,
                         "text": "News",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "Liberation Serif",
+                          "fg-color": "0,0,238",
+                          "language": "en",
+                          "size": "12pt",
+                          "underline": "single"
+                        },
+                        "path": "/org/a11y/atspi/accessible/24",
                         "uri": "file:///root/okur/corpus/fixtures/flexible-web.html#news",
                         "children": [
                           {
@@ -127,7 +217,17 @@
                               "name-from": "contents"
                             },
                             "states": 1124073728,
-                            "text": "News"
+                            "text": "News",
+                            "text_attributes": {
+                              "bg-color": "255,255,255",
+                              "direction": "lr",
+                              "family-name": "Liberation Serif",
+                              "fg-color": "0,0,238",
+                              "language": "en",
+                              "size": "12pt",
+                              "underline": "single"
+                            },
+                            "path": "/org/a11y/atspi/accessible/25"
                           }
                         ]
                       }
@@ -145,6 +245,15 @@
                     },
                     "states": 1124073728,
                     "text": "• ￼",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Serif",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/21",
                     "children": [
                       {
                         "role": "static",
@@ -156,7 +265,16 @@
                           "text-align": "left"
                         },
                         "states": 1124073728,
-                        "text": "• "
+                        "text": "• ",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "Liberation Serif",
+                          "fg-color": "0,0,0",
+                          "language": "en",
+                          "size": "12pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/26"
                       },
                       {
                         "role": "link",
@@ -169,6 +287,16 @@
                         },
                         "states": 1124075776,
                         "text": "Events",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "Liberation Serif",
+                          "fg-color": "0,0,238",
+                          "language": "en",
+                          "size": "12pt",
+                          "underline": "single"
+                        },
+                        "path": "/org/a11y/atspi/accessible/27",
                         "uri": "file:///root/okur/corpus/fixtures/flexible-web.html#events",
                         "children": [
                           {
@@ -178,7 +306,17 @@
                               "name-from": "contents"
                             },
                             "states": 1124073728,
-                            "text": "Events"
+                            "text": "Events",
+                            "text_attributes": {
+                              "bg-color": "255,255,255",
+                              "direction": "lr",
+                              "family-name": "Liberation Serif",
+                              "fg-color": "0,0,238",
+                              "language": "en",
+                              "size": "12pt",
+                              "underline": "single"
+                            },
+                            "path": "/org/a11y/atspi/accessible/28"
                           }
                         ]
                       }
@@ -196,6 +334,15 @@
                     },
                     "states": 1124073728,
                     "text": "• ￼",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Serif",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/22",
                     "children": [
                       {
                         "role": "static",
@@ -207,7 +354,16 @@
                           "text-align": "left"
                         },
                         "states": 1124073728,
-                        "text": "• "
+                        "text": "• ",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "Liberation Serif",
+                          "fg-color": "0,0,0",
+                          "language": "en",
+                          "size": "12pt"
+                        },
+                        "path": "/org/a11y/atspi/accessible/29"
                       },
                       {
                         "role": "link",
@@ -220,6 +376,16 @@
                         },
                         "states": 1124075776,
                         "text": "Sports",
+                        "text_attributes": {
+                          "bg-color": "255,255,255",
+                          "direction": "lr",
+                          "family-name": "Liberation Serif",
+                          "fg-color": "0,0,238",
+                          "language": "en",
+                          "size": "12pt",
+                          "underline": "single"
+                        },
+                        "path": "/org/a11y/atspi/accessible/30",
                         "uri": "file:///root/okur/corpus/fixtures/flexible-web.html#sports",
                         "children": [
                           {
@@ -229,7 +395,17 @@
                               "name-from": "contents"
                             },
                             "states": 1124073728,
-                            "text": "Sports"
+                            "text": "Sports",
+                            "text_attributes": {
+                              "bg-color": "255,255,255",
+                              "direction": "lr",
+                              "family-name": "Liberation Serif",
+                              "fg-color": "0,0,238",
+                              "language": "en",
+                              "size": "12pt",
+                              "underline": "single"
+                            },
+                            "path": "/org/a11y/atspi/accessible/31"
                           }
                         ]
                       }
@@ -254,6 +430,15 @@
         },
         "states": 1124073728,
         "text": "￼￼",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,0",
+          "language": "en",
+          "size": "12pt"
+        },
+        "path": "/org/a11y/atspi/accessible/14",
         "children": [
           {
             "role": "paragraph",
@@ -264,6 +449,15 @@
             },
             "states": 1124073728,
             "text": "Spring sale at Main Street Shoes: two pairs for the price of one.",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/32",
             "children": [
               {
                 "role": "static",
@@ -272,7 +466,16 @@
                   "name-from": "contents"
                 },
                 "states": 1124073728,
-                "text": "Spring sale at Main Street Shoes: two pairs for the price of one."
+                "text": "Spring sale at Main Street Shoes: two pairs for the price of one.",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/34"
               }
             ]
           },
@@ -285,6 +488,16 @@
             },
             "states": 1124073728,
             "text": "￼",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,238",
+              "language": "en",
+              "size": "12pt",
+              "underline": "single"
+            },
+            "path": "/org/a11y/atspi/accessible/33",
             "children": [
               {
                 "role": "link",
@@ -297,6 +510,16 @@
                 },
                 "states": 1124075776,
                 "text": "See the sale",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,238",
+                  "language": "en",
+                  "size": "12pt",
+                  "underline": "single"
+                },
+                "path": "/org/a11y/atspi/accessible/35",
                 "uri": "file:///root/okur/corpus/fixtures/flexible-web.html#sale",
                 "children": [
                   {
@@ -306,7 +529,17 @@
                       "name-from": "contents"
                     },
                     "states": 1124073728,
-                    "text": "See the sale"
+                    "text": "See the sale",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Serif",
+                      "fg-color": "0,0,238",
+                      "language": "en",
+                      "size": "12pt",
+                      "underline": "single"
+                    },
+                    "path": "/org/a11y/atspi/accessible/36"
                   }
                 ]
               }
@@ -324,6 +557,16 @@
         },
         "states": 1124073728,
         "text": "￼￼￼￼￼￼￼￼",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,0",
+          "language": "en",
+          "size": "24pt",
+          "weight": "700"
+        },
+        "path": "/org/a11y/atspi/accessible/15",
         "children": [
           {
             "role": "heading",
@@ -338,6 +581,16 @@
             },
             "states": 1124073728,
             "text": "Weekend events",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "24pt",
+              "weight": "700"
+            },
+            "path": "/org/a11y/atspi/accessible/37",
             "children": [
               {
                 "role": "static",
@@ -346,7 +599,17 @@
                   "name-from": "contents"
                 },
                 "states": 1124073728,
-                "text": "Weekend events"
+                "text": "Weekend events",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "24pt",
+                  "weight": "700"
+                },
+                "path": "/org/a11y/atspi/accessible/45"
               }
             ]
           },
@@ -359,6 +622,15 @@
             },
             "states": 1124073728,
             "text": "Three events open to everyone this weekend.",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/38",
             "children": [
               {
                 "role": "static",
@@ -367,7 +639,16 @@
                   "name-from": "contents"
                 },
                 "states": 1124073728,
-                "text": "Three events open to everyone this weekend."
+                "text": "Three events open to everyone this weekend.",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/46"
               }
             ]
           },
@@ -383,6 +664,16 @@
             },
             "states": 1124073728,
             "text": "Saturday market",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "18pt",
+              "weight": "700"
+            },
+            "path": "/org/a11y/atspi/accessible/39",
             "children": [
               {
                 "role": "static",
@@ -391,7 +682,17 @@
                   "name-from": "contents"
                 },
                 "states": 1124073728,
-                "text": "Saturday market"
+                "text": "Saturday market",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "18pt",
+                  "weight": "700"
+                },
+                "path": "/org/a11y/atspi/accessible/47"
               }
             ]
           },
@@ -404,6 +705,15 @@
             },
             "states": 1124073728,
             "text": "The farmers' market opens at eight in Mill Square.",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/40",
             "children": [
               {
                 "role": "static",
@@ -412,7 +722,16 @@
                   "name-from": "contents"
                 },
                 "states": 1124073728,
-                "text": "The farmers' market opens at eight in Mill Square."
+                "text": "The farmers' market opens at eight in Mill Square.",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/48"
               }
             ]
           },
@@ -428,6 +747,16 @@
             },
             "states": 1124073728,
             "text": "River clean-up",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "18pt",
+              "weight": "700"
+            },
+            "path": "/org/a11y/atspi/accessible/41",
             "children": [
               {
                 "role": "static",
@@ -436,7 +765,17 @@
                   "name-from": "contents"
                 },
                 "states": 1124073728,
-                "text": "River clean-up"
+                "text": "River clean-up",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "18pt",
+                  "weight": "700"
+                },
+                "path": "/org/a11y/atspi/accessible/49"
               }
             ]
           },
@@ -449,6 +788,15 @@
             },
             "states": 1124073728,
             "text": "Volunteers meet at the boat ramp at ten on Saturday.",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/42",
             "children": [
               {
                 "role": "static",
@@ -457,7 +805,16 @@
                   "name-from": "contents"
                 },
                 "states": 1124073728,
-                "text": "Volunteers meet at the boat ramp at ten on Saturday."
+                "text": "Volunteers meet at the boat ramp at ten on Saturday.",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/50"
               }
             ]
           },
@@ -473,6 +830,16 @@
             },
             "states": 1124073728,
             "text": "Sunday concert",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "18pt",
+              "weight": "700"
+            },
+            "path": "/org/a11y/atspi/accessible/43",
             "children": [
               {
                 "role": "static",
@@ -481,7 +848,17 @@
                   "name-from": "contents"
                 },
                 "states": 1124073728,
-                "text": "Sunday concert"
+                "text": "Sunday concert",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "18pt",
+                  "weight": "700"
+                },
+                "path": "/org/a11y/atspi/accessible/51"
               }
             ]
           },
@@ -494,6 +871,15 @@
             },
             "states": 1124073728,
             "text": "The town band plays in the park at four.",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/44",
             "children": [
               {
                 "role": "static",
@@ -502,7 +888,16 @@
                   "name-from": "contents"
                 },
                 "states": 1124073728,
-                "text": "The town band plays in the park at four."
+                "text": "The town band plays in the park at four.",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/52"
               }
             ]
           }
