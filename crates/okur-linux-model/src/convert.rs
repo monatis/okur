@@ -127,6 +127,14 @@ impl Converter {
         self.last_page = Some(document.to_owned());
     }
 
+    /// The page of `document` given up before the engine had it (the focus moved on before it
+    /// was read): a focus coming back to it asks again.
+    pub fn page_dropped(&mut self, document: &str) {
+        if self.last_page.as_deref() == Some(document) {
+            self.last_page = None;
+        }
+    }
+
     /// Whether the event's object is read with what surrounds it: a focus, or the focused
     /// control's change, outside a page.
     pub fn wants_native(kind: &EventKind, target: Option<&ElementData>, in_page: bool) -> bool {
@@ -173,20 +181,24 @@ impl Converter {
         // change names the control as its focus did.
         let native = target
             .filter(|_| outside_page)
-            .and_then(|element| match &record.native {
-                // The focus moved on before it was read (fast Tabs): its newer focus event
-                // follows, and this one is not said (the code review of 2026-11-08, 3c). The
-                // lab's traces at f0b3a66d: every focus read but each desktop fixture's first,
-                // its window's object before any key, has FOCUSED.
-                Some(read) if focus && !read.focus.has(crate::page::state::FOCUSED) => None,
-                Some(read) => native_control(element, read, app.clone()),
-                // Not read (its object unnamed): as its event's snapshot has it.
-                None => {
-                    let mut control = focus_event(element);
-                    control.app = app.clone();
-                    Some(control)
-                }
-            })
+            // A read that failed (no role: the object gone, or the bus call timed out) is no
+            // read: the event's snapshot says the control (the second review, finding 4).
+            .and_then(
+                |element| match record.native.as_ref().filter(|r| !r.focus.role.is_empty()) {
+                    // The focus moved on before it was read (fast Tabs): its newer focus event
+                    // follows, and this one is not said (the code review of 2026-11-08, 3c). The
+                    // lab's traces at f0b3a66d: every focus read but each desktop fixture's first,
+                    // its window's object before any key, has FOCUSED.
+                    Some(read) if focus && !read.focus.has(crate::page::state::FOCUSED) => None,
+                    Some(read) => native_control(element, read, app.clone()),
+                    // Not read (its object unnamed): as its event's snapshot has it.
+                    None => {
+                        let mut control = focus_event(element);
+                        control.app = app.clone();
+                        Some(control)
+                    }
+                },
+            )
             .map(|control| {
                 if changed {
                     AccessibilityEvent::Change {

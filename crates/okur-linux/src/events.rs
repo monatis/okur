@@ -10,6 +10,7 @@ use std::thread::JoinHandle;
 use std::time::Duration;
 
 use okur_linux_model::convert::{AtspiRecord, Converter, NativeRead, PageRead};
+use okur_linux_model::delivery::Delivery;
 use okur_linux_model::focus::{ancestor_limit, is_window, CONTROL_LIMIT, WINDOW_DEPTH};
 use okur_runtime::events::{EventSink, EventSource};
 use okur_runtime::RuntimeError;
@@ -237,14 +238,16 @@ fn shown_page(provider: &LinuxProvider, document: &ElementData) -> bool {
 fn read_page(provider: &LinuxProvider, document: &AtspiObject, objects: &PageObjects) -> PageRead {
     let started = std::time::Instant::now();
     let tree = provider.atspi_tree_parallel(document, PAGE_LIMIT);
-    let base = match objects.lock() {
-        Ok(mut objects) => {
-            let base = objects.next_page();
-            let mut next = base;
-            objects_of(&tree, &mut next, &mut objects.by_id);
-            base
-        }
-        Err(_) => 0,
+    // A lock a panicking thread left still holds the numbering (the second review): base 0
+    // and no objects would have sent actions to other pages' objects.
+    let base = {
+        let mut objects = objects
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner);
+        let base = objects.next_page();
+        let mut next = base;
+        objects_of(&tree, &mut next, &mut objects.by_id);
+        base
     };
     let root = snapshot(tree);
     let read_ms = u64::try_from(started.elapsed().as_millis()).unwrap_or(u64::MAX);
@@ -269,32 +272,117 @@ fn source_error(what: &str, error: impl std::fmt::Display) -> RuntimeError {
 /// comes (`okur-lab live-replay linux --pages-after-focus` said the same as the runs, 418 of
 /// 418 steps, before this was built).
 struct PageReader {
-    asks: std::sync::mpsc::Sender<AtspiObject>,
+    asks: std::sync::mpsc::Sender<Ask>,
     pages: std::sync::mpsc::Receiver<PageRead>,
+}
+
+/// What the page reader is asked.
+enum Ask {
+    Read(AtspiObject),
+    /// The page of this document no longer wanted (the focus moved on before it was read).
+    Cancel(String),
 }
 
 impl PageReader {
     /// The reader, on a thread of its own, which ends once its asker is gone and the read in
-    /// hand is done.
+    /// hand is done. It reads the pages asked of it in their order, each once, and skips those
+    /// cancelled before their read began.
     fn start(objects: PageObjects) -> Result<Self, RuntimeError> {
         let provider =
             LinuxProvider::new().map_err(|e| source_error("the page reader's bus", e))?;
-        let (asks, asked) = std::sync::mpsc::channel::<AtspiObject>();
+        let (asks, asked) = std::sync::mpsc::channel::<Ask>();
         let (read, pages) = std::sync::mpsc::channel();
         std::thread::spawn(move || {
-            while let Ok(mut document) = asked.recv() {
-                while let Ok(later) = asked.try_recv() {
-                    document = later;
+            let mut waiting: std::collections::VecDeque<AtspiObject> = Default::default();
+            let take = |ask: Ask, waiting: &mut std::collections::VecDeque<AtspiObject>| match ask {
+                Ask::Read(document) => {
+                    let key = key_of(&document);
+                    if !waiting.iter().any(|w| key_of(w) == key) {
+                        waiting.push_back(document);
+                    }
                 }
-                if read
-                    .send(read_page(&provider, &document, &objects))
-                    .is_err()
-                {
-                    return;
+                Ask::Cancel(key) => waiting.retain(|w| key_of(w) != key),
+            };
+            while let Ok(ask) = asked.recv() {
+                take(ask, &mut waiting);
+                loop {
+                    while let Ok(more) = asked.try_recv() {
+                        take(more, &mut waiting);
+                    }
+                    let Some(document) = waiting.pop_front() else {
+                        break;
+                    };
+                    if read
+                        .send(read_page(&provider, &document, &objects))
+                        .is_err()
+                    {
+                        return;
+                    }
                 }
             }
         });
         Ok(Self { asks, pages })
+    }
+}
+
+/// A page asked for, before the record that asks for it in `delivery`: of the page reader where
+/// it runs (a reader gone is said, and pages are read here from then on), else read here at
+/// once. Once per page while it is awaited.
+#[allow(clippy::too_many_arguments)]
+fn ask_page(
+    document: &AtspiObject,
+    at_ms: u64,
+    reader: &mut Option<PageReader>,
+    delivery: &mut Delivery,
+    converter: &mut Converter,
+    provider: &LinuxProvider,
+    objects: &PageObjects,
+) {
+    let key = key_of(document);
+    if delivery.is_awaited(&key) {
+        return;
+    }
+    delivery.ask(key.clone(), at_ms);
+    converter.page_asked(&key);
+    let sent = reader
+        .as_ref()
+        .is_some_and(|r| r.asks.send(Ask::Read(document.clone())).is_ok());
+    if !sent {
+        if reader.take().is_some() {
+            tracing::warn!("the page reader is gone: pages are read on the event thread");
+        }
+        delivery.page_read(read_page(provider, document, objects));
+    }
+}
+
+/// The records the engine may take now, each traced and converted: false once the engine is
+/// gone.
+fn deliver(
+    delivery: &mut Delivery,
+    converter: &mut Converter,
+    write: &mut dyn FnMut(&AtspiRecord),
+    sink: &EventSink,
+) -> bool {
+    for record in delivery.take_ready() {
+        write(&record);
+        for said in converter.convert_read(&record) {
+            if !sink.send(said) {
+                return false;
+            }
+        }
+    }
+    true
+}
+
+/// Pages given up (the focus left them, or they took too long): the reader skips them, and the
+/// converter asks again when the focus comes back.
+fn drop_pages(documents: Vec<String>, reader: &Option<PageReader>, converter: &mut Converter) {
+    for document in documents {
+        tracing::debug!(%document, "page given up before the engine had it");
+        converter.page_dropped(&document);
+        if let Some(reader) = reader {
+            let _ = reader.asks.send(Ask::Cancel(document));
+        }
     }
 }
 
@@ -439,9 +527,12 @@ impl EventSource for AtspiEventSource {
                 let mut converter = Converter::default();
                 let objects = objects;
                 // Pages read off this thread; read here, as before, when the reader has no bus.
-                let reader = PageReader::start(Arc::clone(&objects))
+                let mut reader = PageReader::start(Arc::clone(&objects))
                     .map_err(|e| tracing::warn!("pages read on the event thread: {e}"))
                     .ok();
+                // The order the engine takes the records and pages in: a page before the
+                // focus that asked for it, as when pages were read here.
+                let mut delivery = Delivery::default();
                 let mut write = |record: &AtspiRecord| {
                     if let Some(out) = trace.as_mut() {
                         if let Err(e) = write_record(out, record) {
@@ -451,16 +542,19 @@ impl EventSource for AtspiEventSource {
                     }
                 };
                 while !stop.load(Ordering::SeqCst) {
-                    // The pages the reader read, each a record of its own, given to the
-                    // engine as they come.
+                    // The pages the reader read, into their places; what waited for them, and
+                    // for pages waited for too long, goes on.
                     for page in reader.iter().flat_map(|r| r.pages.try_iter()) {
-                        let record = AtspiRecord::page(unix_ms(), page);
-                        write(&record);
-                        for said in converter.convert_read(&record) {
-                            if !sink.send(said) {
-                                return;
-                            }
+                        let document = page.document.clone();
+                        if !delivery.page_read(page) {
+                            tracing::debug!(%document, "page read after it was given up");
                         }
+                    }
+                    if delivery.is_holding() {
+                        drop_pages(delivery.expire(unix_ms()), &reader, &mut converter);
+                    }
+                    if !deliver(&mut delivery, &mut converter, &mut write, &sink) {
+                        return;
                     }
                     // Short, so that a page read while the bus is quiet comes at once.
                     match subscription.recv_status(Duration::from_millis(20)) {
@@ -478,12 +572,17 @@ impl EventSource for AtspiEventSource {
                             // over too).
                             if converter.is_twin(&event.kind, target, at_ms) {
                                 tracing::debug!("AT-SPI focus's twin");
-                                write(&AtspiRecord::bare(
+                                let twin = AtspiRecord::bare(
                                     at_ms,
                                     event.kind.clone(),
                                     event.app_name.clone(),
                                     event.target.clone(),
-                                ));
+                                );
+                                // In its place, cancelling no page: it was not read.
+                                let _ = delivery.push(twin, false);
+                                if !deliver(&mut delivery, &mut converter, &mut write, &sink) {
+                                    return;
+                                }
                                 continue;
                             }
                             let focus = event.kind == EventKind::FocusChanged;
@@ -498,25 +597,20 @@ impl EventSource for AtspiEventSource {
                                 Some(element) => look_for_page(&provider, element),
                                 None => (None, Vec::new()),
                             };
-                            let mut pages = Vec::new();
-                            // A page is asked of the reader, the page reader's when it runs,
-                            // else read here.
-                            let mut page =
-                                |document: &AtspiObject, converter: &mut Converter| match &reader {
-                                    Some(reader) => {
-                                        converter.page_asked(&key_of(document));
-                                        if reader.asks.send(document.clone()).is_err() {
-                                            tracing::warn!("the page reader is gone");
-                                        }
-                                    }
-                                    None => pages.push(read_page(&provider, document, &objects)),
-                                };
                             if let (true, Some(element), Some(document)) =
                                 (focus, target, document.as_ref())
                             {
                                 let on_document = okur_linux_model::convert::is_document(element);
                                 if converter.wants_page(on_document, &key_of(document)) {
-                                    page(document, &mut converter);
+                                    ask_page(
+                                        document,
+                                        at_ms,
+                                        &mut reader,
+                                        &mut delivery,
+                                        &mut converter,
+                                        &provider,
+                                        &objects,
+                                    );
                                 }
                             }
                             // A page that finished loading, a reload's too, is read again: the
@@ -527,7 +621,15 @@ impl EventSource for AtspiEventSource {
                                     .filter(|d| shown_page(&provider, d))
                                     .and_then(AtspiObject::of)
                                 {
-                                    page(&document, &mut converter);
+                                    ask_page(
+                                        &document,
+                                        at_ms,
+                                        &mut reader,
+                                        &mut delivery,
+                                        &mut converter,
+                                        &provider,
+                                        &objects,
+                                    );
                                 }
                             }
                             let native = target
@@ -545,15 +647,15 @@ impl EventSource for AtspiEventSource {
                                 app: event.app_name.clone(),
                                 target: event.target.clone(),
                                 document: document.as_ref().map(key_of),
-                                pages,
+                                // Pages come as records of their own, before this one.
+                                pages: Vec::new(),
                                 native,
                                 reread,
                             };
-                            write(&record);
-                            for said in converter.convert_read(&record) {
-                                if !sink.send(said) {
-                                    return;
-                                }
+                            let cancelled = delivery.push(record, true);
+                            drop_pages(cancelled, &reader, &mut converter);
+                            if !deliver(&mut delivery, &mut converter, &mut write, &sink) {
+                                return;
                             }
                         }
                         RecvStatus::Timeout => {}

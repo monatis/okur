@@ -40,20 +40,23 @@ impl System {
         Some(Self)
     }
 
-    /// A terminate signal stops Okur as Ctrl+C does.
+    /// A terminate signal, or its terminal closing (a hang-up), stops Okur as Ctrl+C does, so
+    /// the desktop's accessibility status is put back.
     pub fn serve(&mut self, exits: &Exits, _console: bool) {
-        let exit = exits.sender();
-        tokio::spawn(async move {
-            use tokio::signal::unix::{signal, SignalKind};
-            match signal(SignalKind::terminate()) {
-                Ok(mut terminate) => {
-                    if terminate.recv().await.is_some() {
-                        exit.send(ExitReason::Interrupted);
+        use tokio::signal::unix::SignalKind;
+        for kind in [SignalKind::terminate(), SignalKind::hangup()] {
+            let exit = exits.sender();
+            tokio::spawn(async move {
+                match tokio::signal::unix::signal(kind) {
+                    Ok(mut signal) => {
+                        if signal.recv().await.is_some() {
+                            exit.send(ExitReason::Interrupted);
+                        }
                     }
+                    Err(e) => tracing::warn!("a signal not heard: {e}"),
                 }
-                Err(e) => tracing::warn!("the terminate signal not heard: {e}"),
-            }
-        });
+            });
+        }
     }
 
     /// okur-linux's platform; its event source writing what it read for each event to
