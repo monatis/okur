@@ -17,7 +17,13 @@ async fn main() {
         .init();
     let args: Vec<String> = std::env::args().skip(1).collect();
     let seconds = run_seconds(&args);
-    let mut settings = okur_core::settings::Settings::default();
+    // This run's options over the default settings, in the session's layer, as `okur run`
+    // puts them: the engine takes its settings from the layers, and the options set on
+    // Config's settings alone reached only the voice (the lab's web rerun of 2026-11-08 read
+    // every page at Medium with --web-verbosity 2).
+    let mut layers = okur_core::settings_layers::SettingsLayers::default();
+    let defaults = layers.resolve(None, None);
+    let mut settings = defaults.clone();
     if args.iter().any(|a| a == "--no-speech") {
         settings.voice.synthesizer = okur_core::settings::Synthesizer::NoSpeech;
     }
@@ -28,6 +34,12 @@ async fn main() {
     {
         settings.web_verbosity = okur_core::settings::WebVerbosity::from_jcf(level);
     }
+    layers.change(
+        &okur_core::settings_layers::Scope::Session,
+        &defaults,
+        &settings,
+        None,
+    );
     let event_source = okur_linux::events::AtspiEventSource::new();
     let objects = event_source.objects();
     let platform = Platform {
@@ -46,7 +58,7 @@ async fn main() {
     };
     let config = Config {
         settings,
-        layers: Default::default(),
+        layers,
         settings_folder: None,
         first_start: false,
         // --speech-log <path>: every utterance as JSON lines, keys' speech too.
