@@ -118,6 +118,14 @@ pub fn native_focus(
     if event.name.is_none() {
         event.name = first_label(focus);
     }
+    // A button that opens a menu (Chrome's toolbar's "Tab search", AT-SPI's `haspopup` "menu"):
+    // a menu button, "Tab search | button menu | Press space to activate the menu ..."
+    // [obs, 204/s11].
+    if matches!(focus.role.as_str(), "push button" | "button")
+        && focus.attributes.get("haspopup").map(String::as_str) == Some("menu")
+    {
+        event.role = Role::MenuButton;
+    }
     // A notebook focused itself: its selected page's tab, "General Tab selected".
     if focus.role == "grouping" {
         if let Some(tab) = find(focus, &|n| n.role == "page tab" && n.has(state::SELECTED)) {
@@ -329,6 +337,20 @@ mod tests {
 
     /// The parent is read whole, and a list's, a column view's or a group box's above it; the
     /// rest alone; the read ends at a window, a page's dialog's too.
+    #[test]
+    fn a_button_opening_a_menu_is_a_menu_button() {
+        let mut button = AtspiNode {
+            role: "push button".to_owned(),
+            name: "Tab search".to_owned(),
+            ..AtspiNode::default()
+        };
+        button
+            .attributes
+            .insert("haspopup".to_owned(), "menu".to_owned());
+        let event = native_focus(FocusEvent::new(Role::Button), &button, &[]);
+        assert_eq!(event.role, Role::MenuButton);
+    }
+
     #[test]
     fn the_read_plan_for_a_native_focus() {
         let button = AtspiNode {

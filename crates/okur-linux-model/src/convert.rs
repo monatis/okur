@@ -303,7 +303,24 @@ impl Converter {
                     .and_then(|path| path.as_str())
                     .and_then(|path| self.page_ids.get(path))
                     .map(i32::to_string);
-                plain(record, in_page, app, window, unique_id)
+                let window_id = self
+                    .track
+                    .active_window()
+                    .filter(|_| {
+                        in_page && same_application(object.as_deref(), self.track.active_window())
+                    })
+                    .map(str::to_owned);
+                plain(record, in_page, app, window, unique_id).map(|mut event| {
+                    // A page's focus is in its browser's window, by that window's object, as a
+                    // native focus names its window: leaving the page for the browser's
+                    // toolbar is no window change [obs, 204/s11].
+                    if let AccessibilityEvent::Focus(focus)
+                    | AccessibilityEvent::Change { control: focus, .. } = &mut event
+                    {
+                        focus.platform.window_id = window_id;
+                    }
+                    event
+                })
             })
         };
         // A page's select focused: kept for its value's changes; any other focus ends it.
