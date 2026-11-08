@@ -479,6 +479,11 @@ impl Run<'_> {
     /// A window put in a frame by the window manager (or back on the root): the frame, grabbed as
     /// a new top-level window, lets its keys go, and the window holds them itself.
     fn reparented(&mut self, event: &xproto::ReparentNotifyEvent) {
+        tracing::debug!(
+            window = event.window,
+            parent = event.parent,
+            "keyboard: a window put in a frame"
+        );
         if event.parent != self.root {
             ungrab_window(
                 self.conn,
@@ -514,6 +519,13 @@ impl Run<'_> {
         let state = event.mods.effective;
         let key_event = self.keymap.event(code, state, self.held, true, time);
         let action = (self.callback)(key_event);
+        tracing::debug!(
+            code,
+            window = event.event,
+            child = event.child,
+            ?action,
+            "keyboard: a grabbed key decided"
+        );
         // Answered in time: the key is the engine's to keep or pass.
         let ours = self.pending.lock().ok().and_then(|mut p| p.take());
         if let Some(key) = ours {
