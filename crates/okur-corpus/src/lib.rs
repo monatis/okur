@@ -3,6 +3,7 @@ pub mod divergences;
 pub mod invariants;
 pub mod keys;
 pub mod latency;
+pub mod linux_replay;
 pub mod live;
 pub mod manifest;
 pub mod parity;

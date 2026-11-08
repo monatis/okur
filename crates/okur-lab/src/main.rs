@@ -496,6 +496,18 @@ enum Commands {
         #[arg(long)]
         all: bool,
     },
+    /// A platform's live runs replayed from the traces they kept
+    /// (`corpus/live/linux/<id>.trace.jsonl`): each step's replayed speech against what the run
+    /// said, and against JAWS's evidence
+    LiveReplay {
+        /// The platform: "linux", the one whose driver traces its runs
+        platform: String,
+        #[arg(short, long, default_value = "corpus")]
+        corpus_dir: String,
+        /// Print every step, not only those the replay says otherwise
+        #[arg(long)]
+        all: bool,
+    },
     /// Write the reference machine's settings (old-pc's JAWS configuration) as a settings
     /// folder, for `run --settings` in a live run there
     ReferenceSettings {
@@ -1347,6 +1359,46 @@ async fn main() {
             };
             if let Err(e) = result {
                 eprintln!("Error: {e}");
+                std::process::exit(1);
+            }
+        }
+        Some(Commands::LiveReplay {
+            platform,
+            corpus_dir,
+            all,
+        }) => {
+            if platform != "linux" {
+                eprintln!("Error: only Linux's runs keep a trace (not {platform:?})");
+                std::process::exit(2);
+            }
+            let report = okur_corpus::linux_replay::run(Path::new(&corpus_dir));
+            for error in &report.errors {
+                eprintln!("Error: {error}");
+            }
+            for step in report.steps.iter().filter(|s| all || !s.faithful()) {
+                let tag = if step.faithful() { "SAME " } else { "OTHER" };
+                println!("[{tag}] {}", step.key);
+                println!(
+                    "    live:     {:?}",
+                    okur_corpus::parity::normalize(&step.live)
+                );
+                println!(
+                    "    replayed: {:?}",
+                    okur_corpus::parity::normalize(&step.replayed)
+                );
+            }
+            let (matched, compared) = report.jaws_matched();
+            println!(
+                "Okur's live runs on {platform} replayed: {}/{} steps say what the run said; \
+                 replayed, {matched}/{compared} match JAWS exactly ({} runs replayed, {} without \
+                 a trace, {} could not be replayed)",
+                report.faithful(),
+                report.steps.len(),
+                report.runs,
+                report.without_trace.len(),
+                report.errors.len()
+            );
+            if !report.errors.is_empty() {
                 std::process::exit(1);
             }
         }

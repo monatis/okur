@@ -4,6 +4,8 @@
 //! runtime's silent synthesizer instead. Runs for the seconds given (20 by default).
 //! `--web-verbosity <level>` reads pages at a JAWS `VirtualCursorVerbosityLevel` (2 High, 1
 //! Medium, 0 Low): the lab's runs read at the level JAWS's evidence was recorded at.
+//! `--trace <path>` writes what the event source read for each event, a JSON line each, for
+//! `okur-lab live-replay linux`.
 
 #[cfg(target_os = "linux")]
 #[tokio::main]
@@ -40,7 +42,14 @@ async fn main() {
         &settings,
         None,
     );
-    let event_source = okur_linux::events::AtspiEventSource::new();
+    let event_source = match args
+        .iter()
+        .position(|a| a == "--trace")
+        .and_then(|i| args.get(i + 1))
+    {
+        Some(path) => okur_linux::events::AtspiEventSource::with_trace(path.into()),
+        None => okur_linux::events::AtspiEventSource::new(),
+    };
     let objects = event_source.objects();
     let platform = Platform {
         keyboard_hook: Box::new(okur_linux::keyboard::X11KeyboardHook::new()),
@@ -84,11 +93,11 @@ async fn main() {
 }
 
 /// The seconds to run, the first number among the arguments that is no option's value
-/// (`--speech-log <path>`, `--web-verbosity <level>`); the lab's runner passes
+/// (`--speech-log <path>`, `--web-verbosity <level>`, `--trace <path>`); the lab's runner passes
 /// `--no-speech 3600 --speech-log <path>`, a flag before the number.
 #[cfg(target_os = "linux")]
 fn run_seconds(args: &[String]) -> u64 {
-    const WITH_VALUE: [&str; 2] = ["--speech-log", "--web-verbosity"];
+    const WITH_VALUE: [&str; 3] = ["--speech-log", "--web-verbosity", "--trace"];
     let mut skip = false;
     for arg in args {
         if std::mem::take(&mut skip) {

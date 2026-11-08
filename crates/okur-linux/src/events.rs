@@ -216,6 +216,27 @@ fn source_error(what: &str, error: impl std::fmt::Display) -> RuntimeError {
     RuntimeError::EventSource(format!("AT-SPI: {what}: {error}"))
 }
 
+/// Milliseconds since the Unix epoch: a record's time, on the clock the lab's runner stamps its
+/// steps with, so a replay finds each step's records.
+fn unix_ms() -> u64 {
+    std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .map(|d| u64::try_from(d.as_millis()).unwrap_or(u64::MAX))
+        .unwrap_or(0)
+}
+
+/// One record, a JSON line, written through at once: a run stopped by its runner keeps every
+/// record before it.
+fn write_record(
+    out: &mut std::io::BufWriter<std::fs::File>,
+    record: &AtspiRecord,
+) -> std::io::Result<()> {
+    use std::io::Write;
+    serde_json::to_writer(&mut *out, record)?;
+    out.write_all(b"\n")?;
+    out.flush()
+}
+
 /// The page whose address ends with `address_end`, read whole as Okur reads a page, as Chrome
 /// gives the focus to it, for the Linux lab's snapshots (`examples/atspi_snapshot.rs`, the
 /// plan's §2.3), with the time reading it took; an error if no focus reached it in `wait`.
@@ -267,6 +288,8 @@ pub struct AtspiEventSource {
     objects: PageObjects,
     /// The desktop's accessibility status before the source told it a screen reader runs.
     status_before: Option<A11yStatus>,
+    /// Where each event's record is written, one JSON line each, for the run to be replayed.
+    trace: Option<std::path::PathBuf>,
 }
 
 struct Running {
@@ -277,6 +300,15 @@ struct Running {
 impl AtspiEventSource {
     pub fn new() -> Self {
         Self::default()
+    }
+
+    /// The source writing what it read for each event, an [`AtspiRecord`] a line, to `path`:
+    /// the Linux lab's live runs keep it, and `okur-lab live-replay linux` replays it through
+    /// the converter and the engine with no Linux.
+    pub fn with_trace(path: std::path::PathBuf) -> Self {
+        let mut source = Self::default();
+        source.trace = Some(path);
+        source
     }
 
     /// The objects of the page it read last, for acting on the page's nodes.
@@ -308,6 +340,12 @@ impl EventSource for AtspiEventSource {
             .subscribe_desktop_kinds(Box::new(okur_linux_model::focus_track::is_heard))
             .map_err(|e| source_error("the desktop's events", e))?;
         tracing::debug!("AT-SPI: the desktop's events subscribed");
+        let mut trace = match &self.trace {
+            Some(path) => Some(std::io::BufWriter::new(
+                std::fs::File::create(path).map_err(|e| source_error("the trace", e))?,
+            )),
+            None => None,
+        };
         let stop = Arc::new(AtomicBool::new(false));
         let thread = {
             let stop = Arc::clone(&stop);
@@ -317,8 +355,15 @@ impl EventSource for AtspiEventSource {
                 // events and ends its own reader. The converter decides what each event says,
                 // from what is read for it here (okur_linux_model::convert).
                 let mut converter = Converter::default();
-                let clock = std::time::Instant::now();
                 let objects = objects;
+                let mut write = |record: &AtspiRecord| {
+                    if let Some(out) = trace.as_mut() {
+                        if let Err(e) = write_record(out, record) {
+                            tracing::warn!("the trace not written, no longer kept: {e}");
+                            trace = None;
+                        }
+                    }
+                };
                 while !stop.load(Ordering::SeqCst) {
                     match subscription.recv_status(Duration::from_millis(100)) {
                         RecvStatus::Event(event) => {
@@ -329,12 +374,18 @@ impl EventSource for AtspiEventSource {
                                 "AT-SPI event"
                             );
                             let target = event.target.as_ref();
-                            let at_ms =
-                                u64::try_from(clock.elapsed().as_millis()).unwrap_or(u64::MAX);
+                            let at_ms = unix_ms();
                             // GTK 4's second focus event for one move, passed over before
-                            // anything is read.
+                            // anything is read (and traced bare, for the replay to pass it
+                            // over too).
                             if converter.is_twin(&event.kind, target, at_ms) {
                                 tracing::debug!("AT-SPI focus's twin");
+                                write(&AtspiRecord::bare(
+                                    at_ms,
+                                    event.kind.clone(),
+                                    event.app_name.clone(),
+                                    event.target.clone(),
+                                ));
                                 continue;
                             }
                             let focus = event.kind == EventKind::FocusChanged;
@@ -387,6 +438,7 @@ impl EventSource for AtspiEventSource {
                                 native,
                                 reread,
                             };
+                            write(&record);
                             for said in converter.convert(&record) {
                                 if !sink.send(said) {
                                     return;

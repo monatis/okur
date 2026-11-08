@@ -17,3 +17,7 @@ thiserror = { workspace = true }
 tracing = { workspace = true }
 sha2 = { workspace = true }
 
+
+[dev-dependencies]
+# The records a Linux trace holds, built in linux_replay's tests.
+xa11y-core = { workspace = true }

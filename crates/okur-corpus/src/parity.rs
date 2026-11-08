@@ -890,7 +890,7 @@ type Log = std::sync::Arc<std::sync::Mutex<Vec<String>>>;
 /// owns it: as JAWS's speech history would keep it, and as the synthesizer is asked to say it
 /// ([`okur_core::pronounce`]).
 #[derive(Debug, Clone, Default)]
-struct RecordingSpeech {
+pub(crate) struct RecordingSpeech {
     history: Log,
     spoken: Log,
     /// The punctuation level the engine's voice settings give the synthesizer.
@@ -952,7 +952,7 @@ impl RecordingSpeech {
         append(&self.spoken, spoken);
     }
 
-    fn take(&self) -> Vec<String> {
+    pub(crate) fn take(&self) -> Vec<String> {
         drain(&self.history)
     }
 
@@ -1196,7 +1196,7 @@ fn replay_settings(evidence: &Value) -> okur_core::settings::Settings {
 
 /// Presses and releases `chord` at `time_ms` (0: unknown) through the engine's live
 /// key-handling entry point.
-fn press(
+pub(crate) fn press(
     engine: &mut ScreenReaderEngine,
     actions: &okur_core::actions::RecordingActions,
     chord: &str,

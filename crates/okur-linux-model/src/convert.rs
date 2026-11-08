@@ -33,7 +33,7 @@ pub struct PageRead {
 /// What the driver read for one AT-SPI event.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AtspiRecord {
-    /// Milliseconds since the event source started.
+    /// When the event came, in milliseconds since the Unix epoch (the lab runner's clock).
     pub at_ms: u64,
     pub kind: EventKind,
     /// The application, by its AT-SPI name.
@@ -48,6 +48,22 @@ pub struct AtspiRecord {
     pub native: Option<NativeRead>,
     /// The focused control read again, as something within it changed.
     pub reread: Option<NativeRead>,
+}
+
+impl AtspiRecord {
+    /// A record of an event for which nothing was read.
+    pub fn bare(at_ms: u64, kind: EventKind, app: String, target: Option<ElementData>) -> Self {
+        Self {
+            at_ms,
+            kind,
+            app,
+            target,
+            document: None,
+            pages: Vec::new(),
+            native: None,
+            reread: None,
+        }
+    }
 }
 
 /// An object's key, its bus name and path, as an element's raw data names them.

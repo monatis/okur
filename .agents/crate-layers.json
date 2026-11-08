@@ -63,7 +63,7 @@
     "okur-corpus": {
       "kind": "lab",
       "portable": true,
-      "allow": ["okur-core", "okur-model", "okur-windows-model", "okur-linux-model"]
+      "allow": ["okur-core", "okur-model", "okur-windows-model", "okur-linux-model", "xa11y-core"]
     },
     "okur": {
       "kind": "program",

@@ -221,8 +221,11 @@ def main():
     level = recorded_web_verbosity(scenario)
     started = []
     atexit.register(stop, started, profile)
+    # What Okur read for each event, kept beside the run for okur-lab live-replay linux.
+    trace = out_path[:-len(".json")] + ".trace.jsonl" if out_path.endswith(".json") else None
     okur = subprocess.Popen([OKUR, "--no-speech", "3600", "--speech-log", log,
-                             *(["--web-verbosity", level] if level else [])],
+                             *(["--web-verbosity", level] if level else []),
+                             *(["--trace", trace] if trace else [])],
                             stdin=subprocess.DEVNULL, stdout=okur_out, stderr=subprocess.STDOUT,
                             env={**os.environ, "RUST_LOG": os.environ.get("RUST_LOG", "okur_linux=debug")})
     started.append(okur)
@@ -253,7 +256,10 @@ def main():
         apps = subprocess.run([XA11Y, "apps"], capture_output=True, text=True, timeout=30).stdout
     reset = scenario.get("reset", {})
     reset_pressed = True
+    # The reset's keys and when each was pressed, for okur-lab live-replay linux.
+    reset_keys = []
     for key in reset.get("keys", []) + [k for s in reset.get("keystrokes", []) for k in sendkeys(s)]:
+        reset_keys.append({"key": key, "t_ms": int(time.time() * 1000)})
         reset_pressed = press(key) and reset_pressed
         time.sleep(0.3)
     settle(log, 0)
@@ -289,6 +295,8 @@ def main():
             "t_start_ms": start,
             "t_end_ms": int(time.time() * 1000),
             "action": {"type": kind, "command": command},
+            # The chords pressed for it, for okur-lab live-replay linux.
+            "keys": keys,
             "observation": {"speech_raw": "\n".join(said), "settled": settled,
                             **({} if running else {"okur_exited": True}),
                             **({} if pressed else {"not_pressed": True})},
@@ -329,7 +337,8 @@ def main():
                           if replica else {"chrome": "google-chrome"}),
                        "commit": subprocess.run(["git", "rev-parse", "--short", "HEAD"],
                                                 capture_output=True, text=True).stdout.strip()},
-        "trials": [{"trial_index": 1, "trial_success": success, "step_results": results}],
+        "trials": [{"trial_index": 1, "trial_success": success, "reset_keys": reset_keys,
+                    "step_results": results}],
     }
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(run, f, indent=1)

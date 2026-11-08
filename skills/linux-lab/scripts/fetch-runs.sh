@@ -38,6 +38,11 @@ for id in "${ids[@]}"; do
         rm -f "corpus/live/linux/$name"
         continue
     fi
+    # Its trace, where the run kept one (okur-lab live-replay linux).
+    trace="${name%.json}.trace.jsonl"
+    if ! timeout 120 opendesk pull --peer "$PEER" "D:/okur-linux/runs/$trace" "corpus/live/linux/$trace" > /dev/null 2>&1; then
+        rm -f "corpus/live/linux/$trace"
+    fi
     echo "fetched $name ($(grep -o '"commit": "[0-9a-f]*"' "corpus/live/linux/$name"))"
 done
 if [ -n "$failed" ]; then
