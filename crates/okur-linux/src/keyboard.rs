@@ -241,11 +241,15 @@ impl KeyboardHook for X11KeyboardHook {
             .map_err(|e| hook_error("windows", e))?
             .children;
         let mut grabbed = 0;
+        let (mut refused, mut refusing) = (0, 0);
         for window in tops.into_iter().filter(|w| *w != wake) {
             let client = client_in(&conn, window, wm_state).unwrap_or(window);
-            grab_window(&conn, &keymap, keyboard, client, &sets);
+            let kept = grab_window(&conn, &keymap, keyboard, client, &sets);
+            refused += kept;
+            refusing += usize::from(kept > 0);
             grabbed += 1;
         }
+        warn_refused(refused, refusing);
         tracing::debug!(
             windows = grabbed,
             keys = keymap.codes().count(),
@@ -318,17 +322,20 @@ impl Drop for X11KeyboardHook {
     }
 }
 
-/// Every key but the modifiers on `window`, synchronously, under every modifier set. A window
-/// gone before the grab (it closed) is no error.
+/// Every key but the modifiers on `window`, synchronously, under every modifier set: how many
+/// keys another client's grab kept from Okur (a leftover Okur's, whose keys then never reach
+/// this one: the code review of 2026-11-08, finding 15). A window gone before the grab (it
+/// closed) is no error.
 fn grab_window(
     conn: &RustConnection,
     keymap: &Keymap,
     keyboard: u16,
     window: xproto::Window,
     sets: &[u32],
-) {
+) -> usize {
+    let mut cookies = Vec::new();
     for code in keymap.codes() {
-        let _ = conn.xinput_xi_passive_grab_device(
+        let cookie = conn.xinput_xi_passive_grab_device(
             x11rb::CURRENT_TIME,
             window,
             x11rb::NONE,
@@ -342,6 +349,25 @@ fn grab_window(
                 xinput::XIEventMask::KEY_PRESS | xinput::XIEventMask::KEY_RELEASE,
             )],
             sets,
+        );
+        cookies.extend(cookie.ok());
+    }
+    // The replies come back together: a grab refused names the modifiers it failed under.
+    cookies
+        .into_iter()
+        .filter_map(|cookie| cookie.reply().ok())
+        .filter(|reply| !reply.modifiers.is_empty())
+        .count()
+}
+
+/// Says that keys were kept from Okur on `windows` windows, where any were.
+fn warn_refused(refused: usize, windows: usize) {
+    if refused > 0 {
+        tracing::warn!(
+            refused,
+            windows,
+            "keyboard: keys grabbed by another program, which Okur does not hear on these \
+             windows (another Okur still running?)"
         );
     }
 }
@@ -449,13 +475,14 @@ impl Run<'_> {
                 Ok(Event::XinputRawKeyPress(event)) => self.raw(&event, true),
                 Ok(Event::XinputRawKeyRelease(event)) => self.raw(&event, false),
                 Ok(Event::CreateNotify(event)) if event.window != self.wake => {
-                    grab_window(
+                    let refused = grab_window(
                         self.conn,
                         &self.keymap,
                         self.keyboard,
                         event.window,
                         &self.sets,
                     );
+                    warn_refused(refused, 1);
                     let _ = self.conn.flush();
                 }
                 Ok(Event::ReparentNotify(event)) => self.reparented(&event),
@@ -493,13 +520,14 @@ impl Run<'_> {
                 &self.sets,
             );
         }
-        grab_window(
+        let refused = grab_window(
             self.conn,
             &self.keymap,
             self.keyboard,
             event.window,
             &self.sets,
         );
+        warn_refused(refused, 1);
         let _ = self.conn.flush();
     }
 
