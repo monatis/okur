@@ -19,6 +19,7 @@ Run inside the headless desktop (a11y-stack.sh), from ~/okur, after
 `cargo build -p okur-linux --example okur_linux`.
 """
 
+import atexit
 import json
 import os
 import re
@@ -84,7 +85,11 @@ def chord(name):
     of the keys pressed, the modifiers first: Insert is held as one, though X has it as none."""
     parts = name.split("+")
     key = parts[-1].strip()
-    mods = [MODIFIERS[m.strip().lower()] for m in parts[:-1] if m.strip().lower() in MODIFIERS]
+    unknown = [m for m in parts[:-1] if m.strip().lower() not in MODIFIERS]
+    if unknown:
+        # A key pressed without the modifier asked for is another key: the step fails.
+        raise ValueError(f"no modifier {unknown} in {name}")
+    mods = [MODIFIERS[m.strip().lower()] for m in parts[:-1]]
     if re.fullmatch(r"[A-Za-z]", key):
         key = key.lower()
     elif re.fullmatch(r"[Ff]([1-9]|1[0-2])", key):
@@ -111,18 +116,25 @@ _DISPLAY = None
 def press(name):
     """Presses the chord's keys in order and lets them go in reverse, by their keycodes through
     XTest. xdotool (3.20160805) pressed and let go Alt before each function key, whose press the
-    window manager's Alt grabs then took: F5 never reached Okur (712's live run, 2026-11-05)."""
+    window manager's Alt grabs then took: F5 never reached Okur (712's live run, 2026-11-05).
+    Whether it was pressed: a key without a keycode, or a modifier the runner does not know, is
+    not, and its step fails."""
     from Xlib import X, XK, display
     from Xlib.ext import xtest
     global _DISPLAY
     if _DISPLAY is None:
         _DISPLAY = display.Display()
+    try:
+        names = chord(name)
+    except ValueError as error:
+        print(error, file=sys.stderr)
+        return False
     codes = []
-    for keysym_name in chord(name):
+    for keysym_name in names:
         code = _DISPLAY.keysym_to_keycode(XK.string_to_keysym(keysym_name))
         if not code:
             print(f"no keycode for {keysym_name} in {name}", file=sys.stderr)
-            return
+            return False
         codes.append(code)
     for code in codes:
         xtest.fake_input(_DISPLAY, X.KeyPress, code)
@@ -130,6 +142,7 @@ def press(name):
     for code in reversed(codes):
         xtest.fake_input(_DISPLAY, X.KeyRelease, code)
         _DISPLAY.sync()
+    return True
 
 
 def said_since(log, offset):
@@ -172,6 +185,20 @@ def settle(log, offset, quiet=1.0, longest=10.0):
     return False
 
 
+def stop(processes, profile):
+    """Ends what a run started, however the run ended: an Okur left running holds its grabs for
+    its hour and the next run hears nothing (the code review of 2026-11-08); Chrome's wrapper
+    leaves its own processes behind, found by their profile."""
+    for process in processes:
+        if process.poll() is None:
+            process.terminate()
+            try:
+                process.wait(timeout=10)
+            except subprocess.TimeoutExpired:
+                process.kill()
+    subprocess.run(["pkill", "-f", f"user-data-dir={profile}"], capture_output=True)
+
+
 def main():
     scenario_path, out_path = sys.argv[1], sys.argv[2]
     with open(scenario_path, encoding="utf-8-sig") as f:
@@ -192,14 +219,18 @@ def main():
     # Okur's own output is kept: a run in which it said nothing shows why.
     okur_out = open(os.path.join(work, "okur.log"), "w", encoding="utf-8")
     level = recorded_web_verbosity(scenario)
+    started = []
+    atexit.register(stop, started, profile)
     okur = subprocess.Popen([OKUR, "--no-speech", "3600", "--speech-log", log,
                              *(["--web-verbosity", level] if level else [])],
                             stdin=subprocess.DEVNULL, stdout=okur_out, stderr=subprocess.STDOUT,
                             env={**os.environ, "RUST_LOG": os.environ.get("RUST_LOG", "okur_linux=debug")})
+    started.append(okur)
     time.sleep(4)
     if replica:
         chrome = subprocess.Popen(["python3", replica], stdout=subprocess.DEVNULL,
                                   stderr=subprocess.DEVNULL)
+        started.append(chrome)
         time.sleep(6)
         # Its window in front with the keyboard's focus, as the Windows runner brings the
         # fixture forward: the window manager's focus for a new window came too late in some
@@ -212,6 +243,7 @@ def main():
                                    "--disable-gpu", f"--user-data-dir={profile}",
                                    "--force-renderer-accessibility", page],
                                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        started.append(chrome)
         time.sleep(15)
     settle(log, 0, quiet=2.0, longest=30.0)
     # The desktop's applications as AT-SPI lists them, for a run in which Okur said nothing:
@@ -220,14 +252,15 @@ def main():
     if os.path.exists(XA11Y):
         apps = subprocess.run([XA11Y, "apps"], capture_output=True, text=True, timeout=30).stdout
     reset = scenario.get("reset", {})
+    reset_pressed = True
     for key in reset.get("keys", []) + [k for s in reset.get("keystrokes", []) for k in sendkeys(s)]:
-        press(key)
+        reset_pressed = press(key) and reset_pressed
         time.sleep(0.3)
     settle(log, 0)
     _, offset = said_since(log, 0)
     script_keys = keys_for_scripts(scenario)
     results = []
-    success = True
+    success = reset_pressed
     for step in scenario.get("steps", []):
         kind = step.get("type")
         command = step.get("command", "")
@@ -244,29 +277,28 @@ def main():
                             "observation": {"speech_raw": "", "skipped": True}, "step_success": False})
             continue
         start = int(time.time() * 1000)
-        for key in keys:
-            press(key)
+        pressed = all(press(key) for key in keys)
         settled = settle(log, offset)
         said, offset = said_since(log, offset)
-        # A step Okur was no longer running for heard nothing: never a result.
+        # A step Okur was no longer running for heard nothing, and one whose key was not
+        # pressed was another step: never a result.
         running = okur.poll() is None
-        success = success and settled and running
+        success = success and settled and running and pressed
         results.append({
             "step_id": step["id"],
             "t_start_ms": start,
             "t_end_ms": int(time.time() * 1000),
             "action": {"type": kind, "command": command},
             "observation": {"speech_raw": "\n".join(said), "settled": settled,
-                            **({} if running else {"okur_exited": True})},
-            "step_success": settled and running,
+                            **({} if running else {"okur_exited": True}),
+                            **({} if pressed else {"not_pressed": True})},
+            "step_success": settled and running and pressed,
         })
     exited = okur.poll()
     if exited is not None:
         print(f"{scenario['id']}: Okur exited ({exited}) before the run ended ({work})",
               file=sys.stderr)
-    okur.terminate()
-    chrome.terminate()
-    okur.wait(timeout=10)
+    stop(started, profile)
     okur_out.close()
     # Silence from the first key to the last is Okur not running or not hearing, never a result.
     everything, _ = said_since(log, 0)
