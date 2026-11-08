@@ -22,6 +22,15 @@ const PLATFORM: &str = "linux";
 /// `idle`): speech held until no event supersedes it is said then.
 const IDLE_MS: u64 = 150;
 
+/// How the replay differs from the run, to try a change of the driver on the runs first.
+#[derive(Debug, Clone, Copy, Default)]
+pub struct ReplayOptions {
+    /// Each page the driver read for a focus given to the engine after that focus, as a
+    /// page-reader thread off the event thread would give it (the code review of 2026-11-08,
+    /// finding 6): whether the engine still says what it said with the page first.
+    pub pages_after_focus: bool,
+}
+
 /// One step of a live run, replayed.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ReplayStep {
@@ -76,9 +85,10 @@ pub fn read_trace(text: &str) -> Result<Vec<AtspiRecord>, String> {
         .collect()
 }
 
-/// The engine as the Linux lab's okur_linux runs it: the default settings, the page verbosity
+/// The engine as the Linux lab's `okur run` runs it: the default settings, the page verbosity
 /// the run was given, no page in front, the records converted as its driver converts them.
 struct Replayer {
+    options: ReplayOptions,
     engine: ScreenReaderEngine,
     speech: RecordingSpeech,
     actions: okur_core::actions::RecordingActions,
@@ -88,7 +98,7 @@ struct Replayer {
 }
 
 impl Replayer {
-    fn new(web_verbosity: Option<&str>) -> Self {
+    fn new(web_verbosity: Option<&str>, options: ReplayOptions) -> Self {
         let mut settings =
             okur_core::settings_layers::SettingsLayers::default().resolve(None, None);
         if let Some(level) = web_verbosity {
@@ -106,6 +116,7 @@ impl Replayer {
         let actions = okur_core::actions::RecordingActions::default();
         engine.set_actions(Box::new(actions.clone()));
         Self {
+            options,
             engine,
             speech,
             actions,
@@ -129,7 +140,16 @@ impl Replayer {
     fn feed(&mut self, record: &AtspiRecord) {
         self.advance(record.at_ms);
         // As the driver converted it: GTK's twin focus passed over, then what was read.
-        for event in EventModel::convert(&mut self.converter, record) {
+        let mut events = EventModel::convert(&mut self.converter, record);
+        if self.options.pages_after_focus {
+            // The order kept otherwise: the pages, in theirs, after the rest.
+            let (pages, mut rest): (Vec<_>, Vec<_>) = events
+                .into_iter()
+                .partition(|e| matches!(e, okur_core::AccessibilityEvent::DocumentLoaded { .. }));
+            rest.extend(pages);
+            events = rest;
+        }
+        for event in events {
             let _ = self.engine.handle_accessibility_event(&event);
             // A big page changed: the host builds it off the engine and installs it.
             if let Some((generation, page)) = self.engine.take_page_build() {
@@ -156,7 +176,11 @@ fn number(value: &Value, pointer: &str) -> Option<u64> {
 }
 
 /// Replays the first trial of the live `run` from its trace's `records`.
-pub fn replay_run(run: &Value, records: &[AtspiRecord]) -> Result<Vec<ReplayStep>, String> {
+pub fn replay_run(
+    run: &Value,
+    records: &[AtspiRecord],
+    options: ReplayOptions,
+) -> Result<Vec<ReplayStep>, String> {
     let scenario = run
         .get("scenario_id")
         .and_then(Value::as_str)
@@ -169,7 +193,7 @@ pub fn replay_run(run: &Value, records: &[AtspiRecord]) -> Result<Vec<ReplayStep
     let level = run
         .pointer("/provenance/web_verbosity")
         .and_then(Value::as_str);
-    let mut replayer = Replayer::new(level);
+    let mut replayer = Replayer::new(level, options);
     let mut records = records.iter().peekable();
     // The setup: the records before the first key, the reset's keys among them at their times;
     // what it said is not a step's.
@@ -269,7 +293,7 @@ fn read_json(path: &Path) -> Result<Value, String> {
 }
 
 /// Replays every Linux live run in the corpus that kept its trace.
-pub fn run(corpus_dir: &Path) -> ReplayReport {
+pub fn run(corpus_dir: &Path, options: ReplayOptions) -> ReplayReport {
     let mut report = ReplayReport::default();
     let dir = corpus_dir.join(LIVE_DIR).join(PLATFORM);
     let mut paths: Vec<_> = match std::fs::read_dir(&dir) {
@@ -297,7 +321,7 @@ pub fn run(corpus_dir: &Path) -> ReplayReport {
         let replayed = read_json(&path).and_then(|run| {
             let text = std::fs::read_to_string(&trace).map_err(|e| format!("{trace:?}: {e}"))?;
             let records = read_trace(&text).map_err(|e| format!("{name}: {e}"))?;
-            let steps = replay_run(&run, &records).map_err(|e| format!("{name}: {e}"))?;
+            let steps = replay_run(&run, &records, options).map_err(|e| format!("{name}: {e}"))?;
             let scenario = run
                 .get("scenario_id")
                 .and_then(Value::as_str)
@@ -366,7 +390,8 @@ mod tests {
             focus(1100, Role::Button, "OK"),
             focus(2100, Role::Button, "Cancel"),
         ];
-        let replayed = replay_run(&run(steps), &records).unwrap_or_default();
+        let replayed =
+            replay_run(&run(steps), &records, ReplayOptions::default()).unwrap_or_default();
         assert_eq!(replayed.len(), 2);
         let said: Vec<&str> = replayed.iter().map(|s| s.replayed.as_str()).collect();
         assert!(matches!(said.as_slice(), [first, second]
@@ -381,7 +406,7 @@ mod tests {
              "action": {"type": "key", "command": "Tab"},
              "observation": {"speech_raw": ""}},
         ]);
-        assert!(replay_run(&run(steps), &[]).is_err());
+        assert!(replay_run(&run(steps), &[], ReplayOptions::default()).is_err());
     }
 
     #[test]

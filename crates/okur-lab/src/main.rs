@@ -507,6 +507,10 @@ enum Commands {
         /// Print every step, not only those the replay says otherwise
         #[arg(long)]
         all: bool,
+        /// Give each page read for a focus after that focus, as a page-reader thread would:
+        /// how the engine's speech holds up (the Linux review's finding 6)
+        #[arg(long)]
+        pages_after_focus: bool,
     },
     /// Write the reference machine's settings (old-pc's JAWS configuration) as a settings
     /// folder, for `run --settings` in a live run there
@@ -1366,12 +1370,16 @@ async fn main() {
             platform,
             corpus_dir,
             all,
+            pages_after_focus,
         }) => {
             if platform != "linux" {
                 eprintln!("Error: only Linux's runs keep a trace (not {platform:?})");
                 std::process::exit(2);
             }
-            let report = okur_corpus::linux_replay::run(Path::new(&corpus_dir));
+            let report = okur_corpus::linux_replay::run(
+                Path::new(&corpus_dir),
+                okur_corpus::linux_replay::ReplayOptions { pages_after_focus },
+            );
             for error in &report.errors {
                 eprintln!("Error: {error}");
             }
