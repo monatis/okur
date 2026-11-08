@@ -58,14 +58,16 @@ const WINDOW_DEPTH: usize = 12;
 /// (their items, columns, label), the other ancestors alone, up to its window. A few calls on
 /// the bus per object read.
 fn native_focus(provider: &LinuxProvider, element: &ElementData) -> okur_core::event::FocusEvent {
-    use xa11y_core::Provider;
     let base = okur_linux_model::focus::focus_event(element);
-    let Ok(focus) = provider.atspi_tree(element, CONTROL_LIMIT) else {
-        return base;
+    let focus = match provider.atspi_tree(element, CONTROL_LIMIT) {
+        Ok(focus) => snapshot(focus),
+        Err(error) => {
+            tracing::debug!(%error, "a native focus's subtree could not be read");
+            return base;
+        }
     };
-    let focus = snapshot(focus);
     let mut ancestors = Vec::new();
-    let mut next = provider.get_parent(element).ok().flatten();
+    let mut next = provider.atspi_parent(element);
     while let Some(parent) = next {
         if ancestors.len() >= WINDOW_DEPTH {
             break;
@@ -78,9 +80,13 @@ fn native_focus(provider: &LinuxProvider, element: &ElementData) -> okur_core::e
                     .and_then(|r| r.as_str())
                     .is_some_and(|r| matches!(r, "list" | "tree table" | "grouping")));
         let limit = if whole { CONTROL_LIMIT } else { 1 };
-        next = provider.get_parent(&parent).ok().flatten();
-        let Ok(tree) = provider.atspi_tree(&parent, limit) else {
-            break;
+        next = provider.atspi_parent(&parent);
+        let tree = match provider.atspi_tree(&parent, limit) {
+            Ok(tree) => tree,
+            Err(error) => {
+                tracing::debug!(%error, "a native focus's ancestor could not be read");
+                break;
+            }
         };
         let node = snapshot(tree);
         let window = matches!(node.role.as_str(), "frame" | "dialog" | "window" | "alert");
@@ -89,6 +95,11 @@ fn native_focus(provider: &LinuxProvider, element: &ElementData) -> okur_core::e
             break;
         }
     }
+    tracing::debug!(
+        focus = %focus.role,
+        ancestors = ?ancestors.iter().map(|a| a.role.as_str()).collect::<Vec<_>>(),
+        "native focus read"
+    );
     okur_linux_model::focus::native_focus(base, &focus, &ancestors)
 }
 

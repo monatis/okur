@@ -4055,6 +4055,25 @@ impl LinuxProvider {
         None
     }
 
+    /// `element`'s AT-SPI parent, found by the object `element`'s raw data names, as an element
+    /// whose raw data names its own, for [`LinuxProvider::atspi_tree`]. An element an event
+    /// carries is not in this provider's handle cache, which `get_parent` reads.
+    pub fn atspi_parent(&self, element: &ElementData) -> Option<ElementData> {
+        let raw = |key: &str| {
+            element
+                .raw
+                .get(key)
+                .and_then(|v| v.as_str())
+                .map(str::to_owned)
+        };
+        let aref = AccessibleRef {
+            bus_name: raw("bus_name")?,
+            path: raw("object_path")?,
+        };
+        let parent = self.get_atspi_parent(&aref).ok().flatten()?;
+        Some(self.build_element_data(&parent, element.pid))
+    }
+
     /// Runs action `index` of the object at `bus_name` and `path` (a page's element read with
     /// [`Self::atspi_tree`]): its Action interface's DoAction, Chrome's "click" for a link, a
     /// button, a check box. Whether it ran.
