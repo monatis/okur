@@ -14,7 +14,7 @@ use okur_linux_model::focus_track::{FocusTrack, Reread};
 use okur_runtime::events::{EventSink, EventSource};
 use okur_runtime::RuntimeError;
 use xa11y_core::{ElementData, Event, EventKind, RecvStatus, Role};
-use xa11y_linux::{AtspiTree, LinuxProvider};
+use xa11y_linux::{AtspiObject, AtspiTree, LinuxProvider};
 
 /// The objects of the page read last, its application's bus name and each object's path, in the
 /// order the page's nodes are numbered ([`okur_linux_model::page::to_ia2`], depth first from 1):
@@ -60,36 +60,23 @@ const WINDOW_DEPTH: usize = 12;
 /// the bus per object read.
 fn native_focus(provider: &LinuxProvider, element: &ElementData) -> okur_core::event::FocusEvent {
     let base = okur_linux_model::focus::focus_event(element);
-    let focus = match provider.atspi_tree(element, CONTROL_LIMIT) {
-        Ok(focus) => snapshot(focus),
-        Err(error) => {
-            tracing::debug!(%error, "a native focus's subtree could not be read");
-            return base;
-        }
+    let Some(object) = AtspiObject::of(element) else {
+        tracing::debug!("a native focus without its object's names");
+        return base;
     };
+    let focus = snapshot(provider.atspi_tree(&object, CONTROL_LIMIT));
     let mut ancestors = Vec::new();
-    let mut next = provider.atspi_parent(element);
+    let mut next = provider.atspi_parent(&object);
     while let Some(parent) = next {
         if ancestors.len() >= WINDOW_DEPTH {
             break;
         }
         let whole = ancestors.is_empty()
             || (ancestors.len() == 1
-                && parent
-                    .raw
-                    .get("atspi_role")
-                    .and_then(|r| r.as_str())
-                    .is_some_and(|r| matches!(r, "list" | "tree table" | "grouping")));
+                && matches!(parent.role.as_str(), "list" | "tree table" | "grouping"));
         let limit = if whole { CONTROL_LIMIT } else { 1 };
         next = provider.atspi_parent(&parent);
-        let tree = match provider.atspi_tree(&parent, limit) {
-            Ok(tree) => tree,
-            Err(error) => {
-                tracing::debug!(%error, "a native focus's ancestor could not be read");
-                break;
-            }
-        };
-        let node = snapshot(tree);
+        let node = snapshot(provider.atspi_tree(&parent, limit));
         let window = matches!(node.role.as_str(), "frame" | "dialog" | "window" | "alert");
         ancestors.push(node);
         if window {
@@ -109,29 +96,34 @@ fn native_focus(provider: &LinuxProvider, element: &ElementData) -> okur_core::e
 
 /// An element's AT-SPI object, by its bus name and path.
 fn object_of(element: &ElementData) -> Option<String> {
-    let raw = |key: &str| element.raw.get(key).and_then(|v| v.as_str());
-    Some(format!("{}{}", raw("bus_name")?, raw("object_path")?))
+    AtspiObject::of(element).map(|object| key_of(&object))
 }
 
 /// The page's document the focused element is in, or is.
-fn document_of(provider: &LinuxProvider, element: &ElementData) -> Option<ElementData> {
+fn document_of(provider: &LinuxProvider, element: &ElementData) -> Option<AtspiObject> {
+    let object = AtspiObject::of(element)?;
     if element.role == Role::WebArea {
-        Some(element.clone())
+        Some(object)
     } else {
-        provider.atspi_ancestor(element, "document web", PAGE_DEPTH)
+        provider.atspi_ancestor(&object, "document web", PAGE_DEPTH)
     }
+}
+
+/// An AT-SPI object's key, its bus name and path.
+fn key_of(object: &AtspiObject) -> String {
+    format!("{}{}", object.bus_name, object.path)
 }
 
 /// Whether `document` is a page in view: a document shown, not a frame's inside another page
 /// (each frame's document loads too), nor a hidden tab's.
 fn shown_page(provider: &LinuxProvider, document: &ElementData) -> bool {
-    use xa11y_core::Provider;
+    // The parent by the document's object: an event's element is in no provider's handle cache,
+    // so get_parent never found one and every frame's document passed (the code review of
+    // 2026-11-08).
     document.role == Role::WebArea
         && document.states.visible
-        && provider
-            .get_parent(document)
-            .ok()
-            .flatten()
+        && AtspiObject::of(document)
+            .and_then(|object| provider.atspi_parent(&object))
             .and_then(|parent| provider.atspi_ancestor(&parent, "document web", PAGE_DEPTH))
             .is_none()
 }
@@ -142,21 +134,18 @@ fn shown_page(provider: &LinuxProvider, document: &ElementData) -> bool {
 fn page(
     provider: &LinuxProvider,
     element: &ElementData,
-    document: &ElementData,
+    document: &AtspiObject,
     last: &mut Option<String>,
     objects: &PageObjects,
 ) -> Option<AccessibilityEvent> {
     let on_document = element.role == Role::WebArea;
-    let object = object_of(document)?;
+    let object = key_of(document);
     if !on_document && last.as_deref() == Some(object.as_str()) {
         return None;
     }
     *last = Some(object);
     let started = std::time::Instant::now();
-    let tree = provider
-        .atspi_tree(document, PAGE_LIMIT)
-        .map_err(|e| tracing::debug!("the page was not read: {e}"))
-        .ok()?;
+    let tree = provider.atspi_tree(document, PAGE_LIMIT);
     let mut read = Vec::new();
     objects_of(&tree, &mut read);
     if let Ok(mut objects) = objects.lock() {
@@ -216,17 +205,12 @@ pub fn capture_page(
         else {
             continue;
         };
-        let address = provider
-            .atspi_tree(&document, 1)
-            .ok()
-            .and_then(|tree| tree.uri);
+        let address = provider.atspi_tree(&document, 1).uri;
         if !address.is_some_and(|a| a.ends_with(address_end)) {
             continue;
         }
         let reading = std::time::Instant::now();
-        let tree = provider
-            .atspi_tree(&document, PAGE_LIMIT)
-            .map_err(|e| source_error("the page", e))?;
+        let tree = provider.atspi_tree(&document, PAGE_LIMIT);
         return Ok((snapshot(tree), reading.elapsed()));
     }
     Err(source_error(
@@ -341,7 +325,10 @@ impl EventSource for AtspiEventSource {
                                     event.kind == EventKind::DocumentLoaded
                                         && shown_page(&provider, d)
                                 })
-                                .and_then(|d| page(&provider, d, d, &mut last_page, &objects));
+                                .and_then(|d| {
+                                    let document = AtspiObject::of(d)?;
+                                    page(&provider, d, &document, &mut last_page, &objects)
+                                });
                             for loaded in loaded.into_iter().chain(reloaded) {
                                 if !sink.send(loaded) {
                                     return;

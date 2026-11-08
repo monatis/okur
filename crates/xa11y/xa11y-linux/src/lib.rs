@@ -37,7 +37,7 @@ mod session;
 mod window;
 
 #[cfg(target_os = "linux")]
-pub use atspi::{AtspiTree, LinuxProvider};
+pub use atspi::{AtspiObject, AtspiTree, LinuxProvider};
 
 #[cfg(target_os = "linux")]
 pub use input::LinuxInputProvider;

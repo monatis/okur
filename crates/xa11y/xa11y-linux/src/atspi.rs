@@ -4186,76 +4186,79 @@ pub struct AtspiTree {
     pub children: Vec<AtspiTree>,
 }
 
-impl LinuxProvider {
-    /// The AT-SPI subtree of `element`, an element this provider or its events read (its raw
-    /// `bus_name` and `object_path`): at most `limit` objects, depth first, the rest left out.
-    /// Each object is a few calls on the bus; the Cache interface would read a tree at once.
-    pub fn atspi_tree(&self, element: &ElementData, limit: usize) -> Result<AtspiTree> {
+/// An AT-SPI object by its application's bus name and its path, with its role's name: where the
+/// tree reads ([`LinuxProvider::atspi_tree`]) and the walks up start, without the reads an
+/// [`ElementData`] costs (for a top-level frame, the window manager's facts, read under an X
+/// server grab: the code review of 2026-11-08 found one with every focus outside a page).
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct AtspiObject {
+    pub bus_name: String,
+    pub path: String,
+    /// The role's name, as [`AtspiTree::role`] names it; for an event's element, the name the
+    /// application gave.
+    pub role: String,
+}
+
+impl AtspiObject {
+    /// The object `element` names in its raw data (an element this provider or its events read).
+    pub fn of(element: &ElementData) -> Option<Self> {
         let raw = |key: &str| {
             element
                 .raw
                 .get(key)
                 .and_then(|v| v.as_str())
                 .map(str::to_owned)
-                .ok_or_else(|| Error::Platform {
-                    code: -1,
-                    message: format!("the element has no {key}"),
-                })
         };
-        let aref = AccessibleRef {
+        Some(Self {
             bus_name: raw("bus_name")?,
             path: raw("object_path")?,
-        };
-        let mut left = limit;
-        Ok(self.read_tree(&aref, &mut left))
+            role: raw("atspi_role").unwrap_or_default(),
+        })
     }
 
-    /// The nearest of `element` and its ancestors, at most `max` levels up, whose AT-SPI role's
-    /// name is `role` (a page's "document web" above a focused link), as an element whose raw
-    /// data names its object, for [`LinuxProvider::atspi_tree`].
+    fn reference(&self) -> AccessibleRef {
+        AccessibleRef {
+            bus_name: self.bus_name.clone(),
+            path: self.path.clone(),
+        }
+    }
+}
+
+impl LinuxProvider {
+    /// The AT-SPI subtree of `object`: at most `limit` objects, depth first, the rest left out.
+    /// Each object is a few calls on the bus; the Cache interface would read a tree at once.
+    pub fn atspi_tree(&self, object: &AtspiObject, limit: usize) -> AtspiTree {
+        let mut left = limit;
+        self.read_tree(&object.reference(), &mut left)
+    }
+
+    /// The nearest of `object` and its ancestors, at most `max` levels up, whose role's name is
+    /// `role` (a page's "document web" above a focused link): two calls on the bus a level.
     pub fn atspi_ancestor(
         &self,
-        element: &ElementData,
+        object: &AtspiObject,
         role: &str,
         max: usize,
-    ) -> Option<ElementData> {
-        let raw = |key: &str| {
-            element
-                .raw
-                .get(key)
-                .and_then(|v| v.as_str())
-                .map(str::to_owned)
-        };
-        let mut aref = AccessibleRef {
-            bus_name: raw("bus_name")?,
-            path: raw("object_path")?,
-        };
+    ) -> Option<AtspiObject> {
+        let mut current = object.clone();
         for _ in 0..=max {
-            if self.get_role_name(&aref).ok().as_deref() == Some(role) {
-                return Some(self.build_element_data(&aref, element.pid));
+            if current.role == role {
+                return Some(current);
             }
-            aref = self.get_atspi_parent(&aref).ok().flatten()?;
+            current = self.atspi_parent(&current)?;
         }
         None
     }
 
-    /// `element`'s AT-SPI parent, found by the object `element`'s raw data names, as an element
-    /// whose raw data names its own, for [`LinuxProvider::atspi_tree`]. An element an event
-    /// carries is not in this provider's handle cache, which `get_parent` reads.
-    pub fn atspi_parent(&self, element: &ElementData) -> Option<ElementData> {
-        let raw = |key: &str| {
-            element
-                .raw
-                .get(key)
-                .and_then(|v| v.as_str())
-                .map(str::to_owned)
-        };
-        let aref = AccessibleRef {
-            bus_name: raw("bus_name")?,
-            path: raw("object_path")?,
-        };
-        let parent = self.get_atspi_parent(&aref).ok().flatten()?;
-        Some(self.build_element_data(&parent, element.pid))
+    /// `object`'s AT-SPI parent: its Parent property and its role's name, two calls on the bus.
+    pub fn atspi_parent(&self, object: &AtspiObject) -> Option<AtspiObject> {
+        let parent = self.get_atspi_parent(&object.reference()).ok().flatten()?;
+        let role = self.get_role_name(&parent).unwrap_or_default();
+        Some(AtspiObject {
+            bus_name: parent.bus_name,
+            path: parent.path,
+            role,
+        })
     }
 
     /// Runs action `index` of the object at `bus_name` and `path` (a page's element read with
