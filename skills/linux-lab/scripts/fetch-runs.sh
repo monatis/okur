@@ -19,6 +19,23 @@ if [ ${#ids[@]} -eq 0 ]; then
     exit 2
 fi
 mkdir -p corpus/live/linux
+# The lab's runs and traces in one archive, pulled once: two pulls a run took half an hour for
+# 83 runs (2026-11-08). The archive is made on old-pc, checked by its size, and unpacked here.
+staging=$(mktemp -d)
+trap 'rm -rf "$staging"' EXIT
+timeout 300 opendesk exec --peer "$PEER" --timeout 280 \
+    "Compress-Archive -Path D:/okur-linux/runs/*.json,D:/okur-linux/runs/*.jsonl -DestinationPath D:/okur-linux/runs.zip -Force; (Get-Item D:/okur-linux/runs.zip).Length" \
+    2>&1 | tr -d '\000\r' | tail -1 > "$staging/size"
+if ! timeout 600 opendesk pull --peer "$PEER" D:/okur-linux/runs.zip "$staging/runs.zip" > /dev/null; then
+    echo "fetch-runs: the runs' archive was not fetched" >&2
+    exit 1
+fi
+size=$(wc -c < "$staging/runs.zip" | tr -d ' ')
+if [ "$size" != "$(cat "$staging/size")" ]; then
+    echo "fetch-runs: the archive is $size bytes here, $(cat "$staging/size") on old-pc" >&2
+    exit 1
+fi
+unzip -q -o "$staging/runs.zip" -d "$staging/runs"
 failed=
 for id in "${ids[@]}"; do
     scenario=$(ls corpus/scenarios/"$id"*.json 2>/dev/null | head -1)
@@ -27,20 +44,21 @@ for id in "${ids[@]}"; do
         continue
     fi
     name=$(basename "$scenario")
-    # A pull that fails (the peer briefly unreachable) is said, and the rest still fetched.
-    if ! timeout 120 opendesk pull --peer "$PEER" "D:/okur-linux/runs/$name" "corpus/live/linux/$name" > /dev/null; then
-        echo "$name: NOT fetched" >&2
+    if [ ! -f "$staging/runs/$name" ]; then
+        echo "$name: NOT in the lab's runs" >&2
         failed=1
         continue
     fi
-    if ! grep -q '"platform": "linux"' "corpus/live/linux/$name"; then
-        echo "$name: not a Linux run, removed" >&2
-        rm -f "corpus/live/linux/$name"
+    if ! grep -q '"platform": "linux"' "$staging/runs/$name"; then
+        echo "$name: not a Linux run, left out" >&2
         continue
     fi
+    cp "$staging/runs/$name" "corpus/live/linux/$name"
     # Its trace, where the run kept one (okur-lab live-replay linux).
     trace="${name%.json}.trace.jsonl"
-    if ! timeout 120 opendesk pull --peer "$PEER" "D:/okur-linux/runs/$trace" "corpus/live/linux/$trace" > /dev/null 2>&1; then
+    if [ -f "$staging/runs/$trace" ]; then
+        cp "$staging/runs/$trace" "corpus/live/linux/$trace"
+    else
         rm -f "corpus/live/linux/$trace"
     fi
     echo "fetched $name ($(grep -o '"commit": "[0-9a-f]*"' "corpus/live/linux/$name"))"
