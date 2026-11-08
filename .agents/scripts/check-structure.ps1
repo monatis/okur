@@ -2,7 +2,7 @@
 # (docs/references/crate-structure-proposal.md, section 10, rules R4 to R6):
 # - neutral_platform_cfg (R4): `cfg` on the platform in a neutral crate's sources;
 # - platform_literals_in_core (R5): `okur-core` outside its application modules comparing a
-#   window class or automation id with a literal, or keeping a window class as a constant;
+#   class or automation id with a literal, or keeping a window class as a constant;
 # - engine_app_references (R6): the engine naming application modules outside `apps/`, by
 #   their path (`apps::windows::excel`) or by the module's name once imported (`excel::`);
 # - uia_outside_xa11y (R6): lines naming `IUIAutomation` outside crates/xa11y;
@@ -58,9 +58,11 @@ $counts['neutral_platform_cfg'] = @($neutral | ForEach-Object { Get-CodeLines (G
 
 # R5 and the engine's references to application modules
 $core = Get-CodeLines (Join-Path $crates 'okur-core\src')
-# Outside the application modules, whose place it is: a window class or automation id compared
-# with a literal, and a window class kept as a constant.
-$literal = '(platform\.\w+|window_class|class_name)\b[^;]*(==\s*Some\("|starts_with\("|==\s*")|^\s*(pub(\([a-z]+\))?\s+)?const\s+\w+_CLASS\w*\s*:\s*&str\s*='
+# Outside the application modules, whose place it is: a class (a window's, an element's, a
+# container's) or an automation id compared with a literal, by ==, !=, a match's alternatives or
+# a string test (starts_with, ends_with, contains, eq_ignore_ascii_case), and a window class kept
+# as a constant (widened 2026-11-08, the structure plan's step 4).
+$literal = '(platform\.\w+|\w*_class\b|class_name|automation_id)\b[^;]*([=!]=\s*Some\("|[=!]=\s*"|(starts_with|ends_with|contains|eq_ignore_ascii_case)\("|Some\("[^"]*"\s*\|)|^\s*(pub(\([a-z]+\))?\s+)?const\s+\w+_CLASS\w*\s*:\s*&str\s*='
 $appsDir = Join-Path $crates 'okur-core\src\apps'
 $counts['platform_literals_in_core'] = @($core | Where-Object {
         -not $_.Path.StartsWith($appsDir) -and $_.Text -match $literal }).Count

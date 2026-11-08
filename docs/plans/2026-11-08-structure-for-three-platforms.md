@@ -32,18 +32,17 @@ Rules for every step, as the accepted [`../references/crate-structure-proposal.m
   - The driver writes each record to a trace when given one (`okur run --trace`). The lab's runner keeps it beside the run, with the keys it pressed. `okur-lab live-replay linux` replays the records against the run's speech and JAWS's evidence (f0b3a66d). Records time their reads (f0746d17).
   - okur-model's `EventModel` is the trait both platforms' converters implement (86df02bc).
   - `--pages-after-focus` tries a page-reader thread on the runs before the driver changes (236db52e).
+- **4. Neutral identity:**
+  - `PlatformIds::window_id`, the top-level window itself, opaque; the engine's window change compares `window_key()`, the id where the platform names one, else the class (68274780). Linux names each window by its frame's object. Windows names none yet: PARITY IDENTICAL.
+  - The structure rule R5 widened to every class field and automation id, compared by `!=`, a match's alternatives or a string test too.
 - **3. One `okur` program for every OS** (340f3b66):
   - `run.rs` is neutral. `windows.rs` keeps Windows' start, unchanged in order. `linux.rs` builds okur-linux's platform and stops on a terminate signal.
   - The example `okur_linux` is gone. The lab runs `okur run`.
   - Checked live on old-pc's Windows: it starts, `okur quit` is answered through the control pipe, and it ends.
 
-Steps 1, 2 and 3 are done (above); their designs are in git's history of this file (at
+Steps 1 to 4 are done (above); their designs are in git's history of this file (at
 d469f746).
 
-## 4. Neutral identity (rest, next)
-
-- An opaque `FocusEvent::window_id` each converter fills, in place of comparing top-level window classes for a window change.
-- The structure rule R5 widened to any literal compared with a class field.
 
 ## 6. Control context over AOM nodes
 
