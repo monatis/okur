@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "9a6b6816"
+  "commit": "0e7ad2a0"
  },
  "trials": [
   {
@@ -15,14 +15,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794172207530
+     "t_ms": 1794175558713
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794172208896,
-     "t_end_ms": 1794172209999,
+     "t_start_ms": 1794175560078,
+     "t_end_ms": 1794175561182,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -31,15 +31,15 @@
       "Tab"
      ],
      "observation": {
-      "speech_raw": "Create Your Account - Riverside Library\n \u001d MainRegion \u001e \n \u001d FormRegion \u001e \nFull name \u001d Edit \u001e \n \u001dRequired\u001e \nblank\nType in text.",
+      "speech_raw": "Create Your Account - Riverside Library\nFull name \u001d Edit \u001e \n \u001dRequired\u001e",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794172210000,
-     "t_end_ms": 1794172211505,
+     "t_start_ms": 1794175561182,
+     "t_end_ms": 1794175562286,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -48,15 +48,15 @@
       "Tab"
      ],
      "observation": {
-      "speech_raw": "Email address \u001d Edit \u001e \nsam@example.com\nWe never share your email.\nType in text.",
+      "speech_raw": "Email address \u001d Edit \u001e \nsam@example.com\nWe never share your email.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794172211505,
-     "t_end_ms": 1794172212610,
+     "t_start_ms": 1794175562286,
+     "t_end_ms": 1794175563390,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -65,15 +65,15 @@
       "Tab"
      ],
      "observation": {
-      "speech_raw": "Password \u001d password edit \u001e \n \u001dRequired\u001e   \u001d\u001e\nType in text.",
+      "speech_raw": "Password \u001d password edit \u001e \n \u001dRequired\u001e   \u001d\u001e",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794172212610,
-     "t_end_ms": 1794172213714,
+     "t_start_ms": 1794175563390,
+     "t_end_ms": 1794175564494,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -82,15 +82,15 @@
       "Tab"
      ],
      "observation": {
-      "speech_raw": "Membership type \u001d group \u001e \nAdult  \u001d radio button \u001e   \u001dchecked\u001e \n1 of 3\nTo change the selection press Up or Down Arrow.",
+      "speech_raw": "Membership type \u001d group \u001e \nAdult  \u001d radio button \u001e   \u001dchecked\u001e \n1 of 3",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794172213714,
-     "t_end_ms": 1794172214819,
+     "t_start_ms": 1794175564494,
+     "t_end_ms": 1794175565599,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -99,15 +99,15 @@
       "Tab"
      ],
      "observation": {
-      "speech_raw": "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside\nTo change the selection use the Arrow keys.",
+      "speech_raw": "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794172214819,
-     "t_end_ms": 1794172215924,
+     "t_start_ms": 1794175565599,
+     "t_end_ms": 1794175566703,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -116,15 +116,15 @@
       "Tab"
      ],
      "observation": {
-      "speech_raw": "Accessibility needs \u001d edit \u001e \nblank\nType in text.",
+      "speech_raw": "Accessibility needs \u001d edit \u001e \nblank",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794172215924,
-     "t_end_ms": 1794172217028,
+     "t_start_ms": 1794175566703,
+     "t_end_ms": 1794175567808,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -140,8 +140,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794172217028,
-     "t_end_ms": 1794172218132,
+     "t_start_ms": 1794175567808,
+     "t_end_ms": 1794175568913,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -157,8 +157,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794172218132,
-     "t_end_ms": 1794172219237,
+     "t_start_ms": 1794175568913,
+     "t_end_ms": 1794175570018,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -174,8 +174,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794172219237,
-     "t_end_ms": 1794172220241,
+     "t_start_ms": 1794175570018,
+     "t_end_ms": 1794175571023,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -191,8 +191,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794172220241,
-     "t_end_ms": 1794172221245,
+     "t_start_ms": 1794175571023,
+     "t_end_ms": 1794175572027,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -208,8 +208,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794172221245,
-     "t_end_ms": 1794172222250,
+     "t_start_ms": 1794175572027,
+     "t_end_ms": 1794175573031,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -225,8 +225,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794172222250,
-     "t_end_ms": 1794172223254,
+     "t_start_ms": 1794175573031,
+     "t_end_ms": 1794175574035,
      "action": {
       "type": "key",
       "command": "Tab"

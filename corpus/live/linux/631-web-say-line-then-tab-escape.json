@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "9a6b6816"
+  "commit": "0e7ad2a0"
  },
  "trials": [
   {
@@ -15,14 +15,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794173588279
+     "t_ms": 1794176947037
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794173589640,
-     "t_end_ms": 1794173590646,
+     "t_start_ms": 1794176948403,
+     "t_end_ms": 1794176949407,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -38,8 +38,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794173590646,
-     "t_end_ms": 1794173591750,
+     "t_start_ms": 1794176949407,
+     "t_end_ms": 1794176950511,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -48,15 +48,15 @@
       "Tab"
      ],
      "observation": {
-      "speech_raw": "Create Your Account - Riverside Library\n \u001d MainRegion \u001e \n \u001d FormRegion \u001e \nFull name \u001d Edit \u001e \n \u001dRequired\u001e \nblank\nType in text.",
+      "speech_raw": "Create Your Account - Riverside Library\nFull name \u001d Edit \u001e \n \u001dRequired\u001e",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794173591750,
-     "t_end_ms": 1794173592753,
+     "t_start_ms": 1794176950511,
+     "t_end_ms": 1794176951514,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -65,7 +65,7 @@
       "Escape"
      ],
      "observation": {
-      "speech_raw": "virtual PC Cursor",
+      "speech_raw": "",
       "settled": true
      },
      "step_success": true

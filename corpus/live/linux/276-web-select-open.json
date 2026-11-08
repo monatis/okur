@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "9a6b6816"
+  "commit": "0e7ad2a0"
  },
  "trials": [
   {
@@ -15,14 +15,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794172716374
+     "t_ms": 1794176072631
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794172717736,
-     "t_end_ms": 1794172718740,
+     "t_start_ms": 1794176073997,
+     "t_end_ms": 1794176075000,
      "action": {
       "type": "key",
       "command": "C"
@@ -38,8 +38,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794172718740,
-     "t_end_ms": 1794172719944,
+     "t_start_ms": 1794176075000,
+     "t_end_ms": 1794176076205,
      "action": {
       "type": "key",
       "command": "Space"
@@ -48,15 +48,15 @@
       "Space"
      ],
      "observation": {
-      "speech_raw": "Create Your Account - Riverside Library\nHome branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside\nTo change the selection use the Arrow keys.\nNorthside\nTo move through items press up or down arrow.",
+      "speech_raw": "Create Your Account - Riverside Library\nHome branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside\nTo change the selection use the Arrow keys.\n  \u001d list \u001e \nwith 3 items\nNorthside\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794172719944,
-     "t_end_ms": 1794172721048,
+     "t_start_ms": 1794176076205,
+     "t_end_ms": 1794176077308,
      "action": {
       "type": "key",
       "command": "Down"
@@ -65,15 +65,15 @@
       "Down"
      ],
      "observation": {
-      "speech_raw": "Eastgate",
+      "speech_raw": "Eastgate\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794172721048,
-     "t_end_ms": 1794172722053,
+     "t_start_ms": 1794176077308,
+     "t_end_ms": 1794176078312,
      "action": {
       "type": "key",
       "command": "Down"
@@ -89,8 +89,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794172722053,
-     "t_end_ms": 1794172723158,
+     "t_start_ms": 1794176078312,
+     "t_end_ms": 1794176079416,
      "action": {
       "type": "key",
       "command": "Up"
@@ -99,15 +99,15 @@
       "Up"
      ],
      "observation": {
-      "speech_raw": "Northside",
+      "speech_raw": "Northside\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794172723158,
-     "t_end_ms": 1794172724262,
+     "t_start_ms": 1794176079416,
+     "t_end_ms": 1794176080621,
      "action": {
       "type": "key",
       "command": "Enter"
@@ -116,15 +116,15 @@
       "Enter"
      ],
      "observation": {
-      "speech_raw": "Leaving menus\nHome branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside\nTo change the selection use the Arrow keys.",
+      "speech_raw": "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside\nTo change the selection use the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794172724262,
-     "t_end_ms": 1794172725367,
+     "t_start_ms": 1794176080621,
+     "t_end_ms": 1794176081725,
      "action": {
       "type": "key",
       "command": "Space"
@@ -133,15 +133,15 @@
       "Space"
      ],
      "observation": {
-      "speech_raw": "Northside\nTo move through items press up or down arrow.",
+      "speech_raw": "  \u001d list \u001e \nwith 3 items\nNorthside\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794172725367,
-     "t_end_ms": 1794172726371,
+     "t_start_ms": 1794176081725,
+     "t_end_ms": 1794176082729,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -157,8 +157,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794172726371,
-     "t_end_ms": 1794172727377,
+     "t_start_ms": 1794176082729,
+     "t_end_ms": 1794176083734,
      "action": {
       "type": "key",
       "command": "Insert+Up"

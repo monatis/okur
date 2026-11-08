@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "9a6b6816"
+  "commit": "0e7ad2a0"
  },
  "trials": [
   {
@@ -15,14 +15,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+End",
-     "t_ms": 1794171317868
+     "t_ms": 1794174663877
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794171319228,
-     "t_end_ms": 1794171320231,
+     "t_start_ms": 1794174665234,
+     "t_end_ms": 1794174666238,
      "action": {
       "type": "key",
       "command": "Up"
@@ -38,8 +38,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794171320231,
-     "t_end_ms": 1794171321235,
+     "t_start_ms": 1794174666238,
+     "t_end_ms": 1794174667242,
      "action": {
       "type": "key",
       "command": "Up"
@@ -55,8 +55,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794171321235,
-     "t_end_ms": 1794171322239,
+     "t_start_ms": 1794174667242,
+     "t_end_ms": 1794174668245,
      "action": {
       "type": "key",
       "command": "Up"
@@ -72,8 +72,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794171322239,
-     "t_end_ms": 1794171323244,
+     "t_start_ms": 1794174668245,
+     "t_end_ms": 1794174669249,
      "action": {
       "type": "key",
       "command": "Up"
@@ -89,8 +89,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794171323244,
-     "t_end_ms": 1794171324248,
+     "t_start_ms": 1794174669249,
+     "t_end_ms": 1794174670253,
      "action": {
       "type": "key",
       "command": "Up"
@@ -106,8 +106,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794171324248,
-     "t_end_ms": 1794171325253,
+     "t_start_ms": 1794174670253,
+     "t_end_ms": 1794174671257,
      "action": {
       "type": "key",
       "command": "Up"
@@ -123,8 +123,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794171325253,
-     "t_end_ms": 1794171326257,
+     "t_start_ms": 1794174671257,
+     "t_end_ms": 1794174672261,
      "action": {
       "type": "key",
       "command": "Up"
@@ -140,8 +140,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794171326257,
-     "t_end_ms": 1794171327262,
+     "t_start_ms": 1794174672261,
+     "t_end_ms": 1794174673265,
      "action": {
       "type": "key",
       "command": "Up"
@@ -157,8 +157,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794171327262,
-     "t_end_ms": 1794171328266,
+     "t_start_ms": 1794174673265,
+     "t_end_ms": 1794174674269,
      "action": {
       "type": "key",
       "command": "Up"
@@ -174,8 +174,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794171328266,
-     "t_end_ms": 1794171329270,
+     "t_start_ms": 1794174674269,
+     "t_end_ms": 1794174675273,
      "action": {
       "type": "key",
       "command": "Up"
@@ -191,8 +191,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794171329270,
-     "t_end_ms": 1794171330275,
+     "t_start_ms": 1794174675273,
+     "t_end_ms": 1794174676278,
      "action": {
       "type": "key",
       "command": "Up"
@@ -208,8 +208,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794171330275,
-     "t_end_ms": 1794171331279,
+     "t_start_ms": 1794174676278,
+     "t_end_ms": 1794174677383,
      "action": {
       "type": "key",
       "command": "Up"
@@ -225,8 +225,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794171331279,
-     "t_end_ms": 1794171332284,
+     "t_start_ms": 1794174677383,
+     "t_end_ms": 1794174678387,
      "action": {
       "type": "key",
       "command": "Up"
@@ -242,8 +242,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794171332284,
-     "t_end_ms": 1794171333289,
+     "t_start_ms": 1794174678387,
+     "t_end_ms": 1794174679392,
      "action": {
       "type": "key",
       "command": "Up"
@@ -259,8 +259,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794171333289,
-     "t_end_ms": 1794171334292,
+     "t_start_ms": 1794174679392,
+     "t_end_ms": 1794174680397,
      "action": {
       "type": "key",
       "command": "Up"
@@ -276,8 +276,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794171334292,
-     "t_end_ms": 1794171335297,
+     "t_start_ms": 1794174680397,
+     "t_end_ms": 1794174681401,
      "action": {
       "type": "key",
       "command": "Up"
@@ -293,8 +293,8 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794171335297,
-     "t_end_ms": 1794171336300,
+     "t_start_ms": 1794174681401,
+     "t_end_ms": 1794174682406,
      "action": {
       "type": "key",
       "command": "Up"
@@ -310,8 +310,8 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794171336300,
-     "t_end_ms": 1794171337305,
+     "t_start_ms": 1794174682406,
+     "t_end_ms": 1794174683410,
      "action": {
       "type": "key",
       "command": "Up"
@@ -327,8 +327,8 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794171337305,
-     "t_end_ms": 1794171338309,
+     "t_start_ms": 1794174683410,
+     "t_end_ms": 1794174684414,
      "action": {
       "type": "key",
       "command": "Up"
@@ -344,8 +344,8 @@
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794171338309,
-     "t_end_ms": 1794171339314,
+     "t_start_ms": 1794174684414,
+     "t_end_ms": 1794174685418,
      "action": {
       "type": "key",
       "command": "Up"
@@ -361,8 +361,8 @@
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794171339314,
-     "t_end_ms": 1794171340318,
+     "t_start_ms": 1794174685418,
+     "t_end_ms": 1794174686423,
      "action": {
       "type": "key",
       "command": "Up"
@@ -378,8 +378,8 @@
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794171340318,
-     "t_end_ms": 1794171341322,
+     "t_start_ms": 1794174686423,
+     "t_end_ms": 1794174687427,
      "action": {
       "type": "key",
       "command": "Up"
@@ -395,8 +395,8 @@
     },
     {
      "step_id": "s23",
-     "t_start_ms": 1794171341322,
-     "t_end_ms": 1794171342327,
+     "t_start_ms": 1794174687427,
+     "t_end_ms": 1794174688432,
      "action": {
       "type": "key",
       "command": "Up"
@@ -412,8 +412,8 @@
     },
     {
      "step_id": "s24",
-     "t_start_ms": 1794171342327,
-     "t_end_ms": 1794171343431,
+     "t_start_ms": 1794174688432,
+     "t_end_ms": 1794174689536,
      "action": {
       "type": "key",
       "command": "Up"
@@ -429,8 +429,8 @@
     },
     {
      "step_id": "s25",
-     "t_start_ms": 1794171343431,
-     "t_end_ms": 1794171344435,
+     "t_start_ms": 1794174689536,
+     "t_end_ms": 1794174690539,
      "action": {
       "type": "key",
       "command": "Up"
@@ -446,8 +446,8 @@
     },
     {
      "step_id": "s26",
-     "t_start_ms": 1794171344435,
-     "t_end_ms": 1794171345440,
+     "t_start_ms": 1794174690539,
+     "t_end_ms": 1794174691544,
      "action": {
       "type": "key",
       "command": "Up"
@@ -463,8 +463,8 @@
     },
     {
      "step_id": "s27",
-     "t_start_ms": 1794171345440,
-     "t_end_ms": 1794171346445,
+     "t_start_ms": 1794174691544,
+     "t_end_ms": 1794174692548,
      "action": {
       "type": "key",
       "command": "Up"
@@ -480,8 +480,8 @@
     },
     {
      "step_id": "s28",
-     "t_start_ms": 1794171346445,
-     "t_end_ms": 1794171347449,
+     "t_start_ms": 1794174692548,
+     "t_end_ms": 1794174693553,
      "action": {
       "type": "key",
       "command": "Up"
@@ -497,8 +497,8 @@
     },
     {
      "step_id": "s29",
-     "t_start_ms": 1794171347449,
-     "t_end_ms": 1794171348453,
+     "t_start_ms": 1794174693553,
+     "t_end_ms": 1794174694557,
      "action": {
       "type": "key",
       "command": "Up"
@@ -514,8 +514,8 @@
     },
     {
      "step_id": "s30",
-     "t_start_ms": 1794171348453,
-     "t_end_ms": 1794171349457,
+     "t_start_ms": 1794174694557,
+     "t_end_ms": 1794174695562,
      "action": {
       "type": "key",
       "command": "Up"
@@ -531,8 +531,8 @@
     },
     {
      "step_id": "s31",
-     "t_start_ms": 1794171349457,
-     "t_end_ms": 1794171350461,
+     "t_start_ms": 1794174695562,
+     "t_end_ms": 1794174696566,
      "action": {
       "type": "key",
       "command": "Up"
@@ -548,8 +548,8 @@
     },
     {
      "step_id": "s32",
-     "t_start_ms": 1794171350461,
-     "t_end_ms": 1794171351465,
+     "t_start_ms": 1794174696566,
+     "t_end_ms": 1794174697570,
      "action": {
       "type": "key",
       "command": "Up"
@@ -565,8 +565,8 @@
     },
     {
      "step_id": "s33",
-     "t_start_ms": 1794171351465,
-     "t_end_ms": 1794171352470,
+     "t_start_ms": 1794174697570,
+     "t_end_ms": 1794174698574,
      "action": {
       "type": "key",
       "command": "Up"
@@ -582,8 +582,8 @@
     },
     {
      "step_id": "s34",
-     "t_start_ms": 1794171352470,
-     "t_end_ms": 1794171353474,
+     "t_start_ms": 1794174698574,
+     "t_end_ms": 1794174699579,
      "action": {
       "type": "key",
       "command": "Up"
@@ -599,8 +599,8 @@
     },
     {
      "step_id": "s35",
-     "t_start_ms": 1794171353474,
-     "t_end_ms": 1794171354479,
+     "t_start_ms": 1794174699579,
+     "t_end_ms": 1794174700584,
      "action": {
       "type": "key",
       "command": "Up"
@@ -616,8 +616,8 @@
     },
     {
      "step_id": "s36",
-     "t_start_ms": 1794171354479,
-     "t_end_ms": 1794171355483,
+     "t_start_ms": 1794174700584,
+     "t_end_ms": 1794174701588,
      "action": {
       "type": "key",
       "command": "Up"
@@ -633,8 +633,8 @@
     },
     {
      "step_id": "s37",
-     "t_start_ms": 1794171355483,
-     "t_end_ms": 1794171356487,
+     "t_start_ms": 1794174701588,
+     "t_end_ms": 1794174702593,
      "action": {
       "type": "key",
       "command": "Up"
@@ -650,8 +650,8 @@
     },
     {
      "step_id": "s38",
-     "t_start_ms": 1794171356487,
-     "t_end_ms": 1794171357492,
+     "t_start_ms": 1794174702593,
+     "t_end_ms": 1794174703597,
      "action": {
       "type": "key",
       "command": "Up"
@@ -667,8 +667,8 @@
     },
     {
      "step_id": "s39",
-     "t_start_ms": 1794171357492,
-     "t_end_ms": 1794171358496,
+     "t_start_ms": 1794174703597,
+     "t_end_ms": 1794174704602,
      "action": {
       "type": "key",
       "command": "Up"
@@ -684,8 +684,8 @@
     },
     {
      "step_id": "s40",
-     "t_start_ms": 1794171358496,
-     "t_end_ms": 1794171359500,
+     "t_start_ms": 1794174704602,
+     "t_end_ms": 1794174705607,
      "action": {
       "type": "key",
       "command": "Up"
@@ -701,8 +701,8 @@
     },
     {
      "step_id": "s41",
-     "t_start_ms": 1794171359500,
-     "t_end_ms": 1794171360505,
+     "t_start_ms": 1794174705607,
+     "t_end_ms": 1794174706612,
      "action": {
       "type": "key",
       "command": "Up"
@@ -718,8 +718,8 @@
     },
     {
      "step_id": "s42",
-     "t_start_ms": 1794171360505,
-     "t_end_ms": 1794171361509,
+     "t_start_ms": 1794174706612,
+     "t_end_ms": 1794174707616,
      "action": {
       "type": "key",
       "command": "Up"
@@ -735,8 +735,8 @@
     },
     {
      "step_id": "s43",
-     "t_start_ms": 1794171361509,
-     "t_end_ms": 1794171362513,
+     "t_start_ms": 1794174707616,
+     "t_end_ms": 1794174708621,
      "action": {
       "type": "key",
       "command": "Up"
@@ -752,8 +752,8 @@
     },
     {
      "step_id": "s44",
-     "t_start_ms": 1794171362513,
-     "t_end_ms": 1794171363516,
+     "t_start_ms": 1794174708621,
+     "t_end_ms": 1794174709624,
      "action": {
       "type": "key",
       "command": "Up"
@@ -769,8 +769,8 @@
     },
     {
      "step_id": "s45",
-     "t_start_ms": 1794171363516,
-     "t_end_ms": 1794171364621,
+     "t_start_ms": 1794174709624,
+     "t_end_ms": 1794174710629,
      "action": {
       "type": "key",
       "command": "Up"
@@ -786,8 +786,8 @@
     },
     {
      "step_id": "s46",
-     "t_start_ms": 1794171364621,
-     "t_end_ms": 1794171365625,
+     "t_start_ms": 1794174710629,
+     "t_end_ms": 1794174711633,
      "action": {
       "type": "key",
       "command": "Up"
@@ -803,8 +803,8 @@
     },
     {
      "step_id": "s47",
-     "t_start_ms": 1794171365625,
-     "t_end_ms": 1794171366629,
+     "t_start_ms": 1794174711633,
+     "t_end_ms": 1794174712637,
      "action": {
       "type": "key",
       "command": "Up"
@@ -820,8 +820,8 @@
     },
     {
      "step_id": "s48",
-     "t_start_ms": 1794171366629,
-     "t_end_ms": 1794171367633,
+     "t_start_ms": 1794174712637,
+     "t_end_ms": 1794174713641,
      "action": {
       "type": "key",
       "command": "Up"
@@ -837,8 +837,8 @@
     },
     {
      "step_id": "s49",
-     "t_start_ms": 1794171367633,
-     "t_end_ms": 1794171368638,
+     "t_start_ms": 1794174713641,
+     "t_end_ms": 1794174714645,
      "action": {
       "type": "key",
       "command": "Up"
@@ -854,8 +854,8 @@
     },
     {
      "step_id": "s50",
-     "t_start_ms": 1794171368638,
-     "t_end_ms": 1794171369642,
+     "t_start_ms": 1794174714645,
+     "t_end_ms": 1794174715749,
      "action": {
       "type": "key",
       "command": "Up"
@@ -871,8 +871,8 @@
     },
     {
      "step_id": "s51",
-     "t_start_ms": 1794171369642,
-     "t_end_ms": 1794171370646,
+     "t_start_ms": 1794174715749,
+     "t_end_ms": 1794174716754,
      "action": {
       "type": "key",
       "command": "Up"
@@ -888,8 +888,8 @@
     },
     {
      "step_id": "s52",
-     "t_start_ms": 1794171370646,
-     "t_end_ms": 1794171371651,
+     "t_start_ms": 1794174716754,
+     "t_end_ms": 1794174717758,
      "action": {
       "type": "key",
       "command": "Up"
@@ -905,8 +905,8 @@
     },
     {
      "step_id": "s53",
-     "t_start_ms": 1794171371651,
-     "t_end_ms": 1794171372655,
+     "t_start_ms": 1794174717758,
+     "t_end_ms": 1794174718762,
      "action": {
       "type": "key",
       "command": "Up"
@@ -922,8 +922,8 @@
     },
     {
      "step_id": "s54",
-     "t_start_ms": 1794171372655,
-     "t_end_ms": 1794171373659,
+     "t_start_ms": 1794174718762,
+     "t_end_ms": 1794174719767,
      "action": {
       "type": "key",
       "command": "Up"
@@ -939,8 +939,8 @@
     },
     {
      "step_id": "s55",
-     "t_start_ms": 1794171373659,
-     "t_end_ms": 1794171374663,
+     "t_start_ms": 1794174719767,
+     "t_end_ms": 1794174720772,
      "action": {
       "type": "key",
       "command": "Up"
@@ -956,8 +956,8 @@
     },
     {
      "step_id": "s56",
-     "t_start_ms": 1794171374663,
-     "t_end_ms": 1794171375667,
+     "t_start_ms": 1794174720772,
+     "t_end_ms": 1794174721776,
      "action": {
       "type": "key",
       "command": "Up"
@@ -973,8 +973,8 @@
     },
     {
      "step_id": "s57",
-     "t_start_ms": 1794171375667,
-     "t_end_ms": 1794171376670,
+     "t_start_ms": 1794174721776,
+     "t_end_ms": 1794174722779,
      "action": {
       "type": "key",
       "command": "Up"
@@ -990,8 +990,8 @@
     },
     {
      "step_id": "s58",
-     "t_start_ms": 1794171376670,
-     "t_end_ms": 1794171377675,
+     "t_start_ms": 1794174722779,
+     "t_end_ms": 1794174723784,
      "action": {
       "type": "key",
       "command": "Up"
@@ -1007,8 +1007,8 @@
     },
     {
      "step_id": "s59",
-     "t_start_ms": 1794171377675,
-     "t_end_ms": 1794171378679,
+     "t_start_ms": 1794174723784,
+     "t_end_ms": 1794174724788,
      "action": {
       "type": "key",
       "command": "Up"
@@ -1024,8 +1024,8 @@
     },
     {
      "step_id": "s60",
-     "t_start_ms": 1794171378679,
-     "t_end_ms": 1794171379684,
+     "t_start_ms": 1794174724788,
+     "t_end_ms": 1794174725792,
      "action": {
       "type": "key",
       "command": "Up"
@@ -1041,8 +1041,8 @@
     },
     {
      "step_id": "s61",
-     "t_start_ms": 1794171379684,
-     "t_end_ms": 1794171380688,
+     "t_start_ms": 1794174725792,
+     "t_end_ms": 1794174726797,
      "action": {
       "type": "key",
       "command": "Up"
@@ -1058,8 +1058,8 @@
     },
     {
      "step_id": "s62",
-     "t_start_ms": 1794171380688,
-     "t_end_ms": 1794171381692,
+     "t_start_ms": 1794174726797,
+     "t_end_ms": 1794174727801,
      "action": {
       "type": "key",
       "command": "Up"
@@ -1075,8 +1075,8 @@
     },
     {
      "step_id": "s63",
-     "t_start_ms": 1794171381692,
-     "t_end_ms": 1794171382697,
+     "t_start_ms": 1794174727801,
+     "t_end_ms": 1794174728805,
      "action": {
       "type": "key",
       "command": "Up"
@@ -1092,8 +1092,8 @@
     },
     {
      "step_id": "s64",
-     "t_start_ms": 1794171382697,
-     "t_end_ms": 1794171383701,
+     "t_start_ms": 1794174728805,
+     "t_end_ms": 1794174729810,
      "action": {
       "type": "key",
       "command": "Up"
@@ -1109,8 +1109,8 @@
     },
     {
      "step_id": "s65",
-     "t_start_ms": 1794171383701,
-     "t_end_ms": 1794171384705,
+     "t_start_ms": 1794174729810,
+     "t_end_ms": 1794174730814,
      "action": {
       "type": "key",
       "command": "Up"
@@ -1126,8 +1126,8 @@
     },
     {
      "step_id": "s66",
-     "t_start_ms": 1794171384705,
-     "t_end_ms": 1794171385709,
+     "t_start_ms": 1794174730814,
+     "t_end_ms": 1794174731818,
      "action": {
       "type": "key",
       "command": "Up"
@@ -1143,8 +1143,8 @@
     },
     {
      "step_id": "s67",
-     "t_start_ms": 1794171385709,
-     "t_end_ms": 1794171386714,
+     "t_start_ms": 1794174731818,
+     "t_end_ms": 1794174732823,
      "action": {
       "type": "key",
       "command": "Up"
@@ -1160,8 +1160,8 @@
     },
     {
      "step_id": "s68",
-     "t_start_ms": 1794171386714,
-     "t_end_ms": 1794171387718,
+     "t_start_ms": 1794174732823,
+     "t_end_ms": 1794174733827,
      "action": {
       "type": "key",
       "command": "Up"
@@ -1177,8 +1177,8 @@
     },
     {
      "step_id": "s69",
-     "t_start_ms": 1794171387718,
-     "t_end_ms": 1794171388723,
+     "t_start_ms": 1794174733827,
+     "t_end_ms": 1794174734832,
      "action": {
       "type": "key",
       "command": "Up"
@@ -1194,8 +1194,8 @@
     },
     {
      "step_id": "s70",
-     "t_start_ms": 1794171388723,
-     "t_end_ms": 1794171389727,
+     "t_start_ms": 1794174734832,
+     "t_end_ms": 1794174735835,
      "action": {
       "type": "key",
       "command": "Up"
@@ -1211,8 +1211,8 @@
     },
     {
      "step_id": "s71",
-     "t_start_ms": 1794171389727,
-     "t_end_ms": 1794171390731,
+     "t_start_ms": 1794174735835,
+     "t_end_ms": 1794174736839,
      "action": {
       "type": "key",
       "command": "Up"
@@ -1228,8 +1228,8 @@
     },
     {
      "step_id": "s72",
-     "t_start_ms": 1794171390731,
-     "t_end_ms": 1794171391735,
+     "t_start_ms": 1794174736839,
+     "t_end_ms": 1794174737843,
      "action": {
       "type": "key",
       "command": "Up"
@@ -1245,8 +1245,8 @@
     },
     {
      "step_id": "s73",
-     "t_start_ms": 1794171391735,
-     "t_end_ms": 1794171392740,
+     "t_start_ms": 1794174737843,
+     "t_end_ms": 1794174738848,
      "action": {
       "type": "key",
       "command": "Up"
@@ -1262,8 +1262,8 @@
     },
     {
      "step_id": "s74",
-     "t_start_ms": 1794171392740,
-     "t_end_ms": 1794171393745,
+     "t_start_ms": 1794174738848,
+     "t_end_ms": 1794174739952,
      "action": {
       "type": "key",
       "command": "Up"

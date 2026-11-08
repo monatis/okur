@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "9a6b6816"
+  "commit": "0e7ad2a0"
  },
  "trials": [
   {
@@ -15,14 +15,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794171448344
+     "t_ms": 1794174795325
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794171449706,
-     "t_end_ms": 1794171450709,
+     "t_start_ms": 1794174796691,
+     "t_end_ms": 1794174797695,
      "action": {
       "type": "key",
       "command": "2"
@@ -38,8 +38,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794171450709,
-     "t_end_ms": 1794171451713,
+     "t_start_ms": 1794174797695,
+     "t_end_ms": 1794174798699,
      "action": {
       "type": "key",
       "command": "2"
@@ -55,8 +55,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794171451713,
-     "t_end_ms": 1794171452717,
+     "t_start_ms": 1794174798699,
+     "t_end_ms": 1794174799703,
      "action": {
       "type": "key",
       "command": "2"
@@ -72,8 +72,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794171452717,
-     "t_end_ms": 1794171453721,
+     "t_start_ms": 1794174799703,
+     "t_end_ms": 1794174800707,
      "action": {
       "type": "key",
       "command": "2"
@@ -89,8 +89,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794171453721,
-     "t_end_ms": 1794171454725,
+     "t_start_ms": 1794174800707,
+     "t_end_ms": 1794174801711,
      "action": {
       "type": "key",
       "command": "3"
@@ -106,8 +106,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794171454725,
-     "t_end_ms": 1794171455729,
+     "t_start_ms": 1794174801711,
+     "t_end_ms": 1794174802715,
      "action": {
       "type": "key",
       "command": "3"
@@ -123,8 +123,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794171455729,
-     "t_end_ms": 1794171456733,
+     "t_start_ms": 1794174802715,
+     "t_end_ms": 1794174803719,
      "action": {
       "type": "key",
       "command": "1"
@@ -140,8 +140,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794171456733,
-     "t_end_ms": 1794171457737,
+     "t_start_ms": 1794174803719,
+     "t_end_ms": 1794174804723,
      "action": {
       "type": "key",
       "command": "1"

@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "9a6b6816"
+  "commit": "0e7ad2a0"
  },
  "trials": [
   {
@@ -15,14 +15,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794172677424
+     "t_ms": 1794176033609
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794172678785,
-     "t_end_ms": 1794172679790,
+     "t_start_ms": 1794176034972,
+     "t_end_ms": 1794176035976,
      "action": {
       "type": "key",
       "command": "2"
@@ -38,8 +38,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794172679790,
-     "t_end_ms": 1794172680793,
+     "t_start_ms": 1794176035976,
+     "t_end_ms": 1794176036980,
      "action": {
       "type": "key",
       "command": "2"
@@ -55,8 +55,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794172680793,
-     "t_end_ms": 1794172681798,
+     "t_start_ms": 1794176036980,
+     "t_end_ms": 1794176037984,
      "action": {
       "type": "key",
       "command": "2"
@@ -72,8 +72,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794172681798,
-     "t_end_ms": 1794172682801,
+     "t_start_ms": 1794176037984,
+     "t_end_ms": 1794176038988,
      "action": {
       "type": "key",
       "command": "2"
@@ -89,8 +89,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794172682801,
-     "t_end_ms": 1794172683806,
+     "t_start_ms": 1794176038988,
+     "t_end_ms": 1794176039992,
      "action": {
       "type": "key",
       "command": "2"
@@ -106,8 +106,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794172683806,
-     "t_end_ms": 1794172684811,
+     "t_start_ms": 1794176039992,
+     "t_end_ms": 1794176040996,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -123,8 +123,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794172684811,
-     "t_end_ms": 1794172685816,
+     "t_start_ms": 1794176040996,
+     "t_end_ms": 1794176042000,
      "action": {
       "type": "key",
       "command": "3"
@@ -140,8 +140,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794172685816,
-     "t_end_ms": 1794172686820,
+     "t_start_ms": 1794176042000,
+     "t_end_ms": 1794176043005,
      "action": {
       "type": "key",
       "command": "3"
@@ -157,8 +157,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794172686820,
-     "t_end_ms": 1794172687825,
+     "t_start_ms": 1794176043005,
+     "t_end_ms": 1794176044009,
      "action": {
       "type": "key",
       "command": "3"
@@ -174,8 +174,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794172687825,
-     "t_end_ms": 1794172688830,
+     "t_start_ms": 1794176044009,
+     "t_end_ms": 1794176045013,
      "action": {
       "type": "key",
       "command": "3"
@@ -191,8 +191,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794172688830,
-     "t_end_ms": 1794172689834,
+     "t_start_ms": 1794176045013,
+     "t_end_ms": 1794176046018,
      "action": {
       "type": "key",
       "command": "Shift+3"
@@ -208,8 +208,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794172689834,
-     "t_end_ms": 1794172690839,
+     "t_start_ms": 1794176046018,
+     "t_end_ms": 1794176047023,
      "action": {
       "type": "key",
       "command": "Shift+2"
@@ -225,8 +225,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794172690839,
-     "t_end_ms": 1794172691844,
+     "t_start_ms": 1794176047023,
+     "t_end_ms": 1794176048029,
      "action": {
       "type": "key",
       "command": "Shift+2"
@@ -242,8 +242,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794172691844,
-     "t_end_ms": 1794172692848,
+     "t_start_ms": 1794176048029,
+     "t_end_ms": 1794176049033,
      "action": {
       "type": "key",
       "command": "1"
@@ -259,8 +259,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794172692848,
-     "t_end_ms": 1794172693852,
+     "t_start_ms": 1794176049033,
+     "t_end_ms": 1794176050038,
      "action": {
       "type": "key",
       "command": "Shift+1"

@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "9a6b6816"
+  "commit": "0e7ad2a0"
  },
  "trials": [
   {
@@ -15,14 +15,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794173496135
+     "t_ms": 1794176854871
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794173497500,
-     "t_end_ms": 1794173498505,
+     "t_start_ms": 1794176856234,
+     "t_end_ms": 1794176857238,
      "action": {
       "type": "key",
       "command": "Insert+T"
@@ -31,15 +31,15 @@
       "Insert+T"
      ],
      "observation": {
-      "speech_raw": "Title is\nStructural Navigation Reference Fixture",
+      "speech_raw": "Title is\nStructural Navigation Reference Fixture - Google Chrome",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794173498505,
-     "t_end_ms": 1794173499508,
+     "t_start_ms": 1794176857238,
+     "t_end_ms": 1794176858242,
      "action": {
       "type": "key",
       "command": "H"
@@ -55,8 +55,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794173499508,
-     "t_end_ms": 1794173500513,
+     "t_start_ms": 1794176858242,
+     "t_end_ms": 1794176859247,
      "action": {
       "type": "key",
       "command": "Insert+T"
@@ -65,15 +65,15 @@
       "Insert+T"
      ],
      "observation": {
-      "speech_raw": "Title is\nStructural Navigation Reference Fixture\nbanner\nlevel 2\nheading is System Documentation",
+      "speech_raw": "Title is\nStructural Navigation Reference Fixture - Google Chrome\nbanner\nlevel 2\nheading is System Documentation",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794173500513,
-     "t_end_ms": 1794173501517,
+     "t_start_ms": 1794176859247,
+     "t_end_ms": 1794176860250,
      "action": {
       "type": "key",
       "command": "H"
@@ -89,8 +89,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794173501517,
-     "t_end_ms": 1794173502522,
+     "t_start_ms": 1794176860250,
+     "t_end_ms": 1794176861256,
      "action": {
       "type": "key",
       "command": "Insert+T"
@@ -99,15 +99,15 @@
       "Insert+T"
      ],
      "observation": {
-      "speech_raw": "Title is\nStructural Navigation Reference Fixture\nmain region\nlevel 2\nheading is Section Overview",
+      "speech_raw": "Title is\nStructural Navigation Reference Fixture - Google Chrome\nmain region\nlevel 2\nheading is Section Overview",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794173502522,
-     "t_end_ms": 1794173503527,
+     "t_start_ms": 1794176861256,
+     "t_end_ms": 1794176862260,
      "action": {
       "type": "key",
       "command": "H"
@@ -123,8 +123,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794173503527,
-     "t_end_ms": 1794173504532,
+     "t_start_ms": 1794176862260,
+     "t_end_ms": 1794176863266,
      "action": {
       "type": "key",
       "command": "Insert+T"
@@ -133,15 +133,15 @@
       "Insert+T"
      ],
      "observation": {
-      "speech_raw": "Title is\nStructural Navigation Reference Fixture\nmain region\nlevel 2\nheading is Subsection Details",
+      "speech_raw": "Title is\nStructural Navigation Reference Fixture - Google Chrome\nmain region\nlevel 2\nheading is Subsection Details",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794173504532,
-     "t_end_ms": 1794173505535,
+     "t_start_ms": 1794176863266,
+     "t_end_ms": 1794176864270,
      "action": {
       "type": "key",
       "command": "H"
@@ -157,8 +157,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794173505535,
-     "t_end_ms": 1794173506541,
+     "t_start_ms": 1794176864270,
+     "t_end_ms": 1794176865275,
      "action": {
       "type": "key",
       "command": "Insert+T"
@@ -167,15 +167,15 @@
       "Insert+T"
      ],
      "observation": {
-      "speech_raw": "Title is\nStructural Navigation Reference Fixture\nmain region\nlevel 2\nheading is Architecture Guide",
+      "speech_raw": "Title is\nStructural Navigation Reference Fixture - Google Chrome\nmain region\nlevel 2\nheading is Architecture Guide",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794173506541,
-     "t_end_ms": 1794173507545,
+     "t_start_ms": 1794176865275,
+     "t_end_ms": 1794176866279,
      "action": {
       "type": "key",
       "command": "H"
@@ -191,8 +191,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794173507545,
-     "t_end_ms": 1794173508550,
+     "t_start_ms": 1794176866279,
+     "t_end_ms": 1794176867284,
      "action": {
       "type": "key",
       "command": "Insert+T"
@@ -201,15 +201,15 @@
       "Insert+T"
      ],
      "observation": {
-      "speech_raw": "Title is\nStructural Navigation Reference Fixture\nQuick Reference complementary information\nlevel 2\nheading is Helpful Resources",
+      "speech_raw": "Title is\nStructural Navigation Reference Fixture - Google Chrome\nQuick Reference complementary information\nlevel 2\nheading is Helpful Resources",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794173508550,
-     "t_end_ms": 1794173509555,
+     "t_start_ms": 1794176867284,
+     "t_end_ms": 1794176868289,
      "action": {
       "type": "key",
       "command": "Ctrl+End"
@@ -225,8 +225,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794173509555,
-     "t_end_ms": 1794173510559,
+     "t_start_ms": 1794176868289,
+     "t_end_ms": 1794176869295,
      "action": {
       "type": "key",
       "command": "Insert+T"
@@ -235,7 +235,7 @@
       "Insert+T"
      ],
      "observation": {
-      "speech_raw": "Title is\nStructural Navigation Reference Fixture\ncontent information\nlevel 2",
+      "speech_raw": "Title is\nStructural Navigation Reference Fixture - Google Chrome\ncontent information\nlevel 2",
       "settled": true
      },
      "step_success": true

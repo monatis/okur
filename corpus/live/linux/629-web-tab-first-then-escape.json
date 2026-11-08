@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "9a6b6816"
+  "commit": "0e7ad2a0"
  },
  "trials": [
   {
@@ -15,14 +15,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794173533120
+     "t_ms": 1794176891962
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794173534485,
-     "t_end_ms": 1794173535589,
+     "t_start_ms": 1794176893327,
+     "t_end_ms": 1794176894431,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -31,15 +31,15 @@
       "Tab"
      ],
      "observation": {
-      "speech_raw": "Create Your Account - Riverside Library\n \u001d MainRegion \u001e \n \u001d FormRegion \u001e \nFull name \u001d Edit \u001e \n \u001dRequired\u001e \nblank\nType in text.",
+      "speech_raw": "Create Your Account - Riverside Library\nFull name \u001d Edit \u001e \n \u001dRequired\u001e",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794173535589,
-     "t_end_ms": 1794173536593,
+     "t_start_ms": 1794176894431,
+     "t_end_ms": 1794176895435,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -48,15 +48,15 @@
       "Escape"
      ],
      "observation": {
-      "speech_raw": "virtual PC Cursor",
+      "speech_raw": "",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794173536593,
-     "t_end_ms": 1794173537697,
+     "t_start_ms": 1794176895435,
+     "t_end_ms": 1794176896538,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -65,15 +65,15 @@
       "Tab"
      ],
      "observation": {
-      "speech_raw": "Email address \u001d Edit \u001e \nsam@example.com\nWe never share your email.\nType in text.",
+      "speech_raw": "Email address \u001d Edit \u001e \nsam@example.com\nWe never share your email.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794173537697,
-     "t_end_ms": 1794173538701,
+     "t_start_ms": 1794176896538,
+     "t_end_ms": 1794176897542,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -82,7 +82,7 @@
       "Escape"
      ],
      "observation": {
-      "speech_raw": "virtual PC Cursor",
+      "speech_raw": "",
       "settled": true
      },
      "step_success": true
