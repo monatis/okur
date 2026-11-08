@@ -96,6 +96,12 @@ with no change to the `KeyboardHook` port:
   (`hook: a h w c Down x b`, `target: a w C Down x b`, 0.30 ms median per replayed key).
   `okur-linux`'s hook therefore grabs on every top-level window (the root's children, as they
   are created), the window manager's root shortcuts staying its own.
+- **On the application's own window, not its frame (2026-11-08, eb0f0ced).** Under a reparenting
+  window manager the root's children are its frames, and X reports a grab on an ancestor of the
+  focus window as the focus leaving for it: GTK deactivated and activated its window around
+  every key, repeated its focus, and its popovers could not keep their state. The hook grabs on
+  the window holding WM_STATE and lets a frame's grabs go as a window is reparented into it; a
+  grab on the focus window itself moves no focus (one `WindowDeactivated` in a whole run of 304).
 
 ## 2. Weeks 2 to 6
 
@@ -114,6 +120,11 @@ with no change to the `KeyboardHook` port:
    and the baseline written.
 3. `okur-linux-model` and Linux snapshots of the HTML fixtures, replayed on every OS.
 4. Invariants for GTK and Qt controls (a check box, a combo box, a dialog said as on Windows).
+   **Begun 2026-11-08** ([`../handoff/2026-11-08-linux-desktop-controls.md`](../handoff/2026-11-08-linux-desktop-controls.md)):
+   SR Desktop Fixture's GTK 4 replica (`corpus/fixtures/linux/desktop-forms.py`) runs 301, 303
+   and 304 in the lab against JAWS's Windows evidence, 411/424 steps with the web runs; open: a
+   window's focus said as it comes forward, the drop-down's place and open list, the tree's
+   depth; then a dialog, and Qt.
 
 ## 3. Meanwhile
 
