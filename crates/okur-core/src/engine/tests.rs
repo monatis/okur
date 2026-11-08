@@ -3645,6 +3645,40 @@ fn tab_moves_on_from_the_virtual_cursor() {
     );
 }
 
+/// Space on a select with the virtual cursor: Okur asks the select to take the focus and opens
+/// it; the select's focus, Okur's own request, is not said, and its list, taking the focus, is
+/// said after the page's name, the page having had no focus yet [obs, 276/s2].
+#[test]
+fn space_on_a_select_says_its_list_not_its_own_focus() {
+    let mut select = AomNode::new(1, Role::ComboBox).with_name("Home branch");
+    select.states.expanded = Some(false);
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Create Your Account")
+        .with_children(vec![select]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    engine.set_actions(Box::new(crate::actions::RecordingActions::default()));
+    engine.handle_focus_event(&page_document());
+    engine.cursor.move_to_node_id(1);
+    speech.take();
+    engine.handle_key_event(&KeyEvent::new(Key::Space, Modifiers::none(), true));
+    let mut focus = FocusEvent::new(Role::ComboBox)
+        .with_node_id(1)
+        .with_name("Home branch");
+    focus.in_document = true;
+    assert_eq!(engine.handle_focus_event(&focus), None);
+    assert!(speech.take().is_empty());
+    let mut option = FocusEvent::new(Role::ListItem).with_name("Northside");
+    option.in_document = true;
+    option.container_is_list_box = true;
+    option.item_index = Some(1);
+    option.item_count = Some(3);
+    let said = engine.handle_focus_event(&option).unwrap_or_default();
+    assert!(said.starts_with("Create Your Account"), "{said}");
+    assert!(said.contains("Northside"), "{said}");
+}
+
 /// An autocomplete (a combo box one types in, its options pointed at with
 /// aria-activedescendant), JAWS on the dev box (2026-10-16): the list on the way in, each
 /// option with its position, forms mode kept, and the field again once an option is chosen.

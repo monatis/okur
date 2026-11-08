@@ -170,6 +170,10 @@ pub struct ScreenReaderEngine {
     /// The field an arrow put the focus on (Auto Forms Mode), already said: its focus event
     /// is not said again.
     arrow_focus: Option<usize>,
+    /// The select Space opened from the virtual cursor, which Okur asked to take the focus: its
+    /// focus is Okur's own request and not said, its list follows [obs, 276/s2]. Taken by the
+    /// next page focus, whatever it is.
+    activated_select: Option<usize>,
     /// A key has moved the virtual cursor since the page loaded: without Auto Forms Mode, Tab
     /// onto a field turns forms mode on only then [obs, 629, 630, 631].
     cursor_moved_since_load: bool,
@@ -668,6 +672,7 @@ impl ScreenReaderEngine {
             option_list: None,
             option_said: None,
             arrow_focus: None,
+            activated_select: None,
             cursor_moved_since_load: false,
             highlight_node: None,
             highlight_shown: false,

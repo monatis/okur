@@ -517,7 +517,11 @@ impl ScreenReaderEngine {
                     let (handled, forms_mode) = match node.role {
                         Role::Edit => (actions.focus(node), true),
                         Role::ComboBox if editable => (actions.focus(node), true),
-                        Role::ComboBox => (actions.focus(node) && actions.activate(node), true),
+                        Role::ComboBox => {
+                            let opened = actions.focus(node) && actions.activate(node);
+                            self.activated_select = opened.then_some(node.id);
+                            (opened, true)
+                        }
                         Role::Link { .. }
                         | Role::Button
                         | Role::MenuButton

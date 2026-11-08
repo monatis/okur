@@ -495,6 +495,8 @@ impl ScreenReaderEngine {
             }
 
             let target_id = self.page_node_for(focus);
+            let activated_select = self.activated_select.take();
+            let page_focus_before = self.last_page_focus;
             // A check box or radio button whose state changed while it was not focused (a
             // page's script set it): the focus brings its state, which the buffer takes before
             // the control is said [obs, round-aria2, 2015/s1].
@@ -1197,6 +1199,13 @@ impl ScreenReaderEngine {
             }
             // A field an arrow put the focus on was said with the arrow (Auto Forms Mode); its
             // text is read now, for the arrow that leaves it at its caret's edge.
+            // The select Space opened, focused at Okur's own request: its list is said as it
+            // takes the focus, after the page and its regions where the page had no focus yet
+            // [obs, 276/s2].
+            if activated_select.is_some() && activated_select == target_id {
+                self.last_page_focus = page_focus_before;
+                return None;
+            }
             if self
                 .arrow_focus
                 .take()
