@@ -15,7 +15,7 @@ import sys
 import gi
 
 gi.require_version("Gtk", "4.0")
-from gi.repository import Gio, GLib, Gtk  # noqa: E402
+from gi.repository import Gdk, Gio, GLib, Gtk  # noqa: E402
 
 
 def labelled(text, widget):
@@ -136,6 +136,24 @@ def build(app):
     tree_factory.connect("bind", tree_bind)
     tree = Gtk.ListView(model=Gtk.SingleSelection(model=folders), factory=tree_factory,
                         tab_behavior=Gtk.ListTabBehavior.ITEM)
+
+    # Right opens the folder selected and Left closes it, as in WinForms' tree (GTK's expander
+    # opens with plus and closes with minus).
+    def tree_key(_controller, keyval, _keycode, _state):
+        row = tree.get_model().get_selected_item()
+        if row is None or not row.is_expandable():
+            return False
+        if keyval == Gdk.KEY_Right and not row.get_expanded():
+            row.set_expanded(True)
+            return True
+        if keyval == Gdk.KEY_Left and row.get_expanded():
+            row.set_expanded(False)
+            return True
+        return False
+
+    tree_keys = Gtk.EventControllerKey(propagation_phase=Gtk.PropagationPhase.CAPTURE)
+    tree_keys.connect("key-pressed", tree_key)
+    tree.add_controller(tree_keys)
     box.append(tree)
 
     # The files' list in columns, Name and Size, its first row selected.
