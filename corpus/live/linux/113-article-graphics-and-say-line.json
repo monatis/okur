@@ -5,7 +5,7 @@
   "platform": "linux",
   "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "f0b3a66d"
+  "commit": "ebc4fd11"
  },
  "trials": [
   {
@@ -14,14 +14,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794162134927
+     "t_ms": 1794167021975
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794162136291,
-     "t_end_ms": 1794162137294,
+     "t_start_ms": 1794167023342,
+     "t_end_ms": 1794167024345,
      "action": {
       "type": "key",
       "command": "G"
@@ -37,8 +37,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794162137294,
-     "t_end_ms": 1794162138298,
+     "t_start_ms": 1794167024345,
+     "t_end_ms": 1794167025349,
      "action": {
       "type": "key",
       "command": "G"
@@ -54,8 +54,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794162138298,
-     "t_end_ms": 1794162139302,
+     "t_start_ms": 1794167025349,
+     "t_end_ms": 1794167026353,
      "action": {
       "type": "key",
       "command": "Insert+Up"

@@ -5,7 +5,7 @@
   "platform": "linux",
   "web_verbosity": null,
   "chrome": "google-chrome",
-  "commit": "f0b3a66d"
+  "commit": "ebc4fd11"
  },
  "trials": [
   {
@@ -14,14 +14,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794161329172
+     "t_ms": 1794166213765
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794161330534,
-     "t_end_ms": 1794161331539,
+     "t_start_ms": 1794166215127,
+     "t_end_ms": 1794166216130,
      "action": {
       "type": "keyboard",
       "command": "{DOWN}"

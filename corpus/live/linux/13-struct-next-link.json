@@ -5,7 +5,7 @@
   "platform": "linux",
   "web_verbosity": null,
   "chrome": "google-chrome",
-  "commit": "f0b3a66d"
+  "commit": "ebc4fd11"
  },
  "trials": [
   {
@@ -14,14 +14,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794162230325
+     "t_ms": 1794167117755
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794162231687,
-     "t_end_ms": 1794162232691,
+     "t_start_ms": 1794167119119,
+     "t_end_ms": 1794167120122,
      "action": {
       "type": "jaws_script",
       "command": "MoveToNextUnvisitedLink"
@@ -37,8 +37,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794162232691,
-     "t_end_ms": 1794162233695,
+     "t_start_ms": 1794167120122,
+     "t_end_ms": 1794167121126,
      "action": {
       "type": "jaws_script",
       "command": "MoveToNextUnvisitedLink"

@@ -5,7 +5,7 @@
   "platform": "linux",
   "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "f0b3a66d"
+  "commit": "ebc4fd11"
  },
  "trials": [
   {
@@ -14,18 +14,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794162696045
+     "t_ms": 1794167584786
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794162696400
+     "t_ms": 1794167585153
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794162697705,
-     "t_end_ms": 1794162698711,
+     "t_start_ms": 1794167586458,
+     "t_end_ms": 1794167587463,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+E"
@@ -41,8 +41,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794162698711,
-     "t_end_ms": 1794162699715,
+     "t_start_ms": 1794167587463,
+     "t_end_ms": 1794167588467,
      "action": {
       "type": "key",
       "command": "Escape"
