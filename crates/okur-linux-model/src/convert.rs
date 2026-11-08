@@ -338,8 +338,30 @@ impl Converter {
                     }
                 })
             });
+        // The select opened: Chrome on Linux says it expanded as its list takes the focus, its
+        // focused state gone, where Windows' Chrome says it of the focused select, which the
+        // engine says as "expanded" with its list [obs, 276/s7].
+        let expanded = record.kind
+            == EventKind::StateChanged {
+                flag: xa11y_core::StateFlag::Expanded,
+                value: true,
+            };
+        let opened = self
+            .page_select
+            .as_ref()
+            .filter(|(select, _)| expanded && object.as_deref() == Some(select.as_str()))
+            .map(|(_, control)| {
+                let mut control = control.clone();
+                control.states.expanded = Some(true);
+                AccessibilityEvent::Change {
+                    kind: ChangeKind::State,
+                    control,
+                }
+            });
+        let converted = converted.filter(|_| opened.is_none());
         events.extend(converted);
         events.extend(value_change);
+        events.extend(opened);
         events
     }
 }
@@ -659,6 +681,32 @@ mod tests {
         assert!(matches!(
             converter.convert_read(&focus).as_slice(),
             [AccessibilityEvent::Focus(f)] if f.unique_id.as_deref() == Some(expected.as_str())
+        ));
+    }
+
+    /// A page's select opened, its expansion reported with its focus gone to its list: the
+    /// focused select's change, expanded [obs, 276/s7].
+    #[test]
+    fn a_selects_expansion_is_its_change() {
+        let mut converter = Converter::default();
+        let select = element(ElementRole::ComboBox, "Home branch", "/select", true);
+        let mut focus = record(EventKind::FocusChanged, select.clone(), None);
+        focus.document = Some(":1.5/doc".to_owned());
+        let _ = converter.convert_read(&focus);
+        let mut unfocused = select;
+        unfocused.states.focused = false;
+        let opened = record(
+            EventKind::StateChanged {
+                flag: StateFlag::Expanded,
+                value: true,
+            },
+            unfocused,
+            None,
+        );
+        assert!(matches!(
+            converter.convert_read(&opened).as_slice(),
+            [AccessibilityEvent::Change { kind: ChangeKind::State, control }]
+                if control.states.expanded == Some(true)
         ));
     }
 
