@@ -64,6 +64,7 @@ fn native_focus(provider: &LinuxProvider, element: &ElementData) -> okur_core::e
         tracing::debug!("a native focus without its object's names");
         return base;
     };
+    let started = std::time::Instant::now();
     let focus = snapshot(provider.atspi_tree(&object, CONTROL_LIMIT));
     let mut ancestors = Vec::new();
     let mut next = provider.atspi_parent(&object);
@@ -75,15 +76,21 @@ fn native_focus(provider: &LinuxProvider, element: &ElementData) -> okur_core::e
             || (ancestors.len() == 1
                 && matches!(parent.role.as_str(), "list" | "tree table" | "grouping"));
         let limit = if whole { CONTROL_LIMIT } else { 1 };
-        next = provider.atspi_parent(&parent);
         let node = snapshot(provider.atspi_tree(&parent, limit));
         let window = matches!(node.role.as_str(), "frame" | "dialog" | "window" | "alert");
         ancestors.push(node);
-        if window {
-            break;
-        }
+        // The window is the last read: its own parent, the application, is not asked for.
+        next = if window {
+            None
+        } else {
+            provider.atspi_parent(&parent)
+        };
     }
+    // What a focus costs, for the review's estimates (2026-11-08) to become numbers.
+    let objects = count(&focus) + ancestors.iter().map(count).sum::<usize>();
     tracing::debug!(
+        ms = started.elapsed().as_millis(),
+        objects,
         focus = %focus.role,
         attributes = ?focus.attributes,
         states = focus.states,
@@ -92,6 +99,11 @@ fn native_focus(provider: &LinuxProvider, element: &ElementData) -> okur_core::e
         "native focus read"
     );
     okur_linux_model::focus::native_focus(base, &focus, &ancestors)
+}
+
+/// The objects in `node`'s tree, itself included.
+fn count(node: &okur_linux_model::page::AtspiNode) -> usize {
+    1 + node.children.iter().map(count).sum::<usize>()
 }
 
 /// An element's AT-SPI object, by its bus name and path.
