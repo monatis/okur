@@ -8,9 +8,9 @@
     "window_class": "",
     "process_version": "Google Chrome 157.0.8103.38 ",
     "fixture_sha256": "98c318f821c31f0385c2a685bdfce13f9377c2348a89cebc7bf002776cae0cff",
-    "captured_at_unix_ms": 1794152845041,
+    "captured_at_unix_ms": 1794156521201,
     "node_count": 38,
-    "capture_ms": 156
+    "capture_ms": 150
   },
   "root": {
     "role": "document web",
@@ -80,7 +80,7 @@
               "language": "en",
               "size": "12pt"
             },
-            "path": "/org/a11y/atspi/accessible/21",
+            "path": "/org/a11y/atspi/accessible/24",
             "children": [
               {
                 "role": "panel",
@@ -104,12 +104,12 @@
                   "size": "14.5pt",
                   "weight": "700"
                 },
-                "path": "/org/a11y/atspi/accessible/22",
+                "path": "/org/a11y/atspi/accessible/25",
                 "relations": [
                   [
                     2,
                     [
-                      "/org/a11y/atspi/accessible/23"
+                      "/org/a11y/atspi/accessible/26"
                     ]
                   ]
                 ],
@@ -132,12 +132,12 @@
                       "size": "14.5pt",
                       "weight": "700"
                     },
-                    "path": "/org/a11y/atspi/accessible/23",
+                    "path": "/org/a11y/atspi/accessible/26",
                     "relations": [
                       [
                         1,
                         [
-                          "/org/a11y/atspi/accessible/22"
+                          "/org/a11y/atspi/accessible/25"
                         ]
                       ]
                     ],
@@ -180,12 +180,12 @@
                       "language": "en",
                       "size": "14.5pt"
                     },
-                    "path": "/org/a11y/atspi/accessible/24",
+                    "path": "/org/a11y/atspi/accessible/27",
                     "relations": [
                       [
                         1,
                         [
-                          "/org/a11y/atspi/accessible/15"
+                          "/org/a11y/atspi/accessible/14"
                         ]
                       ]
                     ],
@@ -221,12 +221,12 @@
                       "text-align": "center"
                     },
                     "states": 1107298304,
-                    "path": "/org/a11y/atspi/accessible/25",
+                    "path": "/org/a11y/atspi/accessible/21",
                     "relations": [
                       [
                         3,
                         [
-                          "/org/a11y/atspi/accessible/15"
+                          "/org/a11y/atspi/accessible/14"
                         ]
                       ]
                     ]
@@ -249,7 +249,7 @@
                       "size": "17pt",
                       "underline": "single"
                     },
-                    "path": "/org/a11y/atspi/accessible/26",
+                    "path": "/org/a11y/atspi/accessible/28",
                     "children": [
                       {
                         "role": "link",
@@ -324,19 +324,19 @@
                       "size": "17pt",
                       "weight": "700"
                     },
-                    "path": "/org/a11y/atspi/accessible/15",
+                    "path": "/org/a11y/atspi/accessible/14",
                     "relations": [
                       [
                         4,
                         [
-                          "/org/a11y/atspi/accessible/25",
-                          "/org/a11y/atspi/accessible/28"
+                          "/org/a11y/atspi/accessible/21",
+                          "/org/a11y/atspi/accessible/30"
                         ]
                       ],
                       [
                         2,
                         [
-                          "/org/a11y/atspi/accessible/24"
+                          "/org/a11y/atspi/accessible/27"
                         ]
                       ]
                     ]
@@ -359,7 +359,7 @@
                       "size": "17pt",
                       "underline": "single"
                     },
-                    "path": "/org/a11y/atspi/accessible/27",
+                    "path": "/org/a11y/atspi/accessible/29",
                     "children": [
                       {
                         "role": "link",
@@ -419,12 +419,12 @@
                       "text-align": "center"
                     },
                     "states": 1124075776,
-                    "path": "/org/a11y/atspi/accessible/28",
+                    "path": "/org/a11y/atspi/accessible/30",
                     "relations": [
                       [
                         3,
                         [
-                          "/org/a11y/atspi/accessible/15"
+                          "/org/a11y/atspi/accessible/14"
                         ]
                       ]
                     ]
@@ -447,7 +447,7 @@
                       "language": "en",
                       "size": "12pt"
                     },
-                    "path": "/org/a11y/atspi/accessible/29",
+                    "path": "/org/a11y/atspi/accessible/31",
                     "children": [
                       {
                         "role": "static",
@@ -485,7 +485,7 @@
                       "text-align": "left"
                     },
                     "states": 1124073728,
-                    "path": "/org/a11y/atspi/accessible/30"
+                    "path": "/org/a11y/atspi/accessible/32"
                   },
                   {
                     "role": "label",
@@ -504,7 +504,7 @@
                       "language": "en",
                       "size": "14.5pt"
                     },
-                    "path": "/org/a11y/atspi/accessible/31",
+                    "path": "/org/a11y/atspi/accessible/33",
                     "relations": [
                       [
                         1,
@@ -545,7 +545,7 @@
                       "text-align": "center"
                     },
                     "states": 1107298304,
-                    "path": "/org/a11y/atspi/accessible/32",
+                    "path": "/org/a11y/atspi/accessible/22",
                     "relations": [
                       [
                         3,
@@ -586,14 +586,14 @@
                       [
                         4,
                         [
-                          "/org/a11y/atspi/accessible/32",
-                          "/org/a11y/atspi/accessible/33"
+                          "/org/a11y/atspi/accessible/22",
+                          "/org/a11y/atspi/accessible/34"
                         ]
                       ],
                       [
                         2,
                         [
-                          "/org/a11y/atspi/accessible/31"
+                          "/org/a11y/atspi/accessible/33"
                         ]
                       ]
                     ]
@@ -609,7 +609,7 @@
                       "text-align": "center"
                     },
                     "states": 1124075776,
-                    "path": "/org/a11y/atspi/accessible/33",
+                    "path": "/org/a11y/atspi/accessible/34",
                     "relations": [
                       [
                         3,
@@ -637,7 +637,7 @@
                       "language": "en",
                       "size": "12pt"
                     },
-                    "path": "/org/a11y/atspi/accessible/34",
+                    "path": "/org/a11y/atspi/accessible/35",
                     "children": [
                       {
                         "role": "static",
@@ -675,7 +675,7 @@
                       "text-align": "left"
                     },
                     "states": 1124073728,
-                    "path": "/org/a11y/atspi/accessible/35"
+                    "path": "/org/a11y/atspi/accessible/36"
                   },
                   {
                     "role": "label",
@@ -694,12 +694,12 @@
                       "language": "en",
                       "size": "14.5pt"
                     },
-                    "path": "/org/a11y/atspi/accessible/36",
+                    "path": "/org/a11y/atspi/accessible/37",
                     "relations": [
                       [
                         1,
                         [
-                          "/org/a11y/atspi/accessible/14"
+                          "/org/a11y/atspi/accessible/15"
                         ]
                       ]
                     ],
@@ -735,12 +735,12 @@
                       "text-align": "center"
                     },
                     "states": 1107298304,
-                    "path": "/org/a11y/atspi/accessible/37",
+                    "path": "/org/a11y/atspi/accessible/23",
                     "relations": [
                       [
                         3,
                         [
-                          "/org/a11y/atspi/accessible/14"
+                          "/org/a11y/atspi/accessible/15"
                         ]
                       ]
                     ]
@@ -771,19 +771,19 @@
                       "size": "17pt",
                       "weight": "700"
                     },
-                    "path": "/org/a11y/atspi/accessible/14",
+                    "path": "/org/a11y/atspi/accessible/15",
                     "relations": [
                       [
                         4,
                         [
-                          "/org/a11y/atspi/accessible/37",
+                          "/org/a11y/atspi/accessible/23",
                           "/org/a11y/atspi/accessible/38"
                         ]
                       ],
                       [
                         2,
                         [
-                          "/org/a11y/atspi/accessible/36"
+                          "/org/a11y/atspi/accessible/37"
                         ]
                       ]
                     ]
@@ -804,7 +804,7 @@
                       [
                         3,
                         [
-                          "/org/a11y/atspi/accessible/14"
+                          "/org/a11y/atspi/accessible/15"
                         ]
                       ]
                     ]

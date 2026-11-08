@@ -8,9 +8,9 @@
     "window_class": "",
     "process_version": "Google Chrome 157.0.8103.38 ",
     "fixture_sha256": "3c5e470c48c7391f066604d67a8eace4d7bf49a8249827af7d244432d25940e4",
-    "captured_at_unix_ms": 1794153403922,
+    "captured_at_unix_ms": 1794157084893,
     "node_count": 22,
-    "capture_ms": 97
+    "capture_ms": 94
   },
   "root": {
     "role": "document web",
@@ -168,6 +168,7 @@
               "size": "18pt",
               "weight": "700"
             },
+            "description": "Orders over fifty dollars ship free.",
             "path": "/org/a11y/atspi/accessible/16",
             "children": [
               {
@@ -211,6 +212,7 @@
               "language": "en",
               "size": "10pt"
             },
+            "description": "This cannot be undone.",
             "path": "/org/a11y/atspi/accessible/17",
             "relations": [
               [
@@ -311,6 +313,7 @@
                   "size": "12pt",
                   "underline": "single"
                 },
+                "description": "Jumps to the end of the page",
                 "path": "/org/a11y/atspi/accessible/26",
                 "uri": "file:///root/okur/corpus/fixtures/described-elements.html#end",
                 "children": [
@@ -360,6 +363,7 @@
               "size": "18pt",
               "weight": "700"
             },
+            "description": "The address you provided has been added.",
             "path": "/org/a11y/atspi/accessible/20",
             "relations": [
               [
