@@ -174,8 +174,19 @@ impl LinuxProvider {
             })
     }
 
-    /// Get the AT-SPI role name string.
+    /// The AT-SPI role's name, as libatspi gives it (`atspi_accessible_get_role_name`): by the
+    /// role's number from AT-SPI's table, so every toolkit's role reads alike (GTK 4's own
+    /// GetRoleName answers "radio" for a radio button); the application's own name where the
+    /// number is not in the table.
     fn get_role_name(&self, aref: &AccessibleRef) -> Result<String> {
+        match self.get_role_number(aref).ok().and_then(atspi_role_name) {
+            Some(name) => Ok(name.to_owned()),
+            None => self.get_app_role_name(aref),
+        }
+    }
+
+    /// The role's name the application gives (its GetRoleName).
+    fn get_app_role_name(&self, aref: &AccessibleRef) -> Result<String> {
         let proxy = self.make_proxy(&aref.bus_name, &aref.path, "org.a11y.atspi.Accessible")?;
         let reply = proxy
             .call_method("GetRoleName", &())
@@ -701,8 +712,12 @@ impl LinuxProvider {
     /// After resolving the role (1-3 sequential D-Bus calls), all remaining
     /// property fetches are independent and run in parallel via rayon::join.
     fn build_element_data(&self, aref: &AccessibleRef, pid: Option<u32>) -> ElementData {
-        let role_name = self.get_role_name(aref).unwrap_or_default();
         let role_num = self.get_role_number(aref).unwrap_or(0);
+        // Named as get_role_name names it, from the number just read.
+        let role_name = match atspi_role_name(role_num) {
+            Some(name) => name.to_owned(),
+            None => self.get_app_role_name(aref).unwrap_or_default(),
+        };
         let coarse_role = {
             let by_name = if !role_name.is_empty() {
                 map_atspi_role(&role_name)
@@ -2825,6 +2840,154 @@ pub(crate) fn map_atspi_role(role_name: &str) -> Role {
 /// pins it against the AtspiRole enum the tests carry.
 const ATSPI_ROLE_FRAME: u32 = 23;
 
+/// AT-SPI's roles named by their number, as libatspi names them (`atspi_role_get_name`;
+/// listed from libatspi 2.60.4 in the Linux lab, 2026-11-08). The application's own GetRoleName
+/// differs by toolkit: GTK 4 answers ARIA's words ("radio", "row", "tree grid", "generic").
+const ATSPI_ROLE_NAMES: [&str; 131] = [
+    "invalid",
+    "accelerator label",
+    "alert",
+    "animation",
+    "arrow",
+    "calendar",
+    "canvas",
+    "check box",
+    "check menu item",
+    "color chooser",
+    "column header",
+    "combo box",
+    "date editor",
+    "desktop icon",
+    "desktop frame",
+    "dial",
+    "dialog",
+    "directory pane",
+    "drawing area",
+    "file chooser",
+    "filler",
+    "focus traversable",
+    "font chooser",
+    "frame",
+    "glass pane",
+    "html container",
+    "icon",
+    "image",
+    "internal frame",
+    "label",
+    "layered pane",
+    "list",
+    "list item",
+    "menu",
+    "menu bar",
+    "menu item",
+    "option pane",
+    "page tab",
+    "page tab list",
+    "panel",
+    "password text",
+    "popup menu",
+    "progress bar",
+    "button",
+    "radio button",
+    "radio menu item",
+    "root pane",
+    "row header",
+    "scroll bar",
+    "scroll pane",
+    "separator",
+    "slider",
+    "spin button",
+    "split pane",
+    "status bar",
+    "table",
+    "table cell",
+    "table column header",
+    "table row header",
+    "tearoff menu item",
+    "terminal",
+    "text",
+    "toggle button",
+    "tool bar",
+    "tool tip",
+    "tree",
+    "tree table",
+    "unknown",
+    "viewport",
+    "window",
+    "extended",
+    "header",
+    "footer",
+    "paragraph",
+    "ruler",
+    "application",
+    "autocomplete",
+    "editbar",
+    "embedded",
+    "entry",
+    "chart",
+    "caption",
+    "document frame",
+    "heading",
+    "page",
+    "section",
+    "redundant object",
+    "form",
+    "link",
+    "input method window",
+    "table row",
+    "tree item",
+    "document spreadsheet",
+    "document presentation",
+    "document text",
+    "document web",
+    "document email",
+    "comment",
+    "list box",
+    "grouping",
+    "image map",
+    "notification",
+    "info bar",
+    "level bar",
+    "title bar",
+    "block quote",
+    "audio",
+    "video",
+    "definition",
+    "article",
+    "landmark",
+    "log",
+    "marquee",
+    "math",
+    "rating",
+    "timer",
+    "static",
+    "math fraction",
+    "math root",
+    "subscript",
+    "superscript",
+    "description list",
+    "description term",
+    "description value",
+    "footnote",
+    "content deletion",
+    "content insertion",
+    "mark",
+    "suggestion",
+    "push button menu",
+    "switch",
+];
+
+/// Role `number`'s name in [`ATSPI_ROLE_NAMES`], none for "invalid" and "extended" (whose name
+/// only the application knows) or a number past the table.
+fn atspi_role_name(number: u32) -> Option<&'static str> {
+    const INVALID: u32 = 0;
+    const EXTENDED: u32 = 70;
+    if number == INVALID || number == EXTENDED {
+        return None;
+    }
+    ATSPI_ROLE_NAMES.get(usize::try_from(number).ok()?).copied()
+}
+
 /// Map AT-SPI2 numeric role (AtspiRole enum) to xa11y Role.
 /// Values from atspi-common Role enum (repr(u32)).
 pub(crate) fn map_atspi_role_number(role: u32) -> Role {
@@ -3613,6 +3776,23 @@ mod tests {
             .copied()
             .expect("the AtspiRole table must carry `frame`");
         assert_eq!(number, ATSPI_ROLE_FRAME, "{name} moved");
+    }
+
+    /// A role is named by its number as libatspi names it (the table listed from libatspi in
+    /// the Linux lab), which the AtspiRole enum the tests carry agrees with; "invalid",
+    /// "extended" and a number past the table have no name of their own.
+    #[test]
+    fn a_role_is_named_by_its_number_as_libatspi_names_it() {
+        for &(number, name) in ATSPI_ROLE_ENUM {
+            match name {
+                "invalid" | "extended" => assert_eq!(atspi_role_name(number), None),
+                _ => assert_eq!(atspi_role_name(number), Some(name), "role {number}"),
+            }
+        }
+        assert_eq!(atspi_role_name(44), Some("radio button"));
+        assert_eq!(atspi_role_name(66), Some("tree table"));
+        assert_eq!(atspi_role_name(90), Some("table row"));
+        assert_eq!(atspi_role_name(500), None);
     }
 
     /// The dock attribute only makes a surface on a top-level frame. `panel`

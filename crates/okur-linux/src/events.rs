@@ -97,7 +97,10 @@ fn native_focus(provider: &LinuxProvider, element: &ElementData) -> okur_core::e
     }
     tracing::debug!(
         focus = %focus.role,
+        attributes = ?focus.attributes,
+        states = focus.states,
         ancestors = ?ancestors.iter().map(|a| a.role.as_str()).collect::<Vec<_>>(),
+        parent = ?ancestors.first().map(|a| &a.attributes),
         "native focus read"
     );
     okur_linux_model::focus::native_focus(base, &focus, &ancestors)
@@ -285,12 +288,24 @@ impl EventSource for AtspiEventSource {
                                     return;
                                 }
                             }
-                            // A focus outside a page, read with what surrounds it.
+                            // A focus outside a page, and its control's change, read with what
+                            // surrounds it: the change names the control as its focus did.
+                            let changed = control_change(&event);
                             let native = event
                                 .target
                                 .as_ref()
-                                .filter(|_| focus && document.is_none())
-                                .map(|e| AccessibilityEvent::Focus(native_focus(&provider, e)));
+                                .filter(|_| (focus || changed) && document.is_none())
+                                .map(|e| native_focus(&provider, e))
+                                .map(|control| {
+                                    if changed {
+                                        AccessibilityEvent::Change {
+                                            kind: okur_core::event::ChangeKind::State,
+                                            control,
+                                        }
+                                    } else {
+                                        AccessibilityEvent::Focus(control)
+                                    }
+                                });
                             if let Some(event) =
                                 native.or_else(|| convert(&event, document.is_some()))
                             {
