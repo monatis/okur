@@ -60,8 +60,8 @@ pub fn in_active_window(ancestors: &[AtspiNode]) -> bool {
 
 /// A native control's focus (GTK's, a toolkit's outside a page) read with what surrounds it, as
 /// Windows reads the same control, so the engine says it alike (the plan's §2.4: SR Desktop
-/// Fixture's GTK replica beside JAWS's Windows evidence, probe-gtk-tree.sh). \`focus\` is the
-/// focused element's AT-SPI subtree, \`ancestors\` its ancestors' subtrees from its parent up,
+/// Fixture's GTK replica beside JAWS's Windows evidence, probe-gtk-tree.sh). `focus` is the
+/// focused element's AT-SPI subtree, `ancestors` its ancestors' subtrees from its parent up,
 /// as far as its window. Fills in:
 /// - the window, the nearest frame or dialog's name;
 /// - a name GTK leaves empty (a list's item) from the first label within, and the mnemonic's
@@ -213,7 +213,9 @@ pub fn native_focus(
     event
 }
 
-/// \`node\`'s place among its parent's children of its role, from 1, and their count.
+/// `node`'s place among its parent's children of its role, from 1, and their count. A peer is
+/// `node` by its object's path where the read has one (two items of one name and state are two
+/// places: the code review of 2026-11-08, finding 11), else by its name, states and label.
 fn place(event: &mut FocusEvent, node: &AtspiNode, parent: &AtspiNode) {
     let peers: Vec<&AtspiNode> = parent
         .children
@@ -221,6 +223,9 @@ fn place(event: &mut FocusEvent, node: &AtspiNode, parent: &AtspiNode) {
         .filter(|c| c.role == node.role)
         .collect();
     let at = peers.iter().position(|p| {
+        if !node.path.is_empty() && !p.path.is_empty() {
+            return p.path == node.path;
+        }
         p.name == node.name && p.states == node.states && first_label(p) == first_label(node)
     });
     if let Some(at) = at {
@@ -243,12 +248,12 @@ fn group_name(group: &AtspiNode) -> Option<String> {
         .filter(|n| !n.is_empty())
 }
 
-/// The first label's text within \`node\`, depth first.
+/// The first label's text within `node`, depth first.
 fn first_label(node: &AtspiNode) -> Option<String> {
     find(node, &|n| n.role == "label" && !n.name.is_empty()).map(|label| label.name.clone())
 }
 
-/// The first node within \`node\` (itself left out), depth first, that \`wanted\` takes.
+/// The first node within `node` (itself left out), depth first, that `wanted` takes.
 fn find<'a>(node: &'a AtspiNode, wanted: &dyn Fn(&AtspiNode) -> bool) -> Option<&'a AtspiNode> {
     node.children.iter().find_map(|child| {
         if wanted(child) {
@@ -280,6 +285,25 @@ fn without_mnemonic(name: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// Two items of one name and state are two places: the one focused is found by its path.
+    #[test]
+    fn a_place_is_found_by_the_objects_path() {
+        let item = |path: &str| AtspiNode {
+            role: "list item".to_owned(),
+            name: "Copy".to_owned(),
+            path: path.to_owned(),
+            ..AtspiNode::default()
+        };
+        let list = AtspiNode {
+            role: "list".to_owned(),
+            children: vec![item("/a"), item("/b"), item("/c")],
+            ..AtspiNode::default()
+        };
+        let mut event = FocusEvent::new(Role::ListItem);
+        place(&mut event, &item("/b"), &list);
+        assert_eq!((event.item_index, event.item_count), (Some(2), Some(3)));
+    }
 
     /// The parent is read whole, and a list's, a column view's or a group box's above it; the
     /// rest alone; the read ends at a window, a page's dialog's too.
