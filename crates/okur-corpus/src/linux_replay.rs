@@ -104,7 +104,9 @@ struct Replayer<'a> {
 
 impl<'a> Replayer<'a> {
     fn new(settings: okur_core::settings::Settings, options: ReplayOptions<'a>) -> Self {
-        let speech = RecordingSpeech::default();
+        // Marks given back as the live run's speech thread gives them, each once handed over:
+        // the silent synthesizer reads a Say All as fast as the event loop takes them.
+        let speech = RecordingSpeech::reporting_marks();
         let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&okur_core::AomNode::new(
             0,
             okur_core::Role::Document,
@@ -137,6 +139,19 @@ impl<'a> Replayer<'a> {
         self.last_ms = Some(self.last_ms.map_or(now, |last| last.max(now)));
     }
 
+    /// The Say All parts handed over, reached: the engine hands over the next, as live.
+    fn reach_marks(&mut self) {
+        for _ in 0..10_000 {
+            let marks = self.speech.take_marks();
+            if marks.is_empty() {
+                return;
+            }
+            for mark in marks {
+                self.engine.speech_reached(mark);
+            }
+        }
+    }
+
     fn feed(&mut self, record: &AtspiRecord) {
         self.advance(record.at_ms);
         // As the driver converted it: GTK's twin focus passed over, then what was read.
@@ -156,6 +171,7 @@ impl<'a> Replayer<'a> {
                 let buffer = VirtualBuffer::from_aom_owned(okur_core::AomNode::clone(&page));
                 let _ = self.engine.install_page_build(generation, buffer);
             }
+            self.reach_marks();
         }
     }
 
@@ -167,7 +183,9 @@ impl<'a> Replayer<'a> {
             chord,
             at,
             Modifiers::none(),
-        )
+        )?;
+        self.reach_marks();
+        Ok(())
     }
 }
 

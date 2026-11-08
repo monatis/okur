@@ -903,6 +903,10 @@ pub(crate) struct RecordingSpeech {
     say_all_caps: std::sync::Arc<std::sync::atomic::AtomicBool>,
     /// The voice settings' Text Processing.
     text: std::sync::Arc<std::sync::Mutex<okur_core::settings::TextProcessing>>,
+    /// The marks of the Say All parts handed over, where the harness gives them back as a live
+    /// run's speech thread does (the Linux replay); parity's speech reports none, and a Say All
+    /// hands over every line at once.
+    marks: Option<std::sync::Arc<std::sync::Mutex<Vec<u64>>>>,
     /// The speech dictionary's rules: the synthesizer is given their replacements.
     dictionary: std::sync::Arc<std::sync::Mutex<Vec<okur_core::dictionary::DictionaryEntry>>>,
 }
@@ -956,6 +960,22 @@ impl RecordingSpeech {
         drain(&self.history)
     }
 
+    /// A speech that reports the marks of its Say All parts, for the harness to give back.
+    pub(crate) fn reporting_marks() -> Self {
+        Self {
+            marks: Some(std::sync::Arc::default()),
+            ..Self::default()
+        }
+    }
+
+    /// The marks handed over since the last call.
+    pub(crate) fn take_marks(&self) -> Vec<u64> {
+        self.marks
+            .as_ref()
+            .and_then(|marks| marks.lock().ok().map(|mut m| std::mem::take(&mut *m)))
+            .unwrap_or_default()
+    }
+
     /// The speech dictionary's rules now.
     fn dictionary(&self) -> Vec<okur_core::dictionary::DictionaryEntry> {
         self.dictionary
@@ -997,7 +1017,16 @@ impl okur_core::speech::SpeechOutput for RecordingSpeech {
 
     /// A Say All part: its capitalized words raised, as the speech thread gives them, while
     /// Indicate Caps During Say All is on.
-    fn speak_marked(&mut self, text: &str, _mark: u64, _interrupt: bool) {
+    fn reports_marks(&self) -> bool {
+        self.marks.is_some()
+    }
+
+    fn speak_marked(&mut self, text: &str, mark: u64, _interrupt: bool) {
+        if let Some(marks) = &self.marks {
+            if let Ok(mut marks) = marks.lock() {
+                marks.push(mark);
+            }
+        }
         if !self.say_all_caps.load(std::sync::atomic::Ordering::SeqCst) {
             self.push(text, false);
             return;
