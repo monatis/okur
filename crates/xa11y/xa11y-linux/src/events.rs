@@ -120,22 +120,28 @@ pub(crate) fn subscribe_for_pid(
             message: format!("No application found with PID {pid}"),
         });
     }
-    subscribe(Sources::App {
-        buses: sender_buses,
-        name: app_name,
-        pid,
-    })
+    subscribe(
+        None,
+        Sources::App {
+            buses: sender_buses,
+            name: app_name,
+            pid,
+        },
+    )
 }
 
 /// Subscribe to every application's AT-SPI2 events: the whole desktop, as a
 /// screen reader hears it. Each event names its application and process,
 /// looked up when the application is first heard. The registration is for
 /// every application, so toolkits started later send their events too.
-pub(crate) fn subscribe_desktop() -> Result<Subscription> {
-    subscribe(Sources::Desktop(Mutex::new(HashMap::new())))
+pub(crate) fn subscribe_desktop(wanted: Option<KindFilter>) -> Result<Subscription> {
+    subscribe(wanted, Sources::Desktop(Mutex::new(HashMap::new())))
 }
 
-fn subscribe(sources: Sources) -> Result<Subscription> {
+/// The kinds of event a subscriber takes: the others are dropped before their element is read.
+pub type KindFilter = Box<dyn Fn(&EventKind) -> bool + Send + Sync>;
+
+fn subscribe(wanted: Option<KindFilter>, sources: Sources) -> Result<Subscription> {
     // The senders the match rules and the registration name: an
     // application's bus names, or none for the desktop (every sender; the
     // registry takes an empty application name as every application).
@@ -201,6 +207,7 @@ fn subscribe(sources: Sources) -> Result<Subscription> {
         sources,
         tx: Mutex::new(tx),
         conn: calls,
+        wanted,
     });
 
     // Activate the broadcast receiver *before* spawning the worker. If we
@@ -286,6 +293,8 @@ fn subscribe(sources: Sources) -> Result<Subscription> {
 struct EventContext {
     sources: Sources,
     tx: Mutex<std::sync::mpsc::Sender<Event>>,
+    /// The kinds the subscriber takes; every kind when none is given.
+    wanted: Option<KindFilter>,
     /// Used for D-Bus property/method calls to build target snapshots: a
     /// connection of its own, not the one whose signals the thread reads
     /// (see `subscribe`). It stays alive until every `Arc<EventContext>`
@@ -389,6 +398,17 @@ impl EventContext {
             Err(_) => return,
         };
 
+        // The kinds first, before the element's snapshot (five to seven calls
+        // back into the application): a signal that maps to no kind, or to none
+        // the subscriber takes, costs nothing more (a page loading sends
+        // thousands; the code review of 2026-11-08). The role only adds a text
+        // kind beside a value change, so it is read when a kind is wanted.
+        let wanted = |kind: &EventKind| self.wanted.as_ref().is_none_or(|w| w(kind));
+        let unread = signal_to_kinds(iface.as_str(), member.as_str(), &detail, detail1, None);
+        if !unread.iter().any(wanted) {
+            return;
+        }
+
         let target_ref = AccessibleRef {
             bus_name: sender.as_str().to_string(),
             path: path.to_string(),
@@ -407,7 +427,7 @@ impl EventContext {
             target_role,
         );
 
-        for kind in kinds {
+        for kind in kinds.into_iter().filter(wanted) {
             self.emit(kind, target.clone(), &app);
         }
     }
@@ -762,7 +782,13 @@ impl LinuxProvider {
     /// Every application's accessibility events: the whole desktop, as a
     /// screen reader hears it ([`subscribe_desktop`]).
     pub fn subscribe_desktop(&self) -> Result<Subscription> {
-        subscribe_desktop()
+        subscribe_desktop(None)
+    }
+
+    /// [`Self::subscribe_desktop`], for the kinds `wanted` takes alone: a signal of another
+    /// kind is dropped before its element is read.
+    pub fn subscribe_desktop_kinds(&self, wanted: KindFilter) -> Result<Subscription> {
+        subscribe_desktop(Some(wanted))
     }
 }
 

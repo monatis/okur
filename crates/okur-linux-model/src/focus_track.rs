@@ -19,6 +19,25 @@ use okur_core::aom::Role;
 use okur_core::event::FocusEvent;
 use xa11y_core::{EventKind, StateFlag};
 
+/// Whether okur-linux's event loop takes events of `kind`: the focus, a control's checked,
+/// selected or expanded state, a name, a page loaded, a window activated or left. The others are
+/// dropped before their object is read (xa11y-linux's `subscribe_desktop_kinds`): a page loading
+/// sends thousands of structure and text signals (the code review of 2026-11-08).
+pub fn is_heard(kind: &EventKind) -> bool {
+    matches!(
+        kind,
+        EventKind::FocusChanged
+            | EventKind::NameChanged
+            | EventKind::DocumentLoaded
+            | EventKind::WindowActivated
+            | EventKind::WindowDeactivated
+            | EventKind::StateChanged {
+                flag: StateFlag::Checked | StateFlag::Selected | StateFlag::Expanded,
+                ..
+            }
+    )
+}
+
 /// Whether an event of `kind` on an object (`focused`: the object has the focus) is a change of
 /// the focused control the engine is told of: its checked, selected or expanded state, as
 /// Windows' state change gives it (Space on a check box [obs, 304/s1]).
@@ -147,6 +166,34 @@ mod tests {
         event.name = Some(name.to_owned());
         event.value = value.map(str::to_owned);
         event
+    }
+
+    /// Every kind the event loop acts on is heard; a structure change or a focus state is not.
+    #[test]
+    fn the_loop_hears_what_it_acts_on() {
+        let checked = EventKind::StateChanged {
+            flag: StateFlag::Checked,
+            value: true,
+        };
+        let selected = EventKind::StateChanged {
+            flag: StateFlag::Selected,
+            value: true,
+        };
+        for kind in [
+            EventKind::FocusChanged,
+            EventKind::NameChanged,
+            checked,
+            selected,
+        ] {
+            assert!(is_heard(&kind));
+        }
+        assert!(is_heard(&EventKind::DocumentLoaded));
+        assert!(is_heard(&EventKind::WindowDeactivated));
+        assert!(!is_heard(&EventKind::StructureChanged));
+        assert!(!is_heard(&EventKind::StateChanged {
+            flag: StateFlag::Focused,
+            value: true,
+        }));
     }
 
     /// Space on a check box changes the focused control; its focus state, or another object's

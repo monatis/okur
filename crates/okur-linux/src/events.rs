@@ -185,7 +185,7 @@ pub fn capture_page(
 ) -> Result<(okur_linux_model::page::AtspiNode, Duration), RuntimeError> {
     let provider = LinuxProvider::new().map_err(|e| source_error("the bus", e))?;
     let subscription = provider
-        .subscribe_desktop()
+        .subscribe_desktop_kinds(Box::new(okur_linux_model::focus_track::is_heard))
         .map_err(|e| source_error("the desktop's events", e))?;
     let started = std::time::Instant::now();
     while started.elapsed() < wait {
@@ -270,7 +270,7 @@ impl EventSource for AtspiEventSource {
         }
         let provider = LinuxProvider::new().map_err(|e| source_error("the bus", e))?;
         let subscription = provider
-            .subscribe_desktop()
+            .subscribe_desktop_kinds(Box::new(okur_linux_model::focus_track::is_heard))
             .map_err(|e| source_error("the desktop's events", e))?;
         tracing::debug!("AT-SPI: the desktop's events subscribed");
         let stop = Arc::new(AtomicBool::new(false));
