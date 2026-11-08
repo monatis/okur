@@ -299,10 +299,17 @@ impl EventSource for AtspiEventSource {
                             let object = event.target.as_ref().and_then(object_of);
                             match event.kind {
                                 EventKind::WindowActivated | EventKind::WindowDeactivated => {
+                                    tracing::debug!(kind = ?event.kind, "AT-SPI window");
                                     focused_object = None;
                                 }
                                 EventKind::FocusChanged => {
                                     let again = object.is_some() && object == focused_object;
+                                    tracing::debug!(
+                                        ?object,
+                                        before = ?focused_object,
+                                        again,
+                                        "AT-SPI focus's object"
+                                    );
                                     focused_object = object;
                                     if again && document.is_none() {
                                         continue;
