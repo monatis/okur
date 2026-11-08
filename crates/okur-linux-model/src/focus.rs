@@ -230,7 +230,7 @@ pub fn native_focus(
 /// The place a node says itself, from 1, and its set's size: GTK's list items and rows carry
 /// `posinset` and `setsize` (the lab's traces at f0b3a66d). Not a tree's: there they number
 /// the flattened list, not the row's siblings (303's Reports, "2 of 4" for 1 of 2).
-fn own_place(node: &AtspiNode) -> Option<(usize, usize)> {
+pub(crate) fn own_place(node: &AtspiNode) -> Option<(usize, usize)> {
     let number = |name: &str| node.attributes.get(name)?.parse::<usize>().ok();
     Some((number("posinset")?, number("setsize")?)).filter(|(at, of)| *at >= 1 && at <= of)
 }
@@ -238,7 +238,7 @@ fn own_place(node: &AtspiNode) -> Option<(usize, usize)> {
 /// `node`'s place among its parent's children of its role, from 1, and their count. A peer is
 /// `node` by its object's path where the read has one (two items of one name and state are two
 /// places: the code review of 2026-11-08, finding 11), else by its name, states and label.
-fn place(event: &mut FocusEvent, node: &AtspiNode, parent: &AtspiNode) {
+pub(crate) fn place(event: &mut FocusEvent, node: &AtspiNode, parent: &AtspiNode) {
     let peers: Vec<&AtspiNode> = parent
         .children
         .iter()

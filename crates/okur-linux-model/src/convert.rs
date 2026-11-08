@@ -141,10 +141,15 @@ impl Converter {
 
     /// Whether the event's object is read with what surrounds it: a focus, or the focused
     /// control's change, outside a page.
+    /// In a page, a menu item focused, which may be a select's option: Chrome on Linux shows a
+    /// select's open list as a menu in the combo box (276).
     pub fn wants_native(kind: &EventKind, target: Option<&ElementData>, in_page: bool) -> bool {
-        target.is_some()
-            && !in_page
-            && (*kind == EventKind::FocusChanged || is_control_change(kind, focused(target)))
+        let focus = *kind == EventKind::FocusChanged;
+        match target {
+            None => false,
+            Some(element) if in_page => focus && element.role == Role::MenuItem,
+            Some(_) => focus || is_control_change(kind, focused(target)),
+        }
     }
 
     /// The focused control to read again, as something within it changed in its application.
@@ -253,8 +258,16 @@ impl Converter {
                 Reread::Same => {}
             }
         }
+        // A select's option, read with its menu and its combo box: the list box option the
+        // engine takes it as, Windows' shape [obs, 276/s2].
+        let option = target
+            .filter(|_| focus && in_page)
+            .zip(record.native.as_ref())
+            .and_then(|(element, read)| select_option(element, read, app.clone()));
         // Outside a page the native reading alone: none is a focus in a window behind.
-        let converted = if outside_page && target.is_some() {
+        let converted = if let Some(option) = option {
+            Some(AccessibilityEvent::Focus(option))
+        } else if outside_page && target.is_some() {
             native
         } else {
             native.or_else(|| {
@@ -311,6 +324,35 @@ fn native_control(
 /// A focus, or the focused control's change, as its event's snapshot has it: a page's (`in_page`,
 /// where the virtual cursor reads and takes the keys, as the focus chain that holds a document
 /// tells it on Windows).
+/// A select's option as Chrome on Linux shows it, a menu item of a menu in a combo box: a list
+/// box's option in the page, with its place, as Windows' select list gives it [obs, 276/s2:
+/// "list | with 3 items | Northside"].
+fn select_option(
+    element: &ElementData,
+    read: &NativeRead,
+    app: Option<String>,
+) -> Option<FocusEvent> {
+    if element.role != Role::MenuItem {
+        return None;
+    }
+    let menu = read.ancestors.first().filter(|m| m.role == "menu")?;
+    read.ancestors.get(1).filter(|c| c.role == "combo box")?;
+    let mut option = focus_event(element);
+    option.role = okur_core::aom::Role::ListItem;
+    option.in_document = true;
+    option.app = app;
+    option.container_role = Some(okur_core::aom::Role::List);
+    option.container_is_list_box = true;
+    match crate::focus::own_place(&read.focus) {
+        Some((at, of)) => {
+            option.item_index = Some(at);
+            option.item_count = Some(of);
+        }
+        None => crate::focus::place(&mut option, &read.focus, menu),
+    }
+    Some(option)
+}
+
 /// Whether two objects' keys (bus name and path) are of one application, by their bus names.
 fn same_application(a: Option<&str>, b: Option<&str>) -> bool {
     let bus = |key: &str| key.split('/').next().map(str::to_owned);
@@ -465,6 +507,40 @@ mod tests {
         assert!(matches!(
             converter.convert_read(&here).as_slice(),
             [AccessibilityEvent::Focus(_)]
+        ));
+    }
+
+    /// Chrome on Linux shows a select's open list as a menu in its combo box: its focused item
+    /// is the list box's option, with its place [obs, 276/s2].
+    #[test]
+    fn a_selects_menu_item_is_its_list_boxs_option() {
+        let mut converter = Converter::default();
+        let item = element(ElementRole::MenuItem, "Northside", "/n", true);
+        let mut menu = node("menu", "", &[]);
+        for (name, path) in [("Northside", "/n"), ("Eastgate", "/e"), ("Westfield", "/w")] {
+            let mut option = node("menu item", name, &[]);
+            option.path = path.to_owned();
+            menu.children.push(option);
+        }
+        let mut focus = node("menu item", "Northside", &[state::FOCUSED]);
+        focus.path = "/n".to_owned();
+        let mut opened = record(
+            EventKind::FocusChanged,
+            item,
+            Some(NativeRead {
+                focus,
+                ancestors: vec![menu, node("combo box", "Home branch", &[])],
+                read_ms: 0,
+            }),
+        );
+        opened.document = Some(":1.5/doc".to_owned());
+        assert!(matches!(
+            converter.convert_read(&opened).as_slice(),
+            [AccessibilityEvent::Focus(f)] if f.role == OkurRole::ListItem
+                && f.container_is_list_box
+                && f.in_document
+                && f.item_index == Some(1)
+                && f.item_count == Some(3)
         ));
     }
 
