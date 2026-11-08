@@ -57,7 +57,7 @@
     "okur-corpus": {
       "kind": "lab",
       "portable": true,
-      "allow": ["okur-core", "okur-windows-model"]
+      "allow": ["okur-core", "okur-windows-model", "okur-linux-model"]
     },
     "okur": {
       "kind": "program",

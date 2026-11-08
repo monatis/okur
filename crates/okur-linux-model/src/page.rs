@@ -234,6 +234,15 @@ fn numbered(node: &AtspiNode, next: &mut i32) -> Ia2Node {
     }
 }
 
+/// A page's AT-SPI tree as the Linux lab captured it (`corpus/snapshots/<fixture>.chrome.atspi.json`,
+/// the plan's §2.3): Chrome's document read through xa11y-linux, with the provenance Windows'
+/// snapshots carry, replayed on every OS through [`to_aom`].
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AtspiSnapshot {
+    pub provenance: okur_windows_model::uia_snapshot::SnapshotProvenance,
+    pub root: AtspiNode,
+}
+
 /// A page's AT-SPI tree as the engine's AOM, through the IA2 objects Chrome gives on Windows.
 pub fn to_aom(root: &AtspiNode) -> AomNode {
     okur_windows_model::ia2_snapshot::ia2_to_aom(&to_ia2(root))

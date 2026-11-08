@@ -8,6 +8,8 @@ license.workspace = true
 [dependencies]
 okur-core = { workspace = true }
 okur-windows-model = { workspace = true }
+# A page captured through AT-SPI on Linux, replayed beside the IA2 and UIA ones (snapshots.rs).
+okur-linux-model = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 thiserror = { workspace = true }

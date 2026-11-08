@@ -43,7 +43,8 @@ enum Commands {
         #[arg(long)]
         write_baseline: bool,
 
-        /// Snapshot API to drive the engine with: ia2 (the ratchet's API) or uia
+        /// Snapshot API to drive the engine with: ia2 (the ratchet's API), uia, or atspi (a page
+        /// captured on Linux)
         #[arg(long)]
         api: Option<String>,
 
@@ -1389,7 +1390,7 @@ async fn main() {
                 None => PARITY_API,
                 Some(Some(api)) => api,
                 Some(None) => {
-                    eprintln!("--api must be uia or ia2");
+                    eprintln!("--api must be uia, ia2 or atspi");
                     std::process::exit(2);
                 }
             };
