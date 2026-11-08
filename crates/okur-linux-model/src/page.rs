@@ -5,17 +5,16 @@
 //! same node of its accessibility tree, with the same object attributes (`tag`, `display`,
 //! `xml-roles`, `level`): news-article.html over AT-SPI (the Linux lab's
 //! `probe-atspi-tree.sh`) and over IA2 (`corpus/snapshots/news-article.chrome.ia2.json`) hold
-//! the same elements. So a page read over AT-SPI is given, object by object, as the IA2 objects
-//! Chrome gives on Windows, to the conversion Windows parity checks
-//! (`okur_windows_model::ia2_snapshot::ia2_to_aom`): block and inline elements, landmarks,
-//! articles, header cells, same-page links read on Linux as on Windows.
+//! the same elements. So a page read over AT-SPI is given, object by object, as okur-model's web
+//! nodes, which Windows' IA2 objects become too, to the conversion Windows parity checks
+//! (`okur_model::web::web_to_aom`): block and inline elements, landmarks, articles, header
+//! cells, same-page links read on Linux as on Windows.
 
 use std::collections::BTreeMap;
 
 use okur_core::aom::AomNode;
-use okur_windows_model::ia2_snapshot::{ia2_state, msaa_role};
+use okur_model::web::{web_to_aom, WebMark, WebNode, WebRole, WebStates};
 use serde::{Deserialize, Serialize};
-use xa11y_windows::ia2::{msaa_states as msaa, roles as ia2_role, Ia2Node};
 
 /// AT-SPI's `StateType` numbering: a state is its bit in the state set.
 pub mod state {
@@ -75,137 +74,100 @@ impl AtspiNode {
     }
 }
 
-/// The MSAA role and the IA2 role Chrome gives on Windows the element it gives over AT-SPI with
-/// `node`'s role, as news-article.html's two snapshots pair them; the IA2 role is the MSAA one
-/// where Chrome gives no other.
-fn ia2_roles(node: &AtspiNode) -> (i32, i32) {
-    let same = |role: i32| (role, role);
-    let section = (msaa_role::GROUPING, ia2_role::IA2_ROLE_SECTION);
+/// The main role and the finer one Chrome gives an element whose AT-SPI role is `node`'s, as
+/// news-article.html's AT-SPI and IA2 snapshots pair them.
+fn web_roles(node: &AtspiNode) -> (WebRole, Option<WebMark>) {
+    let grouping = |mark: Option<WebMark>| (WebRole::Grouping, mark);
     match node.role.as_str() {
-        "document web" | "document frame" | "article" => same(msaa_role::DOCUMENT),
-        "landmark" => (msaa_role::GROUPING, ia2_role::IA2_ROLE_LANDMARK),
-        "form" => (msaa_role::GROUPING, ia2_role::IA2_ROLE_FORM),
-        "heading" => (msaa_role::GROUPING, ia2_role::IA2_ROLE_HEADING),
-        "paragraph" => (msaa_role::GROUPING, ia2_role::IA2_ROLE_PARAGRAPH),
-        "block quote" => (msaa_role::GROUPING, ia2_role::IA2_ROLE_BLOCK_QUOTE),
-        "caption" => (msaa_role::GROUPING, ia2_role::IA2_ROLE_CAPTION),
-        "label" => (msaa_role::GROUPING, ia2_role::IA2_ROLE_LABEL),
-        "content deletion" => (msaa_role::GROUPING, ia2_role::IA2_ROLE_CONTENT_DELETION),
-        "content insertion" => (msaa_role::GROUPING, ia2_role::IA2_ROLE_CONTENT_INSERTION),
-        "mark" => (msaa_role::GROUPING, ia2_role::IA2_ROLE_MARK),
-        "grouping" => same(msaa_role::GROUPING),
-        // A text leaf; an inline element holding text (strong, em) is a text frame.
-        "static" if node.children.is_empty() => same(msaa_role::STATICTEXT),
-        "static" => (msaa_role::TEXT, IA2_ROLE_TEXT_FRAME),
-        "link" => same(msaa_role::LINK),
+        "document web" | "document frame" | "article" => (WebRole::Document, None),
+        "landmark" | "form" | "paragraph" | "caption" | "label" | "grouping" => grouping(None),
+        "heading" => grouping(Some(WebMark::Heading)),
+        "block quote" => grouping(Some(WebMark::BlockQuote)),
+        "content deletion" => grouping(Some(WebMark::ContentDeletion)),
+        "content insertion" => grouping(Some(WebMark::ContentInsertion)),
+        "mark" => grouping(Some(WebMark::Mark)),
+        // A text leaf; an inline element holding text (strong, em) is a text object.
+        "static" if node.children.is_empty() => (WebRole::StaticText, None),
+        "static" => (WebRole::Text, None),
+        "link" => (WebRole::Link, None),
         "push button" | "button" if node.attribute("haspopup").is_some() => {
-            same(msaa_role::BUTTONMENU)
+            (WebRole::MenuButton, None)
         }
-        "push button" | "button" => same(msaa_role::PUSHBUTTON),
-        "toggle button" => (msaa_role::PUSHBUTTON, ia2_role::IA2_ROLE_TOGGLE_BUTTON),
-        "check box" | "check menu item" | "switch" => same(msaa_role::CHECKBUTTON),
-        "radio button" | "radio menu item" => same(msaa_role::RADIOBUTTON),
-        "entry" | "password text" | "text" | "spin button" => same(msaa_role::TEXT),
-        "combo box" => same(msaa_role::COMBOBOX),
-        "list" | "list box" | "description list" => same(msaa_role::LIST),
-        "list item" | "description term" | "description value" => same(msaa_role::LISTITEM),
-        "table" => same(msaa_role::TABLE),
-        "table row" => same(msaa_role::ROW),
-        "table cell" => same(msaa_role::CELL),
-        "column header" | "table column header" => same(msaa_role::COLUMNHEADER),
-        "row header" | "table row header" => same(msaa_role::ROWHEADER),
-        "page tab list" => same(msaa_role::PAGETABLIST),
-        "page tab" => same(msaa_role::PAGETAB),
-        "dialog" | "alert" => same(msaa_role::DIALOG),
-        "tree" | "tree table" => same(msaa_role::OUTLINE),
-        "tree item" => same(msaa_role::OUTLINEITEM),
-        "slider" => same(msaa_role::SLIDER),
-        "progress bar" => same(msaa_role::PROGRESSBAR),
-        "image" => same(msaa_role::GRAPHIC),
-        "separator" => same(msaa_role::SEPARATOR),
-        "menu bar" => same(msaa_role::MENUBAR),
-        "menu item" => same(msaa_role::MENUITEM),
-        "math" => same(msaa_role::EQUATION),
+        "push button" | "button" => (WebRole::Button, None),
+        "toggle button" => (WebRole::Button, Some(WebMark::ToggleButton)),
+        "check box" | "check menu item" | "switch" => (WebRole::CheckBox, None),
+        "radio button" | "radio menu item" => (WebRole::RadioButton, None),
+        "entry" | "password text" | "text" | "spin button" => (WebRole::Text, None),
+        "combo box" => (WebRole::ComboBox, None),
+        "list" | "list box" | "description list" => (WebRole::List, None),
+        "list item" | "description term" | "description value" => (WebRole::ListItem, None),
+        "table" => (WebRole::Table, None),
+        "table row" => (WebRole::Row, None),
+        "table cell" => (WebRole::Cell, None),
+        "column header" | "table column header" => (WebRole::ColumnHeader, None),
+        "row header" | "table row header" => (WebRole::RowHeader, None),
+        "page tab list" => (WebRole::TabList, None),
+        "page tab" => (WebRole::Tab, None),
+        "dialog" | "alert" => (WebRole::Dialog, None),
+        "tree" | "tree table" => (WebRole::Tree, None),
+        "tree item" => (WebRole::TreeItem, None),
+        "slider" => (WebRole::Slider, None),
+        "progress bar" => (WebRole::ProgressBar, None),
+        "image" => (WebRole::Image, None),
+        "separator" => (WebRole::Separator, None),
+        "menu bar" => (WebRole::MenuBar, None),
+        "menu item" => (WebRole::MenuItem, None),
+        "math" => (WebRole::Math, None),
         // A generic element (section, panel, frame): its CSS display makes it a block or not.
-        _ => section,
+        _ => grouping(Some(WebMark::Section)),
     }
 }
 
-/// IA2's role for a text frame (`IA2_ROLE_TEXT_FRAME`): Chrome's inline element holding text.
-const IA2_ROLE_TEXT_FRAME: i32 = 0x429;
-
-/// The MSAA and IA2 state bits for `node`'s AT-SPI states.
-fn ia2_states(node: &AtspiNode) -> (u32, i32) {
-    let mut m = 0;
-    let msaa_bits = [
-        (state::SELECTED, msaa::STATE_SYSTEM_SELECTED),
-        (state::FOCUSED, msaa::STATE_SYSTEM_FOCUSED),
-        (state::PRESSED, msaa::STATE_SYSTEM_PRESSED),
-        (state::CHECKED, msaa::STATE_SYSTEM_CHECKED),
-        (state::INDETERMINATE, msaa::STATE_SYSTEM_MIXED),
-        (state::READ_ONLY, msaa::STATE_SYSTEM_READONLY),
-        (state::EXPANDED, msaa::STATE_SYSTEM_EXPANDED),
-        (state::BUSY, msaa::STATE_SYSTEM_BUSY),
-        (state::FOCUSABLE, msaa::STATE_SYSTEM_FOCUSABLE),
-        (state::VISITED, msaa::STATE_SYSTEM_TRAVERSED),
-    ];
-    for (at, bit) in msaa_bits {
-        if node.has(at) {
-            m |= bit;
-        }
+/// `node`'s AT-SPI states by name.
+fn web_states(node: &AtspiNode) -> WebStates {
+    let has = |bit: u32| node.has(bit);
+    WebStates {
+        checked: has(state::CHECKED),
+        mixed: has(state::INDETERMINATE),
+        pressed: has(state::PRESSED),
+        selected: has(state::SELECTED),
+        expanded: has(state::EXPANDED),
+        collapsed: has(state::EXPANDABLE) && !has(state::EXPANDED),
+        focused: has(state::FOCUSED),
+        focusable: has(state::FOCUSABLE),
+        unavailable: !has(state::ENABLED),
+        invisible: false,
+        protected: node.role == "password text",
+        readonly: has(state::READ_ONLY),
+        traversed: has(state::VISITED),
+        editable: has(state::EDITABLE),
+        horizontal: has(state::HORIZONTAL),
+        vertical: has(state::VERTICAL),
+        invalid_entry: has(state::INVALID_ENTRY),
+        modal: has(state::MODAL),
+        multi_line: has(state::MULTI_LINE),
+        required: has(state::REQUIRED),
+        supports_autocompletion: has(state::SUPPORTS_AUTOCOMPLETION),
     }
-    if !node.has(state::ENABLED) {
-        m |= msaa::STATE_SYSTEM_UNAVAILABLE;
-    }
-    if node.has(state::EXPANDABLE) && !node.has(state::EXPANDED) {
-        m |= msaa::STATE_SYSTEM_COLLAPSED;
-    }
-    if node.role == "link" {
-        m |= msaa::STATE_SYSTEM_LINKED;
-    }
-    if node.role == "password text" {
-        m |= msaa::STATE_SYSTEM_PROTECTED;
-    }
-    let mut i = 0;
-    let ia2_bits = [
-        (state::EDITABLE, ia2_state::EDITABLE),
-        (state::HORIZONTAL, ia2_state::HORIZONTAL),
-        (state::INVALID_ENTRY, ia2_state::INVALID_ENTRY),
-        (state::VERTICAL, ia2_state::VERTICAL),
-        (state::MODAL, ia2_state::MODAL),
-        (state::MULTI_LINE, ia2_state::MULTI_LINE),
-        (state::REQUIRED, ia2_state::REQUIRED),
-        (
-            state::SUPPORTS_AUTOCOMPLETION,
-            ia2_state::SUPPORTS_AUTOCOMPLETION,
-        ),
-    ];
-    for (at, bit) in ia2_bits {
-        if node.has(at) {
-            i |= bit;
-        }
-    }
-    (m, i)
 }
 
-/// `node` and its subtree as the IA2 objects Chrome gives on Windows for the same elements, each
-/// with its place in the tree, depth first from 1, as its unique id: what acting on a page's node
-/// finds its object by (the Linux driver numbers the objects it read the same way).
-pub fn to_ia2(node: &AtspiNode) -> Ia2Node {
+/// `node` and its subtree as okur-model's web nodes, each with its place in the tree, depth
+/// first from 1, as its unique id: what acting on a page's node finds its object by (the Linux
+/// driver numbers the objects it read the same way).
+pub fn atspi_to_web(node: &AtspiNode) -> WebNode {
     let mut next = 0;
     numbered(node, &mut next)
 }
 
-fn numbered(node: &AtspiNode, next: &mut i32) -> Ia2Node {
+fn numbered(node: &AtspiNode, next: &mut i32) -> WebNode {
     *next += 1;
     let unique_id = *next;
-    let (msaa_role, ia2_role) = ia2_roles(node);
-    let (msaa_states, ia2_states) = ia2_states(node);
+    let (role, mark) = web_roles(node);
     // A field's value is its text; a link's and the document's, their address.
-    let value = match msaa_role {
-        msaa_role::TEXT if node.has(state::EDITABLE) => node.text.clone(),
-        msaa_role::COMBOBOX => node.text.clone().filter(|t| !t.contains('\u{fffc}')),
-        msaa_role::LINK | msaa_role::DOCUMENT => node.uri.clone(),
+    let value = match role {
+        WebRole::Text if node.has(state::EDITABLE) => node.text.clone(),
+        WebRole::ComboBox => node.text.clone().filter(|t| !t.contains('\u{fffc}')),
+        WebRole::Link | WebRole::Document => node.uri.clone(),
         _ => None,
     };
     let number = |key: &str| node.attribute(key).and_then(|v| v.parse::<i32>().ok());
@@ -215,13 +177,12 @@ fn numbered(node: &AtspiNode, next: &mut i32) -> Ia2Node {
             Some([level.unwrap_or(0), size.unwrap_or(0), position.unwrap_or(0)])
         }
     };
-    Ia2Node {
-        msaa_role: Some(msaa_role),
-        ia2_role: Some(ia2_role),
+    WebNode {
+        role,
+        mark,
         name: Some(node.name.clone()).filter(|n| !n.is_empty()),
         value,
-        msaa_states,
-        ia2_states,
+        states: web_states(node),
         attributes: node.attributes.clone(),
         group_position,
         text: node.text.clone(),
@@ -231,7 +192,7 @@ fn numbered(node: &AtspiNode, next: &mut i32) -> Ia2Node {
             .iter()
             .map(|child| numbered(child, next))
             .collect(),
-        ..Ia2Node::default()
+        ..WebNode::default()
     }
 }
 
@@ -244,9 +205,9 @@ pub struct AtspiSnapshot {
     pub root: AtspiNode,
 }
 
-/// A page's AT-SPI tree as the engine's AOM, through the IA2 objects Chrome gives on Windows.
+/// A page's AT-SPI tree as the engine's AOM: okur-model's conversion of a page's web nodes.
 pub fn to_aom(root: &AtspiNode) -> AomNode {
-    okur_windows_model::ia2_snapshot::ia2_to_aom(&to_ia2(root))
+    web_to_aom(&atspi_to_web(root))
 }
 
 #[cfg(test)]

@@ -17,7 +17,7 @@ use xa11y_core::{ElementData, Event, EventKind, RecvStatus, Role};
 use xa11y_linux::{A11yStatus, AtspiObject, AtspiTree, LinuxProvider};
 
 /// The objects of the page read last, its application's bus name and each object's path, in the
-/// order the page's nodes are numbered ([`okur_linux_model::page::to_ia2`], depth first from 1):
+/// order the page's nodes are numbered ([`okur_linux_model::page::atspi_to_web`], depth first from 1):
 /// what acting on a page's node finds its object by ([`crate::actions::LinuxActions`]).
 pub type PageObjects = Arc<Mutex<Vec<(String, String)>>>;
 
