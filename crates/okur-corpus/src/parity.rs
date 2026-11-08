@@ -22,6 +22,15 @@ use std::path::{Path, PathBuf};
 
 pub const BASELINE_FILE: &str = "parity-baseline.json";
 
+/// The baseline each API's parity is ratcheted in: IA2's (JAWS reads Chromium through it), and
+/// AT-SPI's, a page as Linux gives it (docs/plans/2026-11-05-linux-first.md §2.3).
+pub fn baseline_file(api: Api) -> &'static str {
+    match api {
+        Api::Atspi => "parity-baseline-atspi.json",
+        Api::Ia2 | Api::Uia => BASELINE_FILE,
+    }
+}
+
 /// The documented normalizer: unify line endings, collapse whitespace runs (including
 /// newlines) to one space, and trim. The `\u{1d}`/`\u{1e}` role markers are kept, because
 /// they encode JAWS speech structure. Word's list bullet is one character: JAWS reads it from
@@ -834,8 +843,9 @@ pub fn render_baseline(report: &ParityReport) -> Result<String, String> {
 
 /// Compares `report` with the committed baseline. Regressions (a step that matched JAWS and
 /// no longer does) are reported first; any other difference means the baseline is stale.
-pub fn check_baseline(corpus_dir: &Path, report: &ParityReport) -> Result<(), String> {
-    let committed_text = fs::read_to_string(corpus_dir.join(BASELINE_FILE)).unwrap_or_default();
+pub fn check_baseline(corpus_dir: &Path, report: &ParityReport, api: Api) -> Result<(), String> {
+    let file = baseline_file(api);
+    let committed_text = fs::read_to_string(corpus_dir.join(file)).unwrap_or_default();
     let committed: Value = serde_json::from_str(&committed_text).unwrap_or(Value::Null);
     let regressions: Vec<&str> = report
         .steps
@@ -847,23 +857,31 @@ pub fn check_baseline(corpus_dir: &Path, report: &ParityReport) -> Result<(), St
         })
         .map(|s| s.key.as_str())
         .collect();
+    let api_option = match api {
+        Api::Atspi => " --api atspi",
+        Api::Ia2 | Api::Uia => "",
+    };
     if !regressions.is_empty() {
         return Err(format!(
-            "JAWS parity regressed for: {}",
+            "JAWS parity ({api:?}) regressed for: {}",
             regressions.join(", ")
         ));
     }
     if committed_text.replace("\r\n", "\n") != render_baseline(report)? {
         return Err(format!(
-            "{BASELINE_FILE} is stale (parity changed). Review `cargo run --bin okur-lab -- parity`, \
-             then regenerate with: cargo run --bin okur-lab -- parity --write-baseline"
+            "{file} is stale (parity changed). Review `cargo run --bin okur-lab -- parity{api_option}`, \
+             then regenerate with: cargo run --bin okur-lab -- parity{api_option} --write-baseline"
         ));
     }
     Ok(())
 }
 
-pub fn write_baseline(corpus_dir: &Path, report: &ParityReport) -> Result<(), String> {
-    fs::write(corpus_dir.join(BASELINE_FILE), render_baseline(report)?).map_err(|e| e.to_string())
+pub fn write_baseline(corpus_dir: &Path, report: &ParityReport, api: Api) -> Result<(), String> {
+    fs::write(
+        corpus_dir.join(baseline_file(api)),
+        render_baseline(report)?,
+    )
+    .map_err(|e| e.to_string())
 }
 
 type Log = std::sync::Arc<std::sync::Mutex<Vec<String>>>;

@@ -1398,8 +1398,10 @@ async fn main() {
                 eprintln!("The baseline covers every scenario; drop --only to write it.");
                 std::process::exit(2);
             }
-            if write_baseline && api != PARITY_API {
-                eprintln!("The baseline ratchets {PARITY_API:?} parity; drop --api to write it.");
+            if write_baseline && api == Api::Uia {
+                eprintln!(
+                    "Baselines ratchet {PARITY_API:?} and Atspi parity; drop --api or give atspi."
+                );
                 std::process::exit(2);
             }
             let report = okur_corpus::parity::run_matching(dir, api, &only);
@@ -1460,11 +1462,14 @@ async fn main() {
                 report.errors.len()
             );
             if write_baseline {
-                if let Err(e) = okur_corpus::parity::write_baseline(dir, &report) {
+                if let Err(e) = okur_corpus::parity::write_baseline(dir, &report, api) {
                     eprintln!("Failed to write baseline: {e}");
                     std::process::exit(1);
                 }
-                println!("Wrote {:?}", dir.join(okur_corpus::parity::BASELINE_FILE));
+                println!(
+                    "Wrote {:?}",
+                    dir.join(okur_corpus::parity::baseline_file(api))
+                );
             }
         }
         #[cfg(windows)]

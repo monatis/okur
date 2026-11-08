@@ -68,7 +68,26 @@ mod tests {
         assert_eq!(live::check_baseline(&dir, "linux", &report), Ok(()));
     }
 
-    /// Engine speech vs. recorded JAWS speech, over UIA snapshots captured from Chrome on
+    /// Engine speech vs. recorded JAWS speech, every scenario on the pages as Linux gives them
+    /// (the AT-SPI snapshots the Linux lab captured), ratcheted apart from IA2's in
+    /// parity-baseline-atspi.json; `cargo run --bin okur-lab -- parity --api atspi` for the
+    /// per-step diff.
+    #[test]
+    fn atspi_parity_matches_baseline() {
+        let dir = corpus_dir();
+        let report = parity::run_with(&dir, snapshots::Api::Atspi);
+        assert!(
+            report.errors.is_empty(),
+            "scenarios could not run on AT-SPI: {:?}",
+            report.errors
+        );
+        assert_eq!(
+            parity::check_baseline(&dir, &report, snapshots::Api::Atspi),
+            Ok(())
+        );
+    }
+
+    /// Engine speech vs. recorded JAWS speech, over the IA2 snapshots captured from Chrome on
     /// the reference machine. Fails on any regression and whenever the generated baseline
     /// is stale; run `cargo run --bin okur-lab -- parity` for the per-step diff.
     #[test]
@@ -80,7 +99,10 @@ mod tests {
             "scenarios could not run: {:?}",
             report.errors
         );
-        assert_eq!(parity::check_baseline(&dir, &report), Ok(()));
+        assert_eq!(
+            parity::check_baseline(&dir, &report, snapshots::PARITY_API),
+            Ok(())
+        );
         // Each step on the history layer, and on the spoken layer where it was recorded.
         let steps: Vec<(&str, &str, &[String])> = report
             .steps
