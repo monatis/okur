@@ -5,7 +5,7 @@
   "platform": "linux",
   "web_verbosity": null,
   "application": "corpus/fixtures/linux/desktop-forms.py",
-  "commit": "6702db718"
+  "commit": "06002f26a"
  },
  "trials": [
   {
@@ -14,8 +14,8 @@
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794132290913,
-     "t_end_ms": 1794132292117,
+     "t_start_ms": 1794135675417,
+     "t_end_ms": 1794135676621,
      "action": {
       "type": "key",
       "command": "Down"
@@ -28,8 +28,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794132292117,
-     "t_end_ms": 1794132293121,
+     "t_start_ms": 1794135676621,
+     "t_end_ms": 1794135677625,
      "action": {
       "type": "key",
       "command": "Down"
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794132293121,
-     "t_end_ms": 1794132294326,
+     "t_start_ms": 1794135677625,
+     "t_end_ms": 1794135678829,
      "action": {
       "type": "key",
       "command": "Up"
@@ -56,8 +56,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794132294326,
-     "t_end_ms": 1794132295531,
+     "t_start_ms": 1794135678829,
+     "t_end_ms": 1794135680034,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -70,8 +70,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794132295531,
-     "t_end_ms": 1794132296735,
+     "t_start_ms": 1794135680034,
+     "t_end_ms": 1794135681239,
      "action": {
       "type": "key",
       "command": "Down"
@@ -84,8 +84,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794132296735,
-     "t_end_ms": 1794132297940,
+     "t_start_ms": 1794135681239,
+     "t_end_ms": 1794135682444,
      "action": {
       "type": "key",
       "command": "Up"
@@ -98,22 +98,22 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794132297940,
-     "t_end_ms": 1794132299145,
+     "t_start_ms": 1794135682444,
+     "t_end_ms": 1794135683648,
      "action": {
       "type": "key",
       "command": "Right"
      },
      "observation": {
-      "speech_raw": "Documents Opened\n1 of 4",
+      "speech_raw": "Documents\n \u001dopen\u001e ",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794132299145,
-     "t_end_ms": 1794132300350,
+     "t_start_ms": 1794135683649,
+     "t_end_ms": 1794135684853,
      "action": {
       "type": "key",
       "command": "Down"
@@ -126,8 +126,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794132300350,
-     "t_end_ms": 1794132301755,
+     "t_start_ms": 1794135684853,
+     "t_end_ms": 1794135686257,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -140,8 +140,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794132301755,
-     "t_end_ms": 1794132303259,
+     "t_start_ms": 1794135686257,
+     "t_end_ms": 1794135687662,
      "action": {
       "type": "key",
       "command": "Down"
@@ -154,8 +154,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794132303259,
-     "t_end_ms": 1794132304664,
+     "t_start_ms": 1794135687662,
+     "t_end_ms": 1794135689067,
      "action": {
       "type": "key",
       "command": "Down"
@@ -168,8 +168,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794132304664,
-     "t_end_ms": 1794132306269,
+     "t_start_ms": 1794135689067,
+     "t_end_ms": 1794135690672,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -182,8 +182,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794132306269,
-     "t_end_ms": 1794132307674,
+     "t_start_ms": 1794135690672,
+     "t_end_ms": 1794135692077,
      "action": {
       "type": "key",
       "command": "Right"
