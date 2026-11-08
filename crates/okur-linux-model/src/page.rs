@@ -10,7 +10,7 @@
 //! (`okur_model::web::web_to_aom`): block and inline elements, landmarks, articles, header
 //! cells, same-page links read on Linux as on Windows.
 
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, HashMap};
 
 use okur_core::aom::AomNode;
 use okur_model::web::{web_to_aom, WebMark, WebNode, WebRole, WebStates};
@@ -191,13 +191,53 @@ fn chosen_item(node: &AtspiNode) -> Option<String> {
 /// first from 1, as its unique id: what acting on a page's node finds its object by (the Linux
 /// driver numbers the objects it read the same way).
 pub fn atspi_to_web(node: &AtspiNode) -> WebNode {
+    let mut ids = HashMap::new();
     let mut next = 0;
-    numbered(node, &mut next)
+    number_paths(node, &mut next, &mut ids);
+    let mut next = 0;
+    numbered(node, &mut next, &ids)
 }
 
-fn numbered(node: &AtspiNode, next: &mut i32) -> WebNode {
+/// Each object's id by its path, numbered as `numbered` numbers them, for relations' targets.
+fn number_paths<'a>(node: &'a AtspiNode, next: &mut i32, ids: &mut HashMap<&'a str, i32>) {
+    *next += 1;
+    if !node.path.is_empty() {
+        ids.insert(node.path.as_str(), *next);
+    }
+    for child in &node.children {
+        number_paths(child, next, ids);
+    }
+}
+
+/// AT-SPI's relation types (libatspi 2.60.4's `AtspiRelationType`, listed in the Linux lab,
+/// 2026-11-08) by the names the conversion reads, as IA2's are.
+fn relation_name(kind: u32) -> Option<&'static str> {
+    match kind {
+        1 => Some("labelFor"),
+        10 => Some("flowsTo"),
+        17 => Some("descriptionFor"),
+        // An error message's target, the field's `aria-errormessage`.
+        21 => Some("error"),
+        _ => None,
+    }
+}
+
+fn numbered(node: &AtspiNode, next: &mut i32, ids: &HashMap<&str, i32>) -> WebNode {
     *next += 1;
     let unique_id = *next;
+    let relations = node
+        .relations
+        .iter()
+        .filter_map(|(kind, paths)| {
+            let targets: Vec<i32> = paths
+                .iter()
+                .filter_map(|path| ids.get(path.as_str()).copied())
+                .collect();
+            relation_name(*kind)
+                .filter(|_| !targets.is_empty())
+                .map(|name| (name.to_owned(), targets))
+        })
+        .collect();
     let (role, mark) = web_roles(node);
     // A field's value is its text; a link's and the document's, their address.
     let value = match role {
@@ -231,10 +271,11 @@ fn numbered(node: &AtspiNode, next: &mut i32) -> WebNode {
         // reads is made from captured runs.
         text_attributes: Some(node.text_attributes.clone()).filter(|a| !a.is_empty()),
         unique_id: Some(unique_id),
+        relations,
         children: node
             .children
             .iter()
-            .map(|child| numbered(child, next))
+            .map(|child| numbered(child, next, ids))
             .collect(),
         ..WebNode::default()
     }
@@ -314,6 +355,31 @@ mod tests {
         assert_eq!(
             aom.children.get(1).and_then(|c| c.value.clone()).as_deref(),
             Some("Northside")
+        );
+    }
+
+    /// A relation names its target by the object's path; the web node names it by the target's
+    /// numbered id, as IA2's relations name uniqueIDs ("Has Flows To", 563's page).
+    #[test]
+    fn a_relation_names_its_target_by_its_number() {
+        let mut part = node(
+            "paragraph",
+            "",
+            vec![node("static", "This part flows", vec![])],
+        );
+        part.path = "/a11y/2".to_owned();
+        part.relations = vec![
+            (10, vec!["/a11y/4".to_owned()]),
+            (99, vec!["/a11y/4".to_owned()]),
+        ];
+        let mut list = node("list", "", vec![]);
+        list.path = "/a11y/4".to_owned();
+        let page = node("document web", "Flow", vec![part, list]);
+        let web = atspi_to_web(&page);
+        let flows = web.children.first().map(|p| p.relations.clone());
+        assert_eq!(
+            flows,
+            Some(BTreeMap::from([("flowsTo".to_owned(), vec![4])]))
         );
     }
 
