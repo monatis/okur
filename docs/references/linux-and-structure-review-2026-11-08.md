@@ -27,6 +27,7 @@ file:line references are to that commit.
 | 18. The lab runner | Unknown modifiers dropped, keys without keycodes "passed", and nothing cleaned up on an exception | df89c0c4 |
 | 19. The desktop not told a screen reader runs | `org.a11y.Status` was never set, and Qt, Firefox and Chromium bridges depend on it | 45202034 (`A11yStatus`) |
 | 21. Focus in a window behind was said | Nothing checked the window's ACTIVE state; GTK's frames carry it | 41adac79 (`in_active_window`) |
+| 9. Page actions found objects by index into a list a later read replaced | Enter could press another page's object | 2c85c5a2 (each page numbered from a base of its own; four pages' objects kept) |
 | Structure 4 (part) | Linux never set `FocusEvent::app`, so per-application settings did nothing; "EDIT" was matched in general code | 514aabf5, d4e88df9 |
 
 **Also found during the rerun:** the example `okur_linux` set its options on `Config.settings`, which reaches only the voice. The engine reads the settings layers, so every Linux web run read pages at Medium (3b2aacec).
@@ -40,7 +41,6 @@ file:line references are to that commit.
    - **Measured in the lab (ed7c39e5, the GTK replica):** a native focus read is 40 to 180 ms for 12 to 47 objects, about 3.5 ms an object. The parent read whole is the bulk: a column view's row read its 47-object list in 180 ms.
    - **A page:** about 3 ms an object (color-grid: 433 objects in 1280 ms, capture-atspi-snapshots.sh).
 3. **(11) Make the model's read plan explicit.** The read plan (which ancestors whole, `CONTROL_LIMIT`) moves into okur-linux-model. A tree cut at 200 objects is marked. Peers are matched by object path, not by name and states.
-4. **(9)** Page actions find objects by index into a list a later read replaces; they need a generation stamp or (bus, path) on each node.
 5. **(14)** CapsLock as the Okur key is never grabbed, so X toggles Caps Lock.
 6. **(15, rest)** Warn when grabs fail (a leftover Okur holds the keys). Mark a read with per-node errors as partial.
 7. **(16)** One walk of references up to the frame, shared by `document_of` and `native_focus`. The 40-level page depth and the 12-level window depth are fixed caps.
