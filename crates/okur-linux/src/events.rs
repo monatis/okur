@@ -13,7 +13,7 @@ use okur_core::event::AccessibilityEvent;
 use okur_linux_model::focus_track::{FocusTrack, Reread};
 use okur_runtime::events::{EventSink, EventSource};
 use okur_runtime::RuntimeError;
-use xa11y_core::{ElementData, Event, EventKind, RecvStatus, Role, StateFlag};
+use xa11y_core::{ElementData, Event, EventKind, RecvStatus, Role};
 use xa11y_linux::{AtspiTree, LinuxProvider};
 
 /// The objects of the page read last, its application's bus name and each object's path, in the
@@ -178,13 +178,12 @@ fn source_error(what: &str, error: impl std::fmt::Display) -> RuntimeError {
 /// Whether `event` is a change the engine is told of: the focused control's state (a check box
 /// checked, a tab selected, a button expanded), as Windows' state change gives it.
 fn control_change(event: &Event) -> bool {
-    matches!(
-        event.kind,
-        EventKind::StateChanged {
-            flag: StateFlag::Checked | StateFlag::Selected | StateFlag::Expanded,
-            ..
-        }
-    ) && event.target.as_ref().is_some_and(|e| e.states.focused)
+    okur_linux_model::focus_track::is_control_change(&event.kind, focused(event))
+}
+
+/// Whether `event`'s object has the focus.
+fn focused(event: &Event) -> bool {
+    event.target.as_ref().is_some_and(|e| e.states.focused)
 }
 
 /// The page whose address ends with `address_end`, read whole as Okur reads a page, as Chrome
@@ -390,14 +389,10 @@ impl EventSource for AtspiEventSource {
                             // only that changed (GTK's drop-down shows its chosen item in its
                             // button's label, renamed as Down or Up chooses another [obs,
                             // 304/s9-s10: "Brazil | 3 of 3"]).
-                            let inside = event.kind == EventKind::NameChanged
-                                || (!focus
-                                    && !changed
-                                    && event.kind
-                                        == EventKind::StateChanged {
-                                            flag: StateFlag::Selected,
-                                            value: true,
-                                        });
+                            let inside = okur_linux_model::focus_track::is_inside_change(
+                                &event.kind,
+                                focused(&event),
+                            );
                             if inside {
                                 if let Some(element) = native_element.as_ref() {
                                     let control = native_focus(&provider, element);

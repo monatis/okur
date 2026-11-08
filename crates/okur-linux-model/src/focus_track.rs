@@ -15,6 +15,34 @@
 
 use okur_core::aom::Role;
 use okur_core::event::FocusEvent;
+use xa11y_core::{EventKind, StateFlag};
+
+/// Whether an event of `kind` on an object (`focused`: the object has the focus) is a change of
+/// the focused control the engine is told of: its checked, selected or expanded state, as
+/// Windows' state change gives it (Space on a check box [obs, 304/s1]).
+pub fn is_control_change(kind: &EventKind, focused: bool) -> bool {
+    focused
+        && matches!(
+            kind,
+            EventKind::StateChanged {
+                flag: StateFlag::Checked | StateFlag::Selected | StateFlag::Expanded,
+                ..
+            }
+        )
+}
+
+/// Whether an event of `kind` changes something within the focused control without moving
+/// the focus, for the control to be read again: a label renamed (GTK's drop-down's item [obs,
+/// 304/s9]), an object selected without the focus (GTK's notebook's tab [obs, 303/s13]).
+pub fn is_inside_change(kind: &EventKind, focused: bool) -> bool {
+    *kind == EventKind::NameChanged
+        || (!focused
+            && *kind
+                == EventKind::StateChanged {
+                    flag: StateFlag::Selected,
+                    value: true,
+                })
+}
 
 /// The focus as the event loop last told the engine of it. Objects and windows are named by
 /// their AT-SPI bus name and path.
@@ -101,6 +129,41 @@ mod tests {
         event.name = Some(name.to_owned());
         event.value = value.map(str::to_owned);
         event
+    }
+
+    /// Space on a check box changes the focused control; its focus state, or another object's
+    /// check, does not.
+    #[test]
+    fn a_control_change_is_the_focused_objects_state() {
+        let checked = EventKind::StateChanged {
+            flag: StateFlag::Checked,
+            value: false,
+        };
+        assert!(is_control_change(&checked, true));
+        assert!(!is_control_change(&checked, false));
+        let focused = EventKind::StateChanged {
+            flag: StateFlag::Focused,
+            value: true,
+        };
+        assert!(!is_control_change(&focused, true));
+    }
+
+    /// A label renamed, or a tab selected while the notebook keeps the focus, is within the
+    /// focused control; the focused item selected is its own change, one let go nothing.
+    #[test]
+    fn an_inside_change_leaves_the_focus_where_it_is() {
+        let selected = EventKind::StateChanged {
+            flag: StateFlag::Selected,
+            value: true,
+        };
+        assert!(is_inside_change(&EventKind::NameChanged, false));
+        assert!(is_inside_change(&selected, false));
+        assert!(!is_inside_change(&selected, true));
+        let unselected = EventKind::StateChanged {
+            flag: StateFlag::Selected,
+            value: false,
+        };
+        assert!(!is_inside_change(&unselected, false));
     }
 
     fn object(path: &str) -> Option<String> {
