@@ -58,11 +58,15 @@ const WINDOW_DEPTH: usize = 12;
 /// it: its own subtree, its parent's, and above it a list's, a column view's or a group box's
 /// (their items, columns, label), the other ancestors alone, up to its window. A few calls on
 /// the bus per object read.
-fn native_focus(provider: &LinuxProvider, element: &ElementData) -> okur_core::event::FocusEvent {
+/// None for a focus in a window behind the active one, which is not said.
+fn native_focus(
+    provider: &LinuxProvider,
+    element: &ElementData,
+) -> Option<okur_core::event::FocusEvent> {
     let base = okur_linux_model::focus::focus_event(element);
     let Some(object) = AtspiObject::of(element) else {
         tracing::debug!("a native focus without its object's names");
-        return base;
+        return Some(base);
     };
     let started = std::time::Instant::now();
     let focus = snapshot(provider.atspi_tree(&object, CONTROL_LIMIT));
@@ -101,7 +105,13 @@ fn native_focus(provider: &LinuxProvider, element: &ElementData) -> okur_core::e
         window_states = ?ancestors.last().map(|a| a.states),
         "native focus read"
     );
-    okur_linux_model::focus::native_focus(base, &focus, &ancestors)
+    if !okur_linux_model::focus::in_active_window(&ancestors) {
+        tracing::debug!("a focus in a window behind, not said");
+        return None;
+    }
+    Some(okur_linux_model::focus::native_focus(
+        base, &focus, &ancestors,
+    ))
 }
 
 /// The objects in `node`'s tree, itself included.
@@ -402,11 +412,12 @@ impl EventSource for AtspiEventSource {
                             // A focus outside a page, and its control's change, read with what
                             // surrounds it: the change names the control as its focus did.
                             let changed = control_change(&event);
+                            let outside_page = (focus || changed) && document.is_none();
                             let native = event
                                 .target
                                 .as_ref()
-                                .filter(|_| (focus || changed) && document.is_none())
-                                .map(|e| native_focus(&provider, e))
+                                .filter(|_| outside_page)
+                                .and_then(|e| native_focus(&provider, e))
                                 .map(|mut control| {
                                     control.app = application(&event);
                                     if changed {
@@ -441,7 +452,9 @@ impl EventSource for AtspiEventSource {
                             ) && track.in_focused_application(object.as_deref());
                             if inside {
                                 if let Some(element) = native_element.as_ref() {
-                                    let mut control = native_focus(&provider, element);
+                                    let Some(mut control) = native_focus(&provider, element) else {
+                                        continue;
+                                    };
                                     control.app = application(&event);
                                     let reread = match track.reread(&control) {
                                         Reread::Focus => Some(AccessibilityEvent::Focus(control)),
@@ -458,9 +471,14 @@ impl EventSource for AtspiEventSource {
                                     }
                                 }
                             }
-                            if let Some(event) =
+                            // Outside a page the native reading alone: none is a focus in a window
+                            // behind, not said.
+                            let converted = if outside_page && event.target.is_some() {
+                                native
+                            } else {
                                 native.or_else(|| convert(&event, document.is_some()))
-                            {
+                            };
+                            if let Some(event) = converted {
                                 if !sink.send(event) {
                                     return;
                                 }

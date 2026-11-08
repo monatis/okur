@@ -21,6 +21,18 @@ pub fn focus_event(element: &ElementData) -> FocusEvent {
     event
 }
 
+/// Whether a focus read with its ancestors (`native_focus`'s) is in the active window: a focus
+/// moving in a window behind (a chat application in the background) is not said, as JAWS says
+/// the window in front's. A focus whose window was not reached is taken as active. GTK's frames
+/// carry the state (the lab's 301, 303 and 304, 2026-11-08).
+pub fn in_active_window(ancestors: &[AtspiNode]) -> bool {
+    use crate::page::state;
+    ancestors
+        .iter()
+        .find(|a| matches!(a.role.as_str(), "frame" | "dialog" | "window" | "alert"))
+        .is_none_or(|window| window.has(state::ACTIVE))
+}
+
 /// A native control's focus (GTK's, a toolkit's outside a page) read with what surrounds it, as
 /// Windows reads the same control, so the engine says it alike (the plan's §2.4: SR Desktop
 /// Fixture's GTK replica beside JAWS's Windows evidence, probe-gtk-tree.sh). \`focus\` is the
@@ -377,6 +389,18 @@ mod tests {
             said(&event),
             fold("Plan \nPro  \u{1d} radio button \u{1e}   \u{1d}checked\u{1e} \n2 of 3\nTo change the selection press Up or Down Arrow.")
         );
+    }
+
+    /// A focus in a window behind the active one is not said; one whose window is active, or
+    /// whose window was not reached, is.
+    #[test]
+    fn a_focus_in_a_window_behind_is_not_said() {
+        use crate::page::state;
+        let panel = node("panel", "", vec![]);
+        let active = with(window(), &[state::ACTIVE]);
+        assert!(in_active_window(&[panel.clone(), active]));
+        assert!(!in_active_window(&[panel.clone(), window()]));
+        assert!(in_active_window(&[panel]));
     }
 
     /// A control read again takes its name and states as read now, not as its focus event's

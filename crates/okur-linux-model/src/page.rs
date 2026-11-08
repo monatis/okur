@@ -19,6 +19,7 @@ use xa11y_windows::ia2::{msaa_states as msaa, roles as ia2_role, Ia2Node};
 
 /// AT-SPI's `StateType` numbering: a state is its bit in the state set.
 pub mod state {
+    pub const ACTIVE: u32 = 1;
     pub const BUSY: u32 = 3;
     pub const CHECKED: u32 = 4;
     pub const EDITABLE: u32 = 7;
