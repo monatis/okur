@@ -4,6 +4,10 @@
 //! - every key but the modifiers is grabbed synchronously through XInput 2, under any modifiers,
 //!   on every top-level window, not the root: X looks for a passive grab from the root down, so
 //!   a window manager's shortcuts on the root stay its own whenever they were grabbed;
+//! - on an application's own window, not the frame a window manager puts it in: X reports a grab
+//!   on an ancestor of the window that has the focus as the focus leaving for it, and GTK
+//!   deactivated its window around every key grabbed on its frame (the lab's 304, under
+//!   fluxbox); a grab on the focus window itself moves no focus;
 //! - a key the engine keeps is let go asynchronously, one it passes is replayed to the
 //!   application (0.3 ms median from the decision to the application in the lab);
 //! - a watchdog in its own thread replays a key the engine has not answered in
@@ -224,6 +228,12 @@ impl KeyboardHook for X11KeyboardHook {
         )
         .map_err(|e| hook_error("window", e))?;
         let sets = modifier_sets();
+        let wm_state = conn
+            .intern_atom(false, b"WM_STATE")
+            .map_err(|e| hook_error("WM_STATE", e))?
+            .reply()
+            .map_err(|e| hook_error("WM_STATE", e))?
+            .atom;
         let tops = conn
             .query_tree(root)
             .map_err(|e| hook_error("windows", e))?
@@ -232,7 +242,8 @@ impl KeyboardHook for X11KeyboardHook {
             .children;
         let mut grabbed = 0;
         for window in tops.into_iter().filter(|w| *w != wake) {
-            grab_window(&conn, &keymap, keyboard, window, &sets);
+            let client = client_in(&conn, window, wm_state).unwrap_or(window);
+            grab_window(&conn, &keymap, keyboard, client, &sets);
             grabbed += 1;
         }
         tracing::debug!(
@@ -259,6 +270,7 @@ impl KeyboardHook for X11KeyboardHook {
                     keymap,
                     keyboard,
                     sets,
+                    root,
                     held: Held::default(),
                     modifiers_down: 0,
                     wake,
@@ -334,6 +346,60 @@ fn grab_window(
     }
 }
 
+/// `grab_window`'s grabs let go.
+fn ungrab_window(
+    conn: &RustConnection,
+    keymap: &Keymap,
+    keyboard: u16,
+    window: xproto::Window,
+    sets: &[u32],
+) {
+    for code in keymap.codes() {
+        let _ = conn.xinput_xi_passive_ungrab_device(
+            window,
+            u32::from(code),
+            keyboard,
+            xinput::GrabType::KEYCODE,
+            sets,
+        );
+    }
+}
+
+/// The application's own window at or within top-level `window`: the one holding WM_STATE,
+/// which a window manager sets on each window it manages, `window` itself or, under a
+/// reparenting window manager, a window in its frame. None for a window without (a popup the
+/// window manager leaves alone).
+fn client_in(
+    conn: &RustConnection,
+    window: xproto::Window,
+    wm_state: xproto::Atom,
+) -> Option<xproto::Window> {
+    let managed = |w: xproto::Window| {
+        conn.get_property(false, w, wm_state, xproto::AtomEnum::ANY, 0, 0)
+            .ok()
+            .and_then(|cookie| cookie.reply().ok())
+            .is_some_and(|reply| reply.type_ != u32::from(xproto::AtomEnum::NONE))
+    };
+    if managed(window) {
+        return Some(window);
+    }
+    let children = |w: xproto::Window| {
+        conn.query_tree(w)
+            .ok()
+            .and_then(|cookie| cookie.reply().ok())
+            .map(|reply| reply.children)
+            .unwrap_or_default()
+    };
+    // A frame holds its window as a child, or a child's child (a decoration's own window).
+    children(window).into_iter().find_map(|child| {
+        if managed(child) {
+            Some(child)
+        } else {
+            children(child).into_iter().find(|w| managed(*w))
+        }
+    })
+}
+
 /// The watchdog: a key the engine has not answered in [`WATCHDOG`] is replayed.
 fn watch(conn: &RustConnection, stop: &AtomicBool, pending: &Mutex<Option<Pending>>) {
     while !stop.load(Ordering::SeqCst) {
@@ -362,6 +428,7 @@ struct Run<'a> {
     keymap: Keymap,
     keyboard: u16,
     sets: Vec<u32>,
+    root: xproto::Window,
     held: Held,
     /// Shift, Control, Alt and Super as held now, from their raw presses and releases.
     modifiers_down: u32,
@@ -391,6 +458,7 @@ impl Run<'_> {
                     );
                     let _ = self.conn.flush();
                 }
+                Ok(Event::ReparentNotify(event)) => self.reparented(&event),
                 Ok(Event::MappingNotify(_)) => {
                     if let Ok(keymap) = Keymap::read(self.conn) {
                         self.keymap = keymap;
@@ -406,6 +474,28 @@ impl Run<'_> {
                 }
             }
         }
+    }
+
+    /// A window put in a frame by the window manager (or back on the root): the frame, grabbed as
+    /// a new top-level window, lets its keys go, and the window holds them itself.
+    fn reparented(&mut self, event: &xproto::ReparentNotifyEvent) {
+        if event.parent != self.root {
+            ungrab_window(
+                self.conn,
+                &self.keymap,
+                self.keyboard,
+                event.parent,
+                &self.sets,
+            );
+        }
+        grab_window(
+            self.conn,
+            &self.keymap,
+            self.keyboard,
+            event.window,
+            &self.sets,
+        );
+        let _ = self.conn.flush();
     }
 
     /// A grabbed key's press: the engine decides it, unless the watchdog already let it go.
