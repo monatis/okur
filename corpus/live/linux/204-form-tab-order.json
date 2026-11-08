@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "0e7ad2a0"
+  "commit": "12447157"
  },
  "trials": [
   {
@@ -15,14 +15,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794175558713
+     "t_ms": 1794178798863
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794175560078,
-     "t_end_ms": 1794175561182,
+     "t_start_ms": 1794178800223,
+     "t_end_ms": 1794178801327,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -38,8 +38,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794175561182,
-     "t_end_ms": 1794175562286,
+     "t_start_ms": 1794178801327,
+     "t_end_ms": 1794178802431,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -55,8 +55,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794175562286,
-     "t_end_ms": 1794175563390,
+     "t_start_ms": 1794178802431,
+     "t_end_ms": 1794178803535,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -72,8 +72,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794175563390,
-     "t_end_ms": 1794175564494,
+     "t_start_ms": 1794178803535,
+     "t_end_ms": 1794178804639,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -89,8 +89,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794175564494,
-     "t_end_ms": 1794175565599,
+     "t_start_ms": 1794178804639,
+     "t_end_ms": 1794178805744,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -106,8 +106,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794175565599,
-     "t_end_ms": 1794175566703,
+     "t_start_ms": 1794178805744,
+     "t_end_ms": 1794178806847,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -123,8 +123,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794175566703,
-     "t_end_ms": 1794175567808,
+     "t_start_ms": 1794178806847,
+     "t_end_ms": 1794178807951,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -140,8 +140,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794175567808,
-     "t_end_ms": 1794175568913,
+     "t_start_ms": 1794178807951,
+     "t_end_ms": 1794178809056,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -157,8 +157,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794175568913,
-     "t_end_ms": 1794175570018,
+     "t_start_ms": 1794178809056,
+     "t_end_ms": 1794178810160,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -167,15 +167,15 @@
       "Tab"
      ],
      "observation": {
-      "speech_raw": "terms of use\nTo activate press Enter.",
+      "speech_raw": "terms of use  \u001d same page link \u001e \nTo activate press Enter.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794175570018,
-     "t_end_ms": 1794175571023,
+     "t_start_ms": 1794178810160,
+     "t_end_ms": 1794178811266,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -184,15 +184,15 @@
       "Tab"
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Create account  \u001d Button \u001e \nTo activate press Enter.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794175571023,
-     "t_end_ms": 1794175572027,
+     "t_start_ms": 1794178811266,
+     "t_end_ms": 1794178812370,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -201,15 +201,15 @@
       "Tab"
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Create Your Account - Riverside Library - Google Chrome\nTab search \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794175572027,
-     "t_end_ms": 1794175573031,
+     "t_start_ms": 1794178812370,
+     "t_end_ms": 1794178813675,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -218,15 +218,15 @@
       "Tab"
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "File \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794175573031,
-     "t_end_ms": 1794175574035,
+     "t_start_ms": 1794178813675,
+     "t_end_ms": 1794178814980,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -235,7 +235,7 @@
       "Tab"
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Address and search bar \u001d Edit \u001e \n/root/okur/corpus/fixtures/signup-form.html\nType in text.",
       "settled": true
      },
      "step_success": true

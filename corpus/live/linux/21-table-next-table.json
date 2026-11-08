@@ -6,7 +6,7 @@
   "web_verbosity": null,
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "0e7ad2a0"
+  "commit": "12447157"
  },
  "trials": [
   {
@@ -15,14 +15,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794175632699
+     "t_ms": 1794178873663
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794175634064,
-     "t_end_ms": 1794175635068,
+     "t_start_ms": 1794178875027,
+     "t_end_ms": 1794178876031,
      "action": {
       "type": "jaws_script",
       "command": "MoveToNextTable"

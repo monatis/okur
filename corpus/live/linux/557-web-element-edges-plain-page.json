@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "0e7ad2a0"
+  "commit": "12447157"
  },
  "trials": [
   {
@@ -15,14 +15,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794176708019
+     "t_ms": 1794179946651
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794176709383,
-     "t_end_ms": 1794176710388,
+     "t_start_ms": 1794179948015,
+     "t_end_ms": 1794179949019,
      "action": {
       "type": "key",
       "command": "Shift+Period"
@@ -38,8 +38,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794176710388,
-     "t_end_ms": 1794176711392,
+     "t_start_ms": 1794179949019,
+     "t_end_ms": 1794179950023,
      "action": {
       "type": "key",
       "command": "Down"
@@ -55,8 +55,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794176711392,
-     "t_end_ms": 1794176712397,
+     "t_start_ms": 1794179950023,
+     "t_end_ms": 1794179951028,
      "action": {
       "type": "key",
       "command": "Shift+Period"
@@ -72,8 +72,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794176712397,
-     "t_end_ms": 1794176713401,
+     "t_start_ms": 1794179951028,
+     "t_end_ms": 1794179952033,
      "action": {
       "type": "key",
       "command": "Shift+Comma"
@@ -89,8 +89,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794176713401,
-     "t_end_ms": 1794176714407,
+     "t_start_ms": 1794179952033,
+     "t_end_ms": 1794179953038,
      "action": {
       "type": "key",
       "command": "Alt+Win+End"
@@ -106,8 +106,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794176714407,
-     "t_end_ms": 1794176715412,
+     "t_start_ms": 1794179953038,
+     "t_end_ms": 1794179954044,
      "action": {
       "type": "key",
       "command": "Alt+Win+Home"
@@ -123,8 +123,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794176715412,
-     "t_end_ms": 1794176716416,
+     "t_start_ms": 1794179954044,
+     "t_end_ms": 1794179955049,
      "action": {
       "type": "key",
       "command": "Down"

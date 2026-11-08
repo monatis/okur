@@ -6,7 +6,7 @@
   "web_verbosity": null,
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "0e7ad2a0"
+  "commit": "12447157"
  },
  "trials": [
   {
@@ -15,14 +15,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794176106374
+     "t_ms": 1794179344558
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794176107735,
-     "t_end_ms": 1794176108840,
+     "t_start_ms": 1794179345921,
+     "t_end_ms": 1794179347024,
      "action": {
       "type": "keyboard",
       "command": "{TAB}"
@@ -38,8 +38,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794176108840,
-     "t_end_ms": 1794176109944,
+     "t_start_ms": 1794179347024,
+     "t_end_ms": 1794179348129,
      "action": {
       "type": "keyboard",
       "command": "{TAB}"

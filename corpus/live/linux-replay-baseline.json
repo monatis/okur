@@ -1,7 +1,7 @@
 {
   "accepted_divergences": 0,
   "errors": [],
-  "matched_steps": 797,
+  "matched_steps": 798,
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- live-replay linux --write",
   "platform": "linux-replay",
   "runs": 83,
@@ -427,7 +427,7 @@
     "203-form-quick-keys/s8": "match",
     "203-form-quick-keys/s9": "match",
     "204-form-tab-order/s1": "match",
-    "204-form-tab-order/s10": "mismatch",
+    "204-form-tab-order/s10": "match",
     "204-form-tab-order/s11": "mismatch",
     "204-form-tab-order/s12": "mismatch",
     "204-form-tab-order/s13": "mismatch",
