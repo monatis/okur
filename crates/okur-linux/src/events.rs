@@ -104,20 +104,53 @@ const CONTROL_LIMIT: usize = 200;
 /// How far up from a native focus its window is looked for.
 const WINDOW_DEPTH: usize = 12;
 
+/// Whether an AT-SPI role is a window's, where a native focus's read ends.
+fn is_window(role: &str) -> bool {
+    matches!(role, "frame" | "dialog" | "window" | "alert")
+}
+
+/// `object`'s ancestors from its parent up, to its window at most: the walk a native focus's
+/// read takes when no walk was made for it.
+fn walk_to_window(provider: &LinuxProvider, object: &AtspiObject) -> Vec<AtspiObject> {
+    let mut walked = Vec::new();
+    let mut next = provider.atspi_parent(object);
+    while let Some(parent) = next {
+        if walked.len() >= WINDOW_DEPTH {
+            break;
+        }
+        next = if is_window(&parent.role) {
+            None
+        } else {
+            provider.atspi_parent(&parent)
+        };
+        walked.push(parent);
+    }
+    walked
+}
+
 /// A focus outside a page read with what surrounds it, for okur-linux-model's `native_focus`:
 /// its own subtree, its parent's, and above it a list's, a column view's or a group box's (their
 /// items, columns, label), the other ancestors alone, up to its window. A few calls on the bus
-/// per object read; none for an element whose object is not named.
-fn read_native(provider: &LinuxProvider, element: &ElementData) -> Option<NativeRead> {
+/// per object read; none for an element whose object is not named. `walked`: its ancestors
+/// as the look for its page walked them, from its parent up, which the read takes instead of
+/// walking them again (the code review of 2026-11-08, finding 16).
+fn read_native(
+    provider: &LinuxProvider,
+    element: &ElementData,
+    walked: Option<&[AtspiObject]>,
+) -> Option<NativeRead> {
     let Some(object) = AtspiObject::of(element) else {
         tracing::debug!("a native focus without its object's names");
         return None;
     };
     let started = std::time::Instant::now();
     let focus = snapshot(provider.atspi_tree(&object, CONTROL_LIMIT));
+    let walked = match walked {
+        Some(walked) => walked.to_vec(),
+        None => walk_to_window(provider, &object),
+    };
     let mut ancestors = Vec::new();
-    let mut next = provider.atspi_parent(&object);
-    while let Some(parent) = next {
+    for parent in walked {
         if ancestors.len() >= WINDOW_DEPTH {
             break;
         }
@@ -126,14 +159,12 @@ fn read_native(provider: &LinuxProvider, element: &ElementData) -> Option<Native
                 && matches!(parent.role.as_str(), "list" | "tree table" | "grouping"));
         let limit = if whole { CONTROL_LIMIT } else { 1 };
         let node = snapshot(provider.atspi_tree(&parent, limit));
-        let window = matches!(node.role.as_str(), "frame" | "dialog" | "window" | "alert");
+        let window = is_window(&node.role);
         ancestors.push(node);
-        // The window is the last read: its own parent, the application, is not asked for.
-        next = if window {
-            None
-        } else {
-            provider.atspi_parent(&parent)
-        };
+        // The window is the last read: its own parent, the application, is not read.
+        if window {
+            break;
+        }
     }
     // What a focus costs, for the review's estimates (2026-11-08) to become numbers.
     let objects = count(&focus) + ancestors.iter().map(count).sum::<usize>();
@@ -163,12 +194,34 @@ fn count(node: &okur_linux_model::page::AtspiNode) -> usize {
 
 /// The page's document the focused element is in, or is.
 fn document_of(provider: &LinuxProvider, element: &ElementData) -> Option<AtspiObject> {
-    let object = AtspiObject::of(element)?;
+    look_for_page(provider, element).0
+}
+
+/// The page's document the element is in, or is, and the ancestors walked to look for it, from
+/// its parent up: to the document where there is one, else as far as the walk went, a native
+/// control's ancestors, which its read then takes.
+fn look_for_page(
+    provider: &LinuxProvider,
+    element: &ElementData,
+) -> (Option<AtspiObject>, Vec<AtspiObject>) {
+    let Some(object) = AtspiObject::of(element) else {
+        return (None, Vec::new());
+    };
     if element.role == Role::WebArea {
-        Some(object)
-    } else {
-        provider.atspi_ancestor(&object, "document web", PAGE_DEPTH)
+        return (Some(object), Vec::new());
     }
+    let mut walked: Vec<AtspiObject> = Vec::new();
+    for _ in 0..=PAGE_DEPTH {
+        let current = walked.last().unwrap_or(&object);
+        if current.role == "document web" {
+            return (Some(current.clone()), walked);
+        }
+        match provider.atspi_parent(current) {
+            Some(parent) => walked.push(parent),
+            None => break,
+        }
+    }
+    (None, walked)
 }
 
 /// An AT-SPI object's key, its bus name and path.
@@ -399,9 +452,10 @@ impl EventSource for AtspiEventSource {
                             // The focus's page, looked up once: read when it is new to the
                             // engine, and telling it the focus is in it; a focused control's
                             // change is told the same way, whether it is on a page.
-                            let document = target
-                                .filter(|_| focus || changed)
-                                .and_then(|e| document_of(&provider, e));
+                            let (document, walked) = match target.filter(|_| focus || changed) {
+                                Some(element) => look_for_page(&provider, element),
+                                None => (None, Vec::new()),
+                            };
                             let mut pages = Vec::new();
                             if let (true, Some(element), Some(document)) =
                                 (focus, target, document.as_ref())
@@ -426,11 +480,11 @@ impl EventSource for AtspiEventSource {
                                 .filter(|_| {
                                     Converter::wants_native(&event.kind, target, document.is_some())
                                 })
-                                .and_then(|e| read_native(&provider, e));
+                                .and_then(|e| read_native(&provider, e, Some(&walked)));
                             let reread = converter
                                 .wants_reread(&event.kind, target)
                                 .cloned()
-                                .and_then(|e| read_native(&provider, &e));
+                                .and_then(|e| read_native(&provider, &e, None));
                             let record = AtspiRecord {
                                 at_ms,
                                 kind: event.kind.clone(),
