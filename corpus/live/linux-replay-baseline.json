@@ -1,7 +1,7 @@
 {
   "accepted_divergences": 0,
   "errors": [],
-  "matched_steps": 796,
+  "matched_steps": 797,
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- live-replay linux --write",
   "platform": "linux-replay",
   "runs": 83,
@@ -498,7 +498,7 @@
     "275-web-heading-levels-sections/s8": "match",
     "275-web-heading-levels-sections/s9": "match",
     "276-web-select-open/s1": "match",
-    "276-web-select-open/s2": "mismatch",
+    "276-web-select-open/s2": "match",
     "276-web-select-open/s3": "match",
     "276-web-select-open/s4": "match",
     "276-web-select-open/s5": "match",
