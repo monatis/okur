@@ -9,11 +9,10 @@ use std::sync::{Arc, Mutex};
 use std::thread::JoinHandle;
 use std::time::Duration;
 
-use okur_core::event::AccessibilityEvent;
-use okur_linux_model::focus_track::{FocusTrack, Reread};
+use okur_linux_model::convert::{AtspiRecord, Converter, NativeRead, PageRead};
 use okur_runtime::events::{EventSink, EventSource};
 use okur_runtime::RuntimeError;
-use xa11y_core::{ElementData, Event, EventKind, RecvStatus, Role};
+use xa11y_core::{ElementData, EventKind, RecvStatus, Role};
 use xa11y_linux::{A11yStatus, AtspiObject, AtspiTree, LinuxProvider};
 
 /// The objects of the last pages read, each its application's bus name and its path, by the id
@@ -105,19 +104,14 @@ const CONTROL_LIMIT: usize = 200;
 /// How far up from a native focus its window is looked for.
 const WINDOW_DEPTH: usize = 12;
 
-/// A focus outside a page with what surrounds it, as okur-linux-model's `native_focus` reads
-/// it: its own subtree, its parent's, and above it a list's, a column view's or a group box's
-/// (their items, columns, label), the other ancestors alone, up to its window. A few calls on
-/// the bus per object read.
-/// None for a focus in a window behind the active one, which is not said.
-fn native_focus(
-    provider: &LinuxProvider,
-    element: &ElementData,
-) -> Option<okur_core::event::FocusEvent> {
-    let base = okur_linux_model::focus::focus_event(element);
+/// A focus outside a page read with what surrounds it, for okur-linux-model's `native_focus`:
+/// its own subtree, its parent's, and above it a list's, a column view's or a group box's (their
+/// items, columns, label), the other ancestors alone, up to its window. A few calls on the bus
+/// per object read; none for an element whose object is not named.
+fn read_native(provider: &LinuxProvider, element: &ElementData) -> Option<NativeRead> {
     let Some(object) = AtspiObject::of(element) else {
         tracing::debug!("a native focus without its object's names");
-        return Some(base);
+        return None;
     };
     let started = std::time::Instant::now();
     let focus = snapshot(provider.atspi_tree(&object, CONTROL_LIMIT));
@@ -151,28 +145,15 @@ fn native_focus(
         states = focus.states,
         ancestors = ?ancestors.iter().map(|a| a.role.as_str()).collect::<Vec<_>>(),
         parent = ?ancestors.first().map(|a| &a.attributes),
-        // Whether a window shows its ACTIVE state (1), before a focus in an inactive one is
-        // passed over by it (the code review's finding 21).
         window_states = ?ancestors.last().map(|a| a.states),
         "native focus read"
     );
-    if !okur_linux_model::focus::in_active_window(&ancestors) {
-        tracing::debug!("a focus in a window behind, not said");
-        return None;
-    }
-    Some(okur_linux_model::focus::native_focus(
-        base, &focus, &ancestors,
-    ))
+    Some(NativeRead { focus, ancestors })
 }
 
 /// The objects in `node`'s tree, itself included.
 fn count(node: &okur_linux_model::page::AtspiNode) -> usize {
     1 + node.children.iter().map(count).sum::<usize>()
-}
-
-/// An element's AT-SPI object, by its bus name and path.
-fn object_of(element: &ElementData) -> Option<String> {
-    AtspiObject::of(element).map(|object| key_of(&object))
 }
 
 /// The page's document the focused element is in, or is.
@@ -204,26 +185,11 @@ fn shown_page(provider: &LinuxProvider, document: &ElementData) -> bool {
             .is_none()
 }
 
-/// The page the focus is in, read whole, as the engine takes a page: when the focus lands on a
-/// page's document (Chrome gives it when a page loads and when Tab comes back to it), and when
-/// it lands inside a page other than the one read last (a link of a page newly in front).
-fn page(
-    provider: &LinuxProvider,
-    element: &ElementData,
-    document: &AtspiObject,
-    last: &mut Option<String>,
-    objects: &PageObjects,
-) -> Option<AccessibilityEvent> {
-    let on_document = element.role == Role::WebArea;
-    let object = key_of(document);
-    if !on_document && last.as_deref() == Some(object.as_str()) {
-        return None;
-    }
-    *last = Some(object);
+/// A page read whole, as the engine takes a page, its objects numbered apart from the pages
+/// before it, so an action finds this page's object even after another page was read.
+fn read_page(provider: &LinuxProvider, document: &AtspiObject, objects: &PageObjects) -> PageRead {
     let started = std::time::Instant::now();
     let tree = provider.atspi_tree(document, PAGE_LIMIT);
-    // Numbered apart from the pages before it, so an action finds this page's object even
-    // after another page was read.
     let base = match objects.lock() {
         Ok(mut objects) => {
             let base = objects.next_page();
@@ -233,28 +199,21 @@ fn page(
         }
         Err(_) => 0,
     };
-    let root = okur_linux_model::page::to_aom_from(&snapshot(tree), base);
-    tracing::debug!(ms = started.elapsed().as_millis(), "page read");
-    let title = root.name.clone().unwrap_or_default();
-    Some(AccessibilityEvent::DocumentLoaded { title, root })
+    let root = snapshot(tree);
+    tracing::debug!(
+        ms = started.elapsed().as_millis(),
+        objects = count(&root),
+        "page read"
+    );
+    PageRead {
+        document: key_of(document),
+        base,
+        root,
+    }
 }
 
 fn source_error(what: &str, error: impl std::fmt::Display) -> RuntimeError {
     RuntimeError::EventSource(format!("AT-SPI: {what}: {error}"))
-}
-
-/// The engine's event for an AT-SPI event, when it takes one. `in_page`: the focus is in a page's
-/// document, or on it, where the virtual cursor reads and takes the keys, as the focus chain
-/// that holds a document tells it on Windows.
-/// Whether `event` is a change the engine is told of: the focused control's state (a check box
-/// checked, a tab selected, a button expanded), as Windows' state change gives it.
-fn control_change(event: &Event) -> bool {
-    okur_linux_model::focus_track::is_control_change(&event.kind, focused(event))
-}
-
-/// Whether `event`'s object has the focus.
-fn focused(event: &Event) -> bool {
-    event.target.as_ref().is_some_and(|e| e.states.focused)
 }
 
 /// The page whose address ends with `address_end`, read whole as Okur reads a page, as Chrome
@@ -299,37 +258,6 @@ pub fn capture_page(
         "the page",
         format!("no focus reached a page at …{address_end} in {wait:?}"),
     ))
-}
-
-/// The application `event` came from, as FocusEvent::app names it for the per-application
-/// settings: its AT-SPI name ("Google Chrome"), by which Orca keeps its per-application settings
-/// too (the structure review of 2026-11-08: Linux set none, and its per-application settings did
-/// nothing).
-fn application(event: &Event) -> Option<String> {
-    Some(event.app_name.clone()).filter(|name| !name.is_empty())
-}
-
-pub fn convert(event: &Event, in_page: bool) -> Option<AccessibilityEvent> {
-    match event.kind {
-        EventKind::FocusChanged => event.target.as_ref().map(|element| {
-            let mut focus = okur_linux_model::focus::focus_event(element);
-            focus.in_document = in_page;
-            focus.app = application(event);
-            AccessibilityEvent::Focus(focus)
-        }),
-        EventKind::StateChanged { .. } if control_change(event) => {
-            event.target.as_ref().map(|element| {
-                let mut control = okur_linux_model::focus::focus_event(element);
-                control.in_document = in_page;
-                control.app = application(event);
-                AccessibilityEvent::Change {
-                    kind: okur_core::event::ChangeKind::State,
-                    control,
-                }
-            })
-        }
-        _ => None,
-    }
 }
 
 /// Every application's accessibility events, from the AT-SPI bus.
@@ -386,13 +314,10 @@ impl EventSource for AtspiEventSource {
             let objects = Arc::clone(&self.objects);
             std::thread::spawn(move || {
                 // The subscription lives in this thread: dropped here, it deregisters its
-                // events and ends its own reader.
-                let mut last_page = None;
-                // The focus as the engine was last told of it, and the control outside a page
-                // that has it.
-                let mut track = FocusTrack::default();
+                // events and ends its own reader. The converter decides what each event says,
+                // from what is read for it here (okur_linux_model::convert).
+                let mut converter = Converter::default();
                 let clock = std::time::Instant::now();
-                let mut native_element: Option<ElementData> = None;
                 let objects = objects;
                 while !stop.load(Ordering::SeqCst) {
                     match subscription.recv_status(Duration::from_millis(100)) {
@@ -403,140 +328,67 @@ impl EventSource for AtspiEventSource {
                                 name = ?event.target.as_ref().and_then(|e| e.name.as_deref()),
                                 "AT-SPI event"
                             );
-                            if event.kind == EventKind::FocusChanged {
-                                tracing::debug!(
-                                    app = %event.app_name,
-                                    role = ?event.target.as_ref().map(|e| e.role),
-                                    "AT-SPI focus"
-                                );
-                            }
-                            // The focus's page, looked up once: read when it is new, and
-                            // telling the engine the focus is in it; a focused control's
-                            // change is told the same way, whether it is on a page.
-                            let focus = event.kind == EventKind::FocusChanged;
-                            // GTK 4's second focus event for one move, passed over before
-                            // anything is read.
+                            let target = event.target.as_ref();
                             let at_ms =
                                 u64::try_from(clock.elapsed().as_millis()).unwrap_or(u64::MAX);
-                            if focus
-                                && track.is_twin(
-                                    event.target.as_ref().and_then(object_of).as_deref(),
-                                    at_ms,
-                                )
-                            {
+                            // GTK 4's second focus event for one move, passed over before
+                            // anything is read.
+                            if converter.is_twin(&event.kind, target, at_ms) {
                                 tracing::debug!("AT-SPI focus's twin");
                                 continue;
                             }
-                            let document = event
-                                .target
-                                .as_ref()
-                                .filter(|_| focus || control_change(&event))
-                                .and_then(|e| Some((e, document_of(&provider, e)?)));
-                            let loaded = document
-                                .as_ref()
-                                .filter(|_| focus)
-                                .and_then(|(e, d)| page(&provider, e, d, &mut last_page, &objects));
-                            // A page that finished loading, a reload's too, is read again:
-                            // the engine takes the page it already has as a refresh, and as
-                            // a new load after F5 or Ctrl+R (the lab's live run of 712).
-                            let reloaded = event
-                                .target
-                                .as_ref()
-                                .filter(|d| {
-                                    event.kind == EventKind::DocumentLoaded
-                                        && shown_page(&provider, d)
-                                })
-                                .and_then(|d| {
-                                    let document = AtspiObject::of(d)?;
-                                    page(&provider, d, &document, &mut last_page, &objects)
-                                });
-                            for loaded in loaded.into_iter().chain(reloaded) {
-                                if !sink.send(loaded) {
-                                    return;
-                                }
-                            }
-                            // The focus's repeats and a control's own changes told from a focus
-                            // move: okur_linux_model::focus_track's rules.
-                            let object = event.target.as_ref().and_then(object_of);
-                            match event.kind {
-                                EventKind::WindowActivated => {
-                                    tracing::debug!(window = ?object, "AT-SPI window activated");
-                                    track.window_activated(object.clone());
-                                }
-                                EventKind::WindowDeactivated => track.window_deactivated(),
-                                _ => {}
-                            }
-                            // A focus outside a page, and its control's change, read with what
-                            // surrounds it: the change names the control as its focus did.
-                            let changed = control_change(&event);
-                            let outside_page = (focus || changed) && document.is_none();
-                            let native = event
-                                .target
-                                .as_ref()
-                                .filter(|_| outside_page)
-                                .and_then(|e| native_focus(&provider, e))
-                                .map(|mut control| {
-                                    control.app = application(&event);
-                                    if changed {
-                                        AccessibilityEvent::Change {
-                                            kind: okur_core::event::ChangeKind::State,
-                                            control,
-                                        }
-                                    } else {
-                                        AccessibilityEvent::Focus(control)
-                                    }
-                                });
-                            if let Some(AccessibilityEvent::Focus(read)) = &native {
-                                if !track.native_focus(object.clone(), read) {
-                                    tracing::debug!(name = ?read.name, "AT-SPI focus repeated");
-                                    continue;
-                                }
-                                native_element = event.target.clone();
-                            } else if focus && document.is_some() {
-                                track.page_focus(object.clone());
-                                native_element = None;
-                            }
-                            // A label renamed, or an object selected without the focus: the focused
-                            // control may read otherwise. Read again, it is said as a focus when
-                            // it reads as another control (GTK's notebook keeps the focus as Right
-                            // selects its next tab [obs, 303/s13]), as its value changing when
-                            // only that changed (GTK's drop-down shows its chosen item in its
-                            // button's label, renamed as Down or Up chooses another [obs,
-                            // 304/s9-s10: "Brazil | 3 of 3"]).
-                            let inside = okur_linux_model::focus_track::is_inside_change(
+                            let focus = event.kind == EventKind::FocusChanged;
+                            let changed = okur_linux_model::focus_track::is_control_change(
                                 &event.kind,
-                                focused(&event),
-                            ) && track.in_focused_application(object.as_deref());
-                            if inside {
-                                if let Some(element) = native_element.as_ref() {
-                                    let Some(mut control) = native_focus(&provider, element) else {
-                                        continue;
-                                    };
-                                    control.app = application(&event);
-                                    let reread = match track.reread(&control) {
-                                        Reread::Focus => Some(AccessibilityEvent::Focus(control)),
-                                        Reread::Value => Some(AccessibilityEvent::Change {
-                                            kind: okur_core::event::ChangeKind::Value,
-                                            control,
-                                        }),
-                                        Reread::Same => None,
-                                    };
-                                    if let Some(reread) = reread {
-                                        if !sink.send(reread) {
-                                            return;
-                                        }
-                                    }
+                                target.is_some_and(|e| e.states.focused),
+                            );
+                            // The focus's page, looked up once: read when it is new to the
+                            // engine, and telling it the focus is in it; a focused control's
+                            // change is told the same way, whether it is on a page.
+                            let document = target
+                                .filter(|_| focus || changed)
+                                .and_then(|e| document_of(&provider, e));
+                            let mut pages = Vec::new();
+                            if let (true, Some(element), Some(document)) =
+                                (focus, target, document.as_ref())
+                            {
+                                let on_document = okur_linux_model::convert::is_document(element);
+                                if converter.wants_page(on_document, &key_of(document)) {
+                                    pages.push(read_page(&provider, document, &objects));
                                 }
                             }
-                            // Outside a page the native reading alone: none is a focus in a window
-                            // behind, not said.
-                            let converted = if outside_page && event.target.is_some() {
-                                native
-                            } else {
-                                native.or_else(|| convert(&event, document.is_some()))
+                            // A page that finished loading, a reload's too, is read again: the
+                            // engine takes the page it already has as a refresh, and as a new
+                            // load after F5 or Ctrl+R (the lab's live run of 712).
+                            if event.kind == EventKind::DocumentLoaded {
+                                if let Some(document) = target
+                                    .filter(|d| shown_page(&provider, d))
+                                    .and_then(AtspiObject::of)
+                                {
+                                    pages.push(read_page(&provider, &document, &objects));
+                                }
+                            }
+                            let native = target
+                                .filter(|_| {
+                                    Converter::wants_native(&event.kind, target, document.is_some())
+                                })
+                                .and_then(|e| read_native(&provider, e));
+                            let reread = converter
+                                .wants_reread(&event.kind, target)
+                                .cloned()
+                                .and_then(|e| read_native(&provider, &e));
+                            let record = AtspiRecord {
+                                at_ms,
+                                kind: event.kind.clone(),
+                                app: event.app_name.clone(),
+                                target: event.target.clone(),
+                                document: document.as_ref().map(key_of),
+                                pages,
+                                native,
+                                reread,
                             };
-                            if let Some(event) = converted {
-                                if !sink.send(event) {
+                            for said in converter.convert(&record) {
+                                if !sink.send(said) {
                                     return;
                                 }
                             }
@@ -577,30 +429,6 @@ impl EventSource for AtspiEventSource {
 impl Drop for AtspiEventSource {
     fn drop(&mut self) {
         let _ = self.stop();
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    fn focus_on(role: Role) -> Event {
-        let mut event = Event::new(EventKind::FocusChanged, "chrome", 1);
-        event.target = Some(ElementData::for_role(role));
-        event
-    }
-
-    /// The focus in a page is in its document, and the engine's virtual cursor takes the keys
-    /// there: without it Down went to Chrome, and nothing was said (the lab's live run of
-    /// 02-doc-next-line, 2026-11-05).
-    #[test]
-    fn a_focus_in_a_page_is_in_its_document() {
-        let in_page = convert(&focus_on(Role::Link), true);
-        assert!(matches!(in_page, Some(AccessibilityEvent::Focus(f)) if f.in_document));
-        let outside = convert(&focus_on(Role::Button), false);
-        assert!(matches!(outside, Some(AccessibilityEvent::Focus(f)) if !f.in_document));
-        let other = Event::new(EventKind::Announcement, "chrome", 1);
-        assert!(convert(&other, true).is_none());
     }
 }
 
