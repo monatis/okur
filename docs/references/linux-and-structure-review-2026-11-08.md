@@ -40,10 +40,16 @@ file:line references are to that commit.
 2. **(3c–e)** Drop a focus whose fresh node no longer has FOCUSED (fast Tabs). Get "n of m" from posinset/setsize (GTK's list items and rows carry them) or GetIndexInParent, instead of reading the parent whole. Pipeline the per-node calls.
    - **Measured in the lab (ed7c39e5, the GTK replica):** a native focus read is 40 to 180 ms for 12 to 47 objects, about 3.5 ms an object. The parent read whole is the bulk: a column view's row read its 47-object list in 180 ms.
    - **A page:** about 3 ms an object (color-grid: 433 objects in 1280 ms, capture-atspi-snapshots.sh).
-3. **(11) Make the model's read plan explicit.** The read plan (which ancestors whole, `CONTROL_LIMIT`) moves into okur-linux-model. A tree cut at 200 objects is marked. Peers are matched by object path, not by name and states.
+3. **(11) Make the model's read plan explicit.**
+   - Done: the read plan is okur-linux-model's (`focus::ancestor_limit`, `is_window`, c4cdc699). Peers are matched by object path (0d360045).
+   - Open: a tree cut at 200 objects is marked.
 5. **(14)** CapsLock as the Okur key is never grabbed, so X toggles Caps Lock.
-6. **(15, rest)** Warn when grabs fail (a leftover Okur holds the keys). Mark a read with per-node errors as partial.
-7. **(16)** One walk of references up to the frame, shared by `document_of` and `native_focus`. The 40-level page depth and the 12-level window depth are fixed caps.
+6. **(15, rest)**
+   - Done: a key grab another program holds is warned of (4d58202f).
+   - Open: mark a read with per-node errors as partial.
+7. **(16)**
+   - Done: the look for a focus's page keeps its walk, and the native read takes it (e7d611dd). The walk cannot stop at a window's role: a page's dialogs are dialogs to AT-SPI too.
+   - Open: the 40-level page depth and the 12-level window depth are fixed caps.
 8. **Plausible, need the lab:**
    - (20) Windows without AT-SPI (xterm, Java) are invisible: watch `_NET_ACTIVE_WINDOW`.
    - (21) Focus events from inactive windows.

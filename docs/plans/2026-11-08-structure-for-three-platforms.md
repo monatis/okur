@@ -26,57 +26,21 @@ Rules for every step, as the accepted [`../references/crate-structure-proposal.m
   - `FocusEvent::plain_edit` replaces the engine's "EDIT" match (d4e88df9).
   - Linux sets `FocusEvent::app` (514aabf5).
 - **1 (part):** okur-linux-model's `focus_track` holds the event loop's rules and its event-kind decisions, tested on every OS (2f71e086, 3d84b3a4, 79eb9a8b, 27ee842b, 35ac0be5).
+- **2. The web pivot** (4d3c8a42, 8cc1ef08, 3c555f36): see the handoff of 2026-11-08 (2).
+- **1. A replayable Linux event model:**
+  - The driver only reads. okur-linux-model's `Converter` decides what the engine is told from an `AtspiRecord` of what was read (f56f2377).
+  - The driver writes each record to a trace when given one (`okur run --trace`). The lab's runner keeps it beside the run, with the keys it pressed. `okur-lab live-replay linux` replays the records against the run's speech and JAWS's evidence (f0b3a66d). Records time their reads (f0746d17).
+  - okur-model's `EventModel` is the trait both platforms' converters implement (86df02bc).
+  - `--pages-after-focus` tries a page-reader thread on the runs before the driver changes (236db52e).
+- **3. One `okur` program for every OS** (340f3b66):
+  - `run.rs` is neutral. `windows.rs` keeps Windows' start, unchanged in order. `linux.rs` builds okur-linux's platform and stops on a terminate signal.
+  - The example `okur_linux` is gone. The lab runs `okur run`.
+  - Checked live on old-pc's Windows: it starts, `okur quit` is answered through the control pipe, and it ends.
 
-## 2. An Okur-owned web node as the pivot (next)
+Steps 1, 2 and 3 are done (above); their designs are in git's history of this file (at
+d469f746).
 
-A page today:
-- Windows: IA2 objects → `ia2_to_aom` (okur-windows-model/src/ia2_snapshot.rs, about 560 lines with `map_role`).
-- Linux: AT-SPI → `to_ia2` (fabricated MSAA/IA2 role numbers and state bits) → `ia2_to_aom`.
-
-`convert` uses the IA2 numbers throughout. It distinguishes:
-- STATICTEXT text from other text;
-- a DOCUMENT inside a group (an article);
-- GROUPING, COLUMNHEADER, ROWHEADER;
-- IA2's SECTION, CONTENT_DELETION, CONTENT_INSERTION, MARK and TOGGLE_BUTTON;
-- MSAA's CHECKED, MIXED, PRESSED, SELECTED, EXPANDED, COLLAPSED, FOCUSED, FOCUSABLE, UNAVAILABLE, INVISIBLE, PROTECTED, READONLY, TRAVERSED;
-- IA2's MODAL and REQUIRED.
-
-Design:
-- **`okur_model::web`.** `WebNode` has:
-  - `role: WebRole`, one value per distinction `map_role` and `convert` make. Built as the union of the MSAA and IA2 roles they test, named for what the element is: `StaticText`, `Article`, `Grouping`, `ColumnHeader`, `ToggleButton`, `Section`, `Deletion`, …
-  - `states: WebStates`, named flags for the bits above;
-  - name, value, description, default action, value range, unique id, attributes (Chromium's object attributes: `tag`, `display`, `xml-roles`, `level`, …), group position, text, text runs, relations, children.
-- **`web_to_aom(&WebNode) -> AomNode`**: today's `convert` and `map_role`, reading `WebRole` and `WebStates` instead of numbers.
-- **`ia2_to_web(&Ia2Node) -> WebNode`** in okur-windows-model: the numbers' meaning, in one place.
-- **(a)** `ia2_to_aom = web_to_aom ∘ ia2_to_web`. Verified by P1 identical, over 278 IA2 snapshots.
-- **(b)** `atspi_to_web(&AtspiNode) -> WebNode` in okur-linux-model, in place of `to_ia2`.
-  - A test that it gives what `ia2_to_web(to_ia2(..))` gave on okur-linux-model's fixtures.
-  - Then `to_ia2` goes, along with okur-linux-model's dependencies on okur-windows-model and xa11y-windows.
-  - Verified by a lab run of the web scenarios and `parity --api atspi` on the captured snapshots.
-- **(c)** The rule R9 in `check-crate-layers.ps1`: a platform's model takes no other platform's model or backend.
-
-## 1. A replayable Linux event model
-
-- **What the driver should do:** only capture. For each event it writes an `AtspiRecord` (serde) in okur-linux-model. A record holds:
-  - the event's kind, application, object and window;
-  - the target's xa11y snapshot;
-  - what the read gave: the focus's subtree and ancestors, the page, a re-read.
-- **The conversion:** a pure `Converter` turns records into `AccessibilityEvent`s, as Windows' `EventConverter` turns `TraceEvent`s. `FocusTrack` lives in it.
-- **The capture:** the driver asks the model's predicates what to read (`is_heard`, `is_twin`, `in_focused_application`).
-- **The lab:** the runner keeps each live run's records beside it (`corpus/live/linux/<id>.trace.jsonl`, fixture pages only).
-- **Replay:** `okur-lab live-replay linux` replays them against JAWS's evidence and against the run's own speech, with a baseline.
-- **A trait for both:** an `EventModel` trait in okur-model, which Windows' `EventConverter` implements too.
-- **Verification:** the model's tests; the lab's live-baseline not regressed; the replay equal to the live run.
-
-## 3. One `okur` program for every OS
-
-- `crates/okur/src/run.rs` becomes platform-neutral: options, settings folder and layers, speech log, fixture, `Config`, `host::run`.
-- `windows.rs` keeps Windows' start: single instance, control pipe, session end, screen reader flag, elevation.
-- `linux.rs` builds the Platform from okur-linux.
-- The Linux lab's scripts run `okur run --engine no-speech --settings …`. Then the example `okur_linux` goes, and with it its second argument parser, which this stretch found twice wrong (the seconds, the settings layer).
-- Verified by P2, the Linux target's clippy, and a live start on old-pc (P4).
-
-## 4. Neutral identity (rest)
+## 4. Neutral identity (rest, next)
 
 - An opaque `FocusEvent::window_id` each converter fills, in place of comparing top-level window classes for a window change.
 - The structure rule R5 widened to any literal compared with a class field.
