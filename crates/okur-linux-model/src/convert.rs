@@ -107,6 +107,9 @@ pub struct Converter {
     /// it, "Structural Navigation Reference Fixture - Google Chrome", as Windows' focus events
     /// carry their top-level window's title (Say Title's "Title is ..." [obs, 625/s1]).
     window_title: Option<String>,
+    /// A page's select with the focus, by its object, as its focus was given to the engine:
+    /// its value changes come as its hidden menu's items selected.
+    page_select: Option<(String, FocusEvent)>,
 }
 
 impl Converter {
@@ -278,7 +281,40 @@ impl Converter {
                 plain(record, in_page, app, window)
             })
         };
+        // A page's select focused: kept for its value's changes; any other focus ends it.
+        if focus {
+            self.page_select = match (&converted, object.clone()) {
+                (Some(AccessibilityEvent::Focus(control)), Some(object))
+                    if in_page && control.role == okur_core::aom::Role::ComboBox =>
+                {
+                    Some((object, control.clone()))
+                }
+                _ => None,
+            };
+        }
+        // The select's value changed by the arrows while it is closed: Chrome on Linux selects
+        // the item in the select's hidden menu, focus unmoved; Windows' Chrome changes the
+        // select's value, which JAWS says, "Eastgate" [obs, 205/s9, s10].
+        let selected = record.kind
+            == EventKind::StateChanged {
+                flag: xa11y_core::StateFlag::Selected,
+                value: true,
+            };
+        let value_change = target
+            .filter(|t| selected && t.role == Role::MenuItem && !t.states.focused)
+            .and_then(|item| {
+                let (select, control) = self.page_select.as_ref()?;
+                same_application(object.as_deref(), Some(select)).then(|| {
+                    let mut control = control.clone();
+                    control.value = item.name.clone().filter(|n| !n.is_empty());
+                    AccessibilityEvent::Change {
+                        kind: ChangeKind::Value,
+                        control,
+                    }
+                })
+            });
         events.extend(converted);
+        events.extend(value_change);
         events
     }
 }
@@ -541,6 +577,32 @@ mod tests {
                 && f.in_document
                 && f.item_index == Some(1)
                 && f.item_count == Some(3)
+        ));
+    }
+
+    /// A page's select changed by the arrows while closed: its hidden menu's item selected, the
+    /// select's value change [obs, 205/s9].
+    #[test]
+    fn a_selects_item_selected_is_its_value_change() {
+        let mut converter = Converter::default();
+        let select = element(ElementRole::ComboBox, "Home branch", "/select", true);
+        let mut focus = record(EventKind::FocusChanged, select, None);
+        focus.document = Some(":1.5/doc".to_owned());
+        let _ = converter.convert_read(&focus);
+        let item = element(ElementRole::MenuItem, "Eastgate", "/e", false);
+        let chosen = record(
+            EventKind::StateChanged {
+                flag: StateFlag::Selected,
+                value: true,
+            },
+            item,
+            None,
+        );
+        assert!(matches!(
+            converter.convert_read(&chosen).as_slice(),
+            [AccessibilityEvent::Change { kind: ChangeKind::Value, control }]
+                if control.value.as_deref() == Some("Eastgate")
+                    && control.role == OkurRole::ComboBox
         ));
     }
 
