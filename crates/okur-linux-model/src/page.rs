@@ -209,6 +209,38 @@ fn number_paths<'a>(node: &'a AtspiNode, next: &mut i32, ids: &mut HashMap<&'a s
     }
 }
 
+/// A text run's attributes by the names the conversion reads (Chromium's IA2 names), from the
+/// ATK names Chrome gives over AT-SPI, as the lab's capture of activation.html has them
+/// (`family-name`, `size` "24pt", `weight` "700", `fg-color` and `bg-color` "0,0,0"); the
+/// colors as CSS gives them on Windows, `rgb(0, 0, 0)`. Others are left out.
+fn text_attributes(atk: &BTreeMap<String, String>) -> BTreeMap<String, String> {
+    let rgb = |value: &str| {
+        let parts: Vec<&str> = value.split(',').map(str::trim).collect();
+        (parts.len() == 3).then(|| format!("rgb({})", parts.join(", ")))
+    };
+    let mut out = BTreeMap::new();
+    for (name, value) in atk {
+        let renamed = match name.as_str() {
+            "family-name" => Some(("font-family", value.clone())),
+            "size" => Some(("font-size", value.clone())),
+            "weight" => Some(("font-weight", value.clone())),
+            "style" => Some(("font-style", value.clone())),
+            "underline" => Some(("text-underline-style", value.clone())),
+            "strikethrough" => Some((
+                "text-line-through-style",
+                if value == "true" { "solid" } else { "none" }.to_owned(),
+            )),
+            "fg-color" => rgb(value).map(|v| ("color", v)),
+            "bg-color" => rgb(value).map(|v| ("background-color", v)),
+            _ => None,
+        };
+        if let Some((key, value)) = renamed {
+            out.insert(key.to_owned(), value);
+        }
+    }
+    out
+}
+
 /// AT-SPI's relation types (libatspi 2.60.4's `AtspiRelationType`, listed in the Linux lab,
 /// 2026-11-08) by the names the conversion reads, as IA2's are.
 fn relation_name(kind: u32) -> Option<&'static str> {
@@ -267,9 +299,7 @@ fn numbered(node: &AtspiNode, next: &mut i32, ids: &HashMap<&str, i32>) -> WebNo
         attributes: node.attributes.clone(),
         group_position,
         text: node.text.clone(),
-        // As Chrome names them over AT-SPI, until their mapping to the names the conversion
-        // reads is made from captured runs.
-        text_attributes: Some(node.text_attributes.clone()).filter(|a| !a.is_empty()),
+        text_attributes: Some(text_attributes(&node.text_attributes)).filter(|a| !a.is_empty()),
         unique_id: Some(unique_id),
         relations,
         children: node
@@ -381,6 +411,43 @@ mod tests {
             flows,
             Some(BTreeMap::from([("flowsTo".to_owned(), vec![4])]))
         );
+    }
+
+    /// A text run's ATK attributes become the names Say Font and Say Color read, its colors CSS's.
+    #[test]
+    fn a_runs_attributes_are_named_as_windows_names_them() {
+        let atk: BTreeMap<String, String> = [
+            ("family-name", "Liberation Serif"),
+            ("size", "24pt"),
+            ("weight", "700"),
+            ("fg-color", "0,0,238"),
+            ("bg-color", "255,255,255"),
+            ("strikethrough", "true"),
+            ("language", "en"),
+        ]
+        .iter()
+        .map(|(k, v)| ((*k).to_owned(), (*v).to_owned()))
+        .collect();
+        let named = text_attributes(&atk);
+        assert_eq!(
+            named.get("font-family").map(String::as_str),
+            Some("Liberation Serif")
+        );
+        assert_eq!(named.get("font-size").map(String::as_str), Some("24pt"));
+        assert_eq!(named.get("font-weight").map(String::as_str), Some("700"));
+        assert_eq!(
+            named.get("color").map(String::as_str),
+            Some("rgb(0, 0, 238)")
+        );
+        assert_eq!(
+            named.get("background-color").map(String::as_str),
+            Some("rgb(255, 255, 255)")
+        );
+        assert_eq!(
+            named.get("text-line-through-style").map(String::as_str),
+            Some("solid")
+        );
+        assert!(!named.contains_key("language"));
     }
 
     /// doc-reading.html as Chrome 157 gives it over AT-SPI (the lab's probe-atspi-tree.sh).
