@@ -284,6 +284,7 @@ impl EventSource for AtspiEventSource {
                 // The focus as the engine was last told of it, and the control outside a page
                 // that has it.
                 let mut track = FocusTrack::default();
+                let clock = std::time::Instant::now();
                 let mut native_element: Option<ElementData> = None;
                 let objects = objects;
                 while !stop.load(Ordering::SeqCst) {
@@ -306,6 +307,19 @@ impl EventSource for AtspiEventSource {
                             // telling the engine the focus is in it; a focused control's
                             // change is told the same way, whether it is on a page.
                             let focus = event.kind == EventKind::FocusChanged;
+                            // GTK 4's second focus event for one move, passed over before
+                            // anything is read.
+                            let at_ms =
+                                u64::try_from(clock.elapsed().as_millis()).unwrap_or(u64::MAX);
+                            if focus
+                                && track.is_twin(
+                                    event.target.as_ref().and_then(object_of).as_deref(),
+                                    at_ms,
+                                )
+                            {
+                                tracing::debug!("AT-SPI focus's twin");
+                                continue;
+                            }
                             let document = event
                                 .target
                                 .as_ref()

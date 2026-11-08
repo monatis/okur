@@ -73,11 +73,16 @@ pub struct FocusTrack {
     object: Option<String>,
     /// The window activated last.
     window: Option<String>,
+    /// The object of the last focus event and when it came, in milliseconds.
+    last_event: Option<(String, u64)>,
     /// What the focus outside a page was said as: its role and name; none in a page.
     said: Option<(Role, Option<String>)>,
     /// The value it was said with.
     value: Option<String>,
 }
+
+/// How close a focus event's twin follows it, in milliseconds.
+const TWIN_MS: u64 = 100;
 
 /// What the focused control, read again, is to the engine.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -97,6 +102,20 @@ impl FocusTrack {
             self.object = None;
         }
         self.window = window;
+    }
+
+    /// Whether a focus event for `object` at `at_ms` is the twin of the one before it: GTK 4
+    /// sends one with its Focus and one with its focused state, at once, and each was read in
+    /// full before the second was found a repeat (the code review of 2026-11-08). A focus coming
+    /// back to the same object later is no twin.
+    pub fn is_twin(&mut self, object: Option<&str>, at_ms: u64) -> bool {
+        let twin = object.is_some_and(|o| {
+            self.last_event
+                .as_ref()
+                .is_some_and(|(last, at)| last == o && at_ms.saturating_sub(*at) <= TWIN_MS)
+        });
+        self.last_event = object.map(|o| (o.to_owned(), at_ms));
+        twin
     }
 
     /// The active window left: the focus coming back to the same object is said.
@@ -272,6 +291,19 @@ mod tests {
         track.window_activated(object("terminal"));
         track.window_activated(object("fixture"));
         assert!(track.native_focus(object("name"), &name));
+    }
+
+    /// GTK's two focus events for one move are one; the same object focused again later is not
+    /// a twin, nor another object at once.
+    #[test]
+    fn a_focus_events_twin_is_one_move() {
+        let mut track = FocusTrack::default();
+        let check = object("check");
+        assert!(!track.is_twin(check.as_deref(), 1_000));
+        assert!(track.is_twin(check.as_deref(), 1_030));
+        assert!(!track.is_twin(check.as_deref(), 2_000));
+        assert!(!track.is_twin(object("other").as_deref(), 2_010));
+        assert!(!track.is_twin(None, 2_020));
     }
 
     /// A label renamed in another application (a clock, a browser's tab) is not within the
