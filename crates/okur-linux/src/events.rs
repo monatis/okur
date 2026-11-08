@@ -252,6 +252,8 @@ impl EventSource for AtspiEventSource {
                 // names and paths).
                 let mut focused_object: Option<String> = None;
                 let mut active_window: Option<String> = None;
+                // What the last focus outside a page read as: its role and name.
+                let mut focus_said: Option<(okur_core::Role, Option<String>)> = None;
                 let objects = objects;
                 while !stop.load(Ordering::SeqCst) {
                     match subscription.recv_status(Duration::from_millis(100)) {
@@ -292,15 +294,17 @@ impl EventSource for AtspiEventSource {
                                     return;
                                 }
                             }
-                            // A focus event for the object that has the focus already is no move:
-                            // GTK 4 sends one with its Focus and one with its focused state, and
+                            // A focus event for the object that has the focus already, read as it
+                            // was (its role and name), is no move: GTK 4 sends one with its Focus and one with its focused state, and
                             // one more after each key the hook grabs, which X reports to the
                             // window as its focus leaving for the grab and coming back (GTK
                             // deactivates and activates the window around every key: the lab's
                             // 304, where the change on Space was compared with the state the
-                            // repeated focus brought). Another window activated forgets it, so a
-                            // focus coming back to the same object from elsewhere is said.
+                            // repeated focus brought). Read otherwise it is said: a notebook keeps
+                            // the focus as Right selects its next tab [obs, 303/s13]. Another window
+                            // activated forgets it, so a focus coming back from elsewhere is said.
                             let object = event.target.as_ref().and_then(object_of);
+                            let mut again = false;
                             match event.kind {
                                 EventKind::WindowActivated => {
                                     tracing::debug!(window = ?object, "AT-SPI window activated");
@@ -310,17 +314,8 @@ impl EventSource for AtspiEventSource {
                                     active_window = object.clone();
                                 }
                                 EventKind::FocusChanged => {
-                                    let again = object.is_some() && object == focused_object;
-                                    tracing::debug!(
-                                        ?object,
-                                        before = ?focused_object,
-                                        again,
-                                        "AT-SPI focus's object"
-                                    );
+                                    again = object.is_some() && object == focused_object;
                                     focused_object = object;
-                                    if again && document.is_none() {
-                                        continue;
-                                    }
                                 }
                                 _ => {}
                             }
@@ -342,6 +337,14 @@ impl EventSource for AtspiEventSource {
                                         AccessibilityEvent::Focus(control)
                                     }
                                 });
+                            if let Some(AccessibilityEvent::Focus(read)) = &native {
+                                let said = (read.role.clone(), read.name.clone());
+                                if again && focus_said.as_ref() == Some(&said) {
+                                    tracing::debug!(name = ?read.name, "AT-SPI focus repeated");
+                                    continue;
+                                }
+                                focus_said = Some(said);
+                            }
                             if let Some(event) =
                                 native.or_else(|| convert(&event, document.is_some()))
                             {
