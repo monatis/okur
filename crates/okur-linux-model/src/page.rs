@@ -82,7 +82,11 @@ impl AtspiNode {
 fn web_roles(node: &AtspiNode) -> (WebRole, Option<WebMark>) {
     let grouping = |mark: Option<WebMark>| (WebRole::Grouping, mark);
     match node.role.as_str() {
-        "document web" | "document frame" | "article" => (WebRole::Document, None),
+        // An iframe is an internal frame to Chrome's AT-SPI, a document with its tag to the
+        // conversion, which says it as a frame (web-structures-2's "Weather frame").
+        "document web" | "document frame" | "article" | "internal frame" => {
+            (WebRole::Document, None)
+        }
         "landmark" | "form" | "paragraph" | "caption" | "label" | "grouping" => grouping(None),
         // A group (a fieldset, role="group") and a log are panels to Chrome's AT-SPI, a generic
         // container a section: a grouping of its own, as IA2's grouping without its section role
@@ -93,6 +97,9 @@ fn web_roles(node: &AtspiNode) -> (WebRole, Option<WebMark>) {
         "content deletion" => grouping(Some(WebMark::ContentDeletion)),
         "content insertion" => grouping(Some(WebMark::ContentInsertion)),
         "mark" => grouping(Some(WebMark::Mark)),
+        // Highlighted text (<mark>) is a static element to Chrome's AT-SPI, IA2's mark role on
+        // Windows (edits.html's "library").
+        "static" if node.attribute("tag") == Some("mark") => (WebRole::Text, Some(WebMark::Mark)),
         // A text leaf; an inline element holding text (strong, em) is a text object.
         "static" if node.children.is_empty() => (WebRole::StaticText, None),
         "static" => (WebRole::Text, None),
