@@ -1,0 +1,46 @@
+{
+ "scenario_id": "12-struct-heading-level-2",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": null,
+  "chrome": "google-chrome",
+  "commit": "3b2aacec7"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794143182071,
+     "t_end_ms": 1794143183075,
+     "action": {
+      "type": "jaws_script",
+      "command": "MoveToNextHeadingLevelTwo"
+     },
+     "observation": {
+      "speech_raw": "System Documentation \u001d heading level 1 \u001e \nSection Overview\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794143183075,
+     "t_end_ms": 1794143184079,
+     "action": {
+      "type": "jaws_script",
+      "command": "MoveToNextHeadingLevelTwo"
+     },
+     "observation": {
+      "speech_raw": "Architecture Guide\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

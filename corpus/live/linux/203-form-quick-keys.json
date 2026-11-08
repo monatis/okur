@@ -1,0 +1,256 @@
+{
+ "scenario_id": "203-form-quick-keys",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "chrome": "google-chrome",
+  "commit": "3b2aacec7"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794143425051,
+     "t_end_ms": 1794143426056,
+     "action": {
+      "type": "key",
+      "command": "E"
+     },
+     "observation": {
+      "speech_raw": "Full name \u001d Edit \u001e \n \u001dRequired\u001e \nblank",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794143426056,
+     "t_end_ms": 1794143427059,
+     "action": {
+      "type": "key",
+      "command": "E"
+     },
+     "observation": {
+      "speech_raw": "Email address \u001d Edit \u001e \nsam@example.com",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794143427059,
+     "t_end_ms": 1794143428063,
+     "action": {
+      "type": "key",
+      "command": "E"
+     },
+     "observation": {
+      "speech_raw": "Password \u001d password edit \u001e \n \u001dRequired\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794143428063,
+     "t_end_ms": 1794143429067,
+     "action": {
+      "type": "key",
+      "command": "E"
+     },
+     "observation": {
+      "speech_raw": "Accessibility needs \u001d edit \u001e \nblank",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794143429067,
+     "t_end_ms": 1794143430071,
+     "action": {
+      "type": "key",
+      "command": "E"
+     },
+     "observation": {
+      "speech_raw": "wrapping to top\nFull name \u001d Edit \u001e \n \u001dRequired\u001e \nblank",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794143430071,
+     "t_end_ms": 1794143431075,
+     "action": {
+      "type": "key",
+      "command": "X"
+     },
+     "observation": {
+      "speech_raw": "Send me the monthly newsletter  \u001d check box \u001e   \u001dchecked\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794143431075,
+     "t_end_ms": 1794143432079,
+     "action": {
+      "type": "key",
+      "command": "X"
+     },
+     "observation": {
+      "speech_raw": "I agree to the terms of use  \u001d check box \u001e   \u001dnot checked\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794143432079,
+     "t_end_ms": 1794143433084,
+     "action": {
+      "type": "key",
+      "command": "X"
+     },
+     "observation": {
+      "speech_raw": "wrapping to top\nSend me the monthly newsletter  \u001d check box \u001e   \u001dchecked\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794143433084,
+     "t_end_ms": 1794143434088,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "observation": {
+      "speech_raw": "wrapping to top\nAdult  \u001d radio button \u001e   \u001dchecked\u001e \n1 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794143434088,
+     "t_end_ms": 1794143435193,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "observation": {
+      "speech_raw": "Student  \u001d radio button \u001e   \u001dnot checked\u001e \n2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794143435193,
+     "t_end_ms": 1794143436198,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "observation": {
+      "speech_raw": "Senior  \u001d radio button \u001e   \u001dnot checked\u001e \n3 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794143436198,
+     "t_end_ms": 1794143437202,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "observation": {
+      "speech_raw": "wrapping to top\nAdult  \u001d radio button \u001e   \u001dchecked\u001e \n1 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794143437202,
+     "t_end_ms": 1794143438206,
+     "action": {
+      "type": "key",
+      "command": "C"
+     },
+     "observation": {
+      "speech_raw": "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794143438206,
+     "t_end_ms": 1794143439210,
+     "action": {
+      "type": "key",
+      "command": "C"
+     },
+     "observation": {
+      "speech_raw": "wrapping to top\nHome branch  \u001d Combo box \u001e   \u001dcollapsed\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794143439210,
+     "t_end_ms": 1794143440214,
+     "action": {
+      "type": "key",
+      "command": "B"
+     },
+     "observation": {
+      "speech_raw": "Create account  \u001d Button \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794143440214,
+     "t_end_ms": 1794143441319,
+     "action": {
+      "type": "key",
+      "command": "B"
+     },
+     "observation": {
+      "speech_raw": "wrapping to top\nCreate account  \u001d Button \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s17",
+     "t_start_ms": 1794143441319,
+     "t_end_ms": 1794143442323,
+     "action": {
+      "type": "key",
+      "command": "B"
+     },
+     "observation": {
+      "speech_raw": "wrapping to top\nCreate account  \u001d Button \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

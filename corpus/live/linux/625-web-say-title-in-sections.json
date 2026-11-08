@@ -1,0 +1,200 @@
+{
+ "scenario_id": "625-web-say-title-in-sections",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "chrome": "google-chrome",
+  "commit": "3b2aacec7"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794144641416,
+     "t_end_ms": 1794144642421,
+     "action": {
+      "type": "key",
+      "command": "Insert+T"
+     },
+     "observation": {
+      "speech_raw": "Title is\nStructural Navigation Reference Fixture",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794144642421,
+     "t_end_ms": 1794144643424,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "observation": {
+      "speech_raw": "System Documentation\n \u001d heading level 1 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794144643424,
+     "t_end_ms": 1794144644429,
+     "action": {
+      "type": "key",
+      "command": "Insert+T"
+     },
+     "observation": {
+      "speech_raw": "Title is\nStructural Navigation Reference Fixture\nbanner\nlevel 2\nheading is System Documentation",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794144644429,
+     "t_end_ms": 1794144645434,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "observation": {
+      "speech_raw": "Section Overview\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794144645434,
+     "t_end_ms": 1794144646439,
+     "action": {
+      "type": "key",
+      "command": "Insert+T"
+     },
+     "observation": {
+      "speech_raw": "Title is\nStructural Navigation Reference Fixture\nmain region\nlevel 2\nheading is Section Overview",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794144646439,
+     "t_end_ms": 1794144647443,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "observation": {
+      "speech_raw": "Subsection Details\n \u001d heading level 3 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794144647443,
+     "t_end_ms": 1794144648448,
+     "action": {
+      "type": "key",
+      "command": "Insert+T"
+     },
+     "observation": {
+      "speech_raw": "Title is\nStructural Navigation Reference Fixture\nmain region\nlevel 2\nheading is Subsection Details",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794144648448,
+     "t_end_ms": 1794144649452,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "observation": {
+      "speech_raw": "Architecture Guide\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794144649452,
+     "t_end_ms": 1794144650457,
+     "action": {
+      "type": "key",
+      "command": "Insert+T"
+     },
+     "observation": {
+      "speech_raw": "Title is\nStructural Navigation Reference Fixture\nmain region\nlevel 2\nheading is Architecture Guide",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794144650457,
+     "t_end_ms": 1794144651461,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "observation": {
+      "speech_raw": "Helpful Resources\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794144651461,
+     "t_end_ms": 1794144652466,
+     "action": {
+      "type": "key",
+      "command": "Insert+T"
+     },
+     "observation": {
+      "speech_raw": "Title is\nStructural Navigation Reference Fixture\nQuick Reference complementary information\nlevel 2\nheading is Helpful Resources",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794144652466,
+     "t_end_ms": 1794144653471,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+End"
+     },
+     "observation": {
+      "speech_raw": "content information end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794144653471,
+     "t_end_ms": 1794144654476,
+     "action": {
+      "type": "key",
+      "command": "Insert+T"
+     },
+     "observation": {
+      "speech_raw": "Title is\nStructural Navigation Reference Fixture\ncontent information\nlevel 2",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

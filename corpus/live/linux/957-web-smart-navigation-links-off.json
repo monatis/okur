@@ -1,0 +1,298 @@
+{
+ "scenario_id": "957-web-smart-navigation-links-off",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "chrome": "google-chrome",
+  "commit": "3b2aacec7"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794144785754,
+     "t_end_ms": 1794144786758,
+     "action": {
+      "type": "key",
+      "command": "K"
+     },
+     "observation": {
+      "speech_raw": "There are no PlaceMarkers on this page.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794144786758,
+     "t_end_ms": 1794144787762,
+     "action": {
+      "type": "key",
+      "command": "K"
+     },
+     "observation": {
+      "speech_raw": "There are no PlaceMarkers on this page.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794144787762,
+     "t_end_ms": 1794144788766,
+     "action": {
+      "type": "key",
+      "command": "K"
+     },
+     "observation": {
+      "speech_raw": "There are no PlaceMarkers on this page.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794144788766,
+     "t_end_ms": 1794144789770,
+     "action": {
+      "type": "key",
+      "command": "K"
+     },
+     "observation": {
+      "speech_raw": "There are no PlaceMarkers on this page.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794144789770,
+     "t_end_ms": 1794144790774,
+     "action": {
+      "type": "key",
+      "command": "K"
+     },
+     "observation": {
+      "speech_raw": "There are no PlaceMarkers on this page.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794144790774,
+     "t_end_ms": 1794144791778,
+     "action": {
+      "type": "key",
+      "command": "Left"
+     },
+     "observation": {
+      "speech_raw": "V",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794144791778,
+     "t_end_ms": 1794144792782,
+     "action": {
+      "type": "key",
+      "command": "Left"
+     },
+     "observation": {
+      "speech_raw": "V",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794144792782,
+     "t_end_ms": 1794144793787,
+     "action": {
+      "type": "key",
+      "command": "Left"
+     },
+     "observation": {
+      "speech_raw": "V",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794144793787,
+     "t_end_ms": 1794144794791,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "observation": {
+      "speech_raw": "i",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794144794791,
+     "t_end_ms": 1794144795795,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "observation": {
+      "speech_raw": "r",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794144795795,
+     "t_end_ms": 1794144796800,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "observation": {
+      "speech_raw": "t",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794144796800,
+     "t_end_ms": 1794144797804,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "observation": {
+      "speech_raw": "u",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794144797804,
+     "t_end_ms": 1794144798808,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "observation": {
+      "speech_raw": "a",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794144798808,
+     "t_end_ms": 1794144799811,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "observation": {
+      "speech_raw": "l",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794144799812,
+     "t_end_ms": 1794144800816,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "observation": {
+      "speech_raw": " ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794144800816,
+     "t_end_ms": 1794144801820,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Right"
+     },
+     "observation": {
+      "speech_raw": "Cursor",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s17",
+     "t_start_ms": 1794144801820,
+     "t_end_ms": 1794144802825,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Right"
+     },
+     "observation": {
+      "speech_raw": "Keys",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s18",
+     "t_start_ms": 1794144802825,
+     "t_end_ms": 1794144803830,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Left"
+     },
+     "observation": {
+      "speech_raw": "Cursor",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s19",
+     "t_start_ms": 1794144803830,
+     "t_end_ms": 1794144804835,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Left"
+     },
+     "observation": {
+      "speech_raw": "Virtual",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s20",
+     "t_start_ms": 1794144804835,
+     "t_end_ms": 1794144805840,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Left"
+     },
+     "observation": {
+      "speech_raw": "Virtual",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

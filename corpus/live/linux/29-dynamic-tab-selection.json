@@ -3,8 +3,9 @@
  "provenance": {
   "reader": "okur",
   "platform": "linux",
+  "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "d702d819a"
+  "commit": "3b2aacec7"
  },
  "trials": [
   {
@@ -13,8 +14,8 @@
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1793925976726,
-     "t_end_ms": 1793925977829,
+     "t_start_ms": 1794144061769,
+     "t_end_ms": 1794144062873,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -27,8 +28,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1793925977829,
-     "t_end_ms": 1793925978934,
+     "t_start_ms": 1794144062873,
+     "t_end_ms": 1794144063977,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1793925978934,
-     "t_end_ms": 1793925980038,
+     "t_start_ms": 1794144063977,
+     "t_end_ms": 1794144065081,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -55,8 +56,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1793925980038,
-     "t_end_ms": 1793925981142,
+     "t_start_ms": 1794144065081,
+     "t_end_ms": 1794144066185,
      "action": {
       "type": "key",
       "command": "Space"

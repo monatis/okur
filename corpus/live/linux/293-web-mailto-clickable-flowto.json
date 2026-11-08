@@ -1,0 +1,144 @@
+{
+ "scenario_id": "293-web-mailto-clickable-flowto",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "chrome": "google-chrome",
+  "commit": "3b2aacec7"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794144204688,
+     "t_end_ms": 1794144205792,
+     "action": {
+      "type": "key",
+      "command": "Backslash"
+     },
+     "observation": {
+      "speech_raw": "Virtual Cursor Keys - Keys Fixture\nhelp@example.org\nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794144205792,
+     "t_end_ms": 1794144206796,
+     "action": {
+      "type": "key",
+      "command": "Backslash"
+     },
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794144206796,
+     "t_end_ms": 1794144207800,
+     "action": {
+      "type": "key",
+      "command": "Shift+Backslash"
+     },
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794144207800,
+     "t_end_ms": 1794144208804,
+     "action": {
+      "type": "key",
+      "command": "Slash"
+     },
+     "observation": {
+      "speech_raw": "There are no clickable elements on this page.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794144208804,
+     "t_end_ms": 1794144209808,
+     "action": {
+      "type": "key",
+      "command": "Slash"
+     },
+     "observation": {
+      "speech_raw": "There are no clickable elements on this page.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794144209808,
+     "t_end_ms": 1794144210813,
+     "action": {
+      "type": "key",
+      "command": "Shift+Slash"
+     },
+     "observation": {
+      "speech_raw": "There are no clickable elements on this page.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794144210813,
+     "t_end_ms": 1794144211818,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "observation": {
+      "speech_raw": "Virtual Cursor Keys - Keys Fixture",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794144211818,
+     "t_end_ms": 1794144212823,
+     "action": {
+      "type": "key",
+      "command": "Equals"
+     },
+     "observation": {
+      "speech_raw": "No more flows found",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794144212823,
+     "t_end_ms": 1794144213828,
+     "action": {
+      "type": "key",
+      "command": "Shift+Equals"
+     },
+     "observation": {
+      "speech_raw": "No more flows found",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

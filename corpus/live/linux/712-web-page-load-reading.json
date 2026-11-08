@@ -3,8 +3,9 @@
  "provenance": {
   "reader": "okur",
   "platform": "linux",
+  "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "995f4d274"
+  "commit": "3b2aacec7"
  },
  "trials": [
   {
@@ -13,8 +14,8 @@
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1793918856919,
-     "t_end_ms": 1793918858024,
+     "t_start_ms": 1794144759110,
+     "t_end_ms": 1794144760214,
      "action": {
       "type": "key",
       "command": "F5"
@@ -27,8 +28,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1793918858024,
-     "t_end_ms": 1793918859030,
+     "t_start_ms": 1794144760214,
+     "t_end_ms": 1794144761218,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1793918859030,
-     "t_end_ms": 1793918860035,
+     "t_start_ms": 1794144761218,
+     "t_end_ms": 1794144762222,
      "action": {
       "type": "key",
       "command": "Down"

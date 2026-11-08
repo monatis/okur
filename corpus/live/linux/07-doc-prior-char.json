@@ -3,8 +3,9 @@
  "provenance": {
   "reader": "okur",
   "platform": "linux",
+  "web_verbosity": null,
   "chrome": "google-chrome",
-  "commit": "995f4d274"
+  "commit": "3b2aacec7"
  },
  "trials": [
   {
@@ -13,8 +14,8 @@
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1793917965144,
-     "t_end_ms": 1793917966148,
+     "t_start_ms": 1794142437398,
+     "t_end_ms": 1794142438402,
      "action": {
       "type": "keyboard",
       "command": "{RIGHT}"
@@ -27,8 +28,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1793917966148,
-     "t_end_ms": 1793917967152,
+     "t_start_ms": 1794142438402,
+     "t_end_ms": 1794142439405,
      "action": {
       "type": "keyboard",
       "command": "{LEFT}"

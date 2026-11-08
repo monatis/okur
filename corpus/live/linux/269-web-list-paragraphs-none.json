@@ -1,0 +1,46 @@
+{
+ "scenario_id": "269-web-list-paragraphs-none",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "chrome": "google-chrome",
+  "commit": "3b2aacec7"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794143799411,
+     "t_end_ms": 1794143800417,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+P"
+     },
+     "observation": {
+      "speech_raw": "no paragraphs were found",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794143800417,
+     "t_end_ms": 1794143801421,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,32 @@
+{
+ "scenario_id": "21-table-next-table",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": null,
+  "chrome": "google-chrome",
+  "commit": "3b2aacec7"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794143538790,
+     "t_end_ms": 1794143539794,
+     "action": {
+      "type": "jaws_script",
+      "command": "MoveToNextTable"
+     },
+     "observation": {
+      "speech_raw": "table with 4 columns and 4 rows\nQ3 Financial Summary Table\nColumn 1, Row 1\nQuarter",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

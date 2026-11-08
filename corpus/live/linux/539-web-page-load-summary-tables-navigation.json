@@ -1,0 +1,46 @@
+{
+ "scenario_id": "539-web-page-load-summary-tables-navigation",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "chrome": "google-chrome",
+  "commit": "3b2aacec7"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794144469895,
+     "t_end_ms": 1794144471100,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+R"
+     },
+     "observation": {
+      "speech_raw": "Tables Navigation Reference Fixture  \u001d document \u001e\nPage has 1heading and no links\nTables Navigation Reference Fixture\n \u001d heading level 1 \u001e Quarterly Financial Summary\ntable with 4 columns and 4 rows\nQ3 Financial Summary Table\nQuarter\nRevenue\nExpenses\nProfit\nQ1\n$10,000\n$7,000\n$3 \ufffd{.\ufffd\ufffd\ufffd00\nQ2\n$14,000\n$8,500\n$5,500\nQ3\n$18,000\n$9,200\n$8,800\ntable end\nend",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794144471100,
+     "t_end_ms": 1794144472104,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "observation": {
+      "speech_raw": "table end",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

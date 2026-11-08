@@ -1,0 +1,46 @@
+{
+ "scenario_id": "271-web-list-tables-none",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "chrome": "google-chrome",
+  "commit": "3b2aacec7"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794143851138,
+     "t_end_ms": 1794143852143,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+T"
+     },
+     "observation": {
+      "speech_raw": "No tables found",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794143852143,
+     "t_end_ms": 1794143853148,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

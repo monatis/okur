@@ -1,0 +1,32 @@
+{
+ "scenario_id": "01-doc-say-all",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": null,
+  "chrome": "google-chrome",
+  "commit": "3b2aacec7"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794142287736,
+     "t_end_ms": 1794142288741,
+     "action": {
+      "type": "jaws_script",
+      "command": "SayAll"
+     },
+     "observation": {
+      "speech_raw": "Document Reading Reference Fixture\n \u001d heading level 1 \u001e The Accessibility Engine Specification\nThe screen reader engine parses the document object model into a clean virtual buffer.\nEngine components operate deterministically across synthetic speech pipelines. Speed and accuracy remain paramount.\nRust provides memory safety without garbage collection latency. This ensures predictable audio delivery.\ndelivery",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

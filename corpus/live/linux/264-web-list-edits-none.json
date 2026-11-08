@@ -1,0 +1,46 @@
+{
+ "scenario_id": "264-web-list-edits-none",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "chrome": "google-chrome",
+  "commit": "3b2aacec7"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794143670041,
+     "t_end_ms": 1794143671046,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+E"
+     },
+     "observation": {
+      "speech_raw": "no edit boxes were found",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794143671046,
+     "t_end_ms": 1794143672050,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

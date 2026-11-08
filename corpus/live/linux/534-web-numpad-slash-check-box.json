@@ -1,0 +1,158 @@
+{
+ "scenario_id": "534-web-numpad-slash-check-box",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "chrome": "google-chrome",
+  "commit": "3b2aacec7"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794144395267,
+     "t_end_ms": 1794144396270,
+     "action": {
+      "type": "key",
+      "command": "X"
+     },
+     "observation": {
+      "speech_raw": "Send me the monthly newsletter  \u001d check box \u001e   \u001dchecked\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794144396270,
+     "t_end_ms": 1794144397374,
+     "action": {
+      "type": "key",
+      "command": "NumpadSlash"
+     },
+     "observation": {
+      "speech_raw": "left mouse button\nCreate Your Account - Riverside Library\n \u001d MainRegion \u001e \n \u001d FormRegion \u001e \nSend me the monthly newsletter  \u001d check box \u001e   \u001dnot checked\u001e \nTo check press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794144397374,
+     "t_end_ms": 1794144398378,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "observation": {
+      "speech_raw": "Send me the monthly newsletter \u001d check box \u001e  \u001dnot checked\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794144398378,
+     "t_end_ms": 1794144399482,
+     "action": {
+      "type": "key",
+      "command": "NumpadSlash"
+     },
+     "observation": {
+      "speech_raw": "left mouse button\n \u001dchecked\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794144399482,
+     "t_end_ms": 1794144400487,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "observation": {
+      "speech_raw": "Send me the monthly newsletter \u001d check box \u001e  \u001dchecked\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794144400487,
+     "t_end_ms": 1794144401492,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "observation": {
+      "speech_raw": "Create Your Account - Riverside Library",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794144401492,
+     "t_end_ms": 1794144402496,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "observation": {
+      "speech_raw": "Adult  \u001d radio button \u001e   \u001dchecked\u001e \n1 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794144402496,
+     "t_end_ms": 1794144403501,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "observation": {
+      "speech_raw": "Student \u001d radio button \u001e  \u001dnot checked\u001e \n2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794144403501,
+     "t_end_ms": 1794144404605,
+     "action": {
+      "type": "key",
+      "command": "NumpadSlash"
+     },
+     "observation": {
+      "speech_raw": "left mouse button\nStudent  \u001d radio button \u001e   \u001dchecked\u001e \n2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794144404605,
+     "t_end_ms": 1794144405710,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "observation": {
+      "speech_raw": "Student \u001d radio button \u001e  \u001dchecked\u001e \n2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

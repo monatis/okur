@@ -1,0 +1,270 @@
+{
+ "scenario_id": "959-web-smart-navigation-table-off",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "chrome": "google-chrome",
+  "commit": "3b2aacec7"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794144829390,
+     "t_end_ms": 1794144830394,
+     "action": {
+      "type": "key",
+      "command": "T"
+     },
+     "observation": {
+      "speech_raw": "table with 4 columns and 4 rows\nQ3 Financial Summary Table\nColumn 1, Row 1\nQuarter",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794144830394,
+     "t_end_ms": 1794144831398,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "observation": {
+      "speech_raw": "Revenue",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794144831398,
+     "t_end_ms": 1794144832401,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "observation": {
+      "speech_raw": "Expenses",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794144832401,
+     "t_end_ms": 1794144833405,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "observation": {
+      "speech_raw": "Profit",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794144833405,
+     "t_end_ms": 1794144834409,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "observation": {
+      "speech_raw": "r",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794144834409,
+     "t_end_ms": 1794144835413,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "observation": {
+      "speech_raw": "o",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794144835413,
+     "t_end_ms": 1794144836417,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "observation": {
+      "speech_raw": "f",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794144836417,
+     "t_end_ms": 1794144837421,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "observation": {
+      "speech_raw": "i",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794144837421,
+     "t_end_ms": 1794144838425,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "observation": {
+      "speech_raw": "t",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794144838425,
+     "t_end_ms": 1794144839430,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "observation": {
+      "speech_raw": "\n",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794144839430,
+     "t_end_ms": 1794144840535,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Right"
+     },
+     "observation": {
+      "speech_raw": "Q1",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794144840535,
+     "t_end_ms": 1794144841541,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Right"
+     },
+     "observation": {
+      "speech_raw": "$10,000",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794144841541,
+     "t_end_ms": 1794144842546,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Left"
+     },
+     "observation": {
+      "speech_raw": "Q1",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794144842546,
+     "t_end_ms": 1794144843550,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Left"
+     },
+     "observation": {
+      "speech_raw": "Profit",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794144843550,
+     "t_end_ms": 1794144844555,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "observation": {
+      "speech_raw": "Q1",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794144844555,
+     "t_end_ms": 1794144845559,
+     "action": {
+      "type": "key",
+      "command": "Left"
+     },
+     "observation": {
+      "speech_raw": "\n",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s17",
+     "t_start_ms": 1794144845559,
+     "t_end_ms": 1794144846564,
+     "action": {
+      "type": "key",
+      "command": "Left"
+     },
+     "observation": {
+      "speech_raw": "t",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s18",
+     "t_start_ms": 1794144846564,
+     "t_end_ms": 1794144847569,
+     "action": {
+      "type": "key",
+      "command": "Left"
+     },
+     "observation": {
+      "speech_raw": "i",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

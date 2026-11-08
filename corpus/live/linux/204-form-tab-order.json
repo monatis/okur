@@ -1,0 +1,200 @@
+{
+ "scenario_id": "204-form-tab-order",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "chrome": "google-chrome",
+  "commit": "3b2aacec7"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794143466071,
+     "t_end_ms": 1794143467175,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "observation": {
+      "speech_raw": "Create Your Account - Riverside Library\n \u001d MainRegion \u001e \n \u001d FormRegion \u001e \nFull name \u001d Edit \u001e \n \u001dRequired\u001e \nblank\nType in text.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794143467175,
+     "t_end_ms": 1794143468279,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "observation": {
+      "speech_raw": "Email address \u001d Edit \u001e \nsam@example.com\nType in text.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794143468279,
+     "t_end_ms": 1794143469383,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "observation": {
+      "speech_raw": "Password \u001d password edit \u001e \n \u001dRequired\u001e   \u001d\u001e\nType in text.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794143469383,
+     "t_end_ms": 1794143470486,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "observation": {
+      "speech_raw": "Adult  \u001d radio button \u001e   \u001dchecked\u001e \n1 of 3\nTo change the selection press Up or Down Arrow.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794143470486,
+     "t_end_ms": 1794143471590,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "observation": {
+      "speech_raw": "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nTo change the selection use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794143471590,
+     "t_end_ms": 1794143472693,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "observation": {
+      "speech_raw": "Accessibility needs \u001d edit \u001e \nblank\nType in text.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794143472693,
+     "t_end_ms": 1794143473798,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "observation": {
+      "speech_raw": "Send me the monthly newsletter  \u001d check box \u001e   \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794143473798,
+     "t_end_ms": 1794143474903,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "observation": {
+      "speech_raw": "I agree to the terms of use  \u001d check box \u001e   \u001dnot checked\u001e \nTo check press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794143474903,
+     "t_end_ms": 1794143476008,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "observation": {
+      "speech_raw": "terms of use\nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794143476008,
+     "t_end_ms": 1794143477011,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794143477011,
+     "t_end_ms": 1794143478016,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794143478016,
+     "t_end_ms": 1794143479020,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794143479020,
+     "t_end_ms": 1794143480024,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,228 @@
+{
+ "scenario_id": "292-web-separators-divisions-highlights",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "chrome": "google-chrome",
+  "commit": "3b2aacec7"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794144166097,
+     "t_end_ms": 1794144167101,
+     "action": {
+      "type": "key",
+      "command": "Minus"
+     },
+     "observation": {
+      "speech_raw": "----- \u001d separator \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794144167101,
+     "t_end_ms": 1794144168105,
+     "action": {
+      "type": "key",
+      "command": "Minus"
+     },
+     "observation": {
+      "speech_raw": "----- \u001d separator \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794144168105,
+     "t_end_ms": 1794144169108,
+     "action": {
+      "type": "key",
+      "command": "Minus"
+     },
+     "observation": {
+      "speech_raw": "wrapping to top\n----- \u001d separator \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794144169108,
+     "t_end_ms": 1794144170112,
+     "action": {
+      "type": "key",
+      "command": "Shift+Minus"
+     },
+     "observation": {
+      "speech_raw": "wrapping to bottom\n----- \u001d separator \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794144170112,
+     "t_end_ms": 1794144171116,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "observation": {
+      "speech_raw": "Virtual Cursor Keys - Keys Fixture",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794144171116,
+     "t_end_ms": 1794144172120,
+     "action": {
+      "type": "key",
+      "command": "Z"
+     },
+     "observation": {
+      "speech_raw": "A division holds this text.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794144172120,
+     "t_end_ms": 1794144173124,
+     "action": {
+      "type": "key",
+      "command": "Z"
+     },
+     "observation": {
+      "speech_raw": "Another division, with a span inside it.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794144173124,
+     "t_end_ms": 1794144174129,
+     "action": {
+      "type": "key",
+      "command": "Z"
+     },
+     "observation": {
+      "speech_raw": "A clickable division",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794144174129,
+     "t_end_ms": 1794144175133,
+     "action": {
+      "type": "key",
+      "command": "Z"
+     },
+     "observation": {
+      "speech_raw": "This part flows to the lists.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794144175133,
+     "t_end_ms": 1794144176138,
+     "action": {
+      "type": "key",
+      "command": "Shift+Z"
+     },
+     "observation": {
+      "speech_raw": "A clickable division",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794144176138,
+     "t_end_ms": 1794144177144,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "observation": {
+      "speech_raw": "Virtual Cursor Keys - Keys Fixture",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794144177144,
+     "t_end_ms": 1794144178148,
+     "action": {
+      "type": "key",
+      "command": "Y"
+     },
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794144178148,
+     "t_end_ms": 1794144179152,
+     "action": {
+      "type": "key",
+      "command": "Y"
+     },
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794144179152,
+     "t_end_ms": 1794144180156,
+     "action": {
+      "type": "key",
+      "command": "Y"
+     },
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794144180156,
+     "t_end_ms": 1794144181161,
+     "action": {
+      "type": "key",
+      "command": "Shift+Y"
+     },
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

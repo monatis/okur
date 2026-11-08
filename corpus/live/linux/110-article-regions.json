@@ -3,8 +3,9 @@
  "provenance": {
   "reader": "okur",
   "platform": "linux",
+  "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "995f4d274"
+  "commit": "3b2aacec7"
  },
  "trials": [
   {
@@ -13,8 +14,8 @@
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1793918506768,
-     "t_end_ms": 1793918507772,
+     "t_start_ms": 1794143003826,
+     "t_end_ms": 1794143004830,
      "action": {
       "type": "key",
       "command": "R"
@@ -27,8 +28,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1793918507772,
-     "t_end_ms": 1793918508776,
+     "t_start_ms": 1794143004830,
+     "t_end_ms": 1794143005834,
      "action": {
       "type": "key",
       "command": "R"
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1793918508776,
-     "t_end_ms": 1793918509780,
+     "t_start_ms": 1794143005834,
+     "t_end_ms": 1794143006837,
      "action": {
       "type": "key",
       "command": "R"
@@ -55,8 +56,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1793918509780,
-     "t_end_ms": 1793918510785,
+     "t_start_ms": 1794143006837,
+     "t_end_ms": 1794143007842,
      "action": {
       "type": "key",
       "command": "R"
@@ -69,8 +70,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1793918510785,
-     "t_end_ms": 1793918511789,
+     "t_start_ms": 1794143007842,
+     "t_end_ms": 1794143008845,
      "action": {
       "type": "key",
       "command": "R"
@@ -83,8 +84,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1793918511789,
-     "t_end_ms": 1793918512794,
+     "t_start_ms": 1794143008845,
+     "t_end_ms": 1794143009849,
      "action": {
       "type": "key",
       "command": "R"
@@ -97,8 +98,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1793918512794,
-     "t_end_ms": 1793918513798,
+     "t_start_ms": 1794143009849,
+     "t_end_ms": 1794143010854,
      "action": {
       "type": "key",
       "command": "R"
@@ -111,8 +112,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1793918513798,
-     "t_end_ms": 1793918514801,
+     "t_start_ms": 1794143010854,
+     "t_end_ms": 1794143011859,
      "action": {
       "type": "key",
       "command": "Semicolon"
@@ -125,8 +126,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1793918514801,
-     "t_end_ms": 1793918515805,
+     "t_start_ms": 1794143011859,
+     "t_end_ms": 1794143012863,
      "action": {
       "type": "key",
       "command": "Semicolon"
@@ -139,8 +140,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1793918515805,
-     "t_end_ms": 1793918516809,
+     "t_start_ms": 1794143012863,
+     "t_end_ms": 1794143013867,
      "action": {
       "type": "key",
       "command": "Semicolon"
@@ -153,8 +154,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1793918516809,
-     "t_end_ms": 1793918517813,
+     "t_start_ms": 1794143013867,
+     "t_end_ms": 1794143014871,
      "action": {
       "type": "key",
       "command": "Semicolon"
@@ -167,8 +168,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1793918517813,
-     "t_end_ms": 1793918518817,
+     "t_start_ms": 1794143014871,
+     "t_end_ms": 1794143015876,
      "action": {
       "type": "key",
       "command": "Semicolon"
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1793918518817,
-     "t_end_ms": 1793918519820,
+     "t_start_ms": 1794143015876,
+     "t_end_ms": 1794143016880,
      "action": {
       "type": "key",
       "command": "Semicolon"
@@ -195,8 +196,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1793918519820,
-     "t_end_ms": 1793918520825,
+     "t_start_ms": 1794143016880,
+     "t_end_ms": 1794143017884,
      "action": {
       "type": "key",
       "command": "Semicolon"

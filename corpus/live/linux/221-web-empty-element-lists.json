@@ -1,0 +1,88 @@
+{
+ "scenario_id": "221-web-empty-element-lists",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "chrome": "google-chrome",
+  "commit": "3b2aacec7"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794143563641,
+     "t_end_ms": 1794143564645,
+     "action": {
+      "type": "key",
+      "command": "Insert+F7"
+     },
+     "observation": {
+      "speech_raw": "no links",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794143564645,
+     "t_end_ms": 1794143565650,
+     "action": {
+      "type": "key",
+      "command": "Insert+F5"
+     },
+     "observation": {
+      "speech_raw": "no form fields were found\nDocument Reading Reference Fixture \u001d document \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794143565650,
+     "t_end_ms": 1794143566657,
+     "action": {
+      "type": "key",
+      "command": "Insert+Ctrl+R"
+     },
+     "observation": {
+      "speech_raw": "No regions were found on the page",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794143566657,
+     "t_end_ms": 1794143567660,
+     "action": {
+      "type": "key",
+      "command": "K"
+     },
+     "observation": {
+      "speech_raw": "There are no PlaceMarkers on this page.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794143567660,
+     "t_end_ms": 1794143568664,
+     "action": {
+      "type": "key",
+      "command": "Shift+K"
+     },
+     "observation": {
+      "speech_raw": "There are no PlaceMarkers on this page.",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

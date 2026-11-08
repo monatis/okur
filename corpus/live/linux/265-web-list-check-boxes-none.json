@@ -1,0 +1,46 @@
+{
+ "scenario_id": "265-web-list-check-boxes-none",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "chrome": "google-chrome",
+  "commit": "3b2aacec7"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794143695900,
+     "t_end_ms": 1794143696906,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+X"
+     },
+     "observation": {
+      "speech_raw": "no Check boxes were found",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794143696906,
+     "t_end_ms": 1794143697910,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

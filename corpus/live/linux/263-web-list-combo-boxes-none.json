@@ -1,0 +1,46 @@
+{
+ "scenario_id": "263-web-list-combo-boxes-none",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "chrome": "google-chrome",
+  "commit": "3b2aacec7"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794143644204,
+     "t_end_ms": 1794143645208,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+C"
+     },
+     "observation": {
+      "speech_raw": "no Selectable Aria controls, ComboBoxes, lists or TreeViews were found",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794143645209,
+     "t_end_ms": 1794143646212,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

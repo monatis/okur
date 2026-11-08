@@ -1,0 +1,214 @@
+{
+ "scenario_id": "290-web-same-different-element",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "chrome": "google-chrome",
+  "commit": "3b2aacec7"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794144089726,
+     "t_end_ms": 1794144090730,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "observation": {
+      "speech_raw": "banner",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794144090730,
+     "t_end_ms": 1794144091733,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "observation": {
+      "speech_raw": "Site navigation region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794144091733,
+     "t_end_ms": 1794144092737,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "observation": {
+      "speech_raw": "list of 3 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794144092737,
+     "t_end_ms": 1794144093741,
+     "action": {
+      "type": "key",
+      "command": "S"
+     },
+     "observation": {
+      "speech_raw": "No more elements of same type found",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794144093741,
+     "t_end_ms": 1794144094746,
+     "action": {
+      "type": "key",
+      "command": "S"
+     },
+     "observation": {
+      "speech_raw": "No more elements of same type found",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794144094746,
+     "t_end_ms": 1794144095750,
+     "action": {
+      "type": "key",
+      "command": "S"
+     },
+     "observation": {
+      "speech_raw": "No more elements of same type found",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794144095750,
+     "t_end_ms": 1794144096755,
+     "action": {
+      "type": "key",
+      "command": "D"
+     },
+     "observation": {
+      "speech_raw": "\u2022 \u001d same page link \u001e Paragraphs",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794144096755,
+     "t_end_ms": 1794144097759,
+     "action": {
+      "type": "key",
+      "command": "D"
+     },
+     "observation": {
+      "speech_raw": "Paragraphs  \u001d same page link \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794144097759,
+     "t_end_ms": 1794144098765,
+     "action": {
+      "type": "key",
+      "command": "Shift+S"
+     },
+     "observation": {
+      "speech_raw": "wrapping to bottom\na link inside it  \u001d same page link \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794144098765,
+     "t_end_ms": 1794144099770,
+     "action": {
+      "type": "key",
+      "command": "Shift+D"
+     },
+     "observation": {
+      "speech_raw": "Some text with",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794144099770,
+     "t_end_ms": 1794144100776,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+Right"
+     },
+     "observation": {
+      "speech_raw": "a link inside it  \u001d same page link \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794144100776,
+     "t_end_ms": 1794144101781,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+Right"
+     },
+     "observation": {
+      "speech_raw": "and more text after it.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794144101781,
+     "t_end_ms": 1794144102786,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+Left"
+     },
+     "observation": {
+      "speech_raw": "a link inside it  \u001d same page link \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794144102786,
+     "t_end_ms": 1794144103792,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+Up"
+     },
+     "observation": {
+      "speech_raw": "A link alone in its paragraph  \u001d same page link \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

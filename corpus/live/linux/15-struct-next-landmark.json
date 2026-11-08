@@ -1,0 +1,46 @@
+{
+ "scenario_id": "15-struct-next-landmark",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": null,
+  "chrome": "google-chrome",
+  "commit": "3b2aacec7"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794143258730,
+     "t_end_ms": 1794143259733,
+     "action": {
+      "type": "jaws_script",
+      "command": "MoveToNextRegion"
+     },
+     "observation": {
+      "speech_raw": "Main Navigation navigation region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794143259733,
+     "t_end_ms": 1794143260737,
+     "action": {
+      "type": "jaws_script",
+      "command": "MoveToNextRegion"
+     },
+     "observation": {
+      "speech_raw": "main region",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

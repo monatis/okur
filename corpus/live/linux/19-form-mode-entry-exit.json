@@ -3,8 +3,9 @@
  "provenance": {
   "reader": "okur",
   "platform": "linux",
+  "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "995f4d274"
+  "commit": "3b2aacec7"
  },
  "trials": [
   {
@@ -13,8 +14,8 @@
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1793918684857,
-     "t_end_ms": 1793918685861,
+     "t_start_ms": 1794143284309,
+     "t_end_ms": 1794143285312,
      "action": {
       "type": "key",
       "command": "E"
@@ -27,22 +28,22 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1793918685861,
-     "t_end_ms": 1793918686865,
+     "t_start_ms": 1794143285312,
+     "t_end_ms": 1794143286416,
      "action": {
       "type": "key",
       "command": "Enter"
      },
      "observation": {
-      "speech_raw": "Forms and Interaction Reference Fixture \n \u001d FormRegion \u001e \nFull Name:  \u001d Edit \u001e   \nJane Doe\nType in text.",
+      "speech_raw": "Forms and Interaction Reference Fixture\n \u001d FormRegion \u001e \nFull Name: \u001d Edit \u001e \nJane Doe\nType in text.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1793918686865,
-     "t_end_ms": 1793918687869,
+     "t_start_ms": 1794143286416,
+     "t_end_ms": 1794143287420,
      "action": {
       "type": "key",
       "command": "Escape"

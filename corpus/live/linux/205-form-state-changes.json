@@ -1,0 +1,172 @@
+{
+ "scenario_id": "205-form-state-changes",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "chrome": "google-chrome",
+  "commit": "3b2aacec7"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794143503767,
+     "t_end_ms": 1794143504771,
+     "action": {
+      "type": "key",
+      "command": "X"
+     },
+     "observation": {
+      "speech_raw": "Send me the monthly newsletter  \u001d check box \u001e   \u001dchecked\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794143504771,
+     "t_end_ms": 1794143505875,
+     "action": {
+      "type": "key",
+      "command": "Space"
+     },
+     "observation": {
+      "speech_raw": "Create Your Account - Riverside Library\nSend me the monthly newsletter  \u001d check box \u001e   \u001dnot checked\u001e \nTo check press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794143505875,
+     "t_end_ms": 1794143506979,
+     "action": {
+      "type": "key",
+      "command": "Space"
+     },
+     "observation": {
+      "speech_raw": " \u001dchecked\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794143506979,
+     "t_end_ms": 1794143507983,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "observation": {
+      "speech_raw": "wrapping to top\nAdult  \u001d radio button \u001e   \u001dchecked\u001e \n1 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794143507983,
+     "t_end_ms": 1794143508986,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "observation": {
+      "speech_raw": "Student  \u001d radio button \u001e   \u001dnot checked\u001e \n2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794143508986,
+     "t_end_ms": 1794143510091,
+     "action": {
+      "type": "key",
+      "command": "Space"
+     },
+     "observation": {
+      "speech_raw": "Student  \u001d radio button \u001e   \u001dnot checked\u001e \n2 of 3\n \u001dchecked\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794143510091,
+     "t_end_ms": 1794143511095,
+     "action": {
+      "type": "key",
+      "command": "C"
+     },
+     "observation": {
+      "speech_raw": "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794143511095,
+     "t_end_ms": 1794143512200,
+     "action": {
+      "type": "key",
+      "command": "Enter"
+     },
+     "observation": {
+      "speech_raw": "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nTo change the selection use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794143512200,
+     "t_end_ms": 1794143513204,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794143513204,
+     "t_end_ms": 1794143514208,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794143514208,
+     "t_end_ms": 1794143515211,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "observation": {
+      "speech_raw": "virtual PC Cursor",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

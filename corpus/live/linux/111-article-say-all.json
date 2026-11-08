@@ -3,8 +3,9 @@
  "provenance": {
   "reader": "okur",
   "platform": "linux",
+  "web_verbosity": "2",
   "chrome": "google-chrome",
-  "commit": "995f4d274"
+  "commit": "3b2aacec7"
  },
  "trials": [
   {
@@ -13,8 +14,8 @@
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1793918544351,
-     "t_end_ms": 1793918545456,
+     "t_start_ms": 1794143041477,
+     "t_end_ms": 1794143042581,
      "action": {
       "type": "key",
       "command": "Insert+Down"

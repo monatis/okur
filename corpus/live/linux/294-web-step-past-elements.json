@@ -1,0 +1,144 @@
+{
+ "scenario_id": "294-web-step-past-elements",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "chrome": "google-chrome",
+  "commit": "3b2aacec7"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794144237401,
+     "t_end_ms": 1794144238405,
+     "action": {
+      "type": "key",
+      "command": "L"
+     },
+     "observation": {
+      "speech_raw": "list of 3 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794144238405,
+     "t_end_ms": 1794144239410,
+     "action": {
+      "type": "key",
+      "command": "Shift+Period"
+     },
+     "observation": {
+      "speech_raw": "list end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794144239410,
+     "t_end_ms": 1794144240414,
+     "action": {
+      "type": "key",
+      "command": "Shift+Comma"
+     },
+     "observation": {
+      "speech_raw": "list of 3 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794144240414,
+     "t_end_ms": 1794144241417,
+     "action": {
+      "type": "key",
+      "command": "L"
+     },
+     "observation": {
+      "speech_raw": "list of 2 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794144241417,
+     "t_end_ms": 1794144242422,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "observation": {
+      "speech_raw": "\u2022 First item",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794144242422,
+     "t_end_ms": 1794144243427,
+     "action": {
+      "type": "key",
+      "command": "Shift+Period"
+     },
+     "observation": {
+      "speech_raw": "list end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794144243427,
+     "t_end_ms": 1794144244432,
+     "action": {
+      "type": "key",
+      "command": "Shift+Comma"
+     },
+     "observation": {
+      "speech_raw": "list of 2 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794144244432,
+     "t_end_ms": 1794144245438,
+     "action": {
+      "type": "key",
+      "command": "Alt+Win+End"
+     },
+     "observation": {
+      "speech_raw": "list end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794144245438,
+     "t_end_ms": 1794144246444,
+     "action": {
+      "type": "key",
+      "command": "Alt+Win+Home"
+     },
+     "observation": {
+      "speech_raw": "list of 2 items",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

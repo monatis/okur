@@ -1,0 +1,228 @@
+{
+ "scenario_id": "291-web-paragraphs-and-sentences",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "chrome": "google-chrome",
+  "commit": "3b2aacec7"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794144127329,
+     "t_end_ms": 1794144128333,
+     "action": {
+      "type": "key",
+      "command": "P"
+     },
+     "observation": {
+      "speech_raw": "banner",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794144128333,
+     "t_end_ms": 1794144129336,
+     "action": {
+      "type": "key",
+      "command": "P"
+     },
+     "observation": {
+      "speech_raw": "Site navigation region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794144129336,
+     "t_end_ms": 1794144130340,
+     "action": {
+      "type": "key",
+      "command": "P"
+     },
+     "observation": {
+      "speech_raw": "list of 3 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794144130340,
+     "t_end_ms": 1794144131344,
+     "action": {
+      "type": "key",
+      "command": "P"
+     },
+     "observation": {
+      "speech_raw": "\u2022 \u001d same page link \u001e Paragraphs",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794144131344,
+     "t_end_ms": 1794144132348,
+     "action": {
+      "type": "key",
+      "command": "Shift+P"
+     },
+     "observation": {
+      "speech_raw": "list of 3 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794144132348,
+     "t_end_ms": 1794144133353,
+     "action": {
+      "type": "key",
+      "command": "Alt+NumpadPlus"
+     },
+     "observation": {
+      "speech_raw": "\u2022",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794144133353,
+     "t_end_ms": 1794144134358,
+     "action": {
+      "type": "key",
+      "command": "Alt+NumpadPlus"
+     },
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Paragraphs",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794144134358,
+     "t_end_ms": 1794144135363,
+     "action": {
+      "type": "key",
+      "command": "Alt+NumpadMinus"
+     },
+     "observation": {
+      "speech_raw": "\u2022",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794144135363,
+     "t_end_ms": 1794144136368,
+     "action": {
+      "type": "key",
+      "command": "Alt+Numpad5"
+     },
+     "observation": {
+      "speech_raw": "\u2022",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794144136368,
+     "t_end_ms": 1794144137374,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Numpad5"
+     },
+     "observation": {
+      "speech_raw": "\u2022 \u001d same page link \u001e Paragraphs",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794144137374,
+     "t_end_ms": 1794144138378,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "observation": {
+      "speech_raw": " ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794144138378,
+     "t_end_ms": 1794144139381,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "observation": {
+      "speech_raw": "P",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794144139381,
+     "t_end_ms": 1794144140385,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "observation": {
+      "speech_raw": "a",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794144140385,
+     "t_end_ms": 1794144141390,
+     "action": {
+      "type": "key",
+      "command": "Insert+PageUp"
+     },
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e aragraphs",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794144141390,
+     "t_end_ms": 1794144142395,
+     "action": {
+      "type": "key",
+      "command": "Insert+Home"
+     },
+     "observation": {
+      "speech_raw": "\u2022  \u001d same page link \u001e P",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

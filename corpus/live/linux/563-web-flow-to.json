@@ -1,0 +1,186 @@
+{
+ "scenario_id": "563-web-flow-to",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "chrome": "google-chrome",
+  "commit": "3b2aacec7"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794144526340,
+     "t_end_ms": 1794144527344,
+     "action": {
+      "type": "key",
+      "command": "Z"
+     },
+     "observation": {
+      "speech_raw": "A division holds this text.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794144527344,
+     "t_end_ms": 1794144528348,
+     "action": {
+      "type": "key",
+      "command": "Z"
+     },
+     "observation": {
+      "speech_raw": "Another division, with a span inside it.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794144528348,
+     "t_end_ms": 1794144529352,
+     "action": {
+      "type": "key",
+      "command": "Z"
+     },
+     "observation": {
+      "speech_raw": "A clickable division",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794144529352,
+     "t_end_ms": 1794144530355,
+     "action": {
+      "type": "key",
+      "command": "Z"
+     },
+     "observation": {
+      "speech_raw": "This part flows to the lists.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794144530355,
+     "t_end_ms": 1794144531360,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "observation": {
+      "speech_raw": "This part flows to the lists.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794144531360,
+     "t_end_ms": 1794144532364,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "observation": {
+      "speech_raw": "A clickable division",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794144532364,
+     "t_end_ms": 1794144533368,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "observation": {
+      "speech_raw": "This part flows to the lists.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794144533368,
+     "t_end_ms": 1794144534373,
+     "action": {
+      "type": "key",
+      "command": "Equals"
+     },
+     "observation": {
+      "speech_raw": "No more flows found",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794144534373,
+     "t_end_ms": 1794144535377,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "observation": {
+      "speech_raw": "This part flows to the lists.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794144535377,
+     "t_end_ms": 1794144536382,
+     "action": {
+      "type": "key",
+      "command": "Shift+Equals"
+     },
+     "observation": {
+      "speech_raw": "No more flows found",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794144536382,
+     "t_end_ms": 1794144537387,
+     "action": {
+      "type": "key",
+      "command": "Equals"
+     },
+     "observation": {
+      "speech_raw": "No more flows found",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794144537387,
+     "t_end_ms": 1794144538391,
+     "action": {
+      "type": "key",
+      "command": "Equals"
+     },
+     "observation": {
+      "speech_raw": "No more flows found",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

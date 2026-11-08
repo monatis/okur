@@ -1,0 +1,74 @@
+{
+ "scenario_id": "296-web-first-last-form-field",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "chrome": "google-chrome",
+  "commit": "3b2aacec7"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794144269970,
+     "t_end_ms": 1794144270977,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+End"
+     },
+     "observation": {
+      "speech_raw": "Create account  \u001d Button \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794144270977,
+     "t_end_ms": 1794144271981,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794144271981,
+     "t_end_ms": 1794144272985,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+Home"
+     },
+     "observation": {
+      "speech_raw": "Full name \u001d Edit \u001e \n \u001dRequired\u001e \nblank",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794144272985,
+     "t_end_ms": 1794144273990,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

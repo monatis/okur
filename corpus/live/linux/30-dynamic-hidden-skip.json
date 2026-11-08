@@ -3,8 +3,9 @@
  "provenance": {
   "reader": "okur",
   "platform": "linux",
+  "web_verbosity": null,
   "chrome": "google-chrome",
-  "commit": "995f4d274"
+  "commit": "3b2aacec7"
  },
  "trials": [
   {
@@ -13,8 +14,8 @@
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1793918829272,
-     "t_end_ms": 1793918830276,
+     "t_start_ms": 1794144297534,
+     "t_end_ms": 1794144298538,
      "action": {
       "type": "keyboard",
       "command": "{DOWN}"
@@ -27,8 +28,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1793918830276,
-     "t_end_ms": 1793918831280,
+     "t_start_ms": 1794144298538,
+     "t_end_ms": 1794144299542,
      "action": {
       "type": "keyboard",
       "command": "{DOWN}"
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1793918831280,
-     "t_end_ms": 1793918832285,
+     "t_start_ms": 1794144299542,
+     "t_end_ms": 1794144300546,
      "action": {
       "type": "keyboard",
       "command": "{DOWN}"
@@ -55,8 +56,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1793918832285,
-     "t_end_ms": 1793918833288,
+     "t_start_ms": 1794144300547,
+     "t_end_ms": 1794144301550,
      "action": {
       "type": "keyboard",
       "command": "{DOWN}"
