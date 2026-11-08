@@ -4,8 +4,9 @@
   "reader": "okur",
   "platform": "linux",
   "web_verbosity": null,
+  "settings": "recorded",
   "application": "corpus/fixtures/linux/desktop-forms.py",
-  "commit": "ebc4fd11"
+  "commit": "9a6b6816"
  },
  "trials": [
   {
@@ -14,34 +15,34 @@
    "reset_keys": [
     {
      "key": "Tab",
-     "t_ms": 1794168274588
+     "t_ms": 1794173101863
     },
     {
      "key": "Tab",
-     "t_ms": 1794168274940
+     "t_ms": 1794173102215
     },
     {
      "key": "Tab",
-     "t_ms": 1794168275242
+     "t_ms": 1794173102517
     },
     {
      "key": "Tab",
-     "t_ms": 1794168275543
+     "t_ms": 1794173102818
     },
     {
      "key": "Tab",
-     "t_ms": 1794168275844
+     "t_ms": 1794173103119
     },
     {
      "key": "Tab",
-     "t_ms": 1794168276146
+     "t_ms": 1794173103420
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794168277450,
-     "t_end_ms": 1794168278554,
+     "t_start_ms": 1794173104725,
+     "t_end_ms": 1794173105830,
      "action": {
       "type": "key",
       "command": "Down"
@@ -57,8 +58,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794168278554,
-     "t_end_ms": 1794168279558,
+     "t_start_ms": 1794173105830,
+     "t_end_ms": 1794173106833,
      "action": {
       "type": "key",
       "command": "Down"
@@ -74,8 +75,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794168279558,
-     "t_end_ms": 1794168280663,
+     "t_start_ms": 1794173106833,
+     "t_end_ms": 1794173107938,
      "action": {
       "type": "key",
       "command": "Up"
@@ -91,8 +92,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794168280663,
-     "t_end_ms": 1794168281767,
+     "t_start_ms": 1794173107938,
+     "t_end_ms": 1794173109043,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -108,8 +109,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794168281767,
-     "t_end_ms": 1794168282871,
+     "t_start_ms": 1794173109043,
+     "t_end_ms": 1794173110147,
      "action": {
       "type": "key",
       "command": "Down"
@@ -125,8 +126,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794168282872,
-     "t_end_ms": 1794168283976,
+     "t_start_ms": 1794173110147,
+     "t_end_ms": 1794173111252,
      "action": {
       "type": "key",
       "command": "Up"
@@ -142,8 +143,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794168283976,
-     "t_end_ms": 1794168285180,
+     "t_start_ms": 1794173111252,
+     "t_end_ms": 1794173112457,
      "action": {
       "type": "key",
       "command": "Right"
@@ -159,8 +160,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794168285180,
-     "t_end_ms": 1794168286385,
+     "t_start_ms": 1794173112457,
+     "t_end_ms": 1794173113661,
      "action": {
       "type": "key",
       "command": "Down"
@@ -176,8 +177,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794168286385,
-     "t_end_ms": 1794168287689,
+     "t_start_ms": 1794173113661,
+     "t_end_ms": 1794173114866,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -193,8 +194,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794168287689,
-     "t_end_ms": 1794168288992,
+     "t_start_ms": 1794173114866,
+     "t_end_ms": 1794173116070,
      "action": {
       "type": "key",
       "command": "Down"
@@ -210,8 +211,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794168288992,
-     "t_end_ms": 1794168290296,
+     "t_start_ms": 1794173116070,
+     "t_end_ms": 1794173117274,
      "action": {
       "type": "key",
       "command": "Down"
@@ -227,8 +228,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794168290296,
-     "t_end_ms": 1794168291801,
+     "t_start_ms": 1794173117274,
+     "t_end_ms": 1794173118778,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -244,8 +245,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794168291801,
-     "t_end_ms": 1794168293307,
+     "t_start_ms": 1794173118778,
+     "t_end_ms": 1794173120284,
      "action": {
       "type": "key",
       "command": "Right"

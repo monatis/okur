@@ -4,8 +4,9 @@
   "reader": "okur",
   "platform": "linux",
   "web_verbosity": null,
+  "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "ebc4fd11"
+  "commit": "9a6b6816"
  },
  "trials": [
   {
@@ -14,14 +15,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794167452175
+     "t_ms": 1794172281214
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794167453538,
-     "t_end_ms": 1794167454541,
+     "t_start_ms": 1794172282582,
+     "t_end_ms": 1794172283586,
      "action": {
       "type": "jaws_script",
       "command": "MoveToNextTable"

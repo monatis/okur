@@ -4,8 +4,9 @@
   "reader": "okur",
   "platform": "linux",
   "web_verbosity": null,
+  "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "ebc4fd11"
+  "commit": "9a6b6816"
  },
  "trials": [
   {
@@ -14,14 +15,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794166885887
+     "t_ms": 1794171713844
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794166887247,
-     "t_end_ms": 1794166888250,
+     "t_start_ms": 1794171715207,
+     "t_end_ms": 1794171716210,
      "action": {
       "type": "jaws_script",
       "command": "MoveToNextHeading"
@@ -37,8 +38,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794166888250,
-     "t_end_ms": 1794166889254,
+     "t_start_ms": 1794171716210,
+     "t_end_ms": 1794171717214,
      "action": {
       "type": "jaws_script",
       "command": "MoveToNextHeading"

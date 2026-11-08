@@ -4,8 +4,9 @@
   "reader": "okur",
   "platform": "linux",
   "web_verbosity": null,
+  "settings": "recorded",
   "application": "corpus/fixtures/linux/desktop-forms.py",
-  "commit": "ebc4fd11"
+  "commit": "9a6b6816"
  },
  "trials": [
   {
@@ -15,8 +16,8 @@
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794168242982,
-     "t_end_ms": 1794168244144,
+     "t_start_ms": 1794173070216,
+     "t_end_ms": 1794173071376,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -32,8 +33,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794168244144,
-     "t_end_ms": 1794168245249,
+     "t_start_ms": 1794173071376,
+     "t_end_ms": 1794173072481,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -49,8 +50,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794168245249,
-     "t_end_ms": 1794168246354,
+     "t_start_ms": 1794173072481,
+     "t_end_ms": 1794173073586,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -66,8 +67,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794168246354,
-     "t_end_ms": 1794168247658,
+     "t_start_ms": 1794173073586,
+     "t_end_ms": 1794173074991,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -83,8 +84,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794168247658,
-     "t_end_ms": 1794168248762,
+     "t_start_ms": 1794173074991,
+     "t_end_ms": 1794173076095,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -100,8 +101,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794168248762,
-     "t_end_ms": 1794168249867,
+     "t_start_ms": 1794173076095,
+     "t_end_ms": 1794173077200,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -117,8 +118,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794168249867,
-     "t_end_ms": 1794168250972,
+     "t_start_ms": 1794173077200,
+     "t_end_ms": 1794173078304,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -134,8 +135,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794168250972,
-     "t_end_ms": 1794168252276,
+     "t_start_ms": 1794173078304,
+     "t_end_ms": 1794173079509,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -151,8 +152,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794168252276,
-     "t_end_ms": 1794168253781,
+     "t_start_ms": 1794173079509,
+     "t_end_ms": 1794173081013,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -168,8 +169,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794168253781,
-     "t_end_ms": 1794168254886,
+     "t_start_ms": 1794173081014,
+     "t_end_ms": 1794173082118,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -185,8 +186,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794168254886,
-     "t_end_ms": 1794168255990,
+     "t_start_ms": 1794173082118,
+     "t_end_ms": 1794173083223,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -202,8 +203,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794168255990,
-     "t_end_ms": 1794168257495,
+     "t_start_ms": 1794173083223,
+     "t_end_ms": 1794173084728,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -219,8 +220,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794168257495,
-     "t_end_ms": 1794168258599,
+     "t_start_ms": 1794173084728,
+     "t_end_ms": 1794173085832,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -236,8 +237,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794168258599,
-     "t_end_ms": 1794168260106,
+     "t_start_ms": 1794173085832,
+     "t_end_ms": 1794173087339,
      "action": {
       "type": "key",
       "command": "Shift+Tab"
@@ -253,8 +254,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794168260106,
-     "t_end_ms": 1794168261212,
+     "t_start_ms": 1794173087339,
+     "t_end_ms": 1794173088444,
      "action": {
       "type": "key",
       "command": "Shift+Tab"

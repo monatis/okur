@@ -4,8 +4,9 @@
   "reader": "okur",
   "platform": "linux",
   "web_verbosity": "2",
+  "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "ebc4fd11"
+  "commit": "9a6b6816"
  },
  "trials": [
   {
@@ -14,14 +15,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794167887636
+     "t_ms": 1794172716374
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794167889000,
-     "t_end_ms": 1794167890004,
+     "t_start_ms": 1794172717736,
+     "t_end_ms": 1794172718740,
      "action": {
       "type": "key",
       "command": "C"
@@ -37,8 +38,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794167890004,
-     "t_end_ms": 1794167891308,
+     "t_start_ms": 1794172718740,
+     "t_end_ms": 1794172719944,
      "action": {
       "type": "key",
       "command": "Space"
@@ -54,8 +55,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794167891308,
-     "t_end_ms": 1794167892412,
+     "t_start_ms": 1794172719944,
+     "t_end_ms": 1794172721048,
      "action": {
       "type": "key",
       "command": "Down"
@@ -71,8 +72,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794167892412,
-     "t_end_ms": 1794167893416,
+     "t_start_ms": 1794172721048,
+     "t_end_ms": 1794172722053,
      "action": {
       "type": "key",
       "command": "Down"
@@ -88,8 +89,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794167893416,
-     "t_end_ms": 1794167894520,
+     "t_start_ms": 1794172722053,
+     "t_end_ms": 1794172723158,
      "action": {
       "type": "key",
       "command": "Up"
@@ -105,8 +106,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794167894520,
-     "t_end_ms": 1794167895625,
+     "t_start_ms": 1794172723158,
+     "t_end_ms": 1794172724262,
      "action": {
       "type": "key",
       "command": "Enter"
@@ -122,8 +123,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794167895625,
-     "t_end_ms": 1794167896729,
+     "t_start_ms": 1794172724262,
+     "t_end_ms": 1794172725367,
      "action": {
       "type": "key",
       "command": "Space"
@@ -139,8 +140,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794167896729,
-     "t_end_ms": 1794167897834,
+     "t_start_ms": 1794172725367,
+     "t_end_ms": 1794172726371,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -149,15 +150,15 @@
       "Escape"
      ],
      "observation": {
-      "speech_raw": "Leaving menus\nHome branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside\nTo change the selection use the Arrow keys.",
+      "speech_raw": "virtual PC Cursor",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794167897834,
-     "t_end_ms": 1794167898938,
+     "t_start_ms": 1794172726371,
+     "t_end_ms": 1794172727377,
      "action": {
       "type": "key",
       "command": "Insert+Up"

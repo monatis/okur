@@ -4,8 +4,9 @@
   "reader": "okur",
   "platform": "linux",
   "web_verbosity": null,
+  "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "ebc4fd11"
+  "commit": "9a6b6816"
  },
  "trials": [
   {
@@ -14,14 +15,31 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794167170175
+     "t_ms": 1794171998654
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794167171538,
-     "t_end_ms": 1794167172542,
+     "t_start_ms": 1794172000021,
+     "t_end_ms": 1794172001025,
+     "action": {
+      "type": "jaws_script",
+      "command": "MoveToNextRegion"
+     },
+     "keys": [
+      "R"
+     ],
+     "observation": {
+      "speech_raw": "banner",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794172001025,
+     "t_end_ms": 1794172002029,
      "action": {
       "type": "jaws_script",
       "command": "MoveToNextRegion"
@@ -31,23 +49,6 @@
      ],
      "observation": {
       "speech_raw": "Main Navigation navigation region",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
-     "step_id": "s2",
-     "t_start_ms": 1794167172542,
-     "t_end_ms": 1794167173546,
-     "action": {
-      "type": "jaws_script",
-      "command": "MoveToNextRegion"
-     },
-     "keys": [
-      "R"
-     ],
-     "observation": {
-      "speech_raw": "main region",
       "settled": true
      },
      "step_success": true
