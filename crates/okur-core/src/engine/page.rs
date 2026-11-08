@@ -601,7 +601,18 @@ impl ScreenReaderEngine {
         kind: crate::event::ChangeKind,
         control: &FocusEvent,
     ) -> Option<String> {
-        tracing::debug!(?kind, role = ?control.role, name = ?control.name, "control changed");
+        tracing::debug!(
+            ?kind,
+            role = ?control.role,
+            name = ?control.name,
+            checked = ?control.states.checked,
+            expanded = ?control.states.expanded,
+            before = ?self
+                .last_native_focus
+                .as_ref()
+                .map(|f| (&f.role, f.name.as_deref(), f.states.checked, f.states.expanded)),
+            "control changed"
+        );
         if control.in_document {
             return self.page_change(control);
         }
