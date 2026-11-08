@@ -209,6 +209,17 @@ pub fn atspi_to_web_from(node: &AtspiNode, base: i32) -> WebNode {
 }
 
 /// Each object's id by its path, numbered as `numbered` numbers them, for relations' targets.
+/// The unique ids [`atspi_to_web_from`] gives a page's objects, by their paths: what a focus
+/// in the page names its node by, as Windows' focus names it by IA2's unique id.
+pub fn page_ids(root: &AtspiNode, base: i32) -> HashMap<String, i32> {
+    let mut ids = HashMap::new();
+    let mut next = base;
+    number_paths(root, &mut next, &mut ids);
+    ids.into_iter()
+        .map(|(path, id)| (path.to_owned(), id))
+        .collect()
+}
+
 fn number_paths<'a>(node: &'a AtspiNode, next: &mut i32, ids: &mut HashMap<&'a str, i32>) {
     *next += 1;
     if !node.path.is_empty() {

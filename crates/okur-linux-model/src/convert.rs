@@ -110,6 +110,10 @@ pub struct Converter {
     /// A page's select with the focus, by its object, as its focus was given to the engine:
     /// its value changes come as its hidden menu's items selected.
     page_select: Option<(String, FocusEvent)>,
+    /// The unique ids of the objects of the page given to the engine last, by their paths: a
+    /// focus in it names its node by its id, found where a role and a name do not find it (a
+    /// link, whose role holds its address [obs, 204/s9]).
+    page_ids: std::collections::HashMap<String, i32>,
 }
 
 impl Converter {
@@ -173,6 +177,7 @@ impl Converter {
         let mut events = Vec::new();
         for page in &record.pages {
             self.last_page = Some(page.document.clone());
+            self.page_ids = crate::page::page_ids(&page.root, page.base);
             let root = to_aom_from(&page.root, page.base);
             let title = root.name.clone().unwrap_or_default();
             events.push(AccessibilityEvent::DocumentLoaded { title, root });
@@ -278,7 +283,13 @@ impl Converter {
                 let window = self.window_title.clone().filter(|_| {
                     in_page && same_application(object.as_deref(), self.track.active_window())
                 });
-                plain(record, in_page, app, window)
+                let unique_id = target
+                    .filter(|_| in_page)
+                    .and_then(|t| t.raw.get("object_path"))
+                    .and_then(|path| path.as_str())
+                    .and_then(|path| self.page_ids.get(path))
+                    .map(i32::to_string);
+                plain(record, in_page, app, window, unique_id)
             })
         };
         // A page's select focused: kept for its value's changes; any other focus ends it.
@@ -403,12 +414,14 @@ fn plain(
     in_page: bool,
     app: Option<String>,
     window_title: Option<String>,
+    unique_id: Option<String>,
 ) -> Option<AccessibilityEvent> {
     let element = record.target.as_ref()?;
     let mut control = focus_event(element);
     control.in_document = in_page;
     control.app = app;
     control.window_title = window_title;
+    control.unique_id = unique_id;
     match record.kind {
         EventKind::FocusChanged => Some(AccessibilityEvent::Focus(control)),
         _ if is_control_change(&record.kind, element.states.focused) => {
@@ -603,6 +616,35 @@ mod tests {
             [AccessibilityEvent::Change { kind: ChangeKind::Value, control }]
                 if control.value.as_deref() == Some("Eastgate")
                     && control.role == OkurRole::ComboBox
+        ));
+    }
+
+    /// A focus in the page given last names its node by the unique id the page's read gave it.
+    #[test]
+    fn a_page_focus_names_its_node() {
+        let mut converter = Converter::default();
+        let mut root = node("document web", "Sign up", &[]);
+        root.path = "/doc".to_owned();
+        let mut link = node("link", "terms of use", &[]);
+        link.path = "/link".to_owned();
+        root.children.push(link);
+        let page = AtspiRecord::page(
+            0,
+            PageRead {
+                document: ":1.5/doc".to_owned(),
+                base: 1 << 20,
+                root,
+                read_ms: 0,
+            },
+        );
+        let _ = converter.convert_read(&page);
+        let target = element(ElementRole::Link, "terms of use", "/link", true);
+        let mut focus = record(EventKind::FocusChanged, target, None);
+        focus.document = Some(":1.5/doc".to_owned());
+        let expected = ((1 << 20) + 2).to_string();
+        assert!(matches!(
+            converter.convert_read(&focus).as_slice(),
+            [AccessibilityEvent::Focus(f)] if f.unique_id.as_deref() == Some(expected.as_str())
         ));
     }
 
