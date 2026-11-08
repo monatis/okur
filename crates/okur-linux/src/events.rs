@@ -187,6 +187,53 @@ fn control_change(event: &Event) -> bool {
     ) && event.target.as_ref().is_some_and(|e| e.states.focused)
 }
 
+/// The page whose address ends with `address_end`, read whole as Okur reads a page, as Chrome
+/// gives the focus to it, for the Linux lab's snapshots (`examples/atspi_snapshot.rs`, the
+/// plan's §2.3); an error if no focus reached it in `wait`. Start it before Chrome.
+pub fn capture_page(
+    address_end: &str,
+    wait: Duration,
+) -> Result<okur_linux_model::page::AtspiNode, RuntimeError> {
+    let provider = LinuxProvider::new().map_err(|e| source_error("the bus", e))?;
+    let subscription = provider
+        .subscribe_desktop()
+        .map_err(|e| source_error("the desktop's events", e))?;
+    let started = std::time::Instant::now();
+    while started.elapsed() < wait {
+        let RecvStatus::Event(event) = subscription.recv_status(Duration::from_millis(200)) else {
+            continue;
+        };
+        if !matches!(
+            event.kind,
+            EventKind::FocusChanged | EventKind::DocumentLoaded
+        ) {
+            continue;
+        }
+        let Some(document) = event
+            .target
+            .as_ref()
+            .and_then(|e| document_of(&provider, e))
+        else {
+            continue;
+        };
+        let address = provider
+            .atspi_tree(&document, 1)
+            .ok()
+            .and_then(|tree| tree.uri);
+        if !address.is_some_and(|a| a.ends_with(address_end)) {
+            continue;
+        }
+        let tree = provider
+            .atspi_tree(&document, PAGE_LIMIT)
+            .map_err(|e| source_error("the page", e))?;
+        return Ok(snapshot(tree));
+    }
+    Err(source_error(
+        "the page",
+        format!("no focus reached a page at …{address_end} in {wait:?}"),
+    ))
+}
+
 pub fn convert(event: &Event, in_page: bool) -> Option<AccessibilityEvent> {
     match event.kind {
         EventKind::FocusChanged => event.target.as_ref().map(|element| {
