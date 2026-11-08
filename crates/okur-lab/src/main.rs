@@ -515,6 +515,10 @@ enum Commands {
         /// engine's debug log for them)
         #[arg(long, num_args = 1..)]
         only: Vec<String>,
+        /// Replay every run with the settings JAWS recorded its scenario with, whatever the run
+        /// gave Okur
+        #[arg(long)]
+        recorded_settings: bool,
     },
     /// Write the reference machine's settings (old-pc's JAWS configuration) as a settings
     /// folder, for `run --settings` in a live run there
@@ -528,6 +532,10 @@ enum Commands {
         /// A scenario whose `jaws_settings` (its `DEFAULT.JCF` keys) are read over `--jcf`'s
         #[arg(long, requires = "jcf")]
         scenario: Option<String>,
+        /// The settings JAWS ran with when this evidence was recorded, as replay gives them
+        /// to the engine (a live run on another system, the Linux lab's)
+        #[arg(long, conflicts_with = "jcf")]
+        evidence: Option<String>,
     },
     /// Query hardware soundcard / default playback audio meter
     Meter {
@@ -1376,6 +1384,7 @@ async fn main() {
             all,
             pages_after_focus,
             only,
+            recorded_settings,
         }) => {
             if platform != "linux" {
                 eprintln!("Error: only Linux's runs keep a trace (not {platform:?})");
@@ -1386,6 +1395,7 @@ async fn main() {
                 okur_corpus::linux_replay::ReplayOptions {
                     only: &only,
                     pages_after_focus,
+                    recorded_settings,
                 },
             );
             for error in &report.errors {
@@ -1422,12 +1432,24 @@ async fn main() {
             path,
             jcf,
             scenario,
+            evidence,
         }) => {
             use okur_core::settings::SettingsStore;
-            let settings = match jcf
-                .as_deref()
-                .map(|jcf| jaws_file_settings(jcf, scenario.as_deref()))
-            {
+            let from_evidence = evidence.as_deref().map(|path| {
+                std::fs::read_to_string(path)
+                    .map_err(|e| format!("{path}: {e}"))
+                    .and_then(|text| {
+                        serde_json::from_str::<serde_json::Value>(
+                            text.trim_start_matches('\u{feff}'),
+                        )
+                        .map_err(|e| format!("{path}: {e}"))
+                    })
+                    .map(|evidence| okur_corpus::parity::recorded_settings(&evidence))
+            });
+            let settings = match from_evidence.or_else(|| {
+                jcf.as_deref()
+                    .map(|jcf| jaws_file_settings(jcf, scenario.as_deref()))
+            }) {
                 Some(Ok(settings)) => settings,
                 Some(Err(e)) => {
                     eprintln!("Error: {e}");

@@ -405,7 +405,7 @@ fn replay_scenario(
     engine.set_actions(Box::new(actions.clone()));
     // JAWS's settings when the evidence was recorded, and what Okur saved in the scenario
     // this one continues.
-    let mut settings = replay_settings(&evidence);
+    let mut settings = recorded_settings(&evidence);
     for (id, value) in scenario.okur_settings.iter().flatten() {
         if RETIRED_OKUR_SETTINGS.contains(&id.as_str()) {
             continue;
@@ -1163,7 +1163,11 @@ fn replay_clock(evidence: &Value) -> Result<Option<(FixedClock, i32)>, String> {
 /// (`okur_core::settings::registry::import_jaws`), over the reference machine's configuration
 /// (unchanged since before any evidence was recorded), which is also what evidence without the
 /// file replays with.
-fn replay_settings(evidence: &Value) -> okur_core::settings::Settings {
+/// The settings JAWS ran with when `evidence` was recorded: the reference machine's, with the
+/// recording's `DEFAULT.JCF` and its application's file read through the settings table, as
+/// replay gives them to the engine and a platform's live run gives them to Okur
+/// (`okur-lab reference-settings --evidence`).
+pub fn recorded_settings(evidence: &Value) -> okur_core::settings::Settings {
     use okur_core::settings::registry::{import_jaws, JawsFile};
     use okur_core::settings::Settings;
     let base = Settings::reference_machine();

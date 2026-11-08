@@ -29,6 +29,7 @@ import tempfile
 import time
 
 OKUR = "./target/debug/okur"
+OKUR_LAB = "./target/debug/okur-lab"
 # JAWS's VirtualCursorVerbosityLevel as Okur's web_verbosity setting.
 WEB_VERBOSITY = {"0": "low", "1": "medium", "2": "high"}
 XA11Y = "./target/debug/xa11y"
@@ -225,10 +226,19 @@ def main():
     atexit.register(stop, started, profile)
     # What Okur read for each event, kept beside the run for okur-lab live-replay linux.
     trace = out_path[:-len(".json")] + ".trace.jsonl" if out_path.endswith(".json") else None
+    # The settings JAWS ran with when the scenario was recorded, as replay gives them to the
+    # engine (okur-lab reference-settings --evidence); else the defaults with the page's
+    # verbosity, as the runs before 2026-11-08 had them.
+    settings = os.path.join(work, "settings")
+    evidence = os.path.expanduser(f"~/okur/corpus/evidence/{scenario['id']}-evidence.json")
+    recorded = os.path.exists(evidence) and subprocess.run(
+        [OKUR_LAB, "reference-settings", settings, "--evidence", evidence],
+        capture_output=True, text=True).returncode == 0
     verbosity = WEB_VERBOSITY.get(str(level).strip()) if level is not None else None
     okur = subprocess.Popen([OKUR, "run", "--engine", "no-speech", "--speech-log", log,
-                             "--settings", os.path.join(work, "settings"),
-                             *(["--set", "web_verbosity=" + verbosity] if verbosity else []),
+                             "--settings", settings,
+                             *([] if recorded or not verbosity
+                               else ["--set", "web_verbosity=" + verbosity]),
                              *(["--trace", trace] if trace else [])],
                             stdin=subprocess.DEVNULL, stdout=okur_out, stderr=subprocess.STDOUT,
                             env={**os.environ, "RUST_LOG": os.environ.get("RUST_LOG", "okur_linux=debug")})
@@ -337,6 +347,7 @@ def main():
     run = {
         "scenario_id": scenario["id"],
         "provenance": {"reader": "okur", "platform": "linux", "web_verbosity": level,
+                       "settings": "recorded" if recorded else "default",
                        **({"application": "corpus/fixtures/linux/" + os.path.basename(replica)}
                           if replica else {"chrome": "google-chrome"}),
                        "commit": subprocess.run(["git", "rev-parse", "--short", "HEAD"],

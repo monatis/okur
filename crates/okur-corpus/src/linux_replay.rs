@@ -27,6 +27,9 @@ const IDLE_MS: u64 = 150;
 pub struct ReplayOptions<'a> {
     /// Only the runs whose names start with one of these, where any are given.
     pub only: &'a [String],
+    /// Every run replayed with the settings JAWS recorded its scenario with, whatever the run
+    /// gave Okur: what a run with them would say, before the lab runs it.
+    pub recorded_settings: bool,
     /// Each page the driver read for a focus given to the engine after that focus, as a
     /// page-reader thread off the event thread would give it (the code review of 2026-11-08,
     /// finding 6): whether the engine still says what it said with the page first.
@@ -100,12 +103,7 @@ struct Replayer<'a> {
 }
 
 impl<'a> Replayer<'a> {
-    fn new(web_verbosity: Option<&str>, options: ReplayOptions<'a>) -> Self {
-        let mut settings =
-            okur_core::settings_layers::SettingsLayers::default().resolve(None, None);
-        if let Some(level) = web_verbosity {
-            settings.web_verbosity = okur_core::settings::WebVerbosity::from_jcf(level);
-        }
+    fn new(settings: okur_core::settings::Settings, options: ReplayOptions<'a>) -> Self {
         let speech = RecordingSpeech::default();
         let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&okur_core::AomNode::new(
             0,
@@ -177,9 +175,28 @@ fn number(value: &Value, pointer: &str) -> Option<u64> {
     value.pointer(pointer).and_then(Value::as_u64)
 }
 
-/// Replays the first trial of the live `run` from its trace's `records`.
+/// The settings a live run gave Okur: the ones JAWS recorded `evidence` with, where the runner
+/// wrote them for it (`provenance.settings` "recorded"); else the defaults, with the page
+/// verbosity it was given (the runs before, 2026-11-08).
+fn run_settings(run: &Value, evidence: &Value) -> okur_core::settings::Settings {
+    if run.pointer("/provenance/settings").and_then(Value::as_str) == Some("recorded") {
+        return crate::parity::recorded_settings(evidence);
+    }
+    let mut settings = okur_core::settings_layers::SettingsLayers::default().resolve(None, None);
+    if let Some(level) = run
+        .pointer("/provenance/web_verbosity")
+        .and_then(Value::as_str)
+    {
+        settings.web_verbosity = okur_core::settings::WebVerbosity::from_jcf(level);
+    }
+    settings
+}
+
+/// Replays the first trial of the live `run` from its trace's `records`, with the settings
+/// the run gave Okur for JAWS's `evidence` of its scenario.
 pub fn replay_run(
     run: &Value,
+    evidence: &Value,
     records: &[AtspiRecord],
     options: ReplayOptions<'_>,
 ) -> Result<Vec<ReplayStep>, String> {
@@ -192,10 +209,12 @@ pub fn replay_run(
         .get("step_results")
         .and_then(Value::as_array)
         .ok_or("the trial has no steps")?;
-    let level = run
-        .pointer("/provenance/web_verbosity")
-        .and_then(Value::as_str);
-    let mut replayer = Replayer::new(level, options);
+    let settings = if options.recorded_settings {
+        crate::parity::recorded_settings(evidence)
+    } else {
+        run_settings(run, evidence)
+    };
+    let mut replayer = Replayer::new(settings, options);
     let mut records = records.iter().peekable();
     // The setup: the records before the first key, the reset's keys among them at their times;
     // what it said is not a step's.
@@ -326,7 +345,6 @@ pub fn run(corpus_dir: &Path, options: ReplayOptions<'_>) -> ReplayReport {
         let replayed = read_json(&path).and_then(|run| {
             let text = std::fs::read_to_string(&trace).map_err(|e| format!("{trace:?}: {e}"))?;
             let records = read_trace(&text).map_err(|e| format!("{name}: {e}"))?;
-            let steps = replay_run(&run, &records, options).map_err(|e| format!("{name}: {e}"))?;
             let scenario = run
                 .get("scenario_id")
                 .and_then(Value::as_str)
@@ -336,6 +354,8 @@ pub fn run(corpus_dir: &Path, options: ReplayOptions<'_>) -> ReplayReport {
                     .join("evidence")
                     .join(format!("{scenario}-evidence.json")),
             )?;
+            let steps = replay_run(&run, &evidence, &records, options)
+                .map_err(|e| format!("{name}: {e}"))?;
             let against = live::compare(&with_replayed(&run, &steps), &evidence)
                 .map_err(|e| format!("{name}: {e}"))?;
             Ok((steps, against))
@@ -395,8 +415,13 @@ mod tests {
             focus(1100, Role::Button, "OK"),
             focus(2100, Role::Button, "Cancel"),
         ];
-        let replayed =
-            replay_run(&run(steps), &records, ReplayOptions::default()).unwrap_or_default();
+        let replayed = replay_run(
+            &run(steps),
+            &Value::Null,
+            &records,
+            ReplayOptions::default(),
+        )
+        .unwrap_or_default();
         assert_eq!(replayed.len(), 2);
         let said: Vec<&str> = replayed.iter().map(|s| s.replayed.as_str()).collect();
         assert!(matches!(said.as_slice(), [first, second]
@@ -411,7 +436,7 @@ mod tests {
              "action": {"type": "key", "command": "Tab"},
              "observation": {"speech_raw": ""}},
         ]);
-        assert!(replay_run(&run(steps), &[], ReplayOptions::default()).is_err());
+        assert!(replay_run(&run(steps), &Value::Null, &[], ReplayOptions::default()).is_err());
     }
 
     #[test]
