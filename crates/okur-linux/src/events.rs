@@ -96,6 +96,9 @@ fn native_focus(provider: &LinuxProvider, element: &ElementData) -> okur_core::e
         states = focus.states,
         ancestors = ?ancestors.iter().map(|a| a.role.as_str()).collect::<Vec<_>>(),
         parent = ?ancestors.first().map(|a| &a.attributes),
+        // Whether a window shows its ACTIVE state (1), before a focus in an inactive one is
+        // passed over by it (the code review's finding 21).
+        window_states = ?ancestors.last().map(|a| a.states),
         "native focus read"
     );
     okur_linux_model::focus::native_focus(base, &focus, &ancestors)
