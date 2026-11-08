@@ -529,8 +529,14 @@ impl VirtualBuffer {
 
     /// The smallest id of the nodes the buffer reads with `role` and named `name` (by their
     /// name, else their text), ASCII letters in either case: a node as [`Self::node`] finds
-    /// it, so for an id the page repeats, its last node.
+    /// it, so for an id the page repeats, its last node. A link by its role alone, whatever
+    /// its address: a focus gives it in another form (Windows' recorded `file:///C:/...`
+    /// against a Linux page's) or none (Linux's), and its id did not find it.
     pub fn node_with_role_and_name(&self, role: &Role, name: &str) -> Option<usize> {
+        let index_role = |role: &Role| match role {
+            Role::Link { .. } => Role::Link { href: None },
+            other => other.clone(),
+        };
         self.name_index
             .get_or_init(|| {
                 let mut last: HashMap<usize, &AomNode> = HashMap::new();
@@ -548,13 +554,13 @@ impl VirtualBuffer {
                         continue;
                     };
                     names
-                        .entry((node.role.clone(), named.to_ascii_lowercase()))
+                        .entry((index_role(&node.role), named.to_ascii_lowercase()))
                         .and_modify(|smallest| *smallest = (*smallest).min(id))
                         .or_insert(id);
                 }
                 names
             })
-            .get(&(role.clone(), name.to_ascii_lowercase()))
+            .get(&(index_role(role), name.to_ascii_lowercase()))
             .copied()
     }
 
@@ -1708,6 +1714,29 @@ impl VirtualBuffer {
 mod tests {
     use super::VirtualBuffer;
     use crate::aom::{AomNode, NodeStates, Role};
+
+    /// A link is found by its name whatever its address: a focus gives it in another form, or
+    /// none.
+    #[test]
+    fn a_link_is_found_by_its_name_whatever_its_address() {
+        let page = AomNode::new(0, Role::Document).with_children(vec![AomNode::new(
+            1,
+            Role::Link {
+                href: Some("file:///root/okur/corpus/fixtures/news.html#more".to_owned()),
+            },
+        )
+        .with_name("Contact us")]);
+        let buffer = VirtualBuffer::from_aom(&page);
+        for href in [
+            None,
+            Some("file:///C:/Users/ailabs/corpus/fixtures/news.html#more"),
+        ] {
+            let role = Role::Link {
+                href: href.map(str::to_owned),
+            };
+            assert_eq!(buffer.node_with_role_and_name(&role, "contact us"), Some(1));
+        }
+    }
 
     fn page() -> AomNode {
         let hidden = AomNode::new(4, Role::Paragraph)
