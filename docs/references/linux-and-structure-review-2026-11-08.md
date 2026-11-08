@@ -44,6 +44,8 @@ file:line references are to that commit.
    - Done: the read plan is okur-linux-model's (`focus::ancestor_limit`, `is_window`, c4cdc699). Peers are matched by object path (0d360045).
    - Open: a tree cut at 200 objects is marked.
 5. **(14)** CapsLock as the Okur key is never grabbed, so X toggles Caps Lock.
+   - Built (9a6b6816, ebaf1373): while Okur runs, Caps Lock's keys lose their keysym and their modifier, and Okur toggles Caps Lock through XKB when the engine passes a press on.
+   - Clearing the modifier alone was not enough (probe-capslock.sh: one press still locked). Waiting for the probe's second run.
 6. **(15, rest)**
    - Done: a key grab another program holds is warned of (4d58202f).
    - Open: mark a read with per-node errors as partial.
@@ -56,6 +58,25 @@ file:line references are to that commit.
    - (22) Lists that move only their active descendant (GTK 3, Qt).
    - (23) Window managers that nest the client deeper than two levels.
    - (24) Key repeat, XKB groups and AltGr, keys during a consumed key's hold, keys while a menu holds the keyboard.
+
+## The second review (2026-11-09): the stretch's own code
+
+A reviewer read d469f746..0bca1ff2: the converter, the page reader, the parallel read, the
+replay, the `okur` split and the window id. It replayed its two worst findings from the lab's
+traces. Each was checked by hand.
+
+| # | Finding | Status |
+|---|---|---|
+| 1 | A page read after the focus left it went to the engine as a new load over the editor the focus went to; its letters became quick keys. | Fixed (7c246f2c): okur-linux-model's `Delivery` cancels a page whose document the focus left. |
+| 2 | A page read after a focus in it put the cursor at its top: the focus's place was lost (28, 205). `--pages-after-focus` reordered within one record only, so it could not show this. | Fixed (7c246f2c): records after a page asked for wait until it is read, so the engine takes the page and then its focus, as when pages were read inline. |
+| 3 | `page_asked` keeps converter state outside the records. | Kept to the driver's decisions: the converter's conversion never reads it, and the trace holds the order the engine took. |
+| 4 | A focus whose read failed was dropped. | Fixed (7c246f2c): a read with no role is no read, and the event's snapshot says the control. |
+| 5 | A page read no longer wanted ran to its end. | Fixed (1d9dcf46): a stop flag, checked per object. |
+| 6 | A parallel read cut at the object limit can leave holes, unmarked. | Open (20,000 objects; no page in the corpus is near it). |
+| 7 | A page reader that died left pages unread for good. | Fixed (7c246f2c): read on the event thread from then on. |
+| 8 | The event loop woke 50 times a second when idle. | Fixed (1d9dcf46): 100 ms unless a page is awaited. |
+| 9 | Grab replies are awaited on the keyboard thread. | Open (about 1 to 2 ms for each new window, estimated). |
+| 10 | A poisoned lock numbered no page; a hang-up left the desktop's status set. | Fixed (7c246f2c). Tracing's cost in the lab's timings is open. |
 
 ## Cross-platform structure: the proposal
 
