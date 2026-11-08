@@ -437,7 +437,12 @@ impl EventSource for AtspiEventSource {
                             }
                         }
                         RecvStatus::Timeout => {}
-                        RecvStatus::Disconnected => return,
+                        RecvStatus::Disconnected => {
+                            // Said, not silent: Okur hears nothing more until it starts again
+                            // (the code review of 2026-11-08).
+                            tracing::error!("AT-SPI: the accessibility bus ended; no more events");
+                            return;
+                        }
                     }
                 }
             })
