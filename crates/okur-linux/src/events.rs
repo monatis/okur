@@ -439,7 +439,7 @@ impl EventSource for AtspiEventSource {
                                 reread,
                             };
                             write(&record);
-                            for said in converter.convert(&record) {
+                            for said in converter.convert_read(&record) {
                                 if !sink.send(said) {
                                     return;
                                 }

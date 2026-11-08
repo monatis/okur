@@ -107,6 +107,14 @@ pub struct EventConverter {
     last_toast: Option<(String, u128)>,
 }
 
+impl okur_model::event_model::EventModel for EventConverter {
+    type Record = TraceEvent;
+
+    fn convert(&mut self, record: &TraceEvent) -> Vec<okur_core::AccessibilityEvent> {
+        EventConverter::convert(self, record)
+    }
+}
+
 /// The last focus's MSAA identity (`hwnd`, `id_object`, `id_child`) and name, and the focused
 /// control's own name from its focus chain.
 type FocusIdentity = ((isize, i32, i32, Option<String>), Option<String>);

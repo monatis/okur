@@ -3,9 +3,11 @@
 //! [`AtspiRecord`]), with no call to Linux, so it is tested on every OS and a live run's records
 //! can be replayed as Windows' traces are. The driver asks the [`Converter`] what to read
 //! ([`Converter::is_twin`], [`Converter::wants_page`], [`Converter::wants_native`],
-//! [`Converter::wants_reread`]), reads it, and hands it the record ([`Converter::convert`]).
+//! [`Converter::wants_reread`]), reads it, and hands it the record ([`Converter::convert_read`]).
+//! A replay converts each record as [`EventModel::convert`]: the twin passed over, then the read.
 
 use okur_core::event::{AccessibilityEvent, ChangeKind, FocusEvent};
+use okur_model::event_model::EventModel;
 use serde::{Deserialize, Serialize};
 use xa11y_core::{ElementData, EventKind, Role};
 
@@ -126,7 +128,7 @@ impl Converter {
 
     /// The engine's events for what was read for one event, in order: the pages read, then the
     /// focus or the change.
-    pub fn convert(&mut self, record: &AtspiRecord) -> Vec<AccessibilityEvent> {
+    pub fn convert_read(&mut self, record: &AtspiRecord) -> Vec<AccessibilityEvent> {
         let mut events = Vec::new();
         for page in &record.pages {
             self.last_page = Some(page.document.clone());
@@ -203,6 +205,19 @@ impl Converter {
         };
         events.extend(converted);
         events
+    }
+}
+
+impl EventModel for Converter {
+    type Record = AtspiRecord;
+
+    /// A record as the driver converted it: GTK's twin focus passed over before anything was
+    /// read, then what was read.
+    fn convert(&mut self, record: &AtspiRecord) -> Vec<AccessibilityEvent> {
+        if self.is_twin(&record.kind, record.target.as_ref(), record.at_ms) {
+            return Vec::new();
+        }
+        self.convert_read(record)
     }
 }
 
@@ -316,13 +331,13 @@ mod tests {
             check.clone(),
             Some(read(node("check box", "Remember me", &[]))),
         );
-        let events = converter.convert(&focus);
+        let events = converter.convert_read(&focus);
         assert!(matches!(
             events.as_slice(),
             [AccessibilityEvent::Focus(f)] if f.role == OkurRole::CheckBox
                 && f.app.as_deref() == Some("desktop-forms.py")
         ));
-        assert!(converter.convert(&focus).is_empty());
+        assert!(converter.convert_read(&focus).is_empty());
         let checked = record(
             EventKind::StateChanged {
                 flag: StateFlag::Checked,
@@ -332,7 +347,7 @@ mod tests {
             Some(read(node("check box", "Remember me", &[state::CHECKED]))),
         );
         assert!(matches!(
-            converter.convert(&checked).as_slice(),
+            converter.convert_read(&checked).as_slice(),
             [AccessibilityEvent::Change { kind: ChangeKind::State, control }]
                 if control.states.checked == Some(true)
         ));
@@ -347,7 +362,7 @@ mod tests {
             focus: node("push button", "OK", &[]),
             ancestors: vec![node("frame", "Chat", &[])],
         };
-        let events = converter.convert(&record(EventKind::FocusChanged, button, Some(behind)));
+        let events = converter.convert_read(&record(EventKind::FocusChanged, button, Some(behind)));
         assert!(events.is_empty());
     }
 
@@ -365,7 +380,7 @@ mod tests {
             combo.text = Some(item.to_owned());
             combo
         };
-        let _ = converter.convert(&record(
+        let _ = converter.convert_read(&record(
             EventKind::FocusChanged,
             country.clone(),
             Some(read(shown("Germany"))),
@@ -397,7 +412,7 @@ mod tests {
             base: 1 << 20,
             root: node("document web", "News", &[]),
         }];
-        let events = converter.convert(&page);
+        let events = converter.convert_read(&page);
         assert!(matches!(
             events.as_slice(),
             [AccessibilityEvent::DocumentLoaded { title, .. }, AccessibilityEvent::Focus(f)]

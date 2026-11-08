@@ -5,5 +5,6 @@
 //! platform's model.
 
 pub mod element;
+pub mod event_model;
 pub mod snapshot;
 pub mod web;

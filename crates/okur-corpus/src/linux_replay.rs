@@ -11,6 +11,7 @@ use crate::live::{self, LiveStep, LIVE_DIR};
 use crate::parity::{normalize, press, RecordingSpeech};
 use okur_core::{Modifiers, ScreenReaderEngine, VirtualBuffer, VirtualCursor};
 use okur_linux_model::convert::{AtspiRecord, Converter};
+use okur_model::event_model::EventModel;
 use serde_json::Value;
 use std::path::Path;
 
@@ -126,15 +127,9 @@ impl Replayer {
     }
 
     fn feed(&mut self, record: &AtspiRecord) {
-        // GTK's twin focus, passed over as the driver passed it over.
-        if self
-            .converter
-            .is_twin(&record.kind, record.target.as_ref(), record.at_ms)
-        {
-            return;
-        }
         self.advance(record.at_ms);
-        for event in self.converter.convert(record) {
+        // As the driver converted it: GTK's twin focus passed over, then what was read.
+        for event in EventModel::convert(&mut self.converter, record) {
             let _ = self.engine.handle_accessibility_event(&event);
             // A big page changed: the host builds it off the engine and installs it.
             if let Some((generation, page)) = self.engine.take_page_build() {
