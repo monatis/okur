@@ -24,7 +24,9 @@ const IDLE_MS: u64 = 150;
 
 /// How the replay differs from the run, to try a change of the driver on the runs first.
 #[derive(Debug, Clone, Copy, Default)]
-pub struct ReplayOptions {
+pub struct ReplayOptions<'a> {
+    /// Only the runs whose names start with one of these, where any are given.
+    pub only: &'a [String],
     /// Each page the driver read for a focus given to the engine after that focus, as a
     /// page-reader thread off the event thread would give it (the code review of 2026-11-08,
     /// finding 6): whether the engine still says what it said with the page first.
@@ -87,8 +89,8 @@ pub fn read_trace(text: &str) -> Result<Vec<AtspiRecord>, String> {
 
 /// The engine as the Linux lab's `okur run` runs it: the default settings, the page verbosity
 /// the run was given, no page in front, the records converted as its driver converts them.
-struct Replayer {
-    options: ReplayOptions,
+struct Replayer<'a> {
+    options: ReplayOptions<'a>,
     engine: ScreenReaderEngine,
     speech: RecordingSpeech,
     actions: okur_core::actions::RecordingActions,
@@ -97,8 +99,8 @@ struct Replayer {
     last_ms: Option<u64>,
 }
 
-impl Replayer {
-    fn new(web_verbosity: Option<&str>, options: ReplayOptions) -> Self {
+impl<'a> Replayer<'a> {
+    fn new(web_verbosity: Option<&str>, options: ReplayOptions<'a>) -> Self {
         let mut settings =
             okur_core::settings_layers::SettingsLayers::default().resolve(None, None);
         if let Some(level) = web_verbosity {
@@ -179,7 +181,7 @@ fn number(value: &Value, pointer: &str) -> Option<u64> {
 pub fn replay_run(
     run: &Value,
     records: &[AtspiRecord],
-    options: ReplayOptions,
+    options: ReplayOptions<'_>,
 ) -> Result<Vec<ReplayStep>, String> {
     let scenario = run
         .get("scenario_id")
@@ -293,7 +295,7 @@ fn read_json(path: &Path) -> Result<Value, String> {
 }
 
 /// Replays every Linux live run in the corpus that kept its trace.
-pub fn run(corpus_dir: &Path, options: ReplayOptions) -> ReplayReport {
+pub fn run(corpus_dir: &Path, options: ReplayOptions<'_>) -> ReplayReport {
     let mut report = ReplayReport::default();
     let dir = corpus_dir.join(LIVE_DIR).join(PLATFORM);
     let mut paths: Vec<_> = match std::fs::read_dir(&dir) {
@@ -314,6 +316,9 @@ pub fn run(corpus_dir: &Path, options: ReplayOptions) -> ReplayReport {
             .file_stem()
             .map(|s| s.to_string_lossy().into_owned())
             .unwrap_or_default();
+        if !options.only.is_empty() && !options.only.iter().any(|o| name.starts_with(o.as_str())) {
+            continue;
+        }
         if !trace.exists() {
             report.without_trace.push(name);
             continue;

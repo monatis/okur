@@ -4352,6 +4352,40 @@ impl LinuxProvider {
         self.read_tree(&object.reference(), &mut left)
     }
 
+    /// [`Self::atspi_tree`] with each object's children read at once, on rayon's threads: a
+    /// page's objects are read call by call, each call waiting on the application, and calls in
+    /// flight together overlap their waits (a page read whole, the code review of 2026-11-08,
+    /// finding 6). The children keep their order; where `limit` cuts the tree, which objects
+    /// it leaves out may differ from [`Self::atspi_tree`]'s.
+    pub fn atspi_tree_parallel(&self, object: &AtspiObject, limit: usize) -> AtspiTree {
+        let left = std::sync::atomic::AtomicUsize::new(limit);
+        self.read_tree_parallel(&object.reference(), &left)
+    }
+
+    fn read_tree_parallel(
+        &self,
+        aref: &AccessibleRef,
+        left: &std::sync::atomic::AtomicUsize,
+    ) -> AtspiTree {
+        // One object fewer left to read, never below none (fetch_update is deprecated, and its
+        // replacement newer than the crate's oldest Rust).
+        let mut n = left.load(Ordering::SeqCst);
+        while n > 0 {
+            match left.compare_exchange_weak(n, n - 1, Ordering::SeqCst, Ordering::SeqCst) {
+                Ok(_) => break,
+                Err(now) => n = now,
+            }
+        }
+        let mut node = self.read_node(aref);
+        let children = self.get_atspi_children(aref).unwrap_or_default();
+        node.children = children
+            .par_iter()
+            .filter(|_| left.load(Ordering::SeqCst) > 0)
+            .map(|child| self.read_tree_parallel(child, left))
+            .collect();
+        node
+    }
+
     /// The nearest of `object` and its ancestors, at most `max` levels up, whose role's name is
     /// `role` (a page's "document web" above a focused link): two calls on the bus a level.
     pub fn atspi_ancestor(
@@ -4430,6 +4464,18 @@ impl LinuxProvider {
 
     fn read_tree(&self, aref: &AccessibleRef, left: &mut usize) -> AtspiTree {
         *left = left.saturating_sub(1);
+        let mut node = self.read_node(aref);
+        for child in self.get_atspi_children(aref).unwrap_or_default() {
+            if *left == 0 {
+                break;
+            }
+            node.children.push(self.read_tree(&child, left));
+        }
+        node
+    }
+
+    /// One object as a tree reads it, without its children.
+    fn read_node(&self, aref: &AccessibleRef) -> AtspiTree {
         let role = self.get_role_name(aref).unwrap_or_default();
         let uri = match role.as_str() {
             "link" => self.get_link_uri(aref),
@@ -4463,12 +4509,6 @@ impl LinuxProvider {
         }
         if node.text.is_some() {
             node.text_attributes = self.get_text_attributes(aref).unwrap_or_default();
-        }
-        for child in self.get_atspi_children(aref).unwrap_or_default() {
-            if *left == 0 {
-                break;
-            }
-            node.children.push(self.read_tree(&child, left));
         }
         node
     }

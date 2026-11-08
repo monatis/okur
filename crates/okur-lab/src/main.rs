@@ -511,6 +511,10 @@ enum Commands {
         /// how the engine's speech holds up (the Linux review's finding 6)
         #[arg(long)]
         pages_after_focus: bool,
+        /// Only the runs whose names start with these (with RUST_LOG=okur_core=debug, the
+        /// engine's debug log for them)
+        #[arg(long, num_args = 1..)]
+        only: Vec<String>,
     },
     /// Write the reference machine's settings (old-pc's JAWS configuration) as a settings
     /// folder, for `run --settings` in a live run there
@@ -1371,6 +1375,7 @@ async fn main() {
             corpus_dir,
             all,
             pages_after_focus,
+            only,
         }) => {
             if platform != "linux" {
                 eprintln!("Error: only Linux's runs keep a trace (not {platform:?})");
@@ -1378,7 +1383,10 @@ async fn main() {
             }
             let report = okur_corpus::linux_replay::run(
                 Path::new(&corpus_dir),
-                okur_corpus::linux_replay::ReplayOptions { pages_after_focus },
+                okur_corpus::linux_replay::ReplayOptions {
+                    only: &only,
+                    pages_after_focus,
+                },
             );
             for error in &report.errors {
                 eprintln!("Error: {error}");
