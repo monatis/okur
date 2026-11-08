@@ -219,17 +219,27 @@ pub fn capture_page(
     ))
 }
 
+/// The application `event` came from, as FocusEvent::app names it for the per-application
+/// settings: its AT-SPI name ("Google Chrome"), by which Orca keeps its per-application settings
+/// too (the structure review of 2026-11-08: Linux set none, and its per-application settings did
+/// nothing).
+fn application(event: &Event) -> Option<String> {
+    Some(event.app_name.clone()).filter(|name| !name.is_empty())
+}
+
 pub fn convert(event: &Event, in_page: bool) -> Option<AccessibilityEvent> {
     match event.kind {
         EventKind::FocusChanged => event.target.as_ref().map(|element| {
             let mut focus = okur_linux_model::focus::focus_event(element);
             focus.in_document = in_page;
+            focus.app = application(event);
             AccessibilityEvent::Focus(focus)
         }),
         EventKind::StateChanged { .. } if control_change(event) => {
             event.target.as_ref().map(|element| {
                 let mut control = okur_linux_model::focus::focus_event(element);
                 control.in_document = in_page;
+                control.app = application(event);
                 AccessibilityEvent::Change {
                     kind: okur_core::event::ChangeKind::State,
                     control,
@@ -367,7 +377,8 @@ impl EventSource for AtspiEventSource {
                                 .as_ref()
                                 .filter(|_| (focus || changed) && document.is_none())
                                 .map(|e| native_focus(&provider, e))
-                                .map(|control| {
+                                .map(|mut control| {
+                                    control.app = application(&event);
                                     if changed {
                                         AccessibilityEvent::Change {
                                             kind: okur_core::event::ChangeKind::State,
@@ -400,7 +411,8 @@ impl EventSource for AtspiEventSource {
                             ) && track.in_focused_application(object.as_deref());
                             if inside {
                                 if let Some(element) = native_element.as_ref() {
-                                    let control = native_focus(&provider, element);
+                                    let mut control = native_focus(&provider, element);
+                                    control.app = application(&event);
                                     let reread = match track.reread(&control) {
                                         Reread::Focus => Some(AccessibilityEvent::Focus(control)),
                                         Reread::Value => Some(AccessibilityEvent::Change {
