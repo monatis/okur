@@ -144,7 +144,7 @@ fn read_native(
         if ancestors.len() >= WINDOW_DEPTH {
             break;
         }
-        let limit = ancestor_limit(ancestors.len(), &parent.role);
+        let limit = ancestor_limit(ancestors.len(), &parent.role, &focus);
         let node = snapshot(provider.atspi_tree(&parent, limit));
         let window = is_window(&node.role);
         ancestors.push(node);

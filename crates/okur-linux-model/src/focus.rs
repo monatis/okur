@@ -35,10 +35,15 @@ pub fn is_window(role: &str) -> bool {
 
 /// The read plan for a native focus's ancestors, what [`native_focus`] needs of each: the
 /// parent whole (its peers, for their place), and above it a list's, a column view's or a
-/// group box's (their items, columns, label); every other ancestor alone. The most objects
-/// read for the ancestor `index` above the focus (0 its parent) of AT-SPI role `role`.
-pub fn ancestor_limit(index: usize, role: &str) -> usize {
-    let whole = index == 0 || (index == 1 && matches!(role, "list" | "tree table" | "grouping"));
+/// group box's (their items, columns, label); every other ancestor alone. A list's item or a
+/// column view's row that says its own place (GTK's `posinset` and `setsize`) needs its
+/// parent alone, for its name (the code review of 2026-11-08, 3d). The most objects read for
+/// the ancestor `index` above `focus` (0 its parent) of AT-SPI role `role`.
+pub fn ancestor_limit(index: usize, role: &str, focus: &AtspiNode) -> usize {
+    let own_place =
+        own_place(focus).is_some() && matches!(focus.role.as_str(), "list item" | "table row");
+    let whole = (index == 0 && !own_place)
+        || (index == 1 && matches!(role, "list" | "tree table" | "grouping"));
     if whole {
         CONTROL_LIMIT
     } else {
@@ -213,10 +218,23 @@ pub fn native_focus(
     event
 }
 
-/// `node`'s place among its parent's children of its role, from 1, and their count. A peer is
+/// The place a node says itself, from 1, and its set's size: GTK's list items and rows carry
+/// `posinset` and `setsize` (the lab's traces at f0b3a66d).
+fn own_place(node: &AtspiNode) -> Option<(usize, usize)> {
+    let number = |name: &str| node.attributes.get(name)?.parse::<usize>().ok();
+    Some((number("posinset")?, number("setsize")?)).filter(|(at, of)| *at >= 1 && at <= of)
+}
+
+/// `node`'s place among its parent's children of its role, from 1, and their count: the one it
+/// says itself where it says one, its parent then read alone. A peer is
 /// `node` by its object's path where the read has one (two items of one name and state are two
 /// places: the code review of 2026-11-08, finding 11), else by its name, states and label.
 fn place(event: &mut FocusEvent, node: &AtspiNode, parent: &AtspiNode) {
+    if let Some((at, of)) = own_place(node) {
+        event.item_index = Some(at);
+        event.item_count = Some(of);
+        return;
+    }
     let peers: Vec<&AtspiNode> = parent
         .children
         .iter()
@@ -309,11 +327,36 @@ mod tests {
     /// rest alone; the read ends at a window, a page's dialog's too.
     #[test]
     fn the_read_plan_for_a_native_focus() {
-        assert_eq!(ancestor_limit(0, "panel"), CONTROL_LIMIT);
-        assert_eq!(ancestor_limit(1, "list"), CONTROL_LIMIT);
-        assert_eq!(ancestor_limit(1, "grouping"), CONTROL_LIMIT);
-        assert_eq!(ancestor_limit(1, "panel"), 1);
-        assert_eq!(ancestor_limit(2, "list"), 1);
+        let button = AtspiNode {
+            role: "push button".to_owned(),
+            ..AtspiNode::default()
+        };
+        assert_eq!(ancestor_limit(0, "panel", &button), CONTROL_LIMIT);
+        assert_eq!(ancestor_limit(1, "list", &button), CONTROL_LIMIT);
+        assert_eq!(ancestor_limit(1, "grouping", &button), CONTROL_LIMIT);
+        assert_eq!(ancestor_limit(1, "panel", &button), 1);
+        assert_eq!(ancestor_limit(2, "list", &button), 1);
+        // A list's item that says its place: its list alone, for its name.
+        let mut item = AtspiNode {
+            role: "list item".to_owned(),
+            ..AtspiNode::default()
+        };
+        item.attributes
+            .insert("posinset".to_owned(), "500".to_owned());
+        item.attributes
+            .insert("setsize".to_owned(), "1000".to_owned());
+        assert_eq!(ancestor_limit(0, "list", &item), 1);
+        let list = AtspiNode {
+            role: "list".to_owned(),
+            name: "Files".to_owned(),
+            ..AtspiNode::default()
+        };
+        let mut event = FocusEvent::new(Role::ListItem);
+        place(&mut event, &item, &list);
+        assert_eq!(
+            (event.item_index, event.item_count),
+            (Some(500), Some(1000))
+        );
         assert!(is_window("frame") && is_window("dialog") && !is_window("panel"));
     }
 
