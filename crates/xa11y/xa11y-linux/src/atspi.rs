@@ -16,6 +16,11 @@ use crate::window::WindowManager;
 /// Global handle counter for mapping ElementData back to AccessibleRefs.
 static NEXT_HANDLE: AtomicU64 = AtomicU64::new(1);
 
+/// How long an AT-SPI call waits for its application's answer (libatspi waits 800 ms by
+/// default): one that does not answer, busy, stopped or deadlocked, costs this, not the reader's
+/// event thread nor its quitting (the code review of 2026-11-08).
+const A11Y_CALL_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(1);
+
 /// Format a normalized state attribute as the same string `xa11y_core::selector::resolve_attr`
 /// would produce, so fast-path matching agrees byte-for-byte with the slow path.
 fn state_attr_to_string(name: &str, s: &StateSet) -> Option<String> {
@@ -81,34 +86,27 @@ impl LinuxProvider {
     pub(crate) fn connect_a11y_bus() -> Result<Connection> {
         // Try getting the AT-SPI bus address from the a11y bus launcher,
         // then connect to it. If that fails, fall back to the session bus
-        // (AT-SPI2 may use the session bus directly).
-        if let Ok(session) = Connection::session() {
-            let proxy = Proxy::new(&session, "org.a11y.Bus", "/org/a11y/bus", "org.a11y.Bus")
-                .map_err(|e| Error::Platform {
-                    code: -1,
-                    message: format!("Failed to create a11y bus proxy: {}", e),
-                })?;
-
-            if let Ok(addr_reply) = proxy.call_method("GetAddress", &()) {
-                if let Ok(address) = addr_reply.body().deserialize::<String>() {
-                    if let Ok(addr) = zbus::Address::try_from(address.as_str()) {
-                        if let Ok(Ok(conn)) =
-                            zbus::blocking::connection::Builder::address(addr).map(|b| b.build())
-                        {
-                            return Ok(conn);
-                        }
-                    }
-                }
-            }
-
-            // Fall back to session bus
-            return Ok(session);
-        }
-
-        Connection::session().map_err(|e| Error::Platform {
+        // (AT-SPI2 may use the session bus directly). Either way, every call
+        // is bounded: an application that does not answer (busy, stopped,
+        // deadlocked) costs a second, not the reader's event thread.
+        let session = Connection::session().map_err(|e| Error::Platform {
             code: -1,
             message: format!("Failed to connect to D-Bus session bus: {}", e),
-        })
+        })?;
+        let address = Proxy::new(&session, "org.a11y.Bus", "/org/a11y/bus", "org.a11y.Bus")
+            .ok()
+            .and_then(|proxy| proxy.call_method("GetAddress", &()).ok())
+            .and_then(|reply| reply.body().deserialize::<String>().ok())
+            .and_then(|address| zbus::Address::try_from(address.as_str()).ok());
+        let bounded = match address {
+            Some(address) => zbus::blocking::connection::Builder::address(address)
+                .map(|b| b.method_timeout(A11Y_CALL_TIMEOUT))
+                .and_then(|b| b.build()),
+            None => zbus::blocking::connection::Builder::session()
+                .map(|b| b.method_timeout(A11Y_CALL_TIMEOUT))
+                .and_then(|b| b.build()),
+        };
+        Ok(bounded.unwrap_or(session))
     }
 
     fn make_proxy(&self, bus_name: &str, path: &str, interface: &str) -> Result<Proxy<'_>> {
