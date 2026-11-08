@@ -56,6 +56,9 @@ pub struct AtspiNode {
     pub states: u64,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub text: Option<String>,
+    /// The text attributes of its text's first run, as Chrome gives them over AT-SPI.
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub text_attributes: BTreeMap<String, String>,
     /// An address: a link's, or the document's.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub uri: Option<String>,
@@ -211,6 +214,9 @@ fn numbered(node: &AtspiNode, next: &mut i32) -> WebNode {
         attributes: node.attributes.clone(),
         group_position,
         text: node.text.clone(),
+        // As Chrome names them over AT-SPI, until their mapping to the names the conversion
+        // reads is made from captured runs.
+        text_attributes: Some(node.text_attributes.clone()).filter(|a| !a.is_empty()),
         unique_id: Some(unique_id),
         children: node
             .children

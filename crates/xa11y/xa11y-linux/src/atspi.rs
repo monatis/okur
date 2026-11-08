@@ -683,6 +683,18 @@ impl LinuxProvider {
         None
     }
 
+    /// The text attributes of the run at the start of `aref`'s text, defaults included: its
+    /// Text interface's GetAttributeRun at offset 0.
+    fn get_text_attributes(&self, aref: &AccessibleRef) -> Option<HashMap<String, String>> {
+        let proxy = self
+            .make_proxy(&aref.bus_name, &aref.path, "org.a11y.atspi.Text")
+            .ok()?;
+        let reply = proxy.call_method("GetAttributeRun", &(0i32, true)).ok()?;
+        let (attributes, _start, _end): (HashMap<String, String>, i32, i32) =
+            reply.body().deserialize().ok()?;
+        Some(attributes)
+    }
+
     /// Cache an AccessibleRef and return a new handle ID.
     fn cache_element(&self, aref: AccessibleRef) -> u64 {
         let handle = NEXT_HANDLE.fetch_add(1, Ordering::Relaxed);
@@ -4174,6 +4186,9 @@ pub struct AtspiTree {
     pub attributes: HashMap<String, String>,
     pub states: u64,
     pub text: Option<String>,
+    /// The text attributes of its text's first run, defaults included, as the application names
+    /// them (Chrome's ATK names: `family-name`, `size`, `weight`, `fg-color`, ...).
+    pub text_attributes: HashMap<String, String>,
     /// An address: a link's (its Hyperlink interface's URI), or a document's (its Document
     /// interface's `URI` attribute), as Chrome gives them.
     pub uri: Option<String>,
@@ -4403,12 +4418,17 @@ impl LinuxProvider {
                 .flatten()
                 .unwrap_or_default(),
             states: self.state_bits(aref).0,
-            text: self.get_text_content(aref),
+            text: None,
+            text_attributes: HashMap::new(),
             uri,
             bus_name: aref.bus_name.clone(),
             path: aref.path.clone(),
             children: Vec::new(),
         };
+        node.text = self.get_text_content(aref);
+        if node.text.is_some() {
+            node.text_attributes = self.get_text_attributes(aref).unwrap_or_default();
+        }
         for child in self.get_atspi_children(aref).unwrap_or_default() {
             if *left == 0 {
                 break;
