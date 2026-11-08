@@ -10,6 +10,9 @@
 #   platform, program or lab crate but a portable one, so that the portable CI job can build
 #   and test it on macOS and Linux (a vendored crate builds there: okur-windows-model takes
 #   xa11y-windows's IA2 data types).
+# - R9: a platform's model (okur-windows-model, okur-linux-model, a macOS one) takes no other
+#   platform's model, driver or accessibility backend: what they share is okur-model's
+#   (docs/plans/2026-11-08-structure-for-three-platforms.md, step 2c).
 # Prints each failure and exits 1; prints nothing and exits 0 when the layers hold.
 #   -Report    also print the known edges still to remove
 #   -Neutral   print the neutral crates' names, one per line
@@ -109,6 +112,19 @@ foreach ($crate in $portableCrates) {
         $kind = if ($crates.ContainsKey($dep)) { $crates[$dep].kind } else { '' }
         if (@('platform', 'program', 'lab') -contains $kind -and -not ($portableCrates -contains $dep)) {
             $failures += "[Crate Layers] R4: $crate is portable and depends on $dep, which is not"
+        }
+    }
+}
+$platforms = @('windows', 'linux', 'macos')
+foreach ($package in $meta.packages) {
+    $own = @($platforms | Where-Object { $package.name -eq "okur-$_-model" })
+    if ($own.Count -eq 0) { continue }
+    $others = @($platforms | Where-Object { $_ -ne $own[0] })
+    foreach ($dep in @($package.dependencies | Where-Object { $_.path } | ForEach-Object { $_.name } | Sort-Object -Unique)) {
+        foreach ($other in $others) {
+            if (@("okur-$other-model", "okur-$other", "xa11y-$other") -contains $dep) {
+                $failures += "[Crate Layers] R9: $($package.name) depends on $dep, another platform's"
+            }
         }
     }
 }
