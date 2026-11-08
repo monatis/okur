@@ -4329,9 +4329,10 @@ fn a_plain_multi_line_edit_is_silent_on_home() {
         norm(&speech.take().join(" ")).contains("top of file"),
         "Ctrl+Home names the top"
     );
-    // Windows 10 Notepad's edit, a Document to UI Automation, is a plain edit by its class.
+    // Windows 10 Notepad's edit, a Document to UI Automation, is a plain edit by its class, as
+    // the platform's converter says it.
     let mut notepad = FocusEvent::new(Role::Document).with_name("Text Editor");
-    notepad.platform.element_class = Some("Edit".to_owned());
+    notepad.plain_edit = true;
     notepad.multi_line = true;
     notepad.text = Some(context(7));
     engine.handle_focus_event(&notepad);

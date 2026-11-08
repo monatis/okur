@@ -91,19 +91,13 @@ impl ScreenReaderEngine {
             // file" for Ctrl+Home as a document does [obs, 660/s4], but nothing for Home
             // [obs, 504/s5, 664/s9, 406/s8].
             // UI Automation gives Windows 10 Notepad's multi-line edit the Document type, as it
-            // gives Windows 11 Notepad's rich edit: the window's class tells them apart.
+            // gives Windows 11 Notepad's rich edit: the platform tells them apart
+            // (`FocusEvent::plain_edit`, from the window's class on Windows).
             let plain_edit = self.app_mode != super::AppMode::VirtualBuffer
-                && self.last_native_focus.as_ref().is_some_and(|f| {
-                    let plain = |class: Option<&str>| {
-                        class.is_some_and(|c| {
-                            let c = c.to_ascii_uppercase();
-                            c == "EDIT" || c.contains(".EDIT.")
-                        })
-                    };
-                    let plain_class = plain(f.platform.element_class.as_deref())
-                        || plain(f.platform.window_class.as_deref());
-                    f.role == crate::aom::Role::Edit || plain_class
-                });
+                && self
+                    .last_native_focus
+                    .as_ref()
+                    .is_some_and(|f| f.role == crate::aom::Role::Edit || f.plain_edit);
             // Word's Ctrl+PageDown and Ctrl+PageUp, to its next or previous page.
             let browse = self
                 .last_text

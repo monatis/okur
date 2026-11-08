@@ -985,6 +985,7 @@ dependencies = [
  "okur-core",
  "okur-linux-model",
  "okur-runtime",
+ "serde_json",
  "tokio",
  "tracing",
  "tracing-subscriber",
