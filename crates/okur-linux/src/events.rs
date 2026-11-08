@@ -258,6 +258,12 @@ impl EventSource for AtspiEventSource {
                 while !stop.load(Ordering::SeqCst) {
                     match subscription.recv_status(Duration::from_millis(100)) {
                         RecvStatus::Event(event) => {
+                            tracing::trace!(
+                                kind = ?event.kind,
+                                role = ?event.target.as_ref().map(|e| e.role),
+                                name = ?event.target.as_ref().and_then(|e| e.name.as_deref()),
+                                "AT-SPI event"
+                            );
                             if event.kind == EventKind::FocusChanged {
                                 tracing::debug!(
                                     app = %event.app_name,
