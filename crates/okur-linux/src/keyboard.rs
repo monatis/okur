@@ -43,20 +43,29 @@ const CAPS_LOCK_KEYSYM: u32 = 0xffe5;
 /// The modifier map's row of Lock (Shift, Lock, Control, Mod1 to Mod5).
 const LOCK_ROW: usize = 1;
 
+/// The evdev keycode of Caps Lock: where a run that ended without putting its keysym back
+/// left it with none, it is given Caps_Lock again.
+const EVDEV_CAPS_LOCK: u8 = 66;
+
 /// Caps Lock made Okur's while it runs (the code review of 2026-11-08, finding 14). X toggles
 /// Caps Lock as a press reaches it, whatever the engine decides, where JAWS's CapsLock, the
-/// laptop layout's Okur key, toggles only when pressed twice quickly. Lock's keys are taken off
-/// the modifier map, so a press locks nothing; Okur toggles Caps Lock itself through XKB when
-/// the engine passes a press on (the second of two, or each one where CapsLock is no Okur key).
-/// The map is put back as the hook stops; a map a run left without Lock's keys (it ended
-/// without putting them back) gets Caps_Lock's keys back then.
+/// laptop layout's Okur key, toggles only when pressed twice quickly. Taking Lock's keys off the
+/// modifier map was not enough: XKB's Caps_Lock action locks Lock by name (the lab's
+/// probe-capslock.sh, 2026-11-09). So Caps Lock's keys lose their keysyms while Okur runs (no
+/// interpretation, no action) and leave the modifier map's Lock row (no modifier while held);
+/// the hook knows them by their keycodes, and Okur toggles Caps Lock itself through XKB when the
+/// engine passes a press on (the second of two, or each one where CapsLock is no Okur key).
+/// Both are put back as the hook stops.
 struct CapsLock {
     /// The modifier map to put back.
     map: Vec<u8>,
+    /// Caps Lock's keys, each with the keysyms to put back.
+    keys: Vec<(u8, Vec<u32>)>,
+    per_code: u8,
 }
 
 impl CapsLock {
-    /// Lock's keys off the modifier map, and XKB asked for, where both work; none otherwise,
+    /// Caps Lock's keys made Okur's, where XKB and the mapping requests work; none otherwise,
     /// and Caps Lock stays X's (said in the log).
     fn take(conn: &RustConnection, keymap: &Keymap) -> Option<Self> {
         let usable = conn
@@ -68,20 +77,28 @@ impl CapsLock {
             tracing::warn!("keyboard: no XKB, Caps Lock stays the system's");
             return None;
         }
+        let per_code = u8::try_from(keymap.per_code).ok()?;
+        let mut keys: Vec<(u8, Vec<u32>)> = keymap
+            .all_codes()
+            .filter(|code| keymap.keysym(*code, 0) == CAPS_LOCK_KEYSYM)
+            .map(|code| (code, keymap.keysyms_of(code)))
+            .collect();
         let mut map = conn.get_modifier_mapping().ok()?.reply().ok()?.keycodes;
         let per_row = map.len() / 8;
         let lock = map.get_mut(per_row * LOCK_ROW..per_row * (LOCK_ROW + 1))?;
-        let mut without = Vec::new();
+        if keys.is_empty() {
+            if lock.iter().any(|code| *code != 0) {
+                return None;
+            }
+            // A run before left Caps Lock without its keysym and its modifier: both given back.
+            keys.push((EVDEV_CAPS_LOCK, vec![CAPS_LOCK_KEYSYM; keymap.per_code]));
+        }
         if lock.iter().all(|code| *code == 0) {
-            // Left empty by a run before: Caps_Lock's keys are put back as it stops.
-            for (slot, code) in lock
-                .iter_mut()
-                .zip(keymap.all_codes().filter(|c| keymap.is_caps_lock(*c)))
-            {
-                *slot = code;
+            for (slot, (code, _)) in lock.iter_mut().zip(&keys) {
+                *slot = *code;
             }
         }
-        without.extend_from_slice(&map);
+        let mut without = map.clone();
         if let Some(row) = without.get_mut(per_row * LOCK_ROW..per_row * (LOCK_ROW + 1)) {
             row.fill(0);
         }
@@ -95,7 +112,21 @@ impl CapsLock {
             tracing::warn!("keyboard: the modifier map not changed, Caps Lock stays the system's");
             return None;
         }
-        Some(Self { map })
+        let none = vec![0u32; keymap.per_code];
+        for (code, _) in &keys {
+            let _ = conn.change_keyboard_mapping(1, *code, per_code, &none);
+        }
+        let _ = conn.flush();
+        Some(Self {
+            map,
+            keys,
+            per_code,
+        })
+    }
+
+    /// Caps Lock's keys, by their keycodes.
+    fn codes(&self) -> Vec<u8> {
+        self.keys.iter().map(|(code, _)| *code).collect()
     }
 
     /// Caps Lock on or off now.
@@ -131,8 +162,11 @@ impl CapsLock {
         }
     }
 
-    /// The modifier map as it was.
+    /// Caps Lock's keysyms and the modifier map as they were.
     fn give_back(&self, conn: &RustConnection) {
+        for (code, keysyms) in &self.keys {
+            let _ = conn.change_keyboard_mapping(1, *code, self.per_code, keysyms);
+        }
         let back = conn
             .set_modifier_mapping(&self.map)
             .ok()
@@ -176,6 +210,8 @@ struct Keymap {
     per_code: usize,
     keysyms: Vec<u32>,
     modifiers: Vec<(u8, u32)>,
+    /// Caps Lock's keys while Okur holds them without a keysym ([`CapsLock`]).
+    caps_lock: Vec<u8>,
 }
 
 impl Keymap {
@@ -206,11 +242,16 @@ impl Keymap {
             per_code: usize::from(mapping.keysyms_per_keycode),
             keysyms: mapping.keysyms,
             modifiers,
+            caps_lock: Vec::new(),
         })
     }
 
-    /// The keysym at `level` (0 without Shift, 1 with it), or none.
+    /// The keysym at `level` (0 without Shift, 1 with it), or none; Caps_Lock for Caps Lock's
+    /// keys while Okur holds them without one.
     fn keysym(&self, code: u8, level: usize) -> u32 {
+        if self.caps_lock.contains(&code) {
+            return CAPS_LOCK_KEYSYM;
+        }
         let index = usize::from(code.saturating_sub(self.min)) * self.per_code + level;
         self.keysyms.get(index).copied().unwrap_or(0)
     }
@@ -239,10 +280,19 @@ impl Keymap {
             .map(|i| self.min.saturating_add(i))
     }
 
-    /// Whether `code` is Caps Lock's key, by its keysym: off the modifier map while Okur runs
-    /// ([`CapsLock`]), it is a modifier no longer, and still never grabbed.
+    /// Whether `code` is Caps Lock's key: off the modifier map while Okur runs ([`CapsLock`]),
+    /// it is a modifier no longer, and still never grabbed.
     fn is_caps_lock(&self, code: u8) -> bool {
         self.keysym(code, 0) == CAPS_LOCK_KEYSYM
+    }
+
+    /// Every keysym of `code`, as the keyboard mapping has them.
+    fn keysyms_of(&self, code: u8) -> Vec<u32> {
+        let start = usize::from(code.saturating_sub(self.min)) * self.per_code;
+        self.keysyms
+            .get(start..start + self.per_code)
+            .map(<[u32]>::to_vec)
+            .unwrap_or_default()
     }
 
     fn event(&self, code: u8, state: u32, held: Held, is_down: bool, time: u32) -> KeyEvent {
@@ -314,9 +364,10 @@ impl KeyboardHook for X11KeyboardHook {
             .find(|info| info.type_ == xinput::DeviceType::MASTER_KEYBOARD)
             .map(|info| info.deviceid)
             .ok_or_else(|| hook_error("devices", "no master keyboard"))?;
-        let keymap = Keymap::read(&conn)?;
+        let mut keymap = Keymap::read(&conn)?;
         let caps_lock = CapsLock::take(&conn, &keymap);
-        let owns_caps_lock = caps_lock.is_some();
+        let caps_codes = caps_lock.as_ref().map(CapsLock::codes).unwrap_or_default();
+        keymap.caps_lock = caps_codes.clone();
 
         // New top-level windows are grabbed as they come; every key's raw press and release.
         conn.change_window_attributes(
@@ -395,7 +446,7 @@ impl KeyboardHook for X11KeyboardHook {
             std::thread::spawn(move || {
                 let mut run = Run {
                     conn: &conn,
-                    owns_caps_lock,
+                    caps_codes,
                     keymap,
                     keyboard,
                     sets,
@@ -580,8 +631,8 @@ fn allow(conn: &RustConnection, key: Pending, mode: xinput::EventMode) {
 /// The event loop's state.
 struct Run<'a> {
     conn: &'a RustConnection,
-    /// Caps Lock is Okur's to toggle ([`CapsLock`]).
-    owns_caps_lock: bool,
+    /// Caps Lock's keys while Okur holds them ([`CapsLock`]): Okur toggles Caps Lock.
+    caps_codes: Vec<u8>,
     keymap: Keymap,
     keyboard: u16,
     sets: Vec<u32>,
@@ -618,7 +669,8 @@ impl Run<'_> {
                 }
                 Ok(Event::ReparentNotify(event)) => self.reparented(&event),
                 Ok(Event::MappingNotify(_)) => {
-                    if let Ok(keymap) = Keymap::read(self.conn) {
+                    if let Ok(mut keymap) = Keymap::read(self.conn) {
+                        keymap.caps_lock = self.caps_codes.clone();
                         self.keymap = keymap;
                     }
                 }
@@ -724,7 +776,7 @@ impl Run<'_> {
                 self.modifiers_down &= !bit;
             }
         }
-        let caps_lock = self.owns_caps_lock && self.keymap.is_caps_lock(code);
+        let caps_lock = self.caps_codes.contains(&code);
         if is_down && !self.keymap.is_modifier(code) && !caps_lock {
             return;
         }

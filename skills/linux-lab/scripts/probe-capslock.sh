@@ -10,6 +10,22 @@ cd ~/okur || exit 1
 cargo build -q -p okur --bin okur || exit 1
 caps() { xset q | grep -o 'Caps Lock: *[a-z]*' | awk '{print $3}'; }
 lock_keys() { xmodmap -pm | awk '$1 == "lock" { $1 = ""; print }' | xargs; }
+# Caps Lock's own key, found before Okur takes its keysym away: xdotool's Caps_Lock would bind a
+# spare keycode while Okur runs, which locks as Caps_Lock does.
+code=$(xmodmap -pke | awk '$4 == "Caps_Lock" { print $2; exit }')
+press_caps() {
+    python3 - "$code" <<'PY'
+import sys
+from Xlib import X, display
+from Xlib.ext import xtest
+d = display.Display()
+code = int(sys.argv[1])
+xtest.fake_input(d, X.KeyPress, code)
+xtest.fake_input(d, X.KeyRelease, code)
+d.sync()
+PY
+}
+caps_keysym() { xmodmap -pke | awk -v c="$code" '$2 == c { print $4 }'; }
 status=0
 expect() {
     if [ "$2" = "$3" ]; then
@@ -28,20 +44,22 @@ RUST_LOG=okur_linux=debug ./target/debug/okur run --engine no-speech --keyboard-
 okur=$!
 sleep 4
 expect "lock keys while Okur runs" "" "$(lock_keys)"
-xdotool key Caps_Lock
+expect "Caps Lock's keysym while Okur runs (keycode $code)" "" "$(caps_keysym)"
+press_caps
 sleep 1
 expect "one press" off "$(caps)"
-xdotool key Caps_Lock && xdotool key Caps_Lock
+press_caps && press_caps
 sleep 1
 expect "two quick presses" on "$(caps)"
 sleep 1
-xdotool key Caps_Lock && xdotool key Caps_Lock
+press_caps && press_caps
 sleep 1
 expect "two more" off "$(caps)"
 kill -TERM "$okur"
 wait "$okur"
 sleep 1
 expect "lock keys after Okur" "$before_keys" "$(lock_keys)"
+expect "Caps Lock's keysym after Okur" Caps_Lock "$(caps_keysym)"
 echo "Okur said:"
 grep -o '"text":"[^"]*"' "$out/speech.jsonl" | tail -5 | sed 's/^/  /'
 if [ "$status" -ne 0 ]; then
