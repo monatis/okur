@@ -512,9 +512,11 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
                     format!(" {}", msg::state_opened()),
                 )),
                 // Closed, a word too ("Current Site: localhost Closed" [obs, 748/s9]; File
-                // Explorer's "OneDrive Closed"), but a state in a WinForms tree: "Documents
+                // Explorer's "OneDrive Closed"), but a state in a toolkit's own tree (`classic_tree`): "Documents
                 // closed" [obs, 303/s4].
-                Some(false) if winforms(focus) => parts.push(state(msg::state_closed().as_str())),
+                Some(false) if focus.classic_tree => {
+                    parts.push(state(msg::state_closed().as_str()))
+                }
                 Some(false) => parts.push(Part::new(
                     PartKind::Message,
                     format!(" {}", msg::state_closed_word()),
@@ -841,17 +843,6 @@ impl NativeFocus {
         self.last = Some(key);
         Some(speech)
     }
-}
-
-/// Whether `focus` is in a WinForms control, which JAWS reads its own way (a tree's states as
-/// marked states, its item opened with its name and count [obs, 303/s4, s7]).
-fn winforms(focus: &FocusEvent) -> bool {
-    [
-        &focus.platform.window_class,
-        &focus.platform.container_class,
-    ]
-    .iter()
-    .any(|c| c.as_deref().is_some_and(|c| c.starts_with("WindowsForms")))
 }
 
 /// A read-only text field: its name, "read only edit", and its caret's line, or its first.
@@ -1262,12 +1253,12 @@ pub fn change_speech(before: &FocusEvent, after: &FocusEvent) -> Option<Announce
             lines.extend(position(after));
             Some(Announcement::new(lines))
         }
-        // Opened outside a WinForms tree, only the state and an empty one: " ‹open› ‹›" [obs,
+        // Opened outside a toolkit's own tree, only the state and an empty one: " ‹open› ‹›" [obs,
         // 748/s10, 751/s11].
         Role::TreeItem
             if before.states.expanded != after.states.expanded
                 && after.states.expanded == Some(true)
-                && !winforms(after) =>
+                && !after.classic_tree =>
         {
             Some(Announcement::new(vec![Line::new(vec![
                 Part::text(" "),
@@ -2464,6 +2455,7 @@ Undo  Unavailable"
             2,
         );
         docs.states.expanded = Some(false);
+        docs.classic_tree = true;
         assert_eq!(
             norm(&focus_speech(&docs, None).render()),
             norm(" \u{1d} Tree view \u{1e} \nDocuments  \u{1d}closed\u{1e} \n1 of 2\nTo move through or expand items use the Arrow keys.")
@@ -2623,6 +2615,7 @@ Undo  Unavailable"
             "WindowsForms10.SysTreeView32.app.0.1",
         );
         item.states.expanded = Some(false);
+        item.classic_tree = true;
         item.item_index = Some(1);
         item.item_count = Some(2);
         assert_eq!(
@@ -2829,6 +2822,7 @@ mod tree_tests {
         item.container_role = Some(Role::Tree);
         // 303's WinForms tree.
         item.platform.container_class = Some("WindowsForms10.SysTreeView32.app.0.1".into());
+        item.classic_tree = true;
         item.tree_level = Some(level);
         item.item_index = Some(index);
         item.item_count = Some(count);

@@ -110,7 +110,7 @@ pub fn focus_event(element: &ElementData) -> FocusEvent {
 /// - a radio button's group, by the label its group box shows ("Plan");
 /// - GTK's drop-down, focused on its toggle button: the combo box, its name and the item shown;
 /// - GTK's tree (a list view whose rows have an expander): the expander's row as a tree's item,
-///   open or closed;
+///   open or closed, said as a toolkit's own tree (`classic_tree`);
 /// - a column view's row as a list view's item, its first cell its name and the others its
 ///   columns;
 /// - a notebook focused itself: its selected page's tab.
@@ -169,6 +169,8 @@ pub fn native_focus(
         });
     if tree_row {
         event.role = Role::TreeItem;
+        // A toolkit's own tree, said as JAWS says WinForms' [obs, 303/s4].
+        event.classic_tree = true;
         event.states.expanded = focus
             .has(state::EXPANDABLE)
             .then(|| focus.has(state::EXPANDED));
@@ -362,6 +364,16 @@ mod tests {
         node("frame", "SR Desktop Fixture", Vec::new())
     }
 
+    /// What the engine says as the focus enters `event`, its spaces folded.
+    fn said(event: &FocusEvent) -> String {
+        fold(&okur_core::native_focus::focus_speech(event, None).render())
+    }
+
+    /// JAWS's speech (`speech_raw` of 301-desktop-tab-order's evidence), its spaces folded.
+    fn fold(speech: &str) -> String {
+        speech.split_whitespace().collect::<Vec<_>>().join(" ")
+    }
+
     /// The check box keeps GTK's mnemonic mark in its name; its label shows it without
     /// (probe-gtk-tree.sh); the window is named.
     #[test]
@@ -377,6 +389,7 @@ mod tests {
         );
         let mut event = FocusEvent::new(Role::CheckBox);
         event.name = Some("_Subscribe to updates".into());
+        event.states.checked = Some(true);
         let event = native_focus(
             event,
             &check,
@@ -388,6 +401,10 @@ mod tests {
         );
         assert_eq!(event.name.as_deref(), Some("Subscribe to updates"));
         assert_eq!(event.window_title.as_deref(), Some("SR Desktop Fixture"));
+        assert_eq!(
+            said(&event),
+            fold("Subscribe to updates  \u{1d} check box \u{1e}   \u{1d}checked\u{1e} \nTo clear checkmark press Spacebar.")
+        );
         // A name with an underscore of its own keeps it.
         let file = node("button", "my_file.txt", vec![label("my_file.txt")]);
         let mut event = FocusEvent::new(Role::Button);
@@ -424,6 +441,7 @@ mod tests {
         let group = node("grouping", "", vec![label("Plan"), radios.clone()]);
         let mut event = FocusEvent::new(Role::RadioButton);
         event.name = Some("Pro".into());
+        event.states.checked = Some(true);
         let event = native_focus(
             event,
             &pro,
@@ -433,6 +451,10 @@ mod tests {
         assert_eq!(event.container_role, Some(Role::Group));
         assert_eq!(event.container_name.as_deref(), Some("Plan"));
         assert_eq!(event.groups, vec![okur_core::GroupEntry::group("Plan")]);
+        assert_eq!(
+            said(&event),
+            fold("Plan \nPro  \u{1d} radio button \u{1e}   \u{1d}checked\u{1e} \n2 of 3\nTo change the selection press Up or Down Arrow.")
+        );
     }
 
     /// GTK's drop-down focused on its toggle button: the combo box, named, with the item shown
@@ -448,6 +470,23 @@ mod tests {
         assert_eq!(event.role, Role::ComboBox);
         assert_eq!(event.name.as_deref(), Some("Country:"));
         assert_eq!(event.value.as_deref(), Some("Germany"));
+    }
+
+    /// JAWS gives the drop-down's place, "2 of 3" [obs, 301/s5]; GTK's closed drop-down shows
+    /// only the item chosen, its list built when it opens.
+    #[test]
+    #[ignore = "known gap: a closed GTK drop-down's place among its items"]
+    fn a_drop_down_says_its_place() {
+        let shown = node("panel", "", vec![node("panel", "", vec![label("Germany")])]);
+        let toggle = node("toggle button", "Country:", vec![shown]);
+        let combo = node("combo box", "Country:", vec![toggle.clone()]);
+        let mut event = FocusEvent::new(Role::Button);
+        event.name = Some("Country:".into());
+        let event = native_focus(event, &toggle, &[combo, window()]);
+        assert_eq!(
+            said(&event),
+            fold("Country:  \u{1d} Combo box \u{1e} \nGermany\n2 of 3\nTo change the selection use the Arrow keys.")
+        );
     }
 
     /// A list's item, named by its label, in its named list [obs, 301/s6: "Fruit: List box |
@@ -467,6 +506,10 @@ mod tests {
         assert_eq!((event.item_index, event.item_count), (Some(2), Some(3)));
         assert_eq!(event.container_role, Some(Role::List));
         assert_eq!(event.container_name.as_deref(), Some("Fruit:"));
+        assert_eq!(
+            said(&event),
+            fold("Fruit:  \u{1d} List box \u{1e} \nBananas \n2 of 3\nTo move to an item press the Arrow keys.")
+        );
     }
 
     /// GTK's tree, a list view whose rows have expanders: the row is a tree's item, closed
@@ -495,6 +538,10 @@ mod tests {
         assert_eq!(event.states.expanded, Some(false));
         assert_eq!((event.item_index, event.item_count), (Some(1), Some(2)));
         assert_eq!(event.container_role, Some(Role::Tree));
+        assert_eq!(
+            said(&event),
+            fold(" \u{1d} Tree view \u{1e} \nDocuments  \u{1d}closed\u{1e} \n1 of 2\nTo move through or expand items use the Arrow keys.")
+        );
     }
 
     /// A column view's row: a list view's item, its other cells its columns [obs, 301/s8:
@@ -534,6 +581,10 @@ mod tests {
         assert_eq!(event.columns, vec!["24 KB".to_owned()]);
         assert!(event.container_is_list_view);
         assert_eq!((event.item_index, event.item_count), (Some(1), Some(3)));
+        assert_eq!(
+            said(&event),
+            fold(" \u{1d} List view \u{1e} \nbudget.xlsx\n24 KB \n1 of 3\nTo move to items use the Arrow keys.")
+        );
     }
 
     /// A notebook focused itself: its selected tab [obs, 301/s9: "General Tab selected"].
@@ -556,5 +607,9 @@ mod tests {
         assert_eq!(event.role, Role::Tab);
         assert_eq!(event.name.as_deref(), Some("General"));
         assert_eq!(event.states.selected, Some(true));
+        assert_eq!(
+            said(&event),
+            fold("General  \u{1d} Tab \u{1e}   \u{1d}selected\u{1e} \nTo switch pages, press Control+PageDown.")
+        );
     }
 }

@@ -69,6 +69,14 @@ pub fn add_class_facts(event: &mut okur_core::AccessibilityEvent) {
     // IDCANCEL: a Win32 control's automation id is its control id.
     focus.cancel_button = ids.automation_id.as_deref() == Some("2");
     focus.on_menu_window = ids.window_class.as_deref() == Some(MENU);
+    // WinForms' controls, its tree's items said with their states marked [obs, 303/s4].
+    focus.classic_tree = [&ids.window_class, &ids.container_class]
+        .iter()
+        .any(|class| {
+            class
+                .as_deref()
+                .is_some_and(|c| c.starts_with("WindowsForms"))
+        });
     // Office's own dialogs share the start of their window class, their application's after
     // it (Word's `bosa_sdm_msword`, Excel's `bosa_sdm_XL9`).
     focus.pages_by_control_tab = ids
@@ -105,8 +113,16 @@ mod tests {
             ids.top_window_class = Some("#32770".into());
         });
         assert!(plain.is_some_and(|f| {
-            !f.switch && !f.cancel_button && !f.on_menu_window && !f.pages_by_control_tab
+            !f.switch
+                && !f.cancel_button
+                && !f.on_menu_window
+                && !f.pages_by_control_tab
+                && !f.classic_tree
         }));
+        assert!(facts(
+            |ids| ids.container_class = Some("WindowsForms10.SysTreeView32.app.0.1".into())
+        )
+        .is_some_and(|f| f.classic_tree));
         assert!(
             facts(|ids| ids.element_class = Some("ToggleSwitch".into())).is_some_and(|f| f.switch)
         );

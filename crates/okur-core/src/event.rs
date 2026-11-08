@@ -933,6 +933,12 @@ pub struct FocusEvent {
     /// 1124/s4-s6]), not Control+PageDown.
     #[serde(default, skip_serializing_if = "std::ops::Not::not")]
     pub pages_by_control_tab: bool,
+    /// The focus is in a desktop toolkit's own tree, whose items JAWS says open and closed as
+    /// states, an opened one with its name and its items' count: WinForms' [obs, 303/s4, s7;
+    /// 304/s16-s17], and so GTK's on Linux. A tree read through UI Automation alone (File
+    /// Explorer's, a page's) says "Closed" as a word, opening only the state [obs, 748/s9-s10].
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub classic_tree: bool,
     pub window_title: Option<String>,
     /// The texts directly in the application's own window, in order, where the platform
     /// reads them (a Store app's core window): Windows Settings' "Settings", "System", whose
@@ -1192,6 +1198,7 @@ impl FocusEvent {
             cancel_button: false,
             on_menu_window: false,
             pages_by_control_tab: false,
+            classic_tree: false,
             window_title: None,
             app_window_texts: Vec::new(),
             folder_name: None,
