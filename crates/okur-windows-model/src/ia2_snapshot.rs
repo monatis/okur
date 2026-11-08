@@ -6,6 +6,7 @@
 //! the browser's rendered line ranges per text object.
 
 use okur_model::snapshot::SnapshotProvenance;
+use okur_model::web::{web_to_aom, WebMark, WebNode, WebRole, WebStates};
 use serde::{Deserialize, Serialize};
 
 pub use xa11y_windows::ia2::Ia2Node;
@@ -72,522 +73,113 @@ pub mod ia2_state {
     pub const SUPPORTS_AUTOCOMPLETION: i32 = 0x8000;
 }
 
-/// ARIA landmark roles, as Chromium reports them in `xml-roles`.
-const LANDMARKS: [&str; 8] = [
-    "banner",
-    "complementary",
-    "contentinfo",
-    "form",
-    "main",
-    "navigation",
-    "region",
-    "search",
-];
-
-/// Whether Chromium reports `node` as a grouping of its own (a fieldset, `role=group`, a
-/// log): MSAA calls every generic `div` and `span` a grouping too, and only IA2's role
-/// (`IA2_ROLE_SECTION`) tells them apart. WhatsApp names its message wrappers with
-/// `aria-label`, and JAWS reads them as plain text, not as groups.
-fn is_grouping(node: &Ia2Node) -> bool {
-    use xa11y_windows::ia2::roles::IA2_ROLE_SECTION;
-    node.msaa_role == Some(msaa_role::GROUPING) && node.ia2_role != Some(IA2_ROLE_SECTION)
-}
-
-/// Whether `node` is a generic element (`div`, `span`) with an `aria-label` and nothing
-/// inside: it reads as its label (WhatsApp's "Siz:" before each of the user's messages,
-/// which JAWS reads as a line of its own).
-fn is_labelled_empty_generic(node: &Ia2Node) -> bool {
-    use xa11y_windows::ia2::roles::IA2_ROLE_SECTION;
-    node.ia2_role == Some(IA2_ROLE_SECTION)
-        && node.children.is_empty()
-        && node.attributes.get("name-from").map(String::as_str) == Some("attribute")
-        && node.name.as_deref().is_some_and(|n| !n.trim().is_empty())
-}
-
-/// Whether a CSS `display` value makes a block-level box (anything but inline content).
-fn is_block_display(display: Option<&str>) -> bool {
-    display.is_some_and(|d| !d.is_empty() && !d.starts_with("inline") && d != "contents")
-}
-
-/// A font size from IA2 text attributes in points: IA2 specifies points (`12pt`), and CSS
-/// pixels (`16px`) are three quarters of a point.
-fn font_size_points(raw: &str) -> Option<f32> {
-    let raw = raw.trim();
-    if let Some(px) = raw.strip_suffix("px") {
-        return px.trim().parse::<f32>().ok().map(|px| px * 0.75);
-    }
-    raw.strip_suffix("pt").unwrap_or(raw).trim().parse().ok()
-}
-
-/// Say Font's and Say Color's formatting from an IA2 text run (`font-family`, `font-size`,
-/// `font-weight`, `font-style`, `text-underline-style`, `color`, `background-color`), and
-/// what skim reading finds text by (`text-line-through-style`, `text-position`).
-fn text_formatting(
-    attributes: &std::collections::BTreeMap<String, String>,
-) -> Option<okur_core::aom::TextFormatting> {
-    let get = |k: &str| attributes.get(k).map(|v| v.trim().trim_matches('"'));
-    let font_family = get("font-family")
-        .filter(|f| !f.is_empty())
-        .map(str::to_owned);
-    let font_size_pt = get("font-size").and_then(font_size_points);
-    if font_family.is_none() && font_size_pt.is_none() {
-        return None;
-    }
-    let bold =
-        get("font-weight").is_some_and(|w| w == "bold" || w.parse::<u32>().is_ok_and(|n| n >= 600));
-    Some(okur_core::aom::TextFormatting {
-        font_family,
-        font_size_pt,
-        bold,
-        italic: get("font-style").is_some_and(|s| s == "italic" || s == "oblique"),
-        underline: get("text-underline-style").is_some_and(|s| !s.is_empty() && s != "none"),
-        strikeout: get("text-line-through-style").is_some_and(|s| !s.is_empty() && s != "none"),
-        superscript: get("text-position") == Some("super"),
-        subscript: get("text-position") == Some("sub"),
-        alignment: None,
-        color: get("color").and_then(okur_core::color::Rgb::parse_css),
-        background: get("background-color").and_then(okur_core::color::Rgb::parse_css),
-    })
-}
-
-fn map_role(node: &Ia2Node) -> okur_core::Role {
-    use okur_core::Role;
-    use xa11y_windows::ia2::msaa_states::STATE_SYSTEM_FOCUSABLE as FOCUSABLE;
-    use xa11y_windows::ia2::roles::{IA2_ROLE_BLOCK_QUOTE, IA2_ROLE_HEADING};
-
-    let attr = |k: &str| node.attributes.get(k).map(String::as_str);
-    let xml_role = attr("xml-roles")
-        .and_then(|r| r.split_whitespace().next())
-        .unwrap_or_default();
-    let named = node.name.as_deref().is_some_and(|n| !n.trim().is_empty());
-
-    if node.ia2_role == Some(IA2_ROLE_HEADING) {
-        let level = attr("level")
-            .and_then(|l| l.parse().ok())
-            .or_else(|| {
-                node.group_position
-                    .and_then(|[l, _, _]| u32::try_from(l).ok())
-            })
-            .unwrap_or(2);
-        return Role::Heading { level };
-    }
-    if node.ia2_role == Some(IA2_ROLE_BLOCK_QUOTE) {
-        return Role::BlockQuote;
-    }
-    match xml_role {
-        "dialog" => return Role::Dialog,
-        "alertdialog" => return Role::AlertDialog,
-        "tabpanel" => return Role::TabPanel,
-        // Forms and generic regions are landmarks only when named.
-        "form" | "region" if !named => {}
-        r if LANDMARKS.contains(&r) => {
-            return Role::Landmark {
-                landmark_type: r.to_owned(),
-            }
-        }
-        _ => {}
-    }
-    let editable = node.ia2_states & ia2_state::EDITABLE != 0;
-    match node.msaa_role.unwrap_or_default() {
-        msaa_role::DOCUMENT if attr("tag") == Some("article") => Role::Group,
-        // An iframe, which holds its page's own document [obs, 1175's snapshot].
-        msaa_role::DOCUMENT if matches!(attr("tag"), Some("iframe" | "frame")) => Role::IFrame,
-        msaa_role::DOCUMENT => Role::Document,
-        msaa_role::DIALOG => Role::Dialog,
-        msaa_role::MENUBAR => Role::MenuBar,
-        msaa_role::MENUITEM => Role::MenuItem,
-        msaa_role::LINK => Role::Link {
-            href: node.value.clone(),
-        },
-        msaa_role::GRAPHIC => Role::Image,
-        msaa_role::SEPARATOR => Role::Separator,
-        msaa_role::STATICTEXT => Role::Text,
-        msaa_role::TEXT if editable => Role::Edit,
-        msaa_role::PUSHBUTTON => Role::Button,
-        // Chromium makes a button with any popup but a dialog a "button menu"; JAWS says
-        // "button menu" only for a menu ("Pick one Button Has Popup listbox", dev box).
-        msaa_role::BUTTONMENU if matches!(attr("haspopup"), None | Some("menu")) => {
-            Role::MenuButton
-        }
-        msaa_role::BUTTONMENU => Role::Button,
-        msaa_role::CHECKBUTTON => Role::CheckBox,
-        msaa_role::RADIOBUTTON => Role::RadioButton,
-        msaa_role::COMBOBOX => Role::ComboBox,
-        msaa_role::PROGRESSBAR => Role::ProgressBar,
-        msaa_role::SLIDER => Role::Slider,
-        msaa_role::LIST => Role::List,
-        msaa_role::LISTITEM => Role::ListItem,
-        msaa_role::OUTLINE => Role::Tree,
-        msaa_role::OUTLINEITEM => Role::TreeItem,
-        msaa_role::PAGETABLIST => Role::TabList,
-        msaa_role::PAGETAB => Role::Tab,
-        msaa_role::PROPERTYPAGE => Role::TabPanel,
-        msaa_role::TABLE => Role::Table,
-        msaa_role::ROW => Role::TableRow,
-        msaa_role::CELL | msaa_role::COLUMNHEADER | msaa_role::ROWHEADER => Role::TableCell,
-        msaa_role::EQUATION => Role::Math,
-        // A fieldset; its name is the legend.
-        // An editing host (contenteditable without a role): editable and focusable.
-        // Its text children are editable too, but not focusable.
-        _ if editable && node.msaa_states & FOCUSABLE != 0 => Role::Edit,
-        msaa_role::GROUPING if named && is_grouping(node) => Role::Group,
-        // Any other element reads by its CSS box: block boxes break lines, inline
-        // elements (strong, em, time, label) flow with the surrounding text.
-        _ if is_block_display(attr("display")) => Role::Group,
-        _ => Role::Text,
-    }
-}
-
-/// Converts a captured IA2 tree into the engine's AOM.
-///
-/// Pure and platform-independent like [`crate::uia_snapshot::to_aom`], and with the same AOM
-/// conventions: text leaves carry `text`, inline elements are `Text` nodes with children,
-/// articles and fieldsets are `Group` with an `aria_role`, and header cells carry
-/// `tag`=`th` plus `scope`.
-///
-/// IA2 is what JAWS reads in Chromium. It carries semantics UIA lacks or only localizes:
-/// the HTML `tag` (block quotes), the CSS `display` (block versus inline), visited links.
-pub fn ia2_to_aom(root: &Ia2Node) -> okur_core::AomNode {
-    let mut next_id = 0;
-    let mut by_id = std::collections::HashMap::new();
-    index_by_id(root, &mut by_id);
-    convert(root, &mut next_id, &by_id)
-}
-
-/// The tree's nodes by their IA2 uniqueID, which relations name.
-fn index_by_id<'a>(node: &'a Ia2Node, out: &mut std::collections::HashMap<i32, &'a Ia2Node>) {
-    if let Some(id) = node.unique_id {
-        out.insert(id, node);
-    }
-    for child in &node.children {
-        index_by_id(child, out);
-    }
-}
-
-/// A related node's words: its name, or its text without embedded objects' marks.
-fn related_text(node: &Ia2Node) -> Option<String> {
-    let text = node
-        .name
-        .as_deref()
-        .filter(|n| !n.trim().is_empty())
-        .or(node.text.as_deref())?;
-    let words = text.replace('\u{fffc}', " ");
-    let words = words.split_whitespace().collect::<Vec<_>>().join(" ");
-    (!words.is_empty()).then_some(words)
-}
-
-fn convert(
-    node: &Ia2Node,
-    next_id: &mut usize,
-    by_id: &std::collections::HashMap<i32, &Ia2Node>,
-) -> okur_core::AomNode {
-    use okur_core::{AomNode, NodeStates, Role};
+/// An IA2 object as the web node okur-model converts (okur_model::web): its MSAA role as the
+/// main role, its IA2 role as the finer one, and its MSAA and IA2 state bits, each by name.
+pub fn ia2_to_web(node: &Ia2Node) -> WebNode {
     use xa11y_windows::ia2::msaa_states::{
         STATE_SYSTEM_CHECKED, STATE_SYSTEM_COLLAPSED, STATE_SYSTEM_EXPANDED,
         STATE_SYSTEM_FOCUSABLE, STATE_SYSTEM_FOCUSED, STATE_SYSTEM_INVISIBLE, STATE_SYSTEM_MIXED,
         STATE_SYSTEM_PRESSED, STATE_SYSTEM_PROTECTED, STATE_SYSTEM_READONLY, STATE_SYSTEM_SELECTED,
         STATE_SYSTEM_TRAVERSED, STATE_SYSTEM_UNAVAILABLE,
     };
-
-    use xa11y_windows::ia2::roles::IA2_ROLE_TOGGLE_BUTTON;
-    let id = *next_id;
-    *next_id += 1;
-    let role = map_role(node);
-    let attr = |k: &str| node.attributes.get(k).cloned();
-    let has = |bit: u32| node.msaa_states & bit != 0;
-
-    let mut aom = AomNode::new(id, role.clone());
-    aom.name = node.name.clone().filter(|n| !n.is_empty());
-    match role {
-        Role::Text if node.msaa_role == Some(msaa_role::STATICTEXT) => {
-            aom.text = node.name.clone();
-        }
-        Role::Text | Role::Group if is_labelled_empty_generic(node) => {
-            aom.text = node.name.clone();
-        }
-        Role::Edit | Role::ComboBox | Role::Slider | Role::ProgressBar => {
-            aom.value = node.value.clone();
-            aom.value_min = node.value_min;
-            aom.value_max = node.value_max;
-        }
-        // The document value is its URL; same-page links are resolved against it.
-        Role::Document => {
-            if let Some(url) = &node.value {
-                aom.attributes.insert("url".to_owned(), url.clone());
-            }
-        }
-        _ => {}
-    }
-    aom.level = attr("level").and_then(|l| l.parse().ok());
-    aom.formatting = node
-        .text_runs
-        .first()
-        .and_then(|run| text_formatting(&run.attributes));
-    aom.states = NodeStates {
-        // A toggle button (`aria-pressed`) is checked when pressed.
-        checked: if node.ia2_role == Some(IA2_ROLE_TOGGLE_BUTTON) {
-            Some(has(STATE_SYSTEM_PRESSED))
-        } else {
-            matches!(role, Role::CheckBox | Role::RadioButton).then(|| has(STATE_SYSTEM_CHECKED))
-        },
-        // A tri-state check box between checked and not (`aria-checked="mixed"`).
-        mixed: role == Role::CheckBox && has(STATE_SYSTEM_MIXED),
-        selected: has(STATE_SYSTEM_SELECTED).then_some(true),
-        expanded: if has(STATE_SYSTEM_EXPANDED) {
-            Some(true)
-        } else if has(STATE_SYSTEM_COLLAPSED) {
-            Some(false)
-        } else {
-            None
-        },
-        focused: has(STATE_SYSTEM_FOCUSED),
-        disabled: has(STATE_SYSTEM_UNAVAILABLE),
-        hidden: has(STATE_SYSTEM_INVISIBLE),
-        modal: node.ia2_states & ia2_state::MODAL != 0,
-        focusable: Some(has(STATE_SYSTEM_FOCUSABLE)),
-        pressed: false,
+    use xa11y_windows::ia2::roles::{
+        IA2_ROLE_BLOCK_QUOTE, IA2_ROLE_CONTENT_DELETION, IA2_ROLE_CONTENT_INSERTION,
+        IA2_ROLE_HEADING, IA2_ROLE_MARK, IA2_ROLE_SECTION, IA2_ROLE_TOGGLE_BUTTON,
     };
-
-    let mut set_attr = |key: &str, value: String| {
-        aom.attributes.insert(key.to_owned(), value);
+    let msaa = |bit: u32| node.msaa_states & bit != 0;
+    let ia2 = |bit: i32| node.ia2_states & bit != 0;
+    let role = match node.msaa_role.unwrap_or_default() {
+        msaa_role::DOCUMENT => WebRole::Document,
+        msaa_role::DIALOG => WebRole::Dialog,
+        msaa_role::MENUBAR => WebRole::MenuBar,
+        msaa_role::MENUITEM => WebRole::MenuItem,
+        msaa_role::LINK => WebRole::Link,
+        msaa_role::GRAPHIC => WebRole::Image,
+        msaa_role::SEPARATOR => WebRole::Separator,
+        msaa_role::STATICTEXT => WebRole::StaticText,
+        msaa_role::TEXT => WebRole::Text,
+        msaa_role::PUSHBUTTON => WebRole::Button,
+        msaa_role::BUTTONMENU => WebRole::MenuButton,
+        msaa_role::CHECKBUTTON => WebRole::CheckBox,
+        msaa_role::RADIOBUTTON => WebRole::RadioButton,
+        msaa_role::COMBOBOX => WebRole::ComboBox,
+        msaa_role::PROGRESSBAR => WebRole::ProgressBar,
+        msaa_role::SLIDER => WebRole::Slider,
+        msaa_role::LIST => WebRole::List,
+        msaa_role::LISTITEM => WebRole::ListItem,
+        msaa_role::OUTLINE => WebRole::Tree,
+        msaa_role::OUTLINEITEM => WebRole::TreeItem,
+        msaa_role::PAGETABLIST => WebRole::TabList,
+        msaa_role::PAGETAB => WebRole::Tab,
+        msaa_role::PROPERTYPAGE => WebRole::TabPanel,
+        msaa_role::TABLE => WebRole::Table,
+        msaa_role::ROW => WebRole::Row,
+        msaa_role::CELL => WebRole::Cell,
+        msaa_role::COLUMNHEADER => WebRole::ColumnHeader,
+        msaa_role::ROWHEADER => WebRole::RowHeader,
+        msaa_role::EQUATION => WebRole::Math,
+        msaa_role::GROUPING => WebRole::Grouping,
+        _ => WebRole::Other,
     };
-    match (&role, node.msaa_role) {
-        (Role::Group, Some(msaa_role::DOCUMENT)) => set_attr("aria_role", "article".to_owned()),
-        // A fieldset: a named grouping. An unnamed one (a form, a section) keeps its xml-roles.
-        // A feed is one too, which JAWS says as a feed ("Updates feed" [obs, 1172/s5]).
-        (Role::Group, Some(msaa_role::GROUPING))
-            if aom.name.is_some()
-                && is_grouping(node)
-                && attr("xml-roles").as_deref() == Some("feed") =>
-        {
-            set_attr("aria_role", "feed".to_owned())
-        }
-        (Role::Group, Some(msaa_role::GROUPING)) if aom.name.is_some() && is_grouping(node) => {
-            set_attr("aria_role", "group".to_owned())
-        }
-        (_, Some(msaa_role::COLUMNHEADER)) => {
-            set_attr("tag", "th".to_owned());
-            set_attr("scope", "col".to_owned());
-        }
-        (_, Some(msaa_role::ROWHEADER)) => {
-            set_attr("tag", "th".to_owned());
-            set_attr("scope", "row".to_owned());
-        }
-        _ => {
-            if let Some(r) = attr("xml-roles") {
-                set_attr("aria_role", r);
-            }
-        }
+    let mark = match node.ia2_role {
+        Some(IA2_ROLE_HEADING) => Some(WebMark::Heading),
+        Some(IA2_ROLE_BLOCK_QUOTE) => Some(WebMark::BlockQuote),
+        Some(IA2_ROLE_TOGGLE_BUTTON) => Some(WebMark::ToggleButton),
+        Some(IA2_ROLE_SECTION) => Some(WebMark::Section),
+        Some(IA2_ROLE_CONTENT_DELETION) => Some(WebMark::ContentDeletion),
+        Some(IA2_ROLE_CONTENT_INSERTION) => Some(WebMark::ContentInsertion),
+        Some(IA2_ROLE_MARK) => Some(WebMark::Mark),
+        _ => None,
+    };
+    WebNode {
+        role,
+        mark,
+        name: node.name.clone(),
+        value: node.value.clone(),
+        description: node.description.clone(),
+        default_action: node.default_action.clone(),
+        value_min: node.value_min,
+        value_max: node.value_max,
+        states: WebStates {
+            checked: msaa(STATE_SYSTEM_CHECKED),
+            mixed: msaa(STATE_SYSTEM_MIXED),
+            pressed: msaa(STATE_SYSTEM_PRESSED),
+            selected: msaa(STATE_SYSTEM_SELECTED),
+            expanded: msaa(STATE_SYSTEM_EXPANDED),
+            collapsed: msaa(STATE_SYSTEM_COLLAPSED),
+            focused: msaa(STATE_SYSTEM_FOCUSED),
+            focusable: msaa(STATE_SYSTEM_FOCUSABLE),
+            unavailable: msaa(STATE_SYSTEM_UNAVAILABLE),
+            invisible: msaa(STATE_SYSTEM_INVISIBLE),
+            protected: msaa(STATE_SYSTEM_PROTECTED),
+            readonly: msaa(STATE_SYSTEM_READONLY),
+            traversed: msaa(STATE_SYSTEM_TRAVERSED),
+            editable: ia2(ia2_state::EDITABLE),
+            horizontal: ia2(ia2_state::HORIZONTAL),
+            vertical: ia2(ia2_state::VERTICAL),
+            invalid_entry: ia2(ia2_state::INVALID_ENTRY),
+            modal: ia2(ia2_state::MODAL),
+            multi_line: ia2(ia2_state::MULTI_LINE),
+            required: ia2(ia2_state::REQUIRED),
+            supports_autocompletion: ia2(ia2_state::SUPPORTS_AUTOCOMPLETION),
+        },
+        unique_id: node.unique_id,
+        attributes: node.attributes.clone(),
+        group_position: node.group_position,
+        text: node.text.clone(),
+        text_attributes: node.text_runs.first().map(|run| run.attributes.clone()),
+        relations: node.relations.clone(),
+        children: node.children.iter().map(ia2_to_web).collect(),
     }
-    // An editing host (contenteditable): JAWS reads it in the
-    // page as a section, "Notes field | Editable Section Start | Editable text | Editable
-    // Section End" [obs, 1172/s23-s26].
-    // A section (a div) made editable: not a text field, nor a spin box or a combo box's edit.
-    if role == Role::Edit && node.ia2_role == Some(xa11y_windows::ia2::roles::IA2_ROLE_SECTION) {
-        set_attr("editing_host", "true".to_owned());
-    }
-    // An ARIA radio group (`role="radiogroup"`), a group as a fieldset is, which JAWS says
-    // its own way as the focus comes into it [obs, round-aria4, 2080/s1].
-    if role == Role::Group && attr("xml-roles").as_deref() == Some("radiogroup") {
-        set_attr("radiogroup", "true".to_owned());
-    }
-    // An ARIA group (`role="group"` on another element, not a fieldset), whose name a focus
-    // coming into it does not say [obs, round-aria9, 2272/s1, 2286/s1].
-    if role == Role::Group && attr("xml-roles").as_deref() == Some("group") {
-        set_attr("aria_group", "true".to_owned());
-    }
-    // Struck, deleted, inserted and highlighted text (<s>, <del>, <ins>, <mark>), which JAWS
-    // reads between "Deletion" and "end Deletion" and the like [obs, 814/s3, 819/s2, s4].
-    {
-        use xa11y_windows::ia2::roles::{
-            IA2_ROLE_CONTENT_DELETION, IA2_ROLE_CONTENT_INSERTION, IA2_ROLE_MARK,
-        };
-        match node.ia2_role {
-            Some(IA2_ROLE_CONTENT_DELETION) => set_attr("aria_role", "deletion".to_owned()),
-            Some(IA2_ROLE_CONTENT_INSERTION) => set_attr("aria_role", "insertion".to_owned()),
-            Some(IA2_ROLE_MARK) => set_attr("aria_role", "mark".to_owned()),
-            _ => {}
-        }
-    }
-    if node.ia2_states & ia2_state::REQUIRED != 0 {
-        set_attr("required", "true".to_owned());
-    }
-    // Chrome keeps the whitespace of preformatted elements in their text (tabs, runs of
-    // spaces, line breaks), and so does the virtual buffer.
-    if matches!(
-        attr("tag").as_deref(),
-        Some("pre" | "listing" | "xmp" | "plaintext")
-    ) {
-        set_attr("preformatted", "true".to_owned());
-    }
-    // Paragraphs and divisions are blocks like any other in the AOM; JAWS lists them apart
-    // (Select a Paragraph, Select a Division) by their tag [obs, 239, 244]. A label's text is
-    // a unit of its own to Smart Navigation ("City" [obs, 955/s2]).
-    if let Some(tag) = attr("tag").filter(|t| matches!(t.as_str(), "p" | "div" | "label")) {
-        set_attr("tag", tag);
-    }
-    // A read-only field (GitHub's code view is a read-only text area).
-    if role == Role::Edit && has(STATE_SYSTEM_READONLY) {
-        set_attr("readonly", "true".to_owned());
-    }
-    if has(STATE_SYSTEM_PROTECTED) {
-        set_attr("password", "true".to_owned());
-    }
-    // A combo box one types in (an autocomplete), JAWS's "edit combo". Chrome's UIA reports
-    // a select's value as writable too, so only IA2's editable state tells them apart.
-    // Clicks a table answers: a cell, row or table with a click listener of its own
-    // (Chromium's default action "click") is clickable; a cell under a listener elsewhere
-    // ("click ancestor") is clickable when its row or table is, which the reading decides.
-    // JAWS says "clickable" in a table answering clicks itself, not in one under a listener
-    // on the whole page, as GitHub's [obs, round-aria24, 2695/s2; 3154/s4, s1].
-    if matches!(role, Role::TableCell | Role::TableRow | Role::Table) {
-        match node.default_action.as_deref() {
-            Some("click") => set_attr("clickable", "true".to_owned()),
-            Some("click ancestor") if role == Role::TableCell => {
-                set_attr("click_ancestor", "true".to_owned())
-            }
-            _ => {}
-        }
-    }
-    // An ARIA meter, a progress bar to MSAA: "CPU Usage meter 36.1665".
-    if role == Role::ProgressBar && attr("xml-roles").as_deref() == Some("meter") {
-        set_attr("meter", "true".to_owned());
-    }
-    if role == Role::ComboBox && node.ia2_states & ia2_state::EDITABLE != 0 {
-        set_attr("editable", "true".to_owned());
-    }
-    // One that completes what is typed (aria-autocomplete): "Supports AutoComplete" [obs,
-    // round-aria32, 2925/s1].
-    if role == Role::ComboBox && node.ia2_states & ia2_state::SUPPORTS_AUTOCOMPLETION != 0 {
-        set_attr("autocomplete", "true".to_owned());
-    }
-    if node.ia2_states & ia2_state::MULTI_LINE != 0 {
-        set_attr("multiline", "true".to_owned());
-    }
-    if has(STATE_SYSTEM_TRAVERSED) {
-        set_attr("visited", "true".to_owned());
-    }
-    // aria-describedby text, spoken after the value in focus phrasing.
-    if let Some(d) = node.description.as_deref().filter(|d| !d.is_empty()) {
-        set_attr("description", d.to_owned());
-        // A description from the element's title (HTML's `title`), read in the page after its
-        // first line: "Titled text Tooltip title" [obs, 1178/s12].
-        if attr("description-from").as_deref() == Some("tooltip") {
-            set_attr(okur_core::linearize::TITLE_ATTRIBUTE, d.to_owned());
-        }
-    }
-    // A frame named by its title says it after its first line too: "First frame line News
-    // frame" [obs, 1178/s4].
-    if role == Role::IFrame && attr("name-from").as_deref() == Some("tooltip") {
-        if let Some(name) = aom.name.clone().filter(|n| !n.is_empty()) {
-            set_attr(okur_core::linearize::TITLE_ATTRIBUTE, name);
-        }
-    }
-    if let Some(dom_id) = attr("id") {
-        set_attr("id", dom_id);
-    }
-    // aria-current: "page", "step", "location", "date", "time" or "true".
-    if let Some(current) = attr("current").filter(|c| c != "false") {
-        set_attr("current", current);
-    }
-    // A menu item that opens a menu of its own: "File menu sub menu collapsed" [obs, 218/s1].
-    if role == Role::MenuItem && attr("haspopup").is_some_and(|p| p != "false") {
-        set_attr("submenu", "true".to_owned());
-    }
-    // A button's popup other than a menu ("listbox", "dialog"); a menu makes a menu button.
-    if let Some(popup) =
-        attr("haspopup").filter(|p| !matches!(p.as_str(), "false" | "true" | "menu"))
-    {
-        set_attr("haspopup", popup);
-    }
-    // A slider's orientation, which its role word says: "left right slider" [obs,
-    // round-aria26, 2741/s1].
-    if role == Role::Slider {
-        if node.ia2_states & ia2_state::HORIZONTAL != 0 {
-            set_attr("orientation", "horizontal".to_owned());
-        } else if node.ia2_states & ia2_state::VERTICAL != 0 {
-            set_attr("orientation", "vertical".to_owned());
-        }
-    }
-    // An ARIA spin button (role="spinbutton"), a text field JAWS calls an "edit spin box"
-    // [obs, round-aria25, 2718/s1].
-    if role == Role::Edit && attr("xml-roles").as_deref() == Some("spinbutton") {
-        set_attr("spinbutton", "true".to_owned());
-    }
-    // A name given by aria-label (or title), which a link says in place of its text.
-    if attr("name-from").as_deref() == Some("attribute") {
-        set_attr("labelled", "true".to_owned());
-    }
-    // A table named from outside it (aria-labelledby, aria-label), not by a caption of its
-    // own: JAWS reads no caption line for it [obs, round-aria24, 2695/s2].
-    if role == Role::Table
-        && matches!(
-            attr("name-from").as_deref(),
-            Some("related-element" | "attribute")
-        )
-    {
-        set_attr("named_outside", "true".to_owned());
-    }
-    // aria-keyshortcuts, said after a link's or graphic's name ("Alt+ArrowUp").
-    if let Some(keys) = attr("keyshortcuts").filter(|k| !k.trim().is_empty()) {
-        set_attr("keyshortcuts", keys);
-    }
-    // aria-roledescription, said in place of some roles.
-    if let Some(description) = attr("roledescription") {
-        set_attr("roledescription", description);
-    }
-    // A field whose value is invalid (aria-invalid), and one with an error message
-    // (aria-errormessage): "Adults edit spin box | Has Error | invalid entry | 9" [obs,
-    // round-aria25, 2732/s1].
-    if node.ia2_states & ia2_state::INVALID_ENTRY != 0 {
-        set_attr("invalid", "true".to_owned());
-    }
-    if let Some(targets) = node.relations.get("error").filter(|t| !t.is_empty()) {
-        set_attr("has_error", "true".to_owned());
-        // The error message's words, "Must be between 1 and 8".
-        let message: Vec<String> = targets
-            .iter()
-            .filter_map(|id| by_id.get(id).and_then(|target| related_text(target)))
-            .collect();
-        if !message.is_empty() {
-            set_attr("error_message", message.join(" "));
-        }
-    }
-    // Text that labels or describes a control (a label, an aria-describedby target): a
-    // dialog's text leaves it out [obs, round-aria23, 2687/s1].
-    if node
-        .relations
-        .get("labelFor")
-        .is_some_and(|t| !t.is_empty())
-        || node
-            .relations
-            .get("descriptionFor")
-            .is_some_and(|t| !t.is_empty())
-    {
-        set_attr("labels_control", "true".to_owned());
-    }
-    // aria-flowto: the objects this one flows to, by their IA2 uniqueIDs (Equals follows them).
-    if let Some(targets) = node.relations.get("flowsTo").filter(|t| !t.is_empty()) {
-        let ids: Vec<String> = targets.iter().map(i32::to_string).collect();
-        set_attr("flows-to", ids.join(" "));
-    }
-    // The live object behind the node, for actions (focus, default action).
-    if let Some(unique_id) = node.unique_id {
-        set_attr(okur_core::aom::UNIQUE_ID_ATTR, unique_id.to_string());
-    }
-    if let (Some(pos), Some(size)) = (attr("posinset"), attr("setsize")) {
-        if size != "0" {
-            set_attr("posinset", pos);
-            set_attr("setsize", size);
-        }
-    }
+}
 
-    aom.children = node
-        .children
-        .iter()
-        .map(|c| convert(c, next_id, by_id))
-        .collect();
-    aom
+/// Converts a captured IA2 tree into the engine's AOM: okur-model's conversion of a page
+/// (`okur_model::web::web_to_aom`), from the IA2 objects named (`ia2_to_web`).
+///
+/// IA2 is what JAWS reads in Chromium. It carries semantics UIA lacks or only localizes:
+/// the HTML `tag` (block quotes), the CSS `display` (block versus inline), visited links.
+pub fn ia2_to_aom(root: &Ia2Node) -> okur_core::AomNode {
+    web_to_aom(&ia2_to_web(root))
 }
 
 #[cfg(test)]
@@ -608,28 +200,6 @@ mod tests {
                 .collect(),
             ..Default::default()
         }
-    }
-
-    /// Struck-through, raised and lowered text, as Chromium marks its runs
-    /// (`text-line-through-style:solid`, `text-position:super` or `sub`): what skim reading's
-    /// Strikeout, Superscript and Subscript find.
-    #[test]
-    fn a_run_says_struck_raised_and_lowered_text() {
-        let run = |pairs: &[(&str, &str)]| {
-            let attributes = [("font-family", "Times New Roman"), ("font-size", "12pt")]
-                .iter()
-                .chain(pairs)
-                .map(|(k, v)| ((*k).to_owned(), (*v).to_owned()))
-                .collect();
-            super::text_formatting(&attributes).unwrap_or_default()
-        };
-        assert!(run(&[("text-line-through-style", "solid")]).strikeout);
-        assert!(!run(&[("text-line-through-style", "none")]).strikeout);
-        let raised = run(&[("text-position", "super")]);
-        assert!(raised.superscript && !raised.subscript);
-        let lowered = run(&[("text-position", "sub")]);
-        assert!(lowered.subscript && !lowered.superscript);
-        assert!(!run(&[("text-position", "baseline")]).superscript);
     }
 
     /// Chromium calls every `div` and `span` an MSAA grouping; only IA2's role tells a
