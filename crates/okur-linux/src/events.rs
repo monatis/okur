@@ -248,6 +248,8 @@ impl EventSource for AtspiEventSource {
                 // The subscription lives in this thread: dropped here, it deregisters its
                 // events and ends its own reader.
                 let mut last_page = None;
+                // The object that took the focus last (its bus name and path).
+                let mut focused_object: Option<String> = None;
                 let objects = objects;
                 while !stop.load(Ordering::SeqCst) {
                     match subscription.recv_status(Duration::from_millis(100)) {
@@ -287,6 +289,26 @@ impl EventSource for AtspiEventSource {
                                 if !sink.send(loaded) {
                                     return;
                                 }
+                            }
+                            // A focus event for the object that has the focus already is no move:
+                            // GTK 4 sends one with its Focus and one with its focused state, and
+                            // one more as Space checks a check box, which left the engine
+                            // comparing the change with the state it brought (the lab's 304).
+                            // A window activated or left forgets it, so a focus coming back to
+                            // the same object is said.
+                            let object = event.target.as_ref().and_then(object_of);
+                            match event.kind {
+                                EventKind::WindowActivated | EventKind::WindowDeactivated => {
+                                    focused_object = None;
+                                }
+                                EventKind::FocusChanged => {
+                                    let again = object.is_some() && object == focused_object;
+                                    focused_object = object;
+                                    if again && document.is_none() {
+                                        continue;
+                                    }
+                                }
+                                _ => {}
                             }
                             // A focus outside a page, and its control's change, read with what
                             // surrounds it: the change names the control as its focus did.
