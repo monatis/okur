@@ -14,7 +14,7 @@ use okur_linux_model::focus_track::{FocusTrack, Reread};
 use okur_runtime::events::{EventSink, EventSource};
 use okur_runtime::RuntimeError;
 use xa11y_core::{ElementData, Event, EventKind, RecvStatus, Role};
-use xa11y_linux::{AtspiObject, AtspiTree, LinuxProvider};
+use xa11y_linux::{A11yStatus, AtspiObject, AtspiTree, LinuxProvider};
 
 /// The objects of the page read last, its application's bus name and each object's path, in the
 /// order the page's nodes are numbered ([`okur_linux_model::page::to_ia2`], depth first from 1):
@@ -255,6 +255,8 @@ pub fn convert(event: &Event, in_page: bool) -> Option<AccessibilityEvent> {
 pub struct AtspiEventSource {
     running: Option<Running>,
     objects: PageObjects,
+    /// The desktop's accessibility status before the source told it a screen reader runs.
+    status_before: Option<A11yStatus>,
 }
 
 struct Running {
@@ -277,6 +279,19 @@ impl EventSource for AtspiEventSource {
     fn start(&mut self, sink: EventSink) -> Result<(), RuntimeError> {
         if self.running.is_some() {
             return Ok(());
+        }
+        // The desktop told a screen reader runs, as Orca tells it: Qt, Firefox and Chromium
+        // turn their AT-SPI bridges on by it. Put back as it was when the source stops.
+        self.status_before = A11yStatus::read()
+            .map_err(|e| tracing::warn!("the desktop's accessibility status not read: {e}"))
+            .ok();
+        if let Err(e) = (A11yStatus {
+            screen_reader_enabled: true,
+            is_enabled: true,
+        })
+        .write()
+        {
+            tracing::warn!("the desktop not told a screen reader runs: {e}");
         }
         let provider = LinuxProvider::new().map_err(|e| source_error("the bus", e))?;
         let subscription = provider
@@ -455,6 +470,11 @@ impl EventSource for AtspiEventSource {
         if let Some(running) = self.running.take() {
             running.stop.store(true, Ordering::SeqCst);
             let _ = running.thread.join();
+        }
+        if let Some(before) = self.status_before.take() {
+            if let Err(e) = before.write() {
+                tracing::warn!("the desktop's accessibility status not put back: {e}");
+            }
         }
         Ok(())
     }

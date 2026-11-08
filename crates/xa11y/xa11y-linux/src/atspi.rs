@@ -4222,6 +4222,85 @@ impl AtspiObject {
     }
 }
 
+/// The desktop's accessibility status (`org.a11y.Status` on the session bus's accessibility bus
+/// launcher): whether a screen reader runs, and whether accessibility is on. Qt, Firefox and
+/// Chromium turn their AT-SPI bridges on by them; a screen reader sets both as it starts and puts
+/// them back as it ends, as Orca does (the code review of 2026-11-08).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct A11yStatus {
+    pub screen_reader_enabled: bool,
+    pub is_enabled: bool,
+}
+
+impl A11yStatus {
+    fn properties(session: &Connection) -> Result<Proxy<'_>> {
+        Proxy::new(
+            session,
+            "org.a11y.Bus",
+            "/org/a11y/bus",
+            "org.freedesktop.DBus.Properties",
+        )
+        .map_err(|e| Error::Platform {
+            code: -1,
+            message: format!("org.a11y.Status: {e}"),
+        })
+    }
+
+    /// The status the desktop has now.
+    pub fn read() -> Result<Self> {
+        let session = Connection::session().map_err(|e| Error::Platform {
+            code: -1,
+            message: format!("the session bus: {e}"),
+        })?;
+        let properties = Self::properties(&session)?;
+        let get = |name: &str| -> Result<bool> {
+            let reply = properties
+                .call_method("Get", &("org.a11y.Status", name))
+                .map_err(|e| Error::Platform {
+                    code: -1,
+                    message: format!("org.a11y.Status.{name}: {e}"),
+                })?;
+            let value: zbus::zvariant::OwnedValue =
+                reply.body().deserialize().map_err(|e| Error::Platform {
+                    code: -1,
+                    message: format!("org.a11y.Status.{name}: {e}"),
+                })?;
+            bool::try_from(value).map_err(|e| Error::Platform {
+                code: -1,
+                message: format!("org.a11y.Status.{name}: {e}"),
+            })
+        };
+        Ok(Self {
+            screen_reader_enabled: get("ScreenReaderEnabled")?,
+            is_enabled: get("IsEnabled")?,
+        })
+    }
+
+    /// Sets the desktop's status to `self`.
+    pub fn write(self) -> Result<()> {
+        let session = Connection::session().map_err(|e| Error::Platform {
+            code: -1,
+            message: format!("the session bus: {e}"),
+        })?;
+        let properties = Self::properties(&session)?;
+        for (name, on) in [
+            ("ScreenReaderEnabled", self.screen_reader_enabled),
+            ("IsEnabled", self.is_enabled),
+        ] {
+            properties
+                .call_method(
+                    "Set",
+                    &("org.a11y.Status", name, zbus::zvariant::Value::from(on)),
+                )
+                .map_err(|e| Error::Platform {
+                    code: -1,
+                    message: format!("org.a11y.Status.{name}: {e}"),
+                })?;
+        }
+        Ok(())
+    }
+}
+
 impl LinuxProvider {
     /// The AT-SPI subtree of `object`: at most `limit` objects, depth first, the rest left out.
     /// Each object is a few calls on the bus; the Cache interface would read a tree at once.
