@@ -23,6 +23,7 @@ import atexit
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -241,7 +242,8 @@ def main():
                                else ["--set", "web_verbosity=" + verbosity]),
                              *(["--trace", trace] if trace else [])],
                             stdin=subprocess.DEVNULL, stdout=okur_out, stderr=subprocess.STDOUT,
-                            env={**os.environ, "RUST_LOG": os.environ.get("RUST_LOG", "okur_linux=debug")})
+                            env={**os.environ, "RUST_LOG": os.environ.get(
+                                "RUST_LOG", "okur_linux=debug,okur_core=debug")})
     started.append(okur)
     time.sleep(4)
     if replica:
@@ -322,6 +324,13 @@ def main():
               file=sys.stderr)
     stop(started, profile)
     okur_out.close()
+    # Okur's own log kept beside the run in the lab (<id>.okur.log), for what only a live run
+    # shows (a key the platform did not act on); fetch-runs.sh leaves it there.
+    if out_path.endswith(".json"):
+        try:
+            shutil.copyfile(os.path.join(work, "okur.log"), out_path[:-len(".json")] + ".okur.log")
+        except OSError as error:
+            print(f"{scenario['id']}: Okur's log not kept: {error}", file=sys.stderr)
     # Silence from the first key to the last is Okur not running or not hearing, never a result.
     everything, _ = said_since(log, 0)
     if os.environ.get("OKUR_RUN_VERBOSE"):
