@@ -59,6 +59,12 @@ pub struct AtspiNode {
     /// The text attributes of its text's first run, as Chrome gives them over AT-SPI.
     #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
     pub text_attributes: BTreeMap<String, String>,
+    /// Its object's path, which relations name their targets by.
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub path: String,
+    /// Its relations: each one's AT-SPI type (its number) and its targets' paths.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub relations: Vec<(u32, Vec<String>)>,
     /// An address: a link's, or the document's.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub uri: Option<String>,

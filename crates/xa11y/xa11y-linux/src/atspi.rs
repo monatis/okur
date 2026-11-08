@@ -695,6 +695,29 @@ impl LinuxProvider {
         Some(attributes)
     }
 
+    /// `aref`'s relations: its Accessible interface's GetRelationSet, each relation's type and
+    /// its targets' paths.
+    fn get_relations(&self, aref: &AccessibleRef) -> Vec<(u32, Vec<String>)> {
+        let Ok(proxy) = self.make_proxy(&aref.bus_name, &aref.path, "org.a11y.atspi.Accessible")
+        else {
+            return Vec::new();
+        };
+        let Ok(reply) = proxy.call_method("GetRelationSet", &()) else {
+            return Vec::new();
+        };
+        let set: Vec<(u32, Vec<(String, zbus::zvariant::OwnedObjectPath)>)> =
+            reply.body().deserialize().unwrap_or_default();
+        set.into_iter()
+            .map(|(kind, targets)| {
+                let paths = targets
+                    .into_iter()
+                    .map(|(_, path)| path.to_string())
+                    .collect();
+                (kind, paths)
+            })
+            .collect()
+    }
+
     /// Cache an AccessibleRef and return a new handle ID.
     fn cache_element(&self, aref: AccessibleRef) -> u64 {
         let handle = NEXT_HANDLE.fetch_add(1, Ordering::Relaxed);
@@ -4189,6 +4212,9 @@ pub struct AtspiTree {
     /// The text attributes of its text's first run, defaults included, as the application names
     /// them (Chrome's ATK names: `family-name`, `size`, `weight`, `fg-color`, ...).
     pub text_attributes: HashMap<String, String>,
+    /// Its relations: each one's AT-SPI type (its number) and its targets' paths, in the same
+    /// application (a label's, a description's, a flow's, an error message's).
+    pub relations: Vec<(u32, Vec<String>)>,
     /// An address: a link's (its Hyperlink interface's URI), or a document's (its Document
     /// interface's `URI` attribute), as Chrome gives them.
     pub uri: Option<String>,
@@ -4420,6 +4446,7 @@ impl LinuxProvider {
             states: self.state_bits(aref).0,
             text: None,
             text_attributes: HashMap::new(),
+            relations: self.get_relations(aref),
             uri,
             bus_name: aref.bus_name.clone(),
             path: aref.path.clone(),
