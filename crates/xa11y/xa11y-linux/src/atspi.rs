@@ -4358,15 +4358,31 @@ impl LinuxProvider {
     /// finding 6). The children keep their order; where `limit` cuts the tree, which objects
     /// it leaves out may differ from [`Self::atspi_tree`]'s.
     pub fn atspi_tree_parallel(&self, object: &AtspiObject, limit: usize) -> AtspiTree {
+        self.atspi_tree_parallel_until(object, limit, &std::sync::atomic::AtomicBool::new(false))
+    }
+
+    /// [`Self::atspi_tree_parallel`], cut short once `stop` is set: no object is read after it
+    /// (a page no longer wanted, the focus gone from it).
+    pub fn atspi_tree_parallel_until(
+        &self,
+        object: &AtspiObject,
+        limit: usize,
+        stop: &std::sync::atomic::AtomicBool,
+    ) -> AtspiTree {
         let left = std::sync::atomic::AtomicUsize::new(limit);
-        self.read_tree_parallel(&object.reference(), &left)
+        self.read_tree_parallel(&object.reference(), &left, stop)
     }
 
     fn read_tree_parallel(
         &self,
         aref: &AccessibleRef,
         left: &std::sync::atomic::AtomicUsize,
+        stop: &std::sync::atomic::AtomicBool,
     ) -> AtspiTree {
+        if stop.load(Ordering::SeqCst) {
+            left.store(0, Ordering::SeqCst);
+            return AtspiTree::default();
+        }
         // One object fewer left to read, never below none (fetch_update is deprecated, and its
         // replacement newer than the crate's oldest Rust).
         let mut n = left.load(Ordering::SeqCst);
@@ -4381,7 +4397,7 @@ impl LinuxProvider {
         node.children = children
             .par_iter()
             .filter(|_| left.load(Ordering::SeqCst) > 0)
-            .map(|child| self.read_tree_parallel(child, left))
+            .map(|child| self.read_tree_parallel(child, left, stop))
             .collect();
         node
     }

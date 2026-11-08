@@ -236,8 +236,23 @@ fn shown_page(provider: &LinuxProvider, document: &ElementData) -> bool {
 /// parallel: 3 to 3.5 times as fast as in order, the same tree (probe-read-speed.sh in the lab
 /// at ebc4fd11: color-grid's 433 objects in 419 to 524 ms against 1399 to 1597).
 fn read_page(provider: &LinuxProvider, document: &AtspiObject, objects: &PageObjects) -> PageRead {
+    read_page_until(
+        provider,
+        document,
+        objects,
+        &std::sync::atomic::AtomicBool::new(false),
+    )
+}
+
+/// [`read_page`], cut short once `stop` is set.
+fn read_page_until(
+    provider: &LinuxProvider,
+    document: &AtspiObject,
+    objects: &PageObjects,
+    stop: &AtomicBool,
+) -> PageRead {
     let started = std::time::Instant::now();
-    let tree = provider.atspi_tree_parallel(document, PAGE_LIMIT);
+    let tree = provider.atspi_tree_parallel_until(document, PAGE_LIMIT, stop);
     // A lock a panicking thread left still holds the numbering (the second review): base 0
     // and no objects would have sent actions to other pages' objects.
     let base = {
@@ -271,9 +286,26 @@ fn source_error(what: &str, error: impl std::fmt::Display) -> RuntimeError {
 /// each page back; the event thread gives the engine its focus at once and the page when it
 /// comes (`okur-lab live-replay linux --pages-after-focus` said the same as the runs, 418 of
 /// 418 steps, before this was built).
+/// The page being read, by its document, and what stops its read.
+type Reading = Arc<Mutex<Option<(String, Arc<AtomicBool>)>>>;
+
 struct PageReader {
     asks: std::sync::mpsc::Sender<Ask>,
     pages: std::sync::mpsc::Receiver<PageRead>,
+    /// The page being read, and what stops its read (the second review, finding 5).
+    reading: Reading,
+}
+
+impl PageReader {
+    /// The read of `document`'s page stopped, where it is the one being read: nothing more of
+    /// it is read, and it is not handed back.
+    fn stop_reading(&self, document: &str) {
+        if let Ok(reading) = self.reading.lock() {
+            if let Some((_, stop)) = reading.as_ref().filter(|(key, _)| key == document) {
+                stop.store(true, Ordering::SeqCst);
+            }
+        }
+    }
 }
 
 /// What the page reader is asked.
@@ -292,6 +324,8 @@ impl PageReader {
             LinuxProvider::new().map_err(|e| source_error("the page reader's bus", e))?;
         let (asks, asked) = std::sync::mpsc::channel::<Ask>();
         let (read, pages) = std::sync::mpsc::channel();
+        let reading: Reading = Arc::default();
+        let now_reading = Arc::clone(&reading);
         std::thread::spawn(move || {
             let mut waiting: std::collections::VecDeque<AtspiObject> = Default::default();
             let take = |ask: Ask, waiting: &mut std::collections::VecDeque<AtspiObject>| match ask {
@@ -312,16 +346,29 @@ impl PageReader {
                     let Some(document) = waiting.pop_front() else {
                         break;
                     };
-                    if read
-                        .send(read_page(&provider, &document, &objects))
-                        .is_err()
-                    {
+                    let stop = Arc::new(AtomicBool::new(false));
+                    if let Ok(mut reading) = now_reading.lock() {
+                        *reading = Some((key_of(&document), Arc::clone(&stop)));
+                    }
+                    let page = read_page_until(&provider, &document, &objects, &stop);
+                    if let Ok(mut reading) = now_reading.lock() {
+                        *reading = None;
+                    }
+                    if stop.load(Ordering::SeqCst) {
+                        tracing::debug!(document = %page.document, "page read stopped");
+                        continue;
+                    }
+                    if read.send(page).is_err() {
                         return;
                     }
                 }
             }
         });
-        Ok(Self { asks, pages })
+        Ok(Self {
+            asks,
+            pages,
+            reading,
+        })
     }
 }
 
@@ -381,6 +428,7 @@ fn drop_pages(documents: Vec<String>, reader: &Option<PageReader>, converter: &m
         tracing::debug!(%document, "page given up before the engine had it");
         converter.page_dropped(&document);
         if let Some(reader) = reader {
+            reader.stop_reading(&document);
             let _ = reader.asks.send(Ask::Cancel(document));
         }
     }
@@ -556,8 +604,11 @@ impl EventSource for AtspiEventSource {
                     if !deliver(&mut delivery, &mut converter, &mut write, &sink) {
                         return;
                     }
-                    // Short, so that a page read while the bus is quiet comes at once.
-                    match subscription.recv_status(Duration::from_millis(20)) {
+                    // Short while a page is awaited, so that it comes at once when the bus is
+                    // quiet; else the thread wakes ten times a second, not fifty (the second
+                    // review, finding 8).
+                    let wait = if delivery.is_holding() { 20 } else { 100 };
+                    match subscription.recv_status(Duration::from_millis(wait)) {
                         RecvStatus::Event(event) => {
                             tracing::trace!(
                                 kind = ?event.kind,
