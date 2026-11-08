@@ -357,19 +357,40 @@ impl EventSource for AtspiEventSource {
                             } else if focus && document.is_some() {
                                 native_focused = None;
                             }
-                            // A label renamed: the focused control may show another value. GTK's
-                            // drop-down shows its chosen item in its button's label, renamed as
-                            // Down or Up chooses another [obs, 304/s9-s10: "Brazil | 3 of 3"].
-                            if event.kind == EventKind::NameChanged {
+                            // A label renamed, or an object selected without the focus: the focused
+                            // control may read otherwise. Read again, it is said as a focus when
+                            // it reads as another control (GTK's notebook keeps the focus as Right
+                            // selects its next tab [obs, 303/s13]), as its value changing when
+                            // only that changed (GTK's drop-down shows its chosen item in its
+                            // button's label, renamed as Down or Up chooses another [obs,
+                            // 304/s9-s10: "Brazil | 3 of 3"]).
+                            let inside = event.kind == EventKind::NameChanged
+                                || (!focus
+                                    && !changed
+                                    && event.kind
+                                        == EventKind::StateChanged {
+                                            flag: StateFlag::Selected,
+                                            value: true,
+                                        });
+                            if inside {
                                 if let Some((element, value)) = native_focused.as_mut() {
                                     let control = native_focus(&provider, element);
-                                    if control.value != *value {
+                                    let said = (control.role.clone(), control.name.clone());
+                                    let reread = if focus_said.as_ref() != Some(&said) {
+                                        focus_said = Some(said);
                                         value.clone_from(&control.value);
-                                        let change = AccessibilityEvent::Change {
+                                        Some(AccessibilityEvent::Focus(control))
+                                    } else if control.value != *value {
+                                        value.clone_from(&control.value);
+                                        Some(AccessibilityEvent::Change {
                                             kind: okur_core::event::ChangeKind::Value,
                                             control,
-                                        };
-                                        if !sink.send(change) {
+                                        })
+                                    } else {
+                                        None
+                                    };
+                                    if let Some(reread) = reread {
+                                        if !sink.send(reread) {
                                             return;
                                         }
                                     }
