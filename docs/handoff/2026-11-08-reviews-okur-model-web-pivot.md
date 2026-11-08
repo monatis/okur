@@ -79,3 +79,33 @@ From the commands named:
 4. **The Linux review's open items, in their order:**
    - The page read off the event thread.
    - "n of m" from posinset/setsize, instead of reading the parent whole.
+
+## Later the same day: Linux's pages closer to Windows'
+
+**AT-SPI parity, every scenario on the pages as Linux gives them.** Measured beside IA2's
+12686/13284 by `okur-lab parity --api atspi`, each step gaining steps and losing none:
+
+- 11405/13284: the first full capture (55832596).
+- 11695: fieldsets and logs are groups, a select says its chosen item (7c8c089f).
+- 11729: an iframe is a frame, `<mark>` a mark (d5eb97b9).
+- 12151: text attributes (Say Color, Say Font) and relations (flows-to, error messages, labels)
+  read and mapped (3d092aae, 69ee102e, 3da1e8ac, 39dd40c6, recaptured in efc10436).
+- 12173: raised and lowered text (092e1ecf).
+- 12204: descriptions (9ffdebdc, recaptured in 71746ac6).
+
+      JAWS parity (Atspi): 12204/13284 steps match exactly; 388 accepted divergences not counted (0 scenarios could not run)
+
+Most of the 482 steps left are scenarios that replay Windows' recorded focus events
+(Tab, followed links, table Tab, landmarks on focus). Their IA2 object ids cannot meet a Linux
+page; they wait for the replayable Linux event model (the structure plan's step 1).
+
+**Ratchets:**
+- AT-SPI parity has its own baseline, `corpus/parity-baseline-atspi.json`, which the corpus test `atspi_parity_matches_baseline` checks (748c9ab7).
+- The Linux live runs at 3c555f36, with the review's fixes and the web pivot, held 708/829 (829a1250).
+
+**The review's finding 9:** each page read numbers its objects from a base of its own, so an action finds its own page's object (2c85c5a2).
+
+**Next, in order:**
+1. The structure plan's step 1, a replayable Linux event model: records, a pure converter, traces kept with live runs. It also lets the focus scenarios replay on Linux's pages.
+2. Step 3, one `okur` program for every OS.
+3. The review's open items: the page read off the event thread, and "n of m" without reading the parent whole.
