@@ -231,10 +231,12 @@ fn shown_page(provider: &LinuxProvider, document: &ElementData) -> bool {
 }
 
 /// A page read whole, as the engine takes a page, its objects numbered apart from the pages
-/// before it, so an action finds this page's object even after another page was read.
+/// before it, so an action finds this page's object even after another page was read. Read in
+/// parallel: 3 to 3.5 times as fast as in order, the same tree (probe-read-speed.sh in the lab
+/// at ebc4fd11: color-grid's 433 objects in 419 to 524 ms against 1399 to 1597).
 fn read_page(provider: &LinuxProvider, document: &AtspiObject, objects: &PageObjects) -> PageRead {
     let started = std::time::Instant::now();
-    let tree = provider.atspi_tree(document, PAGE_LIMIT);
+    let tree = provider.atspi_tree_parallel(document, PAGE_LIMIT);
     let base = match objects.lock() {
         Ok(mut objects) => {
             let base = objects.next_page();
