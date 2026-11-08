@@ -17,7 +17,7 @@ okur-core = { workspace = true }
 okur-runtime = { workspace = true }
 serde_json = { workspace = true }
 tracing = { workspace = true }
-x11rb = { version = "0.14", default-features = false, features = ["xinput"] }
+x11rb = { version = "0.14", default-features = false, features = ["xinput", "xkb"] }
 xa11y-core = { workspace = true }
 xa11y-linux = { workspace = true }
 

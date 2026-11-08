@@ -15,7 +15,10 @@
 //!   keyboard (it did in the lab);
 //! - the modifiers, and every key's release, come from XInput 2's raw events, which X sends
 //!   whatever holds a grab: the Okur key and ScrollLock held, and the keys the engine is told of
-//!   without deciding them.
+//!   without deciding them;
+//! - Caps Lock is Okur's while it runs ([`CapsLock`]): X toggles it on its own as the press
+//!   reaches it, whatever the engine decides, so Lock's keys are taken off the modifier map, and
+//!   Okur toggles Caps Lock itself when the engine passes a press on.
 
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex};
@@ -29,9 +32,117 @@ use okur_runtime::RuntimeError;
 use x11rb::connection::Connection;
 use x11rb::protocol::ge::ConnectionExt as _;
 use x11rb::protocol::xinput::{self, ConnectionExt as _};
+use x11rb::protocol::xkb::{self, ConnectionExt as _};
 use x11rb::protocol::xproto::{self, ConnectionExt as _};
 use x11rb::protocol::Event;
 use x11rb::rust_connection::RustConnection;
+
+/// Caps Lock's keysym (XK_Caps_Lock).
+const CAPS_LOCK_KEYSYM: u32 = 0xffe5;
+
+/// The modifier map's row of Lock (Shift, Lock, Control, Mod1 to Mod5).
+const LOCK_ROW: usize = 1;
+
+/// Caps Lock made Okur's while it runs (the code review of 2026-11-08, finding 14). X toggles
+/// Caps Lock as a press reaches it, whatever the engine decides, where JAWS's CapsLock, the
+/// laptop layout's Okur key, toggles only when pressed twice quickly. Lock's keys are taken off
+/// the modifier map, so a press locks nothing; Okur toggles Caps Lock itself through XKB when
+/// the engine passes a press on (the second of two, or each one where CapsLock is no Okur key).
+/// The map is put back as the hook stops; a map a run left without Lock's keys (it ended
+/// without putting them back) gets Caps_Lock's keys back then.
+struct CapsLock {
+    /// The modifier map to put back.
+    map: Vec<u8>,
+}
+
+impl CapsLock {
+    /// Lock's keys off the modifier map, and XKB asked for, where both work; none otherwise,
+    /// and Caps Lock stays X's (said in the log).
+    fn take(conn: &RustConnection, keymap: &Keymap) -> Option<Self> {
+        let usable = conn
+            .xkb_use_extension(1, 0)
+            .ok()
+            .and_then(|cookie| cookie.reply().ok())
+            .is_some_and(|reply| reply.supported);
+        if !usable {
+            tracing::warn!("keyboard: no XKB, Caps Lock stays the system's");
+            return None;
+        }
+        let mut map = conn.get_modifier_mapping().ok()?.reply().ok()?.keycodes;
+        let per_row = map.len() / 8;
+        let lock = map.get_mut(per_row * LOCK_ROW..per_row * (LOCK_ROW + 1))?;
+        let mut without = Vec::new();
+        if lock.iter().all(|code| *code == 0) {
+            // Left empty by a run before: Caps_Lock's keys are put back as it stops.
+            for (slot, code) in lock
+                .iter_mut()
+                .zip(keymap.all_codes().filter(|c| keymap.is_caps_lock(*c)))
+            {
+                *slot = code;
+            }
+        }
+        without.extend_from_slice(&map);
+        if let Some(row) = without.get_mut(per_row * LOCK_ROW..per_row * (LOCK_ROW + 1)) {
+            row.fill(0);
+        }
+        let set = conn
+            .set_modifier_mapping(&without)
+            .ok()?
+            .reply()
+            .ok()
+            .is_some_and(|reply| reply.status == xproto::MappingStatus::SUCCESS);
+        if !set {
+            tracing::warn!("keyboard: the modifier map not changed, Caps Lock stays the system's");
+            return None;
+        }
+        Some(Self { map })
+    }
+
+    /// Caps Lock on or off now.
+    fn is_on(conn: &RustConnection) -> Option<bool> {
+        let state = conn
+            .xkb_get_state(xkb::ID::USE_CORE_KBD.into())
+            .ok()?
+            .reply()
+            .ok()?;
+        Some(state.locked_mods.contains(xproto::ModMask::LOCK))
+    }
+
+    /// Caps Lock toggled, as the key would have.
+    fn toggle(conn: &RustConnection) {
+        let on = Self::is_on(conn).unwrap_or(false);
+        let locks = if on {
+            xproto::ModMask::from(0u16)
+        } else {
+            xproto::ModMask::LOCK
+        };
+        let sent = conn.xkb_latch_lock_state(
+            xkb::ID::USE_CORE_KBD.into(),
+            xproto::ModMask::LOCK,
+            locks,
+            false,
+            xkb::Group::M1,
+            xproto::ModMask::from(0u16),
+            false,
+            0,
+        );
+        if sent.is_err() || conn.flush().is_err() {
+            tracing::warn!("keyboard: Caps Lock not toggled");
+        }
+    }
+
+    /// The modifier map as it was.
+    fn give_back(&self, conn: &RustConnection) {
+        let back = conn
+            .set_modifier_mapping(&self.map)
+            .ok()
+            .and_then(|cookie| cookie.reply().ok())
+            .is_some_and(|reply| reply.status == xproto::MappingStatus::SUCCESS);
+        if !back {
+            tracing::warn!("keyboard: the modifier map not put back: Caps Lock may not lock");
+        }
+    }
+}
 
 /// How long a key waits for the engine before the watchdog replays it to the application.
 pub const WATCHDOG: Duration = Duration::from_millis(200);
@@ -117,11 +228,21 @@ impl Keymap {
     }
 
     fn codes(&self) -> impl Iterator<Item = u8> + '_ {
+        self.all_codes()
+            .filter(|code| !self.is_modifier(*code) && !self.is_caps_lock(*code))
+    }
+
+    fn all_codes(&self) -> impl Iterator<Item = u8> + '_ {
         let count = self.keysyms.len() / self.per_code.max(1);
         (0..count)
             .filter_map(|i| u8::try_from(i).ok())
             .map(|i| self.min.saturating_add(i))
-            .filter(|code| !self.is_modifier(*code))
+    }
+
+    /// Whether `code` is Caps Lock's key, by its keysym: off the modifier map while Okur runs
+    /// ([`CapsLock`]), it is a modifier no longer, and still never grabbed.
+    fn is_caps_lock(&self, code: u8) -> bool {
+        self.keysym(code, 0) == CAPS_LOCK_KEYSYM
     }
 
     fn event(&self, code: u8, state: u32, held: Held, is_down: bool, time: u32) -> KeyEvent {
@@ -150,6 +271,7 @@ struct Running {
     stop: Arc<AtomicBool>,
     wake: xproto::Window,
     threads: Vec<JoinHandle<()>>,
+    caps_lock: Option<CapsLock>,
 }
 
 impl X11KeyboardHook {
@@ -193,6 +315,8 @@ impl KeyboardHook for X11KeyboardHook {
             .map(|info| info.deviceid)
             .ok_or_else(|| hook_error("devices", "no master keyboard"))?;
         let keymap = Keymap::read(&conn)?;
+        let caps_lock = CapsLock::take(&conn, &keymap);
+        let owns_caps_lock = caps_lock.is_some();
 
         // New top-level windows are grabbed as they come; every key's raw press and release.
         conn.change_window_attributes(
@@ -271,6 +395,7 @@ impl KeyboardHook for X11KeyboardHook {
             std::thread::spawn(move || {
                 let mut run = Run {
                     conn: &conn,
+                    owns_caps_lock,
                     keymap,
                     keyboard,
                     sets,
@@ -289,6 +414,7 @@ impl KeyboardHook for X11KeyboardHook {
             stop,
             wake,
             threads: vec![watchdog, events],
+            caps_lock,
         });
         Ok(())
     }
@@ -307,6 +433,9 @@ impl KeyboardHook for X11KeyboardHook {
         let _ = running.conn.flush();
         for thread in running.threads {
             let _ = thread.join();
+        }
+        if let Some(caps_lock) = &running.caps_lock {
+            caps_lock.give_back(&running.conn);
         }
         Ok(())
     }
@@ -451,6 +580,8 @@ fn allow(conn: &RustConnection, key: Pending, mode: xinput::EventMode) {
 /// The event loop's state.
 struct Run<'a> {
     conn: &'a RustConnection,
+    /// Caps Lock is Okur's to toggle ([`CapsLock`]).
+    owns_caps_lock: bool,
     keymap: Keymap,
     keyboard: u16,
     sets: Vec<u32>,
@@ -593,12 +724,21 @@ impl Run<'_> {
                 self.modifiers_down &= !bit;
             }
         }
-        if is_down && !self.keymap.is_modifier(code) {
+        let caps_lock = self.owns_caps_lock && self.keymap.is_caps_lock(code);
+        if is_down && !self.keymap.is_modifier(code) && !caps_lock {
             return;
         }
-        let key_event =
+        let mut key_event =
             self.keymap
                 .event(code, self.modifiers_down, self.held, is_down, event.time);
-        let _ = (self.callback)(key_event);
+        if caps_lock && is_down {
+            // Its state as it is, for the engine to say it rightly (Caps Lock on before Okur).
+            key_event.caps_lock_on = CapsLock::is_on(self.conn);
+        }
+        let action = (self.callback)(key_event);
+        // The engine passed the press on: the key's own toggle, which the map no longer makes.
+        if caps_lock && is_down && action == KeyAction::PassThrough {
+            CapsLock::toggle(self.conn);
+        }
     }
 }
