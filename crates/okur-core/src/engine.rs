@@ -1138,7 +1138,19 @@ impl ScreenReaderEngine {
         let action = self.handle_key(event);
         let moved = self.app_mode == AppMode::VirtualBuffer && self.cursor.offset != offset;
         if moved {
-            self.cursor_moved_since_load = true;
+            tracing::debug!(
+                key = ?event.key,
+                from = offset,
+                to = self.cursor.offset,
+                "the virtual cursor moved by a key"
+            );
+            // A key back to the page's top, where its load put the cursor, is no move since
+            // the load: Ctrl+Home after the page's Say All had read on, then Tab onto a field,
+            // left forms mode off [obs, 204/s1: the reset's Ctrl+Home, pressed live; parity
+            // moves the cursor for it outside the keys]. A move elsewhere before it still counts.
+            if self.cursor.offset != 0 {
+                self.cursor_moved_since_load = true;
+            }
         }
         self.refresh_stale_page();
         self.update_reading_highlight(moved);

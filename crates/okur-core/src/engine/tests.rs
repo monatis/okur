@@ -5565,6 +5565,56 @@ fn tab_turns_forms_mode_on_once_the_virtual_cursor_has_moved() {
     assert!(said.ends_with("Type in text."), "{said}");
 }
 
+/// Ctrl+Home back to the page's top, after its Say All had read on, is no move since the load:
+/// Tab onto a field then leaves forms mode off [obs, 204/s1, the reset's Ctrl+Home pressed in
+/// the Linux lab's live run]. Down before it still counts.
+#[test]
+fn ctrl_home_back_to_the_top_is_no_move_since_the_load() {
+    let mut name = AomNode::new(2, Role::Edit).with_name("Full name");
+    name.attributes.insert("required".into(), "true".into());
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Web Menus")
+        .with_children(vec![
+            AomNode::new(1, Role::Paragraph).with_text("Create your account"),
+            AomNode::new(3, Role::Paragraph).with_text("Fields marked required"),
+            name,
+        ]);
+    let ctrl_home = KeyEvent::new(
+        Key::Home,
+        Modifiers {
+            ctrl: true,
+            ..Modifiers::none()
+        },
+        true,
+    );
+    let forms_mode_after = |down_first: bool| {
+        let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+        let mut engine = ScreenReaderEngine::new(cursor, Box::new(SharedSpeech::default()));
+        let mut changed = engine.settings.clone();
+        changed.forms_mode = crate::settings::FormsMode::Manual;
+        engine.set_settings(changed);
+        engine.handle_document_loaded("Web Menus", VirtualBuffer::from_aom(&page));
+        engine.on_idle();
+        engine.handle_focus_event(&page_document());
+        if down_first {
+            engine.handle_key_event(&key(Key::DownArrow));
+        } else {
+            // Where the page's reading left the cursor, as it read on.
+            engine.cursor.move_to_line(1);
+        }
+        engine.handle_key_event(&ctrl_home);
+        engine.handle_key_event(&key(Key::Tab));
+        let mut field = FocusEvent::new(Role::Edit)
+            .with_node_id(2)
+            .with_name("Full name");
+        field.in_document = true;
+        engine.handle_focus_event(&field);
+        engine.forms_mode
+    };
+    assert!(!forms_mode_after(false));
+    assert!(forms_mode_after(true));
+}
+
 /// Without Auto Forms Mode, the arrows read a field's line and stay in browse mode [obs, 201].
 #[test]
 fn without_auto_forms_mode_the_arrows_read_a_fields_line() {

@@ -523,6 +523,10 @@ enum Commands {
         /// which may only grow
         #[arg(long, conflicts_with_all = ["only", "pages_after_focus", "recorded_settings"])]
         write: bool,
+        /// Print the replayed steps that do not match JAWS, with JAWS's transcripts, in place
+        /// of those the replay says otherwise than the run
+        #[arg(long)]
+        jaws: bool,
     },
     /// Write the reference machine's settings (old-pc's JAWS configuration) as a settings
     /// folder, for `run --settings` in a live run there
@@ -1390,6 +1394,7 @@ async fn main() {
             only,
             recorded_settings,
             write,
+            jaws,
         }) => {
             if platform != "linux" {
                 eprintln!("Error: only Linux's runs keep a trace (not {platform:?})");
@@ -1406,7 +1411,22 @@ async fn main() {
             for error in &report.errors {
                 eprintln!("Error: {error}");
             }
-            for step in report.steps.iter().filter(|s| all || !s.faithful()) {
+            for step in report
+                .against_jaws
+                .iter()
+                .filter(|s| jaws && (all || !(s.matched || s.accepted)))
+            {
+                println!("[DIFF ] {}  ({})", step.key, step.command);
+                println!("    okur: {:?}", okur_corpus::parity::normalize(&step.okur));
+                for variant in &step.jaws_variants {
+                    println!("    jaws: {:?}", okur_corpus::parity::normalize(variant));
+                }
+            }
+            for step in report
+                .steps
+                .iter()
+                .filter(|s| !jaws && (all || !s.faithful()))
+            {
                 let tag = if step.faithful() { "SAME " } else { "OTHER" };
                 println!("[{tag}] {}", step.key);
                 println!(
