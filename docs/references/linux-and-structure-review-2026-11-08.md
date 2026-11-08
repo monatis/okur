@@ -26,6 +26,7 @@ file:line references are to that commit.
 | 17. Small slips | The hook grabbed keys on its own wake window | 35c1d765 |
 | 18. The lab runner | Unknown modifiers dropped, keys without keycodes "passed", and nothing cleaned up on an exception | df89c0c4 |
 | 19. The desktop not told a screen reader runs | `org.a11y.Status` was never set, and Qt, Firefox and Chromium bridges depend on it | 45202034 (`A11yStatus`) |
+| 21. Focus in a window behind was said | Nothing checked the window's ACTIVE state; GTK's frames carry it | 41adac79 (`in_active_window`) |
 | Structure 4 (part) | Linux never set `FocusEvent::app`, so per-application settings did nothing; "EDIT" was matched in general code | 514aabf5, d4e88df9 |
 
 **Also found during the rerun:** the example `okur_linux` set its options on `Config.settings`, which reaches only the voice. The engine reads the settings layers, so every Linux web run read pages at Medium (3b2aacec).
@@ -35,7 +36,9 @@ file:line references are to that commit.
 ## Linux stack: open, in order
 
 1. **(6) Pages are read whole, synchronously, on the event thread.** At about 7 sequential calls per object, a 5,000-object page is about 15 s (estimated), and the page's own focus is said only after it. Plan: a page-reader thread, cancelled when the focus leaves; the focus sent first; pipelined or Cache-interface reads; pages cached by document; a truncation flag.
-2. **(3c–e)** Drop a focus whose fresh node no longer has FOCUSED (fast Tabs). Get "n of m" from posinset/setsize or GetIndexInParent instead of reading the parent whole. Pipeline the per-node calls. First add `ms` and a call count to "native focus read" for real numbers.
+2. **(3c–e)** Drop a focus whose fresh node no longer has FOCUSED (fast Tabs). Get "n of m" from posinset/setsize (GTK's list items and rows carry them) or GetIndexInParent, instead of reading the parent whole. Pipeline the per-node calls.
+   - **Measured in the lab (ed7c39e5, the GTK replica):** a native focus read is 40 to 180 ms for 12 to 47 objects, about 3.5 ms an object. The parent read whole is the bulk: a column view's row read its 47-object list in 180 ms.
+   - **A page:** about 3 ms an object (color-grid: 433 objects in 1280 ms, capture-atspi-snapshots.sh).
 3. **(11) Make the model's read plan explicit.** The read plan (which ancestors whole, `CONTROL_LIMIT`) moves into okur-linux-model. A tree cut at 200 objects is marked. Peers are matched by object path, not by name and states.
 4. **(9)** Page actions find objects by index into a list a later read replaces; they need a generation stamp or (bus, path) on each node.
 5. **(14)** CapsLock as the Okur key is never grabbed, so X toggles Caps Lock.
