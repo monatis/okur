@@ -179,7 +179,10 @@ pub fn native_focus(
             .filter(|c| !c.is_empty())
             .collect();
         event.container_is_list_view = true;
-        if let Some(rows) = parent {
+        if let Some((at, of)) = own_place(focus) {
+            event.item_index = Some(at);
+            event.item_count = Some(of);
+        } else if let Some(rows) = parent {
             place(&mut event, focus, rows);
         }
         event.container_role = Some(Role::List);
@@ -192,7 +195,13 @@ pub fn native_focus(
     // A list's item, its list named.
     if focus.role == "list item" {
         if let Some(list) = parent.filter(|p| p.role == "list") {
-            place(&mut event, focus, list);
+            match own_place(focus) {
+                Some((at, of)) => {
+                    event.item_index = Some(at);
+                    event.item_count = Some(of);
+                }
+                None => place(&mut event, focus, list),
+            }
             event.container_role = Some(Role::List);
             event.container_name = Some(list.name.clone());
             event.groups = vec![okur_core::GroupEntry::list(list.name.clone())];
@@ -219,22 +228,17 @@ pub fn native_focus(
 }
 
 /// The place a node says itself, from 1, and its set's size: GTK's list items and rows carry
-/// `posinset` and `setsize` (the lab's traces at f0b3a66d).
+/// `posinset` and `setsize` (the lab's traces at f0b3a66d). Not a tree's: there they number
+/// the flattened list, not the row's siblings (303's Reports, "2 of 4" for 1 of 2).
 fn own_place(node: &AtspiNode) -> Option<(usize, usize)> {
     let number = |name: &str| node.attributes.get(name)?.parse::<usize>().ok();
     Some((number("posinset")?, number("setsize")?)).filter(|(at, of)| *at >= 1 && at <= of)
 }
 
-/// `node`'s place among its parent's children of its role, from 1, and their count: the one it
-/// says itself where it says one, its parent then read alone. A peer is
+/// `node`'s place among its parent's children of its role, from 1, and their count. A peer is
 /// `node` by its object's path where the read has one (two items of one name and state are two
 /// places: the code review of 2026-11-08, finding 11), else by its name, states and label.
 fn place(event: &mut FocusEvent, node: &AtspiNode, parent: &AtspiNode) {
-    if let Some((at, of)) = own_place(node) {
-        event.item_index = Some(at);
-        event.item_count = Some(of);
-        return;
-    }
     let peers: Vec<&AtspiNode> = parent
         .children
         .iter()
@@ -351,8 +355,7 @@ mod tests {
             name: "Files".to_owned(),
             ..AtspiNode::default()
         };
-        let mut event = FocusEvent::new(Role::ListItem);
-        place(&mut event, &item, &list);
+        let event = native_focus(FocusEvent::new(Role::ListItem), &item, &[list]);
         assert_eq!(
             (event.item_index, event.item_count),
             (Some(500), Some(1000))
