@@ -35,14 +35,21 @@ fi
 if [ -n "$send" ]; then
     timeout 600 opendesk push --peer "$PEER" "$bundle" D:/okur-linux/okur.bundle > /dev/null
 fi
-# Every lab script but the dev box's own (this one and job.sh).
-for script in skills/linux-lab/scripts/*.sh skills/linux-lab/scripts/*.py; do
-    case "$(basename "$script")" in sync.sh|job.sh) continue ;; esac
-    timeout 120 opendesk push --peer "$PEER" "$script" "D:/okur-linux/$(basename "$script")" > /dev/null
-done
-# Clone once, then fetch: the lab's tree lives in the distribution's own disk, where builds are fast.
+# Clone once, then fetch: the lab's tree lives in the distribution's own disk, where builds are
+# fast. The lab's scripts (every one but the dev box's own, this one and job.sh) are copied to
+# D:\okur-linux from the commit checked out, in the same call: pushed one by one, thirty of
+# them outlasted a caller's timeout before the checkout came (2026-11-08).
+checkout=
 if [ -n "$send" ]; then
-    inner="set -e; if [ ! -d ~/okur/.git ]; then git clone -q -b $branch /mnt/d/okur-linux/okur.bundle ~/okur; fi; cd ~/okur; git fetch -q /mnt/d/okur-linux/okur.bundle $branch:refs/remotes/bundle/$branch; git checkout -q -B $branch refs/remotes/bundle/$branch; git log --oneline -1"
-    timeout 300 opendesk exec --peer "$PEER" --timeout 280 "wsl.exe -d $DISTRO -u root -- bash -lc '$inner'" | tr -d '\000'
+    checkout="if [ ! -d ~/okur/.git ]; then git clone -q -b $branch /mnt/d/okur-linux/okur.bundle ~/okur; fi; cd ~/okur; git fetch -q /mnt/d/okur-linux/okur.bundle $branch:refs/remotes/bundle/$branch; git checkout -q -B $branch refs/remotes/bundle/$branch;"
 fi
-echo "synced $branch at $head to $PEER ($DISTRO)"
+# No shell variable in it: PowerShell, between opendesk and WSL, would expand it.
+copy="cd ~/okur/skills/linux-lab/scripts; cp *.sh *.py /mnt/d/okur-linux/; rm -f /mnt/d/okur-linux/sync.sh /mnt/d/okur-linux/job.sh"
+inner="set -e; $checkout $copy; cd ~/okur; git log --oneline -1"
+lab=$(timeout 300 opendesk exec --peer "$PEER" --timeout 280 "wsl.exe -d $DISTRO -u root -- bash -lc '$inner'" | tr -d '\000\r')
+echo "$lab"
+# The lab's checkout must be this one: a sync that did not reach it is said, never assumed.
+case "$lab" in
+    *"$head"*) echo "synced $branch at $head to $PEER ($DISTRO)" ;;
+    *) echo "sync FAILED: the lab is not at $head" >&2; exit 1 ;;
+esac
