@@ -254,6 +254,8 @@ impl EventSource for AtspiEventSource {
                 let mut active_window: Option<String> = None;
                 // What the last focus outside a page read as: its role and name.
                 let mut focus_said: Option<(okur_core::Role, Option<String>)> = None;
+                // The focused control outside a page, and the value it was said with.
+                let mut native_focused: Option<(ElementData, Option<String>)> = None;
                 let objects = objects;
                 while !stop.load(Ordering::SeqCst) {
                     match subscription.recv_status(Duration::from_millis(100)) {
@@ -350,6 +352,28 @@ impl EventSource for AtspiEventSource {
                                     continue;
                                 }
                                 focus_said = Some(said);
+                                native_focused =
+                                    event.target.clone().map(|e| (e, read.value.clone()));
+                            } else if focus && document.is_some() {
+                                native_focused = None;
+                            }
+                            // A label renamed: the focused control may show another value. GTK's
+                            // drop-down shows its chosen item in its button's label, renamed as
+                            // Down or Up chooses another [obs, 304/s9-s10: "Brazil | 3 of 3"].
+                            if event.kind == EventKind::NameChanged {
+                                if let Some((element, value)) = native_focused.as_mut() {
+                                    let control = native_focus(&provider, element);
+                                    if control.value != *value {
+                                        value.clone_from(&control.value);
+                                        let change = AccessibilityEvent::Change {
+                                            kind: okur_core::event::ChangeKind::Value,
+                                            control,
+                                        };
+                                        if !sink.send(change) {
+                                            return;
+                                        }
+                                    }
+                                }
                             }
                             if let Some(event) =
                                 native.or_else(|| convert(&event, document.is_some()))
