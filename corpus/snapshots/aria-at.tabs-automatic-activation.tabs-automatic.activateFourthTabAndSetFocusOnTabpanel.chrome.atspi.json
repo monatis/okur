@@ -1,0 +1,690 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Example of Tabs with Automatic Activation",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "df0fa579238647c55d6caf180655c7db9285f620caed90855c33763d88c328da",
+    "captured_at_unix_ms": 1794148673442,
+    "node_count": 56,
+    "capture_ms": 154
+  },
+  "root": {
+    "role": "document web",
+    "name": "Example of Tabs with Automatic Activation",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124075776,
+    "text": "￼",
+    "uri": "file:///root/okur/corpus/fixtures/aria-at/tabs-automatic-activation/tabs-automatic.activateFourthTabAndSetFocusOnTabpanel.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼￼",
+        "children": [
+          {
+            "role": "heading",
+            "name": "Example of Tabs with Automatic Activation",
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "states": 1090519296,
+            "text": "Example of Tabs with Automatic Activation",
+            "children": [
+              {
+                "role": "static",
+                "name": "Example of Tabs with Automatic Activation",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1090519296,
+                "text": "Example of Tabs with Automatic Activation"
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼￼",
+            "children": [
+              {
+                "role": "heading",
+                "name": "About This Example",
+                "attributes": {
+                  "display": "block",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "About This Example",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "About This Example",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "About This Example"
+                  }
+                ]
+              },
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "This example section demonstrates a tabs widget that implements the ￼. In this example, a tab is automatically activated and its associated panel is displayed when the tab receives focus. It is recommended that authors consider implementing automatic activation of tabs ￼ circumstances where panels can be displayed instantly, i.e., all panel content is present in the DOM. For additional guidance, see ￼.",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "This example section demonstrates a tabs widget that implements the ",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "This example section demonstrates a tabs widget that implements the "
+                  },
+                  {
+                    "role": "link",
+                    "name": "Tabs Pattern",
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1124075776,
+                    "text": "Tabs Pattern",
+                    "uri": "file:///root/okur/corpus/fixtures/aria-at/tabs-pattern.html",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Tabs Pattern",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Tabs Pattern"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "static",
+                    "name": ". In this example, a tab is automatically activated and its associated panel is displayed when the tab receives focus. It is recommended that authors consider implementing automatic activation of tabs ",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": ". In this example, a tab is automatically activated and its associated panel is displayed when the tab receives focus. It is recommended that authors consider implementing automatic activation of tabs "
+                  },
+                  {
+                    "role": "static",
+                    "attributes": {
+                      "display": "inline",
+                      "tag": "strong",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "only in",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "only in",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "only in"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "static",
+                    "name": " circumstances where panels can be displayed instantly, i.e., all panel content is present in the DOM. For additional guidance, see ",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": " circumstances where panels can be displayed instantly, i.e., all panel content is present in the DOM. For additional guidance, see "
+                  },
+                  {
+                    "role": "link",
+                    "name": "Deciding When to Make Selection Automatically Follow Focus",
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1124075776,
+                    "text": "Deciding When to Make Selection Automatically Follow Focus",
+                    "uri": "file:///root/okur/corpus/practices/keyboard-interface/keyboard-interface-practice.html#kbd_selection_follows_focus",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Deciding When to Make Selection Automatically Follow Focus",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Deciding When to Make Selection Automatically Follow Focus"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "static",
+                    "name": ".",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "."
+                  }
+                ]
+              },
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Similar examples include:",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Similar examples include:",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Similar examples include:"
+                  }
+                ]
+              },
+              {
+                "role": "list",
+                "attributes": {
+                  "display": "block",
+                  "setsize": "1",
+                  "tag": "ul",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼",
+                "children": [
+                  {
+                    "role": "list item",
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "1",
+                      "setsize": "1",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• ￼: A tabs widget where users activate a tab and display its panel by pressing Space or Enter.",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "• ",
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "• "
+                      },
+                      {
+                        "role": "link",
+                        "name": "Example of Tabs with Manual Activation",
+                        "attributes": {
+                          "display": "inline",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "states": 1124075776,
+                        "text": "Example of Tabs with Manual Activation",
+                        "uri": "file:///root/okur/corpus/fixtures/aria-at/tabs-automatic-activation/tabs-manual.html",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "Example of Tabs with Manual Activation",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "Example of Tabs with Manual Activation"
+                          }
+                        ]
+                      },
+                      {
+                        "role": "static",
+                        "name": ": A tabs widget where users activate a tab and display its panel by pressing ",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": ": A tabs widget where users activate a tab and display its panel by pressing "
+                      },
+                      {
+                        "role": "static",
+                        "name": "Space",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Space"
+                      },
+                      {
+                        "role": "static",
+                        "name": " or ",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": " or "
+                      },
+                      {
+                        "role": "static",
+                        "name": "Enter",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Enter"
+                      },
+                      {
+                        "role": "static",
+                        "name": ".",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼￼￼",
+            "children": [
+              {
+                "role": "heading",
+                "name": "Example",
+                "attributes": {
+                  "display": "block",
+                  "id": "ex_label",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Example",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Example",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Example"
+                  }
+                ]
+              },
+              {
+                "role": "separator",
+                "name": "Start of Example",
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_start_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "states": 1124090112
+              },
+              {
+                "role": "section",
+                "attributes": {
+                  "display": "block",
+                  "id": "ex1",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼￼￼￼",
+                "children": [
+                  {
+                    "role": "heading",
+                    "name": "Danish Composers",
+                    "attributes": {
+                      "display": "block",
+                      "id": "tablist-1",
+                      "level": "3",
+                      "name-from": "contents",
+                      "tag": "h3",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "Danish Composers",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Danish Composers",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Danish Composers"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "paragraph",
+                    "attributes": {
+                      "display": "block",
+                      "tag": "p",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "￼",
+                    "children": [
+                      {
+                        "role": "link",
+                        "name": "Navigate forwards from here",
+                        "attributes": {
+                          "display": "inline",
+                          "id": "beforelink",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "states": 1124075776,
+                        "text": "Navigate forwards from here",
+                        "uri": "file:///root/okur/corpus/fixtures/aria-at/tabs-automatic-activation/tabs-automatic.activateFourthTabAndSetFocusOnTabpanel.html#beforelink",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "Navigate forwards from here",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "Navigate forwards from here"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "role": "page tab list",
+                    "name": "Danish Composers",
+                    "attributes": {
+                      "class": "automatic",
+                      "display": "block",
+                      "explicit-name": "true",
+                      "name-from": "related-element",
+                      "setsize": "4",
+                      "tag": "div",
+                      "text-align": "left",
+                      "xml-roles": "tablist"
+                    },
+                    "states": 1124090112,
+                    "text": "￼￼￼￼",
+                    "children": [
+                      {
+                        "role": "page tab",
+                        "name": "Maria Ahlefeldt",
+                        "attributes": {
+                          "display": "inline-block",
+                          "id": "tab-1",
+                          "name-from": "contents",
+                          "posinset": "1",
+                          "setsize": "4",
+                          "tag": "button",
+                          "text-align": "left",
+                          "xml-roles": "tab"
+                        },
+                        "states": 1136658688,
+                        "text": "Maria Ahlefeldt"
+                      },
+                      {
+                        "role": "page tab",
+                        "name": "Carl Andersen",
+                        "attributes": {
+                          "display": "inline-block",
+                          "id": "tab-2",
+                          "name-from": "contents",
+                          "posinset": "2",
+                          "setsize": "4",
+                          "tag": "button",
+                          "text-align": "left",
+                          "xml-roles": "tab"
+                        },
+                        "states": 1128270080,
+                        "text": "Carl Andersen"
+                      },
+                      {
+                        "role": "page tab",
+                        "name": "Ida da Fonseca",
+                        "attributes": {
+                          "display": "inline-block",
+                          "id": "tab-3",
+                          "name-from": "contents",
+                          "posinset": "3",
+                          "setsize": "4",
+                          "tag": "button",
+                          "text-align": "left",
+                          "xml-roles": "tab"
+                        },
+                        "states": 1128270080,
+                        "text": "Ida da Fonseca"
+                      },
+                      {
+                        "role": "page tab",
+                        "name": "Peter Müller",
+                        "attributes": {
+                          "display": "inline-block",
+                          "id": "tab-4",
+                          "name-from": "contents",
+                          "posinset": "4",
+                          "setsize": "4",
+                          "tag": "button",
+                          "text-align": "left",
+                          "xml-roles": "tab"
+                        },
+                        "states": 1128270080,
+                        "text": "Peter Müller"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "scroll pane",
+                    "name": "Maria Ahlefeldt",
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "id": "tabpanel-1",
+                      "name-from": "related-element",
+                      "tag": "div",
+                      "text-align": "left",
+                      "xml-roles": "tabpanel"
+                    },
+                    "states": 1124075776,
+                    "text": "￼",
+                    "children": [
+                      {
+                        "role": "paragraph",
+                        "attributes": {
+                          "display": "block",
+                          "tag": "p",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "Maria Theresia Ahlefeldt (16 January 1755 – 20 December 1810) was a Danish, (originally German), composer. She is known as the first female composer in Denmark. Maria Theresia composed music for several ballets, operas, and plays of the royal theatre. She was given good critic as a composer and described as a “virkelig Tonekunstnerinde” ('a True Artist of Music').",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "Maria Theresia Ahlefeldt (16 January 1755 – 20 December 1810) was a Danish, (originally German), composer. She is known as the first female composer in Denmark. Maria Theresia composed music for several ballets, operas, and plays of the royal theatre. She was given good critic as a composer and described as a “",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "Maria Theresia Ahlefeldt (16 January 1755 – 20 December 1810) was a Danish, (originally German), composer. She is known as the first female composer in Denmark. Maria Theresia composed music for several ballets, operas, and plays of the royal theatre. She was given good critic as a composer and described as a “"
+                          },
+                          {
+                            "role": "static",
+                            "name": "virkelig Tonekunstnerinde",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "virkelig Tonekunstnerinde"
+                          },
+                          {
+                            "role": "static",
+                            "name": "” ('a True Artist of Music').",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "” ('a True Artist of Music')."
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼",
+                "children": [
+                  {
+                    "role": "link",
+                    "name": "Navigate backwards from here",
+                    "attributes": {
+                      "display": "inline",
+                      "id": "afterlink",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1124075776,
+                    "text": "Navigate backwards from here",
+                    "uri": "file:///root/okur/corpus/fixtures/aria-at/tabs-automatic-activation/tabs-automatic.activateFourthTabAndSetFocusOnTabpanel.html#afterlink",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Navigate backwards from here",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Navigate backwards from here"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "separator",
+                "name": "End of Example",
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_end_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "states": 1124090112
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼",
+            "children": [
+              {
+                "role": "button",
+                "name": "Run Test Setup",
+                "attributes": {
+                  "class": "button-run-test-setup",
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "states": 1124079872,
+                "text": "Run Test Setup"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

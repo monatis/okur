@@ -1,0 +1,304 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Rating Slider Example",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "b468bfc30531cbf604e8be95c04d8afc145e4141ef84bcbb45b79fa4ff05e7f0",
+    "captured_at_unix_ms": 1794148496098,
+    "node_count": 23,
+    "capture_ms": 72
+  },
+  "root": {
+    "role": "document web",
+    "name": "Rating Slider Example",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124075776,
+    "text": "￼",
+    "uri": "file:///root/okur/corpus/fixtures/aria-at/rating-slider/slider-rating.setFocusBeforeSlider.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼￼",
+        "children": [
+          {
+            "role": "heading",
+            "name": "Rating Slider Example",
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Rating Slider Example",
+            "children": [
+              {
+                "role": "static",
+                "name": "Rating Slider Example",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Rating Slider Example"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Following is an example of a rating input that demonstrates the ￼",
+            "children": [
+              {
+                "role": "static",
+                "name": "Following is an example of a rating input that demonstrates the ",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Following is an example of a rating input that demonstrates the "
+              },
+              {
+                "role": "link",
+                "name": "slider design pattern.",
+                "attributes": {
+                  "display": "inline",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "states": 1124075776,
+                "text": "slider design pattern.",
+                "uri": "https://w3c.github.io/aria-practices/#slider",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "slider design pattern.",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "slider design pattern."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼￼",
+            "children": [
+              {
+                "role": "heading",
+                "name": "Example",
+                "attributes": {
+                  "display": "block",
+                  "id": "ex_label",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Example",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Example",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Example"
+                  }
+                ]
+              },
+              {
+                "role": "separator",
+                "name": "Start of Example",
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_start_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "states": 1124090112
+              },
+              {
+                "role": "section",
+                "attributes": {
+                  "display": "block",
+                  "id": "ex1",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼￼￼￼",
+                "children": [
+                  {
+                    "role": "link",
+                    "name": "Navigate forwards from here",
+                    "attributes": {
+                      "display": "inline",
+                      "id": "beforelink",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1124075776,
+                    "text": "Navigate forwards from here",
+                    "uri": "file:///root/okur/corpus/fixtures/aria-at/rating-slider/slider-rating.setFocusBeforeSlider.html#beforelink",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Navigate forwards from here",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Navigate forwards from here"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "section",
+                    "attributes": {
+                      "class": "label",
+                      "display": "block",
+                      "id": "id-rating-label",
+                      "tag": "div",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "Rating",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Rating",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Rating"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "slider",
+                    "name": "Rating",
+                    "attributes": {
+                      "class": "rating-slider",
+                      "display": "block",
+                      "explicit-name": "true",
+                      "id": "id-rating",
+                      "name-from": "related-element",
+                      "tag": "div",
+                      "text-align": "left",
+                      "valuetext": "zero of five stars",
+                      "xml-roles": "slider"
+                    },
+                    "states": 1124092160
+                  },
+                  {
+                    "role": "link",
+                    "name": "Navigate backwards from here",
+                    "attributes": {
+                      "display": "inline",
+                      "id": "afterlink",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1124075776,
+                    "text": "Navigate backwards from here",
+                    "uri": "file:///root/okur/corpus/fixtures/aria-at/rating-slider/slider-rating.setFocusBeforeSlider.html#afterlink",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Navigate backwards from here",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Navigate backwards from here"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "separator",
+                "name": "End of Example",
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_end_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "states": 1124090112
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼",
+            "children": [
+              {
+                "role": "button",
+                "name": "Run Test Setup",
+                "attributes": {
+                  "class": "button-run-test-setup",
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "states": 1124079872,
+                "text": "Run Test Setup"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

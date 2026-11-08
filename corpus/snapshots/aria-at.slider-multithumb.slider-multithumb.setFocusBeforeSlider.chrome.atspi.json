@@ -1,0 +1,410 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Horizontal Multi-Thumb Slider Example",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "83df371adb7476813796ca3cc5c04d91408e98910aef518fad7525a993934a9a",
+    "captured_at_unix_ms": 1794148539636,
+    "node_count": 32,
+    "capture_ms": 96
+  },
+  "root": {
+    "role": "document web",
+    "name": "Horizontal Multi-Thumb Slider Example",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124075776,
+    "text": "￼",
+    "uri": "file:///root/okur/corpus/fixtures/aria-at/slider-multithumb/slider-multithumb.setFocusBeforeSlider.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼￼",
+        "children": [
+          {
+            "role": "heading",
+            "name": "Horizontal Multi-Thumb Slider Example",
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Horizontal Multi-Thumb Slider Example",
+            "children": [
+              {
+                "role": "static",
+                "name": "Horizontal Multi-Thumb Slider Example",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Horizontal Multi-Thumb Slider Example"
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼",
+            "children": [
+              {
+                "role": "heading",
+                "name": "About This Example",
+                "attributes": {
+                  "display": "block",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "About This Example",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "About This Example",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "About This Example"
+                  }
+                ]
+              },
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "The following example of the ￼ demonstrates an input for setting a pair of values that represent a range. This example enables users to specify a price range for a hotel reservation by moving the two arrows (thumbs) that represent the minimum and maximum price.",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "The following example of the ",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "The following example of the "
+                  },
+                  {
+                    "role": "link",
+                    "name": "Multi-Thumb Slider Pattern",
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1124075776,
+                    "text": "Multi-Thumb Slider Pattern",
+                    "uri": "https://www.w3.org/WAI/ARIA/apg/patterns/slider-multithumb/",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Multi-Thumb Slider Pattern",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Multi-Thumb Slider Pattern"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "static",
+                    "name": " demonstrates an input for setting a pair of values that represent a range. This example enables users to specify a price range for a hotel reservation by moving the two arrows (thumbs) that represent the minimum and maximum price.",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": " demonstrates an input for setting a pair of values that represent a range. This example enables users to specify a price range for a hotel reservation by moving the two arrows (thumbs) that represent the minimum and maximum price."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼￼￼￼",
+            "children": [
+              {
+                "role": "heading",
+                "name": "Example",
+                "attributes": {
+                  "display": "block",
+                  "id": "ex_label",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Example",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Example",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Example"
+                  }
+                ]
+              },
+              {
+                "role": "separator",
+                "name": "Start of Example",
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_start_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "states": 1124090112
+              },
+              {
+                "role": "link",
+                "name": "Navigate forwards from here",
+                "attributes": {
+                  "display": "inline",
+                  "id": "beforelink",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "states": 1124075776,
+                "text": "Navigate forwards from here",
+                "uri": "file:///root/okur/corpus/fixtures/aria-at/slider-multithumb/slider-multithumb.setFocusBeforeSlider.html#beforelink",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Navigate forwards from here",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Navigate forwards from here"
+                  }
+                ]
+              },
+              {
+                "role": "section",
+                "attributes": {
+                  "display": "block",
+                  "id": "ex1",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼￼",
+                "children": [
+                  {
+                    "role": "heading",
+                    "name": "Hotel Price Range (in USD)",
+                    "attributes": {
+                      "display": "block",
+                      "level": "3",
+                      "name-from": "contents",
+                      "tag": "h3",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "Hotel Price Range (in ￼)",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Hotel Price Range (in ",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Hotel Price Range (in "
+                      },
+                      {
+                        "role": "static",
+                        "name": "United States Dollars",
+                        "attributes": {
+                          "display": "inline",
+                          "explicit-name": "true",
+                          "name-from": "tooltip",
+                          "tag": "abbr",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "USD",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "USD",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "USD"
+                          }
+                        ]
+                      },
+                      {
+                        "role": "static",
+                        "name": ")",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": ")"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "section",
+                    "attributes": {
+                      "class": "slider-multithumb",
+                      "display": "block",
+                      "tag": "div",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "￼￼",
+                    "children": [
+                      {
+                        "role": "slider",
+                        "name": "Hotel Minimum Price in US dollars",
+                        "attributes": {
+                          "class": "minimum",
+                          "display": "inline",
+                          "explicit-name": "true",
+                          "name-from": "attribute",
+                          "tag": "g",
+                          "text-align": "left",
+                          "valuetext": "100",
+                          "xml-roles": "slider"
+                        },
+                        "states": 1124092160
+                      },
+                      {
+                        "role": "slider",
+                        "name": "Hotel Maximum Price in US dollars",
+                        "attributes": {
+                          "class": "maximum",
+                          "display": "inline",
+                          "explicit-name": "true",
+                          "name-from": "attribute",
+                          "tag": "g",
+                          "text-align": "left",
+                          "valuetext": "250",
+                          "xml-roles": "slider"
+                        },
+                        "states": 1124092160
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "separator",
+                "name": "End of Example",
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_end_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "states": 1124090112
+              },
+              {
+                "role": "link",
+                "name": "Navigate backwards from here",
+                "attributes": {
+                  "display": "inline",
+                  "id": "afterlink",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "states": 1124075776,
+                "text": "Navigate backwards from here",
+                "uri": "file:///root/okur/corpus/fixtures/aria-at/slider-multithumb/slider-multithumb.setFocusBeforeSlider.html#afterlink",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Navigate backwards from here",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Navigate backwards from here"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼",
+            "children": [
+              {
+                "role": "button",
+                "name": "Run Test Setup",
+                "attributes": {
+                  "class": "button-run-test-setup",
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "states": 1124079872,
+                "text": "Run Test Setup"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

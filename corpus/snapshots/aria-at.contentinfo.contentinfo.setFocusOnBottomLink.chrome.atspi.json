@@ -1,0 +1,315 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Contentinfo Landmark Example",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "317888a690b39f3ac7a0b1cba761d06d572af0d56603d9b0d74144dc77a71479",
+    "captured_at_unix_ms": 1794147941356,
+    "node_count": 25,
+    "capture_ms": 74
+  },
+  "root": {
+    "role": "document web",
+    "name": "Contentinfo Landmark Example",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124075776,
+    "text": "￼￼￼￼",
+    "uri": "file:///root/okur/corpus/fixtures/aria-at/contentinfo/contentinfo.setFocusOnBottomLink.html",
+    "children": [
+      {
+        "role": "link",
+        "name": "Navigate forwards from here",
+        "attributes": {
+          "display": "inline",
+          "id": "beforelink",
+          "name-from": "contents",
+          "tag": "a",
+          "text-align": "left"
+        },
+        "states": 1124075776,
+        "text": "Navigate forwards from here",
+        "uri": "file:///root/okur/corpus/fixtures/aria-at/contentinfo/contentinfo.setFocusOnBottomLink.html#beforelink",
+        "children": [
+          {
+            "role": "static",
+            "name": "Navigate forwards from here",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Navigate forwards from here"
+          }
+        ]
+      },
+      {
+        "role": "landmark",
+        "attributes": {
+          "class": "row",
+          "display": "block",
+          "tag": "footer",
+          "text-align": "left",
+          "xml-roles": "contentinfo"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼￼",
+        "children": [
+          {
+            "role": "link",
+            "name": "Top",
+            "attributes": {
+              "display": "inline",
+              "id": "top",
+              "name-from": "contents",
+              "tag": "a",
+              "text-align": "left"
+            },
+            "states": 1124075776,
+            "text": "Top",
+            "uri": "file:///root/okur/corpus/fixtures/aria-at/contentinfo/contentinfo.setFocusOnBottomLink.html#top",
+            "children": [
+              {
+                "role": "static",
+                "name": "Top",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Top"
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "class": "col-xs-12 col-sm-9 col-md-9 col-lg-10",
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "W3C ARIA Authoring Practices Task Force",
+            "children": [
+              {
+                "role": "static",
+                "name": "W3C ARIA Authoring Practices Task Force",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "W3C ARIA Authoring Practices Task Force"
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "class": "col-xs-12 col-sm-3 col-md-3 col-lg-2",
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Copyright 2021",
+            "children": [
+              {
+                "role": "static",
+                "name": "Copyright 2021",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Copyright 2021"
+              }
+            ]
+          },
+          {
+            "role": "link",
+            "name": "Bottom",
+            "attributes": {
+              "display": "inline",
+              "id": "bottom",
+              "name-from": "contents",
+              "tag": "a",
+              "text-align": "left"
+            },
+            "states": 1124075776,
+            "text": "Bottom",
+            "uri": "file:///root/okur/corpus/fixtures/aria-at/contentinfo/contentinfo.setFocusOnBottomLink.html#bottom",
+            "children": [
+              {
+                "role": "static",
+                "name": "Bottom",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Bottom"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "link",
+        "name": "Navigate backwards from here",
+        "attributes": {
+          "display": "inline",
+          "id": "afterlink",
+          "name-from": "contents",
+          "tag": "a",
+          "text-align": "left"
+        },
+        "states": 1124075776,
+        "text": "Navigate backwards from here",
+        "uri": "file:///root/okur/corpus/fixtures/aria-at/contentinfo/contentinfo.setFocusOnBottomLink.html#afterlink",
+        "children": [
+          {
+            "role": "static",
+            "name": "Navigate backwards from here",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Navigate backwards from here"
+          }
+        ]
+      },
+      {
+        "role": "section",
+        "attributes": {
+          "class": "col-xs-12 col-sm-9 col-md-6 col-lg-7",
+          "display": "block",
+          "tag": "div",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "landmark",
+            "attributes": {
+              "display": "block",
+              "tag": "main",
+              "text-align": "left",
+              "xml-roles": "main"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼",
+            "children": [
+              {
+                "role": "heading",
+                "name": "Contentinfo Landmark",
+                "attributes": {
+                  "display": "block",
+                  "id": "id1",
+                  "level": "1",
+                  "name-from": "contents",
+                  "tag": "h1",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Contentinfo Landmark",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Contentinfo Landmark",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Contentinfo Landmark"
+                  }
+                ]
+              },
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "A ￼ landmark is a way to identify common information at the bottom of each page within a website, typically called the \"footer\" of the page, including information such as copyrights and links to privacy and accessibility statements.",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "A ",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "A "
+                  },
+                  {
+                    "role": "static",
+                    "attributes": {
+                      "display": "inline",
+                      "tag": "code",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "contentinfo",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "contentinfo",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "contentinfo"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "static",
+                    "name": " landmark is a way to identify common information at the bottom of each page within a website, typically called the \"footer\" of the page, including information such as copyrights and links to privacy and accessibility statements.",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": " landmark is a way to identify common information at the bottom of each page within a website, typically called the \"footer\" of the page, including information such as copyrights and links to privacy and accessibility statements."
+                  }
+                ]
+              },
+              {
+                "role": "section",
+                "attributes": {
+                  "display": "block",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼",
+                "children": [
+                  {
+                    "role": "button",
+                    "name": "Run Test Setup",
+                    "attributes": {
+                      "class": "button-run-test-setup",
+                      "display": "inline-block",
+                      "name-from": "contents",
+                      "tag": "button",
+                      "text-align": "center"
+                    },
+                    "states": 1124079872,
+                    "text": "Run Test Setup"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

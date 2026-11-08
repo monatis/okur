@@ -1,0 +1,338 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Meter Example",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "54a9962f5593ccc31995f05527e0786a3e81198304229fad5e8b072805005120",
+    "captured_at_unix_ms": 1794148266484,
+    "node_count": 26,
+    "capture_ms": 81
+  },
+  "root": {
+    "role": "document web",
+    "name": "Meter Example",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124075776,
+    "text": "￼",
+    "uri": "file:///root/okur/corpus/fixtures/aria-at/meter/meter.setFocusOnButton.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼￼",
+        "children": [
+          {
+            "role": "heading",
+            "name": "Meter Example",
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Meter Example",
+            "children": [
+              {
+                "role": "static",
+                "name": "Meter Example",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Meter Example"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "The following example of a CPU meter demonstrates the ￼.",
+            "children": [
+              {
+                "role": "static",
+                "name": "The following example of a CPU meter demonstrates the ",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "The following example of a CPU meter demonstrates the "
+              },
+              {
+                "role": "link",
+                "name": "meter design pattern",
+                "attributes": {
+                  "display": "inline",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "states": 1124075776,
+                "text": "meter design pattern",
+                "uri": "https://w3c.github.io/aria-practices/#meter",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "meter design pattern",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "meter design pattern"
+                  }
+                ]
+              },
+              {
+                "role": "static",
+                "name": ".",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "."
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼￼",
+            "children": [
+              {
+                "role": "heading",
+                "name": "Example",
+                "attributes": {
+                  "display": "block",
+                  "id": "ex_label",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Example",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Example",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Example"
+                  }
+                ]
+              },
+              {
+                "role": "separator",
+                "name": "Start of Example",
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_start_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "states": 1124090112
+              },
+              {
+                "role": "section",
+                "attributes": {
+                  "display": "block",
+                  "id": "example",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼￼￼￼￼",
+                "children": [
+                  {
+                    "role": "heading",
+                    "name": "Central Processing Unit (CPU) Usage",
+                    "attributes": {
+                      "display": "block",
+                      "id": "cpu_usage_label",
+                      "level": "3",
+                      "name-from": "contents",
+                      "tag": "h3",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "Central Processing Unit (CPU) Usage",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Central Processing Unit (CPU) Usage",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Central Processing Unit (CPU) Usage"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "paragraph",
+                    "attributes": {
+                      "display": "block",
+                      "tag": "p",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "￼",
+                    "children": [
+                      {
+                        "role": "button",
+                        "name": "Change Value",
+                        "attributes": {
+                          "class": "play-meters",
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "button",
+                          "text-align": "center"
+                        },
+                        "states": 1124075776,
+                        "text": "Change Value"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "link",
+                    "name": "Navigate forwards from here",
+                    "attributes": {
+                      "display": "inline",
+                      "id": "beforelink",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1124075776,
+                    "text": "Navigate forwards from here",
+                    "uri": "file:///root/okur/corpus/fixtures/aria-at/meter/meter.setFocusOnButton.html#beforelink",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Navigate forwards from here",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Navigate forwards from here"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "level bar",
+                    "name": "Central Processing Unit (CPU) Usage",
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "name-from": "related-element",
+                      "tag": "div",
+                      "text-align": "left",
+                      "valuetext": "36.1665",
+                      "xml-roles": "meter"
+                    },
+                    "states": 1124075776
+                  },
+                  {
+                    "role": "link",
+                    "name": "Navigate backwards from here",
+                    "attributes": {
+                      "display": "inline",
+                      "id": "afterlink",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1124075776,
+                    "text": "Navigate backwards from here",
+                    "uri": "file:///root/okur/corpus/fixtures/aria-at/meter/meter.setFocusOnButton.html#afterlink",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Navigate backwards from here",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Navigate backwards from here"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "separator",
+                "name": "End of Example",
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_end_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "states": 1124090112
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼",
+            "children": [
+              {
+                "role": "button",
+                "name": "Run Test Setup",
+                "attributes": {
+                  "class": "button-run-test-setup",
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "states": 1124079872,
+                "text": "Run Test Setup"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

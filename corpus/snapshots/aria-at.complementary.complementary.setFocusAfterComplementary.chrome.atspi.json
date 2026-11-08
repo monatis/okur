@@ -1,0 +1,561 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Complementary Landmark Example",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "e1f809c818d6f6108b11f2d06ed7f6b7534f8b1cc28870311f8eaaf2609b2219",
+    "captured_at_unix_ms": 1794147915040,
+    "node_count": 45,
+    "capture_ms": 129
+  },
+  "root": {
+    "role": "document web",
+    "name": "Complementary Landmark Example",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124075776,
+    "text": "￼￼",
+    "uri": "file:///root/okur/corpus/fixtures/aria-at/complementary/complementary.setFocusAfterComplementary.html",
+    "children": [
+      {
+        "role": "section",
+        "attributes": {
+          "class": "col-xs-12 col-sm-12 col-md-3 col-lg-3",
+          "display": "block",
+          "tag": "div",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼",
+        "children": [
+          {
+            "role": "link",
+            "name": "Navigate forwards from here",
+            "attributes": {
+              "display": "inline",
+              "id": "beforelink",
+              "name-from": "contents",
+              "tag": "a",
+              "text-align": "left"
+            },
+            "states": 1124075776,
+            "text": "Navigate forwards from here",
+            "uri": "file:///root/okur/corpus/fixtures/aria-at/complementary/complementary.setFocusAfterComplementary.html#beforelink",
+            "children": [
+              {
+                "role": "static",
+                "name": "Navigate forwards from here",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Navigate forwards from here"
+              }
+            ]
+          },
+          {
+            "role": "landmark",
+            "name": "Landmarks",
+            "attributes": {
+              "display": "block",
+              "explicit-name": "true",
+              "name-from": "related-element",
+              "tag": "aside",
+              "text-align": "left",
+              "xml-roles": "complementary"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼￼￼",
+            "children": [
+              {
+                "role": "link",
+                "name": "Top",
+                "attributes": {
+                  "display": "inline",
+                  "id": "top",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "states": 1124075776,
+                "text": "Top",
+                "uri": "file:///root/okur/corpus/fixtures/aria-at/complementary/complementary.setFocusAfterComplementary.html#top",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Top",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Top"
+                  }
+                ]
+              },
+              {
+                "role": "heading",
+                "name": "Landmarks",
+                "attributes": {
+                  "display": "block",
+                  "id": "id4",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Landmarks",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Landmarks",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Landmarks"
+                  }
+                ]
+              },
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "The following landmarks are defined on this page:",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "The following landmarks are defined on this page:",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "The following landmarks are defined on this page:"
+                  }
+                ]
+              },
+              {
+                "role": "list",
+                "attributes": {
+                  "display": "block",
+                  "setsize": "6",
+                  "tag": "ul",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼￼￼￼￼￼",
+                "children": [
+                  {
+                    "role": "list item",
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "1",
+                      "setsize": "6",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• Banner",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "• ",
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "• "
+                      },
+                      {
+                        "role": "static",
+                        "name": "Banner",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Banner"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "list item",
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "2",
+                      "setsize": "6",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• Complementary",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "• ",
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "• "
+                      },
+                      {
+                        "role": "static",
+                        "name": "Complementary",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Complementary"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "list item",
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "3",
+                      "setsize": "6",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• Contentinfo",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "• ",
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "• "
+                      },
+                      {
+                        "role": "static",
+                        "name": "Contentinfo",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Contentinfo"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "list item",
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "4",
+                      "setsize": "6",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• Main",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "• ",
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "• "
+                      },
+                      {
+                        "role": "static",
+                        "name": "Main",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Main"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "list item",
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "5",
+                      "setsize": "6",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• Navigation",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "• ",
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "• "
+                      },
+                      {
+                        "role": "static",
+                        "name": "Navigation",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Navigation"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "list item",
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "6",
+                      "setsize": "6",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "• Region",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "• ",
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "• "
+                      },
+                      {
+                        "role": "static",
+                        "name": "Region",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Region"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "link",
+                "name": "Bottom",
+                "attributes": {
+                  "display": "inline",
+                  "id": "bottom",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "states": 1124075776,
+                "text": "Bottom",
+                "uri": "file:///root/okur/corpus/fixtures/aria-at/complementary/complementary.setFocusAfterComplementary.html#bottom",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Bottom",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Bottom"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "link",
+            "name": "Navigate backwards from here",
+            "attributes": {
+              "display": "inline",
+              "id": "afterlink",
+              "name-from": "contents",
+              "tag": "a",
+              "text-align": "left"
+            },
+            "states": 1124075776,
+            "text": "Navigate backwards from here",
+            "uri": "file:///root/okur/corpus/fixtures/aria-at/complementary/complementary.setFocusAfterComplementary.html#afterlink",
+            "children": [
+              {
+                "role": "static",
+                "name": "Navigate backwards from here",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Navigate backwards from here"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "section",
+        "attributes": {
+          "class": "col-xs-12 col-sm-9 col-md-6 col-lg-7",
+          "display": "block",
+          "tag": "div",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "landmark",
+            "attributes": {
+              "display": "block",
+              "tag": "main",
+              "text-align": "left",
+              "xml-roles": "main"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼",
+            "children": [
+              {
+                "role": "heading",
+                "name": "Complementary Landmark",
+                "attributes": {
+                  "display": "block",
+                  "id": "id1",
+                  "level": "1",
+                  "name-from": "contents",
+                  "tag": "h1",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Complementary Landmark",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Complementary Landmark",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Complementary Landmark"
+                  }
+                ]
+              },
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "A ￼ landmark is a supporting section of the document, designed to be complementary to the main content at a similar level in the DOM hierarchy, but remains meaningful when separated from the main content.",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "A ",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "A "
+                  },
+                  {
+                    "role": "static",
+                    "attributes": {
+                      "display": "inline",
+                      "tag": "code",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "complementary",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "complementary",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "complementary"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "static",
+                    "name": " landmark is a supporting section of the document, designed to be complementary to the main content at a similar level in the DOM hierarchy, but remains meaningful when separated from the main content.",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": " landmark is a supporting section of the document, designed to be complementary to the main content at a similar level in the DOM hierarchy, but remains meaningful when separated from the main content."
+                  }
+                ]
+              },
+              {
+                "role": "section",
+                "attributes": {
+                  "display": "block",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼",
+                "children": [
+                  {
+                    "role": "button",
+                    "name": "Run Test Setup",
+                    "attributes": {
+                      "class": "button-run-test-setup",
+                      "display": "inline-block",
+                      "name-from": "contents",
+                      "tag": "button",
+                      "text-align": "center"
+                    },
+                    "states": 1124079872,
+                    "text": "Run Test Setup"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

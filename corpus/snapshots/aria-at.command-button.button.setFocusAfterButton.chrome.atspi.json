@@ -1,0 +1,378 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Command Button Example",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "683ee64a4781abf027ff26a7974b861ea2b65752e424c86c0be3ed40dfcdc0d1",
+    "captured_at_unix_ms": 1794147901761,
+    "node_count": 31,
+    "capture_ms": 98
+  },
+  "root": {
+    "role": "document web",
+    "name": "Command Button Example",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124075776,
+    "text": "￼",
+    "uri": "file:///root/okur/corpus/fixtures/aria-at/command-button/button.setFocusAfterButton.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼￼",
+        "children": [
+          {
+            "role": "heading",
+            "name": "Command Button Example",
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Command Button Example",
+            "children": [
+              {
+                "role": "static",
+                "name": "Command Button Example",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Command Button Example"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "The following command button example demonstrates the ￼",
+            "children": [
+              {
+                "role": "static",
+                "name": "The following command button example demonstrates the ",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "The following command button example demonstrates the "
+              },
+              {
+                "role": "link",
+                "name": "button design pattern.",
+                "attributes": {
+                  "display": "inline",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "states": 1124075776,
+                "text": "button design pattern.",
+                "uri": "https://w3c.github.io/aria-practices/#button",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "button design pattern.",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "button design pattern."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼￼",
+            "children": [
+              {
+                "role": "heading",
+                "name": "Example",
+                "attributes": {
+                  "display": "block",
+                  "id": "ex_label",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Example",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Example",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Example"
+                  }
+                ]
+              },
+              {
+                "role": "separator",
+                "name": "Start of Example",
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_start_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "states": 1124090112
+              },
+              {
+                "role": "section",
+                "attributes": {
+                  "display": "block",
+                  "id": "example",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼￼￼￼",
+                "children": [
+                  {
+                    "role": "paragraph",
+                    "attributes": {
+                      "display": "block",
+                      "tag": "p",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "This “Print” action button uses a ￼ element.",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "This ",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "This "
+                      },
+                      {
+                        "role": "static",
+                        "name": "“",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "“"
+                      },
+                      {
+                        "role": "static",
+                        "name": "Print",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Print"
+                      },
+                      {
+                        "role": "static",
+                        "name": "”",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "”"
+                      },
+                      {
+                        "role": "static",
+                        "name": " action button uses a ",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": " action button uses a "
+                      },
+                      {
+                        "role": "static",
+                        "attributes": {
+                          "display": "inline",
+                          "tag": "code",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "div",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "div",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "div"
+                          }
+                        ]
+                      },
+                      {
+                        "role": "static",
+                        "name": " element.",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": " element."
+                      }
+                    ]
+                  },
+                  {
+                    "role": "link",
+                    "name": "Navigate forwards from here",
+                    "attributes": {
+                      "display": "inline",
+                      "id": "beforelink",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1124075776,
+                    "text": "Navigate forwards from here",
+                    "uri": "file:///root/okur/corpus/fixtures/aria-at/command-button/button.setFocusAfterButton.html#beforelink",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Navigate forwards from here",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Navigate forwards from here"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "section",
+                    "attributes": {
+                      "display": "block",
+                      "tag": "div",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "￼",
+                    "children": [
+                      {
+                        "role": "button",
+                        "name": "Print Page",
+                        "attributes": {
+                          "display": "inline-block",
+                          "id": "action",
+                          "name-from": "contents",
+                          "tag": "div",
+                          "text-align": "left",
+                          "xml-roles": "button"
+                        },
+                        "states": 1124075776,
+                        "text": "Print Page"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "link",
+                    "name": "Navigate backwards from here",
+                    "attributes": {
+                      "display": "inline",
+                      "id": "afterlink",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1124075776,
+                    "text": "Navigate backwards from here",
+                    "uri": "file:///root/okur/corpus/fixtures/aria-at/command-button/button.setFocusAfterButton.html#afterlink",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Navigate backwards from here",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Navigate backwards from here"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "separator",
+                "name": "End of Example",
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_end_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "states": 1124090112
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼",
+            "children": [
+              {
+                "role": "button",
+                "name": "Run Test Setup",
+                "attributes": {
+                  "class": "button-run-test-setup",
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "states": 1124079872,
+                "text": "Run Test Setup"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

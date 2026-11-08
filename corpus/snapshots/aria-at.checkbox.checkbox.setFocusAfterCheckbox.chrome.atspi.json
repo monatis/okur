@@ -1,0 +1,414 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Checkbox Example (Two State)",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "daaeb51e5ee369c5ab3a069d990cf64295d2847c1eeac54c524eded1eb6e878f",
+    "captured_at_unix_ms": 1794147772727,
+    "node_count": 32,
+    "capture_ms": 90
+  },
+  "root": {
+    "role": "document web",
+    "name": "Checkbox Example (Two State)",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124075776,
+    "text": "￼",
+    "uri": "file:///root/okur/corpus/fixtures/aria-at/checkbox/checkbox.setFocusAfterCheckbox.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼￼",
+        "children": [
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "id": "ex1",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼",
+            "children": [
+              {
+                "role": "heading",
+                "name": "Sandwich Condiments",
+                "attributes": {
+                  "display": "block",
+                  "id": "id-group-label",
+                  "level": "3",
+                  "name-from": "contents",
+                  "tag": "h3",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Sandwich Condiments",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Sandwich Condiments",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Sandwich Condiments"
+                  }
+                ]
+              },
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼",
+                "children": [
+                  {
+                    "role": "link",
+                    "name": "Navigate forwards from here",
+                    "attributes": {
+                      "display": "inline",
+                      "id": "beforelink",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1124075776,
+                    "text": "Navigate forwards from here",
+                    "uri": "file:///root/okur/corpus/fixtures/aria-at/checkbox/checkbox.setFocusAfterCheckbox.html#beforelink",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Navigate forwards from here",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Navigate forwards from here"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "panel",
+                "name": "Sandwich Condiments",
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "name-from": "related-element",
+                  "setsize": "0",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "group"
+                },
+                "states": 1124073728,
+                "text": "￼",
+                "children": [
+                  {
+                    "role": "list",
+                    "attributes": {
+                      "class": "checkboxes",
+                      "display": "block",
+                      "setsize": "5",
+                      "tag": "ul",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "￼￼￼￼￼",
+                    "children": [
+                      {
+                        "role": "list item",
+                        "attributes": {
+                          "display": "list-item",
+                          "level": "1",
+                          "posinset": "1",
+                          "setsize": "5",
+                          "tag": "li",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "￼",
+                        "children": [
+                          {
+                            "role": "check box",
+                            "name": "Lettuce",
+                            "attributes": {
+                              "checkable": "true",
+                              "display": "inline-block",
+                              "name-from": "contents",
+                              "tag": "div",
+                              "text-align": "left",
+                              "xml-roles": "checkbox"
+                            },
+                            "states": 2200147331328,
+                            "text": "￼Lettuce",
+                            "children": [
+                              {
+                                "role": "image",
+                                "attributes": {
+                                  "text-align": "left"
+                                },
+                                "states": 1124073728
+                              },
+                              {
+                                "role": "static",
+                                "name": "Lettuce",
+                                "attributes": {
+                                  "name-from": "contents"
+                                },
+                                "states": 1124073728,
+                                "text": "Lettuce"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "role": "list item",
+                        "attributes": {
+                          "display": "list-item",
+                          "level": "1",
+                          "posinset": "2",
+                          "setsize": "5",
+                          "tag": "li",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "￼",
+                        "children": [
+                          {
+                            "role": "paragraph",
+                            "attributes": {
+                              "display": "block",
+                              "tag": "p",
+                              "text-align": "left"
+                            },
+                            "states": 1124073728,
+                            "text": "￼",
+                            "children": [
+                              {
+                                "role": "link",
+                                "name": "Navigate backwards from here",
+                                "attributes": {
+                                  "display": "inline",
+                                  "id": "afterlink",
+                                  "name-from": "contents",
+                                  "tag": "a",
+                                  "text-align": "left"
+                                },
+                                "states": 1124075776,
+                                "text": "Navigate backwards from here",
+                                "uri": "file:///root/okur/corpus/fixtures/aria-at/checkbox/checkbox.setFocusAfterCheckbox.html#afterlink",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "Navigate backwards from here",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "Navigate backwards from here"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "role": "list item",
+                        "attributes": {
+                          "display": "list-item",
+                          "level": "1",
+                          "posinset": "3",
+                          "setsize": "5",
+                          "tag": "li",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "￼",
+                        "children": [
+                          {
+                            "role": "check box",
+                            "name": "Tomato",
+                            "attributes": {
+                              "checkable": "true",
+                              "display": "inline-block",
+                              "name-from": "contents",
+                              "tag": "div",
+                              "text-align": "left",
+                              "xml-roles": "checkbox"
+                            },
+                            "states": 2200147331344,
+                            "text": "￼Tomato",
+                            "children": [
+                              {
+                                "role": "image",
+                                "attributes": {
+                                  "text-align": "left"
+                                },
+                                "states": 1124073728
+                              },
+                              {
+                                "role": "static",
+                                "name": "Tomato",
+                                "attributes": {
+                                  "name-from": "contents"
+                                },
+                                "states": 1124073728,
+                                "text": "Tomato"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "role": "list item",
+                        "attributes": {
+                          "display": "list-item",
+                          "level": "1",
+                          "posinset": "4",
+                          "setsize": "5",
+                          "tag": "li",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "￼",
+                        "children": [
+                          {
+                            "role": "check box",
+                            "name": "Mustard",
+                            "attributes": {
+                              "checkable": "true",
+                              "display": "inline-block",
+                              "name-from": "contents",
+                              "tag": "div",
+                              "text-align": "left",
+                              "xml-roles": "checkbox"
+                            },
+                            "states": 2200147331328,
+                            "text": "￼Mustard",
+                            "children": [
+                              {
+                                "role": "image",
+                                "attributes": {
+                                  "text-align": "left"
+                                },
+                                "states": 1124073728
+                              },
+                              {
+                                "role": "static",
+                                "name": "Mustard",
+                                "attributes": {
+                                  "name-from": "contents"
+                                },
+                                "states": 1124073728,
+                                "text": "Mustard"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "role": "list item",
+                        "attributes": {
+                          "display": "list-item",
+                          "level": "1",
+                          "posinset": "5",
+                          "setsize": "5",
+                          "tag": "li",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "￼",
+                        "children": [
+                          {
+                            "role": "check box",
+                            "name": "Sprouts",
+                            "attributes": {
+                              "checkable": "true",
+                              "display": "inline-block",
+                              "name-from": "contents",
+                              "tag": "div",
+                              "text-align": "left",
+                              "xml-roles": "checkbox"
+                            },
+                            "states": 2200147331328,
+                            "text": "￼Sprouts",
+                            "children": [
+                              {
+                                "role": "image",
+                                "attributes": {
+                                  "text-align": "left"
+                                },
+                                "states": 1124073728
+                              },
+                              {
+                                "role": "static",
+                                "name": "Sprouts",
+                                "attributes": {
+                                  "name-from": "contents"
+                                },
+                                "states": 1124073728,
+                                "text": "Sprouts"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼",
+            "children": [
+              {
+                "role": "button",
+                "name": "Run Test Setup",
+                "attributes": {
+                  "class": "button-run-test-setup",
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "states": 1124079872,
+                "text": "Run Test Setup"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

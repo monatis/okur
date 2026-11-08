@@ -1,0 +1,352 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Switch Example",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "3393f827795b9fd5ae25aab1a84a11353a056f87ff7a6bce05e20d80b95f7f3b",
+    "captured_at_unix_ms": 1794148660248,
+    "node_count": 28,
+    "capture_ms": 86
+  },
+  "root": {
+    "role": "document web",
+    "name": "Switch Example",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124075776,
+    "text": "￼",
+    "uri": "file:///root/okur/corpus/fixtures/aria-at/switch/switch.setFocusOnSwitch.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼￼",
+        "children": [
+          {
+            "role": "heading",
+            "name": "Switch Example",
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Switch Example",
+            "children": [
+              {
+                "role": "static",
+                "name": "Switch Example",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Switch Example"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "This example illustrates implementation of the ￼ for a notification preferences control. It uses a ￼ element for the switch and CSS borders to provide graphical rendering of switch states.",
+            "children": [
+              {
+                "role": "static",
+                "name": "This example illustrates implementation of the ",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "This example illustrates implementation of the "
+              },
+              {
+                "role": "link",
+                "name": "switch design pattern",
+                "attributes": {
+                  "display": "inline",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "states": 1124075776,
+                "text": "switch design pattern",
+                "uri": "https://w3c.github.io/aria-practices/#switch",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "switch design pattern",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "switch design pattern"
+                  }
+                ]
+              },
+              {
+                "role": "static",
+                "name": " for a notification preferences control. It uses a ",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": " for a notification preferences control. It uses a "
+              },
+              {
+                "role": "static",
+                "attributes": {
+                  "display": "inline",
+                  "tag": "code",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "div",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "div",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "div"
+                  }
+                ]
+              },
+              {
+                "role": "static",
+                "name": " element for the switch and CSS borders to provide graphical rendering of switch states.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": " element for the switch and CSS borders to provide graphical rendering of switch states."
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼￼",
+            "children": [
+              {
+                "role": "heading",
+                "name": "Example",
+                "attributes": {
+                  "display": "block",
+                  "id": "ex_label",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Example",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Example",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Example"
+                  }
+                ]
+              },
+              {
+                "role": "separator",
+                "name": "Start of Example",
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_start_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "states": 1124090112
+              },
+              {
+                "role": "section",
+                "attributes": {
+                  "display": "block",
+                  "id": "ex1",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼￼￼",
+                "children": [
+                  {
+                    "role": "link",
+                    "name": "Navigate forwards from here",
+                    "attributes": {
+                      "display": "inline",
+                      "id": "beforelink",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1124075776,
+                    "text": "Navigate forwards from here",
+                    "uri": "file:///root/okur/corpus/fixtures/aria-at/switch/switch.setFocusOnSwitch.html#beforelink",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Navigate forwards from here",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Navigate forwards from here"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "toggle button",
+                    "name": "Notifications",
+                    "attributes": {
+                      "checkable": "true",
+                      "display": "block",
+                      "name-from": "contents",
+                      "tag": "div",
+                      "text-align": "left",
+                      "xml-roles": "switch"
+                    },
+                    "states": 2200147331328,
+                    "text": "￼￼",
+                    "children": [
+                      {
+                        "role": "section",
+                        "attributes": {
+                          "class": "label",
+                          "display": "inline-block",
+                          "tag": "span",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "Notifications",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "Notifications",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "Notifications"
+                          }
+                        ]
+                      },
+                      {
+                        "role": "section",
+                        "attributes": {
+                          "class": "switch",
+                          "display": "inline-block",
+                          "tag": "span",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728
+                      }
+                    ]
+                  },
+                  {
+                    "role": "link",
+                    "name": "Navigate backwards from here",
+                    "attributes": {
+                      "display": "inline",
+                      "id": "afterlink",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1124075776,
+                    "text": "Navigate backwards from here",
+                    "uri": "file:///root/okur/corpus/fixtures/aria-at/switch/switch.setFocusOnSwitch.html#afterlink",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Navigate backwards from here",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Navigate backwards from here"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "separator",
+                "name": "End of Example",
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_end_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "states": 1124090112
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼",
+            "children": [
+              {
+                "role": "button",
+                "name": "Run Test Setup",
+                "attributes": {
+                  "class": "button-run-test-setup",
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "states": 1124079872,
+                "text": "Run Test Setup"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

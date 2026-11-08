@@ -1,0 +1,257 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Main Landmark Example",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "180f1e1b2af8f82a3eb706bc6eb86758b0932c5a130695adc52a007c013b6996",
+    "captured_at_unix_ms": 1794148138302,
+    "node_count": 20,
+    "capture_ms": 64
+  },
+  "root": {
+    "role": "document web",
+    "name": "Main Landmark Example",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124075776,
+    "text": "￼",
+    "uri": "file:///root/okur/corpus/fixtures/aria-at/main/main.setFocusBeforeMain.html",
+    "children": [
+      {
+        "role": "section",
+        "attributes": {
+          "class": "col-xs-12 col-sm-9 col-md-6 col-lg-7",
+          "display": "block",
+          "tag": "div",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼",
+        "children": [
+          {
+            "role": "link",
+            "name": "Navigate forwards from here",
+            "attributes": {
+              "display": "inline",
+              "id": "beforelink",
+              "name-from": "contents",
+              "tag": "a",
+              "text-align": "left"
+            },
+            "states": 1124075776,
+            "text": "Navigate forwards from here",
+            "uri": "file:///root/okur/corpus/fixtures/aria-at/main/main.setFocusBeforeMain.html#beforelink",
+            "children": [
+              {
+                "role": "static",
+                "name": "Navigate forwards from here",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Navigate forwards from here"
+              }
+            ]
+          },
+          {
+            "role": "landmark",
+            "attributes": {
+              "display": "block",
+              "tag": "main",
+              "text-align": "left",
+              "xml-roles": "main"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼￼￼",
+            "children": [
+              {
+                "role": "link",
+                "name": "Top",
+                "attributes": {
+                  "display": "inline",
+                  "id": "top",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "states": 1124075776,
+                "text": "Top",
+                "uri": "file:///root/okur/corpus/fixtures/aria-at/main/main.setFocusBeforeMain.html#top",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Top",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Top"
+                  }
+                ]
+              },
+              {
+                "role": "heading",
+                "name": "Main Landmark",
+                "attributes": {
+                  "display": "block",
+                  "id": "id1",
+                  "level": "1",
+                  "name-from": "contents",
+                  "tag": "h1",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Main Landmark",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Main Landmark",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Main Landmark"
+                  }
+                ]
+              },
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "A ￼ landmark identifies the primary content of the page.",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "A ",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "A "
+                  },
+                  {
+                    "role": "static",
+                    "attributes": {
+                      "display": "inline",
+                      "tag": "code",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "main",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "main",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "main"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "static",
+                    "name": " landmark identifies the primary content of the page.",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": " landmark identifies the primary content of the page."
+                  }
+                ]
+              },
+              {
+                "role": "link",
+                "name": "Bottom",
+                "attributes": {
+                  "display": "inline",
+                  "id": "bottom",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "states": 1124075776,
+                "text": "Bottom",
+                "uri": "file:///root/okur/corpus/fixtures/aria-at/main/main.setFocusBeforeMain.html#bottom",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Bottom",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Bottom"
+                  }
+                ]
+              },
+              {
+                "role": "section",
+                "attributes": {
+                  "display": "block",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼",
+                "children": [
+                  {
+                    "role": "button",
+                    "name": "Run Test Setup",
+                    "attributes": {
+                      "class": "button-run-test-setup",
+                      "display": "inline-block",
+                      "name-from": "contents",
+                      "tag": "button",
+                      "text-align": "center"
+                    },
+                    "states": 1124079872,
+                    "text": "Run Test Setup"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "link",
+            "name": "Navigate backwards from here",
+            "attributes": {
+              "display": "inline",
+              "id": "afterlink",
+              "name-from": "contents",
+              "tag": "a",
+              "text-align": "left"
+            },
+            "states": 1124075776,
+            "text": "Navigate backwards from here",
+            "uri": "file:///root/okur/corpus/fixtures/aria-at/main/main.setFocusBeforeMain.html#afterlink",
+            "children": [
+              {
+                "role": "static",
+                "name": "Navigate backwards from here",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Navigate backwards from here"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

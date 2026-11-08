@@ -1,0 +1,1381 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Data Grid Examples",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "476fc1a208524a689e3e75f508209da125b734aa19a285dadb1bb678e75630cf",
+    "captured_at_unix_ms": 1794148275061,
+    "node_count": 110,
+    "capture_ms": 332
+  },
+  "root": {
+    "role": "document web",
+    "name": "Data Grid Examples",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124075776,
+    "text": "￼",
+    "uri": "file:///root/okur/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusAfterGrid.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼￼",
+        "children": [
+          {
+            "role": "heading",
+            "name": "Data Grid Examples",
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Data Grid Examples",
+            "children": [
+              {
+                "role": "static",
+                "name": "Data Grid Examples",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Data Grid Examples"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Following is an example implementation of the ￼ that demonstrate the keyboard interactions and ARIA features that enable accessible, interactive presentation of tabular information. The following grid presents a set of financial transactions via a simple grid with minimum ARIA markup and keyboard support.",
+            "children": [
+              {
+                "role": "static",
+                "name": "Following is an example implementation of the ",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Following is an example implementation of the "
+              },
+              {
+                "role": "link",
+                "name": "design pattern for grid",
+                "attributes": {
+                  "display": "inline",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "states": 1124075776,
+                "text": "design pattern for grid",
+                "uri": "https://w3c.github.io/aria-practices/#grid",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "design pattern for grid",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "design pattern for grid"
+                  }
+                ]
+              },
+              {
+                "role": "static",
+                "name": " that demonstrate the keyboard interactions and ARIA features that enable accessible, interactive presentation of tabular information. The following grid presents a set of financial transactions via a simple grid with minimum ARIA markup and keyboard support.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": " that demonstrate the keyboard interactions and ARIA features that enable accessible, interactive presentation of tabular information. The following grid presents a set of financial transactions via a simple grid with minimum ARIA markup and keyboard support."
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼",
+            "children": [
+              {
+                "role": "heading",
+                "name": "Examples",
+                "attributes": {
+                  "display": "block",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Examples",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Examples",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Examples"
+                  }
+                ]
+              },
+              {
+                "role": "section",
+                "attributes": {
+                  "display": "block",
+                  "tag": "section",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼￼￼￼",
+                "children": [
+                  {
+                    "role": "heading",
+                    "name": "Example 1: Minimal Data Grid",
+                    "attributes": {
+                      "display": "block",
+                      "id": "ex1_label",
+                      "level": "3",
+                      "name-from": "contents",
+                      "tag": "h3",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "Example 1: Minimal Data Grid",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Example 1: Minimal Data Grid",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Example 1: Minimal Data Grid"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "separator",
+                    "name": "Start of Example 1: Minimal Data Grid",
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "id": "ex1_start_sep",
+                      "name-from": "related-element",
+                      "tag": "div",
+                      "text-align": "left",
+                      "xml-roles": "separator"
+                    },
+                    "states": 1124090112
+                  },
+                  {
+                    "role": "section",
+                    "attributes": {
+                      "display": "block",
+                      "id": "ex1",
+                      "tag": "div",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "￼￼￼￼",
+                    "children": [
+                      {
+                        "role": "heading",
+                        "name": "Transactions January 1 through January 6",
+                        "attributes": {
+                          "display": "block",
+                          "id": "grid1Label",
+                          "level": "4",
+                          "name-from": "contents",
+                          "tag": "h4",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "Transactions January 1 through January 6",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "Transactions January 1 through January 6",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "Transactions January 1 through January 6"
+                          }
+                        ]
+                      },
+                      {
+                        "role": "link",
+                        "name": "Navigate forwards from here",
+                        "attributes": {
+                          "display": "inline",
+                          "id": "beforelink",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "states": 1124075776,
+                        "text": "Navigate forwards from here",
+                        "uri": "file:///root/okur/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusAfterGrid.html#beforelink",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "Navigate forwards from here",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "Navigate forwards from here"
+                          }
+                        ]
+                      },
+                      {
+                        "role": "table",
+                        "name": "Transactions January 1 through January 6",
+                        "attributes": {
+                          "class": "data",
+                          "display": "table",
+                          "explicit-name": "true",
+                          "id": "ex1-grid",
+                          "name-from": "related-element",
+                          "tag": "table",
+                          "text-align": "left",
+                          "xml-roles": "grid"
+                        },
+                        "states": 1124073728,
+                        "text": "￼￼￼￼￼￼￼",
+                        "children": [
+                          {
+                            "role": "table row",
+                            "name": "Date Type Description Amount Balance",
+                            "attributes": {
+                              "display": "table-row",
+                              "name-from": "contents",
+                              "tag": "tr",
+                              "text-align": "left"
+                            },
+                            "states": 1124073728,
+                            "text": "￼￼￼￼￼",
+                            "children": [
+                              {
+                                "role": "column header",
+                                "name": "Date",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "0",
+                                  "tag": "th",
+                                  "text-align": "center"
+                                },
+                                "states": 1124073728,
+                                "text": "Date",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "Date",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "Date"
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "column header",
+                                "name": "Type",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "1",
+                                  "tag": "th",
+                                  "text-align": "center"
+                                },
+                                "states": 1124073728,
+                                "text": "Type",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "Type",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "Type"
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "column header",
+                                "name": "Description",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "2",
+                                  "tag": "th",
+                                  "text-align": "center"
+                                },
+                                "states": 1124073728,
+                                "text": "Description",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "Description",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "Description"
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "column header",
+                                "name": "Amount",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "3",
+                                  "tag": "th",
+                                  "text-align": "center"
+                                },
+                                "states": 1124073728,
+                                "text": "Amount",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "Amount",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "Amount"
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "column header",
+                                "name": "Balance",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "4",
+                                  "tag": "th",
+                                  "text-align": "center"
+                                },
+                                "states": 1124073728,
+                                "text": "Balance",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "Balance",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "Balance"
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "role": "table row",
+                            "name": "01-Jan-16 Deposit Cash Deposit $1,000,000.00 $1,000,000.00",
+                            "attributes": {
+                              "display": "table-row",
+                              "name-from": "contents",
+                              "tag": "tr",
+                              "text-align": "left"
+                            },
+                            "states": 1124073728,
+                            "text": "￼￼￼￼￼",
+                            "children": [
+                              {
+                                "role": "table cell",
+                                "name": "01-Jan-16",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "5",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "states": 1124075776,
+                                "text": "01-Jan-16",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "01-Jan-16",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "01-Jan-16"
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "table cell",
+                                "name": "Deposit",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "6",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "states": 1124075776,
+                                "text": "Deposit",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "Deposit",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "Deposit"
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "table cell",
+                                "name": "Cash Deposit",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "7",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "states": 1124073728,
+                                "text": "￼",
+                                "children": [
+                                  {
+                                    "role": "link",
+                                    "name": "Cash Deposit",
+                                    "attributes": {
+                                      "display": "inline",
+                                      "name-from": "contents",
+                                      "tag": "a",
+                                      "text-align": "left"
+                                    },
+                                    "states": 1124075776,
+                                    "text": "Cash Deposit",
+                                    "uri": "file:///root/okur/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusAfterGrid.html#",
+                                    "children": [
+                                      {
+                                        "role": "static",
+                                        "name": "Cash Deposit",
+                                        "attributes": {
+                                          "name-from": "contents"
+                                        },
+                                        "states": 1124073728,
+                                        "text": "Cash Deposit"
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "table cell",
+                                "name": "$1,000,000.00",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "8",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "states": 1124075776,
+                                "text": "$1,000,000.00",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "$1,000,000.00",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "$1,000,000.00"
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "table cell",
+                                "name": "$1,000,000.00",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "9",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "states": 1124075776,
+                                "text": "$1,000,000.00",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "$1,000,000.00",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "$1,000,000.00"
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "role": "table row",
+                            "name": "02-Jan-16 Debit Down Town Grocery $250.00 $999,750.00",
+                            "attributes": {
+                              "display": "table-row",
+                              "name-from": "contents",
+                              "tag": "tr",
+                              "text-align": "left"
+                            },
+                            "states": 1124073728,
+                            "text": "￼￼￼￼￼",
+                            "children": [
+                              {
+                                "role": "table cell",
+                                "name": "02-Jan-16",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "10",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "states": 1124075776,
+                                "text": "02-Jan-16",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "02-Jan-16",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "02-Jan-16"
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "table cell",
+                                "name": "Debit",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "11",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "states": 1124075776,
+                                "text": "Debit",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "Debit",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "Debit"
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "table cell",
+                                "name": "Down Town Grocery",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "12",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "states": 1124073728,
+                                "text": "￼",
+                                "children": [
+                                  {
+                                    "role": "link",
+                                    "name": "Down Town Grocery",
+                                    "attributes": {
+                                      "display": "inline",
+                                      "name-from": "contents",
+                                      "tag": "a",
+                                      "text-align": "left"
+                                    },
+                                    "states": 1124075776,
+                                    "text": "Down Town Grocery",
+                                    "uri": "file:///root/okur/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusAfterGrid.html#",
+                                    "children": [
+                                      {
+                                        "role": "static",
+                                        "name": "Down Town Grocery",
+                                        "attributes": {
+                                          "name-from": "contents"
+                                        },
+                                        "states": 1124073728,
+                                        "text": "Down Town Grocery"
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "table cell",
+                                "name": "$250.00",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "13",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "states": 1124075776,
+                                "text": "$250.00",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "$250.00",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "$250.00"
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "table cell",
+                                "name": "$999,750.00",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "14",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "states": 1124075776,
+                                "text": "$999,750.00",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "$999,750.00",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "$999,750.00"
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "role": "table row",
+                            "name": "03-Jan-16 Debit Hot Coffee $9.00 $999,741.00",
+                            "attributes": {
+                              "display": "table-row",
+                              "name-from": "contents",
+                              "tag": "tr",
+                              "text-align": "left"
+                            },
+                            "states": 1124073728,
+                            "text": "￼￼￼￼￼",
+                            "children": [
+                              {
+                                "role": "table cell",
+                                "name": "03-Jan-16",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "15",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "states": 1124075776,
+                                "text": "03-Jan-16",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "03-Jan-16",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "03-Jan-16"
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "table cell",
+                                "name": "Debit",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "16",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "states": 1124075776,
+                                "text": "Debit",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "Debit",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "Debit"
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "table cell",
+                                "name": "Hot Coffee",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "17",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "states": 1124073728,
+                                "text": "￼",
+                                "children": [
+                                  {
+                                    "role": "link",
+                                    "name": "Hot Coffee",
+                                    "attributes": {
+                                      "display": "inline",
+                                      "name-from": "contents",
+                                      "tag": "a",
+                                      "text-align": "left"
+                                    },
+                                    "states": 1124075776,
+                                    "text": "Hot Coffee",
+                                    "uri": "file:///root/okur/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusAfterGrid.html#",
+                                    "children": [
+                                      {
+                                        "role": "static",
+                                        "name": "Hot Coffee",
+                                        "attributes": {
+                                          "name-from": "contents"
+                                        },
+                                        "states": 1124073728,
+                                        "text": "Hot Coffee"
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "table cell",
+                                "name": "$9.00",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "18",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "states": 1124075776,
+                                "text": "$9.00",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "$9.00",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "$9.00"
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "table cell",
+                                "name": "$999,741.00",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "19",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "states": 1124075776,
+                                "text": "$999,741.00",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "$999,741.00",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "$999,741.00"
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "role": "table row",
+                            "name": "04-Jan-16 Debit The Filling Station $88.00 $999,653.00",
+                            "attributes": {
+                              "display": "table-row",
+                              "name-from": "contents",
+                              "tag": "tr",
+                              "text-align": "left"
+                            },
+                            "states": 1124073728,
+                            "text": "￼￼￼￼￼",
+                            "children": [
+                              {
+                                "role": "table cell",
+                                "name": "04-Jan-16",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "20",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "states": 1124075776,
+                                "text": "04-Jan-16",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "04-Jan-16",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "04-Jan-16"
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "table cell",
+                                "name": "Debit",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "21",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "states": 1124075776,
+                                "text": "Debit",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "Debit",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "Debit"
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "table cell",
+                                "name": "The Filling Station",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "22",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "states": 1124073728,
+                                "text": "￼",
+                                "children": [
+                                  {
+                                    "role": "link",
+                                    "name": "The Filling Station",
+                                    "attributes": {
+                                      "display": "inline",
+                                      "name-from": "contents",
+                                      "tag": "a",
+                                      "text-align": "left"
+                                    },
+                                    "states": 1124075776,
+                                    "text": "The Filling Station",
+                                    "uri": "file:///root/okur/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusAfterGrid.html#",
+                                    "children": [
+                                      {
+                                        "role": "static",
+                                        "name": "The Filling Station",
+                                        "attributes": {
+                                          "name-from": "contents"
+                                        },
+                                        "states": 1124073728,
+                                        "text": "The Filling Station"
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "table cell",
+                                "name": "$88.00",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "23",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "states": 1124075776,
+                                "text": "$88.00",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "$88.00",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "$88.00"
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "table cell",
+                                "name": "$999,653.00",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "24",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "states": 1124075776,
+                                "text": "$999,653.00",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "$999,653.00",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "$999,653.00"
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "role": "table row",
+                            "name": "05-Jan-16 Debit Tinker's Hardware $3,421.00 $996,232.00",
+                            "attributes": {
+                              "display": "table-row",
+                              "name-from": "contents",
+                              "tag": "tr",
+                              "text-align": "left"
+                            },
+                            "states": 1124073728,
+                            "text": "￼￼￼￼￼",
+                            "children": [
+                              {
+                                "role": "table cell",
+                                "name": "05-Jan-16",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "25",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "states": 1124075776,
+                                "text": "05-Jan-16",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "05-Jan-16",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "05-Jan-16"
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "table cell",
+                                "name": "Debit",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "26",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "states": 1124075776,
+                                "text": "Debit",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "Debit",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "Debit"
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "table cell",
+                                "name": "Tinker's Hardware",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "27",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "states": 1124073728,
+                                "text": "￼",
+                                "children": [
+                                  {
+                                    "role": "link",
+                                    "name": "Tinker's Hardware",
+                                    "attributes": {
+                                      "display": "inline",
+                                      "name-from": "contents",
+                                      "tag": "a",
+                                      "text-align": "left"
+                                    },
+                                    "states": 1124075776,
+                                    "text": "Tinker's Hardware",
+                                    "uri": "file:///root/okur/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusAfterGrid.html#",
+                                    "children": [
+                                      {
+                                        "role": "static",
+                                        "name": "Tinker's Hardware",
+                                        "attributes": {
+                                          "name-from": "contents"
+                                        },
+                                        "states": 1124073728,
+                                        "text": "Tinker's Hardware"
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "table cell",
+                                "name": "$3,421.00",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "28",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "states": 1124075776,
+                                "text": "$3,421.00",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "$3,421.00",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "$3,421.00"
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "table cell",
+                                "name": "$996,232.00",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "29",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "states": 1124075776,
+                                "text": "$996,232.00",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "$996,232.00",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "$996,232.00"
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "role": "table row",
+                            "name": "06-Jan-16 Debit Cutey's Salon $700.00 $995,532.00",
+                            "attributes": {
+                              "display": "table-row",
+                              "name-from": "contents",
+                              "tag": "tr",
+                              "text-align": "left"
+                            },
+                            "states": 1124073728,
+                            "text": "￼￼￼￼￼",
+                            "children": [
+                              {
+                                "role": "table cell",
+                                "name": "06-Jan-16",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "30",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "states": 1124075776,
+                                "text": "06-Jan-16",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "06-Jan-16",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "06-Jan-16"
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "table cell",
+                                "name": "Debit",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "31",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "states": 1124075776,
+                                "text": "Debit",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "Debit",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "Debit"
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "table cell",
+                                "name": "Cutey's Salon",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "32",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "states": 1124073728,
+                                "text": "￼",
+                                "children": [
+                                  {
+                                    "role": "link",
+                                    "name": "Cutey's Salon",
+                                    "attributes": {
+                                      "display": "inline",
+                                      "name-from": "contents",
+                                      "tag": "a",
+                                      "text-align": "left"
+                                    },
+                                    "states": 1124075776,
+                                    "text": "Cutey's Salon",
+                                    "uri": "file:///root/okur/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusAfterGrid.html#",
+                                    "children": [
+                                      {
+                                        "role": "static",
+                                        "name": "Cutey's Salon",
+                                        "attributes": {
+                                          "name-from": "contents"
+                                        },
+                                        "states": 1124073728,
+                                        "text": "Cutey's Salon"
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "table cell",
+                                "name": "$700.00",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "33",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "states": 1124075776,
+                                "text": "$700.00",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "$700.00",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "$700.00"
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "table cell",
+                                "name": "$995,532.00",
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "34",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "states": 1124075776,
+                                "text": "$995,532.00",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "$995,532.00",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "$995,532.00"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "role": "link",
+                        "name": "Navigate backwards from here",
+                        "attributes": {
+                          "display": "inline",
+                          "id": "afterlink",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "states": 1124075776,
+                        "text": "Navigate backwards from here",
+                        "uri": "file:///root/okur/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusAfterGrid.html#afterlink",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "Navigate backwards from here",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "Navigate backwards from here"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "role": "separator",
+                    "name": "End of Example 1: Minimal Data Grid",
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "id": "ex1_end_sep",
+                      "name-from": "related-element",
+                      "tag": "div",
+                      "text-align": "left",
+                      "xml-roles": "separator"
+                    },
+                    "states": 1124090112
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼",
+            "children": [
+              {
+                "role": "button",
+                "name": "Run Test Setup",
+                "attributes": {
+                  "class": "button-run-test-setup",
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "states": 1124079872,
+                "text": "Run Test Setup"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

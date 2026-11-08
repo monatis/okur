@@ -1,0 +1,412 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Banner Landmark Example",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "09e995a2580da049e0bc0d98f8d04541125b17d8724a28efd1d0d9491a49f394",
+    "captured_at_unix_ms": 1794147692762,
+    "node_count": 32,
+    "capture_ms": 93
+  },
+  "root": {
+    "role": "document web",
+    "name": "Banner Landmark Example",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124075776,
+    "text": "￼￼￼￼",
+    "uri": "file:///root/okur/corpus/fixtures/aria-at/banner/banner.setFocusBeforeBanner.html",
+    "children": [
+      {
+        "role": "link",
+        "name": "Navigate forwards from here",
+        "attributes": {
+          "display": "inline",
+          "id": "beforelink",
+          "name-from": "contents",
+          "tag": "a",
+          "text-align": "left"
+        },
+        "states": 1124075776,
+        "text": "Navigate forwards from here",
+        "uri": "file:///root/okur/corpus/fixtures/aria-at/banner/banner.setFocusBeforeBanner.html#beforelink",
+        "children": [
+          {
+            "role": "static",
+            "name": "Navigate forwards from here",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Navigate forwards from here"
+          }
+        ]
+      },
+      {
+        "role": "landmark",
+        "attributes": {
+          "class": "row",
+          "display": "block",
+          "tag": "header",
+          "text-align": "left",
+          "xml-roles": "banner"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼￼",
+        "children": [
+          {
+            "role": "link",
+            "name": "Top",
+            "attributes": {
+              "display": "inline",
+              "id": "top",
+              "name-from": "contents",
+              "tag": "a",
+              "text-align": "left"
+            },
+            "states": 1124075776,
+            "text": "Top",
+            "uri": "file:///root/okur/corpus/fixtures/aria-at/banner/banner.setFocusBeforeBanner.html#top",
+            "children": [
+              {
+                "role": "static",
+                "name": "Top",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Top"
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "class": "col-xs-12 col-sm-3 col-md-3 col-lg-2",
+              "display": "block",
+              "id": "skip-to-attach",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼",
+            "children": [
+              {
+                "role": "section",
+                "attributes": {
+                  "class": "skip-to",
+                  "display": "block",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼",
+                "children": [
+                  {
+                    "role": "button",
+                    "name": "Skip To Content",
+                    "attributes": {
+                      "display": "inline-block",
+                      "haspopup": "menu",
+                      "keyshortcuts": "Alt+0",
+                      "name-from": "contents",
+                      "tag": "button",
+                      "text-align": "center"
+                    },
+                    "states": 4399170587392,
+                    "text": "Skip To Content"
+                  }
+                ]
+              },
+              {
+                "role": "image",
+                "name": "W3C Logo. To get missing image descriptions, open the context menu.",
+                "attributes": {
+                  "display": "inline",
+                  "explicit-name": "true",
+                  "name-from": "attribute",
+                  "roledescription": "Unlabeled image",
+                  "src": "file:///root/okur/corpus/fixtures/aria-at/banner/images/w3c.png",
+                  "tag": "img",
+                  "text-align": "left"
+                },
+                "states": 1124073728
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "class": "col-xs-12 col-sm-9 col-md-9 col-lg-10",
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼￼",
+            "children": [
+              {
+                "role": "heading",
+                "name": "ARIA Landmarks Example",
+                "attributes": {
+                  "display": "block",
+                  "level": "1",
+                  "name-from": "contents",
+                  "tag": "h1",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "ARIA Landmarks Example",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "ARIA Landmarks Example",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "ARIA Landmarks Example"
+                  }
+                ]
+              },
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "class": "inst",
+                  "display": "block",
+                  "id": "inst",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Visually outline the landmarks and/or headings on the page using the following buttons.",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Visually outline the landmarks and/or headings on the page using the following buttons.",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Visually outline the landmarks and/or headings on the page using the following buttons."
+                  }
+                ]
+              },
+              {
+                "role": "button",
+                "name": "Show Landmarks",
+                "attributes": {
+                  "description-from": "aria-describedby",
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "states": 1124075776,
+                "text": "Show Landmarks"
+              },
+              {
+                "role": "button",
+                "name": "Show Headings",
+                "attributes": {
+                  "description-from": "aria-describedby",
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "states": 1124075776,
+                "text": "Show Headings"
+              }
+            ]
+          },
+          {
+            "role": "link",
+            "name": "Bottom",
+            "attributes": {
+              "display": "inline",
+              "id": "bottom",
+              "name-from": "contents",
+              "tag": "a",
+              "text-align": "left"
+            },
+            "states": 1124075776,
+            "text": "Bottom",
+            "uri": "file:///root/okur/corpus/fixtures/aria-at/banner/banner.setFocusBeforeBanner.html#bottom",
+            "children": [
+              {
+                "role": "static",
+                "name": "Bottom",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Bottom"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "link",
+        "name": "Navigate backwards from here",
+        "attributes": {
+          "display": "inline",
+          "id": "afterlink",
+          "name-from": "contents",
+          "tag": "a",
+          "text-align": "left"
+        },
+        "states": 1124075776,
+        "text": "Navigate backwards from here",
+        "uri": "file:///root/okur/corpus/fixtures/aria-at/banner/banner.setFocusBeforeBanner.html#afterlink",
+        "children": [
+          {
+            "role": "static",
+            "name": "Navigate backwards from here",
+            "attributes": {
+              "name-from": "contents"
+            },
+            "states": 1124073728,
+            "text": "Navigate backwards from here"
+          }
+        ]
+      },
+      {
+        "role": "section",
+        "attributes": {
+          "class": "col-xs-12 col-sm-9 col-md-6 col-lg-7",
+          "display": "block",
+          "tag": "div",
+          "text-align": "left"
+        },
+        "states": 1124073728,
+        "text": "￼",
+        "children": [
+          {
+            "role": "landmark",
+            "attributes": {
+              "display": "block",
+              "tag": "main",
+              "text-align": "left",
+              "xml-roles": "main"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼",
+            "children": [
+              {
+                "role": "heading",
+                "name": "Banner Landmark",
+                "attributes": {
+                  "display": "block",
+                  "id": "id1",
+                  "level": "1",
+                  "name-from": "contents",
+                  "tag": "h1",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Banner Landmark",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Banner Landmark",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Banner Landmark"
+                  }
+                ]
+              },
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "A ￼ landmark identifies site-oriented content at the beginning of each page within a website. Site-oriented content typically includes things such as the logo or identity of the site sponsor, and site-specific search tool. A banner usually appears at the top of the page and typically spans the full width.",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "A ",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "A "
+                  },
+                  {
+                    "role": "static",
+                    "attributes": {
+                      "display": "inline",
+                      "tag": "code",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "banner",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "banner",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "banner"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "static",
+                    "name": " landmark identifies site-oriented content at the beginning of each page within a website. Site-oriented content typically includes things such as the logo or identity of the site sponsor, and site-specific search tool. A banner usually appears at the top of the page and typically spans the full width.",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": " landmark identifies site-oriented content at the beginning of each page within a website. Site-oriented content typically includes things such as the logo or identity of the site sponsor, and site-specific search tool. A banner usually appears at the top of the page and typically spans the full width."
+                  }
+                ]
+              },
+              {
+                "role": "section",
+                "attributes": {
+                  "display": "block",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼",
+                "children": [
+                  {
+                    "role": "button",
+                    "name": "Run Test Setup",
+                    "attributes": {
+                      "class": "button-run-test-setup",
+                      "display": "inline-block",
+                      "name-from": "contents",
+                      "tag": "button",
+                      "text-align": "center"
+                    },
+                    "states": 1124079872,
+                    "text": "Run Test Setup"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

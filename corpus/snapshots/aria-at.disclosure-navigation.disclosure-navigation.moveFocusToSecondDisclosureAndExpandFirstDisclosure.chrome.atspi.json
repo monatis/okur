@@ -1,0 +1,450 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Example Disclosure Navigation Menu",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "d57a736778239679b5a6a5443c743cf49df26cf925b8eeff2b4df888ac6903ca",
+    "captured_at_unix_ms": 1794148033749,
+    "node_count": 34,
+    "capture_ms": 121
+  },
+  "root": {
+    "role": "document web",
+    "name": "Example Disclosure Navigation Menu",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124075776,
+    "text": "￼",
+    "uri": "file:///root/okur/corpus/fixtures/aria-at/disclosure-navigation/disclosure-navigation.moveFocusToSecondDisclosureAndExpandFirstDisclosure.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼￼",
+        "children": [
+          {
+            "role": "heading",
+            "name": "Example Disclosure Navigation Menu",
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Example Disclosure Navigation Menu",
+            "children": [
+              {
+                "role": "static",
+                "name": "Example Disclosure Navigation Menu",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Example Disclosure Navigation Menu"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "The following example demonstrates using the ￼ to show and hide dropdown lists of links in a navigation bar for a mythical university web site. Each disclosure button represents a section of the web site, and expanding it shows a list of links to pages within that section.",
+            "children": [
+              {
+                "role": "static",
+                "name": "The following example demonstrates using the ",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "The following example demonstrates using the "
+              },
+              {
+                "role": "link",
+                "name": "disclosure design pattern",
+                "attributes": {
+                  "display": "inline",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "states": 1124075776,
+                "text": "disclosure design pattern",
+                "uri": "https://w3c.github.io/aria-practices/#disclosure",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "disclosure design pattern",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "disclosure design pattern"
+                  }
+                ]
+              },
+              {
+                "role": "static",
+                "name": " to show and hide dropdown lists of links in a navigation bar for a mythical university web site. Each disclosure button represents a section of the web site, and expanding it shows a list of links to pages within that section.",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": " to show and hide dropdown lists of links in a navigation bar for a mythical university web site. Each disclosure button represents a section of the web site, and expanding it shows a list of links to pages within that section."
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼￼￼",
+            "children": [
+              {
+                "role": "heading",
+                "name": "Example",
+                "attributes": {
+                  "display": "block",
+                  "id": "ex_label",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Example",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Example",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Example"
+                  }
+                ]
+              },
+              {
+                "role": "separator",
+                "name": "Start of Example",
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_start_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "states": 1124090112
+              },
+              {
+                "role": "link",
+                "name": "Navigate forwards from here",
+                "attributes": {
+                  "display": "inline",
+                  "id": "beforelink",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "states": 1124075776,
+                "text": "Navigate forwards from here",
+                "uri": "file:///root/okur/corpus/fixtures/aria-at/disclosure-navigation/disclosure-navigation.moveFocusToSecondDisclosureAndExpandFirstDisclosure.html#beforelink",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Navigate forwards from here",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Navigate forwards from here"
+                  }
+                ]
+              },
+              {
+                "role": "section",
+                "attributes": {
+                  "display": "block",
+                  "id": "ex1",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼￼￼",
+                "children": [
+                  {
+                    "role": "landmark",
+                    "name": "Mythical University",
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "name-from": "attribute",
+                      "tag": "nav",
+                      "text-align": "left",
+                      "xml-roles": "navigation"
+                    },
+                    "states": 1124073728,
+                    "text": "￼",
+                    "children": [
+                      {
+                        "role": "list",
+                        "attributes": {
+                          "class": "disclosure-nav",
+                          "display": "flex",
+                          "id": "exTest",
+                          "setsize": "3",
+                          "tag": "ul",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "￼￼￼",
+                        "children": [
+                          {
+                            "role": "list item",
+                            "attributes": {
+                              "display": "flex",
+                              "level": "1",
+                              "posinset": "1",
+                              "setsize": "3",
+                              "tag": "li",
+                              "text-align": "left"
+                            },
+                            "states": 1124073728,
+                            "text": "￼",
+                            "children": [
+                              {
+                                "role": "button",
+                                "name": "About",
+                                "attributes": {
+                                  "display": "flex",
+                                  "name-from": "contents",
+                                  "tag": "button",
+                                  "text-align": "center"
+                                },
+                                "states": 1124076288,
+                                "text": "About"
+                              }
+                            ]
+                          },
+                          {
+                            "role": "list item",
+                            "attributes": {
+                              "display": "flex",
+                              "level": "1",
+                              "posinset": "2",
+                              "setsize": "3",
+                              "tag": "li",
+                              "text-align": "left"
+                            },
+                            "states": 1124073728,
+                            "text": "￼",
+                            "children": [
+                              {
+                                "role": "button",
+                                "name": "Admissions",
+                                "attributes": {
+                                  "display": "flex",
+                                  "name-from": "contents",
+                                  "tag": "button",
+                                  "text-align": "center"
+                                },
+                                "states": 1124076288,
+                                "text": "Admissions"
+                              }
+                            ]
+                          },
+                          {
+                            "role": "list item",
+                            "attributes": {
+                              "display": "flex",
+                              "level": "1",
+                              "posinset": "3",
+                              "setsize": "3",
+                              "tag": "li",
+                              "text-align": "left"
+                            },
+                            "states": 1124073728,
+                            "text": "￼",
+                            "children": [
+                              {
+                                "role": "button",
+                                "name": "Academics",
+                                "attributes": {
+                                  "display": "flex",
+                                  "name-from": "contents",
+                                  "tag": "button",
+                                  "text-align": "center"
+                                },
+                                "states": 1124076288,
+                                "text": "Academics"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "role": "link",
+                    "name": "Navigate backwards from here",
+                    "attributes": {
+                      "display": "inline",
+                      "id": "afterlink",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1124075776,
+                    "text": "Navigate backwards from here",
+                    "uri": "file:///root/okur/corpus/fixtures/aria-at/disclosure-navigation/disclosure-navigation.moveFocusToSecondDisclosureAndExpandFirstDisclosure.html#afterlink",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Navigate backwards from here",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Navigate backwards from here"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "landmark",
+                    "name": "Mythical University sample page content",
+                    "attributes": {
+                      "class": "disclosure-page-content",
+                      "display": "block",
+                      "explicit-name": "true",
+                      "id": "mythical-page-content",
+                      "name-from": "attribute",
+                      "tag": "div",
+                      "text-align": "left",
+                      "xml-roles": "region"
+                    },
+                    "states": 1124075776,
+                    "text": "￼￼",
+                    "children": [
+                      {
+                        "role": "heading",
+                        "name": "Mythical University",
+                        "attributes": {
+                          "display": "block",
+                          "id": "mythical-page-heading",
+                          "level": "3",
+                          "name-from": "contents",
+                          "tag": "h3",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "Mythical University",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "Mythical University",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "Mythical University"
+                          }
+                        ]
+                      },
+                      {
+                        "role": "paragraph",
+                        "attributes": {
+                          "display": "block",
+                          "tag": "p",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "Sample content section. Activating a link above will update and navigate to this region.",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "Sample content section. Activating a link above will update and navigate to this region.",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "Sample content section. Activating a link above will update and navigate to this region."
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "separator",
+                "name": "End of Example",
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_end_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "states": 1124090112
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼",
+            "children": [
+              {
+                "role": "button",
+                "name": "Run Test Setup",
+                "attributes": {
+                  "class": "button-run-test-setup",
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "states": 1124079872,
+                "text": "Run Test Setup"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

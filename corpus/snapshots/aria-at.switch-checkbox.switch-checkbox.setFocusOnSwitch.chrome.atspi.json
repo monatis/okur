@@ -1,0 +1,581 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Switch Example Using HTML Checkbox Input",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "d87c5a8f092f2e8e5c2430a1200a0148c7833083ba87ee95bbbdd2801355e03e",
+    "captured_at_unix_ms": 1794148634565,
+    "node_count": 48,
+    "capture_ms": 147
+  },
+  "root": {
+    "role": "document web",
+    "name": "Switch Example Using HTML Checkbox Input",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124075776,
+    "text": "￼",
+    "uri": "file:///root/okur/corpus/fixtures/aria-at/switch-checkbox/switch-checkbox.setFocusOnSwitch.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼￼",
+        "children": [
+          {
+            "role": "heading",
+            "name": "Switch Example Using HTML Checkbox Input",
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Switch Example Using HTML Checkbox Input",
+            "children": [
+              {
+                "role": "static",
+                "name": "Switch Example Using HTML Checkbox Input",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Switch Example Using HTML Checkbox Input"
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼￼",
+            "children": [
+              {
+                "role": "heading",
+                "name": "About This Example",
+                "attributes": {
+                  "display": "block",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "About This Example",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "About This Example",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "About This Example"
+                  }
+                ]
+              },
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "This example illustrates implementing the ￼ with an HTML ￼ as the switch element and using CSS borders to provide graphical rendering of switch states. It also demonstrates using the HTML ￼ and ￼ elements to present multiple switches in a labeled group.",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "This example illustrates implementing the ",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "This example illustrates implementing the "
+                  },
+                  {
+                    "role": "link",
+                    "name": "Switch Pattern",
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1124075776,
+                    "text": "Switch Pattern",
+                    "uri": "file:///root/okur/corpus/fixtures/aria-at/switch-pattern.html",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Switch Pattern",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Switch Pattern"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "static",
+                    "name": " with an HTML ",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": " with an HTML "
+                  },
+                  {
+                    "role": "static",
+                    "attributes": {
+                      "display": "inline",
+                      "tag": "code",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "input[type=\"checkbox\"]",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "input[type=\"checkbox\"]",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "input[type=\"checkbox\"]"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "static",
+                    "name": " as the switch element and using CSS borders to provide graphical rendering of switch states. It also demonstrates using the HTML ",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": " as the switch element and using CSS borders to provide graphical rendering of switch states. It also demonstrates using the HTML "
+                  },
+                  {
+                    "role": "static",
+                    "attributes": {
+                      "display": "inline",
+                      "tag": "code",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "fieldset",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "fieldset",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "fieldset"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "static",
+                    "name": " and ",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": " and "
+                  },
+                  {
+                    "role": "static",
+                    "attributes": {
+                      "display": "inline",
+                      "tag": "code",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "legend",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "legend",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "legend"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "static",
+                    "name": " elements to present multiple switches in a labeled group.",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": " elements to present multiple switches in a labeled group."
+                  }
+                ]
+              },
+              {
+                "role": "section",
+                "attributes": {
+                  "display": "block",
+                  "tag": "section",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼￼￼￼",
+                "children": [
+                  {
+                    "role": "heading",
+                    "name": "Example",
+                    "attributes": {
+                      "display": "block",
+                      "id": "ex_label",
+                      "level": "2",
+                      "name-from": "contents",
+                      "tag": "h2",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "Example",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Example",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Example"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "separator",
+                    "name": "Start of Example",
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "id": "ex_start_sep",
+                      "name-from": "related-element",
+                      "tag": "div",
+                      "text-align": "left",
+                      "xml-roles": "separator"
+                    },
+                    "states": 1124090112
+                  },
+                  {
+                    "role": "section",
+                    "attributes": {
+                      "display": "block",
+                      "id": "ex1",
+                      "tag": "div",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "￼",
+                    "children": [
+                      {
+                        "role": "panel",
+                        "name": "Accessibility Preferences",
+                        "attributes": {
+                          "display": "block",
+                          "explicit-name": "true",
+                          "name-from": "related-element",
+                          "setsize": "0",
+                          "tag": "fieldset",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "￼￼￼￼￼",
+                        "children": [
+                          {
+                            "role": "label",
+                            "attributes": {
+                              "display": "block",
+                              "tag": "legend",
+                              "text-align": "left"
+                            },
+                            "states": 1124073728,
+                            "text": "Accessibility Preferences",
+                            "children": [
+                              {
+                                "role": "static",
+                                "name": "Accessibility Preferences",
+                                "attributes": {
+                                  "name-from": "contents"
+                                },
+                                "states": 1124073728,
+                                "text": "Accessibility Preferences"
+                              }
+                            ]
+                          },
+                          {
+                            "role": "link",
+                            "name": "Navigate forwards from here",
+                            "attributes": {
+                              "display": "inline",
+                              "id": "beforelink",
+                              "name-from": "contents",
+                              "tag": "a",
+                              "text-align": "left"
+                            },
+                            "states": 1124075776,
+                            "text": "Navigate forwards from here",
+                            "uri": "file:///root/okur/corpus/fixtures/aria-at/switch-checkbox/switch-checkbox.setFocusOnSwitch.html#beforelink",
+                            "children": [
+                              {
+                                "role": "static",
+                                "name": "Navigate forwards from here",
+                                "attributes": {
+                                  "name-from": "contents"
+                                },
+                                "states": 1124073728,
+                                "text": "Navigate forwards from here"
+                              }
+                            ]
+                          },
+                          {
+                            "role": "label",
+                            "attributes": {
+                              "display": "block",
+                              "tag": "label",
+                              "text-align": "left"
+                            },
+                            "states": 1124073728,
+                            "text": "￼￼￼",
+                            "children": [
+                              {
+                                "role": "section",
+                                "attributes": {
+                                  "class": "label",
+                                  "display": "inline-block",
+                                  "tag": "span",
+                                  "text-align": "left"
+                                },
+                                "states": 1124073728,
+                                "text": "Reduced motion",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "Reduced motion",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "Reduced motion"
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "toggle button",
+                                "name": "Reduced motion",
+                                "attributes": {
+                                  "checkable": "true",
+                                  "display": "inline-block",
+                                  "explicit-name": "true",
+                                  "id": "id-switch-1",
+                                  "name-from": "related-element",
+                                  "tag": "input",
+                                  "text-align": "left",
+                                  "xml-roles": "switch"
+                                },
+                                "states": 2200147331328
+                              },
+                              {
+                                "role": "section",
+                                "attributes": {
+                                  "class": "state",
+                                  "display": "inline-block",
+                                  "tag": "span",
+                                  "text-align": "left"
+                                },
+                                "states": 1124073728,
+                                "text": "￼",
+                                "children": [
+                                  {
+                                    "role": "section",
+                                    "attributes": {
+                                      "class": "container",
+                                      "display": "inline-block",
+                                      "tag": "span",
+                                      "text-align": "left"
+                                    },
+                                    "states": 1124073728
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "role": "link",
+                            "name": "Navigate backwards from here",
+                            "attributes": {
+                              "display": "inline",
+                              "id": "afterlink",
+                              "name-from": "contents",
+                              "tag": "a",
+                              "text-align": "left"
+                            },
+                            "states": 1124075776,
+                            "text": "Navigate backwards from here",
+                            "uri": "file:///root/okur/corpus/fixtures/aria-at/switch-checkbox/switch-checkbox.setFocusOnSwitch.html#afterlink",
+                            "children": [
+                              {
+                                "role": "static",
+                                "name": "Navigate backwards from here",
+                                "attributes": {
+                                  "name-from": "contents"
+                                },
+                                "states": 1124073728,
+                                "text": "Navigate backwards from here"
+                              }
+                            ]
+                          },
+                          {
+                            "role": "label",
+                            "attributes": {
+                              "display": "block",
+                              "tag": "label",
+                              "text-align": "left"
+                            },
+                            "states": 1124073728,
+                            "text": "￼￼￼",
+                            "children": [
+                              {
+                                "role": "section",
+                                "attributes": {
+                                  "class": "label",
+                                  "display": "inline-block",
+                                  "tag": "span",
+                                  "text-align": "left"
+                                },
+                                "states": 1124073728,
+                                "text": "Show captions",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "Show captions",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "Show captions"
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "toggle button",
+                                "name": "Show captions",
+                                "attributes": {
+                                  "checkable": "true",
+                                  "display": "inline-block",
+                                  "explicit-name": "true",
+                                  "id": "id-switch-2",
+                                  "name-from": "related-element",
+                                  "tag": "input",
+                                  "text-align": "left",
+                                  "xml-roles": "switch"
+                                },
+                                "states": 2200147331328
+                              },
+                              {
+                                "role": "section",
+                                "attributes": {
+                                  "class": "state",
+                                  "display": "inline-block",
+                                  "tag": "span",
+                                  "text-align": "left"
+                                },
+                                "states": 1124073728,
+                                "text": "￼",
+                                "children": [
+                                  {
+                                    "role": "section",
+                                    "attributes": {
+                                      "class": "container",
+                                      "display": "inline-block",
+                                      "tag": "span",
+                                      "text-align": "left"
+                                    },
+                                    "states": 1124073728
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "role": "separator",
+                    "name": "End of Example",
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "id": "ex_end_sep",
+                      "name-from": "related-element",
+                      "tag": "div",
+                      "text-align": "left",
+                      "xml-roles": "separator"
+                    },
+                    "states": 1124090112
+                  }
+                ]
+              },
+              {
+                "role": "section",
+                "attributes": {
+                  "display": "block",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼",
+                "children": [
+                  {
+                    "role": "button",
+                    "name": "Run Test Setup",
+                    "attributes": {
+                      "class": "button-run-test-setup",
+                      "display": "inline-block",
+                      "name-from": "contents",
+                      "tag": "button",
+                      "text-align": "center"
+                    },
+                    "states": 1124079872,
+                    "text": "Run Test Setup"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,334 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Navigation Menu Button Example",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "82868e2da4253a67efa18af91c2e6f82f58155531117a4980ec59213e40001a9",
+    "captured_at_unix_ms": 1794148232841,
+    "node_count": 26,
+    "capture_ms": 78
+  },
+  "root": {
+    "role": "document web",
+    "name": "Navigation Menu Button Example",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124075776,
+    "text": "￼",
+    "uri": "file:///root/okur/corpus/fixtures/aria-at/menu-button-navigation/menu-button-links.openMenuAndSetFocusToLastItem.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼￼",
+        "children": [
+          {
+            "role": "heading",
+            "name": "Navigation Menu Button Example",
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Navigation Menu Button Example",
+            "children": [
+              {
+                "role": "static",
+                "name": "Navigation Menu Button Example",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Navigation Menu Button Example"
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼",
+            "children": [
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "This example demonstrates the ￼ for a button that displays a menu of link targets. The menu items are made from HTML links, so they maintain their HTML link behaviors. That is, activating a menuitem loads the link target, and the browser's link context menu and associated actions are available.",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "This example demonstrates the ",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "This example demonstrates the "
+                  },
+                  {
+                    "role": "link",
+                    "name": "Menu Button Pattern",
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1124075776,
+                    "text": "Menu Button Pattern",
+                    "uri": "file:///root/okur/corpus/fixtures/aria-at/menu-button-pattern.html",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Menu Button Pattern",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Menu Button Pattern"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "static",
+                    "name": " for a button that displays a menu of link targets. The menu items are made from HTML links, so they maintain their HTML link behaviors. That is, activating a menuitem loads the link target, and the browser's link context menu and associated actions are available.",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": " for a button that displays a menu of link targets. The menu items are made from HTML links, so they maintain their HTML link behaviors. That is, activating a menuitem loads the link target, and the browser's link context menu and associated actions are available."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼￼￼",
+            "children": [
+              {
+                "role": "heading",
+                "name": "Example",
+                "attributes": {
+                  "display": "block",
+                  "id": "ex_label",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Example",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Example",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Example"
+                  }
+                ]
+              },
+              {
+                "role": "separator",
+                "name": "Start of Example",
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_start_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "states": 1124090112
+              },
+              {
+                "role": "link",
+                "name": "Navigate forwards from here",
+                "attributes": {
+                  "display": "inline",
+                  "id": "beforelink",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "states": 1124075776,
+                "text": "Navigate forwards from here",
+                "uri": "file:///root/okur/corpus/fixtures/aria-at/menu-button-navigation/menu-button-links.openMenuAndSetFocusToLastItem.html#beforelink",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Navigate forwards from here",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Navigate forwards from here"
+                  }
+                ]
+              },
+              {
+                "role": "section",
+                "attributes": {
+                  "display": "block",
+                  "id": "ex1",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼￼",
+                "children": [
+                  {
+                    "role": "section",
+                    "attributes": {
+                      "class": "menu-button-links",
+                      "display": "block",
+                      "tag": "div",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "￼",
+                    "children": [
+                      {
+                        "role": "button",
+                        "name": "WAI-ARIA Quick Links ",
+                        "attributes": {
+                          "display": "inline-block",
+                          "haspopup": "menu",
+                          "id": "menubutton",
+                          "name-from": "contents",
+                          "tag": "button",
+                          "text-align": "center"
+                        },
+                        "states": 4399170587392,
+                        "text": "WAI-ARIA Quick Links ￼",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "WAI-ARIA Quick Links ",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "WAI-ARIA Quick Links "
+                          },
+                          {
+                            "role": "image",
+                            "attributes": {
+                              "class": "down",
+                              "display": "inline",
+                              "tag": "svg",
+                              "text-align": "center"
+                            },
+                            "states": 1124073728
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "role": "link",
+                    "name": "Navigate backwards from here",
+                    "attributes": {
+                      "display": "inline",
+                      "id": "afterlink",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1124075776,
+                    "text": "Navigate backwards from here",
+                    "uri": "file:///root/okur/corpus/fixtures/aria-at/menu-button-navigation/menu-button-links.openMenuAndSetFocusToLastItem.html#afterlink",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Navigate backwards from here",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Navigate backwards from here"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "separator",
+                "name": "End of Example",
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_end_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "states": 1124090112
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼",
+            "children": [
+              {
+                "role": "button",
+                "name": "Run Test Setup",
+                "attributes": {
+                  "class": "button-run-test-setup",
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "states": 1124079872,
+                "text": "Run Test Setup"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

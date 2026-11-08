@@ -1,0 +1,498 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Quantity Spin Button Example",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "98c318f821c31f0385c2a685bdfce13f9377c2348a89cebc7bf002776cae0cff",
+    "captured_at_unix_ms": 1794148352883,
+    "node_count": 38,
+    "capture_ms": 111
+  },
+  "root": {
+    "role": "document web",
+    "name": "Quantity Spin Button Example",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124075776,
+    "text": "￼",
+    "uri": "file:///root/okur/corpus/fixtures/aria-at/quantity-spin-button/quantity-spinbutton.setFocusOnAdultsSpinbuttonValue2.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼￼",
+        "children": [
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "id": "example",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼",
+            "children": [
+              {
+                "role": "panel",
+                "name": "Guests",
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "name-from": "related-element",
+                  "setsize": "0",
+                  "tag": "fieldset",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼",
+                "children": [
+                  {
+                    "role": "label",
+                    "attributes": {
+                      "display": "block",
+                      "tag": "legend",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "Guests",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Guests",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Guests"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "label",
+                    "attributes": {
+                      "display": "block",
+                      "tag": "label",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "Adults",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Adults",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Adults"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "button",
+                    "name": "Remove adult",
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "name-from": "tooltip",
+                      "tag": "button",
+                      "text-align": "center"
+                    },
+                    "states": 1107298304
+                  },
+                  {
+                    "role": "paragraph",
+                    "attributes": {
+                      "display": "block",
+                      "tag": "p",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "￼",
+                    "children": [
+                      {
+                        "role": "link",
+                        "name": "Navigate forwards from here",
+                        "attributes": {
+                          "display": "inline",
+                          "id": "beforelink",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "states": 1124075776,
+                        "text": "Navigate forwards from here",
+                        "uri": "file:///root/okur/corpus/fixtures/aria-at/quantity-spin-button/quantity-spinbutton.setFocusOnAdultsSpinbuttonValue2.html#beforelink",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "Navigate forwards from here",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "Navigate forwards from here"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "role": "spin button",
+                    "name": "Adults",
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "id": "adults",
+                      "name-from": "related-element",
+                      "tag": "input",
+                      "text-align": "center",
+                      "text-input-type": "text",
+                      "text-model": "a1",
+                      "valuetext": "1",
+                      "xml-roles": "spinbutton"
+                    },
+                    "states": 276069091712,
+                    "text": "1"
+                  },
+                  {
+                    "role": "paragraph",
+                    "attributes": {
+                      "display": "block",
+                      "tag": "p",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "￼",
+                    "children": [
+                      {
+                        "role": "link",
+                        "name": "Navigate backwards from here",
+                        "attributes": {
+                          "display": "inline",
+                          "id": "afterlink",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "states": 1124075776,
+                        "text": "Navigate backwards from here",
+                        "uri": "file:///root/okur/corpus/fixtures/aria-at/quantity-spin-button/quantity-spinbutton.setFocusOnAdultsSpinbuttonValue2.html#afterlink",
+                        "children": [
+                          {
+                            "role": "static",
+                            "name": "Navigate backwards from here",
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "states": 1124073728,
+                            "text": "Navigate backwards from here"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "role": "button",
+                    "name": "Add adult",
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "name-from": "tooltip",
+                      "tag": "button",
+                      "text-align": "center"
+                    },
+                    "states": 1124075776
+                  },
+                  {
+                    "role": "section",
+                    "attributes": {
+                      "display": "block",
+                      "id": "help-adults",
+                      "tag": "small",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "1 to 8",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "1 to 8",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "1 to 8"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "status bar",
+                    "attributes": {
+                      "atomic": "true",
+                      "class": "visually-hidden",
+                      "container-atomic": "true",
+                      "container-busy": "false",
+                      "container-live": "polite",
+                      "container-relevant": "additions text",
+                      "display": "block",
+                      "live": "polite",
+                      "relevant": "additions text",
+                      "tag": "output",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728
+                  },
+                  {
+                    "role": "label",
+                    "attributes": {
+                      "display": "block",
+                      "tag": "label",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "Kids",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Kids",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Kids"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "button",
+                    "name": "Remove kid",
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "name-from": "tooltip",
+                      "tag": "button",
+                      "text-align": "center"
+                    },
+                    "states": 1107298304
+                  },
+                  {
+                    "role": "spin button",
+                    "name": "Kids",
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "id": "kids",
+                      "name-from": "related-element",
+                      "tag": "input",
+                      "text-align": "center",
+                      "text-input-type": "text",
+                      "text-model": "a1",
+                      "valuetext": "0",
+                      "xml-roles": "spinbutton"
+                    },
+                    "states": 276069091712,
+                    "text": "0"
+                  },
+                  {
+                    "role": "button",
+                    "name": "Add kid",
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "name-from": "tooltip",
+                      "tag": "button",
+                      "text-align": "center"
+                    },
+                    "states": 1124075776
+                  },
+                  {
+                    "role": "section",
+                    "attributes": {
+                      "display": "block",
+                      "id": "help-kids",
+                      "tag": "small",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "0 to 8",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "0 to 8",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "0 to 8"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "status bar",
+                    "attributes": {
+                      "atomic": "true",
+                      "class": "visually-hidden",
+                      "container-atomic": "true",
+                      "container-busy": "false",
+                      "container-live": "polite",
+                      "container-relevant": "additions text",
+                      "display": "block",
+                      "live": "polite",
+                      "relevant": "additions text",
+                      "tag": "output",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728
+                  },
+                  {
+                    "role": "label",
+                    "attributes": {
+                      "display": "block",
+                      "tag": "label",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "Animals",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Animals",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Animals"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "button",
+                    "name": "Remove animal",
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "name-from": "tooltip",
+                      "tag": "button",
+                      "text-align": "center"
+                    },
+                    "states": 1107298304
+                  },
+                  {
+                    "role": "spin button",
+                    "name": "Animals",
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "id": "animals",
+                      "name-from": "related-element",
+                      "tag": "input",
+                      "text-align": "center",
+                      "text-input-type": "text",
+                      "text-model": "a1",
+                      "valuetext": "0",
+                      "xml-roles": "spinbutton"
+                    },
+                    "states": 276069091712,
+                    "text": "0"
+                  },
+                  {
+                    "role": "button",
+                    "name": "Add animal",
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "name-from": "tooltip",
+                      "tag": "button",
+                      "text-align": "center"
+                    },
+                    "states": 1124075776
+                  },
+                  {
+                    "role": "section",
+                    "attributes": {
+                      "display": "block",
+                      "id": "help-animals",
+                      "tag": "small",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "0 to 12",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "0 to 12",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "0 to 12"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "status bar",
+                    "attributes": {
+                      "atomic": "true",
+                      "class": "visually-hidden",
+                      "container-atomic": "true",
+                      "container-busy": "false",
+                      "container-live": "polite",
+                      "container-relevant": "additions text",
+                      "display": "block",
+                      "live": "polite",
+                      "relevant": "additions text",
+                      "tag": "output",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼",
+            "children": [
+              {
+                "role": "button",
+                "name": "Run Test Setup",
+                "attributes": {
+                  "class": "button-run-test-setup",
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "states": 1124079872,
+                "text": "Run Test Setup"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

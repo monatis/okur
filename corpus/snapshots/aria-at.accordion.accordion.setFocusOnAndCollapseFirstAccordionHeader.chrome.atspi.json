@@ -1,0 +1,707 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Accordion Example",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "0774b5620b928dcae60a86811386b3777394e3497e492a459b0fc25f405163f2",
+    "captured_at_unix_ms": 1794147641221,
+    "node_count": 55,
+    "capture_ms": 181
+  },
+  "root": {
+    "role": "document web",
+    "name": "Accordion Example",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124075776,
+    "text": "￼",
+    "uri": "file:///root/okur/corpus/fixtures/aria-at/accordion/accordion.setFocusOnAndCollapseFirstAccordionHeader.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼￼",
+        "children": [
+          {
+            "role": "heading",
+            "name": "Accordion Example",
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "states": 1090519296,
+            "text": "Accordion Example",
+            "children": [
+              {
+                "role": "static",
+                "name": "Accordion Example",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1090519296,
+                "text": "Accordion Example"
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "states": 1090519296,
+            "text": "￼￼",
+            "children": [
+              {
+                "role": "heading",
+                "name": "About This Example",
+                "attributes": {
+                  "display": "block",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "states": 1090519296,
+                "text": "About This Example",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "About This Example",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1090519296,
+                    "text": "About This Example"
+                  }
+                ]
+              },
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1090519296,
+                "text": "The below example section contains a simple personal information input form divided into 3 sections that demonstrates the ￼.",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "The below example section contains a simple personal information input form divided into 3 sections that demonstrates the ",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1090519296,
+                    "text": "The below example section contains a simple personal information input form divided into 3 sections that demonstrates the "
+                  },
+                  {
+                    "role": "link",
+                    "name": "Accordion Pattern",
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1090521344,
+                    "text": "Accordion Pattern",
+                    "uri": "https://www.w3.org/WAI/ARIA/apg/patterns/accordion/",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Accordion Pattern",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1090519296,
+                        "text": "Accordion Pattern"
+                      }
+                    ]
+                  },
+                  {
+                    "role": "static",
+                    "name": ".",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1090519296,
+                    "text": "."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼￼￼￼￼",
+            "children": [
+              {
+                "role": "heading",
+                "name": "Example",
+                "attributes": {
+                  "display": "block",
+                  "id": "ex_label",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Example",
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Example",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Example"
+                  }
+                ]
+              },
+              {
+                "role": "separator",
+                "name": "Start of Example",
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_start_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "states": 1124090112
+              },
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼",
+                "children": [
+                  {
+                    "role": "link",
+                    "name": "Navigate forwards from here",
+                    "attributes": {
+                      "display": "inline",
+                      "id": "beforelink",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1124075776,
+                    "text": "Navigate forwards from here",
+                    "uri": "file:///root/okur/corpus/fixtures/aria-at/accordion/accordion.setFocusOnAndCollapseFirstAccordionHeader.html#beforelink",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Navigate forwards from here",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Navigate forwards from here"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "section",
+                "attributes": {
+                  "display": "block",
+                  "id": "ex1",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼",
+                "children": [
+                  {
+                    "role": "section",
+                    "attributes": {
+                      "class": "accordion",
+                      "display": "block",
+                      "id": "accordionGroup",
+                      "tag": "div",
+                      "text-align": "left"
+                    },
+                    "states": 1124073728,
+                    "text": "￼￼￼￼",
+                    "children": [
+                      {
+                        "role": "heading",
+                        "name": "Personal Information",
+                        "attributes": {
+                          "display": "block",
+                          "level": "3",
+                          "name-from": "contents",
+                          "tag": "h3",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "￼",
+                        "children": [
+                          {
+                            "role": "button",
+                            "name": "Personal Information",
+                            "attributes": {
+                              "class": "accordion-trigger",
+                              "display": "block",
+                              "id": "accordion1id",
+                              "name-from": "contents",
+                              "tag": "button",
+                              "text-align": "left"
+                            },
+                            "states": 1124077312,
+                            "text": "Personal Information"
+                          }
+                        ]
+                      },
+                      {
+                        "role": "landmark",
+                        "name": "Personal Information",
+                        "attributes": {
+                          "class": "accordion-panel",
+                          "display": "block",
+                          "explicit-name": "true",
+                          "id": "sect1",
+                          "name-from": "related-element",
+                          "tag": "div",
+                          "text-align": "left",
+                          "xml-roles": "region"
+                        },
+                        "states": 1124073728,
+                        "text": "￼",
+                        "children": [
+                          {
+                            "role": "panel",
+                            "attributes": {
+                              "display": "block",
+                              "setsize": "0",
+                              "tag": "fieldset",
+                              "text-align": "left"
+                            },
+                            "states": 1124073728,
+                            "text": "￼￼￼￼￼￼￼￼￼￼￼￼",
+                            "children": [
+                              {
+                                "role": "label",
+                                "attributes": {
+                                  "display": "inline",
+                                  "tag": "label",
+                                  "text-align": "left"
+                                },
+                                "states": 1124073728,
+                                "text": "Name:",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "Name",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "Name"
+                                  },
+                                  {
+                                    "role": "static",
+                                    "name": ":",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": ":"
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "entry",
+                                "name": "Name:",
+                                "attributes": {
+                                  "class": "required",
+                                  "display": "block",
+                                  "explicit-name": "true",
+                                  "html-input-name": "Name",
+                                  "id": "cufc1",
+                                  "name-from": "related-element",
+                                  "tag": "input",
+                                  "text-align": "left",
+                                  "text-input-type": "text",
+                                  "text-model": "a1"
+                                },
+                                "states": 284659026304
+                              },
+                              {
+                                "role": "label",
+                                "attributes": {
+                                  "display": "inline",
+                                  "tag": "label",
+                                  "text-align": "left"
+                                },
+                                "states": 1124073728,
+                                "text": "Email:",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "Email",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "Email"
+                                  },
+                                  {
+                                    "role": "static",
+                                    "name": ":",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": ":"
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "entry",
+                                "name": "Email:",
+                                "attributes": {
+                                  "display": "block",
+                                  "explicit-name": "true",
+                                  "html-input-name": "Email",
+                                  "id": "cufc2",
+                                  "name-from": "related-element",
+                                  "tag": "input",
+                                  "text-align": "left",
+                                  "text-input-type": "text",
+                                  "text-model": "a1"
+                                },
+                                "states": 284659026304
+                              },
+                              {
+                                "role": "label",
+                                "attributes": {
+                                  "display": "inline",
+                                  "tag": "label",
+                                  "text-align": "left"
+                                },
+                                "states": 1124073728,
+                                "text": "Phone:",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "Phone:",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "Phone:"
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "entry",
+                                "name": "Phone:",
+                                "attributes": {
+                                  "display": "block",
+                                  "explicit-name": "true",
+                                  "html-input-name": "Phone",
+                                  "id": "cufc3",
+                                  "name-from": "related-element",
+                                  "tag": "input",
+                                  "text-align": "left",
+                                  "text-input-type": "text",
+                                  "text-model": "a1"
+                                },
+                                "states": 276069091712
+                              },
+                              {
+                                "role": "label",
+                                "attributes": {
+                                  "display": "inline",
+                                  "tag": "label",
+                                  "text-align": "left"
+                                },
+                                "states": 1124073728,
+                                "text": "Extension:",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "Extension:",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "Extension:"
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "entry",
+                                "name": "Extension:",
+                                "attributes": {
+                                  "display": "block",
+                                  "explicit-name": "true",
+                                  "html-input-name": "Ext",
+                                  "id": "cufc4",
+                                  "name-from": "related-element",
+                                  "tag": "input",
+                                  "text-align": "left",
+                                  "text-input-type": "text",
+                                  "text-model": "a1"
+                                },
+                                "states": 276069091712
+                              },
+                              {
+                                "role": "label",
+                                "attributes": {
+                                  "display": "inline",
+                                  "tag": "label",
+                                  "text-align": "left"
+                                },
+                                "states": 1124073728,
+                                "text": "Country:",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "Country:",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "Country:"
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "entry",
+                                "name": "Country:",
+                                "attributes": {
+                                  "display": "block",
+                                  "explicit-name": "true",
+                                  "html-input-name": "Country",
+                                  "id": "cufc5",
+                                  "name-from": "related-element",
+                                  "tag": "input",
+                                  "text-align": "left",
+                                  "text-input-type": "text",
+                                  "text-model": "a1"
+                                },
+                                "states": 276069091712
+                              },
+                              {
+                                "role": "label",
+                                "attributes": {
+                                  "display": "inline",
+                                  "tag": "label",
+                                  "text-align": "left"
+                                },
+                                "states": 1124073728,
+                                "text": "City/Province:",
+                                "children": [
+                                  {
+                                    "role": "static",
+                                    "name": "City/Province:",
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "states": 1124073728,
+                                    "text": "City/Province:"
+                                  }
+                                ]
+                              },
+                              {
+                                "role": "entry",
+                                "name": "City/Province:",
+                                "attributes": {
+                                  "display": "block",
+                                  "explicit-name": "true",
+                                  "html-input-name": "City_Province",
+                                  "id": "cufc6",
+                                  "name-from": "related-element",
+                                  "tag": "input",
+                                  "text-align": "left",
+                                  "text-input-type": "text",
+                                  "text-model": "a1"
+                                },
+                                "states": 276069091712
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "role": "heading",
+                        "name": "Billing Address",
+                        "attributes": {
+                          "display": "block",
+                          "level": "3",
+                          "name-from": "contents",
+                          "tag": "h3",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "￼",
+                        "children": [
+                          {
+                            "role": "button",
+                            "name": "Billing Address",
+                            "attributes": {
+                              "class": "accordion-trigger",
+                              "display": "block",
+                              "id": "accordion2id",
+                              "name-from": "contents",
+                              "tag": "button",
+                              "text-align": "left"
+                            },
+                            "states": 1124076288,
+                            "text": "Billing Address"
+                          }
+                        ]
+                      },
+                      {
+                        "role": "heading",
+                        "name": "Shipping Address",
+                        "attributes": {
+                          "display": "block",
+                          "level": "3",
+                          "name-from": "contents",
+                          "tag": "h3",
+                          "text-align": "left"
+                        },
+                        "states": 1124073728,
+                        "text": "￼",
+                        "children": [
+                          {
+                            "role": "button",
+                            "name": "Shipping Address",
+                            "attributes": {
+                              "class": "accordion-trigger",
+                              "display": "block",
+                              "id": "accordion3id",
+                              "name-from": "contents",
+                              "tag": "button",
+                              "text-align": "left"
+                            },
+                            "states": 1124076288,
+                            "text": "Shipping Address"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "paragraph",
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "￼",
+                "children": [
+                  {
+                    "role": "link",
+                    "name": "Navigate backwards from here",
+                    "attributes": {
+                      "display": "inline",
+                      "id": "afterlink",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "states": 1124075776,
+                    "text": "Navigate backwards from here",
+                    "uri": "file:///root/okur/corpus/fixtures/aria-at/accordion/accordion.setFocusOnAndCollapseFirstAccordionHeader.html#afterlink",
+                    "children": [
+                      {
+                        "role": "static",
+                        "name": "Navigate backwards from here",
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "states": 1124073728,
+                        "text": "Navigate backwards from here"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "role": "separator",
+                "name": "End of Example",
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_end_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "states": 1124090112
+              }
+            ]
+          },
+          {
+            "role": "section",
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼",
+            "children": [
+              {
+                "role": "button",
+                "name": "Run Test Setup",
+                "attributes": {
+                  "class": "button-run-test-setup",
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "states": 1124079872,
+                "text": "Run Test Setup"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
