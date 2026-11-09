@@ -24,6 +24,11 @@ start = time.time()
 def log(*parts):
     print(f"{time.time() - start:7.3f}", *parts, flush=True)
 
+# The unnamed window Chrome activates for its menu: not among its application's children (gtk6's
+# outline listed the browser's frame alone), so it is kept from its activation, as Okur's driver
+# reads it from the event.
+menu_windows = []
+
 def heard(event):
     try:
         source = event.source
@@ -32,6 +37,8 @@ def heard(event):
         if not source.get_application().get_name().startswith(("Google Chrome", "Chrom")):
             return
         role = source.get_role_name()
+        if event.type == "window:activate" and not source.get_name():
+            menu_windows.append(source)
         if role in ("menu item", "menu", "frame") or event.type.startswith("focus"):
             log("EVENT", event.type, event.detail1, role, repr(source.get_name()))
     except Exception as error:
@@ -103,7 +110,13 @@ def steps():
     log("KEY Alt+F"); press("Alt_L", "f"); time.sleep(1.5)
     app = chrome()
     menu = None
-    if app:
+    for window in reversed(menu_windows):
+        menu = find_menu(window)
+        if menu:
+            break
+        log("the menu's window:")
+        outline(window)
+    if app and not menu:
         for i in range(app.get_child_count()):
             menu = find_menu(app.get_child_at_index(i))
             if menu:
