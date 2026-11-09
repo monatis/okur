@@ -21,7 +21,10 @@ use super::held_keys::AskedDialog;
 use super::{ScreenReaderEngine, OKUR_WINDOWS};
 use crate::aom::Role;
 use crate::event::FocusEvent;
-use crate::ui::{Control, ControlKind, DialogSpec, FromUi, ToUi, TreeItem, UiHost, Value};
+use crate::ui::{
+    Control, ControlKind, DialogSpec, FromUi, ToUi, TreeItem, UiHost, Value, WizardButtons,
+    WizardLabels,
+};
 
 /// The dialogs okur-ui shows, as the engine last told it of them.
 pub(super) type OpenDialogs = Arc<Mutex<Vec<DialogSpec>>>;
@@ -56,6 +59,29 @@ fn kept(open: &mut Vec<DialogSpec>, message: &ToUi) {
             open.push(dialog.clone());
         }
         ToUi::DialogClose { id } => open.retain(|d| d.id != *id),
+        // A wizard, kept as a dialog of its page's controls and its Next and Finish, the one
+        // Enter presses the default: on Linux, Insert+E in Flexible Web said "Not in a dialog
+        // box", as no wizard was kept.
+        ToUi::WizardShow { wizard } => {
+            open.retain(|d| d.id != wizard.id);
+            open.push(wizard_page(
+                wizard.id,
+                &wizard.page,
+                &wizard.labels,
+                wizard.buttons,
+            ));
+        }
+        ToUi::WizardPage { id, page, buttons } => {
+            if let Some(kept) = open.iter_mut().find(|d| d.id == *id) {
+                let labels = wizard_labels_of(kept);
+                *kept = wizard_page(*id, page, &labels, *buttons);
+            }
+        }
+        ToUi::WizardButtons { id, buttons } => {
+            if let Some(kept) = open.iter_mut().find(|d| d.id == *id) {
+                set_wizard_default(&mut kept.controls, *buttons);
+            }
+        }
         ToUi::DialogDefault { id, control } => {
             for dialog in open.iter_mut().filter(|d| d.id == *id) {
                 for c in &mut dialog.controls {
@@ -99,6 +125,67 @@ fn kept(open: &mut Vec<DialogSpec>, message: &ToUi) {
             }
         }
         _ => {}
+    }
+}
+
+/// The ids of a wizard's Next and Finish, kept with its page's controls.
+const WIZARD_NEXT: &str = "next";
+const WIZARD_FINISH: &str = "finish";
+
+/// A wizard's page kept as a dialog: titled by the page, its controls, then its Next and Finish
+/// as hidden buttons, the one Enter presses the default.
+fn wizard_page(
+    id: u32,
+    page: &DialogSpec,
+    labels: &WizardLabels,
+    buttons: WizardButtons,
+) -> DialogSpec {
+    let button = |id: &str, label: &str| Control {
+        id: id.to_owned(),
+        label: label.to_owned(),
+        kind: ControlKind::Button { default: false },
+        enabled: true,
+        hidden: true,
+    };
+    let mut controls = page.controls.clone();
+    controls.push(button(WIZARD_NEXT, &labels.next));
+    controls.push(button(WIZARD_FINISH, &labels.finish));
+    set_wizard_default(&mut controls, buttons);
+    DialogSpec {
+        id,
+        title: page.title.clone(),
+        controls,
+        keys: Vec::new(),
+    }
+}
+
+/// Next the default where the wizard can go on, else Finish.
+fn set_wizard_default(controls: &mut [Control], buttons: WizardButtons) {
+    let default = if buttons.next {
+        WIZARD_NEXT
+    } else {
+        WIZARD_FINISH
+    };
+    for c in controls.iter_mut() {
+        if let ControlKind::Button { default: on } = &mut c.kind {
+            *on = c.id == default;
+        }
+    }
+}
+
+/// A kept wizard's Next and Finish labels.
+fn wizard_labels_of(kept: &DialogSpec) -> WizardLabels {
+    let label = |id: &str| {
+        kept.controls
+            .iter()
+            .find(|c| c.id == id && c.hidden)
+            .map(|c| c.label.clone())
+            .unwrap_or_default()
+    };
+    WizardLabels {
+        next: label(WIZARD_NEXT),
+        finish: label(WIZARD_FINISH),
+        ..WizardLabels::default()
     }
 }
 
@@ -479,6 +566,79 @@ mod tests {
             control_of(&controls, &bold).and_then(|at| group_box_of(&controls, at)),
             None
         );
+    }
+
+    /// A wizard is kept as a dialog of its page, its default Next where it can go on, Finish
+    /// once it cannot, through its pages and its buttons' changes.
+    #[test]
+    fn a_wizard_is_kept_with_next_or_finish_its_default() {
+        use crate::ui::WizardSpec;
+        let mut open = Vec::new();
+        let page = |title: &str| DialogSpec {
+            id: 9,
+            title: title.to_owned(),
+            controls: Vec::new(),
+            keys: Vec::new(),
+        };
+        let labels = WizardLabels {
+            back: "< &Back".to_owned(),
+            next: "&Next >".to_owned(),
+            finish: "Finish".to_owned(),
+            cancel: "Cancel".to_owned(),
+        };
+        let default = |open: &[DialogSpec]| {
+            open.first().and_then(|d| {
+                d.controls.iter().find_map(|c| match c.kind {
+                    ControlKind::Button { default: true } => Some(shown(&c.label)),
+                    _ => None,
+                })
+            })
+        };
+        kept(
+            &mut open,
+            &ToUi::WizardShow {
+                wizard: WizardSpec {
+                    id: 9,
+                    page: page("Flexible Web"),
+                    buttons: WizardButtons {
+                        back: false,
+                        next: true,
+                        finish: false,
+                    },
+                    labels,
+                },
+            },
+        );
+        assert_eq!(default(&open).as_deref(), Some("Next >"));
+        kept(
+            &mut open,
+            &ToUi::WizardPage {
+                id: 9,
+                page: page("Choose an element"),
+                buttons: WizardButtons {
+                    back: true,
+                    next: false,
+                    finish: true,
+                },
+            },
+        );
+        assert_eq!(
+            open.first().map(|d| d.title.as_str()),
+            Some("Choose an element")
+        );
+        assert_eq!(default(&open).as_deref(), Some("Finish"));
+        kept(
+            &mut open,
+            &ToUi::WizardButtons {
+                id: 9,
+                buttons: WizardButtons {
+                    back: true,
+                    next: true,
+                    finish: false,
+                },
+            },
+        );
+        assert_eq!(default(&open).as_deref(), Some("Next >"));
     }
 
     /// Shown, its default moved and a label changed, then closed: the dialogs kept follow.
