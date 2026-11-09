@@ -430,6 +430,20 @@ fn numbered(node: &AtspiNode, next: &mut i32, ids: &HashMap<&str, i32>) -> WebNo
     }
 }
 
+/// The paths of all a page's objects: a change among them is the page's (its children added or
+/// taken away), which the driver captures again once its changes settle.
+pub fn object_paths(root: &AtspiNode) -> std::collections::HashSet<String> {
+    let mut paths = std::collections::HashSet::new();
+    let mut stack = vec![root];
+    while let Some(node) = stack.pop() {
+        if !node.path.is_empty() {
+            paths.insert(node.path.clone());
+        }
+        stack.extend(node.children.iter());
+    }
+    paths
+}
+
 /// The objects of a page's progress bars and meters, by their paths: the driver hears their
 /// values change ([`crate::convert`]'s progress).
 pub fn progress_bars(root: &AtspiNode) -> std::collections::HashSet<String> {
@@ -520,6 +534,9 @@ mod tests {
             progress_bars(&page).into_iter().collect::<Vec<_>>(),
             ["/bar"]
         );
+        let mut paths: Vec<String> = object_paths(&page).into_iter().collect();
+        paths.sort();
+        assert_eq!(paths, ["/bar"]);
     }
 
     /// A list box's items have its name and their places, their own where Chrome gives them,

@@ -48,6 +48,12 @@ struct LivePage {
     paths: std::collections::HashMap<String, String>,
     /// Its progress bars' objects, whose value changes are heard.
     bars: std::collections::HashSet<String>,
+    /// All its objects: the first of them whose children change is heard, and the page is
+    /// captured again once its changes settle, as Windows' page is.
+    objects: std::collections::HashSet<String>,
+    /// Whether a change among its objects is still to be heard: one is, until the page is read
+    /// again (a page changing all the time costs one read of an object per capture).
+    armed: std::sync::atomic::AtomicBool,
 }
 
 /// A live region heard changing, read once its signals pause: the page's document and when.
@@ -123,8 +129,35 @@ fn heard(live: &LiveObjects, kind: &EventKind, bus: &str, path: &str) -> bool {
     if okur_linux_model::focus_track::is_heard(kind) {
         return true;
     }
-    matches!(kind, EventKind::StructureChanged | EventKind::TextChanged)
-        && live_page_of(live, bus, path).is_some()
+    if !matches!(kind, EventKind::StructureChanged | EventKind::TextChanged) {
+        return false;
+    }
+    if live_page_of(live, bus, path).is_some() {
+        return true;
+    }
+    // A read page's content changed outside its live regions (a section opened, results come):
+    // its first change heard, and none more until it is read again. Text alone is a field's
+    // typing, not the page's.
+    *kind == EventKind::StructureChanged && {
+        let pages = live
+            .read()
+            .unwrap_or_else(std::sync::PoisonError::into_inner);
+        pages
+            .iter()
+            .find(|page| page.bus == bus && page.objects.contains(path))
+            .is_some_and(|page| page.armed.swap(false, std::sync::atomic::Ordering::SeqCst))
+    }
+}
+
+/// The document key of the read page holding the object at `bus` and `path`.
+fn page_of_object(live: &LiveObjects, bus: &str, path: &str) -> Option<String> {
+    let pages = live
+        .read()
+        .unwrap_or_else(std::sync::PoisonError::into_inner);
+    pages
+        .iter()
+        .find(|page| page.bus == bus && page.objects.contains(path))
+        .map(|page| format!("{}{}", page.bus, page.document))
 }
 
 /// The document of the page whose live region holds the object at `bus` and `path`, and that
@@ -268,26 +301,26 @@ fn note_live_pages(live: &LiveObjects, record: &AtspiRecord) {
                 page,
                 okur_linux_model::live::live_objects(&page.root),
                 okur_linux_model::page::progress_bars(&page.root),
+                okur_linux_model::page::object_paths(&page.root),
             )
         })
         .collect();
     let mut pages = live
         .write()
         .unwrap_or_else(std::sync::PoisonError::into_inner);
-    for (page, paths, bars) in found {
+    for (page, paths, bars, objects) in found {
         let Some(at) = page.document.find('/') else {
             continue;
         };
         let (bus, document) = page.document.split_at(at);
         pages.retain(|p| !(p.bus == bus && p.document == document));
-        if paths.is_empty() && bars.is_empty() {
-            continue;
-        }
         pages.push(LivePage {
             bus: bus.to_owned(),
             document: document.to_owned(),
             paths,
             bars,
+            objects,
+            armed: std::sync::atomic::AtomicBool::new(true),
         });
         if pages.len() > PAGES_KEPT {
             pages.remove(0);
@@ -1303,6 +1336,26 @@ impl EventSource for AtspiEventSource {
                                     .filter(|(document, _)| {
                                         focus_page.as_deref() == Some(key_of(document).as_str())
                                     });
+                                // The page in front changed outside its live regions: it is
+                                // captured again once its changes settle (it was not, and
+                                // what a page added later stayed unread until the focus
+                                // moved).
+                                if page.is_none() {
+                                    let in_front = target
+                                        .and_then(AtspiObject::of)
+                                        .and_then(|object| {
+                                            page_of_object(&live, &object.bus_name, &object.path)
+                                        })
+                                        .is_some_and(|document| {
+                                            focus_page.as_deref() == Some(document.as_str())
+                                        });
+                                    if in_front {
+                                        let mut wanted = page_wanted
+                                            .lock()
+                                            .unwrap_or_else(std::sync::PoisonError::into_inner);
+                                        PageWanted::ask(&mut wanted, false);
+                                    }
+                                }
                                 if let Some((document, region)) = page {
                                     // One time for the page's regions changing together, so
                                     // they are read together in the page's order, however far
@@ -1481,6 +1534,48 @@ impl EventSource for AtspiEventSource {
 impl Drop for AtspiEventSource {
     fn drop(&mut self) {
         let _ = self.stop();
+    }
+}
+
+#[cfg(test)]
+mod heard_tests {
+    use super::*;
+
+    /// A read page's first change of its children is heard and none after it until the page
+    /// is read again; its text changing is not (a field typed in); another page's object is not
+    /// this page's.
+    #[test]
+    fn a_pages_first_change_is_heard_once() {
+        let live: LiveObjects = Arc::default();
+        let page = |objects: &[&str]| LivePage {
+            bus: ":1.5".to_owned(),
+            document: "/doc".to_owned(),
+            paths: std::collections::HashMap::new(),
+            bars: std::collections::HashSet::new(),
+            objects: objects.iter().map(|p| (*p).to_owned()).collect(),
+            armed: std::sync::atomic::AtomicBool::new(true),
+        };
+        live.write()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .push(page(&["/doc", "/section"]));
+        assert!(!heard(&live, &EventKind::TextChanged, ":1.5", "/section"));
+        assert!(heard(
+            &live,
+            &EventKind::StructureChanged,
+            ":1.5",
+            "/section"
+        ));
+        assert!(!heard(&live, &EventKind::StructureChanged, ":1.5", "/doc"));
+        assert!(!heard(
+            &live,
+            &EventKind::StructureChanged,
+            ":1.9",
+            "/section"
+        ));
+        assert_eq!(
+            page_of_object(&live, ":1.5", "/section").as_deref(),
+            Some(":1.5/doc")
+        );
     }
 }
 
