@@ -495,13 +495,13 @@ impl ScreenReaderEngine {
         // The dialog of Okur's it opened over, named first as Windows names the dialog box
         // that owns it: "PlaceMarker List dialog | Add PlaceMarker dialog | Name: Edit" [obs,
         // 702/s5]. Only where JAWS's own owns it: JAWS names no Dictionary Manager before its
-        // Add Dictionary Definition [obs, 1157/s5].
-        if told.outer_dialogs.is_empty() && !focus.dialog_box_read {
-            let owner = self
-                .placemarker_dialog_owner(dialog.id)
-                .and_then(|owner| open.get(..at)?.iter().find(|d| d.id == owner));
-            told.outer_dialogs = owner.map(|d| d.title.clone()).into_iter().collect();
-        }
+        // Add Dictionary Definition [obs, 1157/s5]. On every platform: GTK tells no owner, and
+        // okur-ui's Win32 dialog is owned by any of Okur's in front as it opens, which keeps
+        // it above that one, so Windows' own owner is not what is said.
+        let owner = self
+            .placemarker_dialog_owner(dialog.id)
+            .and_then(|owner| open.get(..at)?.iter().find(|d| d.id == owner));
+        told.outer_dialogs = owner.map(|d| d.title.clone()).into_iter().collect();
         // A row of a check list of Okur's: its check, as Windows' list view with check boxes
         // gives it ("Hide ComplementaryRegion 1 from the top ... checked | 1 of 1" [obs,
         // 742/s18]).

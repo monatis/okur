@@ -529,4 +529,29 @@ mod tests {
             [DictionaryEntry::new("total", "amount")]
         );
     }
+
+    /// Add Dictionary Definition is said without the manager it opened over, as JAWS says it
+    /// [obs, 1157/s5], though okur-ui on Windows owns it by the manager and the focus names
+    /// it so: only the PlaceMarker List is named before the dialog it opened.
+    #[test]
+    fn the_managers_add_dialog_is_said_alone() {
+        let (mut engine, ui) = engine();
+        insert_d(&mut engine);
+        let manager = shown(&ui).map(|d| (d.id, d.title)).unwrap_or_default();
+        press(&mut engine, manager.0, "add");
+        let add = shown(&ui).map(|d| d.title).unwrap_or_default();
+        let mut field = crate::event::FocusEvent::new(Role::Edit)
+            .with_name("Actual Word:")
+            .with_window_title(&add);
+        field.app = Some("okur-ui.exe".into());
+        field.dialog_box_read = true;
+        field.dialog_text = Some(String::new());
+        field.outer_dialogs = vec![manager.1.clone()];
+        let said = engine.handle_accessibility_event(&AccessibilityEvent::Focus(field));
+        assert!(
+            said.as_deref()
+                .is_some_and(|s| s.starts_with(&add) && !s.contains(&manager.1)),
+            "{said:?}"
+        );
+    }
 }
