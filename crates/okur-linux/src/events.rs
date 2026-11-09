@@ -148,37 +148,100 @@ fn object_of_key(key: &str) -> Option<AtspiObject> {
     })
 }
 
-/// A live region read again as it changed, as a record for the engine: its objects numbered
-/// after its page's, for the engine to splice it into the page and to act on its new objects.
+/// A live region read again as it changed, as a record for the engine: its objects with the
+/// ids they have in the page (new ones new), for the engine to splice it into the page and to
+/// act on its new objects. Read in parallel, as a page is.
 fn read_region(
     provider: &LinuxProvider,
-    document: &AtspiObject,
+    document: &str,
     region: &AtspiObject,
     objects: &PageObjects,
 ) -> AtspiRecord {
     let started = std::time::Instant::now();
-    let tree = provider.atspi_tree(region, LIVE_LIMIT);
-    let key = key_of(document);
-    let base = objects
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
-        .number_part(&key, &tree);
-    let root = snapshot(tree);
+    let tree = provider.atspi_tree_parallel(region, LIVE_LIMIT);
+    let ids = {
+        let mut objects = objects
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner);
+        let mut ids = Vec::new();
+        objects.ids_of(&tree, &mut ids);
+        objects.part_read(document, &ids);
+        ids
+    };
+    let mut root = snapshot(tree);
+    give_ids(&mut root, &mut ids.iter());
+    let objects = count(&root);
     let read_ms = u64::try_from(started.elapsed().as_millis()).unwrap_or(u64::MAX);
-    tracing::debug!(region = %region.path, ms = read_ms, ?base, "a live region read again");
+    tracing::debug!(region = %region.path, ms = read_ms, objects, "a live region read again");
     AtspiRecord::live(
         unix_ms(),
         okur_linux_model::convert::LiveRead {
-            document: key,
-            base,
+            document: document.to_owned(),
             root,
+            cut: objects >= LIVE_LIMIT,
             read_ms,
         },
     )
 }
 
-/// The live objects of the pages `record` gives the engine, in place of those pages' before.
+/// The live regions read off the event thread, as their signals pause: a big region read on
+/// it held every focus behind it (the code review of 2026-11-09, second pass, finding 1).
+struct RegionReader {
+    asks: std::sync::mpsc::Sender<(String, AtspiObject)>,
+    reads: std::sync::mpsc::Receiver<AtspiRecord>,
+}
+
+impl RegionReader {
+    /// The reader, on a thread of its own, which ends once its asker is gone. A region asked
+    /// for again before its read began is read once.
+    fn start(objects: PageObjects) -> Result<Self, RuntimeError> {
+        let provider =
+            LinuxProvider::new().map_err(|e| source_error("the region reader's bus", e))?;
+        let (asks, asked) = std::sync::mpsc::channel::<(String, AtspiObject)>();
+        let (read, reads) = std::sync::mpsc::channel();
+        std::thread::spawn(move || {
+            while let Ok(first) = asked.recv() {
+                let mut waiting = vec![first];
+                for more in asked.try_iter() {
+                    if !waiting.contains(&more) {
+                        waiting.push(more);
+                    }
+                }
+                for (document, region) in waiting {
+                    if read
+                        .send(read_region(&provider, &document, &region, &objects))
+                        .is_err()
+                    {
+                        return;
+                    }
+                }
+            }
+        });
+        Ok(Self { asks, reads })
+    }
+}
+
+/// The live objects of the pages `record` gives the engine, in place of those pages' before;
+/// of a region read again, added to its page's: a message's own objects, new in it, are heard as
+/// they change (a reply streamed into it; the code review of 2026-11-09, second pass, 3).
 fn note_live_pages(live: &LiveObjects, record: &AtspiRecord) {
+    if let Some(read) = &record.live {
+        let objects = okur_linux_model::live::live_objects(&read.root);
+        let Some(at) = read.document.find('/') else {
+            return;
+        };
+        let (bus, document) = read.document.split_at(at);
+        let mut pages = live
+            .write()
+            .unwrap_or_else(std::sync::PoisonError::into_inner);
+        if let Some(page) = pages
+            .iter_mut()
+            .find(|p| p.bus == bus && p.document == document)
+        {
+            page.paths.extend(objects);
+        }
+        return;
+    }
     if record.pages.is_empty() {
         return;
     }
@@ -206,7 +269,7 @@ fn note_live_pages(live: &LiveObjects, record: &AtspiRecord) {
             document: document.to_owned(),
             paths,
         });
-        if pages.len() > usize::try_from(PAGES_KEPT).unwrap_or(4) {
+        if pages.len() > PAGES_KEPT {
             pages.remove(0);
         }
     }
@@ -275,7 +338,11 @@ fn settle_toggle(provider: &LinuxProvider, activated: &Activated, target: &mut E
         let Ok(bits) = provider.atspi_state_bits(&object.bus_name, &object.path) else {
             return;
         };
-        let now = Some(if bits & on_bits != 0 {
+        // Mixed as xa11y-linux reads it, before checked (the code review of 2026-11-09,
+        // second pass, finding 4).
+        let now = Some(if bits & bit(state::INDETERMINATE) != 0 {
+            xa11y_core::Toggled::Mixed
+        } else if bits & on_bits != 0 {
             xa11y_core::Toggled::On
         } else {
             xa11y_core::Toggled::Off
@@ -297,7 +364,7 @@ impl DriverShared {
     /// once the engine has gone.
     pub fn hand(
         &self,
-        record: &AtspiRecord,
+        record: AtspiRecord,
         said: Vec<AccessibilityEvent>,
         sink: &EventSink,
     ) -> bool {
@@ -310,7 +377,7 @@ impl DriverShared {
 /// engine has gone.
 fn hand(
     trace: &TraceOut,
-    record: &AtspiRecord,
+    mut record: AtspiRecord,
     said: Vec<AccessibilityEvent>,
     sink: &EventSink,
 ) -> bool {
@@ -318,7 +385,9 @@ fn hand(
         .lock()
         .unwrap_or_else(std::sync::PoisonError::into_inner);
     if let Some(writer) = out.as_mut() {
-        if let Err(e) = write_record(writer, record) {
+        // When the engine is given it, under the trace's lock: the trace's stamps go forward.
+        record.delivered_ms = Some(unix_ms());
+        if let Err(e) = write_record(writer, &record) {
             tracing::warn!("the trace not written, no longer kept: {e}");
             *out = None;
         }
@@ -326,78 +395,88 @@ fn hand(
     said.into_iter().all(|event| sink.send(event))
 }
 
-/// The ids a page read gives its objects, and the objects of the last pages by them.
+/// Each object's id, by its application's bus name and its path, kept while its page is one of
+/// the last read: a page read again gives an object the id it had, as IA2's unique ids stay on
+/// Windows, so a part read again splices into the page the engine has, whichever read that page
+/// came from (the code review of 2026-11-09, second pass, findings 2 and 7). The objects of the
+/// pages before the last few go, and those that no page kept has any longer.
 #[derive(Debug, Default)]
 pub struct PageIds {
-    /// The base the next page read numbers from.
-    next_base: i32,
-    /// The bases of the pages whose objects are kept, oldest first.
-    kept: std::collections::VecDeque<i32>,
+    /// The id given last.
+    last: i32,
+    ids: std::collections::HashMap<(String, String), i32>,
     pub by_id: std::collections::BTreeMap<i32, (String, String)>,
-    /// Each kept page's base and the id after its last object, by its document's key: a live
-    /// region read again numbers its objects from there, in its page's range.
-    documents: std::collections::HashMap<String, (i32, i32)>,
+    /// The objects of the last pages read, by their documents' keys, the oldest first.
+    pages: std::collections::VecDeque<(String, std::collections::HashSet<i32>)>,
 }
-
-/// How far apart pages' ids start: more than a page read keeps ([`PAGE_LIMIT`]).
-const PAGE_ID_STRIDE: i32 = 1 << 20;
 
 /// How many pages' objects are kept.
-const PAGES_KEPT: i32 = 4;
+const PAGES_KEPT: usize = 4;
 
 impl PageIds {
-    /// The base a new page read numbers from; the objects of pages before the last few go.
-    fn next_page(&mut self) -> i32 {
-        let base = self.next_base;
-        // Wrapping before i32's end: ids start again at 0 after 2000 pages.
-        self.next_base = if base >= 2000 * PAGE_ID_STRIDE {
-            0
-        } else {
-            base + PAGE_ID_STRIDE
-        };
-        let range = |start: i32| start..=start.saturating_add(PAGE_ID_STRIDE);
-        // The page this one's ids were last given to, after the ids wrapped, and the oldest
-        // page past the ones kept.
-        self.by_id.retain(|id, _| !range(base).contains(id));
-        self.documents.retain(|_, (b, _)| *b != base);
-        self.kept.retain(|kept| *kept != base);
-        self.kept.push_back(base);
-        while self.kept.len() > usize::try_from(PAGES_KEPT).unwrap_or(4) {
-            if let Some(oldest) = self.kept.pop_front() {
-                self.by_id.retain(|id, _| !range(oldest).contains(id));
-                self.documents.retain(|_, (b, _)| *b != oldest);
+    /// The id of the object at `bus` and `path`: the one it has, else a new one.
+    fn id_of(&mut self, bus: &str, path: &str) -> i32 {
+        let key = (bus.to_owned(), path.to_owned());
+        if let Some(&id) = self.ids.get(&key) {
+            return id;
+        }
+        // Past i32's end the ids start again at 1, skipping any still kept.
+        loop {
+            self.last = if self.last >= i32::MAX - 1 {
+                1
+            } else {
+                self.last + 1
+            };
+            if !self.by_id.contains_key(&self.last) {
+                break;
             }
         }
-        base
+        self.by_id.insert(self.last, key.clone());
+        self.ids.insert(key, self.last);
+        self.last
     }
 
-    /// Numbers a part of `document`'s page read again (`tree`) after the page's objects, in the
-    /// page's range, and keeps its objects: the id its numbering starts from, none when the page
-    /// is not kept or its range is full.
-    fn number_part(&mut self, document: &str, tree: &AtspiTree) -> Option<i32> {
-        let (base, start) = *self.documents.get(document)?;
-        let mut next = start;
-        let mut part = std::collections::BTreeMap::new();
-        objects_of(tree, &mut next, &mut part);
-        if next >= base.saturating_add(PAGE_ID_STRIDE) {
-            return None;
+    /// `tree`'s objects' ids, depth first, as its snapshot's nodes are ordered.
+    fn ids_of(&mut self, tree: &AtspiTree, out: &mut Vec<i32>) {
+        out.push(self.id_of(&tree.bus_name, &tree.path));
+        for child in &tree.children {
+            self.ids_of(child, out);
         }
-        self.by_id.extend(part);
-        self.documents.insert(document.to_owned(), (base, next));
-        Some(start)
+    }
+
+    /// `document`'s page read whole, its objects `ids`: they are the page's now. The objects of
+    /// the pages before the last few go, and those no page kept has.
+    fn page_read(&mut self, document: &str, ids: &[i32]) {
+        self.pages.retain(|(d, _)| d != document);
+        self.pages
+            .push_back((document.to_owned(), ids.iter().copied().collect()));
+        while self.pages.len() > PAGES_KEPT {
+            self.pages.pop_front();
+        }
+        let kept: std::collections::HashSet<i32> = self
+            .pages
+            .iter()
+            .flat_map(|(_, ids)| ids.iter().copied())
+            .collect();
+        self.by_id.retain(|id, _| kept.contains(id));
+        self.ids.retain(|_, id| kept.contains(id));
+    }
+
+    /// A part of `document`'s page read again, its objects `ids`: kept with the page's. A part
+    /// of a page not kept keeps nothing; its objects go at the next page read.
+    fn part_read(&mut self, document: &str, ids: &[i32]) {
+        if let Some((_, page)) = self.pages.iter_mut().find(|(d, _)| d == document) {
+            page.extend(ids.iter().copied());
+        }
     }
 }
 
-/// `tree`'s objects, depth first, as the page's nodes are numbered.
-fn objects_of(
-    tree: &AtspiTree,
-    next: &mut i32,
-    out: &mut std::collections::BTreeMap<i32, (String, String)>,
-) {
-    *next += 1;
-    out.insert(*next, (tree.bus_name.clone(), tree.path.clone()));
-    for child in &tree.children {
-        objects_of(child, next, out);
+/// Gives `node` and its descendants, depth first, the ids `ids` gives in that order: those
+/// [`PageIds::ids_of`] gave the tree it is the snapshot of.
+fn give_ids(node: &mut okur_linux_model::page::AtspiNode, ids: &mut std::slice::Iter<'_, i32>) {
+    node.id = ids.next().copied();
+    for child in &mut node.children {
+        give_ids(child, ids);
     }
 }
 
@@ -417,6 +496,8 @@ fn snapshot(tree: AtspiTree) -> okur_linux_model::page::AtspiNode {
         relations: tree.relations,
         description: tree.description,
         uri: tree.uri,
+        // Given by give_ids, from the page's ids.
+        id: None,
         children: tree.children.into_iter().map(snapshot).collect(),
     }
 }
@@ -577,24 +658,27 @@ fn read_page_until(
 ) -> PageRead {
     let started = std::time::Instant::now();
     let tree = provider.atspi_tree_parallel_until(document, PAGE_LIMIT, stop);
-    // A lock a panicking thread left still holds the numbering (the second review): base 0
-    // and no objects would have sent actions to other pages' objects.
-    let base = {
+    // A lock a panicking thread left still holds the ids (the second review). A read stopped
+    // gives its new objects ids but does not make them the page's: they go at the next read.
+    let ids = {
         let mut objects = objects
             .lock()
             .unwrap_or_else(std::sync::PoisonError::into_inner);
-        let base = objects.next_page();
-        let mut next = base;
-        objects_of(&tree, &mut next, &mut objects.by_id);
-        objects.documents.insert(key_of(document), (base, next));
-        base
+        let mut ids = Vec::new();
+        objects.ids_of(&tree, &mut ids);
+        if !stop.load(Ordering::SeqCst) {
+            objects.page_read(&key_of(document), &ids);
+        }
+        ids
     };
-    let root = snapshot(tree);
+    let mut root = snapshot(tree);
+    give_ids(&mut root, &mut ids.iter());
     let read_ms = u64::try_from(started.elapsed().as_millis()).unwrap_or(u64::MAX);
     tracing::debug!(ms = read_ms, objects = count(&root), "page read");
+    // Its objects carry their ids: the base numbers nothing.
     PageRead {
         document: key_of(document),
-        base,
+        base: 0,
         read_ms,
         root,
     }
@@ -753,7 +837,7 @@ fn deliver(
                 .unwrap_or_else(std::sync::PoisonError::into_inner) = Some(object);
         }
         let said = converter.convert_read(&record);
-        if !hand(trace, &record, said, sink) {
+        if !hand(trace, record, said, sink) {
             return false;
         }
     }
@@ -776,10 +860,18 @@ fn drop_pages(documents: Vec<String>, reader: &Option<PageReader>, converter: &m
 /// Milliseconds since the Unix epoch: a record's time, on the clock the lab's runner stamps its
 /// steps with, so a replay finds each step's records.
 pub(crate) fn unix_ms() -> u64 {
-    std::time::SystemTime::now()
-        .duration_since(std::time::UNIX_EPOCH)
-        .map(|d| u64::try_from(d.as_millis()).unwrap_or(u64::MAX))
-        .unwrap_or(0)
+    // The wall clock read once, then a steady clock from it: a step of the system's clock (WSL
+    // sets it as the machine wakes) would have put a record before the one before it, and the
+    // replay refuses such a trace (the code review of 2026-11-09, second pass, finding 8).
+    static ANCHOR: std::sync::OnceLock<(u64, std::time::Instant)> = std::sync::OnceLock::new();
+    let (wall, at) = ANCHOR.get_or_init(|| {
+        let wall = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .map(|d| u64::try_from(d.as_millis()).unwrap_or(u64::MAX))
+            .unwrap_or(0);
+        (wall, std::time::Instant::now())
+    });
+    wall.saturating_add(u64::try_from(at.elapsed().as_millis()).unwrap_or(u64::MAX))
 }
 
 /// One record, a JSON line, written through at once: a run stopped by its runner keeps every
@@ -789,20 +881,7 @@ fn write_record(
     record: &AtspiRecord,
 ) -> std::io::Result<()> {
     use std::io::Write;
-    /// The record with the time the engine is given it.
-    #[derive(serde::Serialize)]
-    struct Delivered<'a> {
-        #[serde(flatten)]
-        record: &'a AtspiRecord,
-        delivered_ms: u64,
-    }
-    serde_json::to_writer(
-        &mut *out,
-        &Delivered {
-            record,
-            delivered_ms: unix_ms(),
-        },
-    )?;
+    serde_json::to_writer(&mut *out, record)?;
     out.write_all(b"\n")?;
     out.flush()
 }
@@ -955,6 +1034,10 @@ impl EventSource for AtspiEventSource {
                 // The order the engine takes the records and pages in: a page before the
                 // focus that asked for it, as when pages were read here.
                 let mut delivery = Delivery::default();
+                // Live regions read off this thread.
+                let regions = RegionReader::start(Arc::clone(&objects))
+                    .map_err(|e| tracing::warn!("live regions not read: {e}"))
+                    .ok();
                 // The page the focus is in, by its document's key: the live regions heard.
                 let mut focus_page: Option<String> = None;
                 // Live regions heard changing, read once their signals pause, by their objects.
@@ -993,8 +1076,19 @@ impl EventSource for AtspiEventSource {
                         .map(|(region, _)| region.clone())
                         .collect();
                     for region in due {
-                        if let Some(d) = dirty.remove(&region) {
-                            let record = read_region(&provider, &d.document, &region, &objects);
+                        if let (Some(d), Some(regions)) = (dirty.remove(&region), regions.as_ref())
+                        {
+                            let _ = regions.asks.send((key_of(&d.document), region));
+                        }
+                    }
+                    // The regions read, given to the engine where the focus is still in their
+                    // page (the code review of 2026-11-09, second pass, finding 6).
+                    for record in regions.iter().flat_map(|r| r.reads.try_iter()) {
+                        let in_front = record
+                            .live
+                            .as_ref()
+                            .is_some_and(|read| focus_page.as_deref() == Some(&read.document));
+                        if in_front {
                             let cancelled = delivery.push(record, false);
                             drop_pages(cancelled, &reader, &mut converter);
                         }
@@ -1240,53 +1334,79 @@ impl Drop for AtspiEventSource {
 mod page_id_tests {
     use super::*;
 
-    /// Each page read numbers its objects from a base of its own; the last pages' objects are
-    /// kept, an older page's go.
-    #[test]
-    fn a_pages_objects_keep_their_ids_after_another_page_is_read() {
-        let mut ids = PageIds::default();
-        let mut bases = Vec::new();
-        for page in 0..6 {
-            let base = ids.next_page();
-            ids.by_id
-                .insert(base + 1, (":1.5".to_owned(), format!("/page/{page}")));
-            bases.push(base);
+    fn tree(path: &str, children: Vec<AtspiTree>) -> AtspiTree {
+        AtspiTree {
+            bus_name: ":1.5".to_owned(),
+            path: path.to_owned(),
+            children,
+            ..AtspiTree::default()
         }
-        assert_eq!(
-            bases
-                .windows(2)
-                .filter(|w| matches!(w, [a, b] if b - a == PAGE_ID_STRIDE))
-                .count(),
-            5
-        );
+    }
+
+    fn page_read(ids: &mut PageIds, document: &str, page: &AtspiTree) -> Vec<i32> {
+        let mut out = Vec::new();
+        ids.ids_of(page, &mut out);
+        ids.page_read(document, &out);
+        out
+    }
+
+    /// A page read again gives its objects the ids they had; a new object a new id; an object
+    /// gone from it goes. A page's ids are no other page's.
+    #[test]
+    fn a_page_read_again_keeps_its_objects_ids() {
+        let mut ids = PageIds::default();
+        let first = tree("/doc", vec![tree("/a", vec![]), tree("/b", vec![])]);
+        let before = page_read(&mut ids, ":1.5/doc", &first);
+        let again = tree("/doc", vec![tree("/b", vec![]), tree("/c", vec![])]);
+        let after = page_read(&mut ids, ":1.5/doc", &again);
+        assert_eq!(after.first(), before.first());
+        assert_eq!(after.get(1), before.get(2));
+        assert!(after.get(2).is_some_and(|c| !before.contains(c)));
+        assert!(before.get(1).is_some_and(|a| !ids.by_id.contains_key(a)));
+        let other = page_read(&mut ids, ":1.9/doc", &tree("/doc", vec![]));
+        assert!(other.iter().all(|id| !after.contains(id)));
+    }
+
+    /// The last few pages' objects are kept; an older page's go.
+    #[test]
+    fn the_last_pages_objects_are_kept() {
+        let mut ids = PageIds::default();
+        let mut pages = Vec::new();
+        for page in 0..6 {
+            let id = page_read(
+                &mut ids,
+                &format!(":1.5/page/{page}"),
+                &tree(&format!("/page/{page}"), vec![]),
+            );
+            pages.push(id);
+        }
         let kept: Vec<&String> = ids.by_id.values().map(|(_, path)| path).collect();
         assert_eq!(kept, ["/page/2", "/page/3", "/page/4", "/page/5"]);
     }
 
-    /// A live region read again is numbered after its page's objects, in the page's range, and
-    /// its objects are kept for acting on them; a page not kept numbers nothing.
+    /// A live region read again keeps its objects' ids, its new ones kept with its page's, for
+    /// acting on them; a region of a page not kept keeps nothing.
     #[test]
-    fn a_live_region_read_again_is_numbered_after_its_page() {
+    fn a_live_region_read_again_keeps_its_ids() {
         let mut ids = PageIds::default();
-        let base = ids.next_page();
-        ids.documents
-            .insert(":1.5/doc".to_owned(), (base, base + 40));
-        let region = AtspiTree {
-            bus_name: ":1.5".to_owned(),
-            path: "/log".to_owned(),
-            children: vec![AtspiTree {
-                bus_name: ":1.5".to_owned(),
-                path: "/message/2".to_owned(),
-                ..AtspiTree::default()
-            }],
-            ..AtspiTree::default()
-        };
-        assert_eq!(ids.number_part(":1.5/doc", &region), Some(base + 40));
+        let page = tree("/doc", vec![tree("/log", vec![tree("/message/1", vec![])])]);
+        let read = page_read(&mut ids, ":1.5/doc", &page);
+        let region = tree(
+            "/log",
+            vec![tree("/message/1", vec![]), tree("/message/2", vec![])],
+        );
+        let mut part = Vec::new();
+        ids.ids_of(&region, &mut part);
+        ids.part_read(":1.5/doc", &part);
+        assert_eq!(part.first(), read.get(1));
+        assert_eq!(part.get(1), read.get(2));
+        let new = part.get(2).copied().unwrap_or_default();
         assert_eq!(
-            ids.by_id.get(&(base + 42)).map(|(_, path)| path.as_str()),
+            ids.by_id.get(&new).map(|(_, path)| path.as_str()),
             Some("/message/2")
         );
-        assert_eq!(ids.number_part(":1.5/doc", &region), Some(base + 42));
-        assert_eq!(ids.number_part(":1.9/other", &region), None);
+        // Another page read keeps it, as its page is still kept.
+        page_read(&mut ids, ":1.9/other", &tree("/other", vec![]));
+        assert!(ids.by_id.contains_key(&new));
     }
 }

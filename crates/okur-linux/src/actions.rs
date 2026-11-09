@@ -353,11 +353,7 @@ fn read_text(
             read_ms,
         },
     );
-    reads.hand(
-        &record,
-        vec![AccessibilityEvent::TextContext(context)],
-        sink,
-    )
+    reads.hand(record, vec![AccessibilityEvent::TextContext(context)], sink)
 }
 
 impl ApplicationActions for LinuxActions {

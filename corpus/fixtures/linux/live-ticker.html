@@ -5,8 +5,9 @@
 <title>Live Ticker - Linux Lab Fixture</title>
 </head>
 <body>
-<!-- A big page (about 2,000 accessible objects) with a status region that ticks every second:
-     the Linux lab's measure of what a live region's change costs Okur (probe-live-ticker.sh). -->
+<!-- A big page (about 2,000 accessible objects) with a status region that ticks every second
+     and a log of about 300 objects that grows every second: the Linux lab's measure of what a
+     live region's change costs Okur (probe-live-ticker.sh). -->
 <h1>Live ticker</h1>
 <div id="ticker" role="status">Tick 0</div>
 <p>
@@ -17,8 +18,18 @@
   <button>Fifth</button>
   <button>Sixth</button>
 </p>
+<div id="log" role="log" aria-label="Messages"></div>
 <main id="items"></main>
 <script>
+  const log = document.getElementById("log");
+  const message = (n) => {
+    const p = document.createElement("p");
+    p.textContent = `Message ${n}`;
+    log.append(p);
+  };
+  for (let n = 1; n <= 150; n++) {
+    message(n);
+  }
   const items = document.getElementById("items");
   for (let i = 1; i <= 500; i++) {
     const p = document.createElement("p");
@@ -33,6 +44,7 @@
   setInterval(() => {
     tick += 1;
     document.getElementById("ticker").textContent = `Tick ${tick}`;
+    message(150 + tick);
   }, 1000);
 </script>
 </body>

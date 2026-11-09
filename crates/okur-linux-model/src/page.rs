@@ -71,6 +71,12 @@ pub struct AtspiNode {
     /// An address: a link's, or the document's.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub uri: Option<String>,
+    /// The id the driver gave its object, kept while its page is one of the last read: a page
+    /// read again gives an object the id it had, as IA2's unique ids stay on Windows (the code
+    /// review of 2026-11-09, second pass, findings 2 and 7). None in the traces before it, whose
+    /// objects are numbered from their read's base.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<i32>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub children: Vec<AtspiNode>,
 }
@@ -306,7 +312,7 @@ fn collect_applications(
 fn number_paths<'a>(node: &'a AtspiNode, next: &mut i32, ids: &mut HashMap<&'a str, i32>) {
     *next += 1;
     if !node.path.is_empty() {
-        ids.insert(node.path.as_str(), *next);
+        ids.insert(node.path.as_str(), node.id.unwrap_or(*next));
     }
     for child in &node.children {
         number_paths(child, next, ids);
@@ -359,7 +365,7 @@ fn relation_name(kind: u32) -> Option<&'static str> {
 
 fn numbered(node: &AtspiNode, next: &mut i32, ids: &HashMap<&str, i32>) -> WebNode {
     *next += 1;
-    let unique_id = *next;
+    let unique_id = node.id.unwrap_or(*next);
     let relations = node
         .relations
         .iter()

@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
-# What a live region's change costs Okur on Linux (the code review of 2026-11-09, finding 2):
-# Chrome on live-ticker.html, a page of about 2,000 objects whose status region ticks every
+# What a live region's change costs Okur on Linux (the code reviews of 2026-11-09, findings 2
+# and 1 of the second pass): Chrome on live-ticker.html, a page of about 2,000 objects whose
+# status region ticks every second and whose log of about 300 objects grows by a message every
 # second, with `okur run` (the silent synthesizer) for 30 s, Tab pressed six times. Prints how
-# many times the region and the page were read again, their read times, and the Tabs said.
-# Passes when the region was read for its ticks and spliced into the page, the page itself
-# read again at most twice, and every Tab was said. Run in the lab:
+# many times a region and the page were read again, the regions' read times, the messages said
+# and the Tabs said. Passes when the regions were read for their changes and spliced into the
+# page (the page itself read again at most twice), new messages were said, and every Tab was
+# said. Run in the lab:
 #   bash /mnt/d/okur-linux/a11y-stack.sh bash /mnt/d/okur-linux/probe-live-ticker.sh
 set -uo pipefail
 cd ~/okur
@@ -30,18 +32,18 @@ echo "region reads: $regions; their times (ms):"
 grep 'a live region read again' <<< "$log" | grep -o 'ms=[0-9]*' | sort -t= -k2 -n | tr '\n' ' '
 echo
 echo "page reads after a change: $pages"
-grep -o 'page read[^"]*ms=[0-9]*' <<< "$log" | tail -10
-echo "--- what was said for the Tabs"
+echo "--- what was said"
 python3 -c "
 import json, sys
 for line in open(sys.argv[1]):
     entry = json.loads(line)
     print(entry.get('kind'), '|', (entry.get('text') or '')[:80])" "$out/speech.jsonl" 2>/dev/null \
-    | grep -v '^None | Tick\|Tick [0-9]' | tail -12
+    | tail -24
+messages=$(grep -c 'Message 1[5-9][0-9]' "$out/speech.jsonl" 2>/dev/null)
 said=$(grep -c 'First\|Second\|Third\|Fourth\|Fifth\|Sixth' "$out/speech.jsonl" 2>/dev/null)
 rm -rf "$out"
-echo "Tabs said: ${said:-0} of 6"
-if [ "$regions" -ge 5 ] && [ "$pages" -le 2 ] && [ "${said:-0}" -ge 6 ]; then
+echo "new messages said: ${messages:-0}; Tabs said: ${said:-0} of 6"
+if [ "$regions" -ge 5 ] && [ "$pages" -le 2 ] && [ "${messages:-0}" -ge 5 ] && [ "${said:-0}" -ge 6 ]; then
     echo "LIVE TICKER PASS"
 else
     echo "LIVE TICKER FAIL"

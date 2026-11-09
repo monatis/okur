@@ -49,15 +49,16 @@ pub struct TextRead {
     pub read_ms: u64,
 }
 
-/// A live region read again as it changed: its page's document, by its key, the region's
-/// subtree, and the id its objects are numbered from, after its page's (none when the page's
-/// numbering was not kept: the page is then captured again whole).
+/// A live region read again as it changed: its page's document, by its key, and the region's
+/// subtree, its objects with the ids they have in the page.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LiveRead {
     pub document: String,
-    #[serde(default)]
-    pub base: Option<i32>,
     pub root: AtspiNode,
+    /// The read was cut at its object limit: the region's end, its newest content, is missing,
+    /// and the page is captured again instead (the code review of 2026-11-09, second pass, 5).
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub cut: bool,
     /// How long the read took, in milliseconds.
     #[serde(default)]
     pub read_ms: u64,
@@ -262,15 +263,21 @@ impl Converter {
     }
 
     /// What a live region read again changed, compared with its lines when the page or the
-    /// region was read before, then the region spliced into the page the engine has (its root
-    /// by its id in the page, its other objects by their new ids, which a focus in them names):
-    /// the page is not read again for it. A region whose page is not the one given last, or
-    /// read without a numbering, is the page's change instead, which captures it again.
+    /// region was read before, then the region spliced into the page the engine has, by its
+    /// objects' ids, which stay from read to read: the page is not read again for it. A region
+    /// of another page than the one given last says nothing (a background tab's message, the
+    /// code review of 2026-11-09, second pass, 6); a region read cut short, or whose objects have
+    /// no ids, is the page's change instead, which captures the page again.
     fn live_read(&mut self, read: &LiveRead) -> Vec<AccessibilityEvent> {
-        let base = read.base.unwrap_or(0);
+        if self.last_page.as_deref() != Some(read.document.as_str()) {
+            return Vec::new();
+        }
+        if read.cut {
+            return vec![AccessibilityEvent::PageChanged];
+        }
         let regions = crate::live::regions(&read.root);
-        let ids = crate::page::page_ids(&read.root, base);
-        let mut part = to_aom_from(&read.root, base);
+        let ids = crate::page::page_ids(&read.root, 0);
+        let part = to_aom_from(&read.root, 0);
         let lines = crate::live::region_lines(&part, &regions, &ids);
         let at = self
             .live_lines
@@ -292,24 +299,16 @@ impl Converter {
                 }
             }
         }
+        // The region's root as the page has it: spliced where the engine's page has the same id.
         let in_page =
-            self.page_ids.get(&read.root.path).copied().filter(|_| {
-                read.base.is_some() && self.last_page.as_deref() == Some(&read.document)
-            });
-        match in_page {
-            Some(id) => {
-                part.attributes
-                    .insert(okur_core::aom::UNIQUE_ID_ATTR.to_owned(), id.to_string());
-                for (path, new) in ids {
-                    if path != read.root.path {
-                        self.page_ids.insert(path, new);
-                    }
-                }
-                self.page_places
-                    .extend(crate::page::item_places(&read.root));
-                events.push(AccessibilityEvent::PagePartsLoaded(vec![part]));
-            }
-            None => events.push(AccessibilityEvent::PageChanged),
+            read.root.id.is_some() && self.page_ids.get(&read.root.path).copied() == read.root.id;
+        if in_page {
+            self.page_ids.extend(ids);
+            self.page_places
+                .extend(crate::page::item_places(&read.root));
+            events.push(AccessibilityEvent::PagePartsLoaded(vec![part]));
+        } else {
+            events.push(AccessibilityEvent::PageChanged);
         }
         events
     }
@@ -928,10 +927,13 @@ mod tests {
     #[test]
     fn a_live_regions_change_comes_before_its_page() {
         let read = |messages: &[&str]| {
+            // The driver's ids, kept from read to read.
             let mut root = node("document web", "Team Chat", &[]);
             root.path = "/doc".to_owned();
+            root.id = Some(1);
             let mut log = node("log", "Messages", &[]);
             log.path = "/log".to_owned();
+            log.id = Some(2);
             for (key, value) in [
                 ("live", "polite"),
                 ("container-live", "polite"),
@@ -943,6 +945,7 @@ mod tests {
                 let mut text = node("static", message, &[]);
                 text.text = Some((*message).to_owned());
                 text.path = format!("/message/{i}");
+                text.id = i32::try_from(i).ok().map(|i| 10 + i);
                 text.attributes
                     .insert("container-live".to_owned(), "polite".to_owned());
                 log.children.push(text);
@@ -972,8 +975,8 @@ mod tests {
                 0,
                 LiveRead {
                     document: ":1.5/doc".to_owned(),
-                    base: Some(100),
                     root,
+                    cut: false,
                     read_ms: 0,
                 },
             )
@@ -1013,6 +1016,13 @@ mod tests {
             ),
             "{fourth:?}"
         );
+        // A region of another page than the one given last says nothing, nor captures the
+        // page (a background tab's message).
+        let mut elsewhere = region(&["Ada: Good morning", "You: Message 3"]);
+        if let Some(read) = elsewhere.live.as_mut() {
+            read.document = ":1.9/doc".to_owned();
+        }
+        assert!(converter.convert_read(&elsewhere).is_empty());
         // The page read again after it: nothing new to say of the log.
         let fifth = converter.convert_read(&read(&[
             "Ada: Good morning",
