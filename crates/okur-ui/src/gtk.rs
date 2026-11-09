@@ -1268,6 +1268,49 @@ fn changed(id: u32, control: &str, setting: &Rc<Cell<bool>>, value: Value) {
 }
 
 /// A vertical box with a dialog's margins.
+/// The arrows go round a group of radios, choosing the one they come to, as a Win32 dialog's
+/// radio group does: GTK's own arrows leave the group at either end. Down on the last of Skim
+/// Reading's rule types went on to Rules History (763/s5 in night2), where JAWS's dialog
+/// comes back to the first [obs, 763/s5]. A radio that cannot be chosen is passed by.
+fn go_round(buttons: &[gtk::CheckButton]) {
+    let count = buttons.len();
+    if count < 2 {
+        return;
+    }
+    let group: Rc<Vec<glib::WeakRef<gtk::CheckButton>>> =
+        Rc::new(buttons.iter().map(|b| b.downgrade()).collect());
+    for (at, button) in buttons.iter().enumerate() {
+        let keys = gtk::EventControllerKey::new();
+        let group = Rc::clone(&group);
+        keys.connect_key_pressed(move |_, key, _, modifiers| {
+            use gtk::gdk::Key;
+            let forward = match key {
+                Key::Down | Key::Right | Key::KP_Down | Key::KP_Right => true,
+                Key::Up | Key::Left | Key::KP_Up | Key::KP_Left => false,
+                _ => return glib::Propagation::Proceed,
+            };
+            if !modifiers.is_empty() {
+                return glib::Propagation::Proceed;
+            }
+            // The next one round, forward or back: at + n, or at + count - n, both under
+            // 2 * count, taken modulo count.
+            let next = (1..count).find_map(|n| {
+                let index = (if forward { at + n } else { at + count - n }) % count;
+                group
+                    .get(index)?
+                    .upgrade()
+                    .filter(|b| b.is_sensitive() && b.is_visible())
+            });
+            if let Some(next) = next {
+                next.set_active(true);
+                next.grab_focus();
+            }
+            glib::Propagation::Stop
+        });
+        button.add_controller(keys);
+    }
+}
+
 fn margined_box() -> gtk::Box {
     let outer = gtk::Box::new(gtk::Orientation::Vertical, 8);
     outer.set_margin_top(12);
@@ -1864,6 +1907,7 @@ fn build(
                 holder.append(&button);
                 buttons.push(button);
             }
+            go_round(&buttons);
             if let Some(frame) = frame {
                 place.append(&frame);
             }
