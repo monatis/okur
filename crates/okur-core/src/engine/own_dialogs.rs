@@ -115,6 +115,29 @@ fn kept(open: &mut Vec<DialogSpec>, message: &ToUi) {
                 }
             }
         }
+        // A drop-down's choices replaced (Voice Adjustment's profiles): its place counted
+        // among them (the code review of 2026-11-09, sixth pass, 8).
+        ToUi::DialogItems {
+            id,
+            control,
+            items,
+            selected,
+        } => {
+            let controls = open
+                .iter_mut()
+                .filter(|d| d.id == *id)
+                .flat_map(|d| d.controls.iter_mut());
+            for c in controls.filter(|c| c.id == *control) {
+                if let ControlKind::Choice {
+                    options,
+                    selected: chosen,
+                } = &mut c.kind
+                {
+                    options.clone_from(items);
+                    *chosen = *selected;
+                }
+            }
+        }
         ToUi::DialogLabel { id, control, label } => {
             let controls = open
                 .iter_mut()

@@ -313,8 +313,9 @@ enum Sources {
         name: String,
         pid: u32,
     },
-    /// Every application, each sender's name and process kept once looked up.
-    Desktop(Mutex<HashMap<String, (String, u32)>>),
+    /// Every application, each sender's name and process kept once looked up, with when: an
+    /// empty name is asked again a second later.
+    Desktop(Mutex<HashMap<String, (String, u32, std::time::Instant)>>),
 }
 
 impl EventContext {
@@ -328,8 +329,19 @@ impl EventContext {
                 .any(|bus| bus == sender)
                 .then(|| (name.clone(), *pid)),
             Sources::Desktop(known) => {
-                if let Some(app) = known.lock().ok().and_then(|k| k.get(sender).cloned()) {
-                    return Some(app);
+                // A name not yet given (an application's first events, before its root is up:
+                // okur-ui's windows came with none in every Linux trace) is asked again a second
+                // later, not with every signal (a page load sends thousands; the code review of
+                // 2026-11-09, sixth pass, 7).
+                let fresh = |(name, _, at): &(String, u32, std::time::Instant)| {
+                    !name.is_empty() || at.elapsed() < std::time::Duration::from_secs(1)
+                };
+                if let Some((name, pid, _)) = known
+                    .lock()
+                    .ok()
+                    .and_then(|k| k.get(sender).filter(|app| fresh(app)).cloned())
+                {
+                    return Some((name, pid));
                 }
                 let root = AccessibleRef {
                     bus_name: sender.to_string(),
@@ -339,13 +351,11 @@ impl EventContext {
                     get_name(&self.conn, &root).unwrap_or_default(),
                     connection_pid(&self.conn, sender).unwrap_or(0),
                 );
-                // A name not yet given (an application's first events, before its root is up:
-                // okur-ui's windows came with none in every Linux trace) is asked again with its
-                // next event, not kept.
-                if !app.0.is_empty() {
-                    if let Ok(mut known) = known.lock() {
-                        known.insert(sender.to_string(), app.clone());
-                    }
+                if let Ok(mut known) = known.lock() {
+                    known.insert(
+                        sender.to_string(),
+                        (app.0.clone(), app.1, std::time::Instant::now()),
+                    );
                 }
                 Some(app)
             }
@@ -389,10 +399,6 @@ impl EventContext {
         let Some(path) = header.path() else {
             return;
         };
-        let Some(app) = self.app_of(sender.as_str()) else {
-            return;
-        };
-
         // AT-SPI2 event body signature: (s, i, i, v, a{sv}).
         let body = msg.body();
         let (detail, detail1, _detail2, _any, _props): (
@@ -420,6 +426,10 @@ impl EventContext {
         if !unread.iter().any(wanted) {
             return;
         }
+        // The application, once its signal is wanted: looking it up can ask the bus.
+        let Some(app) = self.app_of(sender.as_str()) else {
+            return;
+        };
 
         let target_ref = AccessibleRef {
             bus_name: sender.as_str().to_string(),

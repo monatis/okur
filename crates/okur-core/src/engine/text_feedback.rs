@@ -363,6 +363,19 @@ impl ScreenReaderEngine {
     }
 
     /// The focused text field's text changed: speaks the pending edit key's effect.
+    /// A field's text and caret read with no key asking: kept as the field's, its misspellings
+    /// kept while its text is the same, as a key's read keeps them.
+    pub(super) fn field_text(&mut self, context: &crate::event::TextContext) {
+        let shown = crate::document::as_shown(context);
+        let mut context = shown.unwrap_or_else(|| context.clone());
+        if context.misspelled.is_empty() {
+            if let Some(last) = self.last_text.as_ref().filter(|l| l.text == context.text) {
+                context.misspelled = last.misspelled.clone();
+            }
+        }
+        self.last_text = Some(context);
+    }
+
     pub(super) fn handle_text_context(
         &mut self,
         context: &crate::event::TextContext,

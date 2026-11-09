@@ -121,6 +121,7 @@ pub fn event_kind(event: &okur_core::AccessibilityEvent) -> &'static str {
         AccessibilityEvent::Menu(_) => "menu",
         AccessibilityEvent::Change { .. } => "change",
         AccessibilityEvent::TextContext(_) => "text context",
+        AccessibilityEvent::FieldText(_) => "field text",
         AccessibilityEvent::ConsoleText(_) => "console text",
         AccessibilityEvent::Selected(_) => "selected",
         AccessibilityEvent::LiveRegion(_) => "live region",

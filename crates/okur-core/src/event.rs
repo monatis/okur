@@ -1400,6 +1400,11 @@ pub enum AccessibilityEvent {
     /// The focused text field's text, caret or selection, read after a key moved or edited
     /// it, or reported by the application.
     TextContext(TextContext),
+    /// The focused text field's text and caret read with no key asking (its focus come, its
+    /// text changed as it is typed in): kept as the field's, never taken as a key's answer,
+    /// which a read just after a key would have been (the code review of 2026-11-09, sixth
+    /// pass, 6).
+    FieldText(TextContext),
     /// An item selected in a list while the focus stays elsewhere: Windows search's results
     /// as the search box's text changes, or as Down moves through them.
     Selected(FocusEvent),

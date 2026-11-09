@@ -199,9 +199,13 @@ impl LinuxActions {
                                 tracing::debug!("not activated: {e}");
                             }
                         }
-                        // A newer read asked (a key held down, another field focused) is answered
-                        // alone.
-                        Request::Text(..) | Request::FieldFocused(..)
+                        // A newer read asked (a key held down) is answered alone: a key's read
+                        // gives way to a newer key's read alone, a field's unasked read to any
+                        // (a key's read gave way to one, and the key went unanswered: the code
+                        // review of 2026-11-09, sixth pass, 6).
+                        Request::Text(..)
+                            if pending.iter().any(|r| matches!(r, Request::Text(..))) => {}
+                        Request::FieldFocused(..)
                             if pending.iter().any(|r| {
                                 matches!(r, Request::Text(..) | Request::FieldFocused(..))
                             }) => {}
@@ -490,9 +494,15 @@ fn read_text(
             object: format!("{}{}", object.bus_name, object.path),
             context: context.clone(),
             read_ms,
+            unasked: !after_key,
         },
     );
-    reads.hand(record, vec![AccessibilityEvent::TextContext(context)], sink)
+    let event = if after_key {
+        AccessibilityEvent::TextContext(context)
+    } else {
+        AccessibilityEvent::FieldText(context)
+    };
+    reads.hand(record, vec![event], sink)
 }
 
 impl ApplicationActions for LinuxActions {

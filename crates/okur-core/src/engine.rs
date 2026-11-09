@@ -2137,6 +2137,10 @@ impl ScreenReaderEngine {
                 let shown = crate::document::as_shown(context);
                 self.handle_text_context(shown.as_ref().unwrap_or(context))
             }
+            AccessibilityEvent::FieldText(context) => {
+                self.field_text(context);
+                None
+            }
             AccessibilityEvent::ConsoleText(text) => self.console_text(text),
             AccessibilityEvent::Selected(item) => self.handle_selected(item),
             AccessibilityEvent::LiveRegion(live) => self.handle_live_region_event(live),

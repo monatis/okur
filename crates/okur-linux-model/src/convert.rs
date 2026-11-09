@@ -54,6 +54,10 @@ pub struct TextRead {
     /// How long the read took, in milliseconds, from the ask: the caret's wait included.
     #[serde(default)]
     pub read_ms: u64,
+    /// No key asked for it (the field's focus, its text changed as it is typed in): the field's
+    /// text, never a key's answer.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub unasked: bool,
 }
 
 /// A live region read again as it changed: its page's document, by its key, and the region's
@@ -672,7 +676,11 @@ impl Converter {
     pub fn convert_read(&mut self, record: &AtspiRecord) -> Vec<AccessibilityEvent> {
         // A text field read at its caret: what the engine asked for, as read.
         if let Some(read) = &record.text {
-            return vec![AccessibilityEvent::TextContext(read.context.clone())];
+            return vec![if read.unasked {
+                AccessibilityEvent::FieldText(read.context.clone())
+            } else {
+                AccessibilityEvent::TextContext(read.context.clone())
+            }];
         }
         // A live region read again: what it changed, then the page changed, for the engine to
         // capture it again once its changes settle.
@@ -1870,17 +1878,27 @@ mod tests {
                 object: ":1.5/email".to_owned(),
                 context: context.clone(),
                 read_ms: 4,
+                unasked: false,
             },
         );
         let mut converter = Converter::default();
         assert_eq!(
             converter.convert_read(&read),
-            vec![AccessibilityEvent::TextContext(context)]
+            vec![AccessibilityEvent::TextContext(context.clone())]
         );
         // And as a trace line, read back the same.
         let line = serde_json::to_string(&read).unwrap_or_default();
         let back: Option<AtspiRecord> = serde_json::from_str(&line).ok();
         assert_eq!(back.and_then(|r| r.text), read.text);
+        // A read no key asked for (the field's focus, typing): the field's text, no key's answer.
+        let mut unasked = read.clone();
+        if let Some(text) = unasked.text.as_mut() {
+            text.unasked = true;
+        }
+        assert_eq!(
+            converter.convert_read(&unasked),
+            vec![AccessibilityEvent::FieldText(context)]
+        );
     }
 
     /// A page's select opened, its expansion reported with its focus gone to its list: the
