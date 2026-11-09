@@ -79,6 +79,26 @@ pub fn list() -> Vec<TopWindow> {
     windows
 }
 
+/// Brings window `id` to the front and asks it to close as Alt+F4 does there (the system
+/// menu's Close, posted, never waited for): its application may ask whether to save first.
+/// The Window List's Delete, as JAWS's since 2024.2403 (Sight and Sound's article "Quit
+/// applications from JAWS task list dialogue").
+pub fn close(id: u64) {
+    use windows::Win32::Foundation::{HWND, LPARAM, WPARAM};
+    use windows::Win32::UI::WindowsAndMessaging::{PostMessageW, SC_CLOSE, WM_SYSCOMMAND};
+    switch_to(id);
+    let hwnd = HWND(id as usize as *mut core::ffi::c_void);
+    // SAFETY: a message posted to a window handle, which may be gone by now.
+    unsafe {
+        let _ = PostMessageW(
+            Some(hwnd),
+            WM_SYSCOMMAND,
+            WPARAM(SC_CLOSE as usize),
+            LPARAM(0),
+        );
+    }
+}
+
 /// Brings window `id` to the front, restored first if it is minimized, as Alt+Tab does.
 pub fn switch_to(id: u64) {
     use windows::Win32::Foundation::HWND;

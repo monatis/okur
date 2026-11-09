@@ -507,6 +507,8 @@ pub struct ScreenReaderEngine {
     /// The Window List while it is open, and whether its windows were asked for and not come.
     window_list: Option<crate::ui::windows::WindowListDialog>,
     window_list_asked: bool,
+    /// The window the Window List's Delete asked to close, until the list comes back.
+    window_closing: Option<window_list::ClosingWindow>,
     /// The system tray list while it is open, and whether its icons were asked for.
     tray_dialog: Option<crate::ui::tray::TrayDialog>,
     tray_asked: bool,
@@ -825,6 +827,7 @@ impl ScreenReaderEngine {
             find_dialog: None,
             window_list: None,
             window_list_asked: false,
+            window_closing: None,
             tray_dialog: None,
             tray_asked: false,
             jump_dialog: None,
@@ -2090,6 +2093,9 @@ impl ScreenReaderEngine {
     pub fn handle_accessibility_event(&mut self, event: &AccessibilityEvent) -> Option<String> {
         self.sync_speech_mode();
         self.dialog_came(event);
+        if let AccessibilityEvent::Focus(focus) = event {
+            self.window_list_after_focus(focus);
+        }
         match event {
             AccessibilityEvent::Ui(crate::ui::FromUi::DialogClosed { id }) => {
                 self.own_dialog_closed(*id);

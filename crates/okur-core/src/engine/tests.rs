@@ -11886,3 +11886,85 @@ fn run_manager_over_a_list_takes_its_place() {
     );
     assert!(engine.list_dialog.is_none());
 }
+
+/// Delete in the Window List closes the window chosen and the list comes back once it is
+/// gone: not while its application asks whether to save (the window still listed), but as the
+/// focus moves on after it closed (JAWS 2024.2403 and later, Sight and Sound's article "Quit
+/// applications from JAWS task list dialogue").
+#[test]
+fn delete_in_the_window_list_closes_the_window_and_the_list_comes_back() {
+    use crate::event::{TopWindow, WindowState};
+    use crate::ui::{FromUi, ToUi, Value};
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    engine.app_mode = AppMode::NativeControl;
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let actions = crate::actions::RecordingActions::reading_windows();
+    engine.set_actions(Box::new(actions.clone()));
+    let window = |id: u64, title: &str| TopWindow {
+        id,
+        title: title.to_owned(),
+        state: WindowState::Restored,
+        on_top: false,
+    };
+    let both = vec![
+        window(11, "Command Prompt"),
+        window(12, "notes.txt - Notepad"),
+    ];
+    let mut f10 = KeyEvent::new(Key::F(10), Modifiers::none(), true);
+    f10.modifiers.insert = true;
+    engine.handle_key_event(&f10);
+    engine.handle_accessibility_event(&AccessibilityEvent::TopWindows(both.clone()));
+    let id = shown_dialog(&ui);
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+        id,
+        control: "windows".into(),
+        value: Value::Selected(1),
+    }));
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id,
+        control: "close".into(),
+    }));
+    assert_eq!(ui.take(), [ToUi::DialogClose { id }]);
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(a, w)| a == "close window" && *w == 12));
+    let focus_in = |title: &str, name: &str| {
+        let mut focus = FocusEvent::new(Role::Button)
+            .with_name(name)
+            .with_window_title(title);
+        focus.app = Some("notepad.exe".into());
+        AccessibilityEvent::Focus(focus)
+    };
+    let lists_asked = || {
+        actions
+            .requests()
+            .iter()
+            .filter(|(a, _)| a == "list windows")
+            .count()
+    };
+    let asked = lists_asked();
+    // Notepad's own window first, as it comes to the front: nothing asked.
+    engine.handle_accessibility_event(&focus_in("notes.txt - Notepad", "Text editor"));
+    assert_eq!(lists_asked(), asked);
+    // Its question: the windows asked for, the window still there, no list.
+    engine.handle_accessibility_event(&focus_in("Notepad", "Save"));
+    assert_eq!(lists_asked(), asked + 1);
+    engine.handle_accessibility_event(&AccessibilityEvent::TopWindows(both));
+    assert!(ui.take().is_empty());
+    // Closed: the focus elsewhere, the window gone, the list back.
+    let mut prompt = FocusEvent::new(Role::Edit).with_window_title("Command Prompt");
+    prompt.app = Some("cmd.exe".into());
+    engine.handle_accessibility_event(&AccessibilityEvent::Focus(prompt));
+    engine.handle_accessibility_event(&AccessibilityEvent::TopWindows(vec![window(
+        11,
+        "Command Prompt",
+    )]));
+    let back = ui.take();
+    assert!(
+        matches!(back.first(), Some(ToUi::DialogShow { dialog }) if dialog.title == "Window List"),
+        "{back:?}"
+    );
+}

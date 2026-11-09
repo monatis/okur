@@ -2,9 +2,11 @@
 //! switch to. Its controls are JAWS 2025's (help, Window List Dialog Box): the Running
 //! Applications list, Only Include On Top Windows, and the buttons Switch To (the default) and
 //! Cancel. JAWS reads it "Window List dialog | Running Applications List box | Command Prompt -
-//! opendesk serve Minimized | 1 of 5" [obs, 511/s1].
+//! opendesk serve Minimized | 1 of 5" [obs, 511/s1]. Delete in the list closes the window
+//! chosen, as JAWS's does since 2024.2403 (Sight and Sound's article "Quit applications from
+//! JAWS task list dialogue").
 
-use okur_ui_model::{Control, ControlKind, DialogSpec, FromUi, ToUi, Value};
+use okur_ui_model::{Control, ControlKind, DialogShortcut, DialogSpec, FromUi, ToUi, Value};
 
 use crate::event::{TopWindow, WindowState};
 use crate::messages::msg;
@@ -17,6 +19,9 @@ pub enum Outcome {
     Send(Vec<ToUi>),
     /// Switch To (or Enter) on a window: the dialog closes and the window comes to the front.
     SwitchTo(u64),
+    /// Delete on a window: the dialog closes and the window is asked to close, by its id and
+    /// its title.
+    Close(u64, String),
     /// The dialog was cancelled.
     Closed,
 }
@@ -101,7 +106,12 @@ impl WindowListDialog {
                     ControlKind::Button { default: false },
                 ),
             ],
-            keys: Vec::new(),
+            // Delete in the list: no control of that id, so it is reported pressed.
+            keys: vec![DialogShortcut {
+                key: "Delete".to_owned(),
+                control: "close".to_owned(),
+                from: Some("windows".to_owned()),
+            }],
         }
     }
 
@@ -128,6 +138,12 @@ impl WindowListDialog {
                 .shown()
                 .get(self.selected)
                 .map_or(Outcome::Nothing, |window| Outcome::SwitchTo(window.id)),
+            FromUi::DialogPressed { id, control } if *id == self.id && control == "close" => self
+                .shown()
+                .get(self.selected)
+                .map_or(Outcome::Nothing, |window| {
+                    Outcome::Close(window.id, window.title.clone())
+                }),
             FromUi::DialogClosed { id } if *id == self.id => Outcome::Closed,
             _ => Outcome::Nothing,
         }
@@ -206,6 +222,29 @@ mod tests {
         assert_eq!(
             dialog.handle(&FromUi::DialogClosed { id: 7 }),
             Outcome::Closed
+        );
+    }
+
+    /// Delete in the list closes the window chosen, by its id and title: a key of the dialog
+    /// while the list has the focus.
+    #[test]
+    fn delete_closes_the_selected_window() {
+        let mut dialog = dialog();
+        let keys = dialog.spec().keys;
+        assert!(keys.iter().any(|k| k.key == "Delete"
+            && k.control == "close"
+            && k.from.as_deref() == Some("windows")));
+        let _ = dialog.handle(&FromUi::DialogChanged {
+            id: 7,
+            control: "windows".to_owned(),
+            value: Value::Selected(1),
+        });
+        assert_eq!(
+            dialog.handle(&FromUi::DialogPressed {
+                id: 7,
+                control: "close".to_owned(),
+            }),
+            Outcome::Close(2, "Untitled - Notepad".to_owned())
         );
     }
 }

@@ -348,6 +348,13 @@ pub trait ApplicationActions: Send {
         false
     }
 
+    /// Brings window `id` to the front and asks it to close, as Alt+F4 does there: its
+    /// application may ask first whether to save. False when unsupported.
+    fn close_window(&self, id: u64) -> bool {
+        let _ = id;
+        false
+    }
+
     /// Asks for the notification area's icons; they come back as
     /// [`crate::event::AccessibilityEvent::TrayIcons`]. False when unsupported.
     fn list_tray_icons(&self) -> bool {
@@ -872,6 +879,16 @@ impl ApplicationActions for RecordingActions {
         if let Ok(mut log) = self.log.lock() {
             log.push((
                 "switch to window".to_owned(),
+                usize::try_from(id).unwrap_or(usize::MAX),
+            ));
+        }
+        true
+    }
+
+    fn close_window(&self, id: u64) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push((
+                "close window".to_owned(),
                 usize::try_from(id).unwrap_or(usize::MAX),
             ));
         }

@@ -177,6 +177,8 @@ mod windows_actions {
         ListWindows,
         /// A window to the front.
         SwitchTo(u64),
+        /// A window to the front, asked to close.
+        Close(u64),
         /// The notification area's icons, answered even when there are none.
         ListTray,
         /// What the mouse points to at a point of the screen (mouse echo), answered when
@@ -268,6 +270,7 @@ mod windows_actions {
                 Request::Caret(..) => "caret",
                 Request::ListWindows => "window list",
                 Request::SwitchTo(_) => "switch",
+                Request::Close(_) => "close",
                 Request::ListTray => "tray list",
                 Request::Point(..) => "mouse point",
                 Request::MouseToText(..)
@@ -1037,6 +1040,7 @@ mod windows_actions {
                                 let _ = events.send(AccessibilityEvent::TopWindows(windows));
                             }
                             Request::SwitchTo(id) => crate::top_windows::switch_to(id),
+                            Request::Close(id) => crate::top_windows::close(id),
                             Request::Point(x, y) => {
                                 let (Some(uia), Some(events)) = (uia.as_ref(), events.as_ref())
                                 else {
@@ -1433,6 +1437,10 @@ mod windows_actions {
 
         fn switch_to_window(&self, id: u64) -> bool {
             self.send(Request::SwitchTo(id))
+        }
+
+        fn close_window(&self, id: u64) -> bool {
+            self.send(Request::Close(id))
         }
 
         fn list_tray_icons(&self) -> bool {

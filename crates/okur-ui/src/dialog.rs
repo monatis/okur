@@ -109,6 +109,7 @@ fn chord(text: &str) -> Option<Chord> {
             "up" => key = Some(0x26),
             "down" => key = Some(0x28),
             "space" => key = Some(0x20),
+            "delete" => key = Some(0x2E),
             name => {
                 let upper = name.to_ascii_uppercase();
                 key = match upper.as_bytes() {
