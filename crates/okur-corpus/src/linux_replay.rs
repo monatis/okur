@@ -248,7 +248,16 @@ impl<'a> Replayer<'a> {
             events = rest;
         }
         for event in events {
-            let _ = self.engine.handle_accessibility_event(&event);
+            let said = self.engine.handle_accessibility_event(&event);
+            // What each record became and what the engine said to it, for a step whose speech
+            // is not where it is expected (RUST_LOG=okur_corpus=debug with --only).
+            tracing::debug!(
+                at_ms = record.handed_ms(),
+                kind = ?record.kind,
+                event = %format!("{event:?}").chars().take(160).collect::<String>(),
+                said = ?said,
+                "replayed record"
+            );
             // A big page changed: the host builds it off the engine and installs it.
             if let Some((generation, page)) = self.engine.take_page_build() {
                 let buffer = VirtualBuffer::from_aom_owned(okur_core::AomNode::clone(&page));
@@ -260,6 +269,7 @@ impl<'a> Replayer<'a> {
 
     fn key(&mut self, chord: &str, at: u64) -> Result<(), String> {
         self.advance(at);
+        tracing::debug!(at_ms = at, chord, "replayed key");
         press(
             &mut self.engine,
             &self.actions,

@@ -11440,3 +11440,70 @@ fn okurs_own_dialog_has_the_default_button_its_spec_makes() {
         "{said:?}"
     );
 }
+
+/// A wizard of Okur's turning a page, as GTK tells it: its window renamed, then the focus in
+/// the next page. Said as Windows' wizard is: the page's title and "dialog" as plain words,
+/// not a window come to the front ("Choose an element dialog | Which of the following
+/// elements ..." [obs, 743/s8]).
+#[test]
+fn a_wizard_of_okurs_turning_a_page_says_the_page() {
+    use crate::ui::{ControlKind, FromUi, ToUi};
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    engine.open_startup_wizard();
+    let (id, first) = match ui.take().first() {
+        Some(ToUi::WizardShow { wizard }) => (wizard.id, wizard.page.title.clone()),
+        _ => (0, String::new()),
+    };
+    let focus_in = |title: &str, role: Role, name: &str| {
+        let mut focus = FocusEvent::new(role)
+            .with_name(name)
+            .with_window_title(title);
+        focus.app = Some("okur-ui".into());
+        focus.platform.window_id = Some("wizard".into());
+        AccessibilityEvent::Focus(focus)
+    };
+    let opened = engine.handle_accessibility_event(&focus_in(&first, Role::Button, "Next >"));
+    // The wizard come to the front: its window named.
+    assert!(
+        opened.as_deref().is_some_and(|s| s.starts_with(&first)),
+        "{opened:?}"
+    );
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id,
+        control: "next".into(),
+    }));
+    let page = ui.take().into_iter().find_map(|m| match m {
+        ToUi::WizardPage { page, .. } => Some(page),
+        _ => None,
+    });
+    let title = page.as_ref().map(|p| p.title.clone()).unwrap_or_default();
+    // Its first labelled control, as GTK gives its role.
+    let (role, label) = page
+        .as_ref()
+        .and_then(|p| p.controls.iter().find(|c| !c.label.is_empty()))
+        .map(|c| {
+            let role = match c.kind {
+                ControlKind::CheckBox { .. } => Role::CheckBox,
+                ControlKind::Choice { .. } => Role::ComboBox,
+                _ => Role::Button,
+            };
+            (role, c.label.replace('&', ""))
+        })
+        .unwrap_or((Role::Button, String::new()));
+    assert!(
+        !title.is_empty() && title != first && !label.is_empty(),
+        "{page:?}"
+    );
+    engine.handle_accessibility_event(&AccessibilityEvent::WindowRenamed(title.clone()));
+    let turned = engine.handle_accessibility_event(&focus_in(&title, role, &label));
+    assert!(
+        turned
+            .as_deref()
+            .is_some_and(|s| s.lines().any(|line| line == format!("{title} dialog"))
+                && !s.contains("\u{1d} dialog \u{1e}")),
+        "{turned:?}"
+    );
+}

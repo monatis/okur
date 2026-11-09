@@ -525,6 +525,12 @@ impl ScreenReaderEngine {
                 _ => None,
             });
         }
+        // Its page, by the title the wizard takes from it, as Windows' wizard gives it: the
+        // next page is said as the page turned ("How would you like to customize the page? |
+        // Choose an Action dialog | How would you like ..." [obs, 743/s7]).
+        if wizard && !focus.dialog_box_read && told.wizard_page.is_none() {
+            told.wizard_page = Some(dialog.title.clone());
+        }
         // A row of a tree of Okur's: its item as the spec has it.
         let tree = dialog.controls.iter().find_map(|c| match &c.kind {
             ControlKind::Tree { items, selected } => Some((c.label.as_str(), items, *selected)),

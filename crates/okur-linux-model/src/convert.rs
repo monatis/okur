@@ -753,11 +753,24 @@ impl Converter {
                 self.window_title = name();
             }
             EventKind::WindowDeactivated => self.track.window_deactivated(),
-            // The active window renamed: a browser's, as its page changes.
+            // The active window renamed: a browser's, as its page changes; a wizard's, as it
+            // turns a page. The engine is told, as Windows' converter tells it of the window in
+            // front renamed: a wizard's next page is then its page turned, "Choose an element
+            // dialog", not a window come to the front [obs, 743/s8].
             EventKind::NameChanged
                 if object.is_some() && object.as_deref() == self.track.active_window() =>
             {
                 self.window_title = name();
+                events.extend(name().map(AccessibilityEvent::WindowRenamed));
+            }
+            // A window in front whose activation no event told: GTK 4 tells none over AT-SPI,
+            // only the window's active state (okur-ui's wizard in the lab's run of 743).
+            EventKind::NameChanged
+                if target.is_some_and(|t| {
+                    matches!(t.role, Role::Dialog | Role::Window) && t.states.active
+                }) =>
+            {
+                events.extend(name().map(AccessibilityEvent::WindowRenamed));
             }
             _ => {}
         }
@@ -822,7 +835,16 @@ impl Converter {
         // The focused control read again: said as a focus when it reads as another control
         // (GTK's notebook's next tab [obs, 303/s13]), as its value changing when only that
         // changed (GTK's drop-down's item [obs, 304/s9]).
-        if let (Some(element), Some(read)) = (self.native_element.clone(), &record.reread) {
+        // A read that failed, or of an object that has lost the focus, says nothing: the
+        // control is gone (a wizard's page as the next one replaces it, its list's row read
+        // with no name, "To move to an item press the Arrow keys." alone, 743/s9 at
+        // ec1e5cac), and the focus's own event follows.
+        let reread = record
+            .reread
+            .as_ref()
+            .filter(|read| !read.focus.role.is_empty())
+            .filter(|read| read.focus.has(crate::page::state::FOCUSED));
+        if let (Some(element), Some(read)) = (self.native_element.clone(), reread) {
             let Some(control) = native_control(&element, read, app.clone()) else {
                 return events;
             };
@@ -1973,6 +1995,67 @@ mod tests {
         assert!(converter
             .wants_reread(&EventKind::NameChanged, Some(&other))
             .is_none());
+    }
+
+    /// The focused control read again after a rename within it: said as a focus when it reads
+    /// as another control; not at all when the read failed or the object lost the focus, as a
+    /// wizard's page does when the next replaces it (743/s9 at ec1e5cac, its row read with no
+    /// name said "To move to an item press the Arrow keys." alone).
+    #[test]
+    fn a_read_again_of_a_control_gone_says_nothing() {
+        let row = element(ElementRole::ListItem, "Advertisement", "/row", true);
+        let focused = || {
+            let mut converter = Converter::default();
+            let _ = converter.convert_read(&record(
+                EventKind::FocusChanged,
+                row.clone(),
+                Some(read(node("list item", "Advertisement", &[state::FOCUSED]))),
+            ));
+            converter
+        };
+        let renamed = |reread: NativeRead| {
+            let label = element(ElementRole::StaticText, "Finish", "/label", false);
+            let mut record = record(EventKind::NameChanged, label, None);
+            record.reread = Some(reread);
+            record
+        };
+        let focuses = |events: &[AccessibilityEvent]| {
+            events
+                .iter()
+                .filter(|e| matches!(e, AccessibilityEvent::Focus(_)))
+                .count()
+        };
+        let mut converter = focused();
+        let other = read(node("list item", "Banner", &[state::FOCUSED]));
+        assert_eq!(focuses(&converter.convert_read(&renamed(other))), 1);
+        let mut converter = focused();
+        let failed = read(node("", "", &[]));
+        assert_eq!(focuses(&converter.convert_read(&renamed(failed))), 0);
+        let mut converter = focused();
+        let unfocused = read(node("list item", "", &[]));
+        assert_eq!(focuses(&converter.convert_read(&renamed(unfocused))), 0);
+    }
+
+    /// A window in front renamed is told the engine, as Windows' converter tells it: GTK 4's
+    /// window, whose activation no event tells, by its active state (okur-ui's wizard turning
+    /// a page, 743/s8 at ec1e5cac); a window not in front is not.
+    #[test]
+    fn a_window_in_front_renamed_is_told() {
+        let renamed = |active: bool| {
+            let mut wizard = element(ElementRole::Dialog, "Choose an element", "/wizard", false);
+            wizard.states.active = active;
+            let mut converter = Converter::default();
+            converter
+                .convert_read(&record(EventKind::NameChanged, wizard, None))
+                .into_iter()
+                .filter_map(|e| match e {
+                    AccessibilityEvent::WindowRenamed(title) => Some(title),
+                    _ => None,
+                })
+                .collect::<Vec<_>>()
+        };
+        assert_eq!(renamed(true), vec!["Choose an element".to_owned()]);
+        assert!(renamed(false).is_empty());
     }
 
     /// A page read off the event thread comes as a record of its own: the engine is given the
