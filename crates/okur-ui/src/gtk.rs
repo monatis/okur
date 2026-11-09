@@ -212,6 +212,77 @@ impl ShownList {
         self.items.splice(0, self.items.n_items(), &texts);
     }
 
+    /// The next item after the selected one whose text starts with `letter`, wrapping, selected
+    /// and focused: a Windows list's own search by first letter ("h" in Virtual HTML Features
+    /// is "Headings List | 12 of 22" [obs, 226/s2]), which GTK's lists lack. Whether one did.
+    fn jump_to(&self, letter: char) -> bool {
+        let count = self.items.n_items();
+        let selected = self.selection.selected();
+        let wanted: String = letter.to_lowercase().collect();
+        for step in 1..=count {
+            let at = if selected < count {
+                (selected + step) % count
+            } else {
+                step - 1
+            };
+            let Some(text) = self.items.string(at) else {
+                continue;
+            };
+            let first = text
+                .split(CELLS)
+                .next()
+                .unwrap_or_default()
+                .trim_start()
+                .to_lowercase();
+            if first.starts_with(&wanted) {
+                self.select(usize::try_from(at).unwrap_or(usize::MAX), true);
+                return true;
+            }
+        }
+        false
+    }
+
+    /// Letters typed in it move to the next item that starts with them.
+    fn search_by_letter(&self) {
+        let keys = gtk::EventControllerKey::new();
+        // The model and the selection alone: the view, which owns this handler, is the one it
+        // is attached to (holding it would keep every closed dialog's list alive).
+        let items = self.items.clone();
+        let selection = self.selection.clone();
+        keys.connect_key_pressed(move |keys, key, _, modifiers| {
+            let chord = gtk::gdk::ModifierType::CONTROL_MASK
+                | gtk::gdk::ModifierType::ALT_MASK
+                | gtk::gdk::ModifierType::SUPER_MASK;
+            if modifiers.intersects(chord) {
+                return glib::Propagation::Proceed;
+            }
+            let Some(letter) = key.to_unicode().filter(|c| c.is_alphanumeric()) else {
+                return glib::Propagation::Proceed;
+            };
+            let view = match keys.widget() {
+                Some(widget) => match widget.downcast::<gtk::ColumnView>() {
+                    Ok(view) => ListWidget::Columns(view),
+                    Err(widget) => match widget.downcast::<gtk::ListView>() {
+                        Ok(view) => ListWidget::Rows(view),
+                        Err(_) => return glib::Propagation::Proceed,
+                    },
+                },
+                None => return glib::Propagation::Proceed,
+            };
+            let list = ShownList {
+                view,
+                items: items.clone(),
+                selection: selection.clone(),
+            };
+            if list.jump_to(letter) {
+                glib::Propagation::Stop
+            } else {
+                glib::Propagation::Proceed
+            }
+        });
+        self.widget().add_controller(keys);
+    }
+
     /// The focus on its selected item, or on its first where none is selected (a table with
     /// none chosen yet: "Not Selected", JAWS's PlaceMarker List [obs, 702/s18]).
     fn take_focus(&self) {
@@ -755,6 +826,7 @@ fn build(
             };
             list.fill(items);
             list.select(*selected, false);
+            list.search_by_letter();
             let widget = list.widget();
             // A list's label names it; a list box's is shown above it ("Running Applications
             // List box").
@@ -819,6 +891,7 @@ fn build(
                 Some(i) => list.select(*i, false),
                 None => selection.set_selected(gtk::INVALID_LIST_POSITION),
             }
+            list.search_by_letter();
             let widget = list.widget();
             widget.update_property(&[gtk::accessible::Property::Label(&plain(&control.label))]);
             {
