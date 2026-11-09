@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794199985545
+     "t_ms": 1794229858999
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794199986912,
-     "t_end_ms": 1794199987915,
+     "t_start_ms": 1794229860369,
+     "t_end_ms": 1794229861373,
      "action": {
       "type": "key",
       "command": "G"
@@ -31,7 +32,7 @@
       "G"
      ],
      "key_times": [
-      1794199986912
+      1794229860369
      ],
      "observation": {
       "speech_raw": "There are no Graphics on this page.",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794199987915,
-     "t_end_ms": 1794199988920,
+     "t_start_ms": 1794229861373,
+     "t_end_ms": 1794229862376,
      "action": {
       "type": "key",
       "command": "G"
@@ -51,7 +52,7 @@
       "G"
      ],
      "key_times": [
-      1794199987915
+      1794229861373
      ],
      "observation": {
       "speech_raw": "There are no Graphics on this page.",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794199988920,
-     "t_end_ms": 1794199989925,
+     "t_start_ms": 1794229862376,
+     "t_end_ms": 1794229863380,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -71,7 +72,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794199988920
+      1794229862376
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",

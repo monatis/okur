@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ebcc22e6"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -16,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794212258305
+     "t_ms": 1794233562783
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794212258666
+     "t_ms": 1794233563142
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794212259971,
-     "t_end_ms": 1794212261075,
+     "t_start_ms": 1794233564447,
+     "t_end_ms": 1794233565451,
      "action": {
       "type": "key",
       "command": "H"
@@ -36,7 +36,7 @@
       "H"
      ],
      "key_times": [
-      1794212259971
+      1794233564447
      ],
      "observation": {
       "speech_raw": "Web App Patterns\n \u001d heading level 1 \u001e",
@@ -46,8 +46,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794212261075,
-     "t_end_ms": 1794212262079,
+     "t_start_ms": 1794233565451,
+     "t_end_ms": 1794233566455,
      "action": {
       "type": "key",
       "command": "H"
@@ -56,7 +56,7 @@
       "H"
      ],
      "key_times": [
-      1794212261075
+      1794233565451
      ],
      "observation": {
       "speech_raw": "Current links\n \u001d heading level 2 \u001e",
@@ -66,8 +66,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794212262079,
-     "t_end_ms": 1794212263083,
+     "t_start_ms": 1794233566455,
+     "t_end_ms": 1794233567459,
      "action": {
       "type": "key",
       "command": "H"
@@ -76,7 +76,7 @@
       "H"
      ],
      "key_times": [
-      1794212262079
+      1794233566455
      ],
      "observation": {
       "speech_raw": "Described controls\n \u001d heading level 2 \u001e",
@@ -86,8 +86,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794212263083,
-     "t_end_ms": 1794212264086,
+     "t_start_ms": 1794233567459,
+     "t_end_ms": 1794233568463,
      "action": {
       "type": "key",
       "command": "H"
@@ -96,7 +96,7 @@
       "H"
      ],
      "key_times": [
-      1794212263083
+      1794233567459
      ],
      "observation": {
       "speech_raw": "Popup buttons\n \u001d heading level 2 \u001e",
@@ -106,8 +106,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794212264086,
-     "t_end_ms": 1794212265090,
+     "t_start_ms": 1794233568463,
+     "t_end_ms": 1794233569468,
      "action": {
       "type": "key",
       "command": "H"
@@ -116,7 +116,7 @@
       "H"
      ],
      "key_times": [
-      1794212264086
+      1794233568463
      ],
      "observation": {
       "speech_raw": "Fruit search\n \u001d heading level 2 \u001e",
@@ -126,8 +126,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794212265090,
-     "t_end_ms": 1794212266196,
+     "t_start_ms": 1794233569468,
+     "t_end_ms": 1794233570572,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -136,7 +136,7 @@
       "Tab"
      ],
      "key_times": [
-      1794212265090
+      1794233569468
      ],
      "observation": {
       "speech_raw": "Web App Patterns\nFruit  \u001d edit combo \u001e   \u001dcollapsed\u001e \nblank\nTo set the value use the Arrow keys or type the value.",
@@ -146,8 +146,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794212266196,
-     "t_end_ms": 1794212267200,
+     "t_start_ms": 1794233570572,
+     "t_end_ms": 1794233571578,
      "action": {
       "type": "key",
       "command": "Enter"
@@ -156,7 +156,7 @@
       "Enter"
      ],
      "key_times": [
-      1794212266196
+      1794233570572
      ],
      "observation": {
       "speech_raw": "",
@@ -166,8 +166,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794212267200,
-     "t_end_ms": 1794212268305,
+     "t_start_ms": 1794233571578,
+     "t_end_ms": 1794233572682,
      "action": {
       "type": "key",
       "command": "A"
@@ -176,7 +176,7 @@
       "A"
      ],
      "key_times": [
-      1794212267200
+      1794233571578
      ],
      "observation": {
       "speech_raw": " \u001dexpanded\u001e ",
@@ -186,8 +186,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794212268305,
-     "t_end_ms": 1794212269610,
+     "t_start_ms": 1794233572682,
+     "t_end_ms": 1794233573987,
      "action": {
       "type": "key",
       "command": "Down"
@@ -196,7 +196,7 @@
       "Down"
      ],
      "key_times": [
-      1794212268305
+      1794233572682
      ],
      "observation": {
       "speech_raw": "Fruits  \u001d list \u001e \nwith 3 items\nApple\n1 of 3\nTo move to an item press the Arrow keys.",
@@ -206,8 +206,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794212269610,
-     "t_end_ms": 1794212270714,
+     "t_start_ms": 1794233573987,
+     "t_end_ms": 1794233575091,
      "action": {
       "type": "key",
       "command": "Down"
@@ -216,7 +216,7 @@
       "Down"
      ],
      "key_times": [
-      1794212269610
+      1794233573987
      ],
      "observation": {
       "speech_raw": "Apricot\n2 of 3\nTo move to an item press the Arrow keys.",
@@ -226,8 +226,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794212270714,
-     "t_end_ms": 1794212271819,
+     "t_start_ms": 1794233575091,
+     "t_end_ms": 1794233576196,
      "action": {
       "type": "key",
       "command": "Down"
@@ -236,7 +236,7 @@
       "Down"
      ],
      "key_times": [
-      1794212270714
+      1794233575091
      ],
      "observation": {
       "speech_raw": "Avocado\n3 of 3\nTo move to an item press the Arrow keys.",
@@ -246,8 +246,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794212271819,
-     "t_end_ms": 1794212272924,
+     "t_start_ms": 1794233576196,
+     "t_end_ms": 1794233577300,
      "action": {
       "type": "key",
       "command": "Up"
@@ -256,7 +256,7 @@
       "Up"
      ],
      "key_times": [
-      1794212271819
+      1794233576196
      ],
      "observation": {
       "speech_raw": "Apricot\n2 of 3\nTo move to an item press the Arrow keys.",
@@ -266,8 +266,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794212272924,
-     "t_end_ms": 1794212274028,
+     "t_start_ms": 1794233577300,
+     "t_end_ms": 1794233578404,
      "action": {
       "type": "key",
       "command": "Enter"
@@ -276,7 +276,7 @@
       "Enter"
      ],
      "key_times": [
-      1794212272924
+      1794233577300
      ],
      "observation": {
       "speech_raw": "Fruit  \u001d edit combo \u001e   \u001dcollapsed\u001e \nApricot\nTo set the value use the Arrow keys or type the value.",

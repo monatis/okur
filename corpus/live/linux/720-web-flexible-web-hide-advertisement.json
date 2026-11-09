@@ -1,0 +1,846 @@
+{
+ "scenario_id": "720-web-flexible-web-hide-advertisement",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794229485197
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794229486560,
+     "t_end_ms": 1794229487564,
+     "action": {
+      "type": "key",
+      "command": "R"
+     },
+     "keys": [
+      "R"
+     ],
+     "key_times": [
+      1794229486560
+     ],
+     "observation": {
+      "speech_raw": "banner",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794229487564,
+     "t_end_ms": 1794229488568,
+     "action": {
+      "type": "key",
+      "command": "R"
+     },
+     "keys": [
+      "R"
+     ],
+     "key_times": [
+      1794229487564
+     ],
+     "observation": {
+      "speech_raw": "Sections navigation region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794229488568,
+     "t_end_ms": 1794229489572,
+     "action": {
+      "type": "key",
+      "command": "R"
+     },
+     "keys": [
+      "R"
+     ],
+     "key_times": [
+      1794229488568
+     ],
+     "observation": {
+      "speech_raw": "Advertisement complementary information",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794229489572,
+     "t_end_ms": 1794229490575,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794229489572
+     ],
+     "observation": {
+      "speech_raw": "Spring sale at Main Street Shoes: two pairs for the price of one.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794229490575,
+     "t_end_ms": 1794229491580,
+     "action": {
+      "type": "key",
+      "command": "Insert+Space"
+     },
+     "keys": [
+      "Insert+Space"
+     ],
+     "key_times": [
+      1794229490575
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794229491580,
+     "t_end_ms": 1794229492585,
+     "action": {
+      "type": "key",
+      "command": "X"
+     },
+     "keys": [
+      "X"
+     ],
+     "key_times": [
+      1794229491580
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794229492585,
+     "t_end_ms": 1794229493590,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")"
+     },
+     "keys": [
+      "Alt+N"
+     ],
+     "key_times": [
+      1794229492585
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794229493590,
+     "t_end_ms": 1794229494595,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")"
+     },
+     "keys": [
+      "Alt+N"
+     ],
+     "key_times": [
+      1794229493590
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794229494595,
+     "t_end_ms": 1794229495598,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794229494595
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e See the sale",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794229495598,
+     "t_end_ms": 1794229496602,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794229495598
+     ],
+     "observation": {
+      "speech_raw": "Advertisement complementary information end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794229496602,
+     "t_end_ms": 1794229497707,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"End\")"
+     },
+     "keys": [
+      "End"
+     ],
+     "key_times": [
+      1794229496602
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794229497707,
+     "t_end_ms": 1794229498713,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")"
+     },
+     "keys": [
+      "Alt+N"
+     ],
+     "key_times": [
+      1794229497707
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794229498713,
+     "t_end_ms": 1794229499717,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794229498713
+     ],
+     "observation": {
+      "speech_raw": "main region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794229499717,
+     "t_end_ms": 1794229500721,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794229499717
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e Weekend events",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794229500721,
+     "t_end_ms": 1794229501725,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Home\")"
+     },
+     "keys": [
+      "Home"
+     ],
+     "key_times": [
+      1794229500721
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794229501725,
+     "t_end_ms": 1794229502730,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794229501725
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s17",
+     "t_start_ms": 1794229502730,
+     "t_end_ms": 1794229503735,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "key_times": [
+      1794229502730
+     ],
+     "observation": {
+      "speech_raw": "Weekend Events - Riverside Gazette",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s18",
+     "t_start_ms": 1794229503735,
+     "t_end_ms": 1794229504739,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794229503735
+     ],
+     "observation": {
+      "speech_raw": "banner",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s19",
+     "t_start_ms": 1794229504739,
+     "t_end_ms": 1794229505743,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794229504739
+     ],
+     "observation": {
+      "speech_raw": "Riverside Gazette",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s20",
+     "t_start_ms": 1794229505743,
+     "t_end_ms": 1794229506747,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794229505743
+     ],
+     "observation": {
+      "speech_raw": "Sections navigation region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s21",
+     "t_start_ms": 1794229506747,
+     "t_end_ms": 1794229507751,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794229506747
+     ],
+     "observation": {
+      "speech_raw": "list of 3 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s22",
+     "t_start_ms": 1794229507751,
+     "t_end_ms": 1794229508755,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794229507751
+     ],
+     "observation": {
+      "speech_raw": "\u2022 \u001d same page link \u001e News",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s23",
+     "t_start_ms": 1794229508756,
+     "t_end_ms": 1794229509760,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794229508756
+     ],
+     "observation": {
+      "speech_raw": "\u2022 \u001d same page link \u001e Events",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s24",
+     "t_start_ms": 1794229509760,
+     "t_end_ms": 1794229510764,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794229509760
+     ],
+     "observation": {
+      "speech_raw": "\u2022 \u001d same page link \u001e Sports",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s25",
+     "t_start_ms": 1794229510764,
+     "t_end_ms": 1794229511769,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794229510764
+     ],
+     "observation": {
+      "speech_raw": "list end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s26",
+     "t_start_ms": 1794229511769,
+     "t_end_ms": 1794229512773,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794229511769
+     ],
+     "observation": {
+      "speech_raw": "Sections navigation region end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s27",
+     "t_start_ms": 1794229512773,
+     "t_end_ms": 1794229513778,
+     "action": {
+      "type": "key",
+      "command": "Insert+Space"
+     },
+     "keys": [
+      "Insert+Space"
+     ],
+     "key_times": [
+      1794229512773
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s28",
+     "t_start_ms": 1794229513778,
+     "t_end_ms": 1794229514783,
+     "action": {
+      "type": "key",
+      "command": "X"
+     },
+     "keys": [
+      "X"
+     ],
+     "key_times": [
+      1794229513778
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s29",
+     "t_start_ms": 1794229514783,
+     "t_end_ms": 1794229515787,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794229514783
+     ],
+     "observation": {
+      "speech_raw": "banner end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s30",
+     "t_start_ms": 1794229515787,
+     "t_end_ms": 1794229516792,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794229515787
+     ],
+     "observation": {
+      "speech_raw": "Advertisement complementary information",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s31",
+     "t_start_ms": 1794229516792,
+     "t_end_ms": 1794229517796,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794229516792
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s32",
+     "t_start_ms": 1794229517796,
+     "t_end_ms": 1794229518801,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "key_times": [
+      1794229517796
+     ],
+     "observation": {
+      "speech_raw": "Weekend Events - Riverside Gazette",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s33",
+     "t_start_ms": 1794229518801,
+     "t_end_ms": 1794229519804,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794229518801
+     ],
+     "observation": {
+      "speech_raw": "banner",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s34",
+     "t_start_ms": 1794229519804,
+     "t_end_ms": 1794229520808,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794229519804
+     ],
+     "observation": {
+      "speech_raw": "Riverside Gazette",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s35",
+     "t_start_ms": 1794229520808,
+     "t_end_ms": 1794229521813,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794229520808
+     ],
+     "observation": {
+      "speech_raw": "Sections navigation region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s36",
+     "t_start_ms": 1794229521813,
+     "t_end_ms": 1794229522817,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794229521813
+     ],
+     "observation": {
+      "speech_raw": "list of 3 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s37",
+     "t_start_ms": 1794229522817,
+     "t_end_ms": 1794229523821,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794229522817
+     ],
+     "observation": {
+      "speech_raw": "\u2022 \u001d same page link \u001e News",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s38",
+     "t_start_ms": 1794229523821,
+     "t_end_ms": 1794229524825,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794229523821
+     ],
+     "observation": {
+      "speech_raw": "\u2022 \u001d same page link \u001e Events",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s39",
+     "t_start_ms": 1794229524825,
+     "t_end_ms": 1794229525830,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794229524825
+     ],
+     "observation": {
+      "speech_raw": "\u2022 \u001d same page link \u001e Sports",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s40",
+     "t_start_ms": 1794229525830,
+     "t_end_ms": 1794229526834,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794229525830
+     ],
+     "observation": {
+      "speech_raw": "list end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s41",
+     "t_start_ms": 1794229526834,
+     "t_end_ms": 1794229527839,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794229526834
+     ],
+     "observation": {
+      "speech_raw": "Sections navigation region end",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794198093427
+     "t_ms": 1794227167078
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794198094791,
-     "t_end_ms": 1794198095795,
+     "t_start_ms": 1794227168443,
+     "t_end_ms": 1794227169448,
      "action": {
       "type": "key",
       "command": "Ctrl+End"
@@ -31,7 +32,7 @@
       "Ctrl+End"
      ],
      "key_times": [
-      1794198094791
+      1794227168443
      ],
      "observation": {
       "speech_raw": "content information end",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794198095795,
-     "t_end_ms": 1794198096899,
+     "t_start_ms": 1794227169448,
+     "t_end_ms": 1794227170553,
      "action": {
       "type": "key",
       "command": "Shift+Tab"
@@ -51,7 +52,7 @@
       "Shift+Tab"
      ],
      "key_times": [
-      1794198095795
+      1794227169448
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette\n \u001d same page link \u001e Contact us\nTo activate press Enter.",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794198096899,
-     "t_end_ms": 1794198097903,
+     "t_start_ms": 1794227170553,
+     "t_end_ms": 1794227171557,
      "action": {
       "type": "key",
       "command": "Left"
@@ -71,7 +72,7 @@
       "Left"
      ],
      "key_times": [
-      1794198096899
+      1794227170553
      ],
      "observation": {
       "speech_raw": "\n",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794198097904,
-     "t_end_ms": 1794198098908,
+     "t_start_ms": 1794227171557,
+     "t_end_ms": 1794227172561,
      "action": {
       "type": "key",
       "command": "Left"
@@ -91,7 +92,7 @@
       "Left"
      ],
      "key_times": [
-      1794198097904
+      1794227171557
      ],
      "observation": {
       "speech_raw": " ",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794198098908,
-     "t_end_ms": 1794198099912,
+     "t_start_ms": 1794227172561,
+     "t_end_ms": 1794227173565,
      "action": {
       "type": "key",
       "command": "Right"
@@ -111,7 +112,7 @@
       "Right"
      ],
      "key_times": [
-      1794198098908
+      1794227172561
      ],
      "observation": {
       "speech_raw": "\n",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794198099912,
-     "t_end_ms": 1794198100917,
+     "t_start_ms": 1794227173565,
+     "t_end_ms": 1794227174569,
      "action": {
       "type": "key",
       "command": "Right"
@@ -131,7 +132,7 @@
       "Right"
      ],
      "key_times": [
-      1794198099912
+      1794227173565
      ],
      "observation": {
       "speech_raw": "C",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794198100917,
-     "t_end_ms": 1794198102022,
+     "t_start_ms": 1794227174569,
+     "t_end_ms": 1794227175674,
      "action": {
       "type": "key",
       "command": "Shift+Tab"
@@ -151,7 +152,7 @@
       "Shift+Tab"
      ],
      "key_times": [
-      1794198100917
+      1794227174569
      ],
      "observation": {
       "speech_raw": "Related stories \u001d ComplementaryRegion \u001e \n \u001d list \u001e \nwith 2 items\nSpring book fair returns  \u001d same page link \u001e \nTo activate press Enter.",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794198102022,
-     "t_end_ms": 1794198103026,
+     "t_start_ms": 1794227175674,
+     "t_end_ms": 1794227176678,
      "action": {
       "type": "key",
       "command": "Left"
@@ -171,7 +172,7 @@
       "Left"
      ],
      "key_times": [
-      1794198102022
+      1794227175674
      ],
      "observation": {
       "speech_raw": " ",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794198103026,
-     "t_end_ms": 1794198104031,
+     "t_start_ms": 1794227176678,
+     "t_end_ms": 1794227177682,
      "action": {
       "type": "key",
       "command": "Left"
@@ -191,7 +192,7 @@
       "Left"
      ],
      "key_times": [
-      1794198103026
+      1794227176678
      ],
      "observation": {
       "speech_raw": "\u2022",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794198104031,
-     "t_end_ms": 1794198105136,
+     "t_start_ms": 1794227177682,
+     "t_end_ms": 1794227178787,
      "action": {
       "type": "key",
       "command": "Shift+Tab"
@@ -211,7 +212,7 @@
       "Shift+Tab"
      ],
      "key_times": [
-      1794198104031
+      1794227177682
      ],
      "observation": {
       "speech_raw": "Council approves library budget  \u001d same page link \u001e \nTo activate press Enter.",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794198105136,
-     "t_end_ms": 1794198106140,
+     "t_start_ms": 1794227178787,
+     "t_end_ms": 1794227179792,
      "action": {
       "type": "key",
       "command": "Left"
@@ -231,7 +232,7 @@
       "Left"
      ],
      "key_times": [
-      1794198105136
+      1794227178787
      ],
      "observation": {
       "speech_raw": " ",
@@ -241,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794198106140,
-     "t_end_ms": 1794198107145,
+     "t_start_ms": 1794227179792,
+     "t_end_ms": 1794227180795,
      "action": {
       "type": "key",
       "command": "Left"
@@ -251,7 +252,7 @@
       "Left"
      ],
      "key_times": [
-      1794198106140
+      1794227179792
      ],
      "observation": {
       "speech_raw": "\u2022",
@@ -261,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794198107145,
-     "t_end_ms": 1794198108150,
+     "t_start_ms": 1794227180795,
+     "t_end_ms": 1794227181800,
      "action": {
       "type": "key",
       "command": "Ctrl+End"
@@ -271,7 +272,7 @@
       "Ctrl+End"
      ],
      "key_times": [
-      1794198107145
+      1794227180795
      ],
      "observation": {
       "speech_raw": "content information end",
@@ -281,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794198108150,
-     "t_end_ms": 1794198109153,
+     "t_start_ms": 1794227181800,
+     "t_end_ms": 1794227182804,
      "action": {
       "type": "key",
       "command": "End"
@@ -291,7 +292,7 @@
       "End"
      ],
      "key_times": [
-      1794198108150
+      1794227181800
      ],
      "observation": {
       "speech_raw": "",
@@ -301,8 +302,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794198109153,
-     "t_end_ms": 1794198110157,
+     "t_start_ms": 1794227182804,
+     "t_end_ms": 1794227183809,
      "action": {
       "type": "key",
       "command": "Right"
@@ -311,7 +312,7 @@
       "Right"
      ],
      "key_times": [
-      1794198109153
+      1794227182804
      ],
      "observation": {
       "speech_raw": "",
@@ -321,8 +322,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794198110157,
-     "t_end_ms": 1794198111161,
+     "t_start_ms": 1794227183809,
+     "t_end_ms": 1794227184813,
      "action": {
       "type": "key",
       "command": "Left"
@@ -331,7 +332,7 @@
       "Left"
      ],
      "key_times": [
-      1794198110157
+      1794227183809
      ],
      "observation": {
       "speech_raw": "d",
@@ -341,8 +342,8 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794198111161,
-     "t_end_ms": 1794198112166,
+     "t_start_ms": 1794227184813,
+     "t_end_ms": 1794227185818,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -351,7 +352,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794198111161
+      1794227184813
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
@@ -361,8 +362,8 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794198112166,
-     "t_end_ms": 1794198113270,
+     "t_start_ms": 1794227185818,
+     "t_end_ms": 1794227186923,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -371,7 +372,7 @@
       "Tab"
      ],
      "key_times": [
-      1794198112166
+      1794227185818
      ],
      "observation": {
       "speech_raw": " \u001d BannerRegion \u001e \nRiverside Gazette  \u001d same page link \u001e \nTo activate press Enter.",
@@ -381,8 +382,8 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794198113270,
-     "t_end_ms": 1794198114274,
+     "t_start_ms": 1794227186923,
+     "t_end_ms": 1794227187927,
      "action": {
       "type": "key",
       "command": "Right"
@@ -391,7 +392,7 @@
       "Right"
      ],
      "key_times": [
-      1794198113270
+      1794227186923
      ],
      "observation": {
       "speech_raw": "i",
@@ -401,8 +402,8 @@
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794198114274,
-     "t_end_ms": 1794198115279,
+     "t_start_ms": 1794227187927,
+     "t_end_ms": 1794227188932,
      "action": {
       "type": "key",
       "command": "End"
@@ -411,7 +412,7 @@
       "End"
      ],
      "key_times": [
-      1794198114274
+      1794227187927
      ],
      "observation": {
       "speech_raw": "",
@@ -421,8 +422,8 @@
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794198115279,
-     "t_end_ms": 1794198116283,
+     "t_start_ms": 1794227188932,
+     "t_end_ms": 1794227189935,
      "action": {
       "type": "key",
       "command": "Left"
@@ -431,7 +432,7 @@
       "Left"
      ],
      "key_times": [
-      1794198115279
+      1794227188932
      ],
      "observation": {
       "speech_raw": "e",

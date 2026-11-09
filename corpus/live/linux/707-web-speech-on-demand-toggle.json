@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794199476650
+     "t_ms": 1794229063054
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794199478019,
-     "t_end_ms": 1794199479024,
+     "t_start_ms": 1794229064418,
+     "t_end_ms": 1794229065423,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -31,7 +32,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794199478019
+      1794229064418
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794199479024,
-     "t_end_ms": 1794199480028,
+     "t_start_ms": 1794229065423,
+     "t_end_ms": 1794229066427,
      "action": {
       "type": "key",
       "command": "Insert+Space"
@@ -51,7 +52,7 @@
       "Insert+Space"
      ],
      "key_times": [
-      1794199479024
+      1794229065423
      ],
      "observation": {
       "speech_raw": "",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794199480028,
-     "t_end_ms": 1794199481033,
+     "t_start_ms": 1794229066427,
+     "t_end_ms": 1794229067432,
      "action": {
       "type": "key",
       "command": "Shift+S"
@@ -71,7 +72,7 @@
       "Shift+S"
      ],
      "key_times": [
-      1794199480028
+      1794229066427
      ],
      "observation": {
       "speech_raw": "Speech off set to speech mute",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794199481033,
-     "t_end_ms": 1794199482038,
+     "t_start_ms": 1794229067432,
+     "t_end_ms": 1794229068436,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -91,7 +92,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794199481033
+      1794229067432
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794199482038,
-     "t_end_ms": 1794199483042,
+     "t_start_ms": 1794229068436,
+     "t_end_ms": 1794229069440,
      "action": {
       "type": "key",
       "command": "Down"
@@ -111,7 +112,7 @@
       "Down"
      ],
      "key_times": [
-      1794199482038
+      1794229068436
      ],
      "observation": {
       "speech_raw": "banner",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794199483042,
-     "t_end_ms": 1794199484047,
+     "t_start_ms": 1794229069440,
+     "t_end_ms": 1794229070445,
      "action": {
       "type": "key",
       "command": "Insert+Space"
@@ -131,7 +132,7 @@
       "Insert+Space"
      ],
      "key_times": [
-      1794199483042
+      1794229069440
      ],
      "observation": {
       "speech_raw": "",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794199484047,
-     "t_end_ms": 1794199485052,
+     "t_start_ms": 1794229070445,
+     "t_end_ms": 1794229071450,
      "action": {
       "type": "key",
       "command": "Shift+S"
@@ -151,7 +152,7 @@
       "Shift+S"
      ],
      "key_times": [
-      1794199484047
+      1794229070445
      ],
      "observation": {
       "speech_raw": "speech off set to speech on demand",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794199485052,
-     "t_end_ms": 1794199486057,
+     "t_start_ms": 1794229071450,
+     "t_end_ms": 1794229072455,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -171,7 +172,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794199485052
+      1794229071450
      ],
      "observation": {
       "speech_raw": "banner",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794199486057,
-     "t_end_ms": 1794199487162,
+     "t_start_ms": 1794229072455,
+     "t_end_ms": 1794229073460,
      "action": {
       "type": "key",
       "command": "Down"
@@ -191,7 +192,7 @@
       "Down"
      ],
      "key_times": [
-      1794199486057
+      1794229072455
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Riverside Gazette",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794199487162,
-     "t_end_ms": 1794199488166,
+     "t_start_ms": 1794229073460,
+     "t_end_ms": 1794229074464,
      "action": {
       "type": "key",
       "command": "Insert+Space"
@@ -211,7 +212,7 @@
       "Insert+Space"
      ],
      "key_times": [
-      1794199487162
+      1794229073460
      ],
      "observation": {
       "speech_raw": "",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794199488166,
-     "t_end_ms": 1794199489171,
+     "t_start_ms": 1794229074464,
+     "t_end_ms": 1794229075468,
      "action": {
       "type": "key",
       "command": "S"
@@ -231,7 +232,7 @@
       "S"
      ],
      "key_times": [
-      1794199488166
+      1794229074464
      ],
      "observation": {
       "speech_raw": "Full Speech",
@@ -241,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794199489171,
-     "t_end_ms": 1794199490175,
+     "t_start_ms": 1794229075468,
+     "t_end_ms": 1794229076473,
      "action": {
       "type": "key",
       "command": "Down"
@@ -251,7 +252,7 @@
       "Down"
      ],
      "key_times": [
-      1794199489171
+      1794229075468
      ],
      "observation": {
       "speech_raw": "Primary navigation region",

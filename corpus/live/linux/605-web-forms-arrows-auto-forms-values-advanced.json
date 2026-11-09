@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ccb4c70a"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794206029182
+     "t_ms": 1794225594777
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794206030547,
-     "t_end_ms": 1794206031551,
+     "t_start_ms": 1794225596145,
+     "t_end_ms": 1794225597149,
      "action": {
       "type": "key",
       "command": "Down"
@@ -31,7 +32,7 @@
       "Down"
      ],
      "key_times": [
-      1794206030547
+      1794225596145
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e Account Registration Form",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794206031551,
-     "t_end_ms": 1794206032554,
+     "t_start_ms": 1794225597149,
+     "t_end_ms": 1794225598153,
      "action": {
       "type": "key",
       "command": "Down"
@@ -51,7 +52,7 @@
       "Down"
      ],
      "key_times": [
-      1794206031551
+      1794225597149
      ],
      "observation": {
       "speech_raw": "Full Name:",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794206032554,
-     "t_end_ms": 1794206033558,
+     "t_start_ms": 1794225598153,
+     "t_end_ms": 1794225599157,
      "action": {
       "type": "key",
       "command": "Down"
@@ -71,7 +72,7 @@
       "Down"
      ],
      "key_times": [
-      1794206032554
+      1794225598153
      ],
      "observation": {
       "speech_raw": "Full Name: \u001d Edit \u001e \nJane Doe",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794206033558,
-     "t_end_ms": 1794206034662,
+     "t_start_ms": 1794225599157,
+     "t_end_ms": 1794225600261,
      "action": {
       "type": "key",
       "command": "Down"
@@ -91,7 +92,7 @@
       "Down"
      ],
      "key_times": [
-      1794206033558
+      1794225599157
      ],
      "observation": {
       "speech_raw": "Jane Doe",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794206034662,
-     "t_end_ms": 1794206035666,
+     "t_start_ms": 1794225600261,
+     "t_end_ms": 1794225601266,
      "action": {
       "type": "key",
       "command": "Down"
@@ -111,7 +112,7 @@
       "Down"
      ],
      "key_times": [
-      1794206034662
+      1794225600261
      ],
      "observation": {
       "speech_raw": "Email Address:",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794206035666,
-     "t_end_ms": 1794206036671,
+     "t_start_ms": 1794225601266,
+     "t_end_ms": 1794225602270,
      "action": {
       "type": "key",
       "command": "Down"
@@ -131,7 +132,7 @@
       "Down"
      ],
      "key_times": [
-      1794206035666
+      1794225601266
      ],
      "observation": {
       "speech_raw": "Email Address: \u001d Edit \u001e \njane@example.com",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794206036671,
-     "t_end_ms": 1794206037776,
+     "t_start_ms": 1794225602270,
+     "t_end_ms": 1794225603375,
      "action": {
       "type": "key",
       "command": "Down"
@@ -151,7 +152,7 @@
       "Down"
      ],
      "key_times": [
-      1794206036671
+      1794225602270
      ],
      "observation": {
       "speech_raw": "jane@example.com",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794206037776,
-     "t_end_ms": 1794206038780,
+     "t_start_ms": 1794225603375,
+     "t_end_ms": 1794225604379,
      "action": {
       "type": "key",
       "command": "Down"
@@ -171,7 +172,7 @@
       "Down"
      ],
      "key_times": [
-      1794206037776
+      1794225603375
      ],
      "observation": {
       "speech_raw": "I accept terms and conditions \u001d check box \u001e  \u001dnot checked\u001e ",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794206038780,
-     "t_end_ms": 1794206039785,
+     "t_start_ms": 1794225604379,
+     "t_end_ms": 1794225605384,
      "action": {
       "type": "key",
       "command": "Down"
@@ -191,7 +192,7 @@
       "Down"
      ],
      "key_times": [
-      1794206038780
+      1794225604379
      ],
      "observation": {
       "speech_raw": "Save Preferences \u001d Button \u001e ",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794206039785,
-     "t_end_ms": 1794206040789,
+     "t_start_ms": 1794225605384,
+     "t_end_ms": 1794225606388,
      "action": {
       "type": "key",
       "command": "Down"
@@ -211,7 +212,7 @@
       "Down"
      ],
      "key_times": [
-      1794206039785
+      1794225605384
      ],
      "observation": {
       "speech_raw": "Submit Application \u001d Button \u001e ",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794206040789,
-     "t_end_ms": 1794206041793,
+     "t_start_ms": 1794225606388,
+     "t_end_ms": 1794225607392,
      "action": {
       "type": "key",
       "command": "Up"
@@ -231,7 +232,7 @@
       "Up"
      ],
      "key_times": [
-      1794206040789
+      1794225606388
      ],
      "observation": {
       "speech_raw": "Save Preferences \u001d Button \u001e ",
@@ -241,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794206041793,
-     "t_end_ms": 1794206042797,
+     "t_start_ms": 1794225607392,
+     "t_end_ms": 1794225608395,
      "action": {
       "type": "key",
       "command": "Up"
@@ -251,7 +252,7 @@
       "Up"
      ],
      "key_times": [
-      1794206041793
+      1794225607392
      ],
      "observation": {
       "speech_raw": "I accept terms and conditions \u001d check box \u001e  \u001dnot checked\u001e ",
@@ -261,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794206042797,
-     "t_end_ms": 1794206043801,
+     "t_start_ms": 1794225608395,
+     "t_end_ms": 1794225609400,
      "action": {
       "type": "key",
       "command": "Up"
@@ -271,7 +272,7 @@
       "Up"
      ],
      "key_times": [
-      1794206042797
+      1794225608395
      ],
      "observation": {
       "speech_raw": "Email Address: \u001d Edit \u001e \njane@example.com",
@@ -281,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794206043801,
-     "t_end_ms": 1794206044805,
+     "t_start_ms": 1794225609400,
+     "t_end_ms": 1794225610404,
      "action": {
       "type": "key",
       "command": "Up"
@@ -291,7 +292,7 @@
       "Up"
      ],
      "key_times": [
-      1794206043801
+      1794225609400
      ],
      "observation": {
       "speech_raw": "Email Address:",
@@ -301,8 +302,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794206044806,
-     "t_end_ms": 1794206045810,
+     "t_start_ms": 1794225610404,
+     "t_end_ms": 1794225611408,
      "action": {
       "type": "key",
       "command": "Up"
@@ -311,7 +312,7 @@
       "Up"
      ],
      "key_times": [
-      1794206044806
+      1794225610404
      ],
      "observation": {
       "speech_raw": "Full Name: \u001d Edit \u001e \nJane Doe",
@@ -321,8 +322,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794206045810,
-     "t_end_ms": 1794206046814,
+     "t_start_ms": 1794225611408,
+     "t_end_ms": 1794225612512,
      "action": {
       "type": "key",
       "command": "Up"
@@ -331,7 +332,27 @@
       "Up"
      ],
      "key_times": [
-      1794206045810
+      1794225611408
+     ],
+     "observation": {
+      "speech_raw": "Jane Doe",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s17",
+     "t_start_ms": 1794225612512,
+     "t_end_ms": 1794225613517,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794225612512
      ],
      "observation": {
       "speech_raw": "Full Name:",
@@ -340,9 +361,9 @@
      "step_success": true
     },
     {
-     "step_id": "s17",
-     "t_start_ms": 1794206046814,
-     "t_end_ms": 1794206047818,
+     "step_id": "s18",
+     "t_start_ms": 1794225613517,
+     "t_end_ms": 1794225614521,
      "action": {
       "type": "key",
       "command": "Up"
@@ -351,7 +372,7 @@
       "Up"
      ],
      "key_times": [
-      1794206046814
+      1794225613517
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e Account Registration Form",
@@ -360,29 +381,9 @@
      "step_success": true
     },
     {
-     "step_id": "s18",
-     "t_start_ms": 1794206047818,
-     "t_end_ms": 1794206048822,
-     "action": {
-      "type": "key",
-      "command": "Up"
-     },
-     "keys": [
-      "Up"
-     ],
-     "key_times": [
-      1794206047818
-     ],
-     "observation": {
-      "speech_raw": "Forms and Interaction Reference Fixture",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
      "step_id": "s19",
-     "t_start_ms": 1794206048822,
-     "t_end_ms": 1794206049826,
+     "t_start_ms": 1794225614521,
+     "t_end_ms": 1794225615526,
      "action": {
       "type": "key",
       "command": "Up"
@@ -391,7 +392,7 @@
       "Up"
      ],
      "key_times": [
-      1794206048822
+      1794225614521
      ],
      "observation": {
       "speech_raw": "Forms and Interaction Reference Fixture",

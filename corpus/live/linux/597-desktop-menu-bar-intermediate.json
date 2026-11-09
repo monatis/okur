@@ -1,0 +1,181 @@
+{
+ "scenario_id": "597-desktop-menu-bar-intermediate",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": null,
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "application": "corpus/fixtures/linux/desktop-forms.py",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794225407807,
+     "t_end_ms": 1794225408865,
+     "action": {
+      "type": "key",
+      "command": "Alt"
+     },
+     "keys": [
+      "Alt"
+     ],
+     "key_times": [
+      1794225407807
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794225408865,
+     "t_end_ms": 1794225409969,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794225408865
+     ],
+     "observation": {
+      "speech_raw": "SR Desktop Fixture\nNotes: \u001d Edit \u001e \nType in text.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794225409969,
+     "t_end_ms": 1794225411274,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794225409969
+     ],
+     "observation": {
+      "speech_raw": "\n",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794225411274,
+     "t_end_ms": 1794225412579,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794225411274
+     ],
+     "observation": {
+      "speech_raw": "\n",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794225412579,
+     "t_end_ms": 1794225413883,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794225412579
+     ],
+     "observation": {
+      "speech_raw": "\n",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794225413883,
+     "t_end_ms": 1794225415188,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794225413883
+     ],
+     "observation": {
+      "speech_raw": "\n",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794225415188,
+     "t_end_ms": 1794225416192,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794225415188
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794225416192,
+     "t_end_ms": 1794225417195,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794225416192
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

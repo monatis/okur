@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794201112667
+     "t_ms": 1794232689928
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794201114030,
-     "t_end_ms": 1794201115034,
+     "t_start_ms": 1794232691294,
+     "t_end_ms": 1794232692298,
      "action": {
       "type": "key",
       "command": "Insert+N"
@@ -31,7 +32,7 @@
       "Insert+N"
      ],
      "key_times": [
-      1794201114030
+      1794232691294
      ],
      "observation": {
       "speech_raw": "Navigation Quick Keys\nOff",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794201115034,
-     "t_end_ms": 1794201116037,
+     "t_start_ms": 1794232692298,
+     "t_end_ms": 1794232693302,
      "action": {
       "type": "key",
       "command": "H"
@@ -51,7 +52,7 @@
       "H"
      ],
      "key_times": [
-      1794201115034
+      1794232692298
      ],
      "observation": {
       "speech_raw": "",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794201116037,
-     "t_end_ms": 1794201117042,
+     "t_start_ms": 1794232693302,
+     "t_end_ms": 1794232694307,
      "action": {
       "type": "key",
       "command": "Insert+N"
@@ -71,7 +72,7 @@
       "Insert+N"
      ],
      "key_times": [
-      1794201116037
+      1794232693302
      ],
      "observation": {
       "speech_raw": "Navigation Quick Keys\nSay all only",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794201117042,
-     "t_end_ms": 1794201118046,
+     "t_start_ms": 1794232694307,
+     "t_end_ms": 1794232695311,
      "action": {
       "type": "key",
       "command": "H"
@@ -91,7 +92,7 @@
       "H"
      ],
      "key_times": [
-      1794201117042
+      1794232694307
      ],
      "observation": {
       "speech_raw": "",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794201118046,
-     "t_end_ms": 1794201119052,
+     "t_start_ms": 1794232695311,
+     "t_end_ms": 1794232696316,
      "action": {
       "type": "key",
       "command": "Insert+Shift+Z"
@@ -111,7 +112,7 @@
       "Insert+Shift+Z"
      ],
      "key_times": [
-      1794201118046
+      1794232695311
      ],
      "observation": {
       "speech_raw": "Quick Keys Suspended",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794201119052,
-     "t_end_ms": 1794201120055,
+     "t_start_ms": 1794232696316,
+     "t_end_ms": 1794232697320,
      "action": {
       "type": "key",
       "command": "H"
@@ -131,7 +132,7 @@
       "H"
      ],
      "key_times": [
-      1794201119052
+      1794232696316
      ],
      "observation": {
       "speech_raw": "",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794201120055,
-     "t_end_ms": 1794201121061,
+     "t_start_ms": 1794232697320,
+     "t_end_ms": 1794232698326,
      "action": {
       "type": "key",
       "command": "Insert+Shift+Z"
@@ -151,7 +152,7 @@
       "Insert+Shift+Z"
      ],
      "key_times": [
-      1794201120055
+      1794232697320
      ],
      "observation": {
       "speech_raw": "Resuming Quick Keys",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794201121061,
-     "t_end_ms": 1794201122066,
+     "t_start_ms": 1794232698326,
+     "t_end_ms": 1794232699330,
      "action": {
       "type": "key",
       "command": "H"
@@ -171,7 +172,7 @@
       "H"
      ],
      "key_times": [
-      1794201121061
+      1794232698326
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours\n \u001d heading level 1 \u001e",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794201122066,
-     "t_end_ms": 1794201123071,
+     "t_start_ms": 1794232699330,
+     "t_end_ms": 1794232700335,
      "action": {
       "type": "key",
       "command": "Insert+Z"
@@ -191,7 +192,7 @@
       "Insert+Z"
      ],
      "key_times": [
-      1794201122066
+      1794232699330
      ],
      "observation": {
       "speech_raw": "Off",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794201123071,
-     "t_end_ms": 1794201124074,
+     "t_start_ms": 1794232700335,
+     "t_end_ms": 1794232701338,
      "action": {
       "type": "key",
       "command": "Down"
@@ -211,7 +212,7 @@
       "Down"
      ],
      "key_times": [
-      1794201123071
+      1794232700335
      ],
      "observation": {
       "speech_raw": "",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794201124074,
-     "t_end_ms": 1794201125080,
+     "t_start_ms": 1794232701338,
+     "t_end_ms": 1794232702344,
      "action": {
       "type": "key",
       "command": "Insert+Z"
@@ -231,7 +232,7 @@
       "Insert+Z"
      ],
      "key_times": [
-      1794201124074
+      1794232701338
      ],
      "observation": {
       "speech_raw": "On",
@@ -241,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794201125080,
-     "t_end_ms": 1794201126084,
+     "t_start_ms": 1794232702344,
+     "t_end_ms": 1794232703348,
      "action": {
       "type": "key",
       "command": "Down"
@@ -251,7 +252,7 @@
       "Down"
      ],
      "key_times": [
-      1794201125080
+      1794232702344
      ],
      "observation": {
       "speech_raw": "banner",
@@ -261,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794201126084,
-     "t_end_ms": 1794201127090,
+     "t_start_ms": 1794232703348,
+     "t_end_ms": 1794232704352,
      "action": {
       "type": "key",
       "command": "Insert+Escape"
@@ -271,7 +272,7 @@
       "Insert+Escape"
      ],
      "key_times": [
-      1794201126084
+      1794232703348
      ],
      "observation": {
       "speech_raw": "",

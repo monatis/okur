@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794198507746
+     "t_ms": 1794227650738
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794198509114,
-     "t_end_ms": 1794198510119,
+     "t_start_ms": 1794227652104,
+     "t_end_ms": 1794227653109,
      "action": {
       "type": "key",
       "command": "Ctrl+A"
@@ -31,7 +32,7 @@
       "Ctrl+A"
      ],
      "key_times": [
-      1794198509114
+      1794227652104
      ],
      "observation": {
       "speech_raw": "selected\n1547 characters up to\nfxo\nmain region end",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794198510119,
-     "t_end_ms": 1794198511122,
+     "t_start_ms": 1794227653109,
+     "t_end_ms": 1794227654114,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -51,7 +52,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794198510119
+      1794227653109
      ],
      "observation": {
       "speech_raw": "Reading Settings - Reading Fixture",

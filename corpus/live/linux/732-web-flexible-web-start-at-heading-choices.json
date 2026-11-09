@@ -1,0 +1,326 @@
+{
+ "scenario_id": "732-web-flexible-web-start-at-heading-choices",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794230013433
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794230014797,
+     "t_end_ms": 1794230015801,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794230014797
+     ],
+     "observation": {
+      "speech_raw": "Weekend events\n \u001d heading level 1 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794230015801,
+     "t_end_ms": 1794230016805,
+     "action": {
+      "type": "key",
+      "command": "Insert+Space"
+     },
+     "keys": [
+      "Insert+Space"
+     ],
+     "key_times": [
+      1794230015801
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794230016805,
+     "t_end_ms": 1794230017809,
+     "action": {
+      "type": "key",
+      "command": "X"
+     },
+     "keys": [
+      "X"
+     ],
+     "key_times": [
+      1794230016805
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794230017809,
+     "t_end_ms": 1794230018813,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")"
+     },
+     "keys": [
+      "Alt+N"
+     ],
+     "key_times": [
+      1794230017809
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794230018813,
+     "t_end_ms": 1794230019817,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794230018814
+     ],
+     "observation": {
+      "speech_raw": "Three events open to everyone this weekend.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794230019817,
+     "t_end_ms": 1794230020822,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")"
+     },
+     "keys": [
+      "Alt+N"
+     ],
+     "key_times": [
+      1794230019817
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794230020822,
+     "t_end_ms": 1794230021827,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")"
+     },
+     "keys": [
+      "Alt+N"
+     ],
+     "key_times": [
+      1794230020822
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794230021827,
+     "t_end_ms": 1794230022832,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794230021827
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e Saturday market",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794230022832,
+     "t_end_ms": 1794230023836,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794230022832
+     ],
+     "observation": {
+      "speech_raw": "The farmers' market opens at eight in Mill Square.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794230023836,
+     "t_end_ms": 1794230024840,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794230023836
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e River clean-up",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794230024840,
+     "t_end_ms": 1794230025844,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794230024840
+     ],
+     "observation": {
+      "speech_raw": "Volunteers meet at the boat ramp at ten on Saturday.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794230025844,
+     "t_end_ms": 1794230026849,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794230025844
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e Sunday concert",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794230026849,
+     "t_end_ms": 1794230027854,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794230026849
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794230027854,
+     "t_end_ms": 1794230028859,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794230027854
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794230028859,
+     "t_end_ms": 1794230029864,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794230028859
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e Sunday concert",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

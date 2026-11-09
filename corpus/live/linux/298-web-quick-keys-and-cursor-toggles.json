@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794194615771
+     "t_ms": 1794222458811
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794194617139,
-     "t_end_ms": 1794194618143,
+     "t_start_ms": 1794222460180,
+     "t_end_ms": 1794222461185,
      "action": {
       "type": "key",
       "command": "Insert+N"
@@ -31,7 +32,7 @@
       "Insert+N"
      ],
      "key_times": [
-      1794194617139
+      1794222460180
      ],
      "observation": {
       "speech_raw": "Navigation Quick Keys\nOff",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794194618143,
-     "t_end_ms": 1794194619148,
+     "t_start_ms": 1794222461185,
+     "t_end_ms": 1794222462189,
      "action": {
       "type": "key",
       "command": "H"
@@ -51,7 +52,7 @@
       "H"
      ],
      "key_times": [
-      1794194618143
+      1794222461185
      ],
      "observation": {
       "speech_raw": "",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794194619148,
-     "t_end_ms": 1794194620153,
+     "t_start_ms": 1794222462189,
+     "t_end_ms": 1794222463194,
      "action": {
       "type": "key",
       "command": "Insert+N"
@@ -71,7 +72,7 @@
       "Insert+N"
      ],
      "key_times": [
-      1794194619148
+      1794222462189
      ],
      "observation": {
       "speech_raw": "Navigation Quick Keys\nSay all only",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794194620153,
-     "t_end_ms": 1794194621156,
+     "t_start_ms": 1794222463194,
+     "t_end_ms": 1794222464198,
      "action": {
       "type": "key",
       "command": "H"
@@ -91,7 +92,7 @@
       "H"
      ],
      "key_times": [
-      1794194620153
+      1794222463194
      ],
      "observation": {
       "speech_raw": "",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794194621156,
-     "t_end_ms": 1794194622163,
+     "t_start_ms": 1794222464198,
+     "t_end_ms": 1794222465205,
      "action": {
       "type": "key",
       "command": "Insert+Shift+Z"
@@ -111,7 +112,7 @@
       "Insert+Shift+Z"
      ],
      "key_times": [
-      1794194621156
+      1794222464198
      ],
      "observation": {
       "speech_raw": "Quick Keys Suspended",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794194622163,
-     "t_end_ms": 1794194623167,
+     "t_start_ms": 1794222465205,
+     "t_end_ms": 1794222466209,
      "action": {
       "type": "key",
       "command": "H"
@@ -131,7 +132,7 @@
       "H"
      ],
      "key_times": [
-      1794194622163
+      1794222465205
      ],
      "observation": {
       "speech_raw": "",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794194623167,
-     "t_end_ms": 1794194624174,
+     "t_start_ms": 1794222466209,
+     "t_end_ms": 1794222467215,
      "action": {
       "type": "key",
       "command": "Insert+Shift+Z"
@@ -151,7 +152,7 @@
       "Insert+Shift+Z"
      ],
      "key_times": [
-      1794194623167
+      1794222466209
      ],
      "observation": {
       "speech_raw": "Resuming Quick Keys",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794194624174,
-     "t_end_ms": 1794194625178,
+     "t_start_ms": 1794222467215,
+     "t_end_ms": 1794222468219,
      "action": {
       "type": "key",
       "command": "H"
@@ -171,7 +172,7 @@
       "H"
      ],
      "key_times": [
-      1794194624174
+      1794222467215
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours\n \u001d heading level 1 \u001e",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794194625178,
-     "t_end_ms": 1794194626183,
+     "t_start_ms": 1794222468219,
+     "t_end_ms": 1794222469225,
      "action": {
       "type": "key",
       "command": "Insert+Z"
@@ -191,7 +192,7 @@
       "Insert+Z"
      ],
      "key_times": [
-      1794194625178
+      1794222468219
      ],
      "observation": {
       "speech_raw": "use virtual PC cursor off",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794194626183,
-     "t_end_ms": 1794194627187,
+     "t_start_ms": 1794222469225,
+     "t_end_ms": 1794222470229,
      "action": {
       "type": "key",
       "command": "Down"
@@ -211,7 +212,7 @@
       "Down"
      ],
      "key_times": [
-      1794194626183
+      1794222469225
      ],
      "observation": {
       "speech_raw": "",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794194627187,
-     "t_end_ms": 1794194628193,
+     "t_start_ms": 1794222470229,
+     "t_end_ms": 1794222471234,
      "action": {
       "type": "key",
       "command": "Insert+Z"
@@ -231,7 +232,7 @@
       "Insert+Z"
      ],
      "key_times": [
-      1794194627187
+      1794222470229
      ],
      "observation": {
       "speech_raw": "use virtual PC cursor on",
@@ -241,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794194628193,
-     "t_end_ms": 1794194629197,
+     "t_start_ms": 1794222471234,
+     "t_end_ms": 1794222472239,
      "action": {
       "type": "key",
       "command": "Down"
@@ -251,7 +252,7 @@
       "Down"
      ],
      "key_times": [
-      1794194628193
+      1794222471234
      ],
      "observation": {
       "speech_raw": "banner",
@@ -261,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794194629197,
-     "t_end_ms": 1794194630203,
+     "t_start_ms": 1794222472239,
+     "t_end_ms": 1794222473244,
      "action": {
       "type": "key",
       "command": "Insert+Escape"
@@ -271,7 +272,7 @@
       "Insert+Escape"
      ],
      "key_times": [
-      1794194629197
+      1794222472239
      ],
      "observation": {
       "speech_raw": "Screen updated",

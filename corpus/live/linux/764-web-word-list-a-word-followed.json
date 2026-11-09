@@ -1,0 +1,266 @@
+{
+ "scenario_id": "764-web-word-list-a-word-followed",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794230963078
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794230964442,
+     "t_end_ms": 1794230965747,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+W"
+     },
+     "keys": [
+      "Ctrl+Insert+W"
+     ],
+     "key_times": [
+      1794230964442
+     ],
+     "observation": {
+      "speech_raw": "Word List \u001d dialog \u001e \nList1 \u001d List view \u001e \nm (10)\n1 of 143\nTo move to items use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794230965747,
+     "t_end_ms": 1794230966751,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"R\")"
+     },
+     "keys": [
+      "R"
+     ],
+     "key_times": [
+      1794230965747
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794230966751,
+     "t_end_ms": 1794230967854,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794230966751
+     ],
+     "observation": {
+      "speech_raw": "Primary navigation region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794230967854,
+     "t_end_ms": 1794230968859,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794230967854
+     ],
+     "observation": {
+      "speech_raw": "Primary navigation region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794230968859,
+     "t_end_ms": 1794230969863,
+     "action": {
+      "type": "key",
+      "command": "W"
+     },
+     "keys": [
+      "W"
+     ],
+     "key_times": [
+      1794230968859
+     ],
+     "observation": {
+      "speech_raw": "list of 4 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794230969863,
+     "t_end_ms": 1794230970868,
+     "action": {
+      "type": "key",
+      "command": "W"
+     },
+     "keys": [
+      "W"
+     ],
+     "key_times": [
+      1794230969863
+     ],
+     "observation": {
+      "speech_raw": "Primary navigation region end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794230970868,
+     "t_end_ms": 1794230971872,
+     "action": {
+      "type": "key",
+      "command": "W"
+     },
+     "keys": [
+      "W"
+     ],
+     "key_times": [
+      1794230970868
+     ],
+     "observation": {
+      "speech_raw": "main region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794230971872,
+     "t_end_ms": 1794230972876,
+     "action": {
+      "type": "key",
+      "command": "W"
+     },
+     "keys": [
+      "W"
+     ],
+     "key_times": [
+      1794230971872
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Maria Lopez,",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794230972876,
+     "t_end_ms": 1794230973880,
+     "action": {
+      "type": "key",
+      "command": "W"
+     },
+     "keys": [
+      "W"
+     ],
+     "key_times": [
+      1794230972876
+     ],
+     "observation": {
+      "speech_raw": "published March 14, 2026",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794230973880,
+     "t_end_ms": 1794230974886,
+     "action": {
+      "type": "key",
+      "command": "Shift+W"
+     },
+     "keys": [
+      "Shift+W"
+     ],
+     "key_times": [
+      1794230973880
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Maria Lopez,",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794230974886,
+     "t_end_ms": 1794230975891,
+     "action": {
+      "type": "key",
+      "command": "Shift+W"
+     },
+     "keys": [
+      "Shift+W"
+     ],
+     "key_times": [
+      1794230974886
+     ],
+     "observation": {
+      "speech_raw": "main region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794230975891,
+     "t_end_ms": 1794230976895,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794230975891
+     ],
+     "observation": {
+      "speech_raw": "main region",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

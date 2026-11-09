@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794198180121
+     "t_ms": 1794227253911
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794198181485,
-     "t_end_ms": 1794198182489,
+     "t_start_ms": 1794227255271,
+     "t_end_ms": 1794227256275,
      "action": {
       "type": "key",
       "command": "Insert+T"
@@ -31,7 +32,7 @@
       "Insert+T"
      ],
      "key_times": [
-      1794198181485
+      1794227255271
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette - Google Chrome",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794198182489,
-     "t_end_ms": 1794198183593,
+     "t_start_ms": 1794227256275,
+     "t_end_ms": 1794227257279,
      "action": {
       "type": "key",
       "command": "H"
@@ -51,7 +52,7 @@
       "H"
      ],
      "key_times": [
-      1794198182489
+      1794227256275
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours\n \u001d heading level 1 \u001e",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794198183593,
-     "t_end_ms": 1794198184598,
+     "t_start_ms": 1794227257279,
+     "t_end_ms": 1794227258283,
      "action": {
       "type": "key",
       "command": "Insert+T"
@@ -71,7 +72,7 @@
       "Insert+T"
      ],
      "key_times": [
-      1794198183593
+      1794227257279
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette - Google Chrome\narticle\n3\nCity Library Expands Evening Hours",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794198184598,
-     "t_end_ms": 1794198185601,
+     "t_start_ms": 1794227258283,
+     "t_end_ms": 1794227259287,
      "action": {
       "type": "key",
       "command": "Down"
@@ -91,7 +92,7 @@
       "Down"
      ],
      "key_times": [
-      1794198184598
+      1794227258283
      ],
      "observation": {
       "speech_raw": "By ",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794198185601,
-     "t_end_ms": 1794198186606,
+     "t_start_ms": 1794227259287,
+     "t_end_ms": 1794227260292,
      "action": {
       "type": "key",
       "command": "Insert+T"
@@ -111,7 +112,7 @@
       "Insert+T"
      ],
      "key_times": [
-      1794198185601
+      1794227259287
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette - Google Chrome\narticle\n3\nCity Library Expands Evening Hours",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794198186606,
-     "t_end_ms": 1794198187610,
+     "t_start_ms": 1794227260292,
+     "t_end_ms": 1794227261295,
      "action": {
       "type": "key",
       "command": "H"
@@ -131,7 +132,7 @@
       "H"
      ],
      "key_times": [
-      1794198186606
+      1794227260292
      ],
      "observation": {
       "speech_raw": "What changes\n \u001d heading level 2 \u001e",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794198187610,
-     "t_end_ms": 1794198188615,
+     "t_start_ms": 1794227261295,
+     "t_end_ms": 1794227262300,
      "action": {
       "type": "key",
       "command": "Insert+T"
@@ -151,7 +152,7 @@
       "Insert+T"
      ],
      "key_times": [
-      1794198187610
+      1794227261295
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette - Google Chrome\narticle\n3\nWhat changes",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794198188615,
-     "t_end_ms": 1794198189619,
+     "t_start_ms": 1794227262300,
+     "t_end_ms": 1794227263303,
      "action": {
       "type": "key",
       "command": "Down"
@@ -171,7 +172,7 @@
       "Down"
      ],
      "key_times": [
-      1794198188615
+      1794227262300
      ],
      "observation": {
       "speech_raw": "Membership costs $5.99 a month, e.g. for adults; children join free. Questions go to help@riverside-library.org \u2014 or call 555-0142. Attendance rose 3.5%",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794198189619,
-     "t_end_ms": 1794198190624,
+     "t_start_ms": 1794227263303,
+     "t_end_ms": 1794227264308,
      "action": {
       "type": "key",
       "command": "Insert+T"
@@ -191,7 +192,7 @@
       "Insert+T"
      ],
      "key_times": [
-      1794198189619
+      1794227263303
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette - Google Chrome\narticle\n3\nWhat changes",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794198190624,
-     "t_end_ms": 1794198191628,
+     "t_start_ms": 1794227264308,
+     "t_end_ms": 1794227265312,
      "action": {
       "type": "key",
       "command": "T"
@@ -211,7 +212,7 @@
       "T"
      ],
      "key_times": [
-      1794198190624
+      1794227264308
      ],
      "observation": {
       "speech_raw": "3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794198191628,
-     "t_end_ms": 1794198192634,
+     "t_start_ms": 1794227265312,
+     "t_end_ms": 1794227266318,
      "action": {
       "type": "key",
       "command": "Insert+T"
@@ -231,7 +232,7 @@
       "Insert+T"
      ],
      "key_times": [
-      1794198191628
+      1794227265312
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette - Google Chrome\narticle\n3\nOpening schedule",
@@ -241,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794198192634,
-     "t_end_ms": 1794198193638,
+     "t_start_ms": 1794227266318,
+     "t_end_ms": 1794227267322,
      "action": {
       "type": "key",
       "command": "H"
@@ -251,7 +252,7 @@
       "H"
      ],
      "key_times": [
-      1794198192634
+      1794227266318
      ],
      "observation": {
       "speech_raw": "What readers said\n \u001d heading level 3 \u001e",
@@ -261,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794198193638,
-     "t_end_ms": 1794198194643,
+     "t_start_ms": 1794227267322,
+     "t_end_ms": 1794227268327,
      "action": {
       "type": "key",
       "command": "Insert+T"
@@ -271,7 +272,7 @@
       "Insert+T"
      ],
      "key_times": [
-      1794198193638
+      1794227267322
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette - Google Chrome\narticle\n3\nWhat readers said",
@@ -281,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794198194643,
-     "t_end_ms": 1794198195647,
+     "t_start_ms": 1794227268327,
+     "t_end_ms": 1794227269332,
      "action": {
       "type": "key",
       "command": "H"
@@ -291,7 +292,7 @@
       "H"
      ],
      "key_times": [
-      1794198194643
+      1794227268327
      ],
      "observation": {
       "speech_raw": "Related stories\n \u001d heading level 2 \u001e",
@@ -301,8 +302,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794198195647,
-     "t_end_ms": 1794198196652,
+     "t_start_ms": 1794227269332,
+     "t_end_ms": 1794227270337,
      "action": {
       "type": "key",
       "command": "Insert+T"
@@ -311,7 +312,7 @@
       "Insert+T"
      ],
      "key_times": [
-      1794198195647
+      1794227269332
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette - Google Chrome\nRelated stories complementary information\n2\nRelated stories",
@@ -321,8 +322,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794198196652,
-     "t_end_ms": 1794198197657,
+     "t_start_ms": 1794227270337,
+     "t_end_ms": 1794227271342,
      "action": {
       "type": "key",
       "command": "Ctrl+End"
@@ -331,7 +332,7 @@
       "Ctrl+End"
      ],
      "key_times": [
-      1794198196652
+      1794227270337
      ],
      "observation": {
       "speech_raw": "content information end",
@@ -341,8 +342,8 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794198197657,
-     "t_end_ms": 1794198198661,
+     "t_start_ms": 1794227271342,
+     "t_end_ms": 1794227272347,
      "action": {
       "type": "key",
       "command": "Insert+T"
@@ -351,7 +352,7 @@
       "Insert+T"
      ],
      "key_times": [
-      1794198197657
+      1794227271342
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette - Google Chrome\ncontent information\n2",

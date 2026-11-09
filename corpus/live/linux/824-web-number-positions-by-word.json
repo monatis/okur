@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794200696847
+     "t_ms": 1794232126393
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794200698209,
-     "t_end_ms": 1794200699212,
+     "t_start_ms": 1794232127756,
+     "t_end_ms": 1794232128761,
      "action": {
       "type": "key",
       "command": "Down"
@@ -31,7 +32,7 @@
       "Down"
      ],
      "key_times": [
-      1794200698209
+      1794232127756
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e Raised and lowered numbers",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794200699212,
-     "t_end_ms": 1794200700216,
+     "t_start_ms": 1794232128761,
+     "t_end_ms": 1794232129765,
      "action": {
       "type": "key",
       "command": "Down"
@@ -51,7 +52,7 @@
       "Down"
      ],
      "key_times": [
-      1794200699212
+      1794232128761
      ],
      "observation": {
       "speech_raw": "Two cubed is 2 \u001dsuperscript \u001e 3 \u001dend superscript \u001e  in short.",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794200700216,
-     "t_end_ms": 1794200701221,
+     "t_start_ms": 1794232129765,
+     "t_end_ms": 1794232130770,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -71,7 +72,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794200700216
+      1794232129765
      ],
      "observation": {
       "speech_raw": "cubed",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794200701221,
-     "t_end_ms": 1794200702225,
+     "t_start_ms": 1794232130770,
+     "t_end_ms": 1794232131774,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -91,7 +92,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794200701221
+      1794232130770
      ],
      "observation": {
       "speech_raw": "is",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794200702225,
-     "t_end_ms": 1794200703230,
+     "t_start_ms": 1794232131774,
+     "t_end_ms": 1794232132779,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -111,7 +112,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794200702225
+      1794232131774
      ],
      "observation": {
       "speech_raw": "2 \u001dsuperscript \u001e 3",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794200703230,
-     "t_end_ms": 1794200704235,
+     "t_start_ms": 1794232132779,
+     "t_end_ms": 1794232133784,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -131,7 +132,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794200703230
+      1794232132779
      ],
      "observation": {
       "speech_raw": " \u001dend superscript \u001e in",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794200704235,
-     "t_end_ms": 1794200705240,
+     "t_start_ms": 1794232133784,
+     "t_end_ms": 1794232134788,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -151,7 +152,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794200704235
+      1794232133784
      ],
      "observation": {
       "speech_raw": "short",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794200705240,
-     "t_end_ms": 1794200706244,
+     "t_start_ms": 1794232134788,
+     "t_end_ms": 1794232135792,
      "action": {
       "type": "key",
       "command": "Down"
@@ -171,7 +172,7 @@
       "Down"
      ],
      "key_times": [
-      1794200705240
+      1794232134788
      ],
      "observation": {
       "speech_raw": "A mole holds 10 \u001dsuperscript \u001e 23 \u001dend superscript \u001e  particles.",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794200706244,
-     "t_end_ms": 1794200707248,
+     "t_start_ms": 1794232135792,
+     "t_end_ms": 1794232136796,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -191,7 +192,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794200706244
+      1794232135792
      ],
      "observation": {
       "speech_raw": "mole",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794200707248,
-     "t_end_ms": 1794200708253,
+     "t_start_ms": 1794232136796,
+     "t_end_ms": 1794232137800,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -211,7 +212,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794200707248
+      1794232136796
      ],
      "observation": {
       "speech_raw": "holds",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794200708253,
-     "t_end_ms": 1794200709258,
+     "t_start_ms": 1794232137800,
+     "t_end_ms": 1794232138805,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -231,7 +232,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794200708253
+      1794232137800
      ],
      "observation": {
       "speech_raw": "10 \u001dsuperscript \u001e 23",
@@ -241,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794200709258,
-     "t_end_ms": 1794200710262,
+     "t_start_ms": 1794232138805,
+     "t_end_ms": 1794232139810,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -251,7 +252,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794200709258
+      1794232138805
      ],
      "observation": {
       "speech_raw": " \u001dend superscript \u001e particles",
@@ -261,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794200710262,
-     "t_end_ms": 1794200711267,
+     "t_start_ms": 1794232139810,
+     "t_end_ms": 1794232140814,
      "action": {
       "type": "key",
       "command": "Down"
@@ -271,7 +272,7 @@
       "Down"
      ],
      "key_times": [
-      1794200710262
+      1794232139810
      ],
      "observation": {
       "speech_raw": "A micrometre is 10 \u001dsuperscript \u001e -6 \u001dend superscript \u001e  metres.",
@@ -281,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794200711267,
-     "t_end_ms": 1794200712271,
+     "t_start_ms": 1794232140814,
+     "t_end_ms": 1794232141819,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -291,7 +292,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794200711267
+      1794232140814
      ],
      "observation": {
       "speech_raw": "micrometre",
@@ -301,8 +302,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794200712271,
-     "t_end_ms": 1794200713277,
+     "t_start_ms": 1794232141819,
+     "t_end_ms": 1794232142824,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -311,7 +312,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794200712271
+      1794232141819
      ],
      "observation": {
       "speech_raw": "is",
@@ -321,8 +322,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794200713277,
-     "t_end_ms": 1794200714281,
+     "t_start_ms": 1794232142824,
+     "t_end_ms": 1794232143829,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -331,7 +332,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794200713277
+      1794232142824
      ],
      "observation": {
       "speech_raw": "10 \u001dsuperscript \u001e -6",
@@ -341,8 +342,8 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794200714281,
-     "t_end_ms": 1794200715286,
+     "t_start_ms": 1794232143829,
+     "t_end_ms": 1794232144834,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -351,7 +352,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794200714281
+      1794232143829
      ],
      "observation": {
       "speech_raw": " \u001dend superscript \u001e metres",

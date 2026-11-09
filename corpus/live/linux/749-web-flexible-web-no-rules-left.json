@@ -1,0 +1,106 @@
+{
+ "scenario_id": "749-web-flexible-web-no-rules-left",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794230638852
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794230640221,
+     "t_end_ms": 1794230641226,
+     "action": {
+      "type": "key",
+      "command": "Insert+Space"
+     },
+     "keys": [
+      "Insert+Space"
+     ],
+     "key_times": [
+      1794230640221
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794230641226,
+     "t_end_ms": 1794230642230,
+     "action": {
+      "type": "key",
+      "command": "X"
+     },
+     "keys": [
+      "X"
+     ],
+     "key_times": [
+      1794230641226
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794230642230,
+     "t_end_ms": 1794230643234,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794230642230
+     ],
+     "observation": {
+      "speech_raw": "banner",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794230643234,
+     "t_end_ms": 1794230644237,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794230643234
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

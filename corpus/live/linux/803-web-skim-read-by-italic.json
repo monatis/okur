@@ -1,0 +1,266 @@
+{
+ "scenario_id": "803-web-skim-read-by-italic",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794231354822
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794231356188,
+     "t_end_ms": 1794231357495,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Shift+Insert+Down"
+     },
+     "keys": [
+      "Ctrl+Shift+Insert+Down"
+     ],
+     "key_times": [
+      1794231356188
+     ],
+     "observation": {
+      "speech_raw": "Skim Reading \u001d dialog \u001e \nUse Rule Type:\nRead First Line of Every Paragraph",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794231357496,
+     "t_end_ms": 1794231358700,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794231357496
+     ],
+     "observation": {
+      "speech_raw": "Read First Sentence of Every Paragraph \u001d radio button \u001e  \u001dchecked\u001e \n2 of 4\nTo change the selection press Up or Down Arrow.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794231358700,
+     "t_end_ms": 1794231359904,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794231358700
+     ],
+     "observation": {
+      "speech_raw": "Text Rules Apply for Reading \u001d radio button \u001e  \u001dchecked\u001e \n3 of 4\nTo change the selection press Up or Down Arrow.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794231359904,
+     "t_end_ms": 1794231361108,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794231359904
+     ],
+     "observation": {
+      "speech_raw": "Attributes and Color Rules Apply for Reading \u001d radio button \u001e  \u001dchecked\u001e \n4 of 4\nTo change the selection press Up or Down Arrow.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794231361108,
+     "t_end_ms": 1794231362212,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794231361108
+     ],
+     "observation": {
+      "speech_raw": "Rules History: \u001d Combo box \u001e \n<New>\nTo change the selection use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794231362212,
+     "t_end_ms": 1794231363416,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794231362212
+     ],
+     "observation": {
+      "speech_raw": "Text Color: \u001d Combo box \u001e \n*\nTo change the selection use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794231363416,
+     "t_end_ms": 1794231364521,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794231363416
+     ],
+     "observation": {
+      "speech_raw": "Background Color: \u001d Combo box \u001e \n*\nTo change the selection use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794231364521,
+     "t_end_ms": 1794231365826,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794231364521
+     ],
+     "observation": {
+      "speech_raw": "Bold \u001d check box \u001e  \u001dnot checked\u001e \nTo check press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794231365826,
+     "t_end_ms": 1794231367030,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Space\")"
+     },
+     "keys": [
+      "Space"
+     ],
+     "key_times": [
+      1794231365826
+     ],
+     "observation": {
+      "speech_raw": "\u001dchecked\u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794231367030,
+     "t_end_ms": 1794231368335,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794231367030
+     ],
+     "observation": {
+      "speech_raw": "Italic \u001d check box \u001e  \u001dnot checked\u001e \nTo check press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794231368335,
+     "t_end_ms": 1794231369539,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Space\")"
+     },
+     "keys": [
+      "Space"
+     ],
+     "key_times": [
+      1794231368335
+     ],
+     "observation": {
+      "speech_raw": "\u001dchecked\u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794231369539,
+     "t_end_ms": 1794231370845,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+S\")"
+     },
+     "keys": [
+      "Alt+S"
+     ],
+     "key_times": [
+      1794231369539
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e City Library Expands Evening Hours\nThe Riverside City Library will stay open until 9 p.m. on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which\nmost respondents asked for later hours.\n \u001d heading level 2 \u001e What changes\n \u001d heading level 2 \u001e Opening schedule\nBranch\nWeekdays\nDetails\nCentral\nNorthside\n \u001d heading level 3 \u001e What readers said\n \u001d heading level 2 \u001e Related stories\n12 matches found\nRelated",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

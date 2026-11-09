@@ -1,0 +1,190 @@
+{
+ "scenario_id": "587-web-list-regions-advanced",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Escape",
+     "t_ms": 1794225087383
+    },
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794225087743
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794225089048,
+     "t_end_ms": 1794225090254,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+R"
+     },
+     "keys": [
+      "Ctrl+Insert+R"
+     ],
+     "key_times": [
+      1794225089048
+     ],
+     "observation": {
+      "speech_raw": "Document Regions \u001d dialog \u001e \nMove To region start \u001d Button \u001e \nTo activate press spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794225090254,
+     "t_end_ms": 1794225091258,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794225090254
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794225091258,
+     "t_end_ms": 1794225092261,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794225091258
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794225092261,
+     "t_end_ms": 1794225093366,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794225092261
+     ],
+     "observation": {
+      "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794225093366,
+     "t_end_ms": 1794225094471,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794225093366
+     ],
+     "observation": {
+      "speech_raw": "Move To region start \u001d Button \u001e \nTo activate press spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794225094471,
+     "t_end_ms": 1794225095575,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794225094471
+     ],
+     "observation": {
+      "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794225095575,
+     "t_end_ms": 1794225096680,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794225095575
+     ],
+     "observation": {
+      "speech_raw": "Move To region start \u001d Button \u001e \nTo activate press spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794225096680,
+     "t_end_ms": 1794225097684,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794225096680
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

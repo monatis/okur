@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794203947881
+     "t_ms": 1794236023226
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794203949242,
-     "t_end_ms": 1794203950245,
+     "t_start_ms": 1794236024584,
+     "t_end_ms": 1794236025587,
      "action": {
       "type": "key",
       "command": "B"
@@ -31,7 +32,7 @@
       "B"
      ],
      "key_times": [
-      1794203949242
+      1794236024584
      ],
      "observation": {
       "speech_raw": "Count  \u001d Button \u001e ",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794203950245,
-     "t_end_ms": 1794203951249,
+     "t_start_ms": 1794236025587,
+     "t_end_ms": 1794236026591,
      "action": {
       "type": "key",
       "command": "Right"
@@ -51,7 +52,7 @@
       "Right"
      ],
      "key_times": [
-      1794203950245
+      1794236025587
      ],
      "observation": {
       "speech_raw": "o",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794203951249,
-     "t_end_ms": 1794203952252,
+     "t_start_ms": 1794236026591,
+     "t_end_ms": 1794236027595,
      "action": {
       "type": "key",
       "command": "Right"
@@ -71,7 +72,7 @@
       "Right"
      ],
      "key_times": [
-      1794203951249
+      1794236026591
      ],
      "observation": {
       "speech_raw": "u",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794203952252,
-     "t_end_ms": 1794203953256,
+     "t_start_ms": 1794236027595,
+     "t_end_ms": 1794236028599,
      "action": {
       "type": "key",
       "command": "Right"
@@ -91,7 +92,7 @@
       "Right"
      ],
      "key_times": [
-      1794203952252
+      1794236027595
      ],
      "observation": {
       "speech_raw": "n",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794203953256,
-     "t_end_ms": 1794203954259,
+     "t_start_ms": 1794236028599,
+     "t_end_ms": 1794236029603,
      "action": {
       "type": "key",
       "command": "Right"
@@ -111,7 +112,7 @@
       "Right"
      ],
      "key_times": [
-      1794203953256
+      1794236028599
      ],
      "observation": {
       "speech_raw": "t",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794203954259,
-     "t_end_ms": 1794203955264,
+     "t_start_ms": 1794236029603,
+     "t_end_ms": 1794236030607,
      "action": {
       "type": "key",
       "command": "Right"
@@ -131,7 +132,7 @@
       "Right"
      ],
      "key_times": [
-      1794203954259
+      1794236029603
      ],
      "observation": {
       "speech_raw": "\n",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794203955264,
-     "t_end_ms": 1794203956269,
+     "t_start_ms": 1794236030607,
+     "t_end_ms": 1794236031611,
      "action": {
       "type": "key",
       "command": "Right"
@@ -151,7 +152,7 @@
       "Right"
      ],
      "key_times": [
-      1794203955264
+      1794236030607
      ],
      "observation": {
       "speech_raw": "C",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794203956269,
-     "t_end_ms": 1794203957274,
+     "t_start_ms": 1794236031611,
+     "t_end_ms": 1794236032616,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -171,7 +172,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794203956269
+      1794236031611
      ],
      "observation": {
       "speech_raw": "button",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794203957274,
-     "t_end_ms": 1794203958280,
+     "t_start_ms": 1794236032616,
+     "t_end_ms": 1794236033622,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -191,7 +192,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794203957274
+      1794236032616
      ],
      "observation": {
       "speech_raw": "Subscribe",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794203958280,
-     "t_end_ms": 1794203959285,
+     "t_start_ms": 1794236033622,
+     "t_end_ms": 1794236034627,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -211,7 +212,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794203958280
+      1794236033622
      ],
      "observation": {
       "speech_raw": "group",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794203959285,
-     "t_end_ms": 1794203960291,
+     "t_start_ms": 1794236034627,
+     "t_end_ms": 1794236035732,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -231,7 +232,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794203959285
+      1794236034627
      ],
      "observation": {
       "speech_raw": "start",
@@ -241,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794203960291,
-     "t_end_ms": 1794203961295,
+     "t_start_ms": 1794236035732,
+     "t_end_ms": 1794236036737,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -251,7 +252,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794203960291
+      1794236035732
      ],
      "observation": {
       "speech_raw": "Size",
@@ -261,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794203961295,
-     "t_end_ms": 1794203962300,
+     "t_start_ms": 1794236036737,
+     "t_end_ms": 1794236037741,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -271,7 +272,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794203961295
+      1794236036737
      ],
      "observation": {
       "speech_raw": "Small",
@@ -281,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794203962300,
-     "t_end_ms": 1794203963306,
+     "t_start_ms": 1794236037741,
+     "t_end_ms": 1794236038747,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -291,7 +292,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794203962300
+      1794236037741
      ],
      "observation": {
       "speech_raw": "Medium",
@@ -301,8 +302,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794203963306,
-     "t_end_ms": 1794203964311,
+     "t_start_ms": 1794236038747,
+     "t_end_ms": 1794236039752,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -311,7 +312,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794203963306
+      1794236038747
      ],
      "observation": {
       "speech_raw": "group",
@@ -321,8 +322,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794203964311,
-     "t_end_ms": 1794203965316,
+     "t_start_ms": 1794236039752,
+     "t_end_ms": 1794236040757,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -331,7 +332,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794203964311
+      1794236039752
      ],
      "observation": {
       "speech_raw": "end",
@@ -341,8 +342,8 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794203965316,
-     "t_end_ms": 1794203966320,
+     "t_start_ms": 1794236040757,
+     "t_end_ms": 1794236041762,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -351,7 +352,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794203965316
+      1794236040757
      ],
      "observation": {
       "speech_raw": "Size",
@@ -361,8 +362,8 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794203966320,
-     "t_end_ms": 1794203967326,
+     "t_start_ms": 1794236041762,
+     "t_end_ms": 1794236042768,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -371,7 +372,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794203966320
+      1794236041762
      ],
      "observation": {
       "speech_raw": "Notify",
@@ -381,8 +382,8 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794203967326,
-     "t_end_ms": 1794203968331,
+     "t_start_ms": 1794236042768,
+     "t_end_ms": 1794236043773,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -391,7 +392,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794203967326
+      1794236042768
      ],
      "observation": {
       "speech_raw": "me",
@@ -401,8 +402,8 @@
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794203968331,
-     "t_end_ms": 1794203969336,
+     "t_start_ms": 1794236043773,
+     "t_end_ms": 1794236044779,
      "action": {
       "type": "key",
       "command": "Ctrl+Left"
@@ -411,7 +412,7 @@
       "Ctrl+Left"
      ],
      "key_times": [
-      1794203968331
+      1794236043773
      ],
      "observation": {
       "speech_raw": "Notify",
@@ -421,8 +422,8 @@
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794203969336,
-     "t_end_ms": 1794203970341,
+     "t_start_ms": 1794236044779,
+     "t_end_ms": 1794236045784,
      "action": {
       "type": "key",
       "command": "Ctrl+Left"
@@ -431,7 +432,7 @@
       "Ctrl+Left"
      ],
      "key_times": [
-      1794203969336
+      1794236044779
      ],
      "observation": {
       "speech_raw": "Size",
@@ -441,8 +442,8 @@
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794203970341,
-     "t_end_ms": 1794203971347,
+     "t_start_ms": 1794236045784,
+     "t_end_ms": 1794236046790,
      "action": {
       "type": "key",
       "command": "Ctrl+Left"
@@ -451,7 +452,7 @@
       "Ctrl+Left"
      ],
      "key_times": [
-      1794203970341
+      1794236045784
      ],
      "observation": {
       "speech_raw": "end",
@@ -461,8 +462,8 @@
     },
     {
      "step_id": "s23",
-     "t_start_ms": 1794203971347,
-     "t_end_ms": 1794203972352,
+     "t_start_ms": 1794236046790,
+     "t_end_ms": 1794236047796,
      "action": {
       "type": "key",
       "command": "Ctrl+Left"
@@ -471,7 +472,7 @@
       "Ctrl+Left"
      ],
      "key_times": [
-      1794203971347
+      1794236046790
      ],
      "observation": {
       "speech_raw": "group",
@@ -481,8 +482,8 @@
     },
     {
      "step_id": "s24",
-     "t_start_ms": 1794203972352,
-     "t_end_ms": 1794203973356,
+     "t_start_ms": 1794236047796,
+     "t_end_ms": 1794236048801,
      "action": {
       "type": "key",
       "command": "Ctrl+Left"
@@ -491,7 +492,7 @@
       "Ctrl+Left"
      ],
      "key_times": [
-      1794203972352
+      1794236047796
      ],
      "observation": {
       "speech_raw": "Medium",
@@ -501,8 +502,8 @@
     },
     {
      "step_id": "s25",
-     "t_start_ms": 1794203973356,
-     "t_end_ms": 1794203974360,
+     "t_start_ms": 1794236048801,
+     "t_end_ms": 1794236049805,
      "action": {
       "type": "key",
       "command": "B"
@@ -511,7 +512,7 @@
       "B"
      ],
      "key_times": [
-      1794203973356
+      1794236048801
      ],
      "observation": {
       "speech_raw": "wrapping to top\nCount  \u001d Button \u001e ",
@@ -521,8 +522,8 @@
     },
     {
      "step_id": "s26",
-     "t_start_ms": 1794203974360,
-     "t_end_ms": 1794203975364,
+     "t_start_ms": 1794236049805,
+     "t_end_ms": 1794236050810,
      "action": {
       "type": "key",
       "command": "Left"
@@ -531,7 +532,7 @@
       "Left"
      ],
      "key_times": [
-      1794203974360
+      1794236049805
      ],
      "observation": {
       "speech_raw": "\n",
@@ -541,8 +542,8 @@
     },
     {
      "step_id": "s27",
-     "t_start_ms": 1794203975364,
-     "t_end_ms": 1794203976369,
+     "t_start_ms": 1794236050810,
+     "t_end_ms": 1794236051814,
      "action": {
       "type": "key",
       "command": "Left"
@@ -551,7 +552,7 @@
       "Left"
      ],
      "key_times": [
-      1794203975364
+      1794236050810
      ],
      "observation": {
       "speech_raw": ".",
@@ -561,8 +562,8 @@
     },
     {
      "step_id": "s28",
-     "t_start_ms": 1794203976369,
-     "t_end_ms": 1794203977373,
+     "t_start_ms": 1794236051814,
+     "t_end_ms": 1794236052818,
      "action": {
       "type": "key",
       "command": "Left"
@@ -571,7 +572,7 @@
       "Left"
      ],
      "key_times": [
-      1794203976369
+      1794236051814
      ],
      "observation": {
       "speech_raw": "s",

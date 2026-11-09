@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794204167721
+     "t_ms": 1794236262069
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794204169085,
-     "t_end_ms": 1794204170089,
+     "t_start_ms": 1794236263438,
+     "t_end_ms": 1794236264441,
      "action": {
       "type": "key",
       "command": "Down"
@@ -31,7 +32,7 @@
       "Down"
      ],
      "key_times": [
-      1794204169085
+      1794236263438
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e Activation",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794204170089,
-     "t_end_ms": 1794204171092,
+     "t_start_ms": 1794236264441,
+     "t_end_ms": 1794236265445,
      "action": {
       "type": "key",
       "command": "Down"
@@ -51,7 +52,7 @@
       "Down"
      ],
      "key_times": [
-      1794204170089
+      1794236264441
      ],
      "observation": {
       "speech_raw": "Plain text before the controls.",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794204171092,
-     "t_end_ms": 1794204172096,
+     "t_start_ms": 1794236265445,
+     "t_end_ms": 1794236266450,
      "action": {
       "type": "key",
       "command": "Down"
@@ -71,7 +72,7 @@
       "Down"
      ],
      "key_times": [
-      1794204171092
+      1794236265445
      ],
      "observation": {
       "speech_raw": "Count \u001d Button \u001e ",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794204172096,
-     "t_end_ms": 1794204173100,
+     "t_start_ms": 1794236266450,
+     "t_end_ms": 1794236267454,
      "action": {
       "type": "key",
       "command": "Down"
@@ -91,7 +92,7 @@
       "Down"
      ],
      "key_times": [
-      1794204172096
+      1794236266450
      ],
      "observation": {
       "speech_raw": "Custom button \u001d Button \u001e ",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794204173100,
-     "t_end_ms": 1794204174104,
+     "t_start_ms": 1794236267454,
+     "t_end_ms": 1794236268458,
      "action": {
       "type": "key",
       "command": "Down"
@@ -111,7 +112,7 @@
       "Down"
      ],
      "key_times": [
-      1794204173100
+      1794236267454
      ],
      "observation": {
       "speech_raw": "Subscribe \u001d check box \u001e  \u001dnot checked\u001e ",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794204174104,
-     "t_end_ms": 1794204175109,
+     "t_start_ms": 1794236268458,
+     "t_end_ms": 1794236269462,
      "action": {
       "type": "key",
       "command": "Down"
@@ -131,7 +132,7 @@
       "Down"
      ],
      "key_times": [
-      1794204174104
+      1794236268458
      ],
      "observation": {
       "speech_raw": "group start Size",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794204175109,
-     "t_end_ms": 1794204176113,
+     "t_start_ms": 1794236269462,
+     "t_end_ms": 1794236270466,
      "action": {
       "type": "key",
       "command": "Down"
@@ -151,7 +152,7 @@
       "Down"
      ],
      "key_times": [
-      1794204175109
+      1794236269462
      ],
      "observation": {
       "speech_raw": "Small \u001d radio button \u001e  \u001dnot checked\u001e \n1 of 2",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794204176113,
-     "t_end_ms": 1794204177117,
+     "t_start_ms": 1794236270466,
+     "t_end_ms": 1794236271471,
      "action": {
       "type": "key",
       "command": "Down"
@@ -171,7 +172,7 @@
       "Down"
      ],
      "key_times": [
-      1794204176113
+      1794236270466
      ],
      "observation": {
       "speech_raw": "Medium \u001d radio button \u001e  \u001dnot checked\u001e \n2 of 2",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794204177118,
-     "t_end_ms": 1794204178122,
+     "t_start_ms": 1794236271471,
+     "t_end_ms": 1794236272475,
      "action": {
       "type": "key",
       "command": "Down"
@@ -191,7 +192,7 @@
       "Down"
      ],
      "key_times": [
-      1794204177118
+      1794236271471
      ],
      "observation": {
       "speech_raw": "group end Size",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794204178122,
-     "t_end_ms": 1794204179126,
+     "t_start_ms": 1794236272475,
+     "t_end_ms": 1794236273580,
      "action": {
       "type": "key",
       "command": "Down"
@@ -211,7 +212,7 @@
       "Down"
      ],
      "key_times": [
-      1794204178122
+      1794236272475
      ],
      "observation": {
       "speech_raw": "Notify me \u001d check box \u001e  \u001dnot checked\u001e ",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794204179126,
-     "t_end_ms": 1794204180131,
+     "t_start_ms": 1794236273580,
+     "t_end_ms": 1794236274585,
      "action": {
       "type": "key",
       "command": "Down"
@@ -231,7 +232,7 @@
       "Down"
      ],
      "key_times": [
-      1794204179126
+      1794236273580
      ],
      "observation": {
       "speech_raw": "City",
@@ -241,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794204180131,
-     "t_end_ms": 1794204181135,
+     "t_start_ms": 1794236274585,
+     "t_end_ms": 1794236275590,
      "action": {
       "type": "key",
       "command": "Down"
@@ -251,7 +252,7 @@
       "Down"
      ],
      "key_times": [
-      1794204180131
+      1794236274585
      ],
      "observation": {
       "speech_raw": " \u001d Edit \u001e Izmir",
@@ -261,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794204181135,
-     "t_end_ms": 1794204182140,
+     "t_start_ms": 1794236275590,
+     "t_end_ms": 1794236276595,
      "action": {
       "type": "key",
       "command": "Up"
@@ -271,7 +272,7 @@
       "Up"
      ],
      "key_times": [
-      1794204181135
+      1794236275590
      ],
      "observation": {
       "speech_raw": "City",
@@ -281,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794204182140,
-     "t_end_ms": 1794204183144,
+     "t_start_ms": 1794236276595,
+     "t_end_ms": 1794236277599,
      "action": {
       "type": "key",
       "command": "Up"
@@ -291,7 +292,7 @@
       "Up"
      ],
      "key_times": [
-      1794204182140
+      1794236276595
      ],
      "observation": {
       "speech_raw": "Notify me \u001d check box \u001e  \u001dnot checked\u001e ",

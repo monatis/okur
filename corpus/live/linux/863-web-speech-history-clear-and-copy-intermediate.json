@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794201321243
+     "t_ms": 1794232993280
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794201322611,
-     "t_end_ms": 1794201323614,
+     "t_start_ms": 1794232994646,
+     "t_end_ms": 1794232995650,
      "action": {
       "type": "key",
       "command": "Down"
@@ -31,7 +32,7 @@
       "Down"
      ],
      "key_times": [
-      1794201322611
+      1794232994646
      ],
      "observation": {
       "speech_raw": "banner",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794201323614,
-     "t_end_ms": 1794201324619,
+     "t_start_ms": 1794232995650,
+     "t_end_ms": 1794232996654,
      "action": {
       "type": "key",
       "command": "Insert+Space"
@@ -51,7 +52,7 @@
       "Insert+Space"
      ],
      "key_times": [
-      1794201323614
+      1794232995650
      ],
      "observation": {
       "speech_raw": "",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794201324619,
-     "t_end_ms": 1794201325623,
+     "t_start_ms": 1794232996654,
+     "t_end_ms": 1794232997658,
      "action": {
       "type": "key",
       "command": "Ctrl+H"
@@ -71,7 +72,7 @@
       "Ctrl+H"
      ],
      "key_times": [
-      1794201324619
+      1794232996654
      ],
      "observation": {
       "speech_raw": "Copy speech history to clipboard",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794201325623,
-     "t_end_ms": 1794201326628,
+     "t_start_ms": 1794232997658,
+     "t_end_ms": 1794232998662,
      "action": {
       "type": "key",
       "command": "Down"
@@ -91,7 +92,7 @@
       "Down"
      ],
      "key_times": [
-      1794201325623
+      1794232997658
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Riverside Gazette",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794201326628,
-     "t_end_ms": 1794201327633,
+     "t_start_ms": 1794232998662,
+     "t_end_ms": 1794232999667,
      "action": {
       "type": "key",
       "command": "Insert+Space"
@@ -111,7 +112,7 @@
       "Insert+Space"
      ],
      "key_times": [
-      1794201326628
+      1794232998662
      ],
      "observation": {
       "speech_raw": "",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794201327633,
-     "t_end_ms": 1794201328638,
+     "t_start_ms": 1794232999667,
+     "t_end_ms": 1794233000672,
      "action": {
       "type": "key",
       "command": "Shift+H"
@@ -131,7 +132,7 @@
       "Shift+H"
      ],
      "key_times": [
-      1794201327633
+      1794232999667
      ],
      "observation": {
       "speech_raw": "",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794201328638,
-     "t_end_ms": 1794201329643,
+     "t_start_ms": 1794233000672,
+     "t_end_ms": 1794233001676,
      "action": {
       "type": "key",
       "command": "Down"
@@ -151,7 +152,7 @@
       "Down"
      ],
      "key_times": [
-      1794201328638
+      1794233000672
      ],
      "observation": {
       "speech_raw": "Primary navigation region",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794201329643,
-     "t_end_ms": 1794201330648,
+     "t_start_ms": 1794233001676,
+     "t_end_ms": 1794233002680,
      "action": {
       "type": "key",
       "command": "Insert+Space"
@@ -171,7 +172,7 @@
       "Insert+Space"
      ],
      "key_times": [
-      1794201329643
+      1794233001676
      ],
      "observation": {
       "speech_raw": "",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794201330648,
-     "t_end_ms": 1794201331652,
+     "t_start_ms": 1794233002680,
+     "t_end_ms": 1794233003685,
      "action": {
       "type": "key",
       "command": "H"
@@ -191,7 +192,7 @@
       "H"
      ],
      "key_times": [
-      1794201330648
+      1794233002680
      ],
      "observation": {
       "speech_raw": "Speech History",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794201331652,
-     "t_end_ms": 1794201332655,
+     "t_start_ms": 1794233003685,
+     "t_end_ms": 1794233004689,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -211,7 +212,7 @@
       "Escape"
      ],
      "key_times": [
-      1794201331652
+      1794233003685
      ],
      "observation": {
       "speech_raw": "Primary navigation region",

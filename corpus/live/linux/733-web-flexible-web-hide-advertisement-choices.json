@@ -1,0 +1,346 @@
+{
+ "scenario_id": "733-web-flexible-web-hide-advertisement-choices",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794230053724
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794230055084,
+     "t_end_ms": 1794230056088,
+     "action": {
+      "type": "key",
+      "command": "R"
+     },
+     "keys": [
+      "R"
+     ],
+     "key_times": [
+      1794230055084
+     ],
+     "observation": {
+      "speech_raw": "banner",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794230056088,
+     "t_end_ms": 1794230057093,
+     "action": {
+      "type": "key",
+      "command": "R"
+     },
+     "keys": [
+      "R"
+     ],
+     "key_times": [
+      1794230056088
+     ],
+     "observation": {
+      "speech_raw": "Sections navigation region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794230057093,
+     "t_end_ms": 1794230058096,
+     "action": {
+      "type": "key",
+      "command": "R"
+     },
+     "keys": [
+      "R"
+     ],
+     "key_times": [
+      1794230057093
+     ],
+     "observation": {
+      "speech_raw": "Advertisement complementary information",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794230058096,
+     "t_end_ms": 1794230059100,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794230058096
+     ],
+     "observation": {
+      "speech_raw": "Spring sale at Main Street Shoes: two pairs for the price of one.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794230059100,
+     "t_end_ms": 1794230060104,
+     "action": {
+      "type": "key",
+      "command": "Insert+Space"
+     },
+     "keys": [
+      "Insert+Space"
+     ],
+     "key_times": [
+      1794230059100
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794230060104,
+     "t_end_ms": 1794230061108,
+     "action": {
+      "type": "key",
+      "command": "X"
+     },
+     "keys": [
+      "X"
+     ],
+     "key_times": [
+      1794230060104
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794230061108,
+     "t_end_ms": 1794230062112,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")"
+     },
+     "keys": [
+      "Alt+N"
+     ],
+     "key_times": [
+      1794230061108
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794230062112,
+     "t_end_ms": 1794230063117,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")"
+     },
+     "keys": [
+      "Alt+N"
+     ],
+     "key_times": [
+      1794230062112
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794230063117,
+     "t_end_ms": 1794230064122,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")"
+     },
+     "keys": [
+      "Alt+N"
+     ],
+     "key_times": [
+      1794230063117
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794230064122,
+     "t_end_ms": 1794230065126,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794230064122
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e See the sale",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794230065126,
+     "t_end_ms": 1794230066130,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794230065126
+     ],
+     "observation": {
+      "speech_raw": "Advertisement complementary information end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794230066130,
+     "t_end_ms": 1794230067134,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794230066130
+     ],
+     "observation": {
+      "speech_raw": "main region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794230067134,
+     "t_end_ms": 1794230068138,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794230067134
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e Weekend events",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794230068138,
+     "t_end_ms": 1794230069143,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794230068138
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794230069143,
+     "t_end_ms": 1794230070147,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794230069143
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794230070147,
+     "t_end_ms": 1794230071151,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794230070147
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e Weekend events",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

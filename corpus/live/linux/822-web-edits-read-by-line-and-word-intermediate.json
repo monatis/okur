@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ccb4c70a"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794206427175
+     "t_ms": 1794232029916
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794206428540,
-     "t_end_ms": 1794206429543,
+     "t_start_ms": 1794232031281,
+     "t_end_ms": 1794232032285,
      "action": {
       "type": "key",
       "command": "Down"
@@ -31,7 +32,7 @@
       "Down"
      ],
      "key_times": [
-      1794206428540
+      1794232031281
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e Edits and marks",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794206429543,
-     "t_end_ms": 1794206430547,
+     "t_start_ms": 1794232032285,
+     "t_end_ms": 1794232033289,
      "action": {
       "type": "key",
       "command": "Down"
@@ -51,7 +52,7 @@
       "Down"
      ],
      "key_times": [
-      1794206429543
+      1794232032285
      ],
      "observation": {
       "speech_raw": "The price was  \u001dDeletion \u001e twelve \u001dend Deletion \u001e   \u001dInsertion \u001e ten \u001dend Insertion \u001e  dollars.",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794206430547,
-     "t_end_ms": 1794206431551,
+     "t_start_ms": 1794232033289,
+     "t_end_ms": 1794232034293,
      "action": {
       "type": "key",
       "command": "Down"
@@ -71,7 +72,7 @@
       "Down"
      ],
      "key_times": [
-      1794206430547
+      1794232033289
      ],
      "observation": {
       "speech_raw": " \u001dInsertion \u001e A whole line inserted.",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794206431551,
-     "t_end_ms": 1794206432555,
+     "t_start_ms": 1794232034293,
+     "t_end_ms": 1794232035297,
      "action": {
       "type": "key",
       "command": "Down"
@@ -91,7 +92,7 @@
       "Down"
      ],
      "key_times": [
-      1794206431551
+      1794232034293
      ],
      "observation": {
       "speech_raw": " \u001dend Insertion \u001e Search for  \u001dmark \u001e library \u001dend mark \u001e  found it.",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794206432555,
-     "t_end_ms": 1794206433558,
+     "t_start_ms": 1794232035297,
+     "t_end_ms": 1794232036300,
      "action": {
       "type": "key",
       "command": "Down"
@@ -111,7 +112,7 @@
       "Down"
      ],
      "key_times": [
-      1794206432555
+      1794232035297
      ],
      "observation": {
       "speech_raw": "A mole holds 10 \u001dsuperscript \u001e 23 \u001dend superscript \u001e  particles.",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794206433558,
-     "t_end_ms": 1794206434563,
+     "t_start_ms": 1794232036300,
+     "t_end_ms": 1794232037304,
      "action": {
       "type": "key",
       "command": "Down"
@@ -131,7 +132,7 @@
       "Down"
      ],
      "key_times": [
-      1794206433558
+      1794232036300
      ],
      "observation": {
       "speech_raw": "Another plain line at the end.",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794206434563,
-     "t_end_ms": 1794206435568,
+     "t_start_ms": 1794232037304,
+     "t_end_ms": 1794232038309,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -151,7 +152,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794206434563
+      1794232037304
      ],
      "observation": {
       "speech_raw": "Edits and Marks",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794206435568,
-     "t_end_ms": 1794206436573,
+     "t_start_ms": 1794232038309,
+     "t_end_ms": 1794232039313,
      "action": {
       "type": "key",
       "command": "Down"
@@ -171,7 +172,7 @@
       "Down"
      ],
      "key_times": [
-      1794206435568
+      1794232038309
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e Edits and marks",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794206436573,
-     "t_end_ms": 1794206437577,
+     "t_start_ms": 1794232039313,
+     "t_end_ms": 1794232040317,
      "action": {
       "type": "key",
       "command": "Down"
@@ -191,7 +192,7 @@
       "Down"
      ],
      "key_times": [
-      1794206436573
+      1794232039313
      ],
      "observation": {
       "speech_raw": "The price was  \u001dDeletion \u001e twelve \u001dend Deletion \u001e   \u001dInsertion \u001e ten \u001dend Insertion \u001e  dollars.",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794206437577,
-     "t_end_ms": 1794206438582,
+     "t_start_ms": 1794232040317,
+     "t_end_ms": 1794232041323,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -211,7 +212,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794206437577
+      1794232040317
      ],
      "observation": {
       "speech_raw": "price",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794206438582,
-     "t_end_ms": 1794206439587,
+     "t_start_ms": 1794232041323,
+     "t_end_ms": 1794232042328,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -231,7 +232,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794206438582
+      1794232041323
      ],
      "observation": {
       "speech_raw": "was",
@@ -241,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794206439587,
-     "t_end_ms": 1794206440592,
+     "t_start_ms": 1794232042328,
+     "t_end_ms": 1794232043334,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -251,7 +252,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794206439587
+      1794232042328
      ],
      "observation": {
       "speech_raw": " \u001dDeletion \u001e twelve",
@@ -261,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794206440592,
-     "t_end_ms": 1794206441598,
+     "t_start_ms": 1794232043334,
+     "t_end_ms": 1794232044338,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -271,7 +272,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794206440592
+      1794232043334
      ],
      "observation": {
       "speech_raw": " \u001dInsertion \u001e ten",
@@ -281,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794206441598,
-     "t_end_ms": 1794206442603,
+     "t_start_ms": 1794232044338,
+     "t_end_ms": 1794232045343,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -291,7 +292,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794206441598
+      1794232044338
      ],
      "observation": {
       "speech_raw": " \u001dend Insertion \u001e dollars",
@@ -301,8 +302,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794206442603,
-     "t_end_ms": 1794206443608,
+     "t_start_ms": 1794232045343,
+     "t_end_ms": 1794232046348,
      "action": {
       "type": "key",
       "command": "Down"
@@ -311,7 +312,7 @@
       "Down"
      ],
      "key_times": [
-      1794206442603
+      1794232045343
      ],
      "observation": {
       "speech_raw": " \u001dInsertion \u001e A whole line inserted.",
@@ -321,8 +322,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794206443608,
-     "t_end_ms": 1794206444612,
+     "t_start_ms": 1794232046348,
+     "t_end_ms": 1794232047352,
      "action": {
       "type": "key",
       "command": "Down"
@@ -331,7 +332,7 @@
       "Down"
      ],
      "key_times": [
-      1794206443608
+      1794232046348
      ],
      "observation": {
       "speech_raw": " \u001dend Insertion \u001e Search for  \u001dmark \u001e library \u001dend mark \u001e  found it.",
@@ -341,8 +342,8 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794206444612,
-     "t_end_ms": 1794206445616,
+     "t_start_ms": 1794232047352,
+     "t_end_ms": 1794232048358,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -351,7 +352,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794206444612
+      1794232047352
      ],
      "observation": {
       "speech_raw": "for",
@@ -361,8 +362,8 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794206445616,
-     "t_end_ms": 1794206446621,
+     "t_start_ms": 1794232048358,
+     "t_end_ms": 1794232049362,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -371,7 +372,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794206445616
+      1794232048358
      ],
      "observation": {
       "speech_raw": " \u001dmark \u001e library",
@@ -381,8 +382,8 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794206446621,
-     "t_end_ms": 1794206447627,
+     "t_start_ms": 1794232049362,
+     "t_end_ms": 1794232050367,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -391,7 +392,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794206446621
+      1794232049362
      ],
      "observation": {
       "speech_raw": " \u001dend mark \u001e found",
@@ -401,8 +402,8 @@
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794206447627,
-     "t_end_ms": 1794206448631,
+     "t_start_ms": 1794232050367,
+     "t_end_ms": 1794232051371,
      "action": {
       "type": "key",
       "command": "Down"
@@ -411,7 +412,7 @@
       "Down"
      ],
      "key_times": [
-      1794206447627
+      1794232050367
      ],
      "observation": {
       "speech_raw": "A mole holds 10 \u001dsuperscript \u001e 23 \u001dend superscript \u001e  particles.",
@@ -421,8 +422,8 @@
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794206448631,
-     "t_end_ms": 1794206449637,
+     "t_start_ms": 1794232051371,
+     "t_end_ms": 1794232052376,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -431,7 +432,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794206448631
+      1794232051371
      ],
      "observation": {
       "speech_raw": "mole",
@@ -441,8 +442,8 @@
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794206449637,
-     "t_end_ms": 1794206450642,
+     "t_start_ms": 1794232052376,
+     "t_end_ms": 1794232053381,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -451,7 +452,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794206449637
+      1794232052376
      ],
      "observation": {
       "speech_raw": "holds",
@@ -461,8 +462,8 @@
     },
     {
      "step_id": "s23",
-     "t_start_ms": 1794206450642,
-     "t_end_ms": 1794206451647,
+     "t_start_ms": 1794232053381,
+     "t_end_ms": 1794232054387,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -471,7 +472,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794206450642
+      1794232053381
      ],
      "observation": {
       "speech_raw": "10 \u001dsuperscript \u001e 23",
@@ -481,8 +482,8 @@
     },
     {
      "step_id": "s24",
-     "t_start_ms": 1794206451647,
-     "t_end_ms": 1794206452755,
+     "t_start_ms": 1794232054387,
+     "t_end_ms": 1794232055392,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -491,7 +492,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794206451647
+      1794232054387
      ],
      "observation": {
       "speech_raw": " \u001dend superscript \u001e particles",

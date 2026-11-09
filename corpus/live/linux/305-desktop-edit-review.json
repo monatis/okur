@@ -1,0 +1,326 @@
+{
+ "scenario_id": "305-desktop-edit-review",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": null,
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "application": "corpus/fixtures/linux/desktop-forms.py",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "End",
+     "t_ms": 1794222671025
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794222672384,
+     "t_end_ms": 1794222673389,
+     "action": {
+      "type": "key",
+      "command": "Home"
+     },
+     "keys": [
+      "Home"
+     ],
+     "key_times": [
+      1794222672384
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794222673389,
+     "t_end_ms": 1794222674392,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794222673389
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794222674392,
+     "t_end_ms": 1794222675398,
+     "action": {
+      "type": "key",
+      "command": "Shift+Right"
+     },
+     "keys": [
+      "Shift+Right"
+     ],
+     "key_times": [
+      1794222674392
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794222675398,
+     "t_end_ms": 1794222676404,
+     "action": {
+      "type": "key",
+      "command": "Shift+End"
+     },
+     "keys": [
+      "Shift+End"
+     ],
+     "key_times": [
+      1794222675398
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794222676404,
+     "t_end_ms": 1794222677408,
+     "action": {
+      "type": "key",
+      "command": "End"
+     },
+     "keys": [
+      "End"
+     ],
+     "key_times": [
+      1794222676404
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794222677408,
+     "t_end_ms": 1794222678413,
+     "action": {
+      "type": "key",
+      "command": "Backspace"
+     },
+     "keys": [
+      "Backspace"
+     ],
+     "key_times": [
+      1794222677408
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794222678413,
+     "t_end_ms": 1794222679417,
+     "action": {
+      "type": "key",
+      "command": "Home"
+     },
+     "keys": [
+      "Home"
+     ],
+     "key_times": [
+      1794222678413
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794222679417,
+     "t_end_ms": 1794222680421,
+     "action": {
+      "type": "key",
+      "command": "Delete"
+     },
+     "keys": [
+      "Delete"
+     ],
+     "key_times": [
+      1794222679417
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794222680421,
+     "t_end_ms": 1794222681426,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794222680421
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794222681426,
+     "t_end_ms": 1794222682430,
+     "action": {
+      "type": "key",
+      "command": "B"
+     },
+     "keys": [
+      "B"
+     ],
+     "key_times": [
+      1794222681426
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794222682430,
+     "t_end_ms": 1794222683435,
+     "action": {
+      "type": "key",
+      "command": "O"
+     },
+     "keys": [
+      "O"
+     ],
+     "key_times": [
+      1794222682430
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794222683435,
+     "t_end_ms": 1794222684439,
+     "action": {
+      "type": "key",
+      "command": "Space"
+     },
+     "keys": [
+      "Space"
+     ],
+     "key_times": [
+      1794222683435
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794222684439,
+     "t_end_ms": 1794222685444,
+     "action": {
+      "type": "key",
+      "command": "Shift+Home"
+     },
+     "keys": [
+      "Shift+Home"
+     ],
+     "key_times": [
+      1794222684439
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794222685444,
+     "t_end_ms": 1794222686549,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794222685444
+     ],
+     "observation": {
+      "speech_raw": "SR Desktop Fixture\nNotes: \u001d Edit \u001e \nType in text.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794222686549,
+     "t_end_ms": 1794222687554,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794222686549
+     ],
+     "observation": {
+      "speech_raw": "Notes:  \u001d Edit \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

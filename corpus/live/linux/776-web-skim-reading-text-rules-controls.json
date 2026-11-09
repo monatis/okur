@@ -1,0 +1,426 @@
+{
+ "scenario_id": "776-web-skim-reading-text-rules-controls",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794231133187
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794231134549,
+     "t_end_ms": 1794231135556,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Shift+Insert+Down"
+     },
+     "keys": [
+      "Ctrl+Shift+Insert+Down"
+     ],
+     "key_times": [
+      1794231134549
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794231135556,
+     "t_end_ms": 1794231136560,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794231135556
+     ],
+     "observation": {
+      "speech_raw": "banner",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794231136560,
+     "t_end_ms": 1794231137564,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794231136560
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Riverside Gazette",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794231137564,
+     "t_end_ms": 1794231138868,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794231137564
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours - Riverside Gazette\n\u2022 \u001d same page link \u001e News\nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794231138868,
+     "t_end_ms": 1794231139972,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794231138868
+     ],
+     "observation": {
+      "speech_raw": "Sports  \u001d same page link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794231139973,
+     "t_end_ms": 1794231141077,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794231139973
+     ],
+     "observation": {
+      "speech_raw": "Culture  \u001d same page link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794231141077,
+     "t_end_ms": 1794231142182,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794231141077
+     ],
+     "observation": {
+      "speech_raw": "Opinion  \u001d same page link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794231142182,
+     "t_end_ms": 1794231143287,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794231142182
+     ],
+     "observation": {
+      "speech_raw": " \u001d MainRegion \u001e \nMaria Lopez  \u001d same page link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794231143287,
+     "t_end_ms": 1794231144391,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794231143287
+     ],
+     "observation": {
+      "speech_raw": " \u001d list \u001e \nwith 3 items\nstudy rooms  \u001d same page link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794231144391,
+     "t_end_ms": 1794231145495,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794231144391
+     ],
+     "observation": {
+      "speech_raw": "Details\nDirections  \u001d same page link \u001e \ncolumn 3 row 2\nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794231145495,
+     "t_end_ms": 1794231146599,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794231145495
+     ],
+     "observation": {
+      "speech_raw": "Directions  \u001d same page link \u001e \nRow 3\nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794231146599,
+     "t_end_ms": 1794231147703,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794231146599
+     ],
+     "observation": {
+      "speech_raw": "Related stories \u001d ComplementaryRegion \u001e \n \u001d list \u001e \nwith 2 items\nCouncil approves library budget  \u001d same page link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794231147703,
+     "t_end_ms": 1794231148808,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794231147703
+     ],
+     "observation": {
+      "speech_raw": "Spring book fair returns  \u001d same page link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794231148808,
+     "t_end_ms": 1794231149914,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Shift+Tab\")"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794231148808
+     ],
+     "observation": {
+      "speech_raw": "Council approves library budget  \u001d same page link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794231149914,
+     "t_end_ms": 1794231151019,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Shift+Tab\")"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794231149914
+     ],
+     "observation": {
+      "speech_raw": " \u001d MainRegion \u001e \nDetails\nDirections  \u001d same page link \u001e \ncolumn 3 row 3\nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794231151019,
+     "t_end_ms": 1794231152124,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Shift+Tab\")"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794231151019
+     ],
+     "observation": {
+      "speech_raw": "Directions  \u001d same page link \u001e \nRow 2\nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s17",
+     "t_start_ms": 1794231152124,
+     "t_end_ms": 1794231153128,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"UpArrow\")"
+     },
+     "keys": [
+      "UpArrow"
+     ],
+     "key_times": [
+      1794231152124
+     ],
+     "observation": {
+      "speech_raw": "9 a.m. to 9 p.m.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s18",
+     "t_start_ms": 1794231153128,
+     "t_end_ms": 1794231154133,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"UpArrow\")"
+     },
+     "keys": [
+      "UpArrow"
+     ],
+     "key_times": [
+      1794231153128
+     ],
+     "observation": {
+      "speech_raw": "Central",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s19",
+     "t_start_ms": 1794231154133,
+     "t_end_ms": 1794231155138,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+C\")"
+     },
+     "keys": [
+      "Alt+C"
+     ],
+     "key_times": [
+      1794231154133
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s20",
+     "t_start_ms": 1794231155138,
+     "t_end_ms": 1794231156142,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794231155138
+     ],
+     "observation": {
+      "speech_raw": "Central",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

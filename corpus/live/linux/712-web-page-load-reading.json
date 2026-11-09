@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794199512792
+     "t_ms": 1794229157682
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794199514153,
-     "t_end_ms": 1794199515256,
+     "t_start_ms": 1794229159049,
+     "t_end_ms": 1794229160153,
      "action": {
       "type": "key",
       "command": "F5"
@@ -31,7 +32,7 @@
       "F5"
      ],
      "key_times": [
-      1794199514153
+      1794229159049
      ],
      "observation": {
       "speech_raw": "Document Reading Reference Fixture  \u001d document \u001e\nPage has 1heading and no links\nDocument Reading Reference Fixture\n \u001d heading level 1 \u001e The Accessibility Engine Specification\nThe screen reader engine parses the document object model into a clean virtual buffer.\nEngine components operate deterministically across synthetic speech pipelines. Speed and accuracy remain paramount.\nRust provides memory safety without garbage collection latency. This ensures predictable audio delivery.\ndelivery",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794199515256,
-     "t_end_ms": 1794199516261,
+     "t_start_ms": 1794229160154,
+     "t_end_ms": 1794229161158,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -51,7 +52,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794199515256
+      1794229160154
      ],
      "observation": {
       "speech_raw": "Rust provides memory safety without garbage collection latency. This ensures predictable audio delivery.",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794199516261,
-     "t_end_ms": 1794199517265,
+     "t_start_ms": 1794229161158,
+     "t_end_ms": 1794229162162,
      "action": {
       "type": "key",
       "command": "Down"
@@ -71,7 +72,7 @@
       "Down"
      ],
      "key_times": [
-      1794199516261
+      1794229161158
      ],
      "observation": {
       "speech_raw": "Rust provides memory safety without garbage collection latency. This ensures predictable audio delivery.",

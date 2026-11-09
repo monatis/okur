@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794202302398
+     "t_ms": 1794233976818
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794202303765,
-     "t_end_ms": 1794202304869,
+     "t_start_ms": 1794233978184,
+     "t_end_ms": 1794233979187,
      "action": {
       "type": "key",
       "command": "L"
@@ -31,7 +32,7 @@
       "L"
      ],
      "key_times": [
-      1794202303765
+      1794233978184
      ],
      "observation": {
       "speech_raw": "list of 3 items",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794202304869,
-     "t_end_ms": 1794202305874,
+     "t_start_ms": 1794233979187,
+     "t_end_ms": 1794233980192,
      "action": {
       "type": "key",
       "command": "Shift+Period"
@@ -51,7 +52,7 @@
       "Shift+Period"
      ],
      "key_times": [
-      1794202304869
+      1794233979187
      ],
      "observation": {
       "speech_raw": "list end",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794202305874,
-     "t_end_ms": 1794202306878,
+     "t_start_ms": 1794233980192,
+     "t_end_ms": 1794233981196,
      "action": {
       "type": "key",
       "command": "Shift+Comma"
@@ -71,7 +72,7 @@
       "Shift+Comma"
      ],
      "key_times": [
-      1794202305874
+      1794233980192
      ],
      "observation": {
       "speech_raw": "list of 3 items",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794202306878,
-     "t_end_ms": 1794202307881,
+     "t_start_ms": 1794233981196,
+     "t_end_ms": 1794233982199,
      "action": {
       "type": "key",
       "command": "L"
@@ -91,7 +92,7 @@
       "L"
      ],
      "key_times": [
-      1794202306878
+      1794233981196
      ],
      "observation": {
       "speech_raw": "list of 2 items",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794202307881,
-     "t_end_ms": 1794202308886,
+     "t_start_ms": 1794233982199,
+     "t_end_ms": 1794233983203,
      "action": {
       "type": "key",
       "command": "Down"
@@ -111,7 +112,7 @@
       "Down"
      ],
      "key_times": [
-      1794202307881
+      1794233982199
      ],
      "observation": {
       "speech_raw": "\u2022 First item",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794202308886,
-     "t_end_ms": 1794202309891,
+     "t_start_ms": 1794233983203,
+     "t_end_ms": 1794233984208,
      "action": {
       "type": "key",
       "command": "Shift+Period"
@@ -131,7 +132,7 @@
       "Shift+Period"
      ],
      "key_times": [
-      1794202308886
+      1794233983203
      ],
      "observation": {
       "speech_raw": "list end",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794202309891,
-     "t_end_ms": 1794202310896,
+     "t_start_ms": 1794233984208,
+     "t_end_ms": 1794233985213,
      "action": {
       "type": "key",
       "command": "Shift+Comma"
@@ -151,7 +152,7 @@
       "Shift+Comma"
      ],
      "key_times": [
-      1794202309891
+      1794233984208
      ],
      "observation": {
       "speech_raw": "list of 2 items",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794202310896,
-     "t_end_ms": 1794202311902,
+     "t_start_ms": 1794233985213,
+     "t_end_ms": 1794233986218,
      "action": {
       "type": "key",
       "command": "Alt+Win+End"
@@ -171,7 +172,7 @@
       "Alt+Win+End"
      ],
      "key_times": [
-      1794202310896
+      1794233985213
      ],
      "observation": {
       "speech_raw": "list end",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794202311902,
-     "t_end_ms": 1794202313008,
+     "t_start_ms": 1794233986218,
+     "t_end_ms": 1794233987224,
      "action": {
       "type": "key",
       "command": "Alt+Win+Home"
@@ -191,7 +192,7 @@
       "Alt+Win+Home"
      ],
      "key_times": [
-      1794202311902
+      1794233986218
      ],
      "observation": {
       "speech_raw": "list of 2 items",

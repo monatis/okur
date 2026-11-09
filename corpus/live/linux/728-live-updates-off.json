@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ebcc22e6"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794212147347
+     "t_ms": 1794229886772
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794212148713,
-     "t_end_ms": 1794212149717,
+     "t_start_ms": 1794229888139,
+     "t_end_ms": 1794229889143,
      "action": {
       "type": "key",
       "command": "B"
@@ -32,7 +32,7 @@
       "B"
      ],
      "key_times": [
-      1794212148713
+      1794229888139
      ],
      "observation": {
       "speech_raw": "Send message  \u001d Button \u001e ",
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794212149717,
-     "t_end_ms": 1794212150921,
+     "t_start_ms": 1794229889143,
+     "t_end_ms": 1794229890347,
      "action": {
       "type": "key",
       "command": "Enter"
@@ -52,7 +52,7 @@
       "Enter"
      ],
      "key_times": [
-      1794212149717
+      1794229889143
      ],
      "observation": {
       "speech_raw": "Team Chat - Live Updates Fixture\nSend message  \u001d Button \u001e \nTo activate press Enter.\nMessages\nYou: Message 1\nMessage 1 sent",
@@ -62,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794212150921,
-     "t_end_ms": 1794212152126,
+     "t_start_ms": 1794229890347,
+     "t_end_ms": 1794229891552,
      "action": {
       "type": "key",
       "command": "Enter"
@@ -72,18 +72,18 @@
       "Enter"
      ],
      "key_times": [
-      1794212150921
+      1794229890347
      ],
      "observation": {
-      "speech_raw": "Message 2 sent\nMessages\nYou: Message 2",
+      "speech_raw": "Messages\nYou: Message 2\nMessage 2 sent",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794212152126,
-     "t_end_ms": 1794212153132,
+     "t_start_ms": 1794229891552,
+     "t_end_ms": 1794229892556,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -92,7 +92,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794212152126
+      1794229891552
      ],
      "observation": {
       "speech_raw": "Team Chat - Live Updates Fixture",
@@ -102,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794212153132,
-     "t_end_ms": 1794212154136,
+     "t_start_ms": 1794229892556,
+     "t_end_ms": 1794229893560,
      "action": {
       "type": "key",
       "command": "Down"
@@ -112,7 +112,7 @@
       "Down"
      ],
      "key_times": [
-      1794212153132
+      1794229892556
      ],
      "observation": {
       "speech_raw": "main region",
@@ -122,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794212154136,
-     "t_end_ms": 1794212155140,
+     "t_start_ms": 1794229893560,
+     "t_end_ms": 1794229894563,
      "action": {
       "type": "key",
       "command": "Down"
@@ -132,7 +132,7 @@
       "Down"
      ],
      "key_times": [
-      1794212154136
+      1794229893560
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e Team chat",
@@ -142,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794212155140,
-     "t_end_ms": 1794212156145,
+     "t_start_ms": 1794229894563,
+     "t_end_ms": 1794229895568,
      "action": {
       "type": "key",
       "command": "Down"
@@ -152,7 +152,7 @@
       "Down"
      ],
      "key_times": [
-      1794212155140
+      1794229894563
      ],
      "observation": {
       "speech_raw": "group start Messages",
@@ -162,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794212156145,
-     "t_end_ms": 1794212157150,
+     "t_start_ms": 1794229895568,
+     "t_end_ms": 1794229896573,
      "action": {
       "type": "key",
       "command": "Down"
@@ -172,7 +172,7 @@
       "Down"
      ],
      "key_times": [
-      1794212156145
+      1794229895568
      ],
      "observation": {
       "speech_raw": "Ada: Good morning",
@@ -182,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794212157150,
-     "t_end_ms": 1794212158154,
+     "t_start_ms": 1794229896573,
+     "t_end_ms": 1794229897577,
      "action": {
       "type": "key",
       "command": "Down"
@@ -192,7 +192,7 @@
       "Down"
      ],
      "key_times": [
-      1794212157150
+      1794229896573
      ],
      "observation": {
       "speech_raw": "You: Message 1",
@@ -202,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794212158154,
-     "t_end_ms": 1794212159158,
+     "t_start_ms": 1794229897577,
+     "t_end_ms": 1794229898581,
      "action": {
       "type": "key",
       "command": "Down"
@@ -212,7 +212,7 @@
       "Down"
      ],
      "key_times": [
-      1794212158154
+      1794229897577
      ],
      "observation": {
       "speech_raw": "You: Message 2",

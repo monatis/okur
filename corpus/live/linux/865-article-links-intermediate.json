@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794201389459
+     "t_ms": 1794233061405
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794201390828,
-     "t_end_ms": 1794201391831,
+     "t_start_ms": 1794233062768,
+     "t_end_ms": 1794233063772,
      "action": {
       "type": "key",
       "command": "U"
@@ -31,7 +32,7 @@
       "U"
      ],
      "key_times": [
-      1794201390828
+      1794233062768
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Riverside Gazette",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794201391831,
-     "t_end_ms": 1794201392835,
+     "t_start_ms": 1794233063772,
+     "t_end_ms": 1794233064776,
      "action": {
       "type": "key",
       "command": "U"
@@ -51,7 +52,7 @@
       "U"
      ],
      "key_times": [
-      1794201391831
+      1794233063772
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e News",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794201392835,
-     "t_end_ms": 1794201393838,
+     "t_start_ms": 1794233064776,
+     "t_end_ms": 1794233065780,
      "action": {
       "type": "key",
       "command": "U"
@@ -71,7 +72,7 @@
       "U"
      ],
      "key_times": [
-      1794201392835
+      1794233064776
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Sports",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794201393838,
-     "t_end_ms": 1794201394842,
+     "t_start_ms": 1794233065780,
+     "t_end_ms": 1794233066784,
      "action": {
       "type": "key",
       "command": "U"
@@ -91,7 +92,7 @@
       "U"
      ],
      "key_times": [
-      1794201393838
+      1794233065780
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Culture",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794201394842,
-     "t_end_ms": 1794201395846,
+     "t_start_ms": 1794233066784,
+     "t_end_ms": 1794233067787,
      "action": {
       "type": "key",
       "command": "U"
@@ -111,7 +112,7 @@
       "U"
      ],
      "key_times": [
-      1794201394842
+      1794233066784
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Opinion",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794201395846,
-     "t_end_ms": 1794201396851,
+     "t_start_ms": 1794233067787,
+     "t_end_ms": 1794233068792,
      "action": {
       "type": "key",
       "command": "U"
@@ -131,7 +132,7 @@
       "U"
      ],
      "key_times": [
-      1794201395846
+      1794233067787
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Maria Lopez,",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794201396851,
-     "t_end_ms": 1794201397854,
+     "t_start_ms": 1794233068792,
+     "t_end_ms": 1794233069796,
      "action": {
       "type": "key",
       "command": "U"
@@ -151,7 +152,7 @@
       "U"
      ],
      "key_times": [
-      1794201396851
+      1794233068792
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e study rooms",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794201397854,
-     "t_end_ms": 1794201398858,
+     "t_start_ms": 1794233069796,
+     "t_end_ms": 1794233070800,
      "action": {
       "type": "key",
       "command": "U"
@@ -171,7 +172,7 @@
       "U"
      ],
      "key_times": [
-      1794201397854
+      1794233069796
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Directions",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794201398858,
-     "t_end_ms": 1794201399863,
+     "t_start_ms": 1794233070800,
+     "t_end_ms": 1794233071803,
      "action": {
       "type": "key",
       "command": "U"
@@ -191,7 +192,7 @@
       "U"
      ],
      "key_times": [
-      1794201398858
+      1794233070800
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Directions",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794201399863,
-     "t_end_ms": 1794201400867,
+     "t_start_ms": 1794233071803,
+     "t_end_ms": 1794233072808,
      "action": {
       "type": "key",
       "command": "U"
@@ -211,7 +212,7 @@
       "U"
      ],
      "key_times": [
-      1794201399863
+      1794233071803
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Council approves library budget",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794201400867,
-     "t_end_ms": 1794201401872,
+     "t_start_ms": 1794233072808,
+     "t_end_ms": 1794233073811,
      "action": {
       "type": "key",
       "command": "U"
@@ -231,7 +232,7 @@
       "U"
      ],
      "key_times": [
-      1794201400867
+      1794233072808
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Spring book fair returns",
@@ -241,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794201401872,
-     "t_end_ms": 1794201402878,
+     "t_start_ms": 1794233073811,
+     "t_end_ms": 1794233074816,
      "action": {
       "type": "key",
       "command": "Shift+U"
@@ -251,7 +252,7 @@
       "Shift+U"
      ],
      "key_times": [
-      1794201401872
+      1794233073811
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Council approves library budget",
@@ -261,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794201402878,
-     "t_end_ms": 1794201403883,
+     "t_start_ms": 1794233074816,
+     "t_end_ms": 1794233075821,
      "action": {
       "type": "key",
       "command": "Shift+U"
@@ -271,7 +272,7 @@
       "Shift+U"
      ],
      "key_times": [
-      1794201402878
+      1794233074816
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Directions",

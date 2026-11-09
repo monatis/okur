@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794202365759
+     "t_ms": 1794234040662
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794202367124,
-     "t_end_ms": 1794202368130,
+     "t_start_ms": 1794234042041,
+     "t_end_ms": 1794234043045,
      "action": {
       "type": "key",
       "command": "Alt+Insert+End"
@@ -31,7 +32,7 @@
       "Alt+Insert+End"
      ],
      "key_times": [
-      1794202367124
+      1794234042041
      ],
      "observation": {
       "speech_raw": "Related stories\n \u001d heading level 2 \u001e",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794202368130,
-     "t_end_ms": 1794202369135,
+     "t_start_ms": 1794234043045,
+     "t_end_ms": 1794234044051,
      "action": {
       "type": "key",
       "command": "Alt+Insert+Home"
@@ -51,7 +52,7 @@
       "Alt+Insert+Home"
      ],
      "key_times": [
-      1794202368130
+      1794234043045
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours\n \u001d heading level 1 \u001e",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794202369135,
-     "t_end_ms": 1794202370141,
+     "t_start_ms": 1794234044051,
+     "t_end_ms": 1794234045059,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Insert+Shift+2"
@@ -71,7 +72,7 @@
       "Ctrl+Alt+Insert+Shift+2"
      ],
      "key_times": [
-      1794202369135
+      1794234044051
      ],
      "observation": {
       "speech_raw": "Related stories\n \u001d heading level 2 \u001e",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794202370141,
-     "t_end_ms": 1794202371146,
+     "t_start_ms": 1794234045059,
+     "t_end_ms": 1794234046065,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Insert+2"
@@ -91,7 +92,7 @@
       "Ctrl+Alt+Insert+2"
      ],
      "key_times": [
-      1794202370141
+      1794234045059
      ],
      "observation": {
       "speech_raw": "What changes\n \u001d heading level 2 \u001e",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794202371146,
-     "t_end_ms": 1794202372153,
+     "t_start_ms": 1794234046065,
+     "t_end_ms": 1794234047070,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Insert+3"
@@ -111,7 +112,7 @@
       "Ctrl+Alt+Insert+3"
      ],
      "key_times": [
-      1794202371146
+      1794234046065
      ],
      "observation": {
       "speech_raw": "Opening schedule \u001d heading level 2 \u001e \nWhat readers said\n \u001d heading level 3 \u001e",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794202372153,
-     "t_end_ms": 1794202373160,
+     "t_start_ms": 1794234047070,
+     "t_end_ms": 1794234048077,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Insert+Shift+3"
@@ -131,7 +132,7 @@
       "Ctrl+Alt+Insert+Shift+3"
      ],
      "key_times": [
-      1794202372153
+      1794234047070
      ],
      "observation": {
       "speech_raw": "What readers said\n \u001d heading level 3 \u001e",

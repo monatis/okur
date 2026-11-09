@@ -1,0 +1,370 @@
+{
+ "scenario_id": "590-desktop-state-changes-advanced",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": null,
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "application": "corpus/fixtures/linux/desktop-forms.py",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Tab",
+     "t_ms": 1794225178098
+    },
+    {
+     "key": "Tab",
+     "t_ms": 1794225178450
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794225179754,
+     "t_end_ms": 1794225180859,
+     "action": {
+      "type": "key",
+      "command": "Space"
+     },
+     "keys": [
+      "Space"
+     ],
+     "key_times": [
+      1794225179754
+     ],
+     "observation": {
+      "speech_raw": "\u001dnot checked\u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794225180859,
+     "t_end_ms": 1794225181963,
+     "action": {
+      "type": "key",
+      "command": "Space"
+     },
+     "keys": [
+      "Space"
+     ],
+     "key_times": [
+      1794225180859
+     ],
+     "observation": {
+      "speech_raw": "\u001dchecked\u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794225181963,
+     "t_end_ms": 1794225183068,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794225181963
+     ],
+     "observation": {
+      "speech_raw": "Remember me \u001d check box \u001e  \u001dnot checked\u001e \nTo check press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794225183068,
+     "t_end_ms": 1794225184173,
+     "action": {
+      "type": "key",
+      "command": "Space"
+     },
+     "keys": [
+      "Space"
+     ],
+     "key_times": [
+      1794225183068
+     ],
+     "observation": {
+      "speech_raw": "\u001dchecked\u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794225184173,
+     "t_end_ms": 1794225185478,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794225184173
+     ],
+     "observation": {
+      "speech_raw": "Plan\nPro \u001d radio button \u001e  \u001dchecked\u001e \n2 of 3\nTo change the selection press Up or Down Arrow.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794225185478,
+     "t_end_ms": 1794225186682,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794225185478
+     ],
+     "observation": {
+      "speech_raw": "Team \u001d radio button \u001e  \u001dchecked\u001e \n3 of 3\nTo change the selection press Up or Down Arrow.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794225186682,
+     "t_end_ms": 1794225187787,
+     "action": {
+      "type": "key",
+      "command": "Left"
+     },
+     "keys": [
+      "Left"
+     ],
+     "key_times": [
+      1794225186682
+     ],
+     "observation": {
+      "speech_raw": "Pro \u001d radio button \u001e  \u001dchecked\u001e \n2 of 3\nTo change the selection press Up or Down Arrow.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794225187787,
+     "t_end_ms": 1794225188992,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794225187787
+     ],
+     "observation": {
+      "speech_raw": "Country: \u001d Combo box \u001e \nGermany\nTo change the selection use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794225188992,
+     "t_end_ms": 1794225190095,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794225188992
+     ],
+     "observation": {
+      "speech_raw": "Brazil",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794225190095,
+     "t_end_ms": 1794225191200,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794225190095
+     ],
+     "observation": {
+      "speech_raw": "Germany",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794225191200,
+     "t_end_ms": 1794225192406,
+     "action": {
+      "type": "key",
+      "command": "Alt+Down"
+     },
+     "keys": [
+      "Alt+Down"
+     ],
+     "key_times": [
+      1794225191200
+     ],
+     "observation": {
+      "speech_raw": "To move to an item press the Arrow keys.\n \u001d List box \u001e \nGermany\n2 of 3\nTo move to an item press the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794225192406,
+     "t_end_ms": 1794225193511,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794225192406
+     ],
+     "observation": {
+      "speech_raw": "Brazil",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794225193511,
+     "t_end_ms": 1794225194716,
+     "action": {
+      "type": "key",
+      "command": "Enter"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794225193511
+     ],
+     "observation": {
+      "speech_raw": "Country: \u001d Combo box \u001e \nBrazil\nTo change the selection use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794225194716,
+     "t_end_ms": 1794225195820,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794225194716
+     ],
+     "observation": {
+      "speech_raw": "Fruit: \u001d List box \u001e \nBananas\n2 of 3\nTo move to an item press the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794225195820,
+     "t_end_ms": 1794225196925,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794225195820
+     ],
+     "observation": {
+      "speech_raw": " \u001d Tree view \u001e \nDocuments \u001dclosed\u001e \n1 of 2\nTo move through or expand items use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794225196925,
+     "t_end_ms": 1794225198130,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794225196925
+     ],
+     "observation": {
+      "speech_raw": "Documents\n \u001dopen\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s17",
+     "t_start_ms": 1794225198130,
+     "t_end_ms": 1794225199234,
+     "action": {
+      "type": "key",
+      "command": "Left"
+     },
+     "keys": [
+      "Left"
+     ],
+     "key_times": [
+      1794225198130
+     ],
+     "observation": {
+      "speech_raw": "Documents\n \u001dclosed\u001e \n1 of 2",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,270 @@
+{
+ "scenario_id": "838-web-aria-menus-advanced",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Escape",
+     "t_ms": 1794232542161
+    },
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794232542522
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794232543827,
+     "t_end_ms": 1794232544931,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794232543827
+     ],
+     "observation": {
+      "speech_raw": "Web Menus\nFile \u001d menu \u001e  \u001dsub menu\u001e  \u001dcollapsed\u001e \nTo move through items press up or down arrow.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794232544931,
+     "t_end_ms": 1794232545935,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794232544931
+     ],
+     "observation": {
+      "speech_raw": "Edit \u001d menu \u001e  \u001dsub menu\u001e  \u001dcollapsed\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794232545935,
+     "t_end_ms": 1794232546939,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794232545935
+     ],
+     "observation": {
+      "speech_raw": "Help \u001d menu \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794232546939,
+     "t_end_ms": 1794232547943,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794232546939
+     ],
+     "observation": {
+      "speech_raw": "MenuBar end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794232547943,
+     "t_end_ms": 1794232548947,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794232547943
+     ],
+     "observation": {
+      "speech_raw": "e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794232548947,
+     "t_end_ms": 1794232550052,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794232548947
+     ],
+     "observation": {
+      "speech_raw": "Leaving menus\nNotes \u001d edit \u001e \nContains text",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794232550052,
+     "t_end_ms": 1794232551056,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794232550052
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794232551056,
+     "t_end_ms": 1794232552061,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794232551056
+     ],
+     "observation": {
+      "speech_raw": "i",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794232552061,
+     "t_end_ms": 1794232553064,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794232552061
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794232553064,
+     "t_end_ms": 1794232554171,
+     "action": {
+      "type": "key",
+      "command": "Alt+Shift+F"
+     },
+     "keys": [
+      "Alt+Shift+F"
+     ],
+     "key_times": [
+      1794232553064
+     ],
+     "observation": {
+      "speech_raw": "New \u001d menu \u001e \nTo move through items press up or down arrow.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794232554171,
+     "t_end_ms": 1794232555275,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794232554171
+     ],
+     "observation": {
+      "speech_raw": "File \u001d menu \u001e  \u001dsub menu\u001e  \u001dexpanded\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794232555275,
+     "t_end_ms": 1794232556380,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794232555275
+     ],
+     "observation": {
+      "speech_raw": "Leaving menus\nNotes \u001d edit \u001e \nContains text",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,66 @@
+{
+ "scenario_id": "730-struct-next-heading-indication-0",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794229960082
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794229961577,
+     "t_end_ms": 1794229962581,
+     "action": {
+      "type": "jaws_script",
+      "command": "MoveToNextHeading"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794229961577
+     ],
+     "observation": {
+      "speech_raw": "System Documentation",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794229962581,
+     "t_end_ms": 1794229963585,
+     "action": {
+      "type": "jaws_script",
+      "command": "MoveToNextHeading"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794229962581
+     ],
+     "observation": {
+      "speech_raw": "Section Overview",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

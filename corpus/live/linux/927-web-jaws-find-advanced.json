@@ -1,0 +1,286 @@
+{
+ "scenario_id": "927-web-jaws-find-advanced",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794235298608
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794235299973,
+     "t_end_ms": 1794235301178,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+F"
+     },
+     "keys": [
+      "Ctrl+F"
+     ],
+     "key_times": [
+      1794235299973
+     ],
+     "observation": {
+      "speech_raw": "Okur Find \u001d dialog \u001e \nFind what: \u001d Edit \u001e \nType in text.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794235301178,
+     "t_end_ms": 1794235302182,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"b\")"
+     },
+     "keys": [
+      "b"
+     ],
+     "key_times": [
+      1794235301178
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794235302182,
+     "t_end_ms": 1794235303186,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"o\")"
+     },
+     "keys": [
+      "o"
+     ],
+     "key_times": [
+      1794235302182
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794235303186,
+     "t_end_ms": 1794235304190,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"a\")"
+     },
+     "keys": [
+      "a"
+     ],
+     "key_times": [
+      1794235303186
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794235304190,
+     "t_end_ms": 1794235305194,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"r\")"
+     },
+     "keys": [
+      "r"
+     ],
+     "key_times": [
+      1794235304190
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794235305194,
+     "t_end_ms": 1794235306198,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"d\")"
+     },
+     "keys": [
+      "d"
+     ],
+     "key_times": [
+      1794235305194
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794235306198,
+     "t_end_ms": 1794235307502,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794235306198
+     ],
+     "observation": {
+      "speech_raw": "The Riverside City Library will stay open until 9 p.m. on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794235307502,
+     "t_end_ms": 1794235308506,
+     "action": {
+      "type": "key",
+      "command": "F3"
+     },
+     "keys": [
+      "F3"
+     ],
+     "key_times": [
+      1794235307502
+     ],
+     "observation": {
+      "speech_raw": "The library board will review attendance in the fall. A long-standing complaint among students and working parents was that the reading rooms closed before",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794235308506,
+     "t_end_ms": 1794235309510,
+     "action": {
+      "type": "key",
+      "command": "F3"
+     },
+     "keys": [
+      "F3"
+     ],
+     "key_times": [
+      1794235308506
+     ],
+     "observation": {
+      "speech_raw": "1. Board vote in March",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794235309510,
+     "t_end_ms": 1794235310515,
+     "action": {
+      "type": "key",
+      "command": "Shift+F3"
+     },
+     "keys": [
+      "Shift+F3"
+     ],
+     "key_times": [
+      1794235309510
+     ],
+     "observation": {
+      "speech_raw": "The library board will review attendance in the fall. A long-standing complaint among students and working parents was that the reading rooms closed before",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794235310515,
+     "t_end_ms": 1794235311520,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794235310515
+     ],
+     "observation": {
+      "speech_raw": "The library board will review attendance in the fall. A long-standing complaint among students and working parents was that the reading rooms closed before",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794235311520,
+     "t_end_ms": 1794235312727,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+F"
+     },
+     "keys": [
+      "Ctrl+Insert+F"
+     ],
+     "key_times": [
+      1794235311520
+     ],
+     "observation": {
+      "speech_raw": "Okur Find \u001d dialog \u001e \nFind what: \u001d Edit \u001e \nboard\nType in text.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794235312727,
+     "t_end_ms": 1794235313730,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794235312727
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

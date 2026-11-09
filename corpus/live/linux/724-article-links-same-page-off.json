@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794199948360
+     "t_ms": 1794229719441
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794199949727,
-     "t_end_ms": 1794199950731,
+     "t_start_ms": 1794229720804,
+     "t_end_ms": 1794229721809,
      "action": {
       "type": "key",
       "command": "U"
@@ -31,7 +32,7 @@
       "U"
      ],
      "key_times": [
-      1794199949727
+      1794229720804
      ],
      "observation": {
       "speech_raw": " \u001d Link \u001e Riverside Gazette",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794199950731,
-     "t_end_ms": 1794199951735,
+     "t_start_ms": 1794229721809,
+     "t_end_ms": 1794229722813,
      "action": {
       "type": "key",
       "command": "U"
@@ -51,7 +52,7 @@
       "U"
      ],
      "key_times": [
-      1794199950731
+      1794229721809
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d Link \u001e News",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794199951735,
-     "t_end_ms": 1794199952739,
+     "t_start_ms": 1794229722813,
+     "t_end_ms": 1794229723816,
      "action": {
       "type": "key",
       "command": "U"
@@ -71,7 +72,7 @@
       "U"
      ],
      "key_times": [
-      1794199951735
+      1794229722813
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d Link \u001e Sports",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794199952739,
-     "t_end_ms": 1794199953743,
+     "t_start_ms": 1794229723816,
+     "t_end_ms": 1794229724820,
      "action": {
       "type": "key",
       "command": "U"
@@ -91,7 +92,7 @@
       "U"
      ],
      "key_times": [
-      1794199952739
+      1794229723816
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d Link \u001e Culture",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794199953743,
-     "t_end_ms": 1794199954748,
+     "t_start_ms": 1794229724820,
+     "t_end_ms": 1794229725825,
      "action": {
       "type": "key",
       "command": "U"
@@ -111,7 +112,7 @@
       "U"
      ],
      "key_times": [
-      1794199953743
+      1794229724820
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d Link \u001e Opinion",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794199954748,
-     "t_end_ms": 1794199955752,
+     "t_start_ms": 1794229725825,
+     "t_end_ms": 1794229726828,
      "action": {
       "type": "key",
       "command": "U"
@@ -131,7 +132,7 @@
       "U"
      ],
      "key_times": [
-      1794199954748
+      1794229725825
      ],
      "observation": {
       "speech_raw": " \u001d Link \u001e Maria Lopez,",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794199955752,
-     "t_end_ms": 1794199956756,
+     "t_start_ms": 1794229726828,
+     "t_end_ms": 1794229727833,
      "action": {
       "type": "key",
       "command": "U"
@@ -151,7 +152,7 @@
       "U"
      ],
      "key_times": [
-      1794199955752
+      1794229726828
      ],
      "observation": {
       "speech_raw": " \u001d Link \u001e study rooms",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794199956756,
-     "t_end_ms": 1794199957761,
+     "t_start_ms": 1794229727833,
+     "t_end_ms": 1794229728837,
      "action": {
       "type": "key",
       "command": "U"
@@ -171,7 +172,7 @@
       "U"
      ],
      "key_times": [
-      1794199956756
+      1794229727833
      ],
      "observation": {
       "speech_raw": " \u001d Link \u001e Directions",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794199957761,
-     "t_end_ms": 1794199958865,
+     "t_start_ms": 1794229728837,
+     "t_end_ms": 1794229729842,
      "action": {
       "type": "key",
       "command": "U"
@@ -191,7 +192,7 @@
       "U"
      ],
      "key_times": [
-      1794199957761
+      1794229728837
      ],
      "observation": {
       "speech_raw": " \u001d Link \u001e Directions",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794199958865,
-     "t_end_ms": 1794199959869,
+     "t_start_ms": 1794229729842,
+     "t_end_ms": 1794229730846,
      "action": {
       "type": "key",
       "command": "U"
@@ -211,7 +212,7 @@
       "U"
      ],
      "key_times": [
-      1794199958865
+      1794229729842
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d Link \u001e Council approves library budget",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794199959869,
-     "t_end_ms": 1794199960874,
+     "t_start_ms": 1794229730846,
+     "t_end_ms": 1794229731850,
      "action": {
       "type": "key",
       "command": "U"
@@ -231,7 +232,7 @@
       "U"
      ],
      "key_times": [
-      1794199959869
+      1794229730846
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d Link \u001e Spring book fair returns",
@@ -241,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794199960874,
-     "t_end_ms": 1794199961879,
+     "t_start_ms": 1794229731850,
+     "t_end_ms": 1794229732855,
      "action": {
       "type": "key",
       "command": "Shift+U"
@@ -251,7 +252,7 @@
       "Shift+U"
      ],
      "key_times": [
-      1794199960874
+      1794229731850
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d Link \u001e Council approves library budget",
@@ -261,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794199961879,
-     "t_end_ms": 1794199962883,
+     "t_start_ms": 1794229732855,
+     "t_end_ms": 1794229733860,
      "action": {
       "type": "key",
       "command": "Shift+U"
@@ -271,7 +272,7 @@
       "Shift+U"
      ],
      "key_times": [
-      1794199961879
+      1794229732855
      ],
      "observation": {
       "speech_raw": " \u001d Link \u001e Directions",

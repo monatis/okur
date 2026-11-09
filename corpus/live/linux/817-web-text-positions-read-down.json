@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794200416553
+     "t_ms": 1794231845800
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794200417920,
-     "t_end_ms": 1794200418923,
+     "t_start_ms": 1794231847162,
+     "t_end_ms": 1794231848166,
      "action": {
       "type": "key",
       "command": "Down"
@@ -31,7 +32,7 @@
       "Down"
      ],
      "key_times": [
-      1794200417920
+      1794231847162
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e Raised and lowered text",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794200418923,
-     "t_end_ms": 1794200419928,
+     "t_start_ms": 1794231848166,
+     "t_end_ms": 1794231849171,
      "action": {
       "type": "key",
       "command": "Down"
@@ -51,7 +52,7 @@
       "Down"
      ],
      "key_times": [
-      1794200418923
+      1794231848166
      ],
      "observation": {
       "speech_raw": "A plain line with nothing raised.",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794200419928,
-     "t_end_ms": 1794200420932,
+     "t_start_ms": 1794231849171,
+     "t_end_ms": 1794231850174,
      "action": {
       "type": "key",
       "command": "Down"
@@ -71,7 +72,7 @@
       "Down"
      ],
      "key_times": [
-      1794200419928
+      1794231849171
      ],
      "observation": {
       "speech_raw": "A mole holds 6 \u00d7 10 \u001dsuperscript \u001e 23 \u001dend superscript \u001e  particles.",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794200420932,
-     "t_end_ms": 1794200421936,
+     "t_start_ms": 1794231850174,
+     "t_end_ms": 1794231851178,
      "action": {
       "type": "key",
       "command": "Down"
@@ -91,7 +92,7 @@
       "Down"
      ],
      "key_times": [
-      1794200420932
+      1794231850174
      ],
      "observation": {
       "speech_raw": "The sum runs to xn at most.",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794200421936,
-     "t_end_ms": 1794200422941,
+     "t_start_ms": 1794231851178,
+     "t_end_ms": 1794231852183,
      "action": {
       "type": "key",
       "command": "Down"
@@ -111,7 +112,7 @@
       "Down"
      ],
      "key_times": [
-      1794200421936
+      1794231851178
      ],
      "observation": {
       "speech_raw": "Footnote marka after a word.",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794200422941,
-     "t_end_ms": 1794200423945,
+     "t_start_ms": 1794231852183,
+     "t_end_ms": 1794231853187,
      "action": {
       "type": "key",
       "command": "Down"
@@ -131,7 +132,7 @@
       "Down"
      ],
      "key_times": [
-      1794200422941
+      1794231852183
      ],
      "observation": {
       "speech_raw": "The scale uses log10 steps.",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794200423945,
-     "t_end_ms": 1794200424949,
+     "t_start_ms": 1794231853187,
+     "t_end_ms": 1794231854191,
      "action": {
       "type": "key",
       "command": "Down"
@@ -151,7 +152,7 @@
       "Down"
      ],
      "key_times": [
-      1794200423945
+      1794231853187
      ],
      "observation": {
       "speech_raw": "Each term xi is counted once.",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794200424949,
-     "t_end_ms": 1794200425953,
+     "t_start_ms": 1794231854191,
+     "t_end_ms": 1794231855196,
      "action": {
       "type": "key",
       "command": "Down"
@@ -171,7 +172,7 @@
       "Down"
      ],
      "key_times": [
-      1794200424949
+      1794231854191
      ],
      "observation": {
       "speech_raw": "The entry aij sits in row i.",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794200425953,
-     "t_end_ms": 1794200426957,
+     "t_start_ms": 1794231855196,
+     "t_end_ms": 1794231856199,
      "action": {
       "type": "key",
       "command": "Down"
@@ -191,7 +192,7 @@
       "Down"
      ],
      "key_times": [
-      1794200425953
+      1794231855196
      ],
      "observation": {
       "speech_raw": "Another plain line at the end.",

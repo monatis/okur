@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ebcc22e6"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794211409260
+     "t_ms": 1794228414250
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794211410623,
-     "t_end_ms": 1794211411627,
+     "t_start_ms": 1794228415613,
+     "t_end_ms": 1794228416616,
      "action": {
       "type": "key",
       "command": "H"
@@ -32,7 +32,7 @@
       "H"
      ],
      "key_times": [
-      1794211410623
+      1794228415613
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours\n \u001d heading level 1 \u001e",
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794211411627,
-     "t_end_ms": 1794211412631,
+     "t_start_ms": 1794228416616,
+     "t_end_ms": 1794228417620,
      "action": {
       "type": "key",
       "command": "Down"
@@ -52,7 +52,7 @@
       "Down"
      ],
      "key_times": [
-      1794211411627
+      1794228416616
      ],
      "observation": {
       "speech_raw": "By ",
@@ -62,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794211412631,
-     "t_end_ms": 1794211413635,
+     "t_start_ms": 1794228417620,
+     "t_end_ms": 1794228418624,
      "action": {
       "type": "key",
       "command": "Down"
@@ -72,7 +72,7 @@
       "Down"
      ],
      "key_times": [
-      1794211412631
+      1794228417620
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Maria Lopez,",
@@ -82,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794211413635,
-     "t_end_ms": 1794211414640,
+     "t_start_ms": 1794228418624,
+     "t_end_ms": 1794228419630,
      "action": {
       "type": "key",
       "command": "Ctrl+Win+K"
@@ -92,7 +92,7 @@
       "Ctrl+Win+K"
      ],
      "key_times": [
-      1794211413635
+      1794228418624
      ],
      "observation": {
       "speech_raw": "Temporary PlaceMarker set\n \u001d same page link \u001e Maria Lopez,",
@@ -102,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794211414640,
-     "t_end_ms": 1794211415646,
+     "t_start_ms": 1794228419630,
+     "t_end_ms": 1794228420635,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -112,7 +112,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794211414640
+      1794228419630
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
@@ -122,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794211415646,
-     "t_end_ms": 1794211416649,
+     "t_start_ms": 1794228420635,
+     "t_end_ms": 1794228421639,
      "action": {
       "type": "key",
       "command": "K"
@@ -132,7 +132,7 @@
       "K"
      ],
      "key_times": [
-      1794211415646
+      1794228420635
      ],
      "observation": {
       "speech_raw": "Maria Lopez  \u001d same page link \u001e ",
@@ -142,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794211416649,
-     "t_end_ms": 1794211417653,
+     "t_start_ms": 1794228421639,
+     "t_end_ms": 1794228422643,
      "action": {
       "type": "key",
       "command": "K"
@@ -152,7 +152,7 @@
       "K"
      ],
      "key_times": [
-      1794211416649
+      1794228421639
      ],
      "observation": {
       "speech_raw": "Maria Lopez  \u001d same page link \u001e ",
@@ -162,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794211417653,
-     "t_end_ms": 1794211418658,
+     "t_start_ms": 1794228422643,
+     "t_end_ms": 1794228423648,
      "action": {
       "type": "key",
       "command": "Shift+K"
@@ -172,7 +172,7 @@
       "Shift+K"
      ],
      "key_times": [
-      1794211417653
+      1794228422643
      ],
      "observation": {
       "speech_raw": "Maria Lopez  \u001d same page link \u001e ",
@@ -182,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794211418658,
-     "t_end_ms": 1794211419662,
+     "t_start_ms": 1794228423648,
+     "t_end_ms": 1794228424654,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -192,7 +192,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794211418658
+      1794228423648
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Maria Lopez,",
@@ -202,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794211419662,
-     "t_end_ms": 1794211420666,
+     "t_start_ms": 1794228424654,
+     "t_end_ms": 1794228425659,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -212,7 +212,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794211419662
+      1794228424654
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
@@ -222,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794211420666,
-     "t_end_ms": 1794211421874,
+     "t_start_ms": 1794228425659,
+     "t_end_ms": 1794228426865,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+K"
@@ -232,18 +232,18 @@
       "Ctrl+Shift+K"
      ],
      "key_times": [
-      1794211420666
+      1794228425659
      ],
      "observation": {
-      "speech_raw": "PlaceMarker List\nDisplay PlaceMarkers For:\nAll \u001d radio button \u001e  \u001dchecked\u001e \n3 of 3\nTo change the selection press Up or Down Arrow.",
+      "speech_raw": "PlaceMarker List \u001d dialog \u001e \nPlaceMarker \u001d List view \u001e \nTemporary\nDocument\n1 of 1\nTo move to items use the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794211421874,
-     "t_end_ms": 1794211423179,
+     "t_start_ms": 1794228426865,
+     "t_end_ms": 1794228427869,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -252,18 +252,18 @@
       "Escape"
      ],
      "key_times": [
-      1794211421874
+      1794228426865
      ],
      "observation": {
-      "speech_raw": "City Library Expands Evening Hours - Riverside Gazette  \u001d document \u001e\nPage has 5Regions, 5headings and 12links\nCity Library Expands Evening Hours - Riverside Gazette\nbanner\n \u001d same page link \u001e Riverside Gazette\nPrimary navigation region\nlist of 4 items\n\u2022 \u001d same page link \u001e News\n\u2022 \u001d same page link \u001e Sports\n\u2022 \u001d same page link \u001e Culture\n\u2022 \u001d same page link \u001e Opinion\nlist end\nPrimary navigation region end\nbanner end\nmain region\narticle\n \u001d heading level 1 \u001e City Library Expands Evening Hours\nBy \n \u001d same page link \u001e Maria Lopez,\npublished March 14, 2026\nThe Riverside City Library will stay open until 9 p.m. on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which\nmost respondents asked for later hours.\nFront entrance of the Riverside City Library at dusk\n \u001d Graphic \u001e \n \u001d heading level 2 \u001e What changes\nMembership costs $5.99 a month, e.g. for adults; children join free. Questions go to help@riverside-library.org \u2014 or call 555-0142. Attendance rose 3.5%\nlast year, and staff say they can't wait.\nlist of 3 items\n\u2022 Weekday hours: 9 a.m. to 9 p.m.\n\u2022 Weekend hours, which do not change:\nlist of 2 items nesting level 1\n\u25e6 Saturday: 10 a.m. to 6 p.m.\n\u25e6 Sunday: noon to 5 p.m.\nlist end nesting level 1\n\u2022 New \n \u001d same page link \u001e study rooms\n open in May.\nlist end\n \u001d heading level 2 \u001e Opening schedule\ntable with 3 columns and 3 rows\nBranch hours after the change\nBranch\nWeekdays\nDetails\nCentral\n9 a.m. to 9 p.m.\n \u001d same page link \u001e Directions\nNorthside\n10 a.m. to 8 p.m.\n \u001d same page link \u001e Directions\ntable end\n \u001d heading level 3 \u001e What readers said\nblock quote\nFinally, I can study after work.\nblock quote end\nThe library board will review attendance in the fall. A long-standing complaint among students and working parents was that the reading rooms closed before\nmost people finished their day, so the extended schedule is intended to make the collections, the public computers, and the quiet study spaces available\nat the times when the community actually needs them, according to the library director.\nlist of 3 items\n1. Board vote in March\n2. Hiring in April\n3. Review in October\nlist end\narticle end\nmain region end\nRelated stories complementary information\n \u001d heading level 2 \u001e Related stories\nlist of 2 items\n\u2022 \u001d same page link \u001e Council approves library budget\n\u2022 \u001d same page link \u001e Spring book fair returns\nlist end\nRelated stories complementary information end\ncontent information\n\u00a9 2026 Riverside Gazette. \n \u001d same page link \u001e Contact us\ncontent information end\nend",
+      "speech_raw": "",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794211423179,
-     "t_end_ms": 1794211424182,
+     "t_start_ms": 1794228427869,
+     "t_end_ms": 1794228428874,
      "action": {
       "type": "key",
       "command": "7"
@@ -272,7 +272,7 @@
       "7"
      ],
      "key_times": [
-      1794211423179
+      1794228427869
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Maria Lopez,",
@@ -282,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794211424182,
-     "t_end_ms": 1794211425186,
+     "t_start_ms": 1794228428874,
+     "t_end_ms": 1794228429879,
      "action": {
       "type": "key",
       "command": "Shift+7"
@@ -292,7 +292,7 @@
       "Shift+7"
      ],
      "key_times": [
-      1794211424182
+      1794228428874
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Maria Lopez,",

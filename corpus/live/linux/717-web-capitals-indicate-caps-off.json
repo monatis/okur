@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,70 +16,70 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794199663034
+     "t_ms": 1794229368545
     },
     {
      "key": "Down",
-     "t_ms": 1794199663390
+     "t_ms": 1794229368898
     },
     {
      "key": "Down",
-     "t_ms": 1794199663691
+     "t_ms": 1794229369200
     },
     {
      "key": "Down",
-     "t_ms": 1794199663992
+     "t_ms": 1794229369501
     },
     {
      "key": "Down",
-     "t_ms": 1794199664294
+     "t_ms": 1794229369803
     },
     {
      "key": "Down",
-     "t_ms": 1794199664595
+     "t_ms": 1794229370105
     },
     {
      "key": "Down",
-     "t_ms": 1794199664897
+     "t_ms": 1794229370406
     },
     {
      "key": "Down",
-     "t_ms": 1794199665198
+     "t_ms": 1794229370708
     },
     {
      "key": "Down",
-     "t_ms": 1794199665500
+     "t_ms": 1794229371009
     },
     {
      "key": "Down",
-     "t_ms": 1794199665801
+     "t_ms": 1794229371310
     },
     {
      "key": "Down",
-     "t_ms": 1794199666103
+     "t_ms": 1794229371612
     },
     {
      "key": "Down",
-     "t_ms": 1794199666404
+     "t_ms": 1794229371913
     },
     {
      "key": "Down",
-     "t_ms": 1794199666705
+     "t_ms": 1794229372215
     },
     {
      "key": "Down",
-     "t_ms": 1794199667007
+     "t_ms": 1794229372516
     },
     {
      "key": "Down",
-     "t_ms": 1794199667308
+     "t_ms": 1794229372817
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794199668613,
-     "t_end_ms": 1794199669617,
+     "t_start_ms": 1794229374122,
+     "t_end_ms": 1794229375126,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -87,7 +88,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794199668613
+      1794229374122
      ],
      "observation": {
       "speech_raw": "Ada READ me B x",
@@ -97,8 +98,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794199669617,
-     "t_end_ms": 1794199670622,
+     "t_start_ms": 1794229375126,
+     "t_end_ms": 1794229376131,
      "action": {
       "type": "key",
       "command": "CapsLock+K"
@@ -107,7 +108,7 @@
       "CapsLock+K"
      ],
      "key_times": [
-      1794199669617
+      1794229375126
      ],
      "observation": {
       "speech_raw": "Ada",
@@ -117,8 +118,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794199670622,
-     "t_end_ms": 1794199671749,
+     "t_start_ms": 1794229376131,
+     "t_end_ms": 1794229377258,
      "action": {
       "type": "key",
       "command": "CapsLock+K"
@@ -128,8 +129,8 @@
       "CapsLock+K"
      ],
      "key_times": [
-      1794199670622,
-      1794199670744
+      1794229376131,
+      1794229376253
      ],
      "observation": {
       "speech_raw": "Ada\nAda",
@@ -139,8 +140,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794199671749,
-     "t_end_ms": 1794199672754,
+     "t_start_ms": 1794229377258,
+     "t_end_ms": 1794229378263,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -149,7 +150,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794199671749
+      1794229377258
      ],
      "observation": {
       "speech_raw": "READ",
@@ -159,8 +160,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794199672754,
-     "t_end_ms": 1794199673859,
+     "t_start_ms": 1794229378263,
+     "t_end_ms": 1794229379268,
      "action": {
       "type": "key",
       "command": "CapsLock+K"
@@ -169,7 +170,7 @@
       "CapsLock+K"
      ],
      "key_times": [
-      1794199672754
+      1794229378263
      ],
      "observation": {
       "speech_raw": "READ",
@@ -179,8 +180,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794199673859,
-     "t_end_ms": 1794199674985,
+     "t_start_ms": 1794229379268,
+     "t_end_ms": 1794229380395,
      "action": {
       "type": "key",
       "command": "CapsLock+K"
@@ -190,8 +191,8 @@
       "CapsLock+K"
      ],
      "key_times": [
-      1794199673859,
-      1794199673981
+      1794229379268,
+      1794229379390
      ],
      "observation": {
       "speech_raw": "READ\nREAD",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794199674985,
-     "t_end_ms": 1794199675991,
+     "t_start_ms": 1794229380395,
+     "t_end_ms": 1794229381399,
      "action": {
       "type": "key",
       "command": "CapsLock+I"
@@ -211,7 +212,7 @@
       "CapsLock+I"
      ],
      "key_times": [
-      1794199674985
+      1794229380395
      ],
      "observation": {
       "speech_raw": "Ada READ me B x",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794199675991,
-     "t_end_ms": 1794199677118,
+     "t_start_ms": 1794229381399,
+     "t_end_ms": 1794229382527,
      "action": {
       "type": "key",
       "command": "CapsLock+I"
@@ -232,8 +233,8 @@
       "CapsLock+I"
      ],
      "key_times": [
-      1794199675991,
-      1794199676113
+      1794229381399,
+      1794229381521
      ],
      "observation": {
       "speech_raw": "Ada READ me B x\nAda READ me B x",
@@ -243,8 +244,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794199677118,
-     "t_end_ms": 1794199678122,
+     "t_start_ms": 1794229382527,
+     "t_end_ms": 1794229383531,
      "action": {
       "type": "key",
       "command": "Home"
@@ -253,7 +254,7 @@
       "Home"
      ],
      "key_times": [
-      1794199677118
+      1794229382527
      ],
      "observation": {
       "speech_raw": "",
@@ -263,8 +264,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794199678122,
-     "t_end_ms": 1794199679227,
+     "t_start_ms": 1794229383531,
+     "t_end_ms": 1794229384638,
      "action": {
       "type": "key",
       "command": "Insert+Down"
@@ -273,7 +274,7 @@
       "Insert+Down"
      ],
      "key_times": [
-      1794199678122
+      1794229383531
      ],
      "observation": {
       "speech_raw": "Ada READ me B x\nJAWS sister-in-law 2:00 P.M. aB9 \u00e9 \u20ac\n\n    four spaces\n\tone tab\nSay All reads this. It has three sentences. The last one ends here.\nteh quick brown fxo\nText\n \u001d Edit \u001e Hello, world. Is it done? Yes! Wait; maybe: no.\n \u001d Edit \u001e Mail ada@example.org or see https://example.org/a-b_c?x=1&y=2#top\n \u001d Edit \u001e C:\\Users\\Ada\\notes.txt and /usr/local/bin\n \u001d Edit \u001e Price $9.95, 50% off; total = 3 * 4 + 1 - 2 / 5 ^ 2 ~ 7\n \u001d Edit \u001e fn main() { let v = [1, 2]; v.len() } // done <ok> | a && b\n \u001d Edit \u001e \"double\" 'single' \u201ccurly\u201d \u2018curly\u2019 \u2014 em \u2013 en \u2026 ellipsis \u2022 bullet\n \u001d Edit \u001e ===== ----- ..... !!!!! ##### ***\n \u001d Edit \u001e MenuBar getElementById XMLHttpRequest iPhone McDonald PowerShell\n \u001d Edit \u001e System32 x86_64 COVID19 123RON 1st 2nd 3rd\n \u001d Edit \u001e 7 42 1234 54321 123456 1-800-444-4443 2.5 1,000,000 10:30\n \u001d Edit \u001e 03-16-00 3/2/2002 1/3 $0.02 $1,250.50\n \u001d Edit \u001e Ada READ me B x\n \u001d Edit \u001e JAWS sister-in-law 2:00 P.M. aB9 \u00e9 \u20ac\n \u001d Edit \u001e \n \u001d Edit \u001e     four spaces\n \u001d Edit \u001e \tone tab\n \u001d Edit \u001e Say All reads this. It has three sentences. The last one ends here.\n \u001d Edit \u001e teh quick brown fxo\nmain region end\nend",

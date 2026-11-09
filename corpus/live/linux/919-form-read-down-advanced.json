@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794203078245
+     "t_ms": 1794234985106
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794203079605,
-     "t_end_ms": 1794203080608,
+     "t_start_ms": 1794234986470,
+     "t_end_ms": 1794234987475,
      "action": {
       "type": "key",
       "command": "Down"
@@ -31,7 +32,7 @@
       "Down"
      ],
      "key_times": [
-      1794203079605
+      1794234986470
      ],
      "observation": {
       "speech_raw": "main region",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794203080609,
-     "t_end_ms": 1794203081613,
+     "t_start_ms": 1794234987475,
+     "t_end_ms": 1794234988479,
      "action": {
       "type": "key",
       "command": "Down"
@@ -51,7 +52,7 @@
       "Down"
      ],
      "key_times": [
-      1794203080609
+      1794234987475
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e Create your account",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794203081613,
-     "t_end_ms": 1794203082617,
+     "t_start_ms": 1794234988479,
+     "t_end_ms": 1794234989483,
      "action": {
       "type": "key",
       "command": "Down"
@@ -71,7 +72,7 @@
       "Down"
      ],
      "key_times": [
-      1794203081613
+      1794234988479
      ],
      "observation": {
       "speech_raw": "Fields marked required must be filled in.",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794203082617,
-     "t_end_ms": 1794203083620,
+     "t_start_ms": 1794234989483,
+     "t_end_ms": 1794234990488,
      "action": {
       "type": "key",
       "command": "Down"
@@ -91,7 +92,7 @@
       "Down"
      ],
      "key_times": [
-      1794203082617
+      1794234989483
      ],
      "observation": {
       "speech_raw": "Full name",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794203083620,
-     "t_end_ms": 1794203084625,
+     "t_start_ms": 1794234990488,
+     "t_end_ms": 1794234991491,
      "action": {
       "type": "key",
       "command": "Down"
@@ -111,7 +112,7 @@
       "Down"
      ],
      "key_times": [
-      1794203083620
+      1794234990488
      ],
      "observation": {
       "speech_raw": " \u001dRequired\u001e  \u001d Edit \u001e ",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794203084625,
-     "t_end_ms": 1794203085629,
+     "t_start_ms": 1794234991491,
+     "t_end_ms": 1794234992495,
      "action": {
       "type": "key",
       "command": "Down"
@@ -131,7 +132,7 @@
       "Down"
      ],
      "key_times": [
-      1794203084625
+      1794234991491
      ],
      "observation": {
       "speech_raw": "Email address",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794203085629,
-     "t_end_ms": 1794203086633,
+     "t_start_ms": 1794234992495,
+     "t_end_ms": 1794234993500,
      "action": {
       "type": "key",
       "command": "Down"
@@ -151,7 +152,7 @@
       "Down"
      ],
      "key_times": [
-      1794203085629
+      1794234992495
      ],
      "observation": {
       "speech_raw": " \u001d Edit \u001e sam@example.com",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794203086633,
-     "t_end_ms": 1794203087637,
+     "t_start_ms": 1794234993500,
+     "t_end_ms": 1794234994503,
      "action": {
       "type": "key",
       "command": "Down"
@@ -171,7 +172,7 @@
       "Down"
      ],
      "key_times": [
-      1794203086633
+      1794234993500
      ],
      "observation": {
       "speech_raw": "We never share your email.",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794203087637,
-     "t_end_ms": 1794203088642,
+     "t_start_ms": 1794234994503,
+     "t_end_ms": 1794234995508,
      "action": {
       "type": "key",
       "command": "Down"
@@ -191,7 +192,7 @@
       "Down"
      ],
      "key_times": [
-      1794203087637
+      1794234994503
      ],
      "observation": {
       "speech_raw": "Password",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794203088642,
-     "t_end_ms": 1794203089646,
+     "t_start_ms": 1794234995508,
+     "t_end_ms": 1794234996512,
      "action": {
       "type": "key",
       "command": "Down"
@@ -211,7 +212,7 @@
       "Down"
      ],
      "key_times": [
-      1794203088642
+      1794234995508
      ],
      "observation": {
       "speech_raw": " \u001dRequired\u001e  \u001d password edit \u001e ",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794203089646,
-     "t_end_ms": 1794203090650,
+     "t_start_ms": 1794234996512,
+     "t_end_ms": 1794234997516,
      "action": {
       "type": "key",
       "command": "Down"
@@ -231,7 +232,7 @@
       "Down"
      ],
      "key_times": [
-      1794203089646
+      1794234996512
      ],
      "observation": {
       "speech_raw": "group start Membership type",
@@ -241,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794203090650,
-     "t_end_ms": 1794203091654,
+     "t_start_ms": 1794234997516,
+     "t_end_ms": 1794234998520,
      "action": {
       "type": "key",
       "command": "Down"
@@ -251,7 +252,7 @@
       "Down"
      ],
      "key_times": [
-      1794203090650
+      1794234997516
      ],
      "observation": {
       "speech_raw": "Adult \u001d radio button \u001e  \u001dchecked\u001e \n1 of 3",
@@ -261,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794203091654,
-     "t_end_ms": 1794203092658,
+     "t_start_ms": 1794234998520,
+     "t_end_ms": 1794234999524,
      "action": {
       "type": "key",
       "command": "Down"
@@ -271,7 +272,7 @@
       "Down"
      ],
      "key_times": [
-      1794203091654
+      1794234998520
      ],
      "observation": {
       "speech_raw": "Student \u001d radio button \u001e  \u001dnot checked\u001e \n2 of 3",
@@ -281,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794203092658,
-     "t_end_ms": 1794203093662,
+     "t_start_ms": 1794234999524,
+     "t_end_ms": 1794235000529,
      "action": {
       "type": "key",
       "command": "Down"
@@ -291,7 +292,7 @@
       "Down"
      ],
      "key_times": [
-      1794203092658
+      1794234999524
      ],
      "observation": {
       "speech_raw": "Senior \u001d radio button \u001e  \u001dnot checked\u001e \n3 of 3",
@@ -301,8 +302,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794203093662,
-     "t_end_ms": 1794203094666,
+     "t_start_ms": 1794235000529,
+     "t_end_ms": 1794235001533,
      "action": {
       "type": "key",
       "command": "Down"
@@ -311,7 +312,7 @@
       "Down"
      ],
      "key_times": [
-      1794203093662
+      1794235000529
      ],
      "observation": {
       "speech_raw": "group end Membership type",
@@ -321,8 +322,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794203094666,
-     "t_end_ms": 1794203095671,
+     "t_start_ms": 1794235001533,
+     "t_end_ms": 1794235002538,
      "action": {
       "type": "key",
       "command": "Down"
@@ -331,7 +332,7 @@
       "Down"
      ],
      "key_times": [
-      1794203094666
+      1794235001533
      ],
      "observation": {
       "speech_raw": "Home branch",
@@ -341,8 +342,8 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794203095671,
-     "t_end_ms": 1794203096675,
+     "t_start_ms": 1794235002538,
+     "t_end_ms": 1794235003543,
      "action": {
       "type": "key",
       "command": "Down"
@@ -351,7 +352,7 @@
       "Down"
      ],
      "key_times": [
-      1794203095671
+      1794235002538
      ],
      "observation": {
       "speech_raw": " \u001d Combo box \u001e  \u001dcollapsed\u001e Northside",
@@ -361,8 +362,8 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794203096675,
-     "t_end_ms": 1794203097679,
+     "t_start_ms": 1794235003543,
+     "t_end_ms": 1794235004547,
      "action": {
       "type": "key",
       "command": "Down"
@@ -371,7 +372,7 @@
       "Down"
      ],
      "key_times": [
-      1794203096675
+      1794235003543
      ],
      "observation": {
       "speech_raw": "Accessibility needs",
@@ -381,8 +382,8 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794203097679,
-     "t_end_ms": 1794203098684,
+     "t_start_ms": 1794235004547,
+     "t_end_ms": 1794235005550,
      "action": {
       "type": "key",
       "command": "Down"
@@ -391,7 +392,7 @@
       "Down"
      ],
      "key_times": [
-      1794203097679
+      1794235004547
      ],
      "observation": {
       "speech_raw": " \u001d Edit \u001e ",
@@ -401,8 +402,8 @@
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794203098684,
-     "t_end_ms": 1794203099689,
+     "t_start_ms": 1794235005550,
+     "t_end_ms": 1794235006555,
      "action": {
       "type": "key",
       "command": "Down"
@@ -411,7 +412,7 @@
       "Down"
      ],
      "key_times": [
-      1794203098684
+      1794235005550
      ],
      "observation": {
       "speech_raw": "Send me the monthly newsletter \u001d check box \u001e  \u001dchecked\u001e ",
@@ -421,8 +422,8 @@
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794203099689,
-     "t_end_ms": 1794203100693,
+     "t_start_ms": 1794235006555,
+     "t_end_ms": 1794235007559,
      "action": {
       "type": "key",
       "command": "Down"
@@ -431,7 +432,7 @@
       "Down"
      ],
      "key_times": [
-      1794203099689
+      1794235006555
      ],
      "observation": {
       "speech_raw": "I agree to the terms of use \u001d check box \u001e  \u001dnot checked\u001e ",
@@ -441,8 +442,8 @@
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794203100693,
-     "t_end_ms": 1794203101697,
+     "t_start_ms": 1794235007559,
+     "t_end_ms": 1794235008564,
      "action": {
       "type": "key",
       "command": "Down"
@@ -451,7 +452,7 @@
       "Down"
      ],
      "key_times": [
-      1794203100693
+      1794235007559
      ],
      "observation": {
       "speech_raw": "I agree to the ",
@@ -461,8 +462,8 @@
     },
     {
      "step_id": "s23",
-     "t_start_ms": 1794203101697,
-     "t_end_ms": 1794203102701,
+     "t_start_ms": 1794235008564,
+     "t_end_ms": 1794235009568,
      "action": {
       "type": "key",
       "command": "Down"
@@ -471,7 +472,7 @@
       "Down"
      ],
      "key_times": [
-      1794203101697
+      1794235008564
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e terms of use",
@@ -481,8 +482,8 @@
     },
     {
      "step_id": "s24",
-     "t_start_ms": 1794203102701,
-     "t_end_ms": 1794203103805,
+     "t_start_ms": 1794235009568,
+     "t_end_ms": 1794235010572,
      "action": {
       "type": "key",
       "command": "Down"
@@ -491,7 +492,7 @@
       "Down"
      ],
      "key_times": [
-      1794203102701
+      1794235009568
      ],
      "observation": {
       "speech_raw": "Save draft \u001d Button \u001e  \u001dUnavailable\u001e ",
@@ -501,8 +502,8 @@
     },
     {
      "step_id": "s25",
-     "t_start_ms": 1794203103805,
-     "t_end_ms": 1794203104810,
+     "t_start_ms": 1794235010572,
+     "t_end_ms": 1794235011576,
      "action": {
       "type": "key",
       "command": "Down"
@@ -511,7 +512,7 @@
       "Down"
      ],
      "key_times": [
-      1794203103805
+      1794235010572
      ],
      "observation": {
       "speech_raw": "Create account \u001d Button \u001e ",
@@ -521,8 +522,8 @@
     },
     {
      "step_id": "s26",
-     "t_start_ms": 1794203104810,
-     "t_end_ms": 1794203105815,
+     "t_start_ms": 1794235011576,
+     "t_end_ms": 1794235012581,
      "action": {
       "type": "key",
       "command": "Down"
@@ -531,7 +532,7 @@
       "Down"
      ],
      "key_times": [
-      1794203104810
+      1794235011576
      ],
      "observation": {
       "speech_raw": "main region end",
@@ -541,8 +542,8 @@
     },
     {
      "step_id": "s27",
-     "t_start_ms": 1794203105815,
-     "t_end_ms": 1794203106819,
+     "t_start_ms": 1794235012581,
+     "t_end_ms": 1794235013585,
      "action": {
       "type": "key",
       "command": "Down"
@@ -551,7 +552,7 @@
       "Down"
      ],
      "key_times": [
-      1794203105815
+      1794235012581
      ],
      "observation": {
       "speech_raw": "main region end",

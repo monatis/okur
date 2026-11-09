@@ -1,0 +1,461 @@
+{
+ "scenario_id": "526-desktop-screen-sensitive-help",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": null,
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "application": "corpus/fixtures/linux/desktop-forms.py",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794223390622,
+     "t_end_ms": 1794223391678,
+     "action": {
+      "type": "key",
+      "command": "Insert+F1"
+     },
+     "keys": [
+      "Insert+F1"
+     ],
+     "key_times": [
+      1794223390622
+     ],
+     "observation": {
+      "speech_raw": "Tab goes to the next control and Shift+Tab to the one before. Insert+Tab says where you are.\n\u001d Link \u001e List Okur Hot Keys\nPress ESCAPE to close this message.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794223391678,
+     "t_end_ms": 1794223392682,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794223391678
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794223392682,
+     "t_end_ms": 1794223393786,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794223392682
+     ],
+     "observation": {
+      "speech_raw": "SR Desktop Fixture\nNotes: \u001d Edit \u001e \nType in text.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794223393786,
+     "t_end_ms": 1794223394890,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794223393786
+     ],
+     "observation": {
+      "speech_raw": "Subscribe to updates \u001d check box \u001e  \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794223394890,
+     "t_end_ms": 1794223395895,
+     "action": {
+      "type": "key",
+      "command": "Insert+F1"
+     },
+     "keys": [
+      "Insert+F1"
+     ],
+     "key_times": [
+      1794223394890
+     ],
+     "observation": {
+      "speech_raw": "Press the Spacebar to check or clear this box.\n\u001d Link \u001e List Okur Hot Keys\nPress ESCAPE to close this message.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794223395895,
+     "t_end_ms": 1794223396900,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794223395895
+     ],
+     "observation": {
+      "speech_raw": "Subscribe to updates \u001d check box \u001e  \u001dchecked\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794223396900,
+     "t_end_ms": 1794223398005,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794223396900
+     ],
+     "observation": {
+      "speech_raw": "Remember me \u001d check box \u001e  \u001dnot checked\u001e \nTo check press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794223398005,
+     "t_end_ms": 1794223399309,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794223398005
+     ],
+     "observation": {
+      "speech_raw": "Plan\nPro \u001d radio button \u001e  \u001dchecked\u001e \n2 of 3\nTo change the selection press Up or Down Arrow.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794223399309,
+     "t_end_ms": 1794223400415,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794223399309
+     ],
+     "observation": {
+      "speech_raw": "Country: \u001d Combo box \u001e \nGermany\nTo change the selection use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794223400415,
+     "t_end_ms": 1794223401420,
+     "action": {
+      "type": "key",
+      "command": "Insert+F1"
+     },
+     "keys": [
+      "Insert+F1"
+     ],
+     "key_times": [
+      1794223400415
+     ],
+     "observation": {
+      "speech_raw": "Up and Down Arrow, or an item's first letter, choose an item. Alt+Down Arrow opens the list.\n\u001d Link \u001e List Okur Hot Keys\nPress ESCAPE to close this message.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794223401420,
+     "t_end_ms": 1794223402423,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794223401420
+     ],
+     "observation": {
+      "speech_raw": "Germany",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794223402423,
+     "t_end_ms": 1794223403528,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794223402423
+     ],
+     "observation": {
+      "speech_raw": "Fruit: \u001d List box \u001e \nBananas\n2 of 3\nTo move to an item press the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794223403528,
+     "t_end_ms": 1794223404533,
+     "action": {
+      "type": "key",
+      "command": "Insert+F1"
+     },
+     "keys": [
+      "Insert+F1"
+     ],
+     "key_times": [
+      1794223403528
+     ],
+     "observation": {
+      "speech_raw": "Up and Down Arrow move through this list, and an item's first letter goes to it.\n\u001d Link \u001e List Okur Hot Keys\nPress ESCAPE to close this message.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794223404533,
+     "t_end_ms": 1794223405537,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794223404533
+     ],
+     "observation": {
+      "speech_raw": "Bananas\n2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794223405537,
+     "t_end_ms": 1794223406744,
+     "action": {
+      "type": "key",
+      "command": "Shift+Tab"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794223405537
+     ],
+     "observation": {
+      "speech_raw": "Country: \u001d Combo box \u001e \nGermany\nTo change the selection use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794223406744,
+     "t_end_ms": 1794223407950,
+     "action": {
+      "type": "key",
+      "command": "Shift+Tab"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794223406744
+     ],
+     "observation": {
+      "speech_raw": "Plan\nPro \u001d radio button \u001e  \u001dchecked\u001e \n2 of 3\nTo change the selection press Up or Down Arrow.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s17",
+     "t_start_ms": 1794223407950,
+     "t_end_ms": 1794223409055,
+     "action": {
+      "type": "key",
+      "command": "Shift+Tab"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794223407950
+     ],
+     "observation": {
+      "speech_raw": "Remember me \u001d check box \u001e  \u001dnot checked\u001e \nTo check press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s18",
+     "t_start_ms": 1794223409055,
+     "t_end_ms": 1794223410160,
+     "action": {
+      "type": "key",
+      "command": "Shift+Tab"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794223409055
+     ],
+     "observation": {
+      "speech_raw": "Subscribe to updates \u001d check box \u001e  \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s19",
+     "t_start_ms": 1794223410160,
+     "t_end_ms": 1794223411266,
+     "action": {
+      "type": "key",
+      "command": "Shift+Tab"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794223410160
+     ],
+     "observation": {
+      "speech_raw": "Notes: \u001d Edit \u001e \nType in text.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s20",
+     "t_start_ms": 1794223411266,
+     "t_end_ms": 1794223412571,
+     "action": {
+      "type": "key",
+      "command": "Shift+Tab"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794223411266
+     ],
+     "observation": {
+      "speech_raw": "Name: \u001d Edit \u001e \nAda\nType in text.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s21",
+     "t_start_ms": 1794223412571,
+     "t_end_ms": 1794223413576,
+     "action": {
+      "type": "key",
+      "command": "Insert+F1"
+     },
+     "keys": [
+      "Insert+F1"
+     ],
+     "key_times": [
+      1794223412571
+     ],
+     "observation": {
+      "speech_raw": "Type here. The arrow keys move through the text and read what they pass.\n\u001d Link \u001e List Okur Hot Keys\nPress ESCAPE to close this message.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s22",
+     "t_start_ms": 1794223413576,
+     "t_end_ms": 1794223414580,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794223413576
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

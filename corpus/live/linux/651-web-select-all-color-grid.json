@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794198534129
+     "t_ms": 1794227676721
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794198535494,
-     "t_end_ms": 1794198536499,
+     "t_start_ms": 1794227678090,
+     "t_end_ms": 1794227679095,
      "action": {
       "type": "key",
       "command": "Ctrl+A"
@@ -31,7 +32,7 @@
       "Ctrl+A"
      ],
      "key_times": [
-      1794198535494
+      1794227678090
      ],
      "observation": {
       "speech_raw": "selected\n4310 characters up to\n\n\nGrid 216, ff ff ff.",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794198536499,
-     "t_end_ms": 1794198537503,
+     "t_start_ms": 1794227679095,
+     "t_end_ms": 1794227680099,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -51,7 +52,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794198536499
+      1794227679095
      ],
      "observation": {
       "speech_raw": "Color Grid",

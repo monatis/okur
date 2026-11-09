@@ -1,0 +1,170 @@
+{
+ "scenario_id": "1151-web-spelling-unchecked-field",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": false,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794217093219
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794217094584,
+     "t_end_ms": 1794217095688,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794217094584
+     ],
+     "observation": {
+      "speech_raw": "Spelling Fields Fixture\nChecked \u001d Edit \u001e \nblank\nType in text.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "action": {
+      "type": "text",
+      "command": "abc"
+     },
+     "observation": {
+      "speech_raw": "",
+      "skipped": true
+     },
+     "step_success": false
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794217095688,
+     "t_end_ms": 1794217096692,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794217095688
+     ],
+     "observation": {
+      "speech_raw": "Checked  \u001d Edit \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794217096692,
+     "t_end_ms": 1794217097795,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794217096692
+     ],
+     "observation": {
+      "speech_raw": "Unchecked \u001d Edit \u001e \nblank\nType in text.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "action": {
+      "type": "text",
+      "command": "abc"
+     },
+     "observation": {
+      "speech_raw": "",
+      "skipped": true
+     },
+     "step_success": false
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794217097795,
+     "t_end_ms": 1794217098799,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794217097795
+     ],
+     "observation": {
+      "speech_raw": "Unchecked  \u001d Edit \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794217098799,
+     "t_end_ms": 1794217099902,
+     "action": {
+      "type": "key",
+      "command": "Shift+Tab"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794217098799
+     ],
+     "observation": {
+      "speech_raw": "Checked \u001d Edit \u001e \nblank\nType in text.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794217099902,
+     "t_end_ms": 1794217100906,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794217099902
+     ],
+     "observation": {
+      "speech_raw": "Checked  \u001d Edit \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

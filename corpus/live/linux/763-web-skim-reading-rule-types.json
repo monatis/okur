@@ -1,0 +1,506 @@
+{
+ "scenario_id": "763-web-skim-reading-rule-types",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794230909379
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794230910739,
+     "t_end_ms": 1794230912045,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Shift+Insert+Down"
+     },
+     "keys": [
+      "Ctrl+Shift+Insert+Down"
+     ],
+     "key_times": [
+      1794230910739
+     ],
+     "observation": {
+      "speech_raw": "Skim Reading \u001d dialog \u001e \nUse Rule Type:\nRead First Line of Every Paragraph",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794230912045,
+     "t_end_ms": 1794230913249,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794230912045
+     ],
+     "observation": {
+      "speech_raw": "Read First Sentence of Every Paragraph \u001d radio button \u001e  \u001dchecked\u001e \n2 of 4\nTo change the selection press Up or Down Arrow.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794230913250,
+     "t_end_ms": 1794230914454,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794230913250
+     ],
+     "observation": {
+      "speech_raw": "Text Rules Apply for Reading \u001d radio button \u001e  \u001dchecked\u001e \n3 of 4\nTo change the selection press Up or Down Arrow.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794230914454,
+     "t_end_ms": 1794230915658,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794230914454
+     ],
+     "observation": {
+      "speech_raw": "Attributes and Color Rules Apply for Reading \u001d radio button \u001e  \u001dchecked\u001e \n4 of 4\nTo change the selection press Up or Down Arrow.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794230915658,
+     "t_end_ms": 1794230916763,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794230915658
+     ],
+     "observation": {
+      "speech_raw": "Rules History: \u001d Combo box \u001e \n<New>\nTo change the selection use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794230916763,
+     "t_end_ms": 1794230917867,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794230916763
+     ],
+     "observation": {
+      "speech_raw": "Text Color: \u001d Combo box \u001e \n*\nTo change the selection use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794230917867,
+     "t_end_ms": 1794230919072,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794230917867
+     ],
+     "observation": {
+      "speech_raw": "Background Color: \u001d Combo box \u001e \n*\nTo change the selection use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794230919072,
+     "t_end_ms": 1794230920376,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794230919072
+     ],
+     "observation": {
+      "speech_raw": "Bold \u001d check box \u001e  \u001dnot checked\u001e \nTo check press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794230920376,
+     "t_end_ms": 1794230921681,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794230920376
+     ],
+     "observation": {
+      "speech_raw": "Italic \u001d check box \u001e  \u001dnot checked\u001e \nTo check press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794230921681,
+     "t_end_ms": 1794230922986,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794230921681
+     ],
+     "observation": {
+      "speech_raw": "Underline \u001d check box \u001e  \u001dnot checked\u001e \nTo check press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794230922986,
+     "t_end_ms": 1794230924290,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794230922986
+     ],
+     "observation": {
+      "speech_raw": "Strikeout \u001d check box \u001e  \u001dnot checked\u001e \nTo check press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794230924290,
+     "t_end_ms": 1794230925595,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794230924290
+     ],
+     "observation": {
+      "speech_raw": "Double Strikeout \u001d check box \u001e  \u001dnot checked\u001e \nTo check press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794230925595,
+     "t_end_ms": 1794230926899,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794230925595
+     ],
+     "observation": {
+      "speech_raw": "Superscript \u001d check box \u001e  \u001dnot checked\u001e \nTo check press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794230926899,
+     "t_end_ms": 1794230928205,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Shift+Tab\")"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794230926899
+     ],
+     "observation": {
+      "speech_raw": "Double Strikeout \u001d check box \u001e  \u001dnot checked\u001e \nTo check press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794230928205,
+     "t_end_ms": 1794230929510,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"UpArrow\")"
+     },
+     "keys": [
+      "UpArrow"
+     ],
+     "key_times": [
+      1794230928205
+     ],
+     "observation": {
+      "speech_raw": "Strikeout \u001d check box \u001e  \u001dnot checked\u001e \nTo check press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794230929510,
+     "t_end_ms": 1794230930815,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"UpArrow\")"
+     },
+     "keys": [
+      "UpArrow"
+     ],
+     "key_times": [
+      1794230929510
+     ],
+     "observation": {
+      "speech_raw": "Underline \u001d check box \u001e  \u001dnot checked\u001e \nTo check press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s17",
+     "t_start_ms": 1794230930815,
+     "t_end_ms": 1794230932020,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794230930815
+     ],
+     "observation": {
+      "speech_raw": "Strikeout \u001d check box \u001e  \u001dnot checked\u001e \nTo check press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s18",
+     "t_start_ms": 1794230932020,
+     "t_end_ms": 1794230933325,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794230932020
+     ],
+     "observation": {
+      "speech_raw": "Double Strikeout \u001d check box \u001e  \u001dnot checked\u001e \nTo check press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s19",
+     "t_start_ms": 1794230933325,
+     "t_end_ms": 1794230934629,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794230933325
+     ],
+     "observation": {
+      "speech_raw": "Superscript \u001d check box \u001e  \u001dnot checked\u001e \nTo check press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s20",
+     "t_start_ms": 1794230934629,
+     "t_end_ms": 1794230935934,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794230934629
+     ],
+     "observation": {
+      "speech_raw": "Subscript \u001d check box \u001e  \u001dnot checked\u001e \nTo check press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s21",
+     "t_start_ms": 1794230935934,
+     "t_end_ms": 1794230937139,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794230935934
+     ],
+     "observation": {
+      "speech_raw": "Shadow \u001d check box \u001e  \u001dnot checked\u001e \nTo check press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s22",
+     "t_start_ms": 1794230937139,
+     "t_end_ms": 1794230938444,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794230937139
+     ],
+     "observation": {
+      "speech_raw": "Outline \u001d check box \u001e  \u001dnot checked\u001e \nTo check press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s23",
+     "t_start_ms": 1794230938444,
+     "t_end_ms": 1794230939449,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794230938444
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s24",
+     "t_start_ms": 1794230939449,
+     "t_end_ms": 1794230940454,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794230939449
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

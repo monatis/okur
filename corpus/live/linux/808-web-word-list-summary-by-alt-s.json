@@ -1,0 +1,198 @@
+{
+ "scenario_id": "808-web-word-list-summary-by-alt-s",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794231467923
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794231469287,
+     "t_end_ms": 1794231470593,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+W"
+     },
+     "keys": [
+      "Ctrl+Insert+W"
+     ],
+     "key_times": [
+      1794231469287
+     ],
+     "observation": {
+      "speech_raw": "Word List \u001d dialog \u001e \nList1 \u001d List view \u001e \nm (10)\n1 of 143\nTo move to items use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794231470593,
+     "t_end_ms": 1794231471601,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeString(\"library\")"
+     },
+     "keys": [
+      "l",
+      "i",
+      "b",
+      "r",
+      "a",
+      "r",
+      "y"
+     ],
+     "key_times": [
+      1794231470593,
+      1794231470594,
+      1794231470595,
+      1794231470596,
+      1794231470596,
+      1794231470597,
+      1794231470598
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794231471601,
+     "t_end_ms": 1794231472907,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+S\")"
+     },
+     "keys": [
+      "Alt+S"
+     ],
+     "key_times": [
+      1794231471601
+     ],
+     "observation": {
+      "speech_raw": "Word List Summary\n1. The Riverside City Library will stay open until 9 p.m. \u001d Link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794231472907,
+     "t_end_ms": 1794231473911,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794231472907
+     ],
+     "observation": {
+      "speech_raw": "1. The Riverside City Library will stay open until 9 p.m. \u001d Link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794231473911,
+     "t_end_ms": 1794231474916,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794231473911
+     ],
+     "observation": {
+      "speech_raw": "2. Weekday hours: 9 a.m. \u001d Link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794231474916,
+     "t_end_ms": 1794231475920,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794231474916
+     ],
+     "observation": {
+      "speech_raw": "3. to 9 p.m. \u001d Link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794231475920,
+     "t_end_ms": 1794231476924,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794231475920
+     ],
+     "observation": {
+      "speech_raw": "\u2022 Weekday hours: 9 a.m. to 9 p.m.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794231476924,
+     "t_end_ms": 1794231477929,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794231476924
+     ],
+     "observation": {
+      "speech_raw": "\u2022 Weekday hours: 9 a.m. to 9 p.m.",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,426 @@
+{
+ "scenario_id": "1157-web-dictionary-rule-in-a-page",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": false,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794217123677
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794217125045,
+     "t_end_ms": 1794217126049,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794217125045
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e The Accessibility Engine Specification",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794217126049,
+     "t_end_ms": 1794217127053,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794217126049
+     ],
+     "observation": {
+      "speech_raw": "The screen reader engine parses the document object model into a clean virtual buffer.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794217127053,
+     "t_end_ms": 1794217128257,
+     "action": {
+      "type": "key",
+      "command": "Insert+D"
+     },
+     "keys": [
+      "Insert+D"
+     ],
+     "key_times": [
+      1794217127053
+     ],
+     "observation": {
+      "speech_raw": "New Dictionary \u001d dialog \u001e \nFile Name: \u001d Edit \u001e \ngoogle chrome\nType in text.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "action": {
+      "type": "key_ui_access",
+      "command": "Enter"
+     },
+     "observation": {
+      "speech_raw": "",
+      "skipped": true
+     },
+     "step_success": false
+    },
+    {
+     "step_id": "s5",
+     "action": {
+      "type": "key_ui_access",
+      "command": "Alt+A"
+     },
+     "observation": {
+      "speech_raw": "",
+      "skipped": true
+     },
+     "step_success": false
+    },
+    {
+     "step_id": "s6",
+     "action": {
+      "type": "key_ui_access",
+      "command": "Home"
+     },
+     "observation": {
+      "speech_raw": "",
+      "skipped": true
+     },
+     "step_success": false
+    },
+    {
+     "step_id": "s7",
+     "action": {
+      "type": "key_ui_access",
+      "command": "Shift+End"
+     },
+     "observation": {
+      "speech_raw": "",
+      "skipped": true
+     },
+     "step_success": false
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794217128257,
+     "t_end_ms": 1794217129264,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeString(\"buffer\")"
+     },
+     "keys": [
+      "b",
+      "u",
+      "f",
+      "f",
+      "e",
+      "r"
+     ],
+     "key_times": [
+      1794217128257,
+      1794217128258,
+      1794217128259,
+      1794217128259,
+      1794217128260,
+      1794217128261
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "action": {
+      "type": "key_ui_access",
+      "command": "Tab"
+     },
+     "observation": {
+      "speech_raw": "",
+      "skipped": true
+     },
+     "step_success": false
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794217129264,
+     "t_end_ms": 1794217130271,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeString(\"memory\")"
+     },
+     "keys": [
+      "m",
+      "e",
+      "m",
+      "o",
+      "r",
+      "y"
+     ],
+     "key_times": [
+      1794217129264,
+      1794217129265,
+      1794217129265,
+      1794217129266,
+      1794217129267,
+      1794217129267
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "action": {
+      "type": "key_ui_access",
+      "command": "Enter"
+     },
+     "observation": {
+      "speech_raw": "",
+      "skipped": true
+     },
+     "step_success": false
+    },
+    {
+     "step_id": "s12",
+     "action": {
+      "type": "key_ui_access",
+      "command": "Ctrl+S"
+     },
+     "observation": {
+      "speech_raw": "",
+      "skipped": true
+     },
+     "step_success": false
+    },
+    {
+     "step_id": "s13",
+     "action": {
+      "type": "key_ui_access",
+      "command": "Alt+F4"
+     },
+     "observation": {
+      "speech_raw": "",
+      "skipped": true
+     },
+     "step_success": false
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794217130271,
+     "t_end_ms": 1794217131276,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794217130271
+     ],
+     "observation": {
+      "speech_raw": "File Name:  \u001d Edit \u001e \nbuffermemory",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794217131276,
+     "t_end_ms": 1794217132580,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794217131276
+     ],
+     "observation": {
+      "speech_raw": "buffermemory",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794217132580,
+     "t_end_ms": 1794217133685,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794217132580
+     ],
+     "observation": {
+      "speech_raw": "OK \u001d Button \u001e \nTo activate press spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s17",
+     "t_start_ms": 1794217133685,
+     "t_end_ms": 1794217134790,
+     "action": {
+      "type": "key",
+      "command": "Insert+D"
+     },
+     "keys": [
+      "Insert+D"
+     ],
+     "key_times": [
+      1794217133685
+     ],
+     "observation": {
+      "speech_raw": "New Dictionary \u001d dialog \u001e \nFile Name: \u001d Edit \u001e \ngoogle chrome\nType in text.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s18",
+     "action": {
+      "type": "key_ui_access",
+      "command": "Tab"
+     },
+     "observation": {
+      "speech_raw": "",
+      "skipped": true
+     },
+     "step_success": false
+    },
+    {
+     "step_id": "s19",
+     "action": {
+      "type": "key_ui_access",
+      "command": "Tab"
+     },
+     "observation": {
+      "speech_raw": "",
+      "skipped": true
+     },
+     "step_success": false
+    },
+    {
+     "step_id": "s20",
+     "action": {
+      "type": "key_ui_access",
+      "command": "Tab"
+     },
+     "observation": {
+      "speech_raw": "",
+      "skipped": true
+     },
+     "step_success": false
+    },
+    {
+     "step_id": "s21",
+     "action": {
+      "type": "key_ui_access",
+      "command": "Space"
+     },
+     "observation": {
+      "speech_raw": "",
+      "skipped": true
+     },
+     "step_success": false
+    },
+    {
+     "step_id": "s22",
+     "action": {
+      "type": "key_ui_access",
+      "command": "Space"
+     },
+     "observation": {
+      "speech_raw": "",
+      "skipped": true
+     },
+     "step_success": false
+    },
+    {
+     "step_id": "s23",
+     "action": {
+      "type": "key_ui_access",
+      "command": "Ctrl+S"
+     },
+     "observation": {
+      "speech_raw": "",
+      "skipped": true
+     },
+     "step_success": false
+    },
+    {
+     "step_id": "s24",
+     "action": {
+      "type": "key_ui_access",
+      "command": "Alt+F4"
+     },
+     "observation": {
+      "speech_raw": "",
+      "skipped": true
+     },
+     "step_success": false
+    },
+    {
+     "step_id": "s25",
+     "t_start_ms": 1794217134790,
+     "t_end_ms": 1794217135795,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794217134790
+     ],
+     "observation": {
+      "speech_raw": "File Name:  \u001d Edit \u001e \ngoogle chrome",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

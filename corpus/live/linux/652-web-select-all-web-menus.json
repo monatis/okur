@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794198560171
+     "t_ms": 1794227703111
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794198561541,
-     "t_end_ms": 1794198562547,
+     "t_start_ms": 1794227704476,
+     "t_end_ms": 1794227705482,
      "action": {
       "type": "key",
       "command": "Ctrl+A"
@@ -31,7 +32,7 @@
       "Ctrl+A"
      ],
      "key_times": [
-      1794198561541
+      1794227704476
      ],
      "observation": {
       "speech_raw": "selected\nWeb Menus\n \u001d heading level 1 \u001e Web Menus\nMain menu MenuBar with 3 items\nFile \u001d menu \u001e  \u001dsub menu\u001e  \u001dcollapsed\u001e \nEdit \u001d menu \u001e  \u001dsub menu\u001e  \u001dcollapsed\u001e \nHelp \u001d menu \u001e \nMenuBar end\nNotes\n \u001d Edit \u001e First line of notes.\nChosen: none",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794198562547,
-     "t_end_ms": 1794198563552,
+     "t_start_ms": 1794227705482,
+     "t_end_ms": 1794227706487,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -51,7 +52,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794198562547
+      1794227705482
      ],
      "observation": {
       "speech_raw": "Web Menus",

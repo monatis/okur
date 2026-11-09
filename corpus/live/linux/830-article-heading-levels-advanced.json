@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794200834549
+     "t_ms": 1794232264103
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794200835916,
-     "t_end_ms": 1794200836919,
+     "t_start_ms": 1794232265466,
+     "t_end_ms": 1794232266470,
      "action": {
       "type": "key",
       "command": "2"
@@ -31,7 +32,7 @@
       "2"
      ],
      "key_times": [
-      1794200835916
+      1794232265466
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours \u001d heading level 1 \u001e \nWhat changes\n \u001d heading level 2 \u001e",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794200836919,
-     "t_end_ms": 1794200837924,
+     "t_start_ms": 1794232266470,
+     "t_end_ms": 1794232267474,
      "action": {
       "type": "key",
       "command": "2"
@@ -51,7 +52,7 @@
       "2"
      ],
      "key_times": [
-      1794200836919
+      1794232266470
      ],
      "observation": {
       "speech_raw": "Opening schedule\n \u001d heading level 2 \u001e",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794200837924,
-     "t_end_ms": 1794200838928,
+     "t_start_ms": 1794232267474,
+     "t_end_ms": 1794232268477,
      "action": {
       "type": "key",
       "command": "2"
@@ -71,7 +72,7 @@
       "2"
      ],
      "key_times": [
-      1794200837924
+      1794232267474
      ],
      "observation": {
       "speech_raw": "Related stories\n \u001d heading level 2 \u001e",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794200838928,
-     "t_end_ms": 1794200839932,
+     "t_start_ms": 1794232268477,
+     "t_end_ms": 1794232269481,
      "action": {
       "type": "key",
       "command": "2"
@@ -91,7 +92,7 @@
       "2"
      ],
      "key_times": [
-      1794200838928
+      1794232268477
      ],
      "observation": {
       "speech_raw": "No more headings at level2 in section",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794200839932,
-     "t_end_ms": 1794200840936,
+     "t_start_ms": 1794232269481,
+     "t_end_ms": 1794232270485,
      "action": {
       "type": "key",
       "command": "3"
@@ -111,7 +112,7 @@
       "3"
      ],
      "key_times": [
-      1794200839932
+      1794232269481
      ],
      "observation": {
       "speech_raw": "No more headings at level3 in section",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794200840936,
-     "t_end_ms": 1794200841941,
+     "t_start_ms": 1794232270485,
+     "t_end_ms": 1794232271489,
      "action": {
       "type": "key",
       "command": "3"
@@ -131,7 +132,7 @@
       "3"
      ],
      "key_times": [
-      1794200840936
+      1794232270485
      ],
      "observation": {
       "speech_raw": "No more headings at level3 in section",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794200841941,
-     "t_end_ms": 1794200842945,
+     "t_start_ms": 1794232271489,
+     "t_end_ms": 1794232272494,
      "action": {
       "type": "key",
       "command": "1"
@@ -151,7 +152,7 @@
       "1"
      ],
      "key_times": [
-      1794200841941
+      1794232271489
      ],
      "observation": {
       "speech_raw": "No more headings at level1",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794200842945,
-     "t_end_ms": 1794200843949,
+     "t_start_ms": 1794232272494,
+     "t_end_ms": 1794232273498,
      "action": {
       "type": "key",
       "command": "1"
@@ -171,7 +172,7 @@
       "1"
      ],
      "key_times": [
-      1794200842945
+      1794232272494
      ],
      "observation": {
       "speech_raw": "No more headings at level1",

@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "5bf54de3"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794209363364
+     "t_ms": 1794227755481
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794209364729,
-     "t_end_ms": 1794209365733,
+     "t_start_ms": 1794227756845,
+     "t_end_ms": 1794227757848,
      "action": {
       "type": "key",
       "command": "Down"
@@ -32,7 +32,7 @@
       "Down"
      ],
      "key_times": [
-      1794209364729
+      1794227756845
      ],
      "observation": {
       "speech_raw": "banner",
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794209365733,
-     "t_end_ms": 1794209366989,
+     "t_start_ms": 1794227757848,
+     "t_end_ms": 1794227759104,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -53,8 +53,8 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794209365733,
-      1794209365985
+      1794227757848,
+      1794227758100
      ],
      "observation": {
       "speech_raw": "banner\nb a n n e r space",
@@ -64,8 +64,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794209366989,
-     "t_end_ms": 1794209368296,
+     "t_start_ms": 1794227759104,
+     "t_end_ms": 1794227760410,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -75,8 +75,8 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794209366989,
-      1794209367291
+      1794227759104,
+      1794227759406
      ],
      "observation": {
       "speech_raw": "banner\nb a n n e r space",
@@ -86,8 +86,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794209368296,
-     "t_end_ms": 1794209369652,
+     "t_start_ms": 1794227760411,
+     "t_end_ms": 1794227761768,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -97,8 +97,8 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794209368296,
-      1794209368648
+      1794227760411,
+      1794227760763
      ],
      "observation": {
       "speech_raw": "banner\nbanner",
@@ -108,8 +108,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794209369652,
-     "t_end_ms": 1794209371059,
+     "t_start_ms": 1794227761768,
+     "t_end_ms": 1794227763176,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -119,8 +119,8 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794209369652,
-      1794209370055
+      1794227761768,
+      1794227762170
      ],
      "observation": {
       "speech_raw": "banner\nbanner",
@@ -130,8 +130,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794209371059,
-     "t_end_ms": 1794209372516,
+     "t_start_ms": 1794227763176,
+     "t_end_ms": 1794227764633,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -141,8 +141,8 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794209371059,
-      1794209371511
+      1794227763176,
+      1794227763628
      ],
      "observation": {
       "speech_raw": "banner\nbanner",

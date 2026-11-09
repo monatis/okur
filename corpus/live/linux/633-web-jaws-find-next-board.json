@@ -1,0 +1,366 @@
+{
+ "scenario_id": "633-web-jaws-find-next-board",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794227125887
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794227127247,
+     "t_end_ms": 1794227128252,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+F"
+     },
+     "keys": [
+      "Ctrl+F"
+     ],
+     "key_times": [
+      1794227127247
+     ],
+     "observation": {
+      "speech_raw": "Virtual Find",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794227128252,
+     "t_end_ms": 1794227129256,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"b\")"
+     },
+     "keys": [
+      "b"
+     ],
+     "key_times": [
+      1794227128252
+     ],
+     "observation": {
+      "speech_raw": "There are no buttons on this page.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794227129256,
+     "t_end_ms": 1794227130260,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"o\")"
+     },
+     "keys": [
+      "o"
+     ],
+     "key_times": [
+      1794227129256
+     ],
+     "observation": {
+      "speech_raw": "article",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794227130260,
+     "t_end_ms": 1794227131264,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"a\")"
+     },
+     "keys": [
+      "a"
+     ],
+     "key_times": [
+      1794227130260
+     ],
+     "observation": {
+      "speech_raw": "There are no radio buttons on this page.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794227131264,
+     "t_end_ms": 1794227132267,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"r\")"
+     },
+     "keys": [
+      "r"
+     ],
+     "key_times": [
+      1794227131264
+     ],
+     "observation": {
+      "speech_raw": "Related stories complementary information",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794227132267,
+     "t_end_ms": 1794227133271,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"d\")"
+     },
+     "keys": [
+      "d"
+     ],
+     "key_times": [
+      1794227132267
+     ],
+     "observation": {
+      "speech_raw": "Related stories\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794227133271,
+     "t_end_ms": 1794227134275,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794227133271
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794227134275,
+     "t_end_ms": 1794227135280,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794227134275
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e Related stories",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794227135280,
+     "t_end_ms": 1794227136283,
+     "action": {
+      "type": "key",
+      "command": "F3"
+     },
+     "keys": [
+      "F3"
+     ],
+     "key_times": [
+      1794227135280
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794227136283,
+     "t_end_ms": 1794227137287,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794227136283
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e Related stories",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794227137287,
+     "t_end_ms": 1794227138291,
+     "action": {
+      "type": "key",
+      "command": "F3"
+     },
+     "keys": [
+      "F3"
+     ],
+     "key_times": [
+      1794227137287
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794227138291,
+     "t_end_ms": 1794227139295,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794227138291
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e Related stories",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794227139295,
+     "t_end_ms": 1794227140300,
+     "action": {
+      "type": "key",
+      "command": "Shift+F3"
+     },
+     "keys": [
+      "Shift+F3"
+     ],
+     "key_times": [
+      1794227139295
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794227140300,
+     "t_end_ms": 1794227141305,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794227140300
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e Related stories",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794227141305,
+     "t_end_ms": 1794227142310,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "key_times": [
+      1794227141305
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794227142310,
+     "t_end_ms": 1794227143314,
+     "action": {
+      "type": "key",
+      "command": "F3"
+     },
+     "keys": [
+      "F3"
+     ],
+     "key_times": [
+      1794227142310
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s17",
+     "t_start_ms": 1794227143314,
+     "t_end_ms": 1794227144319,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794227143314
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

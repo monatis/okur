@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794198399355
+     "t_ms": 1794227541819
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794198400721,
-     "t_end_ms": 1794198401725,
+     "t_start_ms": 1794227543188,
+     "t_end_ms": 1794227544191,
      "action": {
       "type": "key",
       "command": "Down"
@@ -31,7 +32,7 @@
       "Down"
      ],
      "key_times": [
-      1794198400721
+      1794227543188
      ],
      "observation": {
       "speech_raw": "main region",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794198401725,
-     "t_end_ms": 1794198402829,
+     "t_start_ms": 1794227544191,
+     "t_end_ms": 1794227545295,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -51,7 +52,7 @@
       "Tab"
      ],
      "key_times": [
-      1794198401725
+      1794227544191
      ],
      "observation": {
       "speech_raw": "Create Your Account - Riverside Library\n \u001d MainRegion \u001e \n \u001d FormRegion \u001e \nFull name \u001d Edit \u001e \n \u001dRequired\u001e \nblank\nType in text.",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794198402829,
-     "t_end_ms": 1794198403833,
+     "t_start_ms": 1794227545295,
+     "t_end_ms": 1794227546299,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -71,7 +72,7 @@
       "Escape"
      ],
      "key_times": [
-      1794198402829
+      1794227545295
      ],
      "observation": {
       "speech_raw": "virtual PC",

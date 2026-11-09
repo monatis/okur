@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": null,
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "application": "corpus/fixtures/linux/desktop-forms.py",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -16,8 +17,8 @@
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794194672983,
-     "t_end_ms": 1794194674139,
+     "t_start_ms": 1794222549876,
+     "t_end_ms": 1794222551032,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -26,7 +27,7 @@
       "Tab"
      ],
      "key_times": [
-      1794194672983
+      1794222549876
      ],
      "observation": {
       "speech_raw": "SR Desktop Fixture\nNotes: \u001d Edit \u001e \nType in text.",
@@ -36,8 +37,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794194674139,
-     "t_end_ms": 1794194675244,
+     "t_start_ms": 1794222551032,
+     "t_end_ms": 1794222552137,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -46,7 +47,7 @@
       "Tab"
      ],
      "key_times": [
-      1794194674139
+      1794222551032
      ],
      "observation": {
       "speech_raw": "Subscribe to updates \u001d check box \u001e  \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
@@ -56,8 +57,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794194675244,
-     "t_end_ms": 1794194676348,
+     "t_start_ms": 1794222552137,
+     "t_end_ms": 1794222553242,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -66,7 +67,7 @@
       "Tab"
      ],
      "key_times": [
-      1794194675244
+      1794222552137
      ],
      "observation": {
       "speech_raw": "Remember me \u001d check box \u001e  \u001dnot checked\u001e \nTo check press Spacebar.",
@@ -76,8 +77,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794194676348,
-     "t_end_ms": 1794194677654,
+     "t_start_ms": 1794222553242,
+     "t_end_ms": 1794222554546,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -86,7 +87,7 @@
       "Tab"
      ],
      "key_times": [
-      1794194676348
+      1794222553242
      ],
      "observation": {
       "speech_raw": "Plan\nPro \u001d radio button \u001e  \u001dchecked\u001e \n2 of 3\nTo change the selection press Up or Down Arrow.",
@@ -96,8 +97,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794194677654,
-     "t_end_ms": 1794194678858,
+     "t_start_ms": 1794222554546,
+     "t_end_ms": 1794222555650,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -106,7 +107,7 @@
       "Tab"
      ],
      "key_times": [
-      1794194677654
+      1794222554546
      ],
      "observation": {
       "speech_raw": "Country: \u001d Combo box \u001e \nGermany\nTo change the selection use the Arrow keys.",
@@ -116,8 +117,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794194678858,
-     "t_end_ms": 1794194679962,
+     "t_start_ms": 1794222555650,
+     "t_end_ms": 1794222556755,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -126,7 +127,7 @@
       "Tab"
      ],
      "key_times": [
-      1794194678858
+      1794222555650
      ],
      "observation": {
       "speech_raw": "Fruit: \u001d List box \u001e \nBananas\n2 of 3\nTo move to an item press the Arrow keys.",
@@ -136,8 +137,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794194679962,
-     "t_end_ms": 1794194681067,
+     "t_start_ms": 1794222556755,
+     "t_end_ms": 1794222557860,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -146,7 +147,7 @@
       "Tab"
      ],
      "key_times": [
-      1794194679962
+      1794222556755
      ],
      "observation": {
       "speech_raw": " \u001d Tree view \u001e \nDocuments \u001dclosed\u001e \n1 of 2\nTo move through or expand items use the Arrow keys.",
@@ -156,8 +157,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794194681067,
-     "t_end_ms": 1794194682272,
+     "t_start_ms": 1794222557860,
+     "t_end_ms": 1794222558964,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -166,7 +167,7 @@
       "Tab"
      ],
      "key_times": [
-      1794194681067
+      1794222557860
      ],
      "observation": {
       "speech_raw": " \u001d List view \u001e \nbudget.xlsx\n24 KB\n1 of 3\nTo move to items use the Arrow keys.",
@@ -176,8 +177,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794194682272,
-     "t_end_ms": 1794194683777,
+     "t_start_ms": 1794222558965,
+     "t_end_ms": 1794222560270,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -186,7 +187,7 @@
       "Tab"
      ],
      "key_times": [
-      1794194682272
+      1794222558965
      ],
      "observation": {
       "speech_raw": "General \u001d Tab \u001e  \u001dselected\u001e \nTo switch pages, press Control+PageDown.",
@@ -196,8 +197,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794194683777,
-     "t_end_ms": 1794194684882,
+     "t_start_ms": 1794222560270,
+     "t_end_ms": 1794222561374,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -206,7 +207,7 @@
       "Tab"
      ],
      "key_times": [
-      1794194683777
+      1794222560270
      ],
      "observation": {
       "speech_raw": "OK \u001d Button \u001e \nTo activate press spacebar.",
@@ -216,8 +217,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794194684882,
-     "t_end_ms": 1794194685987,
+     "t_start_ms": 1794222561374,
+     "t_end_ms": 1794222562479,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -226,7 +227,7 @@
       "Tab"
      ],
      "key_times": [
-      1794194684882
+      1794222561374
      ],
      "observation": {
       "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
@@ -236,8 +237,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794194685987,
-     "t_end_ms": 1794194687492,
+     "t_start_ms": 1794222562479,
+     "t_end_ms": 1794222563784,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -246,7 +247,7 @@
       "Tab"
      ],
      "key_times": [
-      1794194685987
+      1794222562479
      ],
      "observation": {
       "speech_raw": "Name: \u001d Edit \u001e \nAda\nType in text.",
@@ -256,8 +257,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794194687492,
-     "t_end_ms": 1794194688597,
+     "t_start_ms": 1794222563784,
+     "t_end_ms": 1794222564888,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -266,7 +267,7 @@
       "Tab"
      ],
      "key_times": [
-      1794194687492
+      1794222563784
      ],
      "observation": {
       "speech_raw": "Notes: \u001d Edit \u001e \nType in text.",
@@ -276,8 +277,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794194688597,
-     "t_end_ms": 1794194690104,
+     "t_start_ms": 1794222564888,
+     "t_end_ms": 1794222566194,
      "action": {
       "type": "key",
       "command": "Shift+Tab"
@@ -286,7 +287,7 @@
       "Shift+Tab"
      ],
      "key_times": [
-      1794194688597
+      1794222564888
      ],
      "observation": {
       "speech_raw": "Name: \u001d Edit \u001e \nAda\nType in text.",
@@ -296,8 +297,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794194690104,
-     "t_end_ms": 1794194691209,
+     "t_start_ms": 1794222566194,
+     "t_end_ms": 1794222567299,
      "action": {
       "type": "key",
       "command": "Shift+Tab"
@@ -306,7 +307,7 @@
       "Shift+Tab"
      ],
      "key_times": [
-      1794194690104
+      1794222566194
      ],
      "observation": {
       "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",

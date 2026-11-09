@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794197858202
+     "t_ms": 1794226819745
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794197859569,
-     "t_end_ms": 1794197860573,
+     "t_start_ms": 1794226821109,
+     "t_end_ms": 1794226822113,
      "action": {
       "type": "key",
       "command": "Down"
@@ -31,7 +32,7 @@
       "Down"
      ],
      "key_times": [
-      1794197859569
+      1794226821109
      ],
      "observation": {
       "speech_raw": "main region",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794197860573,
-     "t_end_ms": 1794197861576,
+     "t_start_ms": 1794226822113,
+     "t_end_ms": 1794226823117,
      "action": {
       "type": "key",
       "command": "Down"
@@ -51,7 +52,7 @@
       "Down"
      ],
      "key_times": [
-      1794197860573
+      1794226822113
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e Create your account",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794197861576,
-     "t_end_ms": 1794197862781,
+     "t_start_ms": 1794226823117,
+     "t_end_ms": 1794226824322,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -71,7 +72,7 @@
       "Tab"
      ],
      "key_times": [
-      1794197861576
+      1794226823117
      ],
      "observation": {
       "speech_raw": "Create Your Account - Riverside Library\n \u001d MainRegion \u001e \n \u001d FormRegion \u001e \nFull name \u001d Edit \u001e \n \u001dRequired\u001e \nblank\nType in text.",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794197862781,
-     "t_end_ms": 1794197863885,
+     "t_start_ms": 1794226824322,
+     "t_end_ms": 1794226825526,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -91,7 +92,7 @@
       "Tab"
      ],
      "key_times": [
-      1794197862781
+      1794226824322
      ],
      "observation": {
       "speech_raw": "Email address \u001d Edit \u001e \nsam@example.com\nWe never share your email.\nType in text.",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794197863885,
-     "t_end_ms": 1794197864990,
+     "t_start_ms": 1794226825526,
+     "t_end_ms": 1794226826630,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -111,7 +112,7 @@
       "Tab"
      ],
      "key_times": [
-      1794197863885
+      1794226825526
      ],
      "observation": {
       "speech_raw": "Password \u001d password edit \u001e \n \u001dRequired\u001e   \u001d\u001e\nType in text.",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794197864990,
-     "t_end_ms": 1794197866094,
+     "t_start_ms": 1794226826630,
+     "t_end_ms": 1794226827733,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -131,7 +132,7 @@
       "Tab"
      ],
      "key_times": [
-      1794197864990
+      1794226826630
      ],
      "observation": {
       "speech_raw": "Membership type \u001d group \u001e \nAdult  \u001d radio button \u001e   \u001dchecked\u001e \n1 of 3\nTo change the selection press Up or Down Arrow.",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794197866094,
-     "t_end_ms": 1794197867199,
+     "t_start_ms": 1794226827733,
+     "t_end_ms": 1794226828838,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -151,7 +152,7 @@
       "Tab"
      ],
      "key_times": [
-      1794197866094
+      1794226827733
      ],
      "observation": {
       "speech_raw": "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside\nTo change the selection use the Arrow keys.",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794197867199,
-     "t_end_ms": 1794197868302,
+     "t_start_ms": 1794226828838,
+     "t_end_ms": 1794226829942,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -171,7 +172,7 @@
       "Tab"
      ],
      "key_times": [
-      1794197867199
+      1794226828838
      ],
      "observation": {
       "speech_raw": "Accessibility needs \u001d edit \u001e \nblank\nType in text.",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794197868302,
-     "t_end_ms": 1794197869308,
+     "t_start_ms": 1794226829942,
+     "t_end_ms": 1794226830948,
      "action": {
       "type": "key",
       "command": "Insert+Tab"
@@ -191,7 +192,7 @@
       "Insert+Tab"
      ],
      "key_times": [
-      1794197868302
+      1794226829942
      ],
      "observation": {
       "speech_raw": "Accessibility needs \u001d edit \u001e \nblank",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794197869308,
-     "t_end_ms": 1794197870312,
+     "t_start_ms": 1794226830948,
+     "t_end_ms": 1794226831952,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -211,7 +212,7 @@
       "Escape"
      ],
      "key_times": [
-      1794197869308
+      1794226830948
      ],
      "observation": {
       "speech_raw": "virtual PC Cursor",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794197870312,
-     "t_end_ms": 1794197871316,
+     "t_start_ms": 1794226831952,
+     "t_end_ms": 1794226832956,
      "action": {
       "type": "key",
       "command": "Down"
@@ -231,7 +232,7 @@
       "Down"
      ],
      "key_times": [
-      1794197870312
+      1794226831952
      ],
      "observation": {
       "speech_raw": "Send me the monthly newsletter \u001d check box \u001e  \u001dchecked\u001e ",

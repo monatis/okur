@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794200943097
+     "t_ms": 1794232372741
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794200944464,
-     "t_end_ms": 1794200945468,
+     "t_start_ms": 1794232374108,
+     "t_end_ms": 1794232375212,
      "action": {
       "type": "key",
       "command": "G"
@@ -31,7 +32,7 @@
       "G"
      ],
      "key_times": [
-      1794200944464
+      1794232374108
      ],
      "observation": {
       "speech_raw": "Front entrance of the Riverside City Library at dusk\n \u001d Graphic \u001e ",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794200945468,
-     "t_end_ms": 1794200946472,
+     "t_start_ms": 1794232375212,
+     "t_end_ms": 1794232376216,
      "action": {
       "type": "key",
       "command": "G"
@@ -51,7 +52,7 @@
       "G"
      ],
      "key_times": [
-      1794200945468
+      1794232375212
      ],
      "observation": {
       "speech_raw": "wrapping to top\nFront entrance of the Riverside City Library at dusk\n \u001d Graphic \u001e ",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794200946472,
-     "t_end_ms": 1794200947477,
+     "t_start_ms": 1794232376216,
+     "t_end_ms": 1794232377221,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -71,7 +72,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794200946472
+      1794232376216
      ],
      "observation": {
       "speech_raw": "Front entrance of the Riverside City Library at dusk\n \u001d Graphic \u001e ",

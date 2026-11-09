@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794195825310
+     "t_ms": 1794224153837
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794195826673,
-     "t_end_ms": 1794195827677,
+     "t_start_ms": 1794224155200,
+     "t_end_ms": 1794224156204,
      "action": {
       "type": "key",
       "command": "Z"
@@ -31,7 +32,7 @@
       "Z"
      ],
      "key_times": [
-      1794195826673
+      1794224155200
      ],
      "observation": {
       "speech_raw": "A division holds this text.",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794195827677,
-     "t_end_ms": 1794195828681,
+     "t_start_ms": 1794224156204,
+     "t_end_ms": 1794224157208,
      "action": {
       "type": "key",
       "command": "Z"
@@ -51,7 +52,7 @@
       "Z"
      ],
      "key_times": [
-      1794195827677
+      1794224156204
      ],
      "observation": {
       "speech_raw": "Another division, with a span inside it.",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794195828681,
-     "t_end_ms": 1794195829685,
+     "t_start_ms": 1794224157208,
+     "t_end_ms": 1794224158211,
      "action": {
       "type": "key",
       "command": "Z"
@@ -71,7 +72,7 @@
       "Z"
      ],
      "key_times": [
-      1794195828681
+      1794224157208
      ],
      "observation": {
       "speech_raw": "A clickable division",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794195829685,
-     "t_end_ms": 1794195830689,
+     "t_start_ms": 1794224158211,
+     "t_end_ms": 1794224159215,
      "action": {
       "type": "key",
       "command": "Z"
@@ -91,7 +92,7 @@
       "Z"
      ],
      "key_times": [
-      1794195829685
+      1794224158211
      ],
      "observation": {
       "speech_raw": "This part flows to the lists.\nHas Flows To",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794195830689,
-     "t_end_ms": 1794195831693,
+     "t_start_ms": 1794224159215,
+     "t_end_ms": 1794224160220,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -111,7 +112,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794195830689
+      1794224159215
      ],
      "observation": {
       "speech_raw": "This part flows to the lists.\nHas Flows To",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794195831693,
-     "t_end_ms": 1794195832697,
+     "t_start_ms": 1794224160220,
+     "t_end_ms": 1794224161224,
      "action": {
       "type": "key",
       "command": "Up"
@@ -131,7 +132,7 @@
       "Up"
      ],
      "key_times": [
-      1794195831693
+      1794224160220
      ],
      "observation": {
       "speech_raw": "A clickable division",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794195832697,
-     "t_end_ms": 1794195833701,
+     "t_start_ms": 1794224161224,
+     "t_end_ms": 1794224162229,
      "action": {
       "type": "key",
       "command": "Down"
@@ -151,7 +152,7 @@
       "Down"
      ],
      "key_times": [
-      1794195832697
+      1794224161224
      ],
      "observation": {
       "speech_raw": "This part flows to the lists.\nHas Flows To",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794195833701,
-     "t_end_ms": 1794195834706,
+     "t_start_ms": 1794224162229,
+     "t_end_ms": 1794224163233,
      "action": {
       "type": "key",
       "command": "Equals"
@@ -171,7 +172,7 @@
       "Equals"
      ],
      "key_times": [
-      1794195833701
+      1794224162229
      ],
      "observation": {
       "speech_raw": " \u001d heading level 2 \u001e Lists\nHas Flows From",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794195834706,
-     "t_end_ms": 1794195835710,
+     "t_start_ms": 1794224163233,
+     "t_end_ms": 1794224164238,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -191,7 +192,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794195834706
+      1794224163233
      ],
      "observation": {
       "speech_raw": " \u001d heading level 2 \u001e Lists\nHas Flows From",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794195835710,
-     "t_end_ms": 1794195836716,
+     "t_start_ms": 1794224164238,
+     "t_end_ms": 1794224165243,
      "action": {
       "type": "key",
       "command": "Shift+Equals"
@@ -211,7 +212,7 @@
       "Shift+Equals"
      ],
      "key_times": [
-      1794195835710
+      1794224164238
      ],
      "observation": {
       "speech_raw": "This part flows to the lists.\nHas Flows To",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794195836716,
-     "t_end_ms": 1794195837720,
+     "t_start_ms": 1794224165243,
+     "t_end_ms": 1794224166247,
      "action": {
       "type": "key",
       "command": "Equals"
@@ -231,7 +232,7 @@
       "Equals"
      ],
      "key_times": [
-      1794195836716
+      1794224165243
      ],
      "observation": {
       "speech_raw": " \u001d heading level 2 \u001e Lists\nHas Flows From",
@@ -241,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794195837720,
-     "t_end_ms": 1794195838724,
+     "t_start_ms": 1794224166247,
+     "t_end_ms": 1794224167252,
      "action": {
       "type": "key",
       "command": "Equals"
@@ -251,7 +252,7 @@
       "Equals"
      ],
      "key_times": [
-      1794195837720
+      1794224166247
      ],
      "observation": {
       "speech_raw": "No more flows found",

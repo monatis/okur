@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": null,
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794194652929
+     "t_ms": 1794222529662
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794194654296,
-     "t_end_ms": 1794194655300,
+     "t_start_ms": 1794222531029,
+     "t_end_ms": 1794222532034,
      "action": {
       "type": "keyboard",
       "command": "{DOWN}"
@@ -31,7 +32,7 @@
       "Down"
      ],
      "key_times": [
-      1794194654296
+      1794222531029
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e First Boundary Heading",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794194655300,
-     "t_end_ms": 1794194656303,
+     "t_start_ms": 1794222532034,
+     "t_end_ms": 1794222533037,
      "action": {
       "type": "keyboard",
       "command": "{DOWN}"
@@ -51,7 +52,7 @@
       "Down"
      ],
      "key_times": [
-      1794194655300
+      1794222532034
      ],
      "observation": {
       "speech_raw": "First paragraph content.",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794194656303,
-     "t_end_ms": 1794194657307,
+     "t_start_ms": 1794222533037,
+     "t_end_ms": 1794222534041,
      "action": {
       "type": "keyboard",
       "command": "{DOWN}"
@@ -71,7 +72,7 @@
       "Down"
      ],
      "key_times": [
-      1794194656303
+      1794222533037
      ],
      "observation": {
       "speech_raw": " \u001d heading level 2 \u001e Second Boundary Heading",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794194657307,
-     "t_end_ms": 1794194658312,
+     "t_start_ms": 1794222534041,
+     "t_end_ms": 1794222535045,
      "action": {
       "type": "keyboard",
       "command": "{DOWN}"
@@ -91,7 +92,7 @@
       "Down"
      ],
      "key_times": [
-      1794194657307
+      1794222534041
      ],
      "observation": {
       "speech_raw": "Final content paragraph on this page.",

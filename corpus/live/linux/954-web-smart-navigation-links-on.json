@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794203591470
+     "t_ms": 1794235664483
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794203592834,
-     "t_end_ms": 1794203593838,
+     "t_start_ms": 1794235665846,
+     "t_end_ms": 1794235666850,
      "action": {
       "type": "key",
       "command": "K"
@@ -31,7 +32,7 @@
       "K"
      ],
      "key_times": [
-      1794203592834
+      1794235665846
      ],
      "observation": {
       "speech_raw": "There are no PlaceMarkers on this page.",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794203593838,
-     "t_end_ms": 1794203594842,
+     "t_start_ms": 1794235666850,
+     "t_end_ms": 1794235667854,
      "action": {
       "type": "key",
       "command": "K"
@@ -51,7 +52,7 @@
       "K"
      ],
      "key_times": [
-      1794203593838
+      1794235666850
      ],
      "observation": {
       "speech_raw": "There are no PlaceMarkers on this page.",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794203594842,
-     "t_end_ms": 1794203595846,
+     "t_start_ms": 1794235667854,
+     "t_end_ms": 1794235668858,
      "action": {
       "type": "key",
       "command": "K"
@@ -71,7 +72,7 @@
       "K"
      ],
      "key_times": [
-      1794203594842
+      1794235667854
      ],
      "observation": {
       "speech_raw": "There are no PlaceMarkers on this page.",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794203595846,
-     "t_end_ms": 1794203596850,
+     "t_start_ms": 1794235668858,
+     "t_end_ms": 1794235669862,
      "action": {
       "type": "key",
       "command": "K"
@@ -91,7 +92,7 @@
       "K"
      ],
      "key_times": [
-      1794203595846
+      1794235668858
      ],
      "observation": {
       "speech_raw": "There are no PlaceMarkers on this page.",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794203596850,
-     "t_end_ms": 1794203597854,
+     "t_start_ms": 1794235669862,
+     "t_end_ms": 1794235670866,
      "action": {
       "type": "key",
       "command": "K"
@@ -111,7 +112,7 @@
       "K"
      ],
      "key_times": [
-      1794203596850
+      1794235669862
      ],
      "observation": {
       "speech_raw": "There are no PlaceMarkers on this page.",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794203597854,
-     "t_end_ms": 1794203598858,
+     "t_start_ms": 1794235670866,
+     "t_end_ms": 1794235671870,
      "action": {
       "type": "key",
       "command": "Left"
@@ -131,7 +132,7 @@
       "Left"
      ],
      "key_times": [
-      1794203597854
+      1794235670866
      ],
      "observation": {
       "speech_raw": "Virtual Cursor Keys - Keys Fixture",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794203598858,
-     "t_end_ms": 1794203599862,
+     "t_start_ms": 1794235671870,
+     "t_end_ms": 1794235672874,
      "action": {
       "type": "key",
       "command": "Left"
@@ -151,7 +152,7 @@
       "Left"
      ],
      "key_times": [
-      1794203598858
+      1794235671870
      ],
      "observation": {
       "speech_raw": "Virtual Cursor Keys - Keys Fixture",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794203599862,
-     "t_end_ms": 1794203600867,
+     "t_start_ms": 1794235672874,
+     "t_end_ms": 1794235673879,
      "action": {
       "type": "key",
       "command": "Left"
@@ -171,7 +172,7 @@
       "Left"
      ],
      "key_times": [
-      1794203599862
+      1794235672874
      ],
      "observation": {
       "speech_raw": "Virtual Cursor Keys - Keys Fixture",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794203600867,
-     "t_end_ms": 1794203601871,
+     "t_start_ms": 1794235673879,
+     "t_end_ms": 1794235674884,
      "action": {
       "type": "key",
       "command": "Right"
@@ -191,7 +192,7 @@
       "Right"
      ],
      "key_times": [
-      1794203600867
+      1794235673879
      ],
      "observation": {
       "speech_raw": "banner",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794203601871,
-     "t_end_ms": 1794203602875,
+     "t_start_ms": 1794235674884,
+     "t_end_ms": 1794235675889,
      "action": {
       "type": "key",
       "command": "Right"
@@ -211,7 +212,7 @@
       "Right"
      ],
      "key_times": [
-      1794203601871
+      1794235674884
      ],
      "observation": {
       "speech_raw": "Site navigation region",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794203602875,
-     "t_end_ms": 1794203603880,
+     "t_start_ms": 1794235675889,
+     "t_end_ms": 1794235676893,
      "action": {
       "type": "key",
       "command": "Right"
@@ -231,7 +232,7 @@
       "Right"
      ],
      "key_times": [
-      1794203602875
+      1794235675889
      ],
      "observation": {
       "speech_raw": "list of 3 items",
@@ -241,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794203603880,
-     "t_end_ms": 1794203604885,
+     "t_start_ms": 1794235676893,
+     "t_end_ms": 1794235677898,
      "action": {
       "type": "key",
       "command": "Right"
@@ -251,7 +252,7 @@
       "Right"
      ],
      "key_times": [
-      1794203603880
+      1794235676893
      ],
      "observation": {
       "speech_raw": "\u2022",
@@ -261,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794203604885,
-     "t_end_ms": 1794203605890,
+     "t_start_ms": 1794235677898,
+     "t_end_ms": 1794235678901,
      "action": {
       "type": "key",
       "command": "Right"
@@ -271,7 +272,7 @@
       "Right"
      ],
      "key_times": [
-      1794203604885
+      1794235677898
      ],
      "observation": {
       "speech_raw": " ",
@@ -281,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794203605890,
-     "t_end_ms": 1794203606894,
+     "t_start_ms": 1794235678901,
+     "t_end_ms": 1794235679905,
      "action": {
       "type": "key",
       "command": "Right"
@@ -291,7 +292,7 @@
       "Right"
      ],
      "key_times": [
-      1794203605890
+      1794235678901
      ],
      "observation": {
       "speech_raw": "Paragraphs",
@@ -301,8 +302,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794203606894,
-     "t_end_ms": 1794203607898,
+     "t_start_ms": 1794235679905,
+     "t_end_ms": 1794235680910,
      "action": {
       "type": "key",
       "command": "Right"
@@ -311,7 +312,7 @@
       "Right"
      ],
      "key_times": [
-      1794203606894
+      1794235679905
      ],
      "observation": {
       "speech_raw": "\u2022",
@@ -321,8 +322,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794203607898,
-     "t_end_ms": 1794203608903,
+     "t_start_ms": 1794235680910,
+     "t_end_ms": 1794235681916,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -331,7 +332,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794203607898
+      1794235680910
      ],
      "observation": {
       "speech_raw": "Contact",
@@ -341,8 +342,8 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794203608903,
-     "t_end_ms": 1794203609908,
+     "t_start_ms": 1794235681916,
+     "t_end_ms": 1794235682921,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -351,7 +352,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794203608903
+      1794235681916
      ],
      "observation": {
       "speech_raw": "\u2022",
@@ -361,8 +362,8 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794203609908,
-     "t_end_ms": 1794203610913,
+     "t_start_ms": 1794235682921,
+     "t_end_ms": 1794235683926,
      "action": {
       "type": "key",
       "command": "Ctrl+Left"
@@ -371,7 +372,7 @@
       "Ctrl+Left"
      ],
      "key_times": [
-      1794203609908
+      1794235682921
      ],
      "observation": {
       "speech_raw": "Contact",
@@ -381,8 +382,8 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794203610913,
-     "t_end_ms": 1794203611918,
+     "t_start_ms": 1794235683926,
+     "t_end_ms": 1794235684931,
      "action": {
       "type": "key",
       "command": "Ctrl+Left"
@@ -391,7 +392,7 @@
       "Ctrl+Left"
      ],
      "key_times": [
-      1794203610913
+      1794235683926
      ],
      "observation": {
       "speech_raw": "\u2022",
@@ -401,8 +402,8 @@
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794203611918,
-     "t_end_ms": 1794203612923,
+     "t_start_ms": 1794235684931,
+     "t_end_ms": 1794235685936,
      "action": {
       "type": "key",
       "command": "Ctrl+Left"
@@ -411,7 +412,7 @@
       "Ctrl+Left"
      ],
      "key_times": [
-      1794203611918
+      1794235684931
      ],
      "observation": {
       "speech_raw": "Paragraphs",

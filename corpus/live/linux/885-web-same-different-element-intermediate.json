@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794202126856
+     "t_ms": 1794233800800
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794202128227,
-     "t_end_ms": 1794202129230,
+     "t_start_ms": 1794233802166,
+     "t_end_ms": 1794233803170,
      "action": {
       "type": "key",
       "command": "Down"
@@ -31,7 +32,7 @@
       "Down"
      ],
      "key_times": [
-      1794202128227
+      1794233802166
      ],
      "observation": {
       "speech_raw": "banner",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794202129230,
-     "t_end_ms": 1794202130234,
+     "t_start_ms": 1794233803170,
+     "t_end_ms": 1794233804175,
      "action": {
       "type": "key",
       "command": "Down"
@@ -51,7 +52,7 @@
       "Down"
      ],
      "key_times": [
-      1794202129230
+      1794233803170
      ],
      "observation": {
       "speech_raw": "Site navigation region",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794202130234,
-     "t_end_ms": 1794202131237,
+     "t_start_ms": 1794233804175,
+     "t_end_ms": 1794233805179,
      "action": {
       "type": "key",
       "command": "Down"
@@ -71,7 +72,7 @@
       "Down"
      ],
      "key_times": [
-      1794202130234
+      1794233804175
      ],
      "observation": {
       "speech_raw": "list of 3 items",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794202131237,
-     "t_end_ms": 1794202132242,
+     "t_start_ms": 1794233805179,
+     "t_end_ms": 1794233806183,
      "action": {
       "type": "key",
       "command": "S"
@@ -91,7 +92,7 @@
       "S"
      ],
      "key_times": [
-      1794202131237
+      1794233805179
      ],
      "observation": {
       "speech_raw": "No more elements of same type found",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794202132242,
-     "t_end_ms": 1794202133246,
+     "t_start_ms": 1794233806183,
+     "t_end_ms": 1794233807187,
      "action": {
       "type": "key",
       "command": "S"
@@ -111,7 +112,7 @@
       "S"
      ],
      "key_times": [
-      1794202132242
+      1794233806183
      ],
      "observation": {
       "speech_raw": "No more elements of same type found",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794202133246,
-     "t_end_ms": 1794202134250,
+     "t_start_ms": 1794233807187,
+     "t_end_ms": 1794233808191,
      "action": {
       "type": "key",
       "command": "S"
@@ -131,7 +132,7 @@
       "S"
      ],
      "key_times": [
-      1794202133246
+      1794233807187
      ],
      "observation": {
       "speech_raw": "No more elements of same type found",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794202134250,
-     "t_end_ms": 1794202135254,
+     "t_start_ms": 1794233808191,
+     "t_end_ms": 1794233809195,
      "action": {
       "type": "key",
       "command": "D"
@@ -151,7 +152,7 @@
       "D"
      ],
      "key_times": [
-      1794202134250
+      1794233808191
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Paragraphs",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794202135254,
-     "t_end_ms": 1794202136258,
+     "t_start_ms": 1794233809195,
+     "t_end_ms": 1794233810199,
      "action": {
       "type": "key",
       "command": "D"
@@ -171,7 +172,7 @@
       "D"
      ],
      "key_times": [
-      1794202135254
+      1794233809195
      ],
      "observation": {
       "speech_raw": "Paragraphs  \u001d same page link \u001e ",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794202136258,
-     "t_end_ms": 1794202137263,
+     "t_start_ms": 1794233810199,
+     "t_end_ms": 1794233811203,
      "action": {
       "type": "key",
       "command": "Shift+S"
@@ -191,7 +192,7 @@
       "Shift+S"
      ],
      "key_times": [
-      1794202136258
+      1794233810199
      ],
      "observation": {
       "speech_raw": "wrapping to bottom\na link inside it  \u001d same page link \u001e ",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794202137263,
-     "t_end_ms": 1794202138269,
+     "t_start_ms": 1794233811203,
+     "t_end_ms": 1794233812208,
      "action": {
       "type": "key",
       "command": "Shift+D"
@@ -211,7 +212,7 @@
       "Shift+D"
      ],
      "key_times": [
-      1794202137263
+      1794233811203
      ],
      "observation": {
       "speech_raw": "Some text with",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794202138269,
-     "t_end_ms": 1794202139274,
+     "t_start_ms": 1794233812208,
+     "t_end_ms": 1794233813214,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+Right"
@@ -231,7 +232,7 @@
       "Ctrl+Insert+Right"
      ],
      "key_times": [
-      1794202138269
+      1794233812208
      ],
      "observation": {
       "speech_raw": "a link inside it  \u001d same page link \u001e ",
@@ -241,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794202139274,
-     "t_end_ms": 1794202140280,
+     "t_start_ms": 1794233813214,
+     "t_end_ms": 1794233814219,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+Right"
@@ -251,7 +252,7 @@
       "Ctrl+Insert+Right"
      ],
      "key_times": [
-      1794202139274
+      1794233813214
      ],
      "observation": {
       "speech_raw": "and more text after it.",
@@ -261,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794202140280,
-     "t_end_ms": 1794202141285,
+     "t_start_ms": 1794233814219,
+     "t_end_ms": 1794233815226,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+Left"
@@ -271,7 +272,7 @@
       "Ctrl+Insert+Left"
      ],
      "key_times": [
-      1794202140280
+      1794233814219
      ],
      "observation": {
       "speech_raw": "a link inside it  \u001d same page link \u001e ",
@@ -281,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794202141285,
-     "t_end_ms": 1794202142290,
+     "t_start_ms": 1794233815226,
+     "t_end_ms": 1794233816231,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+Up"
@@ -291,7 +292,7 @@
       "Ctrl+Insert+Up"
      ],
      "key_times": [
-      1794202141285
+      1794233815226
      ],
      "observation": {
       "speech_raw": "A link alone in its paragraph  \u001d same page link \u001e ",

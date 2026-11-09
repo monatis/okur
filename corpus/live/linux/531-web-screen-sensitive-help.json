@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794195331283
+     "t_ms": 1794223477868
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794195332645,
-     "t_end_ms": 1794195333649,
+     "t_start_ms": 1794223479228,
+     "t_end_ms": 1794223480232,
      "action": {
       "type": "key",
       "command": "Down"
@@ -31,7 +32,7 @@
       "Down"
      ],
      "key_times": [
-      1794195332645
+      1794223479228
      ],
      "observation": {
       "speech_raw": "banner",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794195333649,
-     "t_end_ms": 1794195334653,
+     "t_start_ms": 1794223480232,
+     "t_end_ms": 1794223481236,
      "action": {
       "type": "key",
       "command": "Insert+F1"
@@ -51,7 +52,7 @@
       "Insert+F1"
      ],
      "key_times": [
-      1794195333649
+      1794223480232
      ],
      "observation": {
       "speech_raw": "Page has 5Regions, 5headings and 12links\nThis is a web page, read with the virtual cursor. The arrow keys read it, H moves by heading, K by link and F by form field. Insert+F6 lists the headings and Insert+F7 the links. Enter on a form field lets you type in it.\n\u001d Link \u001e List Okur Hot Keys\nPress ESCAPE to close this message.",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794195334653,
-     "t_end_ms": 1794195335657,
+     "t_start_ms": 1794223481236,
+     "t_end_ms": 1794223482240,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -71,7 +72,7 @@
       "Escape"
      ],
      "key_times": [
-      1794195334653
+      1794223481236
      ],
      "observation": {
       "speech_raw": "banner",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794195335657,
-     "t_end_ms": 1794195336761,
+     "t_start_ms": 1794223482240,
+     "t_end_ms": 1794223483344,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -91,7 +92,7 @@
       "Tab"
      ],
      "key_times": [
-      1794195335657
+      1794223482240
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette\n \u001d same page link \u001e Riverside Gazette\nTo activate press Enter.",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794195336761,
-     "t_end_ms": 1794195337766,
+     "t_start_ms": 1794223483344,
+     "t_end_ms": 1794223484349,
      "action": {
       "type": "key",
       "command": "Insert+F1"
@@ -111,7 +112,7 @@
       "Insert+F1"
      ],
      "key_times": [
-      1794195336761
+      1794223483344
      ],
      "observation": {
       "speech_raw": "file:///root/okur/corpus/fixtures/news-article.html#top\nPress Enter to follow this link.\nPress ESCAPE to close this message.",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794195337766,
-     "t_end_ms": 1794195338769,
+     "t_start_ms": 1794223484349,
+     "t_end_ms": 1794223485354,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -131,7 +132,7 @@
       "Escape"
      ],
      "key_times": [
-      1794195337766
+      1794223484349
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Riverside Gazette",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794195338769,
-     "t_end_ms": 1794195339774,
+     "t_start_ms": 1794223485354,
+     "t_end_ms": 1794223486359,
      "action": {
       "type": "key",
       "command": "H"
@@ -151,7 +152,7 @@
       "H"
      ],
      "key_times": [
-      1794195338769
+      1794223485354
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours\n \u001d heading level 1 \u001e",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794195339774,
-     "t_end_ms": 1794195340779,
+     "t_start_ms": 1794223486359,
+     "t_end_ms": 1794223487364,
      "action": {
       "type": "key",
       "command": "Insert+F1"
@@ -171,7 +172,7 @@
       "Insert+F1"
      ],
      "key_times": [
-      1794195339774
+      1794223486359
      ],
      "observation": {
       "speech_raw": "A heading at level 1. H and Shift+H move between headings, and the numbers 1 to 6 by level; Insert+F6 lists them.\nPress ESCAPE to close this message.",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794195340779,
-     "t_end_ms": 1794195341782,
+     "t_start_ms": 1794223487364,
+     "t_end_ms": 1794223488369,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -191,7 +192,7 @@
       "Escape"
      ],
      "key_times": [
-      1794195340779
+      1794223487364
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e City Library Expands Evening Hours",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794195341782,
-     "t_end_ms": 1794195342788,
+     "t_start_ms": 1794223488369,
+     "t_end_ms": 1794223489374,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -211,7 +212,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794195341782
+      1794223488369
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e City Library Expands Evening Hours",

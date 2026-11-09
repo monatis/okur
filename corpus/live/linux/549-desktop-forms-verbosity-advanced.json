@@ -1,0 +1,301 @@
+{
+ "scenario_id": "549-desktop-forms-verbosity-advanced",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": null,
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "application": "corpus/fixtures/linux/desktop-forms.py",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794223716857,
+     "t_end_ms": 1794223717913,
+     "action": {
+      "type": "key",
+      "command": "Insert+Tab"
+     },
+     "keys": [
+      "Insert+Tab"
+     ],
+     "key_times": [
+      1794223716857
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794223717913,
+     "t_end_ms": 1794223719017,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794223717913
+     ],
+     "observation": {
+      "speech_raw": "SR Desktop Fixture\nNotes: \u001d Edit \u001e \nType in text.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794223719017,
+     "t_end_ms": 1794223720121,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794223719017
+     ],
+     "observation": {
+      "speech_raw": "Subscribe to updates \u001d check box \u001e  \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794223720121,
+     "t_end_ms": 1794223721226,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794223720121
+     ],
+     "observation": {
+      "speech_raw": "Remember me \u001d check box \u001e  \u001dnot checked\u001e \nTo check press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794223721226,
+     "t_end_ms": 1794223722531,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794223721226
+     ],
+     "observation": {
+      "speech_raw": "Plan\nPro \u001d radio button \u001e  \u001dchecked\u001e \n2 of 3\nTo change the selection press Up or Down Arrow.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794223722531,
+     "t_end_ms": 1794223723636,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794223722531
+     ],
+     "observation": {
+      "speech_raw": "Country: \u001d Combo box \u001e \nGermany\nTo change the selection use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794223723636,
+     "t_end_ms": 1794223724741,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794223723636
+     ],
+     "observation": {
+      "speech_raw": "Fruit: \u001d List box \u001e \nBananas\n2 of 3\nTo move to an item press the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794223724741,
+     "t_end_ms": 1794223725845,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794223724741
+     ],
+     "observation": {
+      "speech_raw": " \u001d Tree view \u001e \nDocuments \u001dclosed\u001e \n1 of 2\nTo move through or expand items use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794223725845,
+     "t_end_ms": 1794223726950,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794223725845
+     ],
+     "observation": {
+      "speech_raw": "Pictures\n2 of 2",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794223726950,
+     "t_end_ms": 1794223728054,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794223726950
+     ],
+     "observation": {
+      "speech_raw": " \u001d List view \u001e \nbudget.xlsx\n24 KB\n1 of 3\nTo move to items use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794223728054,
+     "t_end_ms": 1794223729359,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794223728054
+     ],
+     "observation": {
+      "speech_raw": "General \u001d Tab \u001e  \u001dselected\u001e \nTo switch pages, press Control+PageDown.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794223729359,
+     "t_end_ms": 1794223730564,
+     "action": {
+      "type": "key",
+      "command": "Shift+Tab"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794223729359
+     ],
+     "observation": {
+      "speech_raw": " \u001d List view \u001e \nbudget.xlsx\n24 KB\n1 of 3\nTo move to items use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794223730564,
+     "t_end_ms": 1794223731570,
+     "action": {
+      "type": "key",
+      "command": "Insert+Tab"
+     },
+     "keys": [
+      "Insert+Tab"
+     ],
+     "key_times": [
+      1794223730564
+     ],
+     "observation": {
+      "speech_raw": " \u001d List view \u001e \nbudget.xlsx\n24 KB\n1 of 3\nTo move to items use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794223731570,
+     "t_end_ms": 1794223732575,
+     "action": {
+      "type": "key",
+      "command": "Insert+B"
+     },
+     "keys": [
+      "Insert+B"
+     ],
+     "key_times": [
+      1794223731570
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

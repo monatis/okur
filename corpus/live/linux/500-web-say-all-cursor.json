@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "5bf54de3"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794209431596
+     "t_ms": 1794222981558
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794209432956,
-     "t_end_ms": 1794209437961,
+     "t_start_ms": 1794222982917,
+     "t_end_ms": 1794222987924,
      "action": {
       "type": "key",
       "command": "Insert+Down"
@@ -33,8 +33,8 @@
       "Ctrl"
      ],
      "key_times": [
-      1794209432956,
-      1794209436958
+      1794222982917,
+      1794222986919
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette\nbanner\n \u001d same page link \u001e Riverside Gazette\nPrimary navigation region\nlist of 4 items\n\u2022 \u001d same page link \u001e News\n\u2022 \u001d same page link \u001e Sports\n\u2022 \u001d same page link \u001e Culture\n\u2022 \u001d same page link \u001e Opinion\nlist end\nPrimary navigation region end\nbanner end\nmain region\narticle\n \u001d heading level 1 \u001e City Library Expands Evening Hours\nBy \n \u001d same page link \u001e Maria Lopez,\npublished March 14, 2026\nThe Riverside City Library will stay open until 9 p.m. on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which\nmost respondents asked for later hours.\nFront entrance of the Riverside City Library at dusk\n \u001d Graphic \u001e \n \u001d heading level 2 \u001e What changes\nMembership costs $5.99 a month, e.g. for adults; children join free. Questions go to help@riverside-library.org \u2014 or call 555-0142. Attendance rose 3.5%\nlast year, and staff say they can't wait.\nlist of 3 items\n\u2022 Weekday hours: 9 a.m. to 9 p.m.\n\u2022 Weekend hours, which do not change:\nlist of 2 items nesting level 1\n\u25e6 Saturday: 10 a.m. to 6 p.m.\n\u25e6 Sunday: noon to 5 p.m.\nlist end nesting level 1\n\u2022 New \n \u001d same page link \u001e study rooms\n open in May.\nlist end\n \u001d heading level 2 \u001e Opening schedule\ntable with 3 columns and 3 rows\nBranch hours after the change\nBranch\nWeekdays\nDetails\nCentral\n9 a.m. to 9 p.m.\n \u001d same page link \u001e Directions\nNorthside\n10 a.m. to 8 p.m.\n \u001d same page link \u001e Directions\ntable end\n \u001d heading level 3 \u001e What readers said\nblock quote\nFinally, I can study after work.\nblock quote end\nThe library board will review attendance in the fall. A long-standing complaint among students and working parents was that the reading rooms closed before\nmost people finished their day, so the extended schedule is intended to make the collections, the public computers, and the quiet study spaces available\nat the times when the community actually needs them, according to the library director.\nlist of 3 items\n1. Board vote in March\n2. Hiring in April\n3. Review in October\nlist end\narticle end\nmain region end\nRelated stories complementary information\n \u001d heading level 2 \u001e Related stories\nlist of 2 items\n\u2022 \u001d same page link \u001e Council approves library budget\n\u2022 \u001d same page link \u001e Spring book fair returns\nlist end\nRelated stories complementary information end\ncontent information\n\u00a9 2026 Riverside Gazette. \n \u001d same page link \u001e Contact us\ncontent information end\nend",
@@ -44,8 +44,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794209437961,
-     "t_end_ms": 1794209438966,
+     "t_start_ms": 1794222987924,
+     "t_end_ms": 1794222988929,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -54,7 +54,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794209437961
+      1794222987924
      ],
      "observation": {
       "speech_raw": "content information end",
@@ -64,8 +64,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794209438966,
-     "t_end_ms": 1794209439972,
+     "t_start_ms": 1794222988929,
+     "t_end_ms": 1794222989935,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -74,7 +74,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794209438966
+      1794222988929
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
@@ -84,8 +84,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794209439972,
-     "t_end_ms": 1794209451483,
+     "t_start_ms": 1794222989935,
+     "t_end_ms": 1794223001447,
      "action": {
       "type": "key",
       "command": "Insert+Down"
@@ -98,11 +98,11 @@
       "Ctrl"
      ],
      "key_times": [
-      1794209439972,
-      1794209442974,
-      1794209445475,
-      1794209447977,
-      1794209450478
+      1794222989935,
+      1794222992937,
+      1794222995439,
+      1794222997941,
+      1794223000442
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette\nbanner\n \u001d same page link \u001e Riverside Gazette\nPrimary navigation region\nlist of 4 items\n\u2022 \u001d same page link \u001e News\n\u2022 \u001d same page link \u001e Sports\n\u2022 \u001d same page link \u001e Culture\n\u2022 \u001d same page link \u001e Opinion\nlist end\nPrimary navigation region end\nbanner end\nmain region\narticle\n \u001d heading level 1 \u001e City Library Expands Evening Hours\nBy \n \u001d same page link \u001e Maria Lopez,\npublished March 14, 2026\nThe Riverside City Library will stay open until 9 p.m. on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which\nmost respondents asked for later hours.\nFront entrance of the Riverside City Library at dusk\n \u001d Graphic \u001e \n \u001d heading level 2 \u001e What changes\nMembership costs $5.99 a month, e.g. for adults; children join free. Questions go to help@riverside-library.org \u2014 or call 555-0142. Attendance rose 3.5%\nlast year, and staff say they can't wait.\nlist of 3 items\n\u2022 Weekday hours: 9 a.m. to 9 p.m.\n\u2022 Weekend hours, which do not change:\nlist of 2 items nesting level 1\n\u25e6 Saturday: 10 a.m. to 6 p.m.\n\u25e6 Sunday: noon to 5 p.m.\nlist end nesting level 1\n\u2022 New \n \u001d same page link \u001e study rooms\n open in May.\nlist end\n \u001d heading level 2 \u001e Opening schedule\ntable with 3 columns and 3 rows\nBranch hours after the change\nBranch\nWeekdays\nDetails\nCentral\n9 a.m. to 9 p.m.\n \u001d same page link \u001e Directions\nNorthside\n10 a.m. to 8 p.m.\n \u001d same page link \u001e Directions\ntable end\n \u001d heading level 3 \u001e What readers said\nblock quote\nFinally, I can study after work.\nblock quote end\nThe library board will review attendance in the fall. A long-standing complaint among students and working parents was that the reading rooms closed before\nmost people finished their day, so the extended schedule is intended to make the collections, the public computers, and the quiet study spaces available\nat the times when the community actually needs them, according to the library director.\nlist of 3 items\n1. Board vote in March\n2. Hiring in April\n3. Review in October\nlist end\narticle end\nmain region end\nRelated stories complementary information\n \u001d heading level 2 \u001e Related stories\nlist of 2 items\n\u2022 \u001d same page link \u001e Council approves library budget\n\u2022 \u001d same page link \u001e Spring book fair returns\nlist end\nRelated stories complementary information end\ncontent information\n\u00a9 2026 Riverside Gazette. \n \u001d same page link \u001e Contact us\ncontent information end\nend\no\no\nc\nc",
@@ -112,8 +112,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794209451483,
-     "t_end_ms": 1794209452488,
+     "t_start_ms": 1794223001447,
+     "t_end_ms": 1794223002451,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -122,7 +122,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794209451483
+      1794223001447
      ],
      "observation": {
       "speech_raw": "content information end",
@@ -132,8 +132,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794209452488,
-     "t_end_ms": 1794209453494,
+     "t_start_ms": 1794223002451,
+     "t_end_ms": 1794223003457,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -142,7 +142,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794209452488
+      1794223002451
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
@@ -152,8 +152,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794209453494,
-     "t_end_ms": 1794209462004,
+     "t_start_ms": 1794223003457,
+     "t_end_ms": 1794223011967,
      "action": {
       "type": "key",
       "command": "Insert+Down"
@@ -165,10 +165,10 @@
       "Ctrl"
      ],
      "key_times": [
-      1794209453494,
-      1794209455995,
-      1794209458497,
-      1794209460998
+      1794223003457,
+      1794223005959,
+      1794223008460,
+      1794223010962
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette\nbanner\n \u001d same page link \u001e Riverside Gazette\nPrimary navigation region\nlist of 4 items\n\u2022 \u001d same page link \u001e News\n\u2022 \u001d same page link \u001e Sports\n\u2022 \u001d same page link \u001e Culture\n\u2022 \u001d same page link \u001e Opinion\nlist end\nPrimary navigation region end\nbanner end\nmain region\narticle\n \u001d heading level 1 \u001e City Library Expands Evening Hours\nBy \n \u001d same page link \u001e Maria Lopez,\npublished March 14, 2026\nThe Riverside City Library will stay open until 9 p.m. on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which\nmost respondents asked for later hours.\nFront entrance of the Riverside City Library at dusk\n \u001d Graphic \u001e \n \u001d heading level 2 \u001e What changes\nMembership costs $5.99 a month, e.g. for adults; children join free. Questions go to help@riverside-library.org \u2014 or call 555-0142. Attendance rose 3.5%\nlast year, and staff say they can't wait.\nlist of 3 items\n\u2022 Weekday hours: 9 a.m. to 9 p.m.\n\u2022 Weekend hours, which do not change:\nlist of 2 items nesting level 1\n\u25e6 Saturday: 10 a.m. to 6 p.m.\n\u25e6 Sunday: noon to 5 p.m.\nlist end nesting level 1\n\u2022 New \n \u001d same page link \u001e study rooms\n open in May.\nlist end\n \u001d heading level 2 \u001e Opening schedule\ntable with 3 columns and 3 rows\nBranch hours after the change\nBranch\nWeekdays\nDetails\nCentral\n9 a.m. to 9 p.m.\n \u001d same page link \u001e Directions\nNorthside\n10 a.m. to 8 p.m.\n \u001d same page link \u001e Directions\ntable end\n \u001d heading level 3 \u001e What readers said\nblock quote\nFinally, I can study after work.\nblock quote end\nThe library board will review attendance in the fall. A long-standing complaint among students and working parents was that the reading rooms closed before\nmost people finished their day, so the extended schedule is intended to make the collections, the public computers, and the quiet study spaces available\nat the times when the community actually needs them, according to the library director.\nlist of 3 items\n1. Board vote in March\n2. Hiring in April\n3. Review in October\nlist end\narticle end\nmain region end\nRelated stories complementary information\n \u001d heading level 2 \u001e Related stories\nlist of 2 items\n\u2022 \u001d same page link \u001e Council approves library budget\n\u2022 \u001d same page link \u001e Spring book fair returns\nlist end\nRelated stories complementary information end\ncontent information\n\u00a9 2026 Riverside Gazette. \n \u001d same page link \u001e Contact us\ncontent information end\nend",
@@ -178,8 +178,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794209462004,
-     "t_end_ms": 1794209463009,
+     "t_start_ms": 1794223011967,
+     "t_end_ms": 1794223012972,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -188,7 +188,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794209462004
+      1794223011967
      ],
      "observation": {
       "speech_raw": "content information end",
@@ -198,8 +198,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794209463009,
-     "t_end_ms": 1794209464014,
+     "t_start_ms": 1794223012972,
+     "t_end_ms": 1794223013977,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -208,7 +208,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794209463009
+      1794223012972
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
@@ -218,8 +218,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794209464014,
-     "t_end_ms": 1794209470522,
+     "t_start_ms": 1794223013977,
+     "t_end_ms": 1794223020485,
      "action": {
       "type": "key",
       "command": "Insert+Down"
@@ -230,9 +230,9 @@
       "Ctrl"
      ],
      "key_times": [
-      1794209464014,
-      1794209466516,
-      1794209469517
+      1794223013977,
+      1794223016479,
+      1794223019481
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette\nbanner\n \u001d same page link \u001e Riverside Gazette\nPrimary navigation region\nlist of 4 items\n\u2022 \u001d same page link \u001e News\n\u2022 \u001d same page link \u001e Sports\n\u2022 \u001d same page link \u001e Culture\n\u2022 \u001d same page link \u001e Opinion\nlist end\nPrimary navigation region end\nbanner end\nmain region\narticle\n \u001d heading level 1 \u001e City Library Expands Evening Hours\nBy \n \u001d same page link \u001e Maria Lopez,\npublished March 14, 2026\nThe Riverside City Library will stay open until 9 p.m. on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which\nmost respondents asked for later hours.\nFront entrance of the Riverside City Library at dusk\n \u001d Graphic \u001e \n \u001d heading level 2 \u001e What changes\nMembership costs $5.99 a month, e.g. for adults; children join free. Questions go to help@riverside-library.org \u2014 or call 555-0142. Attendance rose 3.5%\nlast year, and staff say they can't wait.\nlist of 3 items\n\u2022 Weekday hours: 9 a.m. to 9 p.m.\n\u2022 Weekend hours, which do not change:\nlist of 2 items nesting level 1\n\u25e6 Saturday: 10 a.m. to 6 p.m.\n\u25e6 Sunday: noon to 5 p.m.\nlist end nesting level 1\n\u2022 New \n \u001d same page link \u001e study rooms\n open in May.\nlist end\n \u001d heading level 2 \u001e Opening schedule\ntable with 3 columns and 3 rows\nBranch hours after the change\nBranch\nWeekdays\nDetails\nCentral\n9 a.m. to 9 p.m.\n \u001d same page link \u001e Directions\nNorthside\n10 a.m. to 8 p.m.\n \u001d same page link \u001e Directions\ntable end\n \u001d heading level 3 \u001e What readers said\nblock quote\nFinally, I can study after work.\nblock quote end\nThe library board will review attendance in the fall. A long-standing complaint among students and working parents was that the reading rooms closed before\nmost people finished their day, so the extended schedule is intended to make the collections, the public computers, and the quiet study spaces available\nat the times when the community actually needs them, according to the library director.\nlist of 3 items\n1. Board vote in March\n2. Hiring in April\n3. Review in October\nlist end\narticle end\nmain region end\nRelated stories complementary information\n \u001d heading level 2 \u001e Related stories\nlist of 2 items\n\u2022 \u001d same page link \u001e Council approves library budget\n\u2022 \u001d same page link \u001e Spring book fair returns\nlist end\nRelated stories complementary information end\ncontent information\n\u00a9 2026 Riverside Gazette. \n \u001d same page link \u001e Contact us\ncontent information end\nend\nwrapping to top\nCity Library Expands Evening Hours\n \u001d heading level 1 \u001e\n \u001d heading level 1 \u001e City Library Expands Evening Hours\nBy \n \u001d same page link \u001e Maria Lopez,\npublished March 14, 2026\nThe Riverside City Library will stay open until 9 p.m. on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which\nmost respondents asked for later hours.\nFront entrance of the Riverside City Library at dusk\n \u001d Graphic \u001e \n \u001d heading level 2 \u001e What changes\nMembership costs $5.99 a month, e.g. for adults; children join free. Questions go to help@riverside-library.org \u2014 or call 555-0142. Attendance rose 3.5%\nlast year, and staff say they can't wait.\nlist of 3 items\n\u2022 Weekday hours: 9 a.m. to 9 p.m.\n\u2022 Weekend hours, which do not change:\nlist of 2 items nesting level 1\n\u25e6 Saturday: 10 a.m. to 6 p.m.\n\u25e6 Sunday: noon to 5 p.m.\nlist end nesting level 1\n\u2022 New \n \u001d same page link \u001e study rooms\n open in May.\nlist end\n \u001d heading level 2 \u001e Opening schedule\ntable with 3 columns and 3 rows\nBranch hours after the change\nBranch\nWeekdays\nDetails\nCentral\n9 a.m. to 9 p.m.\n \u001d same page link \u001e Directions\nNorthside\n10 a.m. to 8 p.m.\n \u001d same page link \u001e Directions\ntable end\n \u001d heading level 3 \u001e What readers said\nblock quote\nFinally, I can study after work.\nblock quote end\nThe library board will review attendance in the fall. A long-standing complaint among students and working parents was that the reading rooms closed before\nmost people finished their day, so the extended schedule is intended to make the collections, the public computers, and the quiet study spaces available\nat the times when the community actually needs them, according to the library director.\nlist of 3 items\n1. Board vote in March\n2. Hiring in April\n3. Review in October\nlist end\narticle end\nmain region end\nRelated stories complementary information\n \u001d heading level 2 \u001e Related stories\nlist of 2 items\n\u2022 \u001d same page link \u001e Council approves library budget\n\u2022 \u001d same page link \u001e Spring book fair returns\nlist end\nRelated stories complementary information end\ncontent information\n\u00a9 2026 Riverside Gazette. \n \u001d same page link \u001e Contact us\ncontent information end\nend",
@@ -242,8 +242,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794209470522,
-     "t_end_ms": 1794209471527,
+     "t_start_ms": 1794223020485,
+     "t_end_ms": 1794223021490,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -252,7 +252,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794209470522
+      1794223020485
      ],
      "observation": {
       "speech_raw": "content information end",

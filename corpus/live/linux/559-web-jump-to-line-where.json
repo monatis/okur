@@ -1,0 +1,306 @@
+{
+ "scenario_id": "559-web-jump-to-line-where",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794224031796
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794224033155,
+     "t_end_ms": 1794224034360,
+     "action": {
+      "type": "key",
+      "command": "J"
+     },
+     "keys": [
+      "J"
+     ],
+     "key_times": [
+      1794224033155
+     ],
+     "observation": {
+      "speech_raw": "Jump To Line \u001d dialog \u001e \nEnter Line Number (1 to 73): \u001d Edit \u001e \n1\nType in text.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794224034360,
+     "t_end_ms": 1794224035364,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"1\")"
+     },
+     "keys": [
+      "1"
+     ],
+     "key_times": [
+      1794224034360
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794224035364,
+     "t_end_ms": 1794224036368,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"2\")"
+     },
+     "keys": [
+      "2"
+     ],
+     "key_times": [
+      1794224035364
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794224036368,
+     "t_end_ms": 1794224037872,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794224036368
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours - Riverside Gazette \u001d document \u001e \nCity Library Expands Evening Hours - Riverside Gazette - Google Chrome",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794224037872,
+     "t_end_ms": 1794224038877,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794224037872
+     ],
+     "observation": {
+      "speech_raw": "banner end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794224038877,
+     "t_end_ms": 1794224039881,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794224038877
+     ],
+     "observation": {
+      "speech_raw": "main region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794224039881,
+     "t_end_ms": 1794224040887,
+     "action": {
+      "type": "key",
+      "command": "Shift+J"
+     },
+     "keys": [
+      "Shift+J"
+     ],
+     "key_times": [
+      1794224039881
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794224040887,
+     "t_end_ms": 1794224041891,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794224040887
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794224041891,
+     "t_end_ms": 1794224043095,
+     "action": {
+      "type": "key",
+      "command": "J"
+     },
+     "keys": [
+      "J"
+     ],
+     "key_times": [
+      1794224041891
+     ],
+     "observation": {
+      "speech_raw": "Jump To Line \u001d dialog \u001e \nEnter Line Number (1 to 73): \u001d Edit \u001e \n1\nType in text.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794224043095,
+     "t_end_ms": 1794224044099,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"9\")"
+     },
+     "keys": [
+      "9"
+     ],
+     "key_times": [
+      1794224043095
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794224044099,
+     "t_end_ms": 1794224045104,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"9\")"
+     },
+     "keys": [
+      "9"
+     ],
+     "key_times": [
+      1794224044099
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794224045104,
+     "t_end_ms": 1794224046609,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794224045104
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours - Riverside Gazette \u001d document \u001e \nCity Library Expands Evening Hours - Riverside Gazette - Google Chrome",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794224046609,
+     "t_end_ms": 1794224047613,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794224046609
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794224047613,
+     "t_end_ms": 1794224048618,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794224047613
+     ],
+     "observation": {
+      "speech_raw": "content information end",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

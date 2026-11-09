@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794200371429
+     "t_ms": 1794231713608
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794200372794,
-     "t_end_ms": 1794200373798,
+     "t_start_ms": 1794231714968,
+     "t_end_ms": 1794231715973,
      "action": {
       "type": "key",
       "command": "Down"
@@ -31,7 +32,7 @@
       "Down"
      ],
      "key_times": [
-      1794200372794
+      1794231714968
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e Text attributes",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794200373798,
-     "t_end_ms": 1794200374802,
+     "t_start_ms": 1794231715973,
+     "t_end_ms": 1794231716976,
      "action": {
       "type": "key",
       "command": "Down"
@@ -51,7 +52,7 @@
       "Down"
      ],
      "key_times": [
-      1794200373798
+      1794231715973
      ],
      "observation": {
       "speech_raw": "A plain line with nothing marked.",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794200374802,
-     "t_end_ms": 1794200375806,
+     "t_start_ms": 1794231716976,
+     "t_end_ms": 1794231717980,
      "action": {
       "type": "key",
       "command": "Down"
@@ -71,7 +72,7 @@
       "Down"
      ],
      "key_times": [
-      1794200374802
+      1794231716976
      ],
      "observation": {
       "speech_raw": "The price was  \u001dDeletion \u001e twelve dollars \u001dend Deletion \u001e , now ten.",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794200375806,
-     "t_end_ms": 1794200376809,
+     "t_start_ms": 1794231717980,
+     "t_end_ms": 1794231718984,
      "action": {
       "type": "key",
       "command": "Down"
@@ -91,7 +92,7 @@
       "Down"
      ],
      "key_times": [
-      1794200375806
+      1794231717980
      ],
      "observation": {
       "speech_raw": " \u001dDeletion \u001e A whole line struck through.",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794200376809,
-     "t_end_ms": 1794200377813,
+     "t_start_ms": 1794231718984,
+     "t_end_ms": 1794231719988,
      "action": {
       "type": "key",
       "command": "Down"
@@ -111,7 +112,7 @@
       "Down"
      ],
      "key_times": [
-      1794200376809
+      1794231718984
      ],
      "observation": {
       "speech_raw": " \u001dend Deletion \u001e The meeting is on Monday on Tuesday.",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794200377813,
-     "t_end_ms": 1794200378817,
+     "t_start_ms": 1794231719988,
+     "t_end_ms": 1794231720993,
      "action": {
       "type": "key",
       "command": "Down"
@@ -131,7 +132,7 @@
       "Down"
      ],
      "key_times": [
-      1794200377813
+      1794231719988
      ],
      "observation": {
       "speech_raw": "Einstein's E = mc2 dates from 1905.",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794200378817,
-     "t_end_ms": 1794200379821,
+     "t_start_ms": 1794231720993,
+     "t_end_ms": 1794231721997,
      "action": {
       "type": "key",
       "command": "Down"
@@ -151,7 +152,7 @@
       "Down"
      ],
      "key_times": [
-      1794200378817
+      1794231720993
      ],
      "observation": {
       "speech_raw": "The 1st and 2nd floors are open.",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794200379821,
-     "t_end_ms": 1794200380825,
+     "t_start_ms": 1794231721997,
+     "t_end_ms": 1794231723000,
      "action": {
       "type": "key",
       "command": "Down"
@@ -171,7 +172,7 @@
       "Down"
      ],
      "key_times": [
-      1794200379821
+      1794231721997
      ],
      "observation": {
       "speech_raw": "Water is H2O and salt is NaCl.",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794200380825,
-     "t_end_ms": 1794200381830,
+     "t_start_ms": 1794231723000,
+     "t_end_ms": 1794231724004,
      "action": {
       "type": "key",
       "command": "Down"
@@ -191,7 +192,7 @@
       "Down"
      ],
      "key_times": [
-      1794200380825
+      1794231723000
      ],
      "observation": {
       "speech_raw": "Carbon dioxide is CO2.",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794200381830,
-     "t_end_ms": 1794200382834,
+     "t_start_ms": 1794231724005,
+     "t_end_ms": 1794231725009,
      "action": {
       "type": "key",
       "command": "Down"
@@ -211,7 +212,7 @@
       "Down"
      ],
      "key_times": [
-      1794200381830
+      1794231724005
      ],
      "observation": {
       "speech_raw": "A line with a shadowed word in it.",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794200382834,
-     "t_end_ms": 1794200383839,
+     "t_start_ms": 1794231725009,
+     "t_end_ms": 1794231726013,
      "action": {
       "type": "key",
       "command": "Down"
@@ -231,7 +232,7 @@
       "Down"
      ],
      "key_times": [
-      1794200382834
+      1794231725009
      ],
      "observation": {
       "speech_raw": "Another plain line at the end.",
@@ -241,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794200383839,
-     "t_end_ms": 1794200384843,
+     "t_start_ms": 1794231726013,
+     "t_end_ms": 1794231727019,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -251,7 +252,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794200383839
+      1794231726013
      ],
      "observation": {
       "speech_raw": "Text Attributes",
@@ -261,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794200384843,
-     "t_end_ms": 1794200385848,
+     "t_start_ms": 1794231727019,
+     "t_end_ms": 1794231728023,
      "action": {
       "type": "key",
       "command": "Down"
@@ -271,7 +272,7 @@
       "Down"
      ],
      "key_times": [
-      1794200384843
+      1794231727019
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e Text attributes",
@@ -281,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794200385848,
-     "t_end_ms": 1794200386852,
+     "t_start_ms": 1794231728023,
+     "t_end_ms": 1794231729027,
      "action": {
       "type": "key",
       "command": "Down"
@@ -291,7 +292,7 @@
       "Down"
      ],
      "key_times": [
-      1794200385848
+      1794231728023
      ],
      "observation": {
       "speech_raw": "A plain line with nothing marked.",
@@ -301,8 +302,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794200386852,
-     "t_end_ms": 1794200387857,
+     "t_start_ms": 1794231729027,
+     "t_end_ms": 1794231730032,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -311,7 +312,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794200386852
+      1794231729027
      ],
      "observation": {
       "speech_raw": "plain",
@@ -321,8 +322,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794200387857,
-     "t_end_ms": 1794200388862,
+     "t_start_ms": 1794231730032,
+     "t_end_ms": 1794231731037,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -331,7 +332,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794200387857
+      1794231730032
      ],
      "observation": {
       "speech_raw": "line",
@@ -341,8 +342,8 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794200388862,
-     "t_end_ms": 1794200389867,
+     "t_start_ms": 1794231731037,
+     "t_end_ms": 1794231732043,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -351,7 +352,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794200388862
+      1794231731037
      ],
      "observation": {
       "speech_raw": "with",
@@ -361,8 +362,8 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794200389867,
-     "t_end_ms": 1794200390873,
+     "t_start_ms": 1794231732043,
+     "t_end_ms": 1794231733047,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -371,7 +372,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794200389867
+      1794231732043
      ],
      "observation": {
       "speech_raw": "nothing",
@@ -381,8 +382,8 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794200390873,
-     "t_end_ms": 1794200391877,
+     "t_start_ms": 1794231733047,
+     "t_end_ms": 1794231734053,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -391,7 +392,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794200390873
+      1794231733047
      ],
      "observation": {
       "speech_raw": "marked",
@@ -401,8 +402,8 @@
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794200391877,
-     "t_end_ms": 1794200392882,
+     "t_start_ms": 1794231734053,
+     "t_end_ms": 1794231735057,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -411,7 +412,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794200391877
+      1794231734053
      ],
      "observation": {
       "speech_raw": "Text Attributes",
@@ -421,8 +422,8 @@
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794200392882,
-     "t_end_ms": 1794200393887,
+     "t_start_ms": 1794231735057,
+     "t_end_ms": 1794231736162,
      "action": {
       "type": "key",
       "command": "Insert+Down"
@@ -431,7 +432,7 @@
       "Insert+Down"
      ],
      "key_times": [
-      1794200392882
+      1794231735057
      ],
      "observation": {
       "speech_raw": "Text Attributes\n \u001d heading level 1 \u001e Text attributes\nA plain line with nothing marked.\nThe price was  \u001dDeletion \u001e twelve dollars \u001dend Deletion \u001e , now ten.\n \u001dDeletion \u001e A whole line struck through.\n \u001dend Deletion \u001e The meeting is on Monday on Tuesday.\nEinstein's E = mc2 dates from 1905.\nThe 1st and 2nd floors are open.\nWater is H2O and salt is NaCl.\nCarbon dioxide is CO2.\nA line with a shadowed word in it.\nAnother plain line at the end.\nend",

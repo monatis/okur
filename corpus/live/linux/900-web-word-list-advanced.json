@@ -1,0 +1,226 @@
+{
+ "scenario_id": "900-web-word-list-advanced",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794234360912
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794234362275,
+     "t_end_ms": 1794234363583,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+W"
+     },
+     "keys": [
+      "Ctrl+Insert+W"
+     ],
+     "key_times": [
+      1794234362275
+     ],
+     "observation": {
+      "speech_raw": "Word List \u001d dialog \u001e \nList1 \u001d List view \u001e \nm (10)\n1 of 143\nTo move to items use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794234363583,
+     "t_end_ms": 1794234364586,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794234363583
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794234364586,
+     "t_end_ms": 1794234365590,
+     "action": {
+      "type": "key",
+      "command": "W"
+     },
+     "keys": [
+      "W"
+     ],
+     "key_times": [
+      1794234364586
+     ],
+     "observation": {
+      "speech_raw": "No word list has been created.\nTo create the word list, press control+Insert+W.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794234365590,
+     "t_end_ms": 1794234366795,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+W"
+     },
+     "keys": [
+      "Ctrl+Insert+W"
+     ],
+     "key_times": [
+      1794234365590
+     ],
+     "observation": {
+      "speech_raw": "Word List \u001d dialog \u001e \nList1 \u001d List view \u001e \nm (10)\n1 of 143\nTo move to items use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794234366795,
+     "t_end_ms": 1794234367899,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Down\")"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794234366795
+     ],
+     "observation": {
+      "speech_raw": "end (7)",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794234367899,
+     "t_end_ms": 1794234369003,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794234367899
+     ],
+     "observation": {
+      "speech_raw": "list end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794234369003,
+     "t_end_ms": 1794234370008,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794234369003
+     ],
+     "observation": {
+      "speech_raw": "list end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794234370008,
+     "t_end_ms": 1794234371012,
+     "action": {
+      "type": "key",
+      "command": "W"
+     },
+     "keys": [
+      "W"
+     ],
+     "key_times": [
+      1794234370008
+     ],
+     "observation": {
+      "speech_raw": "Primary navigation region end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794234371012,
+     "t_end_ms": 1794234372016,
+     "action": {
+      "type": "key",
+      "command": "W"
+     },
+     "keys": [
+      "W"
+     ],
+     "key_times": [
+      1794234371012
+     ],
+     "observation": {
+      "speech_raw": "banner end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794234372017,
+     "t_end_ms": 1794234373022,
+     "action": {
+      "type": "key",
+      "command": "Shift+W"
+     },
+     "keys": [
+      "Shift+W"
+     ],
+     "key_times": [
+      1794234372017
+     ],
+     "observation": {
+      "speech_raw": "Primary navigation region end",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794196787815
+     "t_ms": 1794225698462
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794196789176,
-     "t_end_ms": 1794196790181,
+     "t_start_ms": 1794225699826,
+     "t_end_ms": 1794225700829,
      "action": {
       "type": "key",
       "command": "Down"
@@ -31,7 +32,7 @@
       "Down"
      ],
      "key_times": [
-      1794196789176
+      1794225699826
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e The Accessibility Engine Specification",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794196790181,
-     "t_end_ms": 1794196791184,
+     "t_start_ms": 1794225700829,
+     "t_end_ms": 1794225701835,
      "action": {
       "type": "key",
       "command": "Shift+Right"
@@ -51,7 +52,7 @@
       "Shift+Right"
      ],
      "key_times": [
-      1794196790181
+      1794225700829
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e \nT",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794196791184,
-     "t_end_ms": 1794196792189,
+     "t_start_ms": 1794225701835,
+     "t_end_ms": 1794225702839,
      "action": {
       "type": "key",
       "command": "Shift+Right"
@@ -71,7 +72,7 @@
       "Shift+Right"
      ],
      "key_times": [
-      1794196791184
+      1794225701835
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e \nh",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794196792189,
-     "t_end_ms": 1794196793317,
+     "t_start_ms": 1794225702839,
+     "t_end_ms": 1794225703967,
      "action": {
       "type": "key",
       "command": "Insert+Shift+Down"
@@ -92,8 +93,8 @@
       "Insert+Shift+Down"
      ],
      "key_times": [
-      1794196792189,
-      1794196792312
+      1794225702839,
+      1794225702961
      ],
      "observation": {
       "speech_raw": "Th\nTh",
@@ -103,8 +104,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794196793317,
-     "t_end_ms": 1794196794324,
+     "t_start_ms": 1794225703967,
+     "t_end_ms": 1794225704972,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+Right"
@@ -113,7 +114,7 @@
       "Ctrl+Shift+Right"
      ],
      "key_times": [
-      1794196793317
+      1794225703967
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e e ",
@@ -123,8 +124,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794196794324,
-     "t_end_ms": 1794196795329,
+     "t_start_ms": 1794225704972,
+     "t_end_ms": 1794225705977,
      "action": {
       "type": "key",
       "command": "Shift+End"
@@ -133,7 +134,7 @@
       "Shift+End"
      ],
      "key_times": [
-      1794196794324
+      1794225704972
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e Accessibility Engine Specification",
@@ -143,8 +144,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794196795329,
-     "t_end_ms": 1794196796334,
+     "t_start_ms": 1794225705977,
+     "t_end_ms": 1794225706983,
      "action": {
       "type": "key",
       "command": "Shift+Down"
@@ -153,7 +154,7 @@
       "Shift+Down"
      ],
      "key_times": [
-      1794196795329
+      1794225705977
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e The Accessibility Engine Specification",
@@ -163,8 +164,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794196796334,
-     "t_end_ms": 1794196797339,
+     "t_start_ms": 1794225706983,
+     "t_end_ms": 1794225707988,
      "action": {
       "type": "key",
       "command": "Insert+Shift+Down"
@@ -173,7 +174,7 @@
       "Insert+Shift+Down"
      ],
      "key_times": [
-      1794196796334
+      1794225706983
      ],
      "observation": {
       "speech_raw": "The Accessibility Engine Specification",
@@ -183,8 +184,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794196797339,
-     "t_end_ms": 1794196798344,
+     "t_start_ms": 1794225707988,
+     "t_end_ms": 1794225708993,
      "action": {
       "type": "key",
       "command": "Ctrl+C"
@@ -193,7 +194,7 @@
       "Ctrl+C"
      ],
      "key_times": [
-      1794196797339
+      1794225707988
      ],
      "observation": {
       "speech_raw": "",
@@ -203,8 +204,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794196798344,
-     "t_end_ms": 1794196799349,
+     "t_start_ms": 1794225708993,
+     "t_end_ms": 1794225709996,
      "action": {
       "type": "key",
       "command": "Down"
@@ -213,7 +214,7 @@
       "Down"
      ],
      "key_times": [
-      1794196798344
+      1794225708993
      ],
      "observation": {
       "speech_raw": "Engine components operate deterministically across synthetic speech pipelines. Speed and accuracy remain paramount.",
@@ -223,8 +224,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794196799349,
-     "t_end_ms": 1794196800352,
+     "t_start_ms": 1794225709997,
+     "t_end_ms": 1794225711002,
      "action": {
       "type": "key",
       "command": "Shift+Home"
@@ -233,7 +234,7 @@
       "Shift+Home"
      ],
      "key_times": [
-      1794196799349
+      1794225709997
      ],
      "observation": {
       "speech_raw": "",
@@ -243,8 +244,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794196800352,
-     "t_end_ms": 1794196801359,
+     "t_start_ms": 1794225711002,
+     "t_end_ms": 1794225712007,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+Home"
@@ -253,7 +254,7 @@
       "Ctrl+Shift+Home"
      ],
      "key_times": [
-      1794196800352
+      1794225711002
      ],
      "observation": {
       "speech_raw": "Document Reading Reference Fixture\n \u001d heading level 1 \u001e The Accessibility Engine Specification\nThe screen reader engine parses the document object model into a clean virtual buffer.",
@@ -263,8 +264,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794196801359,
-     "t_end_ms": 1794196802364,
+     "t_start_ms": 1794225712007,
+     "t_end_ms": 1794225713012,
      "action": {
       "type": "key",
       "command": "Ctrl+A"
@@ -273,7 +274,7 @@
       "Ctrl+A"
      ],
      "key_times": [
-      1794196801359
+      1794225712007
      ],
      "observation": {
       "speech_raw": "Document Reading Reference Fixture\n \u001d heading level 1 \u001e The Accessibility Engine Specification\nThe screen reader engine parses the document object model into a clean virtual buffer.\nEngine components operate deterministically across synthetic speech pipelines. Speed and accuracy remain paramount.\nRust provides memory safety without garbage collection latency. This ensures predictable audio delivery.",
@@ -283,8 +284,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794196802364,
-     "t_end_ms": 1794196803370,
+     "t_start_ms": 1794225713012,
+     "t_end_ms": 1794225714018,
      "action": {
       "type": "key",
       "command": "Ctrl+C"
@@ -293,7 +294,7 @@
       "Ctrl+C"
      ],
      "key_times": [
-      1794196802364
+      1794225713012
      ],
      "observation": {
       "speech_raw": "",

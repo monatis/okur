@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794196910947
+     "t_ms": 1794225861163
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794196912315,
-     "t_end_ms": 1794196913319,
+     "t_start_ms": 1794225862527,
+     "t_end_ms": 1794225863531,
      "action": {
       "type": "key",
       "command": "T"
@@ -31,7 +32,7 @@
       "T"
      ],
      "key_times": [
-      1794196912315
+      1794225862527
      ],
      "observation": {
       "speech_raw": "3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794196913319,
-     "t_end_ms": 1794196914324,
+     "t_start_ms": 1794225863531,
+     "t_end_ms": 1794225864537,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Left"
@@ -51,7 +52,7 @@
       "Ctrl+Alt+Left"
      ],
      "key_times": [
-      1794196913319
+      1794225863531
      ],
      "observation": {
       "speech_raw": "beginning of row",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794196914324,
-     "t_end_ms": 1794196915329,
+     "t_start_ms": 1794225864537,
+     "t_end_ms": 1794225865543,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Up"
@@ -71,7 +72,7 @@
       "Ctrl+Alt+Up"
      ],
      "key_times": [
-      1794196914324
+      1794225864537
      ],
      "observation": {
       "speech_raw": "top of column",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794196915329,
-     "t_end_ms": 1794196916335,
+     "t_start_ms": 1794225865543,
+     "t_end_ms": 1794225866548,
      "action": {
       "type": "key",
       "command": "Win+Alt+Up"
@@ -91,7 +92,7 @@
       "Win+Alt+Up"
      ],
      "key_times": [
-      1794196915329
+      1794225865543
      ],
      "observation": {
       "speech_raw": "First row",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794196916335,
-     "t_end_ms": 1794196917340,
+     "t_start_ms": 1794225866548,
+     "t_end_ms": 1794225867554,
      "action": {
       "type": "key",
       "command": "Win+Alt+Left"
@@ -111,7 +112,7 @@
       "Win+Alt+Left"
      ],
      "key_times": [
-      1794196916335
+      1794225866548
      ],
      "observation": {
       "speech_raw": "First column",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794196917340,
-     "t_end_ms": 1794196918346,
+     "t_start_ms": 1794225867554,
+     "t_end_ms": 1794225868559,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+End"
@@ -131,7 +132,7 @@
       "Ctrl+Alt+End"
      ],
      "key_times": [
-      1794196917340
+      1794225867554
      ],
      "observation": {
       "speech_raw": "Details  Northside\n \u001d same page link \u001e Directions\nColumn 3, Row 3",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794196918346,
-     "t_end_ms": 1794196919351,
+     "t_start_ms": 1794225868559,
+     "t_end_ms": 1794225869566,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Right"
@@ -151,7 +152,7 @@
       "Ctrl+Alt+Right"
      ],
      "key_times": [
-      1794196918346
+      1794225868559
      ],
      "observation": {
       "speech_raw": "end of row",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794196919351,
-     "t_end_ms": 1794196920357,
+     "t_start_ms": 1794225869566,
+     "t_end_ms": 1794225870572,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Down"
@@ -171,7 +172,7 @@
       "Ctrl+Alt+Down"
      ],
      "key_times": [
-      1794196919351
+      1794225869566
      ],
      "observation": {
       "speech_raw": "bottom of column",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794196920357,
-     "t_end_ms": 1794196921463,
+     "t_start_ms": 1794225870572,
+     "t_end_ms": 1794225871578,
      "action": {
       "type": "key",
       "command": "Win+Alt+Down"
@@ -191,7 +192,7 @@
       "Win+Alt+Down"
      ],
      "key_times": [
-      1794196920357
+      1794225870572
      ],
      "observation": {
       "speech_raw": "Last row",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794196921463,
-     "t_end_ms": 1794196922468,
+     "t_start_ms": 1794225871578,
+     "t_end_ms": 1794225872583,
      "action": {
       "type": "key",
       "command": "Win+Alt+Right"
@@ -211,7 +212,7 @@
       "Win+Alt+Right"
      ],
      "key_times": [
-      1794196921463
+      1794225871578
      ],
      "observation": {
       "speech_raw": "Last column",

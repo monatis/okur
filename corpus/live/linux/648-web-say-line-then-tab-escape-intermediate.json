@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794198453496
+     "t_ms": 1794227596246
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794198454864,
-     "t_end_ms": 1794198455869,
+     "t_start_ms": 1794227597612,
+     "t_end_ms": 1794227598616,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -31,7 +32,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794198454864
+      1794227597612
      ],
      "observation": {
       "speech_raw": "Create Your Account - Riverside Library",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794198455869,
-     "t_end_ms": 1794198456973,
+     "t_start_ms": 1794227598617,
+     "t_end_ms": 1794227599720,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -51,7 +52,7 @@
       "Tab"
      ],
      "key_times": [
-      1794198455869
+      1794227598617
      ],
      "observation": {
       "speech_raw": "Create Your Account - Riverside Library\nFull name \u001d Edit \u001e \n \u001dRequired\u001e",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794198456973,
-     "t_end_ms": 1794198457977,
+     "t_start_ms": 1794227599720,
+     "t_end_ms": 1794227600723,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -71,7 +72,7 @@
       "Escape"
      ],
      "key_times": [
-      1794198456973
+      1794227599720
      ],
      "observation": {
       "speech_raw": "",

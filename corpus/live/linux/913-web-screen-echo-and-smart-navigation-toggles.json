@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794202967892
+     "t_ms": 1794234871980
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794202969255,
-     "t_end_ms": 1794202970260,
+     "t_start_ms": 1794234873347,
+     "t_end_ms": 1794234874352,
      "action": {
       "type": "key",
       "command": "Insert+S"
@@ -31,7 +32,7 @@
       "Insert+S"
      ],
      "key_times": [
-      1794202969255
+      1794234873347
      ],
      "observation": {
       "speech_raw": "All",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794202970260,
-     "t_end_ms": 1794202971264,
+     "t_start_ms": 1794234874352,
+     "t_end_ms": 1794234875356,
      "action": {
       "type": "key",
       "command": "Insert+S"
@@ -51,7 +52,7 @@
       "Insert+S"
      ],
      "key_times": [
-      1794202970260
+      1794234874352
      ],
      "observation": {
       "speech_raw": "None",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794202971264,
-     "t_end_ms": 1794202972268,
+     "t_start_ms": 1794234875356,
+     "t_end_ms": 1794234876360,
      "action": {
       "type": "key",
       "command": "Insert+S"
@@ -71,7 +72,7 @@
       "Insert+S"
      ],
      "key_times": [
-      1794202971264
+      1794234875356
      ],
      "observation": {
       "speech_raw": "Highlighted",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794202972268,
-     "t_end_ms": 1794202973272,
+     "t_start_ms": 1794234876360,
+     "t_end_ms": 1794234877364,
      "action": {
       "type": "key",
       "command": "Down"
@@ -91,7 +92,7 @@
       "Down"
      ],
      "key_times": [
-      1794202972268
+      1794234876360
      ],
      "observation": {
       "speech_raw": "banner",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794202973272,
-     "t_end_ms": 1794202974277,
+     "t_start_ms": 1794234877364,
+     "t_end_ms": 1794234878368,
      "action": {
       "type": "key",
       "command": "Insert+X"
@@ -111,7 +112,7 @@
       "Insert+X"
      ],
      "key_times": [
-      1794202973272
+      1794234877364
      ],
      "observation": {
       "speech_raw": "Smart Navigation: Controls and Tables",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794202974278,
-     "t_end_ms": 1794202975282,
+     "t_start_ms": 1794234878368,
+     "t_end_ms": 1794234879373,
      "action": {
       "type": "key",
       "command": "Insert+X"
@@ -131,7 +132,7 @@
       "Insert+X"
      ],
      "key_times": [
-      1794202974278
+      1794234878368
      ],
      "observation": {
       "speech_raw": "Smart Navigation: Off",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794202975282,
-     "t_end_ms": 1794202976288,
+     "t_start_ms": 1794234879373,
+     "t_end_ms": 1794234880379,
      "action": {
       "type": "key",
       "command": "Insert+X"
@@ -151,7 +152,7 @@
       "Insert+X"
      ],
      "key_times": [
-      1794202975282
+      1794234879373
      ],
      "observation": {
       "speech_raw": "Smart Navigation: Controls and Tables",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794202976288,
-     "t_end_ms": 1794202977293,
+     "t_start_ms": 1794234880379,
+     "t_end_ms": 1794234881384,
      "action": {
       "type": "key",
       "command": "Insert+X"
@@ -171,7 +172,7 @@
       "Insert+X"
      ],
      "key_times": [
-      1794202976288
+      1794234880379
      ],
      "observation": {
       "speech_raw": "Smart Navigation: Off",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794202977293,
-     "t_end_ms": 1794202978297,
+     "t_start_ms": 1794234881384,
+     "t_end_ms": 1794234882389,
      "action": {
       "type": "key",
       "command": "Down"
@@ -191,7 +192,7 @@
       "Down"
      ],
      "key_times": [
-      1794202977293
+      1794234881384
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Riverside Gazette",

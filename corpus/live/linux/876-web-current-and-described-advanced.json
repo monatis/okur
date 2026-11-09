@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794201810329
+     "t_ms": 1794233482866
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794201811698,
-     "t_end_ms": 1794201812702,
+     "t_start_ms": 1794233484231,
+     "t_end_ms": 1794233485235,
      "action": {
       "type": "key",
       "command": "Down"
@@ -31,7 +32,7 @@
       "Down"
      ],
      "key_times": [
-      1794201811698
+      1794233484231
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e Web App Patterns",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794201812702,
-     "t_end_ms": 1794201813706,
+     "t_start_ms": 1794233485236,
+     "t_end_ms": 1794233486239,
      "action": {
       "type": "key",
       "command": "Down"
@@ -51,7 +52,7 @@
       "Down"
      ],
      "key_times": [
-      1794201812702
+      1794233485236
      ],
      "observation": {
       "speech_raw": " \u001d heading level 2 \u001e Current links",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794201813706,
-     "t_end_ms": 1794201814711,
+     "t_start_ms": 1794233486239,
+     "t_end_ms": 1794233487243,
      "action": {
       "type": "key",
       "command": "Down"
@@ -71,7 +72,7 @@
       "Down"
      ],
      "key_times": [
-      1794201813706
+      1794233486239
      ],
      "observation": {
       "speech_raw": "list of 3 items",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794201814711,
-     "t_end_ms": 1794201815714,
+     "t_start_ms": 1794233487243,
+     "t_end_ms": 1794233488247,
      "action": {
       "type": "key",
       "command": "Down"
@@ -91,7 +92,7 @@
       "Down"
      ],
      "key_times": [
-      1794201814711
+      1794233487243
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e  \u001dCurrent Page\u001e Overview",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794201815714,
-     "t_end_ms": 1794201816718,
+     "t_start_ms": 1794233488247,
+     "t_end_ms": 1794233489251,
      "action": {
       "type": "key",
       "command": "Down"
@@ -111,7 +112,7 @@
       "Down"
      ],
      "key_times": [
-      1794201815714
+      1794233488247
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d Link \u001e Settings",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794201816718,
-     "t_end_ms": 1794201817723,
+     "t_start_ms": 1794233489251,
+     "t_end_ms": 1794233490256,
      "action": {
       "type": "key",
       "command": "Down"
@@ -131,7 +132,7 @@
       "Down"
      ],
      "key_times": [
-      1794201816718
+      1794233489251
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e  \u001dCurrent Step\u001e Step two",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794201817723,
-     "t_end_ms": 1794201818727,
+     "t_start_ms": 1794233490256,
+     "t_end_ms": 1794233491260,
      "action": {
       "type": "key",
       "command": "Down"
@@ -151,7 +152,7 @@
       "Down"
      ],
      "key_times": [
-      1794201817723
+      1794233490256
      ],
      "observation": {
       "speech_raw": "list end",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794201818727,
-     "t_end_ms": 1794201819732,
+     "t_start_ms": 1794233491260,
+     "t_end_ms": 1794233492266,
      "action": {
       "type": "key",
       "command": "Down"
@@ -171,7 +172,7 @@
       "Down"
      ],
      "key_times": [
-      1794201818727
+      1794233491260
      ],
      "observation": {
       "speech_raw": " \u001d heading level 2 \u001e Described controls",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794201819732,
-     "t_end_ms": 1794201820736,
+     "t_start_ms": 1794233492266,
+     "t_end_ms": 1794233493370,
      "action": {
       "type": "key",
       "command": "Down"
@@ -191,7 +192,7 @@
       "Down"
      ],
      "key_times": [
-      1794201819732
+      1794233492266
      ],
      "observation": {
       "speech_raw": "Next slide \u001d slide control \u001e ",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794201820736,
-     "t_end_ms": 1794201821741,
+     "t_start_ms": 1794233493370,
+     "t_end_ms": 1794233494375,
      "action": {
       "type": "key",
       "command": "Down"
@@ -211,7 +212,7 @@
       "Down"
      ],
      "key_times": [
-      1794201820736
+      1794233493370
      ],
      "observation": {
       "speech_raw": " \u001d chip \u001e Rust",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794201821741,
-     "t_end_ms": 1794201822745,
+     "t_start_ms": 1794233494375,
+     "t_end_ms": 1794233495379,
      "action": {
       "type": "key",
       "command": "Down"
@@ -231,7 +232,7 @@
       "Down"
      ],
      "key_times": [
-      1794201821741
+      1794233494375
      ],
      "observation": {
       "speech_raw": "Wrap \u001d toggle \u001e  \u001dnot checked\u001e ",
@@ -241,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794201822745,
-     "t_end_ms": 1794201823750,
+     "t_start_ms": 1794233495379,
+     "t_end_ms": 1794233496383,
      "action": {
       "type": "key",
       "command": "Down"
@@ -251,7 +252,7 @@
       "Down"
      ],
      "key_times": [
-      1794201822745
+      1794233495379
      ],
      "observation": {
       "speech_raw": " \u001d heading level 2 \u001e Popup buttons",
@@ -261,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794201823750,
-     "t_end_ms": 1794201824754,
+     "t_start_ms": 1794233496383,
+     "t_end_ms": 1794233497387,
      "action": {
       "type": "key",
       "command": "Down"
@@ -271,7 +272,7 @@
       "Down"
      ],
      "key_times": [
-      1794201823750
+      1794233496383
      ],
      "observation": {
       "speech_raw": "Outline \u001d button menu \u001e ",
@@ -281,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794201824754,
-     "t_end_ms": 1794201825758,
+     "t_start_ms": 1794233497387,
+     "t_end_ms": 1794233498391,
      "action": {
       "type": "key",
       "command": "Down"
@@ -291,7 +292,7 @@
       "Down"
      ],
      "key_times": [
-      1794201824754
+      1794233497387
      ],
      "observation": {
       "speech_raw": "Actions \u001d button menu \u001e  \u001dcollapsed\u001e ",
@@ -301,8 +302,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794201825758,
-     "t_end_ms": 1794201826763,
+     "t_start_ms": 1794233498391,
+     "t_end_ms": 1794233499396,
      "action": {
       "type": "key",
       "command": "Down"
@@ -311,7 +312,7 @@
       "Down"
      ],
      "key_times": [
-      1794201825758
+      1794233498391
      ],
      "observation": {
       "speech_raw": "Pick one \u001d Button \u001e  \u001dHas Popup\u001e  listbox",
@@ -321,8 +322,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794201826763,
-     "t_end_ms": 1794201827768,
+     "t_start_ms": 1794233499396,
+     "t_end_ms": 1794233500399,
      "action": {
       "type": "key",
       "command": "Down"
@@ -331,7 +332,7 @@
       "Down"
      ],
      "key_times": [
-      1794201826763
+      1794233499396
      ],
      "observation": {
       "speech_raw": " \u001d heading level 2 \u001e Fruit search",
@@ -341,8 +342,8 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794201827768,
-     "t_end_ms": 1794201828773,
+     "t_start_ms": 1794233500399,
+     "t_end_ms": 1794233501404,
      "action": {
       "type": "key",
       "command": "Down"
@@ -351,7 +352,7 @@
       "Down"
      ],
      "key_times": [
-      1794201827768
+      1794233500399
      ],
      "observation": {
       "speech_raw": "Fruit",

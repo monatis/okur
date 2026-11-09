@@ -1,0 +1,306 @@
+{
+ "scenario_id": "579-desktop-lists-and-trees-intermediate",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": null,
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "application": "corpus/fixtures/linux/desktop-forms.py",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Tab",
+     "t_ms": 1794224747386
+    },
+    {
+     "key": "Tab",
+     "t_ms": 1794224747737
+    },
+    {
+     "key": "Tab",
+     "t_ms": 1794224748038
+    },
+    {
+     "key": "Tab",
+     "t_ms": 1794224748339
+    },
+    {
+     "key": "Tab",
+     "t_ms": 1794224748641
+    },
+    {
+     "key": "Tab",
+     "t_ms": 1794224748942
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794224750247,
+     "t_end_ms": 1794224751352,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794224750247
+     ],
+     "observation": {
+      "speech_raw": "Cherries\n3 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794224751352,
+     "t_end_ms": 1794224752356,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794224751352
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794224752356,
+     "t_end_ms": 1794224753461,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794224752356
+     ],
+     "observation": {
+      "speech_raw": "Bananas\n2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794224753461,
+     "t_end_ms": 1794224754566,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794224753461
+     ],
+     "observation": {
+      "speech_raw": " \u001d Tree view \u001e \nDocuments \u001dclosed\u001e \n1 of 2\nTo move through or expand items use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794224754566,
+     "t_end_ms": 1794224755670,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794224754566
+     ],
+     "observation": {
+      "speech_raw": "Pictures\n2 of 2",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794224755670,
+     "t_end_ms": 1794224756775,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794224755670
+     ],
+     "observation": {
+      "speech_raw": "Documents \u001dclosed\u001e \n1 of 2",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794224756775,
+     "t_end_ms": 1794224757880,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794224756775
+     ],
+     "observation": {
+      "speech_raw": "Documents\n \u001dopen\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794224757880,
+     "t_end_ms": 1794224758984,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794224757880
+     ],
+     "observation": {
+      "speech_raw": "Reports\n2 of 4",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794224758984,
+     "t_end_ms": 1794224760188,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794224758984
+     ],
+     "observation": {
+      "speech_raw": " \u001d List view \u001e \nbudget.xlsx\n24 KB\n1 of 3\nTo move to items use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794224760188,
+     "t_end_ms": 1794224761392,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794224760188
+     ],
+     "observation": {
+      "speech_raw": "notes.txt\n2 KB\n2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794224761392,
+     "t_end_ms": 1794224762596,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794224761392
+     ],
+     "observation": {
+      "speech_raw": "photo.jpg\n1.2 MB\n3 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794224762596,
+     "t_end_ms": 1794224763900,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794224762596
+     ],
+     "observation": {
+      "speech_raw": "General \u001d Tab \u001e  \u001dselected\u001e \nTo switch pages, press Control+PageDown.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794224763900,
+     "t_end_ms": 1794224765206,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794224763901
+     ],
+     "observation": {
+      "speech_raw": "Advanced \u001d Tab \u001e  \u001dselected\u001e \nTo switch pages, press Control+PageDown.",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,381 @@
+{
+ "scenario_id": "322-desktop-forms-viewer",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": null,
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "application": "corpus/fixtures/linux/desktop-forms.py",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794222762187,
+     "t_end_ms": 1794222763247,
+     "action": {
+      "type": "key",
+      "command": "Insert+Alt+W"
+     },
+     "keys": [
+      "Insert+Alt+W"
+     ],
+     "key_times": [
+      1794222762187
+     ],
+     "observation": {
+      "speech_raw": "Virtualizing current window\n",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794222763247,
+     "t_end_ms": 1794222764251,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794222763247
+     ],
+     "observation": {
+      "speech_raw": "\n",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794222764251,
+     "t_end_ms": 1794222765256,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794222764251
+     ],
+     "observation": {
+      "speech_raw": "\n",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794222765256,
+     "t_end_ms": 1794222766762,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+A"
+     },
+     "keys": [
+      "Ctrl+A"
+     ],
+     "key_times": [
+      1794222765256
+     ],
+     "observation": {
+      "speech_raw": "selected\n\n ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794222766762,
+     "t_end_ms": 1794222767767,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+C"
+     },
+     "keys": [
+      "Ctrl+C"
+     ],
+     "key_times": [
+      1794222766762
+     ],
+     "observation": {
+      "speech_raw": "Copied selection to clipboard",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794222767767,
+     "t_end_ms": 1794222768772,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794222767767
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794222768772,
+     "t_end_ms": 1794222769876,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794222768772
+     ],
+     "observation": {
+      "speech_raw": "SR Desktop Fixture\nNotes: \u001d Edit \u001e \nType in text.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794222769876,
+     "t_end_ms": 1794222770980,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794222769876
+     ],
+     "observation": {
+      "speech_raw": "Subscribe to updates \u001d check box \u001e  \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794222770980,
+     "t_end_ms": 1794222772085,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794222770980
+     ],
+     "observation": {
+      "speech_raw": "Remember me \u001d check box \u001e  \u001dnot checked\u001e \nTo check press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794222772085,
+     "t_end_ms": 1794222773390,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794222772085
+     ],
+     "observation": {
+      "speech_raw": "Plan\nPro \u001d radio button \u001e  \u001dchecked\u001e \n2 of 3\nTo change the selection press Up or Down Arrow.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794222773390,
+     "t_end_ms": 1794222774594,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794222773390
+     ],
+     "observation": {
+      "speech_raw": "Country: \u001d Combo box \u001e \nGermany\nTo change the selection use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794222774594,
+     "t_end_ms": 1794222775699,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794222774594
+     ],
+     "observation": {
+      "speech_raw": "Fruit: \u001d List box \u001e \nBananas\n2 of 3\nTo move to an item press the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794222775699,
+     "t_end_ms": 1794222776803,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794222775699
+     ],
+     "observation": {
+      "speech_raw": " \u001d Tree view \u001e \nDocuments \u001dclosed\u001e \n1 of 2\nTo move through or expand items use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794222776804,
+     "t_end_ms": 1794222778008,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794222776804
+     ],
+     "observation": {
+      "speech_raw": " \u001d List view \u001e \nbudget.xlsx\n24 KB\n1 of 3\nTo move to items use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794222778008,
+     "t_end_ms": 1794222779014,
+     "action": {
+      "type": "key",
+      "command": "Insert+Shift+V"
+     },
+     "keys": [
+      "Insert+Shift+V"
+     ],
+     "key_times": [
+      1794222778008
+     ],
+     "observation": {
+      "speech_raw": "Virtualizing current control\nbudget.xlsx",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794222779014,
+     "t_end_ms": 1794222780520,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+A"
+     },
+     "keys": [
+      "Ctrl+A"
+     ],
+     "key_times": [
+      1794222779014
+     ],
+     "observation": {
+      "speech_raw": "selected\nbudget.xlsx\n ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s17",
+     "t_start_ms": 1794222780520,
+     "t_end_ms": 1794222781525,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+C"
+     },
+     "keys": [
+      "Ctrl+C"
+     ],
+     "key_times": [
+      1794222780520
+     ],
+     "observation": {
+      "speech_raw": "Copied selection to clipboard",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s18",
+     "t_start_ms": 1794222781525,
+     "t_end_ms": 1794222782530,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794222781525
+     ],
+     "observation": {
+      "speech_raw": "budget.xlsx",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

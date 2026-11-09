@@ -1,0 +1,318 @@
+{
+ "scenario_id": "765-web-word-list-dialog-and-case",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794230999645
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794231001008,
+     "t_end_ms": 1794231002313,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+W"
+     },
+     "keys": [
+      "Ctrl+Insert+W"
+     ],
+     "key_times": [
+      1794231001008
+     ],
+     "observation": {
+      "speech_raw": "Word List \u001d dialog \u001e \nList1 \u001d List view \u001e \nm (10)\n1 of 143\nTo move to items use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794231002313,
+     "t_end_ms": 1794231003417,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794231002313
+     ],
+     "observation": {
+      "speech_raw": "OK \u001d Button \u001e \nTo activate press spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794231003417,
+     "t_end_ms": 1794231004521,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794231003417
+     ],
+     "observation": {
+      "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794231004521,
+     "t_end_ms": 1794231005624,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794231004521
+     ],
+     "observation": {
+      "speech_raw": "Summary \u001d Button \u001e \nTo activate press spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794231005624,
+     "t_end_ms": 1794231006829,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794231005624
+     ],
+     "observation": {
+      "speech_raw": "List1 \u001d List view \u001e \nm (10)\n1 of 143\nTo move to items use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794231006830,
+     "t_end_ms": 1794231007839,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeString(\"library\")"
+     },
+     "keys": [
+      "l",
+      "i",
+      "b",
+      "r",
+      "a",
+      "r",
+      "y"
+     ],
+     "key_times": [
+      1794231006830,
+      1794231006831,
+      1794231006832,
+      1794231006833,
+      1794231006833,
+      1794231006834,
+      1794231006835
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794231007839,
+     "t_end_ms": 1794231008943,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794231007839
+     ],
+     "observation": {
+      "speech_raw": "Primary navigation region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794231008943,
+     "t_end_ms": 1794231009947,
+     "action": {
+      "type": "key",
+      "command": "W"
+     },
+     "keys": [
+      "W"
+     ],
+     "key_times": [
+      1794231008943
+     ],
+     "observation": {
+      "speech_raw": "list of 4 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794231009947,
+     "t_end_ms": 1794231010951,
+     "action": {
+      "type": "key",
+      "command": "W"
+     },
+     "keys": [
+      "W"
+     ],
+     "key_times": [
+      1794231009947
+     ],
+     "observation": {
+      "speech_raw": "Primary navigation region end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794231010951,
+     "t_end_ms": 1794231011956,
+     "action": {
+      "type": "key",
+      "command": "W"
+     },
+     "keys": [
+      "W"
+     ],
+     "key_times": [
+      1794231010951
+     ],
+     "observation": {
+      "speech_raw": "main region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794231011956,
+     "t_end_ms": 1794231012960,
+     "action": {
+      "type": "key",
+      "command": "W"
+     },
+     "keys": [
+      "W"
+     ],
+     "key_times": [
+      1794231011956
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Maria Lopez,",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794231012960,
+     "t_end_ms": 1794231013965,
+     "action": {
+      "type": "key",
+      "command": "Shift+W"
+     },
+     "keys": [
+      "Shift+W"
+     ],
+     "key_times": [
+      1794231012960
+     ],
+     "observation": {
+      "speech_raw": "main region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794231013965,
+     "t_end_ms": 1794231014971,
+     "action": {
+      "type": "key",
+      "command": "Shift+W"
+     },
+     "keys": [
+      "Shift+W"
+     ],
+     "key_times": [
+      1794231013965
+     ],
+     "observation": {
+      "speech_raw": "Primary navigation region end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794231014971,
+     "t_end_ms": 1794231015976,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794231014971
+     ],
+     "observation": {
+      "speech_raw": "Primary navigation region end",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

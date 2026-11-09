@@ -1,0 +1,686 @@
+{
+ "scenario_id": "708-web-flexible-web-pages",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794229099236
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794229100595,
+     "t_end_ms": 1794229101598,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794229100595
+     ],
+     "observation": {
+      "speech_raw": "Weekend events\n \u001d heading level 1 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794229101598,
+     "t_end_ms": 1794229102602,
+     "action": {
+      "type": "key",
+      "command": "Insert+Space"
+     },
+     "keys": [
+      "Insert+Space"
+     ],
+     "key_times": [
+      1794229101598
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794229102602,
+     "t_end_ms": 1794229103606,
+     "action": {
+      "type": "key",
+      "command": "X"
+     },
+     "keys": [
+      "X"
+     ],
+     "key_times": [
+      1794229102602
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794229103607,
+     "t_end_ms": 1794229104610,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794229103607
+     ],
+     "observation": {
+      "speech_raw": "Three events open to everyone this weekend.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794229104610,
+     "t_end_ms": 1794229105614,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794229104610
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e Saturday market",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794229105614,
+     "t_end_ms": 1794229106617,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794229105614
+     ],
+     "observation": {
+      "speech_raw": "The farmers' market opens at eight in Mill Square.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794229106617,
+     "t_end_ms": 1794229107621,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794229106617
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e River clean-up",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794229107621,
+     "t_end_ms": 1794229108625,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"UpArrow\")"
+     },
+     "keys": [
+      "UpArrow"
+     ],
+     "key_times": [
+      1794229107621
+     ],
+     "observation": {
+      "speech_raw": "The farmers' market opens at eight in Mill Square.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794229108625,
+     "t_end_ms": 1794229109630,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"UpArrow\")"
+     },
+     "keys": [
+      "UpArrow"
+     ],
+     "key_times": [
+      1794229108625
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e Saturday market",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794229109630,
+     "t_end_ms": 1794229110634,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"UpArrow\")"
+     },
+     "keys": [
+      "UpArrow"
+     ],
+     "key_times": [
+      1794229109630
+     ],
+     "observation": {
+      "speech_raw": "Three events open to everyone this weekend.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794229110634,
+     "t_end_ms": 1794229111639,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"UpArrow\")"
+     },
+     "keys": [
+      "UpArrow"
+     ],
+     "key_times": [
+      1794229110634
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e Weekend events",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794229111639,
+     "t_end_ms": 1794229112644,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")"
+     },
+     "keys": [
+      "Alt+N"
+     ],
+     "key_times": [
+      1794229111639
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794229112644,
+     "t_end_ms": 1794229113649,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")"
+     },
+     "keys": [
+      "Alt+N"
+     ],
+     "key_times": [
+      1794229112644
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794229113649,
+     "t_end_ms": 1794229114654,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794229113649
+     ],
+     "observation": {
+      "speech_raw": "Three events open to everyone this weekend.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794229114654,
+     "t_end_ms": 1794229115659,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")"
+     },
+     "keys": [
+      "Alt+N"
+     ],
+     "key_times": [
+      1794229114654
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794229115659,
+     "t_end_ms": 1794229116663,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794229115659
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e Saturday market",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s17",
+     "t_start_ms": 1794229116663,
+     "t_end_ms": 1794229117667,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794229116663
+     ],
+     "observation": {
+      "speech_raw": "The farmers' market opens at eight in Mill Square.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s18",
+     "t_start_ms": 1794229117667,
+     "t_end_ms": 1794229118672,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"UpArrow\")"
+     },
+     "keys": [
+      "UpArrow"
+     ],
+     "key_times": [
+      1794229117667
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e Saturday market",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s19",
+     "t_start_ms": 1794229118672,
+     "t_end_ms": 1794229119676,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"UpArrow\")"
+     },
+     "keys": [
+      "UpArrow"
+     ],
+     "key_times": [
+      1794229118672
+     ],
+     "observation": {
+      "speech_raw": "Three events open to everyone this weekend.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s20",
+     "t_start_ms": 1794229119676,
+     "t_end_ms": 1794229120781,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794229119676
+     ],
+     "observation": {
+      "speech_raw": "Weekend Events - Riverside Gazette\n\u2022 \u001d same page link \u001e News\nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s21",
+     "t_start_ms": 1794229120781,
+     "t_end_ms": 1794229121885,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794229120781
+     ],
+     "observation": {
+      "speech_raw": "Events  \u001d same page link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s22",
+     "t_start_ms": 1794229121885,
+     "t_end_ms": 1794229122990,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794229121885
+     ],
+     "observation": {
+      "speech_raw": "Sports  \u001d same page link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s23",
+     "t_start_ms": 1794229122990,
+     "t_end_ms": 1794229124094,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794229122990
+     ],
+     "observation": {
+      "speech_raw": "Advertisement \u001d ComplementaryRegion \u001e \nSee the sale  \u001d same page link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s24",
+     "t_start_ms": 1794229124094,
+     "t_end_ms": 1794229125198,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794229124094
+     ],
+     "observation": {
+      "speech_raw": "Tab search \u001d button menu \u001e \nPress space to activate the menu, then navigate with arrow keys",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s25",
+     "t_start_ms": 1794229125198,
+     "t_end_ms": 1794229126203,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")"
+     },
+     "keys": [
+      "Alt+N"
+     ],
+     "key_times": [
+      1794229125198
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s26",
+     "t_start_ms": 1794229126203,
+     "t_end_ms": 1794229127408,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794229126203
+     ],
+     "observation": {
+      "speech_raw": "File \u001d button menu \u001e \nPress space to activate the menu, then navigate with arrow keys",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s27",
+     "t_start_ms": 1794229127408,
+     "t_end_ms": 1794229128613,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794229127408
+     ],
+     "observation": {
+      "speech_raw": "Address and search bar \u001d Edit \u001e \n/root/okur/corpus/fixtures/flexible-web.html\nType in text.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s28",
+     "t_start_ms": 1794229128613,
+     "t_end_ms": 1794229129817,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794229128613
+     ],
+     "observation": {
+      "speech_raw": "Bookmark this tab \u001d Button \u001e \nTo activate press spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s29",
+     "t_start_ms": 1794229129817,
+     "t_end_ms": 1794229130822,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794229129817
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s30",
+     "t_start_ms": 1794229130822,
+     "t_end_ms": 1794229132027,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794229130822
+     ],
+     "observation": {
+      "speech_raw": "Weekend Events - Riverside Gazette \u001d document \u001e \nWeekend Events - Riverside Gazette\n\u2022 \u001d same page link \u001e News\nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s31",
+     "t_start_ms": 1794229132027,
+     "t_end_ms": 1794229133031,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794229132027
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s32",
+     "t_start_ms": 1794229133031,
+     "t_end_ms": 1794229134035,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794229133031
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s33",
+     "t_start_ms": 1794229134035,
+     "t_end_ms": 1794229135040,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794229134035
+     ],
+     "observation": {
+      "speech_raw": "\u2022 \u001d same page link \u001e News",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

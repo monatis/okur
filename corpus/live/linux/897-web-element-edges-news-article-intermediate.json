@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794202542242
+     "t_ms": 1794234217519
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794202543605,
-     "t_end_ms": 1794202544610,
+     "t_start_ms": 1794234218882,
+     "t_end_ms": 1794234219887,
      "action": {
       "type": "key",
       "command": "Shift+Period"
@@ -31,7 +32,7 @@
       "Shift+Period"
      ],
      "key_times": [
-      1794202543605
+      1794234218882
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794202544610,
-     "t_end_ms": 1794202545614,
+     "t_start_ms": 1794234219887,
+     "t_end_ms": 1794234220891,
      "action": {
       "type": "key",
       "command": "Shift+Comma"
@@ -51,7 +52,7 @@
       "Shift+Comma"
      ],
      "key_times": [
-      1794202544610
+      1794234219887
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794202545614,
-     "t_end_ms": 1794202546618,
+     "t_start_ms": 1794234220891,
+     "t_end_ms": 1794234221895,
      "action": {
       "type": "key",
       "command": "1"
@@ -71,7 +72,7 @@
       "1"
      ],
      "key_times": [
-      1794202545614
+      1794234220891
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours\n \u001d heading level 1 \u001e",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794202546618,
-     "t_end_ms": 1794202547622,
+     "t_start_ms": 1794234221895,
+     "t_end_ms": 1794234222899,
      "action": {
       "type": "key",
       "command": "Shift+Period"
@@ -91,7 +92,7 @@
       "Shift+Period"
      ],
      "key_times": [
-      1794202546618
+      1794234221895
      ],
      "observation": {
       "speech_raw": "article end",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794202547622,
-     "t_end_ms": 1794202548627,
+     "t_start_ms": 1794234222899,
+     "t_end_ms": 1794234223903,
      "action": {
       "type": "key",
       "command": "Shift+Comma"
@@ -111,7 +112,7 @@
       "Shift+Comma"
      ],
      "key_times": [
-      1794202547622
+      1794234222899
      ],
      "observation": {
       "speech_raw": "article",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794202548627,
-     "t_end_ms": 1794202549731,
+     "t_start_ms": 1794234223903,
+     "t_end_ms": 1794234224908,
      "action": {
       "type": "key",
       "command": "L"
@@ -131,7 +132,7 @@
       "L"
      ],
      "key_times": [
-      1794202548627
+      1794234223903
      ],
      "observation": {
       "speech_raw": "list of 3 items",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794202549731,
-     "t_end_ms": 1794202550735,
+     "t_start_ms": 1794234224908,
+     "t_end_ms": 1794234225912,
      "action": {
       "type": "key",
       "command": "Down"
@@ -151,7 +152,7 @@
       "Down"
      ],
      "key_times": [
-      1794202549731
+      1794234224908
      ],
      "observation": {
       "speech_raw": "\u2022 Weekday hours: 9 a.m. to 9 p.m.",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794202550735,
-     "t_end_ms": 1794202551740,
+     "t_start_ms": 1794234225912,
+     "t_end_ms": 1794234226916,
      "action": {
       "type": "key",
       "command": "Down"
@@ -171,7 +172,7 @@
       "Down"
      ],
      "key_times": [
-      1794202550735
+      1794234225912
      ],
      "observation": {
       "speech_raw": "\u2022 Weekend hours, which do not change:",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794202551740,
-     "t_end_ms": 1794202552744,
+     "t_start_ms": 1794234226916,
+     "t_end_ms": 1794234227921,
      "action": {
       "type": "key",
       "command": "Down"
@@ -191,7 +192,7 @@
       "Down"
      ],
      "key_times": [
-      1794202551740
+      1794234226916
      ],
      "observation": {
       "speech_raw": "list of 2 items nesting level 1",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794202552744,
-     "t_end_ms": 1794202553749,
+     "t_start_ms": 1794234227921,
+     "t_end_ms": 1794234228925,
      "action": {
       "type": "key",
       "command": "Down"
@@ -211,7 +212,7 @@
       "Down"
      ],
      "key_times": [
-      1794202552744
+      1794234227921
      ],
      "observation": {
       "speech_raw": "\u25e6 Saturday: 10 a.m. to 6 p.m.",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794202553749,
-     "t_end_ms": 1794202554754,
+     "t_start_ms": 1794234228925,
+     "t_end_ms": 1794234229931,
      "action": {
       "type": "key",
       "command": "Shift+Period"
@@ -231,7 +232,7 @@
       "Shift+Period"
      ],
      "key_times": [
-      1794202553749
+      1794234228925
      ],
      "observation": {
       "speech_raw": "list end nesting level 1",
@@ -241,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794202554754,
-     "t_end_ms": 1794202555759,
+     "t_start_ms": 1794234229931,
+     "t_end_ms": 1794234230936,
      "action": {
       "type": "key",
       "command": "Shift+Period"
@@ -251,7 +252,7 @@
       "Shift+Period"
      ],
      "key_times": [
-      1794202554754
+      1794234229931
      ],
      "observation": {
       "speech_raw": "list end nesting level 1",
@@ -261,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794202555759,
-     "t_end_ms": 1794202556765,
+     "t_start_ms": 1794234230936,
+     "t_end_ms": 1794234231941,
      "action": {
       "type": "key",
       "command": "Shift+Comma"
@@ -271,7 +272,7 @@
       "Shift+Comma"
      ],
      "key_times": [
-      1794202555759
+      1794234230936
      ],
      "observation": {
       "speech_raw": "list of 2 items nesting level 1",
@@ -281,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794202556765,
-     "t_end_ms": 1794202557770,
+     "t_start_ms": 1794234231941,
+     "t_end_ms": 1794234232946,
      "action": {
       "type": "key",
       "command": "Shift+Comma"
@@ -291,7 +292,7 @@
       "Shift+Comma"
      ],
      "key_times": [
-      1794202556765
+      1794234231941
      ],
      "observation": {
       "speech_raw": "list of 2 items nesting level 1",
@@ -301,8 +302,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794202557770,
-     "t_end_ms": 1794202558774,
+     "t_start_ms": 1794234232946,
+     "t_end_ms": 1794234233950,
      "action": {
       "type": "key",
       "command": "T"
@@ -311,7 +312,7 @@
       "T"
      ],
      "key_times": [
-      1794202557770
+      1794234232946
      ],
      "observation": {
       "speech_raw": "3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch",
@@ -321,8 +322,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794202558774,
-     "t_end_ms": 1794202559779,
+     "t_start_ms": 1794234233950,
+     "t_end_ms": 1794234234954,
      "action": {
       "type": "key",
       "command": "Down"
@@ -331,7 +332,7 @@
       "Down"
      ],
      "key_times": [
-      1794202558774
+      1794234233950
      ],
      "observation": {
       "speech_raw": "Weekdays",
@@ -341,8 +342,8 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794202559779,
-     "t_end_ms": 1794202560783,
+     "t_start_ms": 1794234234954,
+     "t_end_ms": 1794234235959,
      "action": {
       "type": "key",
       "command": "Down"
@@ -351,7 +352,7 @@
       "Down"
      ],
      "key_times": [
-      1794202559779
+      1794234234954
      ],
      "observation": {
       "speech_raw": "Details",
@@ -361,8 +362,8 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794202560783,
-     "t_end_ms": 1794202561789,
+     "t_start_ms": 1794234235959,
+     "t_end_ms": 1794234236964,
      "action": {
       "type": "key",
       "command": "Shift+Period"
@@ -371,7 +372,7 @@
       "Shift+Period"
      ],
      "key_times": [
-      1794202560783
+      1794234235959
      ],
      "observation": {
       "speech_raw": "table end",
@@ -381,8 +382,8 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794202561789,
-     "t_end_ms": 1794202562794,
+     "t_start_ms": 1794234236964,
+     "t_end_ms": 1794234237969,
      "action": {
       "type": "key",
       "command": "Shift+Comma"
@@ -391,7 +392,7 @@
       "Shift+Comma"
      ],
      "key_times": [
-      1794202561789
+      1794234236964
      ],
      "observation": {
       "speech_raw": "table with 3 columns and 3 rows",
@@ -401,8 +402,8 @@
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794202562794,
-     "t_end_ms": 1794202563798,
+     "t_start_ms": 1794234237969,
+     "t_end_ms": 1794234238973,
      "action": {
       "type": "key",
       "command": "3"
@@ -411,7 +412,7 @@
       "3"
      ],
      "key_times": [
-      1794202562794
+      1794234237969
      ],
      "observation": {
       "speech_raw": "What readers said\n \u001d heading level 3 \u001e",
@@ -421,8 +422,8 @@
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794202563798,
-     "t_end_ms": 1794202564802,
+     "t_start_ms": 1794234238973,
+     "t_end_ms": 1794234239978,
      "action": {
       "type": "key",
       "command": "Down"
@@ -431,7 +432,7 @@
       "Down"
      ],
      "key_times": [
-      1794202563798
+      1794234238973
      ],
      "observation": {
       "speech_raw": "block quote",
@@ -441,8 +442,8 @@
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794202564802,
-     "t_end_ms": 1794202565806,
+     "t_start_ms": 1794234239978,
+     "t_end_ms": 1794234240983,
      "action": {
       "type": "key",
       "command": "Down"
@@ -451,7 +452,7 @@
       "Down"
      ],
      "key_times": [
-      1794202564802
+      1794234239978
      ],
      "observation": {
       "speech_raw": "Finally, I can study after work.",
@@ -461,8 +462,8 @@
     },
     {
      "step_id": "s23",
-     "t_start_ms": 1794202565806,
-     "t_end_ms": 1794202566812,
+     "t_start_ms": 1794234240983,
+     "t_end_ms": 1794234241988,
      "action": {
       "type": "key",
       "command": "Shift+Period"
@@ -471,7 +472,7 @@
       "Shift+Period"
      ],
      "key_times": [
-      1794202565806
+      1794234240983
      ],
      "observation": {
       "speech_raw": "block quote end",
@@ -481,8 +482,8 @@
     },
     {
      "step_id": "s24",
-     "t_start_ms": 1794202566812,
-     "t_end_ms": 1794202567916,
+     "t_start_ms": 1794234241988,
+     "t_end_ms": 1794234243092,
      "action": {
       "type": "key",
       "command": "Down"
@@ -491,7 +492,7 @@
       "Down"
      ],
      "key_times": [
-      1794202566812
+      1794234241988
      ],
      "observation": {
       "speech_raw": "The library board will review attendance in the fall. A long-standing complaint among students and working parents was that the reading rooms closed before",
@@ -501,8 +502,8 @@
     },
     {
      "step_id": "s25",
-     "t_start_ms": 1794202567916,
-     "t_end_ms": 1794202568921,
+     "t_start_ms": 1794234243092,
+     "t_end_ms": 1794234244096,
      "action": {
       "type": "key",
       "command": "Down"
@@ -511,7 +512,7 @@
       "Down"
      ],
      "key_times": [
-      1794202567916
+      1794234243092
      ],
      "observation": {
       "speech_raw": "most people finished their day, so the extended schedule is intended to make the collections, the public computers, and the quiet study spaces available",
@@ -521,8 +522,8 @@
     },
     {
      "step_id": "s26",
-     "t_start_ms": 1794202568921,
-     "t_end_ms": 1794202569925,
+     "t_start_ms": 1794234244096,
+     "t_end_ms": 1794234245101,
      "action": {
       "type": "key",
       "command": "Shift+Period"
@@ -531,7 +532,7 @@
       "Shift+Period"
      ],
      "key_times": [
-      1794202568921
+      1794234244096
      ],
      "observation": {
       "speech_raw": "article end",
@@ -541,8 +542,8 @@
     },
     {
      "step_id": "s27",
-     "t_start_ms": 1794202569925,
-     "t_end_ms": 1794202570930,
+     "t_start_ms": 1794234245101,
+     "t_end_ms": 1794234246106,
      "action": {
       "type": "key",
       "command": "Shift+Comma"
@@ -551,7 +552,7 @@
       "Shift+Comma"
      ],
      "key_times": [
-      1794202569925
+      1794234245101
      ],
      "observation": {
       "speech_raw": "article",
@@ -561,8 +562,8 @@
     },
     {
      "step_id": "s28",
-     "t_start_ms": 1794202570930,
-     "t_end_ms": 1794202571936,
+     "t_start_ms": 1794234246106,
+     "t_end_ms": 1794234247111,
      "action": {
       "type": "key",
       "command": "Ctrl+End"
@@ -571,7 +572,7 @@
       "Ctrl+End"
      ],
      "key_times": [
-      1794202570930
+      1794234246106
      ],
      "observation": {
       "speech_raw": "content information end",
@@ -581,8 +582,8 @@
     },
     {
      "step_id": "s29",
-     "t_start_ms": 1794202571936,
-     "t_end_ms": 1794202572941,
+     "t_start_ms": 1794234247111,
+     "t_end_ms": 1794234248116,
      "action": {
       "type": "key",
       "command": "Shift+Comma"
@@ -591,7 +592,7 @@
       "Shift+Comma"
      ],
      "key_times": [
-      1794202571936
+      1794234247111
      ],
      "observation": {
       "speech_raw": "content information",
@@ -601,8 +602,8 @@
     },
     {
      "step_id": "s30",
-     "t_start_ms": 1794202572941,
-     "t_end_ms": 1794202573947,
+     "t_start_ms": 1794234248116,
+     "t_end_ms": 1794234249121,
      "action": {
       "type": "key",
       "command": "Shift+Period"
@@ -611,7 +612,7 @@
       "Shift+Period"
      ],
      "key_times": [
-      1794202572941
+      1794234248116
      ],
      "observation": {
       "speech_raw": "content information end",

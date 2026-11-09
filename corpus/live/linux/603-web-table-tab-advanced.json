@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794196669364
+     "t_ms": 1794225517068
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794196669723
+     "t_ms": 1794225517427
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794196671030,
-     "t_end_ms": 1794196672034,
+     "t_start_ms": 1794225518733,
+     "t_end_ms": 1794225519837,
      "action": {
       "type": "key",
       "command": "H"
@@ -35,7 +36,7 @@
       "H"
      ],
      "key_times": [
-      1794196671030
+      1794225518733
      ],
      "observation": {
       "speech_raw": "Web App Patterns\n \u001d heading level 1 \u001e",
@@ -45,8 +46,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794196672034,
-     "t_end_ms": 1794196673038,
+     "t_start_ms": 1794225519837,
+     "t_end_ms": 1794225520840,
      "action": {
       "type": "key",
       "command": "H"
@@ -55,7 +56,7 @@
       "H"
      ],
      "key_times": [
-      1794196672034
+      1794225519837
      ],
      "observation": {
       "speech_raw": "Current links\n \u001d heading level 2 \u001e",
@@ -65,8 +66,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794196673038,
-     "t_end_ms": 1794196674042,
+     "t_start_ms": 1794225520840,
+     "t_end_ms": 1794225521844,
      "action": {
       "type": "key",
       "command": "H"
@@ -75,7 +76,7 @@
       "H"
      ],
      "key_times": [
-      1794196673038
+      1794225520840
      ],
      "observation": {
       "speech_raw": "Described controls\n \u001d heading level 2 \u001e",
@@ -85,8 +86,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794196674042,
-     "t_end_ms": 1794196675046,
+     "t_start_ms": 1794225521844,
+     "t_end_ms": 1794225522849,
      "action": {
       "type": "key",
       "command": "H"
@@ -95,7 +96,7 @@
       "H"
      ],
      "key_times": [
-      1794196674042
+      1794225521844
      ],
      "observation": {
       "speech_raw": "Popup buttons\n \u001d heading level 2 \u001e",
@@ -105,8 +106,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794196675046,
-     "t_end_ms": 1794196676050,
+     "t_start_ms": 1794225522849,
+     "t_end_ms": 1794225523853,
      "action": {
       "type": "key",
       "command": "H"
@@ -115,7 +116,7 @@
       "H"
      ],
      "key_times": [
-      1794196675046
+      1794225522849
      ],
      "observation": {
       "speech_raw": "Fruit search\n \u001d heading level 2 \u001e",
@@ -125,8 +126,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794196676050,
-     "t_end_ms": 1794196677054,
+     "t_start_ms": 1794225523853,
+     "t_end_ms": 1794225524858,
      "action": {
       "type": "key",
       "command": "H"
@@ -135,7 +136,7 @@
       "H"
      ],
      "key_times": [
-      1794196676050
+      1794225523854
      ],
      "observation": {
       "speech_raw": "Tab from here\n \u001d heading level 2 \u001e",
@@ -145,8 +146,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794196677054,
-     "t_end_ms": 1794196678058,
+     "t_start_ms": 1794225524858,
+     "t_end_ms": 1794225525862,
      "action": {
       "type": "key",
       "command": "H"
@@ -155,7 +156,7 @@
       "H"
      ],
      "key_times": [
-      1794196677054
+      1794225524858
      ],
      "observation": {
       "speech_raw": "Repository files\n \u001d heading level 2 \u001e",
@@ -165,8 +166,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794196678058,
-     "t_end_ms": 1794196679062,
+     "t_start_ms": 1794225525862,
+     "t_end_ms": 1794225526866,
      "action": {
       "type": "key",
       "command": "H"
@@ -175,7 +176,7 @@
       "H"
      ],
      "key_times": [
-      1794196678058
+      1794225525862
      ],
      "observation": {
       "speech_raw": "Workbench region\n \u001d heading level 2 \u001e",
@@ -185,8 +186,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794196679062,
-     "t_end_ms": 1794196680066,
+     "t_start_ms": 1794225526866,
+     "t_end_ms": 1794225527871,
      "action": {
       "type": "key",
       "command": "H"
@@ -195,7 +196,7 @@
       "H"
      ],
      "key_times": [
-      1794196679062
+      1794225526866
      ],
      "observation": {
       "speech_raw": "Files table\n \u001d heading level 2 \u001e",
@@ -205,8 +206,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794196680066,
-     "t_end_ms": 1794196681171,
+     "t_start_ms": 1794225527871,
+     "t_end_ms": 1794225528976,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -215,7 +216,7 @@
       "Tab"
      ],
      "key_times": [
-      1794196680066
+      1794225527871
      ],
      "observation": {
       "speech_raw": "Web App Patterns\n \u001d same page link \u001e alpha.rs\nTo activate press Enter.",
@@ -225,8 +226,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794196681171,
-     "t_end_ms": 1794196682276,
+     "t_start_ms": 1794225528976,
+     "t_end_ms": 1794225530081,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -235,7 +236,7 @@
       "Tab"
      ],
      "key_times": [
-      1794196681171
+      1794225528976
      ],
      "observation": {
       "speech_raw": "Message\nfirst commit  \u001d same page link \u001e \ncol 2 row 2\nTo activate press Enter.",
@@ -245,8 +246,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794196682276,
-     "t_end_ms": 1794196683381,
+     "t_start_ms": 1794225530081,
+     "t_end_ms": 1794225531186,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -255,7 +256,7 @@
       "Tab"
      ],
      "key_times": [
-      1794196682276
+      1794225530081
      ],
      "observation": {
       "speech_raw": "Name\nbeta.rs  \u001d same page link \u001e \ncol 1 row 3\nTo activate press Enter.",
@@ -265,8 +266,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794196683381,
-     "t_end_ms": 1794196684485,
+     "t_start_ms": 1794225531186,
+     "t_end_ms": 1794225532290,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -275,7 +276,7 @@
       "Tab"
      ],
      "key_times": [
-      1794196683381
+      1794225531186
      ],
      "observation": {
       "speech_raw": "gamma.rs  \u001d same page link \u001e \nRow 4\nTo activate press Enter.",
@@ -285,8 +286,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794196684485,
-     "t_end_ms": 1794196685590,
+     "t_start_ms": 1794225532290,
+     "t_end_ms": 1794225533393,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -295,7 +296,7 @@
       "Tab"
      ],
      "key_times": [
-      1794196684485
+      1794225532290
      ],
      "observation": {
       "speech_raw": "Message\nthird commit  \u001d same page link \u001e \nColumn 2\nTo activate press Enter.",

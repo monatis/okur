@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794200449548
+     "t_ms": 1794231879002
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794200450914,
-     "t_end_ms": 1794200451917,
+     "t_start_ms": 1794231880366,
+     "t_end_ms": 1794231881370,
      "action": {
       "type": "key",
       "command": "Down"
@@ -31,7 +32,7 @@
       "Down"
      ],
      "key_times": [
-      1794200450914
+      1794231880366
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e Raised and lowered numbers",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794200451917,
-     "t_end_ms": 1794200452921,
+     "t_start_ms": 1794231881370,
+     "t_end_ms": 1794231882374,
      "action": {
       "type": "key",
       "command": "Down"
@@ -51,7 +52,7 @@
       "Down"
      ],
      "key_times": [
-      1794200451917
+      1794231881370
      ],
      "observation": {
       "speech_raw": "Two cubed is 2 \u001dsuperscript \u001e 3 \u001dend superscript \u001e  in short.",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794200452921,
-     "t_end_ms": 1794200453924,
+     "t_start_ms": 1794231882374,
+     "t_end_ms": 1794231883377,
      "action": {
       "type": "key",
       "command": "Down"
@@ -71,7 +72,7 @@
       "Down"
      ],
      "key_times": [
-      1794200452921
+      1794231882374
      ],
      "observation": {
       "speech_raw": "A mole holds 10 \u001dsuperscript \u001e 23 \u001dend superscript \u001e  particles.",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794200453924,
-     "t_end_ms": 1794200454928,
+     "t_start_ms": 1794231883377,
+     "t_end_ms": 1794231884381,
      "action": {
       "type": "key",
       "command": "Down"
@@ -91,7 +92,7 @@
       "Down"
      ],
      "key_times": [
-      1794200453924
+      1794231883377
      ],
      "observation": {
       "speech_raw": "A micrometre is 10 \u001dsuperscript \u001e -6 \u001dend superscript \u001e  metres.",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794200454928,
-     "t_end_ms": 1794200455933,
+     "t_start_ms": 1794231884381,
+     "t_end_ms": 1794231885385,
      "action": {
       "type": "key",
       "command": "Down"
@@ -111,7 +112,7 @@
       "Down"
      ],
      "key_times": [
-      1794200454928
+      1794231884381
      ],
      "observation": {
       "speech_raw": "The power x10 grows fast.",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794200455933,
-     "t_end_ms": 1794200456937,
+     "t_start_ms": 1794231885385,
+     "t_end_ms": 1794231886389,
      "action": {
       "type": "key",
       "command": "Down"
@@ -131,7 +132,7 @@
       "Down"
      ],
      "key_times": [
-      1794200455933
+      1794231885385
      ],
      "observation": {
       "speech_raw": "The 21st century began in 2001.",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794200456937,
-     "t_end_ms": 1794200457942,
+     "t_start_ms": 1794231886389,
+     "t_end_ms": 1794231887393,
      "action": {
       "type": "key",
       "command": "Down"
@@ -151,7 +152,7 @@
       "Down"
      ],
      "key_times": [
-      1794200456937
+      1794231886389
      ],
      "observation": {
       "speech_raw": "Binary 101 \u001dsubscript \u001e 2 \u001dend subscript \u001e  is five.",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794200457942,
-     "t_end_ms": 1794200458946,
+     "t_start_ms": 1794231887393,
+     "t_end_ms": 1794231888397,
      "action": {
       "type": "key",
       "command": "Down"
@@ -171,7 +172,7 @@
       "Down"
      ],
      "key_times": [
-      1794200457942
+      1794231887393
      ],
      "observation": {
       "speech_raw": "Hex FF16 is 255.",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794200458946,
-     "t_end_ms": 1794200459950,
+     "t_start_ms": 1794231888397,
+     "t_end_ms": 1794231889401,
      "action": {
       "type": "key",
       "command": "Down"
@@ -191,7 +192,7 @@
       "Down"
      ],
      "key_times": [
-      1794200458946
+      1794231888397
      ],
      "observation": {
       "speech_raw": "The value 5 \u001dsubscript \u001e 10 \u001dend subscript \u001e  is decimal.",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794200459950,
-     "t_end_ms": 1794200460954,
+     "t_start_ms": 1794231889401,
+     "t_end_ms": 1794231890405,
      "action": {
       "type": "key",
       "command": "Down"
@@ -211,7 +212,7 @@
       "Down"
      ],
      "key_times": [
-      1794200459950
+      1794231889401
      ],
      "observation": {
       "speech_raw": "Sulfuric acid is H2SO4.",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794200460954,
-     "t_end_ms": 1794200461958,
+     "t_start_ms": 1794231890405,
+     "t_end_ms": 1794231891410,
      "action": {
       "type": "key",
       "command": "Down"
@@ -231,7 +232,7 @@
       "Down"
      ],
      "key_times": [
-      1794200460954
+      1794231890405
      ],
      "observation": {
       "speech_raw": "Another plain line at the end.",

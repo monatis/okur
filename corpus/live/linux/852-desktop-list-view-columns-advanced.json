@@ -1,0 +1,261 @@
+{
+ "scenario_id": "852-desktop-list-view-columns-advanced",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": null,
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "application": "corpus/fixtures/linux/desktop-forms.py",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794232825580,
+     "t_end_ms": 1794232826741,
+     "action": {
+      "type": "key",
+      "command": "Shift+Tab"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794232825580
+     ],
+     "observation": {
+      "speech_raw": "SR Desktop Fixture\nCancel \u001d Button \u001e \nTo activate press spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794232826741,
+     "t_end_ms": 1794232827847,
+     "action": {
+      "type": "key",
+      "command": "Shift+Tab"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794232826741
+     ],
+     "observation": {
+      "speech_raw": "OK \u001d Button \u001e \nTo activate press spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794232827847,
+     "t_end_ms": 1794232829153,
+     "action": {
+      "type": "key",
+      "command": "Shift+Tab"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794232827847
+     ],
+     "observation": {
+      "speech_raw": "General \u001d Tab \u001e  \u001dselected\u001e \nTo switch pages, press Control+PageDown.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794232829153,
+     "t_end_ms": 1794232830359,
+     "action": {
+      "type": "key",
+      "command": "Shift+Tab"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794232829153
+     ],
+     "observation": {
+      "speech_raw": " \u001d List view \u001e \nbudget.xlsx\n24 KB\n1 of 3\nTo move to items use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794232830359,
+     "t_end_ms": 1794232831365,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+1"
+     },
+     "keys": [
+      "Ctrl+Insert+1"
+     ],
+     "key_times": [
+      1794232830359
+     ],
+     "observation": {
+      "speech_raw": "budget.xlsx",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794232831365,
+     "t_end_ms": 1794232832372,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+2"
+     },
+     "keys": [
+      "Ctrl+Insert+2"
+     ],
+     "key_times": [
+      1794232831365
+     ],
+     "observation": {
+      "speech_raw": "24 KB",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794232832372,
+     "t_end_ms": 1794232833378,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+3"
+     },
+     "keys": [
+      "Ctrl+Insert+3"
+     ],
+     "key_times": [
+      1794232832372
+     ],
+     "observation": {
+      "speech_raw": "3 out of range",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794232833378,
+     "t_end_ms": 1794232834582,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794232833378
+     ],
+     "observation": {
+      "speech_raw": "notes.txt\n2 KB",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794232834582,
+     "t_end_ms": 1794232835587,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+1"
+     },
+     "keys": [
+      "Ctrl+Insert+1"
+     ],
+     "key_times": [
+      1794232834582
+     ],
+     "observation": {
+      "speech_raw": "notes.txt",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794232835588,
+     "t_end_ms": 1794232836593,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+2"
+     },
+     "keys": [
+      "Ctrl+Insert+2"
+     ],
+     "key_times": [
+      1794232835588
+     ],
+     "observation": {
+      "speech_raw": "2 KB",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794232836593,
+     "t_end_ms": 1794232837598,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794232836593
+     ],
+     "observation": {
+      "speech_raw": "notes.txt\n2 KB\n2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794232837598,
+     "t_end_ms": 1794232838602,
+     "action": {
+      "type": "key",
+      "command": "Insert+Numpad5"
+     },
+     "keys": [
+      "Insert+Numpad5"
+     ],
+     "key_times": [
+      1794232837598
+     ],
+     "observation": {
+      "speech_raw": "notes.txt\n2 KB\n2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

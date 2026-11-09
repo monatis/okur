@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794196475436
+     "t_ms": 1794225221669
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794196476801,
-     "t_end_ms": 1794196477805,
+     "t_start_ms": 1794225223032,
+     "t_end_ms": 1794225224036,
      "action": {
       "type": "key",
       "command": "T"
@@ -31,7 +32,7 @@
       "T"
      ],
      "key_times": [
-      1794196476801
+      1794225223032
      ],
      "observation": {
       "speech_raw": "3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794196477805,
-     "t_end_ms": 1794196478812,
+     "t_start_ms": 1794225224036,
+     "t_end_ms": 1794225225041,
      "action": {
       "type": "key",
       "command": "Win+Alt+Up"
@@ -51,7 +52,7 @@
       "Win+Alt+Up"
      ],
      "key_times": [
-      1794196477805
+      1794225224036
      ],
      "observation": {
       "speech_raw": "First row",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794196478812,
-     "t_end_ms": 1794196479817,
+     "t_start_ms": 1794225225041,
+     "t_end_ms": 1794225226047,
      "action": {
       "type": "key",
       "command": "Win+Alt+Left"
@@ -71,7 +72,7 @@
       "Win+Alt+Left"
      ],
      "key_times": [
-      1794196478812
+      1794225225041
      ],
      "observation": {
       "speech_raw": "First column",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794196479817,
-     "t_end_ms": 1794196480822,
+     "t_start_ms": 1794225226047,
+     "t_end_ms": 1794225227052,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Right"
@@ -91,7 +92,7 @@
       "Ctrl+Alt+Right"
      ],
      "key_times": [
-      1794196479817
+      1794225226047
      ],
      "observation": {
       "speech_raw": "Weekdays\nColumn 2 of 3",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794196480822,
-     "t_end_ms": 1794196481828,
+     "t_start_ms": 1794225227052,
+     "t_end_ms": 1794225228058,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Right"
@@ -111,7 +112,7 @@
       "Ctrl+Alt+Right"
      ],
      "key_times": [
-      1794196480822
+      1794225227052
      ],
      "observation": {
       "speech_raw": "Details\nColumn 3 of 3",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794196481828,
-     "t_end_ms": 1794196482833,
+     "t_start_ms": 1794225228058,
+     "t_end_ms": 1794225229063,
      "action": {
       "type": "key",
       "command": "Win+Alt+Right"
@@ -131,7 +132,7 @@
       "Win+Alt+Right"
      ],
      "key_times": [
-      1794196481828
+      1794225228058
      ],
      "observation": {
       "speech_raw": "Last column",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794196482833,
-     "t_end_ms": 1794196483839,
+     "t_start_ms": 1794225229063,
+     "t_end_ms": 1794225230069,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Right"
@@ -151,7 +152,7 @@
       "Ctrl+Alt+Right"
      ],
      "key_times": [
-      1794196482833
+      1794225229063
      ],
      "observation": {
       "speech_raw": "end of row",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794196483839,
-     "t_end_ms": 1794196484846,
+     "t_start_ms": 1794225230069,
+     "t_end_ms": 1794225231074,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Up"
@@ -171,7 +172,7 @@
       "Ctrl+Alt+Up"
      ],
      "key_times": [
-      1794196483839
+      1794225230069
      ],
      "observation": {
       "speech_raw": "top of column",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794196484846,
-     "t_end_ms": 1794196485850,
+     "t_start_ms": 1794225231074,
+     "t_end_ms": 1794225232078,
      "action": {
       "type": "key",
       "command": "T"
@@ -191,7 +192,7 @@
       "T"
      ],
      "key_times": [
-      1794196484846
+      1794225231074
      ],
      "observation": {
       "speech_raw": "wrapping to top\n3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794196485850,
-     "t_end_ms": 1794196486853,
+     "t_start_ms": 1794225232078,
+     "t_end_ms": 1794225233083,
      "action": {
       "type": "key",
       "command": "Up"
@@ -211,7 +212,7 @@
       "Up"
      ],
      "key_times": [
-      1794196485850
+      1794225232078
      ],
      "observation": {
       "speech_raw": "Branch hours after the change",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794196486853,
-     "t_end_ms": 1794196487858,
+     "t_start_ms": 1794225233083,
+     "t_end_ms": 1794225234087,
      "action": {
       "type": "key",
       "command": "Up"
@@ -231,7 +232,7 @@
       "Up"
      ],
      "key_times": [
-      1794196486853
+      1794225233083
      ],
      "observation": {
       "speech_raw": "table with 3 columns and 3 rows",
@@ -241,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794196487858,
-     "t_end_ms": 1794196488862,
+     "t_start_ms": 1794225234087,
+     "t_end_ms": 1794225235091,
      "action": {
       "type": "key",
       "command": "Down"
@@ -251,7 +252,7 @@
       "Down"
      ],
      "key_times": [
-      1794196487858
+      1794225234087
      ],
      "observation": {
       "speech_raw": "Branch hours after the change",
@@ -261,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794196488862,
-     "t_end_ms": 1794196489867,
+     "t_start_ms": 1794225235091,
+     "t_end_ms": 1794225236094,
      "action": {
       "type": "key",
       "command": "Down"
@@ -271,7 +272,7 @@
       "Down"
      ],
      "key_times": [
-      1794196488862
+      1794225235091
      ],
      "observation": {
       "speech_raw": "Branch",
