@@ -4511,6 +4511,30 @@ impl LinuxProvider {
         })
     }
 
+    /// The text attributes of the run at `offset` in the text of the object at `bus_name` and
+    /// `path`, with the run's start and end: its Text interface's GetAttributeRun, the
+    /// defaults included or not (Chrome's `fg-color` and `bg-color` are defaults; its
+    /// `invalid` "spelling" is a run's own).
+    pub fn atspi_text_attribute_run(
+        &self,
+        bus_name: &str,
+        path: &str,
+        offset: i32,
+        include_defaults: bool,
+    ) -> Result<(HashMap<String, String>, i32, i32)> {
+        let proxy = self.make_proxy(bus_name, path, "org.a11y.atspi.Text")?;
+        let reply = proxy
+            .call_method("GetAttributeRun", &(offset, include_defaults))
+            .map_err(|e| Error::Platform {
+                code: -1,
+                message: format!("Text.GetAttributeRun failed: {e}"),
+            })?;
+        reply.body().deserialize().map_err(|e| Error::Platform {
+            code: -1,
+            message: format!("Text.GetAttributeRun reply decode failed: {e}"),
+        })
+    }
+
     /// The whole text of the object at `bus_name` and `path`: its Text interface's GetText to
     /// the end.
     pub fn atspi_text(&self, bus_name: &str, path: &str) -> Result<String> {

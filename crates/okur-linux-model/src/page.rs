@@ -208,6 +208,13 @@ pub fn atspi_to_web_from(node: &AtspiNode, base: i32) -> WebNode {
     numbered(node, &mut next, &ids)
 }
 
+/// A color as Chrome gives it over AT-SPI ("0,0,0", a text run's `fg-color` and `bg-color`) as
+/// CSS gives it on Windows, `rgb(0, 0, 0)`.
+pub fn css_color(atk: &str) -> Option<String> {
+    let parts: Vec<&str> = atk.split(',').map(str::trim).collect();
+    (parts.len() == 3).then(|| format!("rgb({})", parts.join(", ")))
+}
+
 /// Each object's id by its path, numbered as `numbered` numbers them, for relations' targets.
 /// The unique ids [`atspi_to_web_from`] gives a page's objects, by their paths: what a focus
 /// in the page names its node by, as Windows' focus names it by IA2's unique id.
@@ -270,6 +277,32 @@ fn collect_places(node: &AtspiNode, places: &mut HashMap<String, ItemPlace>) {
     }
 }
 
+/// The application regions (ARIA role "application", VS Code's workbench) a page's objects are
+/// in, by the objects' paths: the region's name, for a focus in it, as Windows' focus names it
+/// ("Workbench"), the page taking every key there [obs, 215/s9]. The region's own object is not
+/// in it.
+pub fn applications(root: &AtspiNode) -> HashMap<String, std::sync::Arc<str>> {
+    let mut regions = HashMap::new();
+    collect_applications(root, None, &mut regions);
+    regions
+}
+
+fn collect_applications(
+    node: &AtspiNode,
+    region: Option<&std::sync::Arc<str>>,
+    regions: &mut HashMap<String, std::sync::Arc<str>>,
+) {
+    if let Some(region) = region.filter(|_| !node.path.is_empty()) {
+        regions.insert(node.path.clone(), std::sync::Arc::clone(region));
+    }
+    let own = (node.attribute("xml-roles") == Some("application"))
+        .then(|| std::sync::Arc::<str>::from(node.name.trim()));
+    let inner = own.as_ref().or(region);
+    for child in &node.children {
+        collect_applications(child, inner, regions);
+    }
+}
+
 fn number_paths<'a>(node: &'a AtspiNode, next: &mut i32, ids: &mut HashMap<&'a str, i32>) {
     *next += 1;
     if !node.path.is_empty() {
@@ -285,10 +318,7 @@ fn number_paths<'a>(node: &'a AtspiNode, next: &mut i32, ids: &mut HashMap<&'a s
 /// (`family-name`, `size` "24pt", `weight` "700", `fg-color` and `bg-color` "0,0,0"); the
 /// colors as CSS gives them on Windows, `rgb(0, 0, 0)`. Others are left out.
 fn text_attributes(atk: &BTreeMap<String, String>) -> BTreeMap<String, String> {
-    let rgb = |value: &str| {
-        let parts: Vec<&str> = value.split(',').map(str::trim).collect();
-        (parts.len() == 3).then(|| format!("rgb({})", parts.join(", ")))
-    };
+    let rgb = css_color;
     let mut out = BTreeMap::new();
     for (name, value) in atk {
         let renamed = match name.as_str() {
@@ -474,6 +504,26 @@ mod tests {
             })
         );
         assert_eq!(places.len(), 4);
+    }
+
+    /// An object in an application region has the region's name; the region itself, and an
+    /// object outside it, none [obs, 215/s9].
+    #[test]
+    fn an_object_in_an_application_region_has_its_name() {
+        let mut tool = node("push button", "First tool", vec![]);
+        tool.path = "/tool".to_owned();
+        let mut region = node("embedded", "Workbench", vec![tool]);
+        region.path = "/region".to_owned();
+        region
+            .attributes
+            .insert("xml-roles".to_owned(), "application".to_owned());
+        let mut outside = node("heading", "Files", vec![]);
+        outside.path = "/heading".to_owned();
+        let root = node("document web", "Web App Patterns", vec![region, outside]);
+        let regions = applications(&root);
+        assert_eq!(regions.get("/tool").map(|r| &**r), Some("Workbench"));
+        assert!(!regions.contains_key("/region"));
+        assert!(!regions.contains_key("/heading"));
     }
 
     /// A fieldset is a panel to Chrome's AT-SPI, a group to the engine; a select's value is the

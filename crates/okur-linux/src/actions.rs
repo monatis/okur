@@ -18,10 +18,10 @@ use std::time::{Duration, Instant};
 
 use okur_core::actions::ApplicationActions;
 use okur_core::aom::{AomNode, UNIQUE_ID_ATTR};
-use okur_core::event::{AccessibilityEvent, TextContext};
+use okur_core::event::{AccessibilityEvent, FontInfo, TextContext};
 use okur_linux_model::convert::{AtspiRecord, TextRead};
 use okur_runtime::events::EventSink;
-use xa11y_linux::{AtspiTextPosition, LinuxProvider};
+use xa11y_linux::{AtspiObject, AtspiTextPosition, LinuxProvider};
 
 use crate::events::{PageObjects, TextReads};
 
@@ -30,8 +30,8 @@ enum Request {
     Focus(String, String),
     Activate(String, String),
     /// The focused text field read at its caret, after the key the engine asked it for: what
-    /// the engine knew of the field before the key.
-    Text(Option<Box<TextContext>>),
+    /// the engine knew of the field before the key, and whether the field is a page's.
+    Text(Option<Box<TextContext>>, bool),
 }
 
 /// How long a caret read waits for the key to move the caret, or change the text or the
@@ -41,6 +41,10 @@ const SETTLE: Duration = Duration::from_millis(250);
 /// How often the caret is read while it is waited for: a round trip on the bus is under a
 /// millisecond.
 const POLL: Duration = Duration::from_millis(3);
+
+/// The most attribute runs read for a field's misspelled words: a long text area's runs are
+/// each a call on the bus.
+const RUN_LIMIT: usize = 400;
 
 pub struct LinuxActions {
     objects: PageObjects,
@@ -87,11 +91,11 @@ impl LinuxActions {
                                 tracing::debug!("not activated: {e}");
                             }
                         }
-                        Request::Text(before) => {
-                            if pending.iter().any(|r| matches!(r, Request::Text(_))) {
+                        Request::Text(before, in_page) => {
+                            if pending.iter().any(|r| matches!(r, Request::Text(..))) {
                                 continue;
                             }
-                            if !read_text(&provider, &text, &sink, before.map(|b| *b)) {
+                            if !read_text(&provider, &text, &sink, before.map(|b| *b), in_page) {
                                 return;
                             }
                         }
@@ -140,15 +144,71 @@ fn place_known(context: &TextContext) -> Place {
     )
 }
 
+/// The colors at `offset` in the object's text (its run's `fg-color` and `bg-color`, "r,g,b"
+/// as Chrome gives them), for Say Color: "navy on yellow" [obs, 676/s4].
+fn colors_at(provider: &LinuxProvider, object: &AtspiObject, offset: i32) -> Option<FontInfo> {
+    let (attributes, _, _) = provider
+        .atspi_text_attribute_run(&object.bus_name, &object.path, offset, true)
+        .ok()?;
+    let color = |name: &str| {
+        let css = okur_linux_model::page::css_color(attributes.get(name)?)?;
+        okur_core::color::Rgb::parse_css(&css)
+    };
+    let (color, background) = (color("fg-color"), color("bg-color"));
+    (color.is_some() || background.is_some()).then(|| FontInfo {
+        color,
+        background,
+        ..FontInfo::default()
+    })
+}
+
+/// The words the field marks as misspelled, as `(start, end)` in characters: its attribute
+/// runs whose `invalid` is "spelling", as Chrome marks them (JAWS says "Misspelled" with them
+/// [obs, 284/s6]).
+fn misspelled(
+    provider: &LinuxProvider,
+    object: &AtspiObject,
+    length: usize,
+) -> Vec<(usize, usize)> {
+    let mut words = Vec::new();
+    let mut offset = 0usize;
+    for _ in 0..RUN_LIMIT {
+        if offset >= length {
+            break;
+        }
+        let Ok(at) = i32::try_from(offset) else {
+            break;
+        };
+        let Ok((attributes, start, end)) =
+            provider.atspi_text_attribute_run(&object.bus_name, &object.path, at, false)
+        else {
+            break;
+        };
+        let (Ok(start), Ok(end)) = (usize::try_from(start), usize::try_from(end)) else {
+            break;
+        };
+        if attributes.get("invalid").map(String::as_str) == Some("spelling") && start < end {
+            words.push((start, end));
+        }
+        if end <= offset {
+            break;
+        }
+        offset = end;
+    }
+    words
+}
+
 /// Reads the focused field at its caret, once the key moved it from where `before` had it (or
-/// at once, nothing known), and gives the engine the field's text, caret and selection, the
-/// read written to the trace first. False once the engine has gone; a field that cannot be read
-/// (no Text interface, the object gone) is no answer.
+/// at once, nothing known), and gives the engine the field's text, caret and selection, its
+/// misspelled words and the colors at its caret, and a page field's word (Chrome's word moves
+/// stop at punctuation), the read written to the trace first. False once the engine has gone; a
+/// field that cannot be read (no Text interface, the object gone) is no answer.
 fn read_text(
     provider: &LinuxProvider,
     reads: &TextReads,
     sink: &EventSink,
     before: Option<TextContext>,
+    in_page: bool,
 ) -> bool {
     let started = Instant::now();
     let focused = reads
@@ -173,7 +233,7 @@ fn read_text(
         std::thread::sleep(POLL);
         place = read_place();
     }
-    let Some((caret, selection, _)) = place else {
+    let Some((caret, selection, length)) = place else {
         return true;
     };
     let text = match provider.atspi_text(&object.bus_name, &object.path) {
@@ -183,6 +243,13 @@ fn read_text(
             return true;
         }
     };
+    let font = i32::try_from(caret)
+        .ok()
+        .and_then(|offset| colors_at(provider, &object, offset));
+    let misspelled = misspelled(provider, &object, length);
+    let word = in_page
+        .then(|| okur_core::editing::web_word_at(&text, caret))
+        .flatten();
     let read_ms = u64::try_from(started.elapsed().as_millis()).unwrap_or(u64::MAX);
     tracing::debug!(
         chars = text.chars().count(),
@@ -195,9 +262,9 @@ fn read_text(
         text,
         caret,
         selection,
-        font: None,
-        word: None,
-        misspelled: Vec::new(),
+        font,
+        word,
+        misspelled,
         structure: None,
     };
     let record = AtspiRecord::text(
@@ -224,10 +291,10 @@ impl ApplicationActions for LinuxActions {
         self.ask(node, Request::Activate)
     }
 
-    fn read_at_caret(&self, before: Option<&TextContext>, _in_page: bool) -> bool {
+    fn read_at_caret(&self, before: Option<&TextContext>, in_page: bool) -> bool {
         self.worker.as_ref().is_some_and(|worker| {
             worker
-                .send(Request::Text(before.cloned().map(Box::new)))
+                .send(Request::Text(before.cloned().map(Box::new), in_page))
                 .is_ok()
         })
     }

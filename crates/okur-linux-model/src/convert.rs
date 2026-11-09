@@ -140,6 +140,8 @@ pub struct Converter {
     /// The places of that page's list items, by their paths: an option's focus says its list
     /// and its place.
     page_places: std::collections::HashMap<String, crate::page::ItemPlace>,
+    /// The application regions that page's objects are in, by their paths.
+    page_applications: std::collections::HashMap<String, std::sync::Arc<str>>,
 }
 
 impl Converter {
@@ -223,6 +225,7 @@ impl Converter {
             self.last_page = Some(page.document.clone());
             self.page_ids = crate::page::page_ids(&page.root, page.base);
             self.page_places = crate::page::item_places(&page.root);
+            self.page_applications = crate::page::applications(&page.root);
             let root = to_aom_from(&page.root, page.base);
             let title = root.name.clone().unwrap_or_default();
             events.push(AccessibilityEvent::DocumentLoaded { title, root });
@@ -336,6 +339,9 @@ impl Converter {
                     .and_then(|path| self.page_ids.get(path))
                     .map(i32::to_string);
                 let item_place = path.and_then(|path| self.page_places.get(path));
+                let application = path
+                    .and_then(|path| self.page_applications.get(path))
+                    .map(|region| region.to_string());
                 let window_id = self
                     .track
                     .active_window()
@@ -351,6 +357,7 @@ impl Converter {
                     | AccessibilityEvent::Change { control: focus, .. } = &mut event
                     {
                         focus.platform.window_id = window_id;
+                        focus.web_application = application;
                         // An option's list and its place, as Windows' focus carries them.
                         if let Some(place) =
                             item_place.filter(|_| focus.role == okur_core::aom::Role::ListItem)
