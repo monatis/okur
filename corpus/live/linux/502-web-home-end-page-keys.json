@@ -1,0 +1,212 @@
+{
+ "scenario_id": "502-web-home-end-page-keys",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "aac6f125"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794184088988
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794184090349,
+     "t_end_ms": 1794184091353,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "banner",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794184091353,
+     "t_end_ms": 1794184092357,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Riverside Gazette",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794184092357,
+     "t_end_ms": 1794184093361,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Primary navigation region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794184093361,
+     "t_end_ms": 1794184094365,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "r",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794184094365,
+     "t_end_ms": 1794184095369,
+     "action": {
+      "type": "key",
+      "command": "End"
+     },
+     "keys": [
+      "End"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794184095369,
+     "t_end_ms": 1794184096374,
+     "action": {
+      "type": "key",
+      "command": "Home"
+     },
+     "keys": [
+      "Home"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794184096374,
+     "t_end_ms": 1794184097378,
+     "action": {
+      "type": "key",
+      "command": "PageDown"
+     },
+     "keys": [
+      "PageDown"
+     ],
+     "observation": {
+      "speech_raw": "list of 2 items nesting level 1",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794184097378,
+     "t_end_ms": 1794184098382,
+     "action": {
+      "type": "key",
+      "command": "PageDown"
+     },
+     "keys": [
+      "PageDown"
+     ],
+     "observation": {
+      "speech_raw": "block quote end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794184098382,
+     "t_end_ms": 1794184099386,
+     "action": {
+      "type": "key",
+      "command": "PageUp"
+     },
+     "keys": [
+      "PageUp"
+     ],
+     "observation": {
+      "speech_raw": "list of 2 items nesting level 1",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794184099386,
+     "t_end_ms": 1794184100391,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+End"
+     },
+     "keys": [
+      "Ctrl+End"
+     ],
+     "observation": {
+      "speech_raw": "content information end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794184100391,
+     "t_end_ms": 1794184101395,
+     "action": {
+      "type": "key",
+      "command": "PageUp"
+     },
+     "keys": [
+      "PageUp"
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 3 \u001e What readers said",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

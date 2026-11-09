@@ -1,0 +1,161 @@
+{
+ "scenario_id": "512-web-rate-on-the-fly",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "aac6f125"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794184157997
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794184159360,
+     "t_end_ms": 1794184160365,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Alt+PageUp"
+     },
+     "keys": [
+      "Ctrl+Alt+PageUp"
+     ],
+     "observation": {
+      "speech_raw": "Faster",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794184160365,
+     "t_end_ms": 1794184161369,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794184161369,
+     "t_end_ms": 1794184162374,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Alt+PageDown"
+     },
+     "keys": [
+      "Ctrl+Alt+PageDown"
+     ],
+     "observation": {
+      "speech_raw": "Slower",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794184162374,
+     "t_end_ms": 1794184163379,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Alt+PageDown"
+     },
+     "keys": [
+      "Ctrl+Alt+PageDown"
+     ],
+     "observation": {
+      "speech_raw": "Slower",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794184163379,
+     "t_end_ms": 1794184164385,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794184164385,
+     "t_end_ms": 1794184165391,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Alt+PageUp"
+     },
+     "keys": [
+      "Ctrl+Alt+PageUp"
+     ],
+     "observation": {
+      "speech_raw": "Faster",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794184165391,
+     "t_end_ms": 1794184166395,
+     "action": {
+      "type": "key",
+      "command": "Insert+Escape"
+     },
+     "keys": [
+      "Insert+Escape"
+     ],
+     "observation": {
+      "speech_raw": "Screen updated",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794184166395,
+     "t_end_ms": 1794184167400,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,246 @@
+{
+ "scenario_id": "298-web-quick-keys-and-cursor-toggles",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "aac6f125"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794183784102
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794183785466,
+     "t_end_ms": 1794183786471,
+     "action": {
+      "type": "key",
+      "command": "Insert+N"
+     },
+     "keys": [
+      "Insert+N"
+     ],
+     "observation": {
+      "speech_raw": "Navigation Quick Keys\nOff",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794183786471,
+     "t_end_ms": 1794183787474,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794183787474,
+     "t_end_ms": 1794183788478,
+     "action": {
+      "type": "key",
+      "command": "Insert+N"
+     },
+     "keys": [
+      "Insert+N"
+     ],
+     "observation": {
+      "speech_raw": "Navigation Quick Keys\nSay all only",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794183788478,
+     "t_end_ms": 1794183789482,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794183789482,
+     "t_end_ms": 1794183790488,
+     "action": {
+      "type": "key",
+      "command": "Insert+Shift+Z"
+     },
+     "keys": [
+      "Insert+Shift+Z"
+     ],
+     "observation": {
+      "speech_raw": "Quick Keys Suspended",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794183790488,
+     "t_end_ms": 1794183791492,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794183791492,
+     "t_end_ms": 1794183792498,
+     "action": {
+      "type": "key",
+      "command": "Insert+Shift+Z"
+     },
+     "keys": [
+      "Insert+Shift+Z"
+     ],
+     "observation": {
+      "speech_raw": "Resuming Quick Keys",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794183792498,
+     "t_end_ms": 1794183793502,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours\n \u001d heading level 1 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794183793502,
+     "t_end_ms": 1794183794507,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor off",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794183794507,
+     "t_end_ms": 1794183795511,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794183795511,
+     "t_end_ms": 1794183796516,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794183796516,
+     "t_end_ms": 1794183797520,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "banner",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794183797520,
+     "t_end_ms": 1794183798525,
+     "action": {
+      "type": "key",
+      "command": "Insert+Escape"
+     },
+     "keys": [
+      "Insert+Escape"
+     ],
+     "observation": {
+      "speech_raw": "Screen updated",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

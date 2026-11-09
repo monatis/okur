@@ -1,0 +1,233 @@
+{
+ "scenario_id": "220-web-chrome-own-controls",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "aac6f125"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Escape",
+     "t_ms": 1794183008165
+    },
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794183008523
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794183009829,
+     "t_end_ms": 1794183010833,
+     "action": {
+      "type": "key",
+      "command": "Alt+F"
+     },
+     "keys": [
+      "Alt+F"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794183010833,
+     "t_end_ms": 1794183011837,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "banner",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794183011837,
+     "t_end_ms": 1794183012840,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Riverside Gazette",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794183012840,
+     "t_end_ms": 1794183013845,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Primary navigation region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794183013845,
+     "t_end_ms": 1794183015150,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794183015150,
+     "t_end_ms": 1794183016154,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794183016154,
+     "t_end_ms": 1794183017859,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+L"
+     },
+     "keys": [
+      "Ctrl+L"
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours - Riverside Gazette - Google Chrome\nAddress and search bar \u001d Edit \u001e \nfile:///root/okur/corpus/fixtures/news-article.html\nType in text.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794183017859,
+     "t_end_ms": 1794183018861,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794183018862,
+     "t_end_ms": 1794183020565,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Omnibox Popup  \u001d document \u001e\nPage has no headings and no links\nOmnibox Popup\nlist of 2 items\nRemove Suggestion button, press Enter to remove, file:///root/okur/corpus/fixtures/news-article.html \u001d Button \u001e \nRemove suggestion\nlist end\nend",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794183020565,
+     "t_end_ms": 1794183021568,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+T"
+     },
+     "keys": [
+      "Ctrl+T"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794183021568,
+     "t_end_ms": 1794183022571,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+W"
+     },
+     "keys": [
+      "Ctrl+W"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794183022571,
+     "t_end_ms": 1794183023574,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "list end",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,195 @@
+{
+ "scenario_id": "531-web-screen-sensitive-help",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "aac6f125"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794184296971
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794184298333,
+     "t_end_ms": 1794184299337,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "banner",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794184299337,
+     "t_end_ms": 1794184300341,
+     "action": {
+      "type": "key",
+      "command": "Insert+F1"
+     },
+     "keys": [
+      "Insert+F1"
+     ],
+     "observation": {
+      "speech_raw": "Page has 5Regions, 5headings and 12links\nThis is a web page, read with the virtual cursor. The arrow keys read it, H moves by heading, K by link and F by form field. Insert+F6 lists the headings and Insert+F7 the links. Enter on a form field lets you type in it.\n\u001d Link \u001e List Okur Hot Keys\nPress ESCAPE to close this message.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794184300341,
+     "t_end_ms": 1794184301345,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "observation": {
+      "speech_raw": "banner",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794184301345,
+     "t_end_ms": 1794184302448,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours - Riverside Gazette\n \u001d same page link \u001e Riverside Gazette\nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794184302448,
+     "t_end_ms": 1794184303453,
+     "action": {
+      "type": "key",
+      "command": "Insert+F1"
+     },
+     "keys": [
+      "Insert+F1"
+     ],
+     "observation": {
+      "speech_raw": "file:///root/okur/corpus/fixtures/news-article.html#top\nPress Enter to follow this link.\nPress ESCAPE to close this message.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794184303453,
+     "t_end_ms": 1794184304457,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Riverside Gazette",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794184304457,
+     "t_end_ms": 1794184305461,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours\n \u001d heading level 1 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794184305461,
+     "t_end_ms": 1794184306466,
+     "action": {
+      "type": "key",
+      "command": "Insert+F1"
+     },
+     "keys": [
+      "Insert+F1"
+     ],
+     "observation": {
+      "speech_raw": "A heading at level 1. H and Shift+H move between headings, and the numbers 1 to 6 by level; Insert+F6 lists them.\nPress ESCAPE to close this message.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794184306466,
+     "t_end_ms": 1794184307470,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e City Library Expands Evening Hours",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794184307470,
+     "t_end_ms": 1794184308475,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e City Library Expands Evening Hours",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

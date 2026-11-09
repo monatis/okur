@@ -1,0 +1,518 @@
+{
+ "scenario_id": "558-web-same-different-simple",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "aac6f125"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794184559464
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794184560826,
+     "t_end_ms": 1794184561830,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e Same and different elements",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794184561830,
+     "t_end_ms": 1794184562834,
+     "action": {
+      "type": "key",
+      "command": "S"
+     },
+     "keys": [
+      "S"
+     ],
+     "observation": {
+      "speech_raw": "wrapping to top\nSame and different elements\n \u001d heading level 1 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794184562834,
+     "t_end_ms": 1794184563838,
+     "action": {
+      "type": "key",
+      "command": "S"
+     },
+     "keys": [
+      "S"
+     ],
+     "observation": {
+      "speech_raw": "wrapping to top\nSame and different elements\n \u001d heading level 1 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794184563838,
+     "t_end_ms": 1794184564841,
+     "action": {
+      "type": "key",
+      "command": "S"
+     },
+     "keys": [
+      "S"
+     ],
+     "observation": {
+      "speech_raw": "wrapping to top\nSame and different elements\n \u001d heading level 1 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794184564841,
+     "t_end_ms": 1794184565847,
+     "action": {
+      "type": "key",
+      "command": "Shift+S"
+     },
+     "keys": [
+      "Shift+S"
+     ],
+     "observation": {
+      "speech_raw": "wrapping to bottom\nSame and different elements\n \u001d heading level 1 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794184565847,
+     "t_end_ms": 1794184566851,
+     "action": {
+      "type": "key",
+      "command": "I"
+     },
+     "keys": [
+      "I"
+     ],
+     "observation": {
+      "speech_raw": "\u2022 Apple",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794184566851,
+     "t_end_ms": 1794184567855,
+     "action": {
+      "type": "key",
+      "command": "S"
+     },
+     "keys": [
+      "S"
+     ],
+     "observation": {
+      "speech_raw": "\u2022 Apple",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794184567855,
+     "t_end_ms": 1794184568860,
+     "action": {
+      "type": "key",
+      "command": "S"
+     },
+     "keys": [
+      "S"
+     ],
+     "observation": {
+      "speech_raw": "\u2022 Pear",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794184568860,
+     "t_end_ms": 1794184569865,
+     "action": {
+      "type": "key",
+      "command": "Shift+S"
+     },
+     "keys": [
+      "Shift+S"
+     ],
+     "observation": {
+      "speech_raw": "\u2022 Apple",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794184569865,
+     "t_end_ms": 1794184570870,
+     "action": {
+      "type": "key",
+      "command": "Shift+L"
+     },
+     "keys": [
+      "Shift+L"
+     ],
+     "observation": {
+      "speech_raw": "wrapping to bottom\nlist of 1 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794184570870,
+     "t_end_ms": 1794184571874,
+     "action": {
+      "type": "key",
+      "command": "S"
+     },
+     "keys": [
+      "S"
+     ],
+     "observation": {
+      "speech_raw": "No more elements of same type found",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794184571874,
+     "t_end_ms": 1794184572879,
+     "action": {
+      "type": "key",
+      "command": "Shift+S"
+     },
+     "keys": [
+      "Shift+S"
+     ],
+     "observation": {
+      "speech_raw": "No prior elements of same type found",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794184572879,
+     "t_end_ms": 1794184573984,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "observation": {
+      "speech_raw": "Same and Different Elements\n \u001d same page link \u001e a first link\nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794184573984,
+     "t_end_ms": 1794184574989,
+     "action": {
+      "type": "key",
+      "command": "S"
+     },
+     "keys": [
+      "S"
+     ],
+     "observation": {
+      "speech_raw": "A second link  \u001d same page link \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794184574989,
+     "t_end_ms": 1794184575994,
+     "action": {
+      "type": "key",
+      "command": "S"
+     },
+     "keys": [
+      "S"
+     ],
+     "observation": {
+      "speech_raw": "wrapping to top\na first link  \u001d same page link \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794184575994,
+     "t_end_ms": 1794184576999,
+     "action": {
+      "type": "key",
+      "command": "Shift+S"
+     },
+     "keys": [
+      "Shift+S"
+     ],
+     "observation": {
+      "speech_raw": "wrapping to bottom\nA second link  \u001d same page link \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s17",
+     "t_start_ms": 1794184576999,
+     "t_end_ms": 1794184578005,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+Up"
+     },
+     "keys": [
+      "Ctrl+Insert+Up"
+     ],
+     "observation": {
+      "speech_raw": "a first link  \u001d same page link \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s18",
+     "t_start_ms": 1794184578005,
+     "t_end_ms": 1794184579010,
+     "action": {
+      "type": "key",
+      "command": "2"
+     },
+     "keys": [
+      "2"
+     ],
+     "observation": {
+      "speech_raw": "Last part\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s19",
+     "t_start_ms": 1794184579010,
+     "t_end_ms": 1794184580013,
+     "action": {
+      "type": "key",
+      "command": "S"
+     },
+     "keys": [
+      "S"
+     ],
+     "observation": {
+      "speech_raw": "wrapping to top\nLinks\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s20",
+     "t_start_ms": 1794184580013,
+     "t_end_ms": 1794184581018,
+     "action": {
+      "type": "key",
+      "command": "Shift+S"
+     },
+     "keys": [
+      "Shift+S"
+     ],
+     "observation": {
+      "speech_raw": "wrapping to bottom\nLast part\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s21",
+     "t_start_ms": 1794184581018,
+     "t_end_ms": 1794184582023,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "observation": {
+      "speech_raw": "Same and Different Elements",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s22",
+     "t_start_ms": 1794184582023,
+     "t_end_ms": 1794184583028,
+     "action": {
+      "type": "key",
+      "command": "D"
+     },
+     "keys": [
+      "D"
+     ],
+     "observation": {
+      "speech_raw": "Same and different elements\n \u001d heading level 1 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s23",
+     "t_start_ms": 1794184583028,
+     "t_end_ms": 1794184584032,
+     "action": {
+      "type": "key",
+      "command": "D"
+     },
+     "keys": [
+      "D"
+     ],
+     "observation": {
+      "speech_raw": "The first paragraph.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s24",
+     "t_start_ms": 1794184584032,
+     "t_end_ms": 1794184585036,
+     "action": {
+      "type": "key",
+      "command": "D"
+     },
+     "keys": [
+      "D"
+     ],
+     "observation": {
+      "speech_raw": "Links\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s25",
+     "t_start_ms": 1794184585036,
+     "t_end_ms": 1794184586041,
+     "action": {
+      "type": "key",
+      "command": "D"
+     },
+     "keys": [
+      "D"
+     ],
+     "observation": {
+      "speech_raw": "Text with",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s26",
+     "t_start_ms": 1794184586041,
+     "t_end_ms": 1794184587045,
+     "action": {
+      "type": "key",
+      "command": "D"
+     },
+     "keys": [
+      "D"
+     ],
+     "observation": {
+      "speech_raw": "a first link  \u001d same page link \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s27",
+     "t_start_ms": 1794184587045,
+     "t_end_ms": 1794184588050,
+     "action": {
+      "type": "key",
+      "command": "Shift+D"
+     },
+     "keys": [
+      "Shift+D"
+     ],
+     "observation": {
+      "speech_raw": "Text with",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s28",
+     "t_start_ms": 1794184588050,
+     "t_end_ms": 1794184589056,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+Right"
+     },
+     "keys": [
+      "Ctrl+Insert+Right"
+     ],
+     "observation": {
+      "speech_raw": "a first link  \u001d same page link \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s29",
+     "t_start_ms": 1794184589056,
+     "t_end_ms": 1794184590061,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+Left"
+     },
+     "keys": [
+      "Ctrl+Insert+Left"
+     ],
+     "observation": {
+      "speech_raw": "Text with",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

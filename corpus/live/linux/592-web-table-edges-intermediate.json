@@ -1,0 +1,246 @@
+{
+ "scenario_id": "592-web-table-edges-intermediate",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "aac6f125"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794185227336
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794185228701,
+     "t_end_ms": 1794185229704,
+     "action": {
+      "type": "key",
+      "command": "T"
+     },
+     "keys": [
+      "T"
+     ],
+     "observation": {
+      "speech_raw": "3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794185229704,
+     "t_end_ms": 1794185230709,
+     "action": {
+      "type": "key",
+      "command": "Win+Alt+Up"
+     },
+     "keys": [
+      "Win+Alt+Up"
+     ],
+     "observation": {
+      "speech_raw": "First row",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794185230709,
+     "t_end_ms": 1794185231714,
+     "action": {
+      "type": "key",
+      "command": "Win+Alt+Left"
+     },
+     "keys": [
+      "Win+Alt+Left"
+     ],
+     "observation": {
+      "speech_raw": "First column",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794185231714,
+     "t_end_ms": 1794185232720,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Alt+Right"
+     },
+     "keys": [
+      "Ctrl+Alt+Right"
+     ],
+     "observation": {
+      "speech_raw": "Weekdays\nColumn 2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794185232720,
+     "t_end_ms": 1794185233726,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Alt+Right"
+     },
+     "keys": [
+      "Ctrl+Alt+Right"
+     ],
+     "observation": {
+      "speech_raw": "Details\nColumn 3 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794185233726,
+     "t_end_ms": 1794185234733,
+     "action": {
+      "type": "key",
+      "command": "Win+Alt+Right"
+     },
+     "keys": [
+      "Win+Alt+Right"
+     ],
+     "observation": {
+      "speech_raw": "Last column",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794185234733,
+     "t_end_ms": 1794185235738,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Alt+Right"
+     },
+     "keys": [
+      "Ctrl+Alt+Right"
+     ],
+     "observation": {
+      "speech_raw": "end of row",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794185235738,
+     "t_end_ms": 1794185236743,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Alt+Up"
+     },
+     "keys": [
+      "Ctrl+Alt+Up"
+     ],
+     "observation": {
+      "speech_raw": "top of column",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794185236743,
+     "t_end_ms": 1794185237747,
+     "action": {
+      "type": "key",
+      "command": "T"
+     },
+     "keys": [
+      "T"
+     ],
+     "observation": {
+      "speech_raw": "wrapping to top\n3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794185237747,
+     "t_end_ms": 1794185238751,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "observation": {
+      "speech_raw": "Branch hours after the change",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794185238751,
+     "t_end_ms": 1794185239756,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "observation": {
+      "speech_raw": "table with 3 columns and 3 rows",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794185239756,
+     "t_end_ms": 1794185240760,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Branch hours after the change",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794185240760,
+     "t_end_ms": 1794185241765,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Branch",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

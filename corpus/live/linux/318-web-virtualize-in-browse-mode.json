@@ -1,0 +1,127 @@
+{
+ "scenario_id": "318-web-virtualize-in-browse-mode",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "aac6f125"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794183851160
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794183852525,
+     "t_end_ms": 1794183853530,
+     "action": {
+      "type": "key",
+      "command": "Insert+Alt+W"
+     },
+     "keys": [
+      "Insert+Alt+W"
+     ],
+     "observation": {
+      "speech_raw": "The current location is already in a virtual view",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794183853530,
+     "t_end_ms": 1794183854534,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "banner",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794183854534,
+     "t_end_ms": 1794183855539,
+     "action": {
+      "type": "key",
+      "command": "Insert+Shift+V"
+     },
+     "keys": [
+      "Insert+Shift+V"
+     ],
+     "observation": {
+      "speech_raw": "The current location is already in a virtual view",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794183855539,
+     "t_end_ms": 1794183856543,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours\n \u001d heading level 1 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794183856543,
+     "t_end_ms": 1794183857548,
+     "action": {
+      "type": "key",
+      "command": "Insert+Alt+W"
+     },
+     "keys": [
+      "Insert+Alt+W"
+     ],
+     "observation": {
+      "speech_raw": "The current location is already in a virtual view",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794183857548,
+     "t_end_ms": 1794183858552,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "By ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

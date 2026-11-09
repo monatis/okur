@@ -1,0 +1,127 @@
+{
+ "scenario_id": "3154-web-table-click-handlers",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "aac6f125"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794183821111
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794183822473,
+     "t_end_ms": 1794183823477,
+     "action": {
+      "type": "key",
+      "command": "T"
+     },
+     "keys": [
+      "T"
+     ],
+     "observation": {
+      "speech_raw": "table with 2 columns and 3 rows\nColumn 1, Row 1\nBranch",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794183823477,
+     "t_end_ms": 1794183824482,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Alt+Down"
+     },
+     "keys": [
+      "Ctrl+Alt+Down"
+     ],
+     "observation": {
+      "speech_raw": "Central\nRow 2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794183824482,
+     "t_end_ms": 1794183825487,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Alt+Right"
+     },
+     "keys": [
+      "Ctrl+Alt+Right"
+     ],
+     "observation": {
+      "speech_raw": "Opens \n9 am\nColumn 2 of 2",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794183825487,
+     "t_end_ms": 1794183826491,
+     "action": {
+      "type": "key",
+      "command": "T"
+     },
+     "keys": [
+      "T"
+     ],
+     "observation": {
+      "speech_raw": "table with 2 columns and 3 rows\nColumn 1, Row 1\nBook",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794183826491,
+     "t_end_ms": 1794183827497,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Alt+Down"
+     },
+     "keys": [
+      "Ctrl+Alt+Down"
+     ],
+     "observation": {
+      "speech_raw": "Atlas\nRow 2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794183827497,
+     "t_end_ms": 1794183828502,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Alt+Right"
+     },
+     "keys": [
+      "Ctrl+Alt+Right"
+     ],
+     "observation": {
+      "speech_raw": "Due \nMonday\nColumn 2 of 2",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

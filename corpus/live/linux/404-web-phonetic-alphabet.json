@@ -1,0 +1,930 @@
+{
+ "scenario_id": "404-web-phonetic-alphabet",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "aac6f125"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794183881068
+    },
+    {
+     "key": "Down",
+     "t_ms": 1794183881429
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794183882733,
+     "t_end_ms": 1794183883737,
+     "action": {
+      "type": "key",
+      "command": "Numpad5"
+     },
+     "keys": [
+      "Numpad5"
+     ],
+     "observation": {
+      "speech_raw": "a",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794183883737,
+     "t_end_ms": 1794183884740,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "b",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794183884740,
+     "t_end_ms": 1794183885744,
+     "action": {
+      "type": "key",
+      "command": "Numpad5"
+     },
+     "keys": [
+      "Numpad5"
+     ],
+     "observation": {
+      "speech_raw": "b",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794183885744,
+     "t_end_ms": 1794183886748,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "c",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794183886748,
+     "t_end_ms": 1794183887752,
+     "action": {
+      "type": "key",
+      "command": "Numpad5"
+     },
+     "keys": [
+      "Numpad5"
+     ],
+     "observation": {
+      "speech_raw": "c",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794183887752,
+     "t_end_ms": 1794183888757,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "d",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794183888757,
+     "t_end_ms": 1794183889761,
+     "action": {
+      "type": "key",
+      "command": "Numpad5"
+     },
+     "keys": [
+      "Numpad5"
+     ],
+     "observation": {
+      "speech_raw": "d",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794183889761,
+     "t_end_ms": 1794183890765,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794183890765,
+     "t_end_ms": 1794183891870,
+     "action": {
+      "type": "key",
+      "command": "Numpad5"
+     },
+     "keys": [
+      "Numpad5"
+     ],
+     "observation": {
+      "speech_raw": "e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794183891870,
+     "t_end_ms": 1794183892874,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "f",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794183892874,
+     "t_end_ms": 1794183893878,
+     "action": {
+      "type": "key",
+      "command": "Numpad5"
+     },
+     "keys": [
+      "Numpad5"
+     ],
+     "observation": {
+      "speech_raw": "f",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794183893878,
+     "t_end_ms": 1794183894882,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "g",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794183894882,
+     "t_end_ms": 1794183895886,
+     "action": {
+      "type": "key",
+      "command": "Numpad5"
+     },
+     "keys": [
+      "Numpad5"
+     ],
+     "observation": {
+      "speech_raw": "g",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794183895886,
+     "t_end_ms": 1794183896890,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "h",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794183896890,
+     "t_end_ms": 1794183897895,
+     "action": {
+      "type": "key",
+      "command": "Numpad5"
+     },
+     "keys": [
+      "Numpad5"
+     ],
+     "observation": {
+      "speech_raw": "h",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794183897895,
+     "t_end_ms": 1794183898899,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "i",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s17",
+     "t_start_ms": 1794183898899,
+     "t_end_ms": 1794183899904,
+     "action": {
+      "type": "key",
+      "command": "Numpad5"
+     },
+     "keys": [
+      "Numpad5"
+     ],
+     "observation": {
+      "speech_raw": "i",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s18",
+     "t_start_ms": 1794183899904,
+     "t_end_ms": 1794183900908,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "j",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s19",
+     "t_start_ms": 1794183900908,
+     "t_end_ms": 1794183901912,
+     "action": {
+      "type": "key",
+      "command": "Numpad5"
+     },
+     "keys": [
+      "Numpad5"
+     ],
+     "observation": {
+      "speech_raw": "j",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s20",
+     "t_start_ms": 1794183901912,
+     "t_end_ms": 1794183902917,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "k",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s21",
+     "t_start_ms": 1794183902917,
+     "t_end_ms": 1794183903921,
+     "action": {
+      "type": "key",
+      "command": "Numpad5"
+     },
+     "keys": [
+      "Numpad5"
+     ],
+     "observation": {
+      "speech_raw": "k",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s22",
+     "t_start_ms": 1794183903921,
+     "t_end_ms": 1794183904925,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "l",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s23",
+     "t_start_ms": 1794183904925,
+     "t_end_ms": 1794183905930,
+     "action": {
+      "type": "key",
+      "command": "Numpad5"
+     },
+     "keys": [
+      "Numpad5"
+     ],
+     "observation": {
+      "speech_raw": "l",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s24",
+     "t_start_ms": 1794183905930,
+     "t_end_ms": 1794183906934,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "m",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s25",
+     "t_start_ms": 1794183906934,
+     "t_end_ms": 1794183907939,
+     "action": {
+      "type": "key",
+      "command": "Numpad5"
+     },
+     "keys": [
+      "Numpad5"
+     ],
+     "observation": {
+      "speech_raw": "m",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s26",
+     "t_start_ms": 1794183907939,
+     "t_end_ms": 1794183908942,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "n",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s27",
+     "t_start_ms": 1794183908942,
+     "t_end_ms": 1794183909947,
+     "action": {
+      "type": "key",
+      "command": "Numpad5"
+     },
+     "keys": [
+      "Numpad5"
+     ],
+     "observation": {
+      "speech_raw": "n",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s28",
+     "t_start_ms": 1794183909947,
+     "t_end_ms": 1794183910951,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "o",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s29",
+     "t_start_ms": 1794183910951,
+     "t_end_ms": 1794183911956,
+     "action": {
+      "type": "key",
+      "command": "Numpad5"
+     },
+     "keys": [
+      "Numpad5"
+     ],
+     "observation": {
+      "speech_raw": "o",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s30",
+     "t_start_ms": 1794183911956,
+     "t_end_ms": 1794183912960,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "p",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s31",
+     "t_start_ms": 1794183912960,
+     "t_end_ms": 1794183913964,
+     "action": {
+      "type": "key",
+      "command": "Numpad5"
+     },
+     "keys": [
+      "Numpad5"
+     ],
+     "observation": {
+      "speech_raw": "p",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s32",
+     "t_start_ms": 1794183913964,
+     "t_end_ms": 1794183914968,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "q",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s33",
+     "t_start_ms": 1794183914968,
+     "t_end_ms": 1794183915973,
+     "action": {
+      "type": "key",
+      "command": "Numpad5"
+     },
+     "keys": [
+      "Numpad5"
+     ],
+     "observation": {
+      "speech_raw": "q",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s34",
+     "t_start_ms": 1794183915973,
+     "t_end_ms": 1794183916978,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "r",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s35",
+     "t_start_ms": 1794183916978,
+     "t_end_ms": 1794183917982,
+     "action": {
+      "type": "key",
+      "command": "Numpad5"
+     },
+     "keys": [
+      "Numpad5"
+     ],
+     "observation": {
+      "speech_raw": "r",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s36",
+     "t_start_ms": 1794183917982,
+     "t_end_ms": 1794183918987,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "s",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s37",
+     "t_start_ms": 1794183918987,
+     "t_end_ms": 1794183919991,
+     "action": {
+      "type": "key",
+      "command": "Numpad5"
+     },
+     "keys": [
+      "Numpad5"
+     ],
+     "observation": {
+      "speech_raw": "s",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s38",
+     "t_start_ms": 1794183919991,
+     "t_end_ms": 1794183920996,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "t",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s39",
+     "t_start_ms": 1794183920996,
+     "t_end_ms": 1794183922000,
+     "action": {
+      "type": "key",
+      "command": "Numpad5"
+     },
+     "keys": [
+      "Numpad5"
+     ],
+     "observation": {
+      "speech_raw": "t",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s40",
+     "t_start_ms": 1794183922000,
+     "t_end_ms": 1794183923005,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "u",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s41",
+     "t_start_ms": 1794183923005,
+     "t_end_ms": 1794183924009,
+     "action": {
+      "type": "key",
+      "command": "Numpad5"
+     },
+     "keys": [
+      "Numpad5"
+     ],
+     "observation": {
+      "speech_raw": "u",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s42",
+     "t_start_ms": 1794183924009,
+     "t_end_ms": 1794183925013,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "v",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s43",
+     "t_start_ms": 1794183925013,
+     "t_end_ms": 1794183926030,
+     "action": {
+      "type": "key",
+      "command": "Numpad5"
+     },
+     "keys": [
+      "Numpad5"
+     ],
+     "observation": {
+      "speech_raw": "v",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s44",
+     "t_start_ms": 1794183926030,
+     "t_end_ms": 1794183927033,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "w",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s45",
+     "t_start_ms": 1794183927033,
+     "t_end_ms": 1794183928037,
+     "action": {
+      "type": "key",
+      "command": "Numpad5"
+     },
+     "keys": [
+      "Numpad5"
+     ],
+     "observation": {
+      "speech_raw": "w",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s46",
+     "t_start_ms": 1794183928037,
+     "t_end_ms": 1794183929041,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "x",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s47",
+     "t_start_ms": 1794183929041,
+     "t_end_ms": 1794183930045,
+     "action": {
+      "type": "key",
+      "command": "Numpad5"
+     },
+     "keys": [
+      "Numpad5"
+     ],
+     "observation": {
+      "speech_raw": "x",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s48",
+     "t_start_ms": 1794183930045,
+     "t_end_ms": 1794183931048,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "y",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s49",
+     "t_start_ms": 1794183931048,
+     "t_end_ms": 1794183932153,
+     "action": {
+      "type": "key",
+      "command": "Numpad5"
+     },
+     "keys": [
+      "Numpad5"
+     ],
+     "observation": {
+      "speech_raw": "y",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s50",
+     "t_start_ms": 1794183932153,
+     "t_end_ms": 1794183933157,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "z",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s51",
+     "t_start_ms": 1794183933157,
+     "t_end_ms": 1794183934161,
+     "action": {
+      "type": "key",
+      "command": "Numpad5"
+     },
+     "keys": [
+      "Numpad5"
+     ],
+     "observation": {
+      "speech_raw": "z",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s52",
+     "t_start_ms": 1794183934161,
+     "t_end_ms": 1794183935166,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "ABC",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s53",
+     "t_start_ms": 1794183935166,
+     "t_end_ms": 1794183936170,
+     "action": {
+      "type": "key",
+      "command": "Numpad5"
+     },
+     "keys": [
+      "Numpad5"
+     ],
+     "observation": {
+      "speech_raw": "A",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

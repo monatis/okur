@@ -1,0 +1,229 @@
+{
+ "scenario_id": "596-web-non-link-text-intermediate",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "aac6f125"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794185346343
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794185347711,
+     "t_end_ms": 1794185348715,
+     "action": {
+      "type": "key",
+      "command": "N"
+     },
+     "keys": [
+      "N"
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e Virtual cursor keys",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794185348715,
+     "t_end_ms": 1794185349719,
+     "action": {
+      "type": "key",
+      "command": "N"
+     },
+     "keys": [
+      "N"
+     ],
+     "observation": {
+      "speech_raw": " and more text after it.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794185349719,
+     "t_end_ms": 1794185350722,
+     "action": {
+      "type": "key",
+      "command": "N"
+     },
+     "keys": [
+      "N"
+     ],
+     "observation": {
+      "speech_raw": " or call.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794185350722,
+     "t_end_ms": 1794185351726,
+     "action": {
+      "type": "key",
+      "command": "N"
+     },
+     "keys": [
+      "N"
+     ],
+     "observation": {
+      "speech_raw": " or call.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794185351726,
+     "t_end_ms": 1794185352730,
+     "action": {
+      "type": "key",
+      "command": "N"
+     },
+     "keys": [
+      "N"
+     ],
+     "observation": {
+      "speech_raw": " or call.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794185352730,
+     "t_end_ms": 1794185353734,
+     "action": {
+      "type": "key",
+      "command": "N"
+     },
+     "keys": [
+      "N"
+     ],
+     "observation": {
+      "speech_raw": " or call.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794185353734,
+     "t_end_ms": 1794185354740,
+     "action": {
+      "type": "key",
+      "command": "Shift+N"
+     },
+     "keys": [
+      "Shift+N"
+     ],
+     "observation": {
+      "speech_raw": " and more text after it.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794185354740,
+     "t_end_ms": 1794185355744,
+     "action": {
+      "type": "key",
+      "command": "Shift+N"
+     },
+     "keys": [
+      "Shift+N"
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e Virtual cursor keys",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794185355744,
+     "t_end_ms": 1794185356749,
+     "action": {
+      "type": "key",
+      "command": "Shift+N"
+     },
+     "keys": [
+      "Shift+N"
+     ],
+     "observation": {
+      "speech_raw": "Virtual Cursor Keys - Keys Fixture",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794185356749,
+     "t_end_ms": 1794185357755,
+     "action": {
+      "type": "key",
+      "command": "Insert+Enter"
+     },
+     "keys": [
+      "Insert+Enter"
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e Virtual cursor keys",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794185357755,
+     "t_end_ms": 1794185358760,
+     "action": {
+      "type": "key",
+      "command": "Insert+Enter"
+     },
+     "keys": [
+      "Insert+Enter"
+     ],
+     "observation": {
+      "speech_raw": " and more text after it.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794185358760,
+     "t_end_ms": 1794185359766,
+     "action": {
+      "type": "key",
+      "command": "Insert+Shift+Enter"
+     },
+     "keys": [
+      "Insert+Shift+Enter"
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e Virtual cursor keys",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}
