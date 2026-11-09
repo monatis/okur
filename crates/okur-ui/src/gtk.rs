@@ -18,8 +18,8 @@ use gtk::glib;
 use gtk::prelude::*;
 use gtk4 as gtk;
 use okur_ui_model::{
-    decode, encode, Control, ControlKind, DialogSpec, FromUi, ToUi, Value, WizardButtons,
-    WizardLabels, WizardSpec,
+    decode, encode, Control, ControlKind, DialogKey, DialogSpec, FromUi, ToUi, TreeItem, Value,
+    WizardButtons, WizardLabels, WizardSpec,
 };
 
 /// Draws what Okur sends until its input ends; without a display, reads and drops it, so that
@@ -153,6 +153,7 @@ enum Shown {
     Scale(gtk::Scale),
     Button(gtk::Button),
     List(ShownList),
+    Tree(ShownTree),
     Radios(Vec<gtk::CheckButton>),
     Text(gtk::Label),
     Note(gtk::TextView),
@@ -169,6 +170,7 @@ impl Shown {
             Shown::Scale(w) => w.clone().upcast(),
             Shown::Button(w) => w.clone().upcast(),
             Shown::List(list) => list.widget(),
+            Shown::Tree(tree) => tree.view.upgrade()?.upcast(),
             Shown::Radios(buttons) => buttons.first()?.clone().upcast(),
             Shown::Text(w) => w.clone().upcast(),
             Shown::Note(w) => w.clone().upcast(),
@@ -332,6 +334,157 @@ impl ShownList {
     }
 }
 
+/// A tree of Okur's: its items in their order, each with its level, and a list view of GTK's tree
+/// list model over them, each row with its expander. An item is told by its index in that
+/// order, as Windows' tree view tells it: chosen (`Value::Selected`), opened or closed
+/// (`Value::ItemOpened`). Right opens an item, or goes to its first; Left closes it, or goes to
+/// its parent, as a Windows tree view's arrows do; Space and Shift+Space change it.
+#[derive(Clone)]
+struct ShownTree {
+    /// Held weakly: its handlers hold the tree, and the dialog's window holds the view.
+    view: glib::WeakRef<gtk::ListView>,
+    items: Rc<RefCell<Vec<TreeItem>>>,
+    /// The top items' indexes, as the model's roots.
+    roots: gtk::StringList,
+    model: gtk::TreeListModel,
+    selection: gtk::SingleSelection,
+    /// Okur is filling or opening it: not the user's doing, not told.
+    filling: Rc<Cell<bool>>,
+}
+
+impl ShownTree {
+    /// The items in `items` that are `at`'s children, by index: those after it one level
+    /// deeper, up to the next at its level or above.
+    fn children(items: &[TreeItem], at: usize) -> Vec<usize> {
+        let Some(level) = items.get(at).map(|item| item.level) else {
+            return Vec::new();
+        };
+        items
+            .iter()
+            .enumerate()
+            .skip(at + 1)
+            .take_while(|(_, item)| item.level > level)
+            .filter(|(_, item)| item.level == level + 1)
+            .map(|(i, _)| i)
+            .collect()
+    }
+
+    /// The top items, by index: those at the first item's level or above.
+    fn tops(items: &[TreeItem]) -> Vec<usize> {
+        let top = items.iter().map(|item| item.level).min().unwrap_or(0);
+        items
+            .iter()
+            .enumerate()
+            .filter(|(_, item)| item.level == top)
+            .map(|(i, _)| i)
+            .collect()
+    }
+
+    /// The item a row of the model stands for, by its index.
+    fn index_of(row: &gtk::TreeListRow) -> Option<usize> {
+        row.item()
+            .and_downcast::<gtk::StringObject>()
+            .and_then(|text| text.string().parse().ok())
+    }
+
+    /// `items` in place of those it had, each opened as it says, and `selected` chosen.
+    fn fill(&self, items: &[TreeItem], selected: usize) {
+        self.filling.set(true);
+        *self.items.borrow_mut() = items.to_vec();
+        let tops: Vec<String> = Self::tops(items).iter().map(usize::to_string).collect();
+        let tops: Vec<&str> = tops.iter().map(String::as_str).collect();
+        self.roots.splice(0, self.roots.n_items(), &tops);
+        // Open the opened ones, from the top: each opening adds its rows after it.
+        let mut at = 0;
+        while at < self.model.n_items() {
+            if let Some(row) = self.model.row(at) {
+                let open = Self::index_of(&row)
+                    .and_then(|i| self.items.borrow().get(i).map(|item| item.open))
+                    .unwrap_or(false);
+                if open && row.is_expandable() {
+                    row.set_expanded(true);
+                }
+            }
+            at += 1;
+        }
+        self.select(selected, false);
+        self.filling.set(false);
+    }
+
+    /// The model's position of item `index`, its parents opened for it.
+    fn position_of(&self, index: usize) -> Option<u32> {
+        // Its parents, from the top: each the nearest item before it one level up.
+        let items = self.items.borrow().clone();
+        let mut parents = Vec::new();
+        let mut level = items.get(index)?.level;
+        for (i, item) in items.iter().enumerate().take(index).rev() {
+            if item.level < level {
+                parents.push(i);
+                level = item.level;
+            }
+        }
+        for parent in parents.into_iter().rev() {
+            if let Some(row) = self.row_of(parent) {
+                if !row.is_expanded() {
+                    row.set_expanded(true);
+                }
+            }
+        }
+        (0..self.model.n_items()).find(|at| {
+            self.model
+                .row(*at)
+                .and_then(|row| Self::index_of(&row))
+                .is_some_and(|i| i == index)
+        })
+    }
+
+    fn row_of(&self, index: usize) -> Option<gtk::TreeListRow> {
+        (0..self.model.n_items())
+            .filter_map(|at| self.model.row(at))
+            .find(|row| Self::index_of(row) == Some(index))
+    }
+
+    /// Item `index` chosen, the focus on it where `focus` or the tree has the focus.
+    fn select(&self, index: usize, focus: bool) {
+        let filling = self.filling.replace(true);
+        if let Some(at) = self.position_of(index) {
+            self.selection.set_selected(at);
+            let Some(view) = self.view.upgrade() else {
+                self.filling.set(filling);
+                return;
+            };
+            if focus || view.has_focus() || view.focus_child().is_some() {
+                view.scroll_to(
+                    at,
+                    gtk::ListScrollFlags::FOCUS | gtk::ListScrollFlags::SELECT,
+                    None,
+                );
+            }
+        }
+        self.filling.set(filling);
+    }
+
+    /// The focus on its chosen item, as a list's first focus is.
+    fn take_focus(&self) {
+        let at = self.selection.selected();
+        let Some(view) = self.view.upgrade() else {
+            return;
+        };
+        if at < self.model.n_items() {
+            view.scroll_to(
+                at,
+                gtk::ListScrollFlags::FOCUS | gtk::ListScrollFlags::SELECT,
+                None,
+            );
+        }
+    }
+
+    /// The chosen row.
+    fn chosen(&self) -> Option<gtk::TreeListRow> {
+        self.model.row(self.selection.selected())
+    }
+}
+
 /// Between a table row's cells in its model's string (a unit separator, in no cell's text).
 const CELLS: &str = "\u{1f}";
 
@@ -397,6 +550,20 @@ impl Ui {
                 ..
             } => ui.rows(id, &control, &rows, selected),
             ToUi::DialogSet { id, control, value } => ui.set(id, &control, &value),
+            ToUi::DialogTree {
+                id,
+                control,
+                items,
+                selected,
+            } => {
+                let dialogs = ui.dialogs.borrow();
+                if let Some(Shown::Tree(tree)) = dialogs
+                    .get(&id)
+                    .and_then(|dialog| dialog.controls.get(&control))
+                {
+                    tree.fill(&items, selected);
+                }
+            }
             ToUi::DialogItems {
                 id,
                 control,
@@ -519,17 +686,37 @@ impl Ui {
         let Some(first) = first else {
             return;
         };
-        let list = self.dialogs.borrow().get(&id).and_then(|dialog| {
-            dialog.controls.values().find_map(|shown| match shown {
-                Shown::List(list) if list.widget() == first => Some(list.clone()),
-                _ => None,
+        let (list, tree) = self
+            .dialogs
+            .borrow()
+            .get(&id)
+            .map(|dialog| {
+                let list = dialog.controls.values().find_map(|shown| match shown {
+                    Shown::List(list) if list.widget() == first => Some(list.clone()),
+                    _ => None,
+                });
+                let tree = dialog.controls.values().find_map(|shown| match shown {
+                    Shown::Tree(tree)
+                        if tree
+                            .view
+                            .upgrade()
+                            .is_some_and(|view| view.upcast::<gtk::Widget>() == first) =>
+                    {
+                        Some(tree.clone())
+                    }
+                    _ => None,
+                });
+                (list, tree)
             })
-        });
-        match list {
-            Some(list) => {
+            .unwrap_or_default();
+        match (list, tree) {
+            (Some(list), _) => {
                 let _ = glib::idle_add_local_once(move || list.take_focus());
             }
-            None => {
+            (None, Some(tree)) => {
+                let _ = glib::idle_add_local_once(move || tree.take_focus());
+            }
+            (None, None) => {
                 first.grab_focus();
             }
         }
@@ -669,6 +856,19 @@ impl Ui {
                 choice.set_selected(u32::try_from(*i).unwrap_or(u32::MAX));
             }
             (Shown::List(list), Value::Selected(i)) => list.select(*i, false),
+            (Shown::Tree(tree), Value::Selected(i)) => tree.select(*i, false),
+            // An item's text and check box changed in place: the tree filled again as it is.
+            (Shown::Tree(tree), Value::TreeItem(i, item)) => {
+                let mut items = tree.items.borrow().clone();
+                if let Some(slot) = items.get_mut(*i) {
+                    *slot = item.clone();
+                }
+                let chosen = tree
+                    .chosen()
+                    .and_then(|row| ShownTree::index_of(&row))
+                    .unwrap_or(*i);
+                tree.fill(&items, chosen);
+            }
             (Shown::Radios(buttons), Value::Selected(i)) => {
                 if let Some(button) = buttons.get(*i) {
                     button.set_active(true);
@@ -834,6 +1034,48 @@ fn text_cells(column: usize) -> gtk::SignalListItemFactory {
     factory
 }
 
+/// A tree's rows: each its expander and its item's text (with its check box's state, for an item
+/// that is one). A row's accessible name is the item's text.
+fn tree_rows(items: &Rc<RefCell<Vec<TreeItem>>>) -> gtk::SignalListItemFactory {
+    let factory = gtk::SignalListItemFactory::new();
+    factory.connect_setup(|_, object| {
+        let Some(item) = object.downcast_ref::<gtk::ListItem>() else {
+            return;
+        };
+        let expander = gtk::TreeExpander::new();
+        let label = gtk::Label::new(None);
+        label.set_xalign(0.0);
+        expander.set_child(Some(&label));
+        item.set_child(Some(&expander));
+    });
+    let items = Rc::clone(items);
+    factory.connect_bind(move |_, object| {
+        let Some(item) = object.downcast_ref::<gtk::ListItem>() else {
+            return;
+        };
+        let Some(expander) = item.child().and_downcast::<gtk::TreeExpander>() else {
+            return;
+        };
+        let Some(row) = item.item().and_downcast::<gtk::TreeListRow>() else {
+            return;
+        };
+        let text = ShownTree::index_of(&row)
+            .and_then(|i| {
+                items
+                    .borrow()
+                    .get(i)
+                    .map(|tree_item| tree_item.text.clone())
+            })
+            .unwrap_or_default();
+        if let Some(label) = expander.child().and_downcast::<gtk::Label>() {
+            label.set_label(&text);
+        }
+        expander.set_list_row(Some(&row));
+        item.set_accessible_label(&text);
+    });
+    factory
+}
+
 /// A label shown before a field, its access key moving to the field.
 fn field_label(text: &str, field: &impl IsA<gtk::Widget>) -> gtk::Label {
     let label = gtk::Label::with_mnemonic(&mnemonic(text));
@@ -853,7 +1095,6 @@ fn changed(id: u32, control: &str, setting: &Rc<Cell<bool>>, value: Value) {
     }
 }
 
-/// A control drawn into `place`, with the label shown for it.
 /// A vertical box with a dialog's margins.
 fn margined_box() -> gtk::Box {
     let outer = gtk::Box::new(gtk::Orientation::Vertical, 8);
@@ -953,6 +1194,7 @@ fn set_wizard_buttons(wizard: &ShownWizard, window: &gtk::Window, buttons: Wizar
     window.set_default_widget(Some(&wizard.next));
 }
 
+/// A control drawn into `place`, with the label shown for it.
 fn build(
     _ui: &Rc<Ui>,
     id: u32,
@@ -1112,6 +1354,141 @@ fn build(
             }
             place.append(&scrolled);
             (Shown::List(list), label)
+        }
+        ControlKind::Tree { items, selected } => {
+            let roots = gtk::StringList::new(&[]);
+            let tree_items: Rc<RefCell<Vec<TreeItem>>> = Rc::default();
+            let model = {
+                let tree_items = Rc::clone(&tree_items);
+                gtk::TreeListModel::new(roots.clone(), false, false, move |object| {
+                    let at: usize = object
+                        .downcast_ref::<gtk::StringObject>()?
+                        .string()
+                        .parse()
+                        .ok()?;
+                    let children = ShownTree::children(&tree_items.borrow(), at);
+                    if children.is_empty() {
+                        return None;
+                    }
+                    let texts: Vec<String> = children.iter().map(usize::to_string).collect();
+                    let texts: Vec<&str> = texts.iter().map(String::as_str).collect();
+                    Some(gtk::StringList::new(&texts).upcast())
+                })
+            };
+            let selection = gtk::SingleSelection::new(Some(model.clone()));
+            selection.set_autoselect(true);
+            selection.set_can_unselect(false);
+            let view = gtk::ListView::new(Some(selection.clone()), Some(tree_rows(&tree_items)));
+            view.set_tab_behavior(gtk::ListTabBehavior::Item);
+            let tree = ShownTree {
+                view: view.downgrade(),
+                items: tree_items,
+                roots,
+                model,
+                selection: selection.clone(),
+                filling: Rc::new(Cell::new(false)),
+            };
+            tree.fill(items, *selected);
+            let title = plain(&control.label);
+            view.update_property(&[gtk::accessible::Property::Label(&title)]);
+            {
+                let (setting, filling, name) =
+                    (Rc::clone(setting), Rc::clone(&tree.filling), name.clone());
+                selection.connect_selected_notify(move |selection| {
+                    if filling.get() {
+                        return;
+                    }
+                    let index = selection
+                        .selected_item()
+                        .and_downcast::<gtk::TreeListRow>()
+                        .and_then(|row| ShownTree::index_of(&row));
+                    if let Some(i) = index {
+                        changed(id, &name, &setting, Value::Selected(i));
+                    }
+                });
+            }
+            // An item opened or closed: its rows come or go after it.
+            {
+                // The model's own handler holds no model: it is given it.
+                let (setting, name) = (Rc::clone(setting), name.clone());
+                let (filling, items) = (Rc::clone(&tree.filling), Rc::clone(&tree.items));
+                tree.model
+                    .connect_items_changed(move |model, at, removed, added| {
+                        if filling.get() || at == 0 || (removed == 0 && added == 0) {
+                            return;
+                        }
+                        let Some(row) = model.row(at - 1) else {
+                            return;
+                        };
+                        let Some(i) = ShownTree::index_of(&row) else {
+                            return;
+                        };
+                        let open = row.is_expanded();
+                        if let Some(item) = items.borrow_mut().get_mut(i) {
+                            item.open = open;
+                        }
+                        changed(id, &name, &setting, Value::ItemOpened(i, open));
+                    });
+            }
+            // Right and Left as a Windows tree view's; Space changes the item.
+            let keys = gtk::EventControllerKey::new();
+            {
+                let tree = tree.clone();
+                let name = name.clone();
+                keys.connect_key_pressed(move |_, key, _, modifiers| {
+                    let Some(row) = tree.chosen() else {
+                        return glib::Propagation::Proceed;
+                    };
+                    match key {
+                        gtk::gdk::Key::Right if row.is_expandable() && !row.is_expanded() => {
+                            row.set_expanded(true);
+                        }
+                        gtk::gdk::Key::Right if row.is_expanded() => {
+                            let first = row
+                                .child_row(0)
+                                .and_then(|child| ShownTree::index_of(&child));
+                            if let Some(first) = first {
+                                tree.select(first, true);
+                            }
+                        }
+                        gtk::gdk::Key::Left if row.is_expanded() => row.set_expanded(false),
+                        gtk::gdk::Key::Left => {
+                            let parent =
+                                row.parent().and_then(|parent| ShownTree::index_of(&parent));
+                            if let Some(parent) = parent {
+                                tree.select(parent, true);
+                            }
+                        }
+                        gtk::gdk::Key::space => {
+                            let back = modifiers.contains(gtk::gdk::ModifierType::SHIFT_MASK);
+                            send(&FromUi::DialogKey {
+                                id,
+                                control: name.clone(),
+                                key: if back {
+                                    DialogKey::ChangeBack
+                                } else {
+                                    DialogKey::Change
+                                },
+                            });
+                        }
+                        _ => return glib::Propagation::Proceed,
+                    }
+                    glib::Propagation::Stop
+                });
+            }
+            view.add_controller(keys);
+            // Enter on an item presses the dialog's default button.
+            {
+                let window = window.downgrade();
+                view.connect_activate(move |_, _| press_default(&window));
+            }
+            let label = field_label(&control.label, &view);
+            let scrolled = gtk::ScrolledWindow::new();
+            scrolled.set_min_content_height(200);
+            scrolled.set_child(Some(&view));
+            place.append(&label);
+            place.append(&scrolled);
+            (Shown::Tree(tree), Some(label))
         }
         // A table: a column view of its columns, none selected until the user picks a row.
         ControlKind::Table {
