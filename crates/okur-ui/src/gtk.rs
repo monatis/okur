@@ -642,25 +642,30 @@ fn kind(message: &ToUi) -> String {
         .unwrap_or_default()
 }
 
-/// Presses the dialog's default button, as Enter on a list's item does in Windows' dialog: where
-/// the button is available, at once (a button's activate waits for its key to be let go). The
-/// window is held weakly: the list's handler holding it kept every closed dialog alive.
 /// Tells Okur that dialog `id` is shown with the keyboard in it, once its window is active (the
-/// window manager gives it the keyboard after `present`, in its own time) and its first focus
-/// placed (an idle after it, as the list's is): the keys Okur held since it asked for the dialog
-/// go to it then, not to the window before it.
+/// window manager gives it the keyboard after `present`, in its own time) and a frame of it is
+/// laid out: GTK puts a list's focus on its row at the layout, and a letter Okur held, pressed
+/// before it, chose its row while the focus then went to the first (the lab's research run of
+/// 1205: "Settings" selected, "Current Page Overview" focused). The keys Okur held since it
+/// asked for the dialog go to it then, not to the window before it.
 fn tell_shown_when_active(window: &gtk::Window, id: u32) {
     let told = Rc::new(Cell::new(false));
     let tell = {
         let told = Rc::clone(&told);
-        move || {
-            if !told.replace(true) {
-                let _ = glib::idle_add_local_once(move || send(&FromUi::DialogShown { id }));
+        move |window: &gtk::Window| {
+            if told.replace(true) {
+                return;
             }
+            // The next frame's tick, then an idle: an idle at its priority comes after the
+            // frame's layout and drawing.
+            window.add_tick_callback(move |_, _| {
+                let _ = glib::idle_add_local_once(move || send(&FromUi::DialogShown { id }));
+                glib::ControlFlow::Break
+            });
         }
     };
     if window.is_active() {
-        tell();
+        tell(window);
         return;
     }
     // Told once: the handler goes with it, a dialog brought forward again adding its own.
@@ -668,7 +673,7 @@ fn tell_shown_when_active(window: &gtk::Window, id: u32) {
     let id_kept = Rc::clone(&handler);
     let connected = window.connect_is_active_notify(move |window| {
         if window.is_active() {
-            tell();
+            tell(window);
             if let Some(connected) = id_kept.borrow_mut().take() {
                 window.disconnect(connected);
             }
@@ -677,6 +682,9 @@ fn tell_shown_when_active(window: &gtk::Window, id: u32) {
     *handler.borrow_mut() = Some(connected);
 }
 
+/// Presses the dialog's default button, as Enter on a list's item does in Windows' dialog: where
+/// the button is available, at once (a button's activate waits for its key to be let go). The
+/// window is held weakly: the list's handler holding it kept every closed dialog alive.
 fn press_default(window: &glib::WeakRef<gtk::Window>) {
     let Some(window) = window.upgrade() else {
         return;
