@@ -126,6 +126,16 @@ with no change to the `KeyboardHook` port:
    window's focus said as it comes forward, the drop-down's place and open list, the tree's
    depth; then a dialog, and Qt.
 
+**Status, 2026-11-10 (night, old-pc offline from 22:32 on the 9th):** worked from the traces
+already imported ([`../handoff/2026-11-10-offline-linux-replay-fixes-and-run-okur-manager.md`](../handoff/2026-11-10-offline-linux-replay-fixes-and-run-okur-manager.md)):
+a wizard's page turn, the PlaceMarker List's own dialogs, an empty list view and "Not
+Selected", an own dialog taking the keys once shown, Run Okur Manager (Insert+F2), which the
+Linux runs showed Okur lacked. The Linux-only gaps went from 586 steps to 501; `okur-lab
+live-replay linux`: "7747/8101 steps say what the run said; replayed, 7150/7935 match JAWS
+exactly". Waiting for the lab: night2's ARIA-AT runs, `check-linux` (the GTK code of
+af369c04 through 3c56974c), the dialog runs again, `probe-chrome-spelling.sh`,
+`probe-gtk-selection.sh`, pending 1207 and 1208 on old-pc.
+
 **Status, 2026-11-09 (evening):**
 - **Live runs.** 356 scenarios at fcd2601b (the full run `full2`), 40 of them again at ccb4c70a (`gtk1`): 5674/6004 steps match JAWS (`corpus/live/linux-baseline.json`, 53a1ba66).
 - **Replay.** `okur-lab live-replay linux` replays them off the lab with today's code: 5702/6004 match JAWS. It is ratcheted (`corpus/live/linux-replay-baseline.json`).
