@@ -94,6 +94,33 @@ From the commands named, each after the commit given:
   said on every platform; parity's mirrored dialogs gained 748/s20 and 751/s21 by it
   (`okur-lab parity`: "12689/13284 steps match exactly"; `--api atspi`: "12331/13284").
 
+## After the handoff (still offline)
+
+- **An own dialog shown takes the keys before its focus** (8282bed4): okur-ui's DialogShown
+  for an open dialog of Okur's puts the engine out of the virtual cursor. In 816, Skim Reading
+  was shown 138 ms after its key and GTK told no focus for its first radio, so the Downs moved
+  the page. `okur-lab live-replay linux`: "7747/8101 steps say what the run said; replayed,
+  7150/7935 match JAWS exactly".
+- **Custom Label Delete:** JAWS's guide says what it does (the label of the element at the
+  cursor taken away), not what JAWS says; pending 1207 records it (8e0716c4).
+- **`probe-chrome-spelling.sh`** (80898b24) for the misspelling question.
+- **A code review of the day's changes** (one reviewer, read-only), its findings built in
+  3c56974c:
+  1. Flexible Web from Run Okur Manager was muted (a wizard was not counted as a dialog
+     opened); okur-ui now says a wizard shown, on both platforms, and keys are held for it.
+  2. A manager ran for okur-ui, the list's own application, not the one it was opened over:
+     each list keeps the settings' place it was opened over.
+  3. Run Okur Manager over another list orphaned that list; it now takes its place.
+  4. Custom Label Delete All's cursor by its node, not a raw offset.
+  5. Linux's rename by active state only in the focused application, outside a page.
+  6. The read-again filter: checked on the traces, nothing it drops was to be said.
+  7. An empty column view only where its rows' list was read.
+  8. GTK: Caps Lock or Num Lock on made every arrow and Space "held with a modifier".
+  - Open from it: whether GTK marks a row of a list with no selection model SELECTABLE (then
+    each would say "Not Selected"); a lab probe with GtkNoSelection and multi-selection.
+- `okur-lab parity` after all of it: "12689/13284 steps match exactly; 388 accepted
+  divergences not counted".
+
 ## Next
 
 1. **When old-pc is back:**
