@@ -9,31 +9,14 @@
 //! the screen reader's own key, and it reaches the dialog as typed. A dialog whose focus does not
 //! come within [`HOLD_MS`] lets the keys go where the focus is, so no key is ever lost.
 
-use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::Arc;
+use std::sync::atomic::Ordering;
 
 use super::{ScreenReaderEngine, OKUR_WINDOWS};
 use crate::input::{Key, KeyAction, KeyEvent};
-use crate::ui::{ToUi, UiHost};
 
 /// How long keys wait for a dialog's focus, on the key clock: past it they go where the focus
 /// is. Okur's dialogs take the focus within half a second on both platforms.
 const HOLD_MS: u64 = 2000;
-
-/// Okur's windows as the engine gives them messages, noting each dialog it asks to show.
-pub(super) struct DialogWatch {
-    pub(super) inner: Box<dyn UiHost>,
-    pub(super) asked: Arc<AtomicBool>,
-}
-
-impl UiHost for DialogWatch {
-    fn send(&self, message: ToUi) {
-        if matches!(message, ToUi::DialogShow { .. }) {
-            self.asked.store(true, Ordering::SeqCst);
-        }
-        self.inner.send(message);
-    }
-}
 
 /// The keys pressed while a dialog's focus is awaited, and until when they wait.
 #[derive(Debug)]

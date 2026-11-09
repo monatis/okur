@@ -11349,3 +11349,25 @@ fn no_key_is_held_for_a_dialog_asked_for_in_okurs_windows() {
     engine.on_time(5_000);
     assert!(actions.take_pressed().is_empty());
 }
+
+/// Okur's Links List as GTK 4 gives its focus on Linux: no dialog box and no default button
+/// told (no button has IS_DEFAULT, the lab's 222). The engine knows its own dialog: Insert+E
+/// says the default button its spec makes the default, not "Not in a dialog box".
+#[test]
+fn okurs_own_dialog_has_the_default_button_its_spec_makes() {
+    let (mut engine, _ui, _actions) = links_page_engine();
+    let insert = Modifiers {
+        insert: true,
+        ..Modifiers::none()
+    };
+    engine.handle_key_event(&key_at(Key::F(7), insert, 1_000));
+    let focus = okur_ui_focus();
+    assert!(!focus.in_dialog_box && focus.default_button.is_none());
+    engine.handle_accessibility_event(&AccessibilityEvent::Focus(focus));
+    let said = engine.execute_command("SayDefaultButton");
+    assert!(
+        said.as_deref()
+            .is_some_and(|s| s.contains("Activate Link") && !s.contains("Not in")),
+        "{said:?}"
+    );
+}

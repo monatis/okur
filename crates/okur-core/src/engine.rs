@@ -40,6 +40,7 @@ mod labels;
 mod layer;
 mod mouse_echo;
 mod notifications;
+mod own_dialogs;
 mod page;
 mod placemarkers;
 mod quit;
@@ -331,6 +332,8 @@ pub struct ScreenReaderEngine {
     dialog_asked: std::sync::Arc<std::sync::atomic::AtomicBool>,
     /// The keys pressed while a dialog asked for has not yet taken the focus.
     held_for_dialog: Option<held_keys::HeldForDialog>,
+    /// Okur's dialogs okur-ui shows, as the engine told it of them ([`own_dialogs`]).
+    open_dialogs: own_dialogs::OpenDialogs,
     /// Where changed settings are kept; None when headless.
     settings_store: Option<Box<dyn crate::settings::SettingsStore>>,
     /// The settings in their layers; `settings` is what they give where the focus is.
@@ -745,6 +748,7 @@ impl ScreenReaderEngine {
             ui: None,
             dialog_asked: std::sync::Arc::default(),
             held_for_dialog: None,
+            open_dialogs: std::sync::Arc::default(),
             settings_store: None,
             settings_layers: crate::settings_layers::SettingsLayers::default(),
             settings_place: (None, None),
@@ -2078,6 +2082,18 @@ impl ScreenReaderEngine {
     pub fn handle_accessibility_event(&mut self, event: &AccessibilityEvent) -> Option<String> {
         self.sync_speech_mode();
         self.dialog_came(event);
+        if let AccessibilityEvent::Ui(crate::ui::FromUi::DialogClosed { id }) = event {
+            self.own_dialog_closed(*id);
+        }
+        // A focus in one of Okur's dialogs: in a dialog box, with its default button, where
+        // the platform does not say so.
+        let told = match event {
+            AccessibilityEvent::Focus(focus) => self
+                .as_own_dialog_focus(focus)
+                .map(AccessibilityEvent::Focus),
+            _ => None,
+        };
+        let event = told.as_ref().unwrap_or(event);
         if !matches!(
             event,
             AccessibilityEvent::LiveRegion(_)
@@ -2332,9 +2348,10 @@ impl ScreenReaderEngine {
 
     /// Gives the engine its own windows (`okur-ui`).
     pub fn set_ui(&mut self, ui: Box<dyn crate::ui::UiHost>) {
-        self.ui = Some(Box::new(held_keys::DialogWatch {
+        self.ui = Some(Box::new(own_dialogs::DialogWatch {
             inner: ui,
             asked: std::sync::Arc::clone(&self.dialog_asked),
+            open: std::sync::Arc::clone(&self.open_dialogs),
         }));
     }
 
