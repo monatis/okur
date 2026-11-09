@@ -130,6 +130,16 @@ From the commands named, each after the commit given:
   lines, with its fixture), 1209 (the Window List's Delete), 1210 (element information,
   Insert+Shift+F1 and Insert+Ctrl+Shift+F1).
 - **Probes** for the lab: `probe-chrome-spelling.sh`, `probe-gtk-selection.sh`.
+- **A second review** (of 8282bed4, 3c56974c, fa56ef50), its findings built in 6dcca2f6:
+  - the Window List's wait after Delete swallowed the user's own Insert+F10 and had no end;
+  - the list could come back over the application's question (the list's own return of the
+    focus counted as the question answered);
+  - Run Okur Manager over a list closed that list before showing itself;
+  - a dialog asked for but never said shown held the next key whenever it came;
+  - a dialog said shown, closed before any focus, left the virtual cursor without its keys;
+  - Delete All's cursor in a long paragraph went back to the paragraph's start.
+  Kept: the closing window matched by its title (Windows' focus names no window handle; a
+  twin of the same title is taken for it). Parity and the Linux replay unchanged.
 
 ## Next
 
