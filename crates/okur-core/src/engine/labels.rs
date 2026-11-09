@@ -7,7 +7,7 @@
 use super::{AppMode, ScreenReaderEngine};
 use crate::buffer::VirtualBuffer;
 use crate::labels::{place_of, CustomLabels, LabelStore};
-use crate::ui::label::{LabelDialog, Outcome};
+use crate::ui::label::{DeleteAllDialog, LabelDialog, Outcome};
 use crate::ui::{FromUi, ToUi};
 
 impl ScreenReaderEngine {
@@ -138,15 +138,57 @@ impl ScreenReaderEngine {
         Some(again)
     }
 
-    /// Whether `message` is Custom Label's.
-    pub(super) fn is_label_event(&self, message: &FromUi) -> bool {
-        self.label_dialog
-            .as_ref()
-            .is_some_and(|(d, _)| Some(d.id) == super::dialog_of(message))
+    /// Custom Label Delete All (Run Okur Manager, in a page): asks whether to take away every
+    /// custom label of the page's site, "Delete all Custom Labels? dialog | This will remove all
+    /// custom labels for the current document or web page | OK Button" [obs, 688/s6]. Okur
+    /// says nothing itself: the question is read as it takes the focus.
+    pub(super) fn ask_delete_all_labels(&mut self) -> Option<String> {
+        if self.app_mode != AppMode::VirtualBuffer {
+            return None;
+        }
+        let place = place_of(self.cursor.buffer.document_url()?);
+        let ui = self.ui.as_ref()?;
+        self.dialog_count += 1;
+        let dialog = DeleteAllDialog {
+            id: self.dialog_count,
+        };
+        ui.send(ToUi::DialogShow {
+            dialog: dialog.spec(),
+        });
+        self.labels_delete_all = Some((dialog, place));
+        None
     }
 
-    /// What the user did to Custom Label. OK closes it silently [obs, 688/s14].
+    /// Whether `message` is Custom Label's, or Custom Label Delete All's.
+    pub(super) fn is_label_event(&self, message: &FromUi) -> bool {
+        let id = super::dialog_of(message);
+        self.label_dialog
+            .as_ref()
+            .is_some_and(|(d, _)| Some(d.id) == id)
+            || self
+                .labels_delete_all
+                .as_ref()
+                .is_some_and(|(d, _)| Some(d.id) == id)
+    }
+
+    /// What the user did to Custom Label. OK closes it silently [obs, 688/s14]. OK in Custom
+    /// Label Delete All takes the site's labels away, quietly too [obs, 688/s7].
     pub(super) fn handle_label_event(&mut self, message: &FromUi) -> Option<String> {
+        if let Some(yes) = self
+            .labels_delete_all
+            .as_ref()
+            .and_then(|(dialog, _)| dialog.answer(message))
+        {
+            let (dialog, place) = self.labels_delete_all.take()?;
+            if let Some(ui) = &self.ui {
+                ui.send(ToUi::DialogClose { id: dialog.id });
+            }
+            if yes {
+                self.delete_all_labels(&place);
+            }
+            self.returning_from_dialog();
+            return None;
+        }
         let outcome = self.label_dialog.as_mut()?.0.handle(message);
         if outcome == Outcome::Nothing {
             return None;
@@ -196,6 +238,30 @@ impl ScreenReaderEngine {
         } else {
             self.cursor.move_to_start();
         }
+    }
+}
+
+impl ScreenReaderEngine {
+    /// Takes every label of `place` away, keeps that, and reads the page without them, the
+    /// cursor where it was.
+    fn delete_all_labels(&mut self, place: &str) {
+        if !self.custom_labels.remove_place(place) {
+            return;
+        }
+        if let Some(store) = &self.label_store {
+            store.save(&self.custom_labels);
+        }
+        if self.cursor.buffer.document_url().map(place_of).as_deref() != Some(place) {
+            return;
+        }
+        let Some(page) = self.cursor.buffer.page().cloned() else {
+            return;
+        };
+        let offset = self.cursor.offset;
+        let rebuilt = VirtualBuffer::from_aom(&self.custom_labels.apply(place, &page));
+        crate::retire::retire(std::mem::replace(&mut self.cursor.buffer, rebuilt));
+        self.say_all = None;
+        self.cursor.move_to(offset);
     }
 }
 

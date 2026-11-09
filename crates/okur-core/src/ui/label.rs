@@ -110,9 +110,85 @@ impl LabelDialog {
     }
 }
 
+/// Custom Label Delete All's question while it is open: "Delete all Custom Labels? dialog |
+/// This will remove all custom labels for the current document or web page | OK Button", OK
+/// (the default) and Cancel [obs, 688/s6].
+#[derive(Debug, Clone)]
+pub struct DeleteAllDialog {
+    pub id: u32,
+}
+
+impl DeleteAllDialog {
+    pub fn spec(&self) -> DialogSpec {
+        let control = |id: &str, label: String, kind: ControlKind| Control {
+            id: id.to_owned(),
+            label,
+            kind,
+            enabled: true,
+            hidden: false,
+        };
+        DialogSpec {
+            id: self.id,
+            title: msg::custom_labels_delete_all_title().to_string(),
+            controls: vec![
+                control(
+                    "text",
+                    String::new(),
+                    ControlKind::Message {
+                        text: msg::custom_labels_delete_all_text().to_string(),
+                    },
+                ),
+                control(
+                    "ok",
+                    msg::custom_label_ok().to_string(),
+                    ControlKind::Button { default: true },
+                ),
+                control(
+                    "cancel",
+                    msg::custom_label_cancel().to_string(),
+                    ControlKind::Button { default: false },
+                ),
+            ],
+            keys: Vec::new(),
+        }
+    }
+
+    /// Whether `event` answers it: `Some(true)` for OK, `Some(false)` for Cancel or the
+    /// dialog closed.
+    pub fn answer(&self, event: &FromUi) -> Option<bool> {
+        match event {
+            FromUi::DialogPressed { id, control } if *id == self.id => match control.as_str() {
+                "ok" => Some(true),
+                "cancel" => Some(false),
+                _ => None,
+            },
+            FromUi::DialogClosed { id } if *id == self.id => Some(false),
+            _ => None,
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// JAWS's question: its title, its text, OK (the default) and Cancel [obs, 688/s6].
+    #[test]
+    fn delete_all_asks_as_jaws_does() {
+        let dialog = DeleteAllDialog { id: 3 };
+        let spec = dialog.spec();
+        assert_eq!(spec.title, "Delete all Custom Labels?");
+        let labels: Vec<&str> = spec.controls.iter().map(|c| c.label.as_str()).collect();
+        assert_eq!(labels, ["", "OK", "Cancel"]);
+        let pressed = |control: &str| FromUi::DialogPressed {
+            id: 3,
+            control: control.to_owned(),
+        };
+        assert_eq!(dialog.answer(&pressed("ok")), Some(true));
+        assert_eq!(dialog.answer(&pressed("cancel")), Some(false));
+        assert_eq!(dialog.answer(&FromUi::DialogClosed { id: 3 }), Some(false));
+        assert_eq!(dialog.answer(&FromUi::DialogClosed { id: 4 }), None);
+    }
 
     /// JAWS's dialog: "Custom Label", its text and a field of the same name [obs, 688/s9].
     #[test]

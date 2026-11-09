@@ -97,6 +97,13 @@ impl CustomLabels {
         true
     }
 
+    /// Takes every label of `place` away; whether it had any.
+    pub fn remove_place(&mut self, place: &str) -> bool {
+        self.places
+            .remove(place)
+            .is_some_and(|labels| !labels.is_empty())
+    }
+
     /// `page` with the labels of `place` in its elements' names, a link's read in place of its
     /// text.
     pub fn apply(&self, place: &str, page: &AomNode) -> AomNode {

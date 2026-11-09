@@ -11623,3 +11623,104 @@ fn run_manager_opens_the_chosen_manager() {
     assert_eq!(said.as_deref(), Some("Okur has no Keyboard Manager yet."));
     assert_eq!(ui.take(), [ToUi::DialogClose { id }]);
 }
+
+/// Custom Label Delete All, from Run Okur Manager in a page: its question, then OK takes
+/// every label of the page's site away and the page reads its own names again, the cursor
+/// where it was; Cancel keeps them [obs, 688/s5-s8].
+#[test]
+fn custom_label_delete_all_takes_the_sites_labels_away() {
+    use crate::ui::{FromUi, ToUi, Value};
+    let mut field = AomNode::new(2, Role::Edit).with_name("Branch");
+    field
+        .attributes
+        .insert("id".to_owned(), "pickup-branch".to_owned());
+    let mut page = AomNode::new(0, Role::Document)
+        .with_name("Book Pickup")
+        .with_children(vec![
+            AomNode::new(1, Role::Heading { level: 1 }).with_text("Book pickup"),
+            field.clone(),
+        ]);
+    page.attributes.insert(
+        "url".to_owned(),
+        "https://library.example/pickup".to_owned(),
+    );
+    let mut labels = crate::labels::CustomLabels::default();
+    labels.set("library.example", &field, Some("lamp"));
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(VirtualBuffer::from_aom(&page)),
+        Box::new(MockSpeechOutput::new()),
+    );
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    engine.set_custom_labels(labels, None);
+    let buffer = std::mem::replace(
+        &mut engine.cursor.buffer,
+        VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)),
+    );
+    engine.cursor.buffer = engine.labeled(buffer);
+    engine.cursor.move_to_start();
+    for _ in 0..5 {
+        if engine.cursor.current_line().contains("lamp") {
+            break;
+        }
+        engine.execute_command("{DOWN}");
+    }
+    assert!(engine.cursor.current_line().contains("lamp"));
+    let insert = Modifiers {
+        insert: true,
+        ..Modifiers::none()
+    };
+    let shown = |ui: &crate::ui::RecordingUiHost| {
+        ui.take().into_iter().find_map(|m| match m {
+            ToUi::DialogShow { dialog } => Some((dialog.id, dialog.title)),
+            _ => None,
+        })
+    };
+    let ui_event = |engine: &mut ScreenReaderEngine, message: FromUi| {
+        engine.handle_accessibility_event(&AccessibilityEvent::Ui(message))
+    };
+    let ask = |engine: &mut ScreenReaderEngine| {
+        engine.handle_key_event(&KeyEvent::new(Key::F(2), insert, true));
+        let (managers, _) = shown(&ui).unwrap_or_default();
+        ui_event(
+            engine,
+            FromUi::DialogChanged {
+                id: managers,
+                control: "managers".into(),
+                value: Value::Selected(4),
+            },
+        );
+        ui_event(
+            engine,
+            FromUi::DialogPressed {
+                id: managers,
+                control: "ok".into(),
+            },
+        );
+        shown(&ui).unwrap_or_default()
+    };
+    // Cancel keeps them.
+    let (question, title) = ask(&mut engine);
+    assert_eq!(title, "Delete all Custom Labels?");
+    ui_event(
+        &mut engine,
+        FromUi::DialogPressed {
+            id: question,
+            control: "cancel".into(),
+        },
+    );
+    assert!(engine.cursor.current_line().contains("lamp"));
+    // OK takes them away.
+    let (question, _) = ask(&mut engine);
+    let said = ui_event(
+        &mut engine,
+        FromUi::DialogPressed {
+            id: question,
+            control: "ok".into(),
+        },
+    );
+    assert_eq!(said, None);
+    assert_eq!(ui.take(), [ToUi::DialogClose { id: question }]);
+    assert!(engine.cursor.current_line().contains("Branch"));
+    assert!(!engine.custom_labels.has("library.example"));
+}

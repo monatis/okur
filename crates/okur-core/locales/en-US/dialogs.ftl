@@ -262,6 +262,10 @@ custom-label-ok = OK
 custom-label-cancel = Cancel
 # Insert+Ctrl+Tab where there is nothing to label (a paragraph): no dialog opens (JAWS, live).
 custom-label-not-here = A Custom Label cannot be created for this item.
+# Custom Label Delete All (Run Okur Manager): JAWS 2025's question, OK (the default) and Cancel
+# [obs, 688/s6].
+custom-labels-delete-all-title = Delete all Custom Labels?
+custom-labels-delete-all-text = This will remove all custom labels for the current document or web page
 
 ## The PlaceMarker List (Ctrl+Shift+K in a page): JAWS 2025's dialog [obs, 699, 702]. An "&"
 ## marks a label's access key, as in JAWS's dialog.

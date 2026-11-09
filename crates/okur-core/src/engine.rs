@@ -270,6 +270,8 @@ pub struct ScreenReaderEngine {
     label_store: Option<Box<dyn crate::labels::LabelStore>>,
     /// Custom Label while it is open, and the node it labels.
     label_dialog: Option<(crate::ui::label::LabelDialog, usize)>,
+    /// Custom Label Delete All's question while it is open, and the place whose labels go.
+    labels_delete_all: Option<(crate::ui::label::DeleteAllDialog, String)>,
     /// Excel's Edit note (Shift+F2) while it is open.
     note_dialog: Option<crate::ui::label::LabelDialog>,
     /// Shift+F2 asked Excel for the cell's note, to open Edit note with it.
@@ -721,6 +723,7 @@ impl ScreenReaderEngine {
             custom_labels: crate::labels::CustomLabels::default(),
             label_store: None,
             label_dialog: None,
+            labels_delete_all: None,
             note_dialog: None,
             note_edit_asked: false,
             alt_held: false,
@@ -3624,6 +3627,7 @@ impl ScreenReaderEngine {
                 None
             }
             Manager::CustomLabel => self.execute(crate::command::Command::AssignCustomLabel),
+            Manager::CustomLabelDeleteAll => self.ask_delete_all_labels(),
             Manager::DictionaryManager => self.open_dictionary_manager(),
             Manager::FlexibleWeb => self.open_flexible_web(),
             Manager::NotificationHistory => {
