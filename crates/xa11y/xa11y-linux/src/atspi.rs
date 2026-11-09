@@ -4511,6 +4511,22 @@ impl LinuxProvider {
         })
     }
 
+    /// The caret and the text's length of the object at `bus_name` and `path` (its Text
+    /// interface's CaretOffset and CharacterCount): two calls, polled after a key until the key
+    /// moved them.
+    pub fn atspi_caret_and_length(&self, bus_name: &str, path: &str) -> Result<(i32, i32)> {
+        let proxy = self.make_proxy(bus_name, path, "org.a11y.atspi.Text")?;
+        let property = |name: &str| {
+            proxy
+                .get_property::<i32>(name)
+                .map_err(|e| Error::Platform {
+                    code: -1,
+                    message: format!("Text.{name} not read: {e}"),
+                })
+        };
+        Ok((property("CaretOffset")?, property("CharacterCount")?))
+    }
+
     /// The text attributes of the run at `offset` in the text of the object at `bus_name` and
     /// `path`, with the run's start and end: its Text interface's GetAttributeRun, the
     /// defaults included or not (Chrome's `fg-color` and `bg-color` are defaults; its

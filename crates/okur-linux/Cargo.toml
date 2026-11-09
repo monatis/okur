@@ -15,6 +15,7 @@ okur-linux-model = { workspace = true }
 [target.'cfg(target_os = "linux")'.dependencies]
 okur-core = { workspace = true }
 okur-runtime = { workspace = true }
+serde = { workspace = true }
 serde_json = { workspace = true }
 tracing = { workspace = true }
 x11rb = { version = "0.14", default-features = false, features = ["xinput", "xkb"] }

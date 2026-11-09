@@ -94,15 +94,28 @@ impl ReplayReport {
     }
 }
 
-/// A trace's records, one JSON line each.
+/// A trace's records, one JSON line each, in the order the engine was given them: a record
+/// stamped earlier than the one before it is an error, which a replay placing keys among them
+/// by their times would hide (the code review of 2026-11-09, finding 6).
 pub fn read_trace(text: &str) -> Result<Vec<AtspiRecord>, String> {
-    text.lines()
+    let records: Vec<AtspiRecord> = text
+        .lines()
         .enumerate()
         .filter(|(_, line)| !line.trim().is_empty())
         .map(|(index, line)| {
             serde_json::from_str(line).map_err(|e| format!("trace line {}: {e}", index + 1))
         })
-        .collect()
+        .collect::<Result<_, _>>()?;
+    if let Some(at) = records
+        .windows(2)
+        .position(|pair| matches!(pair, [a, b] if b.handed_ms() < a.handed_ms()))
+    {
+        return Err(format!(
+            "trace record {} was given to the engine before the one before it",
+            at + 2
+        ));
+    }
+    Ok(records)
 }
 
 /// What Okur's Linux driver does for the engine (okur-linux's `LinuxActions`): it focuses and
@@ -204,7 +217,7 @@ impl<'a> Replayer<'a> {
     }
 
     fn feed(&mut self, record: &AtspiRecord) {
-        self.advance(record.at_ms);
+        self.advance(record.handed_ms());
         // As the driver converted it: GTK's twin focus passed over, then what was read.
         let mut events = EventModel::convert(&mut self.converter, record);
         if self.options.pages_after_focus {
@@ -303,12 +316,12 @@ pub fn replay_run(
         .collect();
     reset.sort_by_key(|(_, at)| *at);
     for (chord, at) in reset {
-        while let Some(record) = records.next_if(|r| r.at_ms < at) {
+        while let Some(record) = records.next_if(|r| r.handed_ms() < at) {
             replayer.feed(record);
         }
         replayer.key(&chord, at)?;
     }
-    while let Some(record) = records.next_if(|r| r.at_ms < first) {
+    while let Some(record) = records.next_if(|r| r.handed_ms() < first) {
         replayer.feed(record);
     }
     replayer.speech.take();
@@ -340,7 +353,7 @@ pub fn replay_run(
             .ok_or_else(|| format!("{key}: the run did not keep its keys"))?;
         // The events after the step before, and the step's key: said in this step, as the
         // runner's speech log has it.
-        while let Some(record) = records.next_if(|r| r.at_ms < start) {
+        while let Some(record) = records.next_if(|r| r.handed_ms() < start) {
             replayer.feed(record);
         }
         // Each key at its time, where the run kept them (a repeated step's presses 120 ms
@@ -355,12 +368,12 @@ pub fn replay_run(
                 .and_then(Value::as_u64)
                 .unwrap_or_else(|| start.saturating_add(index as u64));
             // The events before this key, as they came between the presses.
-            while let Some(record) = records.next_if(|r| r.at_ms < at) {
+            while let Some(record) = records.next_if(|r| r.handed_ms() < at) {
                 replayer.feed(record);
             }
             replayer.key(chord, at)?;
         }
-        while let Some(record) = records.next_if(|r| r.at_ms < end) {
+        while let Some(record) = records.next_if(|r| r.handed_ms() < end) {
             replayer.feed(record);
         }
         replayer.advance(end);
@@ -509,6 +522,22 @@ mod tests {
         let said: Vec<&str> = replayed.iter().map(|s| s.replayed.as_str()).collect();
         assert!(matches!(said.as_slice(), [first, second]
             if first.contains("OK") && !first.contains("Before") && second.contains("Cancel")));
+    }
+
+    /// A trace is read in the order the engine was given its records: a record stamped as
+    /// given before the one before it is refused; one held for its page, given after a later
+    /// event, is in order by its stamp.
+    #[test]
+    fn a_trace_out_of_its_delivery_order_is_refused() {
+        let line = |at: u64, delivered: u64| {
+            let mut record = focus(at, Role::Button, "OK");
+            record.delivered_ms = Some(delivered);
+            serde_json::to_string(&record).unwrap_or_default()
+        };
+        let held = format!("{}\n{}", line(100, 150), line(120, 160));
+        assert_eq!(read_trace(&held).map(|r| r.len()), Ok(2));
+        let backwards = format!("{}\n{}", line(100, 160), line(120, 150));
+        assert!(read_trace(&backwards).is_err());
     }
 
     /// A run recorded before the runner kept its keys cannot be replayed: said, not guessed.

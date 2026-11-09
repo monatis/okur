@@ -42,9 +42,9 @@ const SETTLE: Duration = Duration::from_millis(250);
 /// millisecond.
 const POLL: Duration = Duration::from_millis(3);
 
-/// The most attribute runs read for a field's misspelled words: a long text area's runs are
-/// each a call on the bus.
-const RUN_LIMIT: usize = 400;
+/// The most attribute runs read for the misspelled words of the caret's line: each is a call
+/// on the bus.
+const RUN_LIMIT: usize = 64;
 
 pub struct LinuxActions {
     objects: PageObjects,
@@ -137,6 +137,24 @@ impl LinuxActions {
     }
 }
 
+/// The line around `caret` in `text`, as `(start, end)` in characters: from after the line
+/// break before it to the line break after it.
+fn line_around(text: &str, caret: usize) -> (usize, usize) {
+    let mut start = 0;
+    let mut end = None;
+    for (i, c) in text.chars().enumerate() {
+        if c == '\n' {
+            if i < caret {
+                start = i + 1;
+            } else {
+                end = Some(i);
+                break;
+            }
+        }
+    }
+    (start, end.unwrap_or_else(|| text.chars().count()))
+}
+
 /// A caret read's place, as the engine's text knows it: the caret, the selection, the length.
 type Place = (usize, Option<(usize, usize)>, usize);
 
@@ -175,18 +193,20 @@ fn colors_at(provider: &LinuxProvider, object: &AtspiObject, offset: i32) -> Opt
     })
 }
 
-/// The words the field marks as misspelled, as `(start, end)` in characters: its attribute
-/// runs whose `invalid` is "spelling", as Chrome marks them (JAWS says "Misspelled" with them
-/// [obs, 284/s6]).
+/// The words the field marks as misspelled in the caret's line (`from` to `to`, in
+/// characters), as `(start, end)`: its attribute runs whose `invalid` is "spelling", as Chrome
+/// marks them (JAWS says "Misspelled" with them [obs, 284/s6]). The caret's line alone: a whole
+/// text area's runs were a call each on every key (the code review of 2026-11-09, finding 5).
 fn misspelled(
     provider: &LinuxProvider,
     object: &AtspiObject,
-    length: usize,
+    from: usize,
+    to: usize,
 ) -> Vec<(usize, usize)> {
     let mut words = Vec::new();
-    let mut offset = 0usize;
+    let mut offset = from;
     for _ in 0..RUN_LIMIT {
-        if offset >= length {
+        if offset >= to {
             break;
         }
         let Ok(at) = i32::try_from(offset) else {
@@ -233,20 +253,37 @@ fn read_text(
         tracing::debug!("caret read: no focus known");
         return true;
     };
-    let read_place = || {
+    // The caret and the length polled (two calls) until the key moved them from where the
+    // engine knew them, or, nothing known, from where the first read finds them: the key is
+    // still held by the X server as the engine asks (the code review of 2026-11-09, finding 3,
+    // as Windows' page fields are read). Then the caret, the selection and the length once.
+    let caret_and_length = || {
         provider
-            .atspi_text_position(&object.bus_name, &object.path)
+            .atspi_caret_and_length(&object.bus_name, &object.path)
             .map_err(|e| tracing::debug!("caret read: the caret not read: {e}"))
             .ok()
-            .and_then(|p| place_read(&p))
     };
-    let known = before.as_ref().map(place_known);
-    let mut place = read_place();
-    while known.is_some() && place.is_some() && place == known && started.elapsed() < SETTLE {
+    let known = match before.as_ref().map(place_known) {
+        Some((caret, _, length)) => Some((caret, length)),
+        None => caret_and_length().and_then(|(caret, length)| {
+            Some((usize::try_from(caret).ok()?, usize::try_from(length).ok()?))
+        }),
+    };
+    loop {
+        let now = caret_and_length().and_then(|(caret, length)| {
+            Some((usize::try_from(caret).ok()?, usize::try_from(length).ok()?))
+        });
+        if now.is_none() || now != known || started.elapsed() >= SETTLE {
+            break;
+        }
         std::thread::sleep(POLL);
-        place = read_place();
     }
-    let Some((caret, selection, length)) = place else {
+    let place = provider
+        .atspi_text_position(&object.bus_name, &object.path)
+        .map_err(|e| tracing::debug!("caret read: the caret not read: {e}"))
+        .ok()
+        .and_then(|p| place_read(&p));
+    let Some((caret, selection, _)) = place else {
         return true;
     };
     let text = match provider.atspi_text(&object.bus_name, &object.path) {
@@ -256,10 +293,19 @@ fn read_text(
             return true;
         }
     };
-    let font = i32::try_from(caret)
+    // The colors where the caret is; at the text's end, where typing leaves it, the last
+    // character's.
+    let length = text.chars().count();
+    let at = if caret >= length {
+        caret.saturating_sub(1)
+    } else {
+        caret
+    };
+    let font = i32::try_from(at)
         .ok()
         .and_then(|offset| colors_at(provider, &object, offset));
-    let misspelled = misspelled(provider, &object, length);
+    let (line_start, line_end) = line_around(&text, caret);
+    let misspelled = misspelled(provider, &object, line_start, line_end);
     let word = in_page
         .then(|| okur_core::editing::web_word_at(&text, caret))
         .flatten();
@@ -280,6 +326,18 @@ fn read_text(
         misspelled,
         structure: None,
     };
+    // The focus moved on while the field was read (Tab during the wait): the read is the field
+    // left, and the engine is not given it.
+    let still_focused = reads
+        .focused
+        .lock()
+        .unwrap_or_else(std::sync::PoisonError::into_inner)
+        .as_ref()
+        .is_some_and(|now| now.bus_name == object.bus_name && now.path == object.path);
+    if !still_focused {
+        tracing::debug!("caret read: the focus moved on; not given");
+        return true;
+    }
     let record = AtspiRecord::text(
         crate::events::unix_ms(),
         TextRead {

@@ -989,6 +989,7 @@ dependencies = [
  "okur-linux-model",
  "okur-model",
  "okur-runtime",
+ "serde",
  "serde_json",
  "tokio",
  "tracing",

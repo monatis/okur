@@ -70,6 +70,20 @@ pub struct AtspiRecord {
     /// A text field read at its caret, asked for by the engine: a record of its own.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub text: Option<TextRead>,
+    /// When the engine was given the record, in milliseconds since the Unix epoch, as the trace
+    /// stamps it: a record held for a page, and a page, come later than their events, and a
+    /// replay gives them to the engine in this order, the keys among them (the code review of
+    /// 2026-11-09, finding 6). None in a record not yet given, and in the traces before it.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub delivered_ms: Option<u64>,
+}
+
+impl AtspiRecord {
+    /// When the engine was given it: its stamp, else (a trace before the stamps) its event's
+    /// time.
+    pub fn handed_ms(&self) -> u64 {
+        self.delivered_ms.unwrap_or(self.at_ms)
+    }
 }
 
 impl AtspiRecord {
@@ -102,6 +116,7 @@ impl AtspiRecord {
             native: None,
             reread: None,
             text: None,
+            delivered_ms: None,
         }
     }
 }
@@ -619,6 +634,7 @@ mod tests {
             native,
             reread: None,
             text: None,
+            delivered_ms: None,
         }
     }
 

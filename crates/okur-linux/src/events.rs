@@ -77,16 +77,22 @@ fn note_live_pages(live: &LiveObjects, record: &AtspiRecord) {
     if record.pages.is_empty() {
         return;
     }
+    // Walked before the lock is taken: the subscription's filter waits on it (the code review
+    // of 2026-11-09).
+    let found: Vec<_> = record
+        .pages
+        .iter()
+        .map(|page| (page, okur_linux_model::live::live_paths(&page.root)))
+        .collect();
     let mut pages = live
         .write()
         .unwrap_or_else(std::sync::PoisonError::into_inner);
-    for page in &record.pages {
+    for (page, paths) in found {
         let Some(at) = page.document.find('/') else {
             continue;
         };
         let (bus, document) = page.document.split_at(at);
         pages.retain(|p| !(p.bus == bus && p.document == document));
-        let paths = okur_linux_model::live::live_paths(&page.root);
         if paths.is_empty() {
             continue;
         }
@@ -600,10 +606,24 @@ fn deliver(
     converter: &mut Converter,
     trace: &TraceOut,
     live: &LiveObjects,
+    focused: &FocusedObject,
     sink: &EventSink,
 ) -> bool {
     for record in delivery.take_ready() {
         note_live_pages(live, &record);
+        // The focused object as the engine is given its focus: a caret read reads the field
+        // the engine knows has the focus, not one whose focus waits for its page (the code
+        // review of 2026-11-09, finding 4).
+        if let Some(object) = record
+            .target
+            .as_ref()
+            .filter(|e| record.kind == EventKind::FocusChanged && e.states.focused)
+            .and_then(AtspiObject::of)
+        {
+            *focused
+                .lock()
+                .unwrap_or_else(std::sync::PoisonError::into_inner) = Some(object);
+        }
         let said = converter.convert_read(&record);
         if !hand(trace, &record, said, sink) {
             return false;
@@ -641,7 +661,20 @@ fn write_record(
     record: &AtspiRecord,
 ) -> std::io::Result<()> {
     use std::io::Write;
-    serde_json::to_writer(&mut *out, record)?;
+    /// The record with the time the engine is given it.
+    #[derive(serde::Serialize)]
+    struct Delivered<'a> {
+        #[serde(flatten)]
+        record: &'a AtspiRecord,
+        delivered_ms: u64,
+    }
+    serde_json::to_writer(
+        &mut *out,
+        &Delivered {
+            record,
+            delivered_ms: unix_ms(),
+        },
+    )?;
     out.write_all(b"\n")?;
     out.flush()
 }
@@ -793,6 +826,8 @@ impl EventSource for AtspiEventSource {
                 // The order the engine takes the records and pages in: a page before the
                 // focus that asked for it, as when pages were read here.
                 let mut delivery = Delivery::default();
+                // The page the focus is in, by its document's key: the live regions heard.
+                let mut focus_page: Option<String> = None;
                 while !stop.load(Ordering::SeqCst) {
                     // The pages the reader read, into their places; what waited for them, and
                     // for pages waited for too long, goes on.
@@ -805,7 +840,14 @@ impl EventSource for AtspiEventSource {
                     if delivery.is_holding() {
                         drop_pages(delivery.expire(unix_ms()), &reader, &mut converter);
                     }
-                    if !deliver(&mut delivery, &mut converter, &trace, &live, &sink) {
+                    if !deliver(
+                        &mut delivery,
+                        &mut converter,
+                        &trace,
+                        &live,
+                        &focused,
+                        &sink,
+                    ) {
                         return;
                     }
                     // Short while a page is awaited, so that it comes at once when the bus is
@@ -835,7 +877,14 @@ impl EventSource for AtspiEventSource {
                                 );
                                 // In its place, cancelling no page: it was not read.
                                 let _ = delivery.push(twin, false);
-                                if !deliver(&mut delivery, &mut converter, &trace, &live, &sink) {
+                                if !deliver(
+                                    &mut delivery,
+                                    &mut converter,
+                                    &trace,
+                                    &live,
+                                    &focused,
+                                    &sink,
+                                ) {
                                     return;
                                 }
                                 continue;
@@ -847,9 +896,17 @@ impl EventSource for AtspiEventSource {
                                 event.kind,
                                 EventKind::StructureChanged | EventKind::TextChanged
                             ) {
-                                let page = target.and_then(AtspiObject::of).and_then(|object| {
-                                    live_page_of(&live, &object.bus_name, &object.path)
-                                });
+                                // The page the focus is in alone: another page read again
+                                // would be taken for a new load and read out over what the
+                                // user is doing (the code review of 2026-11-09, finding 1).
+                                let page = target
+                                    .and_then(AtspiObject::of)
+                                    .and_then(|object| {
+                                        live_page_of(&live, &object.bus_name, &object.path)
+                                    })
+                                    .filter(|document| {
+                                        focus_page.as_deref() == Some(key_of(document).as_str())
+                                    });
                                 if let Some(document) = page {
                                     tracing::debug!(
                                         document = %key_of(&document),
@@ -868,16 +925,6 @@ impl EventSource for AtspiEventSource {
                                 continue;
                             }
                             let focus = event.kind == EventKind::FocusChanged;
-                            // The focused object, for the engine's caret reads.
-                            if let Some(object) = target
-                                .filter(|e| focus && e.states.focused)
-                                .and_then(AtspiObject::of)
-                            {
-                                *focused
-                                    .lock()
-                                    .unwrap_or_else(std::sync::PoisonError::into_inner) =
-                                    Some(object);
-                            }
                             let changed = okur_linux_model::focus_track::is_control_change(
                                 &event.kind,
                                 target.is_some_and(|e| e.states.focused),
@@ -889,6 +936,9 @@ impl EventSource for AtspiEventSource {
                                 Some(element) => look_for_page(&provider, element),
                                 None => (None, Vec::new()),
                             };
+                            if focus && target.is_some_and(|e| e.states.focused) {
+                                focus_page = document.as_ref().map(key_of);
+                            }
                             if let (true, Some(element), Some(document)) =
                                 (focus, target, document.as_ref())
                             {
@@ -951,10 +1001,18 @@ impl EventSource for AtspiEventSource {
                                 native,
                                 reread,
                                 text: None,
+                                delivered_ms: None,
                             };
                             let cancelled = delivery.push(record, true);
                             drop_pages(cancelled, &reader, &mut converter);
-                            if !deliver(&mut delivery, &mut converter, &trace, &live, &sink) {
+                            if !deliver(
+                                &mut delivery,
+                                &mut converter,
+                                &trace,
+                                &live,
+                                &focused,
+                                &sink,
+                            ) {
                                 return;
                             }
                         }
