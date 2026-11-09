@@ -49,11 +49,14 @@ pub struct TextRead {
     pub read_ms: u64,
 }
 
-/// A live region read again as it changed: its page's document, by its key, and the region's
-/// subtree.
+/// A live region read again as it changed: its page's document, by its key, the region's
+/// subtree, and the id its objects are numbered from, after its page's (none when the page's
+/// numbering was not kept: the page is then captured again whole).
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LiveRead {
     pub document: String,
+    #[serde(default)]
+    pub base: Option<i32>,
     pub root: AtspiNode,
     /// How long the read took, in milliseconds.
     #[serde(default)]
@@ -259,11 +262,16 @@ impl Converter {
     }
 
     /// What a live region read again changed, compared with its lines when the page or the
-    /// region was read before, and the page's change.
+    /// region was read before, then the region spliced into the page the engine has (its root
+    /// by its id in the page, its other objects by their new ids, which a focus in them names):
+    /// the page is not read again for it. A region whose page is not the one given last, or
+    /// read without a numbering, is the page's change instead, which captures it again.
     fn live_read(&mut self, read: &LiveRead) -> Vec<AccessibilityEvent> {
+        let base = read.base.unwrap_or(0);
         let regions = crate::live::regions(&read.root);
-        let ids = crate::page::page_ids(&read.root, 0);
-        let lines = crate::live::region_lines(&to_aom_from(&read.root, 0), &regions, &ids);
+        let ids = crate::page::page_ids(&read.root, base);
+        let mut part = to_aom_from(&read.root, base);
+        let lines = crate::live::region_lines(&part, &regions, &ids);
         let at = self
             .live_lines
             .iter()
@@ -284,7 +292,25 @@ impl Converter {
                 }
             }
         }
-        events.push(AccessibilityEvent::PageChanged);
+        let in_page =
+            self.page_ids.get(&read.root.path).copied().filter(|_| {
+                read.base.is_some() && self.last_page.as_deref() == Some(&read.document)
+            });
+        match in_page {
+            Some(id) => {
+                part.attributes
+                    .insert(okur_core::aom::UNIQUE_ID_ATTR.to_owned(), id.to_string());
+                for (path, new) in ids {
+                    if path != read.root.path {
+                        self.page_ids.insert(path, new);
+                    }
+                }
+                self.page_places
+                    .extend(crate::page::item_places(&read.root));
+                events.push(AccessibilityEvent::PagePartsLoaded(vec![part]));
+            }
+            None => events.push(AccessibilityEvent::PageChanged),
+        }
         events
     }
 
@@ -946,6 +972,7 @@ mod tests {
                 0,
                 LiveRead {
                     document: ":1.5/doc".to_owned(),
+                    base: Some(100),
                     root,
                     read_ms: 0,
                 },
@@ -979,8 +1006,10 @@ mod tests {
         assert!(
             matches!(
                 fourth.as_slice(),
-                [AccessibilityEvent::LiveRegion(live), AccessibilityEvent::PageChanged]
+                [AccessibilityEvent::LiveRegion(live), AccessibilityEvent::PagePartsLoaded(parts)]
                     if live.text.ends_with("You: Message 2")
+                        && parts.first().and_then(|p| p.attributes.get(okur_core::aom::UNIQUE_ID_ATTR))
+                            == Some(&"2".to_owned())
             ),
             "{fourth:?}"
         );

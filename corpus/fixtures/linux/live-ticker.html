@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Live Ticker - Linux Lab Fixture</title>
+</head>
+<body>
+<!-- A big page (about 2,000 accessible objects) with a status region that ticks every second:
+     the Linux lab's measure of what a live region's change costs Okur (probe-live-ticker.sh). -->
+<h1>Live ticker</h1>
+<div id="ticker" role="status">Tick 0</div>
+<p>
+  <button>First</button>
+  <button>Second</button>
+  <button>Third</button>
+  <button>Fourth</button>
+  <button>Fifth</button>
+  <button>Sixth</button>
+</p>
+<main id="items"></main>
+<script>
+  const items = document.getElementById("items");
+  for (let i = 1; i <= 500; i++) {
+    const p = document.createElement("p");
+    p.append(`Item ${i} is a line of text with `);
+    const a = document.createElement("a");
+    a.href = `#item-${i}`;
+    a.textContent = `link ${i}`;
+    p.append(a, " after it.");
+    items.append(p);
+  }
+  let tick = 0;
+  setInterval(() => {
+    tick += 1;
+    document.getElementById("ticker").textContent = `Tick ${tick}`;
+  }, 1000);
+</script>
+</body>
+</html>
