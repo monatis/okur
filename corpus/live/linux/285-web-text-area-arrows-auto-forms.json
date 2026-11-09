@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "298f0c7c"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+End",
-     "t_ms": 1794221895026
+     "t_ms": 1794238176013
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794221896388,
-     "t_end_ms": 1794221897392,
+     "t_start_ms": 1794238177377,
+     "t_end_ms": 1794238178382,
      "action": {
       "type": "key",
       "command": "Up"
@@ -32,7 +32,7 @@
       "Up"
      ],
      "key_times": [
-      1794221896388
+      1794238177377
      ],
      "observation": {
       "speech_raw": "Text \u001d edit \u001e \nHello, world. Is it done? Yes! Wait; maybe: no.\nMail ada@example.org or see https://example.org/a-b_c?x=1&y=2#top\nC:\\Users\\Ada\\notes.txt and /usr/local/bin\nPrice $9.95, 50% off; total = 3 * 4 + 1 - 2 / 5 ^ 2 ~ 7\nfn main() { let v = [1, 2]; v.len() } // done <ok> | a && b\n\"double\" 'single' \u201ccurly\u201d \u2018curly\u2019 \u2014 em \u2013 en \u2026 ellipsis \u2022 bullet\n===== ----- ..... !!!!! ##### ***\nMenuBar getElementById XMLHttpRequest iPhone McDonald PowerShell\nSystem32 x86_64 COVID19 123RON 1st 2nd 3rd\n7 42 1234 54321 123456 1-800-444-4443 2.5 1,000,000 10:30\n03-16-00 3/2/2002 1/3 $0.02 $1,250.50\nAda READ me B x\nJAWS sister-in-law 2:00 P.M. aB9 \u00e9 \u20ac\n\n    four spaces\n\tone tab\nSay All reads this. It has three sentences. The last one ends here.\nteh quick brown fxo",
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794221897392,
-     "t_end_ms": 1794221898497,
+     "t_start_ms": 1794238178382,
+     "t_end_ms": 1794238179486,
      "action": {
       "type": "key",
       "command": "Up"
@@ -52,7 +52,7 @@
       "Up"
      ],
      "key_times": [
-      1794221897392
+      1794238178382
      ],
      "observation": {
       "speech_raw": "Say All reads this. It has three sentences. The last one ends here.",
@@ -62,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794221898497,
-     "t_end_ms": 1794221899600,
+     "t_start_ms": 1794238179486,
+     "t_end_ms": 1794238180590,
      "action": {
       "type": "key",
       "command": "Up"
@@ -72,7 +72,7 @@
       "Up"
      ],
      "key_times": [
-      1794221898497
+      1794238179486
      ],
      "observation": {
       "speech_raw": "one tab",
@@ -82,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794221899600,
-     "t_end_ms": 1794221900705,
+     "t_start_ms": 1794238180590,
+     "t_end_ms": 1794238181694,
      "action": {
       "type": "key",
       "command": "Up"
@@ -92,7 +92,7 @@
       "Up"
      ],
      "key_times": [
-      1794221899600
+      1794238180590
      ],
      "observation": {
       "speech_raw": "four spaces",
@@ -102,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794221900705,
-     "t_end_ms": 1794221901810,
+     "t_start_ms": 1794238181694,
+     "t_end_ms": 1794238182798,
      "action": {
       "type": "key",
       "command": "Up"
@@ -112,7 +112,7 @@
       "Up"
      ],
      "key_times": [
-      1794221900705
+      1794238181694
      ],
      "observation": {
       "speech_raw": "\n",
@@ -122,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794221901810,
-     "t_end_ms": 1794221902915,
+     "t_start_ms": 1794238182798,
+     "t_end_ms": 1794238183902,
      "action": {
       "type": "key",
       "command": "Up"
@@ -132,7 +132,7 @@
       "Up"
      ],
      "key_times": [
-      1794221901810
+      1794238182798
      ],
      "observation": {
       "speech_raw": "JAWS sister-in-law 2:00 P.M. aB9 \u00e9 \u20ac",
@@ -142,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794221902915,
-     "t_end_ms": 1794221904020,
+     "t_start_ms": 1794238183902,
+     "t_end_ms": 1794238185006,
      "action": {
       "type": "key",
       "command": "Up"
@@ -152,7 +152,7 @@
       "Up"
      ],
      "key_times": [
-      1794221902915
+      1794238183902
      ],
      "observation": {
       "speech_raw": "Ada READ me B x",
@@ -162,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794221904020,
-     "t_end_ms": 1794221905124,
+     "t_start_ms": 1794238185006,
+     "t_end_ms": 1794238186110,
      "action": {
       "type": "key",
       "command": "Up"
@@ -172,7 +172,7 @@
       "Up"
      ],
      "key_times": [
-      1794221904020
+      1794238185006
      ],
      "observation": {
       "speech_raw": "03-16-00 3/2/2002 1/3 $0.02 $1,250.50",
@@ -182,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794221905124,
-     "t_end_ms": 1794221906229,
+     "t_start_ms": 1794238186110,
+     "t_end_ms": 1794238187215,
      "action": {
       "type": "key",
       "command": "Up"
@@ -192,7 +192,7 @@
       "Up"
      ],
      "key_times": [
-      1794221905124
+      1794238186110
      ],
      "observation": {
       "speech_raw": "7 42 1234 54321 123456 1-800-444-4443 2.5 1,000,000 10:30",
@@ -202,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794221906229,
-     "t_end_ms": 1794221907333,
+     "t_start_ms": 1794238187215,
+     "t_end_ms": 1794238188320,
      "action": {
       "type": "key",
       "command": "Up"
@@ -212,7 +212,7 @@
       "Up"
      ],
      "key_times": [
-      1794221906229
+      1794238187215
      ],
      "observation": {
       "speech_raw": "System32 x86_64 COVID19 123RON 1st 2nd 3rd",
@@ -222,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794221907333,
-     "t_end_ms": 1794221908438,
+     "t_start_ms": 1794238188320,
+     "t_end_ms": 1794238189425,
      "action": {
       "type": "key",
       "command": "Up"
@@ -232,7 +232,7 @@
       "Up"
      ],
      "key_times": [
-      1794221907333
+      1794238188320
      ],
      "observation": {
       "speech_raw": "MenuBar getElementById XMLHttpRequest iPhone McDonald PowerShell",
@@ -242,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794221908438,
-     "t_end_ms": 1794221909543,
+     "t_start_ms": 1794238189425,
+     "t_end_ms": 1794238190530,
      "action": {
       "type": "key",
       "command": "Up"
@@ -252,7 +252,7 @@
       "Up"
      ],
      "key_times": [
-      1794221908438
+      1794238189425
      ],
      "observation": {
       "speech_raw": "===== ----- ..... !!!!! ##### ***",
@@ -262,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794221909543,
-     "t_end_ms": 1794221910649,
+     "t_start_ms": 1794238190530,
+     "t_end_ms": 1794238191634,
      "action": {
       "type": "key",
       "command": "Up"
@@ -272,7 +272,7 @@
       "Up"
      ],
      "key_times": [
-      1794221909543
+      1794238190530
      ],
      "observation": {
       "speech_raw": "\"double\" 'single' \u201ccurly\u201d \u2018curly\u2019 \u2014 em \u2013 en \u2026 ellipsis \u2022 bullet",
@@ -282,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794221910649,
-     "t_end_ms": 1794221911754,
+     "t_start_ms": 1794238191634,
+     "t_end_ms": 1794238192739,
      "action": {
       "type": "key",
       "command": "Up"
@@ -292,7 +292,7 @@
       "Up"
      ],
      "key_times": [
-      1794221910649
+      1794238191634
      ],
      "observation": {
       "speech_raw": "fn main() { let v = [1, 2]; v.len() } // done <ok> | a && b",
@@ -302,8 +302,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794221911754,
-     "t_end_ms": 1794221912859,
+     "t_start_ms": 1794238192739,
+     "t_end_ms": 1794238193842,
      "action": {
       "type": "key",
       "command": "Up"
@@ -312,7 +312,7 @@
       "Up"
      ],
      "key_times": [
-      1794221911754
+      1794238192739
      ],
      "observation": {
       "speech_raw": "Price $9.95, 50% off; total = 3 * 4 + 1 - 2 / 5 ^ 2 ~ 7",
@@ -322,8 +322,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794221912859,
-     "t_end_ms": 1794221913964,
+     "t_start_ms": 1794238193842,
+     "t_end_ms": 1794238194947,
      "action": {
       "type": "key",
       "command": "Up"
@@ -332,7 +332,7 @@
       "Up"
      ],
      "key_times": [
-      1794221912859
+      1794238193842
      ],
      "observation": {
       "speech_raw": "C:\\Users\\Ada\\notes.txt and /usr/local/bin",
@@ -342,8 +342,8 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794221913964,
-     "t_end_ms": 1794221915068,
+     "t_start_ms": 1794238194947,
+     "t_end_ms": 1794238196051,
      "action": {
       "type": "key",
       "command": "Up"
@@ -352,7 +352,7 @@
       "Up"
      ],
      "key_times": [
-      1794221913964
+      1794238194947
      ],
      "observation": {
       "speech_raw": "Mail ada@example.org or see https://example.org/a-b_c?x=1&y=2#top",
@@ -362,8 +362,8 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794221915068,
-     "t_end_ms": 1794221916172,
+     "t_start_ms": 1794238196051,
+     "t_end_ms": 1794238197156,
      "action": {
       "type": "key",
       "command": "Up"
@@ -372,7 +372,7 @@
       "Up"
      ],
      "key_times": [
-      1794221915068
+      1794238196051
      ],
      "observation": {
       "speech_raw": "Hello, world. Is it done? Yes! Wait; maybe: no.",
@@ -382,8 +382,8 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794221916172,
-     "t_end_ms": 1794221917276,
+     "t_start_ms": 1794238197156,
+     "t_end_ms": 1794238198261,
      "action": {
       "type": "key",
       "command": "Up"
@@ -392,7 +392,7 @@
       "Up"
      ],
      "key_times": [
-      1794221916172
+      1794238197156
      ],
      "observation": {
       "speech_raw": "Hello, world. Is it done? Yes! Wait; maybe: no.",
@@ -402,8 +402,8 @@
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794221917276,
-     "t_end_ms": 1794221918280,
+     "t_start_ms": 1794238198261,
+     "t_end_ms": 1794238199266,
      "action": {
       "type": "key",
       "command": "Up"
@@ -412,7 +412,7 @@
       "Up"
      ],
      "key_times": [
-      1794221917276
+      1794238198261
      ],
      "observation": {
       "speech_raw": "Text",
@@ -422,8 +422,8 @@
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794221918280,
-     "t_end_ms": 1794221919284,
+     "t_start_ms": 1794238199266,
+     "t_end_ms": 1794238200270,
      "action": {
       "type": "key",
       "command": "Up"
@@ -432,7 +432,7 @@
       "Up"
      ],
      "key_times": [
-      1794221918280
+      1794238199266
      ],
      "observation": {
       "speech_raw": "teh quick brown fxo",
@@ -442,8 +442,8 @@
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794221919284,
-     "t_end_ms": 1794221920288,
+     "t_start_ms": 1794238200270,
+     "t_end_ms": 1794238201374,
      "action": {
       "type": "key",
       "command": "Up"
@@ -452,7 +452,7 @@
       "Up"
      ],
      "key_times": [
-      1794221919284
+      1794238200270
      ],
      "observation": {
       "speech_raw": "Say All reads this. It has three sentences. The last one ends here.",
@@ -462,8 +462,8 @@
     },
     {
      "step_id": "s23",
-     "t_start_ms": 1794221920288,
-     "t_end_ms": 1794221921291,
+     "t_start_ms": 1794238201374,
+     "t_end_ms": 1794238202378,
      "action": {
       "type": "key",
       "command": "Up"
@@ -472,7 +472,7 @@
       "Up"
      ],
      "key_times": [
-      1794221920288
+      1794238201374
      ],
      "observation": {
       "speech_raw": "\tone tab",
@@ -482,8 +482,8 @@
     },
     {
      "step_id": "s24",
-     "t_start_ms": 1794221921291,
-     "t_end_ms": 1794221922296,
+     "t_start_ms": 1794238202378,
+     "t_end_ms": 1794238203382,
      "action": {
       "type": "key",
       "command": "Up"
@@ -492,7 +492,7 @@
       "Up"
      ],
      "key_times": [
-      1794221921291
+      1794238202378
      ],
      "observation": {
       "speech_raw": "    four spaces",

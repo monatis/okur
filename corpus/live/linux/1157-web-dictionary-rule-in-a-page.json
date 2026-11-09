@@ -7,23 +7,23 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "298f0c7c"
  },
  "trials": [
   {
    "trial_index": 1,
-   "trial_success": false,
+   "trial_success": true,
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794217123677
+     "t_ms": 1794238715460
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794217125045,
-     "t_end_ms": 1794217126049,
+     "t_start_ms": 1794238716825,
+     "t_end_ms": 1794238717829,
      "action": {
       "type": "key",
       "command": "Down"
@@ -32,7 +32,7 @@
       "Down"
      ],
      "key_times": [
-      1794217125045
+      1794238716825
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e The Accessibility Engine Specification",
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794217126049,
-     "t_end_ms": 1794217127053,
+     "t_start_ms": 1794238717830,
+     "t_end_ms": 1794238718833,
      "action": {
       "type": "key",
       "command": "Down"
@@ -52,7 +52,7 @@
       "Down"
      ],
      "key_times": [
-      1794217126049
+      1794238717830
      ],
      "observation": {
       "speech_raw": "The screen reader engine parses the document object model into a clean virtual buffer.",
@@ -62,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794217127053,
-     "t_end_ms": 1794217128257,
+     "t_start_ms": 1794238718833,
+     "t_end_ms": 1794238720038,
      "action": {
       "type": "key",
       "command": "Insert+D"
@@ -72,7 +72,7 @@
       "Insert+D"
      ],
      "key_times": [
-      1794217127053
+      1794238718833
      ],
      "observation": {
       "speech_raw": "New Dictionary \u001d dialog \u001e \nFile Name: \u001d Edit \u001e \ngoogle chrome\nType in text.",
@@ -82,56 +82,88 @@
     },
     {
      "step_id": "s4",
+     "t_start_ms": 1794238720038,
+     "t_end_ms": 1794238721243,
      "action": {
       "type": "key_ui_access",
       "command": "Enter"
      },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794238720038
+     ],
      "observation": {
-      "speech_raw": "",
-      "skipped": true
+      "speech_raw": "Document Reading Reference Fixture \u001d document \u001e \nDocument Reading Reference Fixture - Google Chrome\ngoogle chrome - Okur Dictionary Manager \u001d dialog \u001e \nAdd... \u001d Button \u001e \nTo activate press spacebar.",
+      "settled": true
      },
-     "step_success": false
+     "step_success": true
     },
     {
      "step_id": "s5",
+     "t_start_ms": 1794238721243,
+     "t_end_ms": 1794238722549,
      "action": {
       "type": "key_ui_access",
       "command": "Alt+A"
      },
+     "keys": [
+      "Alt+A"
+     ],
+     "key_times": [
+      1794238721243
+     ],
      "observation": {
-      "speech_raw": "",
-      "skipped": true
+      "speech_raw": "Add Dictionary Definition \u001d dialog \u001e \nActual Word: \u001d Edit \u001e \nThe\nType in text.",
+      "settled": true
      },
-     "step_success": false
+     "step_success": true
     },
     {
      "step_id": "s6",
+     "t_start_ms": 1794238722549,
+     "t_end_ms": 1794238723554,
      "action": {
       "type": "key_ui_access",
       "command": "Home"
      },
+     "keys": [
+      "Home"
+     ],
+     "key_times": [
+      1794238722549
+     ],
      "observation": {
       "speech_raw": "",
-      "skipped": true
+      "settled": true
      },
-     "step_success": false
+     "step_success": true
     },
     {
      "step_id": "s7",
+     "t_start_ms": 1794238723554,
+     "t_end_ms": 1794238724660,
      "action": {
       "type": "key_ui_access",
       "command": "Shift+End"
      },
+     "keys": [
+      "Shift+End"
+     ],
+     "key_times": [
+      1794238723554
+     ],
      "observation": {
-      "speech_raw": "",
-      "skipped": true
+      "speech_raw": "selected\nThe",
+      "settled": true
      },
-     "step_success": false
+     "step_success": true
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794217128257,
-     "t_end_ms": 1794217129264,
+     "t_start_ms": 1794238724660,
+     "t_end_ms": 1794238725668,
      "action": {
       "type": "jaws_function",
       "command": "TypeString(\"buffer\")"
@@ -145,12 +177,12 @@
       "r"
      ],
      "key_times": [
-      1794217128257,
-      1794217128258,
-      1794217128259,
-      1794217128259,
-      1794217128260,
-      1794217128261
+      1794238724660,
+      1794238724661,
+      1794238724662,
+      1794238724663,
+      1794238724664,
+      1794238724664
      ],
      "observation": {
       "speech_raw": "",
@@ -160,20 +192,28 @@
     },
     {
      "step_id": "s9",
+     "t_start_ms": 1794238725668,
+     "t_end_ms": 1794238726873,
      "action": {
       "type": "key_ui_access",
       "command": "Tab"
      },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794238725668
+     ],
      "observation": {
-      "speech_raw": "",
-      "skipped": true
+      "speech_raw": "Replacement Word: \u001d Edit \u001e \nType in text.",
+      "settled": true
      },
-     "step_success": false
+     "step_success": true
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794217129264,
-     "t_end_ms": 1794217130271,
+     "t_start_ms": 1794238726873,
+     "t_end_ms": 1794238727883,
      "action": {
       "type": "jaws_function",
       "command": "TypeString(\"memory\")"
@@ -187,12 +227,12 @@
       "y"
      ],
      "key_times": [
-      1794217129264,
-      1794217129265,
-      1794217129265,
-      1794217129266,
-      1794217129267,
-      1794217129267
+      1794238726873,
+      1794238726874,
+      1794238726875,
+      1794238726876,
+      1794238726878,
+      1794238726880
      ],
      "observation": {
       "speech_raw": "",
@@ -202,44 +242,68 @@
     },
     {
      "step_id": "s11",
+     "t_start_ms": 1794238727883,
+     "t_end_ms": 1794238728987,
      "action": {
       "type": "key_ui_access",
       "command": "Enter"
      },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794238727883
+     ],
      "observation": {
-      "speech_raw": "",
-      "skipped": true
+      "speech_raw": "google chrome - Okur Dictionary Manager \u001d dialog \u001e \nAdd... \u001d Button \u001e \nTo activate press spacebar.",
+      "settled": true
      },
-     "step_success": false
+     "step_success": true
     },
     {
      "step_id": "s12",
+     "t_start_ms": 1794238728987,
+     "t_end_ms": 1794238729992,
      "action": {
       "type": "key_ui_access",
       "command": "Ctrl+S"
      },
+     "keys": [
+      "Ctrl+S"
+     ],
+     "key_times": [
+      1794238728987
+     ],
      "observation": {
       "speech_raw": "",
-      "skipped": true
+      "settled": true
      },
-     "step_success": false
+     "step_success": true
     },
     {
      "step_id": "s13",
+     "t_start_ms": 1794238729992,
+     "t_end_ms": 1794238730997,
      "action": {
       "type": "key_ui_access",
       "command": "Alt+F4"
      },
+     "keys": [
+      "Alt+F4"
+     ],
+     "key_times": [
+      1794238729992
+     ],
      "observation": {
       "speech_raw": "",
-      "skipped": true
+      "settled": true
      },
-     "step_success": false
+     "step_success": true
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794217130271,
-     "t_end_ms": 1794217131276,
+     "t_start_ms": 1794238730997,
+     "t_end_ms": 1794238732002,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -248,18 +312,18 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794217130271
+      1794238730997
      ],
      "observation": {
-      "speech_raw": "File Name:  \u001d Edit \u001e \nbuffermemory",
+      "speech_raw": "Add... \u001d Button \u001e ",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794217131276,
-     "t_end_ms": 1794217132580,
+     "t_start_ms": 1794238732002,
+     "t_end_ms": 1794238733005,
      "action": {
       "type": "key",
       "command": "Up"
@@ -268,18 +332,18 @@
       "Up"
      ],
      "key_times": [
-      1794217131276
+      1794238732002
      ],
      "observation": {
-      "speech_raw": "buffermemory",
+      "speech_raw": "",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794217132580,
-     "t_end_ms": 1794217133685,
+     "t_start_ms": 1794238733005,
+     "t_end_ms": 1794238734009,
      "action": {
       "type": "key",
       "command": "Down"
@@ -288,18 +352,18 @@
       "Down"
      ],
      "key_times": [
-      1794217132580
+      1794238733005
      ],
      "observation": {
-      "speech_raw": "OK \u001d Button \u001e \nTo activate press spacebar.",
+      "speech_raw": "",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794217133685,
-     "t_end_ms": 1794217134790,
+     "t_start_ms": 1794238734009,
+     "t_end_ms": 1794238735114,
      "action": {
       "type": "key",
       "command": "Insert+D"
@@ -308,102 +372,158 @@
       "Insert+D"
      ],
      "key_times": [
-      1794217133685
+      1794238734009
      ],
      "observation": {
-      "speech_raw": "New Dictionary \u001d dialog \u001e \nFile Name: \u001d Edit \u001e \ngoogle chrome\nType in text.",
+      "speech_raw": "google chrome - Okur Dictionary Manager \u001d dialog \u001e \nChange... \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s18",
+     "t_start_ms": 1794238735114,
+     "t_end_ms": 1794238736218,
      "action": {
       "type": "key_ui_access",
       "command": "Tab"
      },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794238735114
+     ],
      "observation": {
-      "speech_raw": "",
-      "skipped": true
+      "speech_raw": "Delete \u001d Button \u001e \nTo activate press spacebar.",
+      "settled": true
      },
-     "step_success": false
+     "step_success": true
     },
     {
      "step_id": "s19",
+     "t_start_ms": 1794238736218,
+     "t_end_ms": 1794238737323,
      "action": {
       "type": "key_ui_access",
       "command": "Tab"
      },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794238736218
+     ],
      "observation": {
-      "speech_raw": "",
-      "skipped": true
+      "speech_raw": "Add... \u001d Button \u001e \nTo activate press spacebar.",
+      "settled": true
      },
-     "step_success": false
+     "step_success": true
     },
     {
      "step_id": "s20",
+     "t_start_ms": 1794238737323,
+     "t_end_ms": 1794238738428,
      "action": {
       "type": "key_ui_access",
       "command": "Tab"
      },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794238737323
+     ],
      "observation": {
-      "speech_raw": "",
-      "skipped": true
+      "speech_raw": "Change... \u001d Button \u001e \nTo activate press spacebar.",
+      "settled": true
      },
-     "step_success": false
+     "step_success": true
     },
     {
      "step_id": "s21",
+     "t_start_ms": 1794238738428,
+     "t_end_ms": 1794238739733,
      "action": {
       "type": "key_ui_access",
       "command": "Space"
      },
+     "keys": [
+      "Space"
+     ],
+     "key_times": [
+      1794238738428
+     ],
      "observation": {
-      "speech_raw": "",
-      "skipped": true
+      "speech_raw": "Change Dictionary Definition \u001d dialog \u001e \nActual Word: \u001d Edit \u001e \nbuffer\nType in text.",
+      "settled": true
      },
-     "step_success": false
+     "step_success": true
     },
     {
      "step_id": "s22",
+     "t_start_ms": 1794238739733,
+     "t_end_ms": 1794238740837,
      "action": {
       "type": "key_ui_access",
       "command": "Space"
      },
+     "keys": [
+      "Space"
+     ],
+     "key_times": [
+      1794238739733
+     ],
      "observation": {
       "speech_raw": "",
-      "skipped": true
+      "settled": true
      },
-     "step_success": false
+     "step_success": true
     },
     {
      "step_id": "s23",
+     "t_start_ms": 1794238740837,
+     "t_end_ms": 1794238741842,
      "action": {
       "type": "key_ui_access",
       "command": "Ctrl+S"
      },
+     "keys": [
+      "Ctrl+S"
+     ],
+     "key_times": [
+      1794238740837
+     ],
      "observation": {
       "speech_raw": "",
-      "skipped": true
+      "settled": true
      },
-     "step_success": false
+     "step_success": true
     },
     {
      "step_id": "s24",
+     "t_start_ms": 1794238741842,
+     "t_end_ms": 1794238742847,
      "action": {
       "type": "key_ui_access",
       "command": "Alt+F4"
      },
+     "keys": [
+      "Alt+F4"
+     ],
+     "key_times": [
+      1794238741842
+     ],
      "observation": {
       "speech_raw": "",
-      "skipped": true
+      "settled": true
      },
-     "step_success": false
+     "step_success": true
     },
     {
      "step_id": "s25",
-     "t_start_ms": 1794217134790,
-     "t_end_ms": 1794217135795,
+     "t_start_ms": 1794238742847,
+     "t_end_ms": 1794238743852,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -412,10 +532,10 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794217134790
+      1794238742847
      ],
      "observation": {
-      "speech_raw": "File Name:  \u001d Edit \u001e \ngoogle chrome",
+      "speech_raw": "Actual Word:  \u001d Edit \u001e ",
       "settled": true
      },
      "step_success": true

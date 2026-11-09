@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "298f0c7c"
  },
  "trials": [
   {
@@ -16,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794225297511
+     "t_ms": 1794237591211
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794225297871
+     "t_ms": 1794237591564
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794225299176,
-     "t_end_ms": 1794225300381,
+     "t_start_ms": 1794237592870,
+     "t_end_ms": 1794237594175,
      "action": {
       "type": "key",
       "command": "Insert+F5"
@@ -36,7 +36,7 @@
       "Insert+F5"
      ],
      "key_times": [
-      1794225299176
+      1794237592870
      ],
      "observation": {
       "speech_raw": "Select a Form Field \u001d dialog \u001e \nList1 \u001d List view \u001e \nNext slide Button\n1 of 10\nTo move to items use the Arrow keys.",
@@ -46,8 +46,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794225300381,
-     "t_end_ms": 1794225301585,
+     "t_start_ms": 1794237594176,
+     "t_end_ms": 1794237595379,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -56,7 +56,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794225300381
+      1794237594176
      ],
      "observation": {
       "speech_raw": "Wrap check box not checked\n2 of 10",
@@ -66,8 +66,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794225301585,
-     "t_end_ms": 1794225302789,
+     "t_start_ms": 1794237595379,
+     "t_end_ms": 1794237596483,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -76,7 +76,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794225301585
+      1794237595379
      ],
      "observation": {
       "speech_raw": "Outline Button\n3 of 10",
@@ -86,8 +86,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794225302789,
-     "t_end_ms": 1794225303893,
+     "t_start_ms": 1794237596483,
+     "t_end_ms": 1794237597587,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -96,7 +96,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794225302789
+      1794237596483
      ],
      "observation": {
       "speech_raw": "Actions Button\n4 of 10",
@@ -106,8 +106,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794225303893,
-     "t_end_ms": 1794225304997,
+     "t_start_ms": 1794237597587,
+     "t_end_ms": 1794237598691,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -116,7 +116,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794225303893
+      1794237597587
      ],
      "observation": {
       "speech_raw": "Pick one Button\n5 of 10",
@@ -126,8 +126,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794225304997,
-     "t_end_ms": 1794225306202,
+     "t_start_ms": 1794237598691,
+     "t_end_ms": 1794237599896,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -136,7 +136,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794225304997
+      1794237598691
      ],
      "observation": {
       "speech_raw": "Fruit edit combo\n6 of 10",
@@ -146,8 +146,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794225306202,
-     "t_end_ms": 1794225307406,
+     "t_start_ms": 1794237599896,
+     "t_end_ms": 1794237601100,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -156,7 +156,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794225306202
+      1794237599896
      ],
      "observation": {
       "speech_raw": "Start Button\n7 of 10",
@@ -166,8 +166,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794225307406,
-     "t_end_ms": 1794225308611,
+     "t_start_ms": 1794237601100,
+     "t_end_ms": 1794237602305,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -176,7 +176,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794225307406
+      1794237601100
      ],
      "observation": {
       "speech_raw": "Notes Edit the lazy dog, then reads std::io again\n8 of 10",
@@ -186,8 +186,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794225308611,
-     "t_end_ms": 1794225309816,
+     "t_start_ms": 1794237602305,
+     "t_end_ms": 1794237603510,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -196,7 +196,7 @@
       "Enter"
      ],
      "key_times": [
-      1794225308611
+      1794237602305
      ],
      "observation": {
       "speech_raw": "Web App Patterns\n \u001d Edit \u001e the lazy dog, then reads std::io again\nNotes  \u001d edit \u001e \nthe lazy dog, then reads std::io again\nNotes \u001d edit \u001e \nContains text",
@@ -206,8 +206,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794225309816,
-     "t_end_ms": 1794225310921,
+     "t_start_ms": 1794237603510,
+     "t_end_ms": 1794237604614,
      "action": {
       "type": "key",
       "command": "Down"
@@ -216,7 +216,7 @@
       "Down"
      ],
      "key_times": [
-      1794225309816
+      1794237603510
      ],
      "observation": {
       "speech_raw": "the lazy dog, then reads std::io again",
@@ -226,8 +226,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794225310921,
-     "t_end_ms": 1794225311925,
+     "t_start_ms": 1794237604614,
+     "t_end_ms": 1794237605619,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -236,7 +236,7 @@
       "Escape"
      ],
      "key_times": [
-      1794225310921
+      1794237604614
      ],
      "observation": {
       "speech_raw": "virtual PC",
@@ -246,8 +246,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794225311925,
-     "t_end_ms": 1794225312930,
+     "t_start_ms": 1794237605619,
+     "t_end_ms": 1794237606623,
      "action": {
       "type": "key",
       "command": "Down"
@@ -256,7 +256,7 @@
       "Down"
      ],
      "key_times": [
-      1794225311925
+      1794237605619
      ],
      "observation": {
       "speech_raw": " \u001d heading level 2 \u001e Repository files",

@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "298f0c7c"
  },
  "trials": [
   {
@@ -16,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794219696025
+     "t_ms": 1794237208917
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794219696383
+     "t_ms": 1794237209274
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794219697688,
-     "t_end_ms": 1794219698893,
+     "t_start_ms": 1794237210579,
+     "t_end_ms": 1794237211883,
      "action": {
       "type": "key",
       "command": "Insert+F5"
@@ -36,7 +36,7 @@
       "Insert+F5"
      ],
      "key_times": [
-      1794219697688
+      1794237210579
      ],
      "observation": {
       "speech_raw": "Select a Form Field \u001d dialog \u001e \nList1 \u001d List view \u001e \nNext slide Button\n1 of 10\nTo move to items use the Arrow keys.",
@@ -46,8 +46,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794219698893,
-     "t_end_ms": 1794219699997,
+     "t_start_ms": 1794237211883,
+     "t_end_ms": 1794237212987,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -56,7 +56,7 @@
       "Tab"
      ],
      "key_times": [
-      1794219698893
+      1794237211883
      ],
      "observation": {
       "speech_raw": "OK \u001d Button \u001e \nTo activate press spacebar.",
@@ -66,8 +66,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794219699997,
-     "t_end_ms": 1794219701101,
+     "t_start_ms": 1794237212987,
+     "t_end_ms": 1794237214091,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -76,7 +76,7 @@
       "Tab"
      ],
      "key_times": [
-      1794219699997
+      1794237212987
      ],
      "observation": {
       "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
@@ -86,8 +86,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794219701101,
-     "t_end_ms": 1794219702306,
+     "t_start_ms": 1794237214091,
+     "t_end_ms": 1794237215295,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -96,7 +96,7 @@
       "Tab"
      ],
      "key_times": [
-      1794219701101
+      1794237214091
      ],
      "observation": {
       "speech_raw": "List1 \u001d List view \u001e \nNext slide Button\n1 of 10\nTo move to items use the Arrow keys.",
@@ -106,8 +106,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794219702306,
-     "t_end_ms": 1794219703411,
+     "t_start_ms": 1794237215295,
+     "t_end_ms": 1794237216400,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -116,7 +116,7 @@
       "Tab"
      ],
      "key_times": [
-      1794219702306
+      1794237215295
      ],
      "observation": {
       "speech_raw": "OK \u001d Button \u001e \nTo activate press spacebar.",
@@ -126,8 +126,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794219703411,
-     "t_end_ms": 1794219704515,
+     "t_start_ms": 1794237216400,
+     "t_end_ms": 1794237217504,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -136,7 +136,7 @@
       "Tab"
      ],
      "key_times": [
-      1794219703411
+      1794237216400
      ],
      "observation": {
       "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
@@ -146,8 +146,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794219704515,
-     "t_end_ms": 1794219705620,
+     "t_start_ms": 1794237217504,
+     "t_end_ms": 1794237218608,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -156,7 +156,7 @@
       "Tab"
      ],
      "key_times": [
-      1794219704515
+      1794237217504
      ],
      "observation": {
       "speech_raw": "List1 \u001d List view \u001e \nNext slide Button\n1 of 10\nTo move to items use the Arrow keys.",
@@ -166,8 +166,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794219705620,
-     "t_end_ms": 1794219706824,
+     "t_start_ms": 1794237218608,
+     "t_end_ms": 1794237219812,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -176,7 +176,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794219705620
+      1794237218608
      ],
      "observation": {
       "speech_raw": "Wrap check box not checked\n2 of 10",
@@ -186,8 +186,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794219706824,
-     "t_end_ms": 1794219707929,
+     "t_start_ms": 1794237219812,
+     "t_end_ms": 1794237221016,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -196,7 +196,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794219706824
+      1794237219812
      ],
      "observation": {
       "speech_raw": "Outline Button\n3 of 10",
@@ -206,8 +206,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794219707929,
-     "t_end_ms": 1794219709133,
+     "t_start_ms": 1794237221017,
+     "t_end_ms": 1794237222321,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -216,7 +216,7 @@
       "Enter"
      ],
      "key_times": [
-      1794219707929
+      1794237221017
      ],
      "observation": {
       "speech_raw": "Web App Patterns\nOutline \u001d button menu \u001e \nOutline  \u001d button menu \u001e \nPress space to activate the menu, then navigate with arrow keys",
@@ -226,8 +226,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794219709133,
-     "t_end_ms": 1794219710137,
+     "t_start_ms": 1794237222321,
+     "t_end_ms": 1794237223326,
      "action": {
       "type": "key",
       "command": "Down"
@@ -236,7 +236,7 @@
       "Down"
      ],
      "key_times": [
-      1794219709133
+      1794237222321
      ],
      "observation": {
       "speech_raw": "Actions \u001d button menu \u001e  \u001dcollapsed\u001e ",

@@ -7,23 +7,23 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "298f0c7c"
  },
  "trials": [
   {
    "trial_index": 1,
-   "trial_success": false,
+   "trial_success": true,
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794217093219
+     "t_ms": 1794238682974
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794217094584,
-     "t_end_ms": 1794217095688,
+     "t_start_ms": 1794238684340,
+     "t_end_ms": 1794238685445,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -32,7 +32,7 @@
       "Tab"
      ],
      "key_times": [
-      1794217094584
+      1794238684340
      ],
      "observation": {
       "speech_raw": "Spelling Fields Fixture\nChecked \u001d Edit \u001e \nblank\nType in text.",
@@ -42,20 +42,32 @@
     },
     {
      "step_id": "s2",
+     "t_start_ms": 1794238685445,
+     "t_end_ms": 1794238686450,
      "action": {
       "type": "text",
       "command": "abc"
      },
+     "keys": [
+      "a",
+      "b",
+      "c"
+     ],
+     "key_times": [
+      1794238685445,
+      1794238685446,
+      1794238685446
+     ],
      "observation": {
       "speech_raw": "",
-      "skipped": true
+      "settled": true
      },
-     "step_success": false
+     "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794217095688,
-     "t_end_ms": 1794217096692,
+     "t_start_ms": 1794238686450,
+     "t_end_ms": 1794238687453,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -64,18 +76,18 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794217095688
+      1794238686450
      ],
      "observation": {
-      "speech_raw": "Checked  \u001d Edit \u001e ",
+      "speech_raw": "Checked  \u001d Edit \u001e \nabc",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794217096692,
-     "t_end_ms": 1794217097795,
+     "t_start_ms": 1794238687453,
+     "t_end_ms": 1794238688558,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -84,7 +96,7 @@
       "Tab"
      ],
      "key_times": [
-      1794217096692
+      1794238687453
      ],
      "observation": {
       "speech_raw": "Unchecked \u001d Edit \u001e \nblank\nType in text.",
@@ -94,20 +106,32 @@
     },
     {
      "step_id": "s5",
+     "t_start_ms": 1794238688558,
+     "t_end_ms": 1794238689564,
      "action": {
       "type": "text",
       "command": "abc"
      },
+     "keys": [
+      "a",
+      "b",
+      "c"
+     ],
+     "key_times": [
+      1794238688558,
+      1794238688559,
+      1794238688560
+     ],
      "observation": {
       "speech_raw": "",
-      "skipped": true
+      "settled": true
      },
-     "step_success": false
+     "step_success": true
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794217097795,
-     "t_end_ms": 1794217098799,
+     "t_start_ms": 1794238689564,
+     "t_end_ms": 1794238690569,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -116,18 +140,18 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794217097795
+      1794238689564
      ],
      "observation": {
-      "speech_raw": "Unchecked  \u001d Edit \u001e ",
+      "speech_raw": "Unchecked  \u001d Edit \u001e \nabc",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794217098799,
-     "t_end_ms": 1794217099902,
+     "t_start_ms": 1794238690569,
+     "t_end_ms": 1794238691674,
      "action": {
       "type": "key",
       "command": "Shift+Tab"
@@ -136,18 +160,18 @@
       "Shift+Tab"
      ],
      "key_times": [
-      1794217098799
+      1794238690569
      ],
      "observation": {
-      "speech_raw": "Checked \u001d Edit \u001e \nblank\nType in text.",
+      "speech_raw": "Checked \u001d Edit \u001e \nabc\nType in text.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794217099902,
-     "t_end_ms": 1794217100906,
+     "t_start_ms": 1794238691674,
+     "t_end_ms": 1794238692679,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -156,10 +180,10 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794217099902
+      1794238691674
      ],
      "observation": {
-      "speech_raw": "Checked  \u001d Edit \u001e ",
+      "speech_raw": "Checked  \u001d Edit \u001e \nabc",
       "settled": true
      },
      "step_success": true

@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "298f0c7c"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794216958653
+     "t_ms": 1794238361990
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794216960021,
-     "t_end_ms": 1794216961025,
+     "t_start_ms": 1794238363354,
+     "t_end_ms": 1794238364358,
      "action": {
       "type": "key",
       "command": "E"
@@ -32,7 +32,7 @@
       "E"
      ],
      "key_times": [
-      1794216960021
+      1794238363354
      ],
      "observation": {
       "speech_raw": "City \u001d Edit \u001e \nIzmir",
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794216961025,
-     "t_end_ms": 1794216962130,
+     "t_start_ms": 1794238364358,
+     "t_end_ms": 1794238365463,
      "action": {
       "type": "key",
       "command": "Enter"
@@ -52,7 +52,7 @@
       "Enter"
      ],
      "key_times": [
-      1794216961025
+      1794238364358
      ],
      "observation": {
       "speech_raw": "Activation Fixture\nCity \u001d Edit \u001e \nIzmir\nType in text.",
@@ -62,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794216962130,
-     "t_end_ms": 1794216963234,
+     "t_start_ms": 1794238365463,
+     "t_end_ms": 1794238366567,
      "action": {
       "type": "key",
       "command": "End"
@@ -72,7 +72,7 @@
       "End"
      ],
      "key_times": [
-      1794216962130
+      1794238365463
      ],
      "observation": {
       "speech_raw": "\n",
@@ -82,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794216963234,
-     "t_end_ms": 1794216964239,
+     "t_start_ms": 1794238366567,
+     "t_end_ms": 1794238367571,
      "action": {
       "type": "key",
       "command": "Shift"
@@ -92,7 +92,7 @@
       "Shift"
      ],
      "key_times": [
-      1794216963234
+      1794238366567
      ],
      "observation": {
       "speech_raw": "",
@@ -102,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794216964239,
-     "t_end_ms": 1794216965243,
+     "t_start_ms": 1794238367571,
+     "t_end_ms": 1794238368575,
      "action": {
       "type": "key",
       "command": "Ctrl"
@@ -112,7 +112,7 @@
       "Ctrl"
      ],
      "key_times": [
-      1794216964239
+      1794238367571
      ],
      "observation": {
       "speech_raw": "",
@@ -122,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794216965243,
-     "t_end_ms": 1794216966248,
+     "t_start_ms": 1794238368575,
+     "t_end_ms": 1794238369580,
      "action": {
       "type": "key",
       "command": "F2"
@@ -132,7 +132,7 @@
       "F2"
      ],
      "key_times": [
-      1794216965243
+      1794238368575
      ],
      "observation": {
       "speech_raw": "",
@@ -142,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794216966248,
-     "t_end_ms": 1794216967252,
+     "t_start_ms": 1794238369580,
+     "t_end_ms": 1794238370584,
      "action": {
       "type": "key",
       "command": "Space"
@@ -152,7 +152,7 @@
       "Space"
      ],
      "key_times": [
-      1794216966248
+      1794238369580
      ],
      "observation": {
       "speech_raw": "",
@@ -162,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794216967252,
-     "t_end_ms": 1794216968256,
+     "t_start_ms": 1794238370584,
+     "t_end_ms": 1794238371589,
      "action": {
       "type": "key",
       "command": "A"
@@ -172,7 +172,7 @@
       "A"
      ],
      "key_times": [
-      1794216967252
+      1794238370584
      ],
      "observation": {
       "speech_raw": "",
@@ -182,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794216968256,
-     "t_end_ms": 1794216969361,
+     "t_start_ms": 1794238371589,
+     "t_end_ms": 1794238372693,
      "action": {
       "type": "key",
       "command": "Backspace"
@@ -192,7 +192,7 @@
       "Backspace"
      ],
      "key_times": [
-      1794216968256
+      1794238371589
      ],
      "observation": {
       "speech_raw": "a",
@@ -202,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794216969361,
-     "t_end_ms": 1794216970465,
+     "t_start_ms": 1794238372693,
+     "t_end_ms": 1794238373798,
      "action": {
       "type": "key",
       "command": "Backspace"
@@ -212,7 +212,7 @@
       "Backspace"
      ],
      "key_times": [
-      1794216969361
+      1794238372693
      ],
      "observation": {
       "speech_raw": "space",
@@ -222,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794216970465,
-     "t_end_ms": 1794216971469,
+     "t_start_ms": 1794238373798,
+     "t_end_ms": 1794238374802,
      "action": {
       "type": "key",
       "command": "Delete"
@@ -232,7 +232,7 @@
       "Delete"
      ],
      "key_times": [
-      1794216970465
+      1794238373798
      ],
      "observation": {
       "speech_raw": "",
@@ -242,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794216971469,
-     "t_end_ms": 1794216972474,
+     "t_start_ms": 1794238374802,
+     "t_end_ms": 1794238375806,
      "action": {
       "type": "key",
       "command": "PageDown"
@@ -252,7 +252,7 @@
       "PageDown"
      ],
      "key_times": [
-      1794216971469
+      1794238374802
      ],
      "observation": {
       "speech_raw": "",
@@ -262,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794216972474,
-     "t_end_ms": 1794216973578,
+     "t_start_ms": 1794238375806,
+     "t_end_ms": 1794238376910,
      "action": {
       "type": "key",
       "command": "Home"
@@ -272,7 +272,7 @@
       "Home"
      ],
      "key_times": [
-      1794216972474
+      1794238375806
      ],
      "observation": {
       "speech_raw": "I",
@@ -282,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794216973578,
-     "t_end_ms": 1794216974583,
+     "t_start_ms": 1794238376910,
+     "t_end_ms": 1794238377914,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -292,7 +292,7 @@
       "Escape"
      ],
      "key_times": [
-      1794216973578
+      1794238376910
      ],
      "observation": {
       "speech_raw": "virtual PC Cursor",

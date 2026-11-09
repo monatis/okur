@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "298f0c7c"
  },
  "trials": [
   {
@@ -16,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794231237105
+     "t_ms": 1794238514191
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794231237464
+     "t_ms": 1794238514551
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794231238770,
-     "t_end_ms": 1794231239874,
+     "t_start_ms": 1794238515856,
+     "t_end_ms": 1794238516961,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -36,7 +36,7 @@
       "Tab"
      ],
      "key_times": [
-      1794231238770
+      1794238515856
      ],
      "observation": {
       "speech_raw": "Progress Bars Fixture\nStart upload  \u001d Button \u001e \nTo activate press Enter.",
@@ -46,8 +46,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794231239874,
-     "t_end_ms": 1794231262940,
+     "t_start_ms": 1794238516961,
+     "t_end_ms": 1794238540029,
      "action": {
       "type": "key",
       "command": "Enter"
@@ -56,7 +56,7 @@
       "Enter"
      ],
      "key_times": [
-      1794231239874
+      1794238516961
      ],
      "observation": {
       "speech_raw": "10\n40\n100",
@@ -66,8 +66,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794231262940,
-     "t_end_ms": 1794231263944,
+     "t_start_ms": 1794238540029,
+     "t_end_ms": 1794238541033,
      "action": {
       "type": "key",
       "command": "Down"
@@ -76,7 +76,7 @@
       "Down"
      ],
      "key_times": [
-      1794231262940
+      1794238540029
      ],
      "observation": {
       "speech_raw": "Upload",
@@ -86,8 +86,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794231263944,
-     "t_end_ms": 1794231264948,
+     "t_start_ms": 1794238541034,
+     "t_end_ms": 1794238542038,
      "action": {
       "type": "key",
       "command": "Down"
@@ -96,7 +96,7 @@
       "Down"
      ],
      "key_times": [
-      1794231263944
+      1794238541034
      ],
      "observation": {
       "speech_raw": "100 \u001d Progress bar \u001e ",
@@ -106,8 +106,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794231264948,
-     "t_end_ms": 1794231265953,
+     "t_start_ms": 1794238542038,
+     "t_end_ms": 1794238543042,
      "action": {
       "type": "key",
       "command": "Down"
@@ -116,7 +116,7 @@
       "Down"
      ],
      "key_times": [
-      1794231264948
+      1794238542038
      ],
      "observation": {
       "speech_raw": "Sync",

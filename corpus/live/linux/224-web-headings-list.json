@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "298f0c7c"
  },
  "trials": [
   {
@@ -16,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794219658899
+     "t_ms": 1794237172016
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794219659264
+     "t_ms": 1794237172374
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794219660569,
-     "t_end_ms": 1794219661874,
+     "t_start_ms": 1794237173679,
+     "t_end_ms": 1794237174984,
      "action": {
       "type": "key",
       "command": "Insert+F6"
@@ -36,7 +36,7 @@
       "Insert+F6"
      ],
      "key_times": [
-      1794219660569
+      1794237173679
      ],
      "observation": {
       "speech_raw": "Heading List \u001d dialog \u001e \nheadings \u001d List view \u001e \nWeb App Patterns : 1\n1 of 10\nTo move to items use the Arrow keys.",
@@ -46,8 +46,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794219661874,
-     "t_end_ms": 1794219662978,
+     "t_start_ms": 1794237174984,
+     "t_end_ms": 1794237176088,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -56,47 +56,7 @@
       "Tab"
      ],
      "key_times": [
-      1794219661874
-     ],
-     "observation": {
-      "speech_raw": "Sort Headings\nIn Tab Order \u001d radio button \u001e  \u001dchecked\u001e \n1 of 2\nTo change the selection press Up or Down Arrow.",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
-     "step_id": "s3",
-     "t_start_ms": 1794219662978,
-     "t_end_ms": 1794219664183,
-     "action": {
-      "type": "jaws_function",
-      "command": "TypeKey(\"Tab\")"
-     },
-     "keys": [
-      "Tab"
-     ],
-     "key_times": [
-      1794219662978
-     ],
-     "observation": {
-      "speech_raw": "Display\nAll Headings \u001d radio button \u001e  \u001dchecked\u001e \n1 of 7\nTo change the selection press Up or Down Arrow.",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
-     "step_id": "s4",
-     "t_start_ms": 1794219664183,
-     "t_end_ms": 1794219665287,
-     "action": {
-      "type": "jaws_function",
-      "command": "TypeKey(\"Tab\")"
-     },
-     "keys": [
-      "Tab"
-     ],
-     "key_times": [
-      1794219664183
+      1794237174984
      ],
      "observation": {
       "speech_raw": "Move To Heading \u001d Button \u001e \nTo activate press spacebar.",
@@ -105,9 +65,9 @@
      "step_success": true
     },
     {
-     "step_id": "s5",
-     "t_start_ms": 1794219665287,
-     "t_end_ms": 1794219666391,
+     "step_id": "s3",
+     "t_start_ms": 1794237176088,
+     "t_end_ms": 1794237177191,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -116,7 +76,7 @@
       "Tab"
      ],
      "key_times": [
-      1794219665287
+      1794237176088
      ],
      "observation": {
       "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
@@ -125,9 +85,9 @@
      "step_success": true
     },
     {
-     "step_id": "s6",
-     "t_start_ms": 1794219666391,
-     "t_end_ms": 1794219667596,
+     "step_id": "s4",
+     "t_start_ms": 1794237177191,
+     "t_end_ms": 1794237178295,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -136,7 +96,47 @@
       "Tab"
      ],
      "key_times": [
-      1794219666391
+      1794237177191
+     ],
+     "observation": {
+      "speech_raw": "Sort Headings\nIn Tab Order \u001d radio button \u001e  \u001dchecked\u001e \n1 of 2\nTo change the selection press Up or Down Arrow.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794237178295,
+     "t_end_ms": 1794237179500,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794237178295
+     ],
+     "observation": {
+      "speech_raw": "Display\nAll Headings \u001d radio button \u001e  \u001dchecked\u001e \n1 of 7\nTo change the selection press Up or Down Arrow.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794237179500,
+     "t_end_ms": 1794237180704,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794237179500
      ],
      "observation": {
       "speech_raw": "headings \u001d List view \u001e \nWeb App Patterns : 1\n1 of 10\nTo move to items use the Arrow keys.",
@@ -146,8 +146,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794219667596,
-     "t_end_ms": 1794219668701,
+     "t_start_ms": 1794237180704,
+     "t_end_ms": 1794237181808,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -156,7 +156,27 @@
       "Tab"
      ],
      "key_times": [
-      1794219667596
+      1794237180704
+     ],
+     "observation": {
+      "speech_raw": "Move To Heading \u001d Button \u001e \nTo activate press spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794237181808,
+     "t_end_ms": 1794237182912,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794237181808
      ],
      "observation": {
       "speech_raw": "Sort Headings\nIn Tab Order \u001d radio button \u001e  \u001dchecked\u001e \n1 of 2\nTo change the selection press Up or Down Arrow.",
@@ -165,9 +185,9 @@
      "step_success": true
     },
     {
-     "step_id": "s8",
-     "t_start_ms": 1794219668701,
-     "t_end_ms": 1794219669905,
+     "step_id": "s9",
+     "t_start_ms": 1794237182912,
+     "t_end_ms": 1794237184016,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -176,7 +196,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794219668701
+      1794237182912
      ],
      "observation": {
       "speech_raw": "Alphabetically \u001d radio button \u001e  \u001dchecked\u001e \n2 of 2\nTo change the selection press Up or Down Arrow.",
@@ -185,29 +205,9 @@
      "step_success": true
     },
     {
-     "step_id": "s9",
-     "t_start_ms": 1794219669905,
-     "t_end_ms": 1794219671110,
-     "action": {
-      "type": "jaws_function",
-      "command": "TypeKey(\"DownArrow\")"
-     },
-     "keys": [
-      "DownArrow"
-     ],
-     "key_times": [
-      1794219669905
-     ],
-     "observation": {
-      "speech_raw": "Display\nAll Headings \u001d radio button \u001e  \u001dchecked\u001e \n1 of 7\nTo change the selection press Up or Down Arrow.",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
      "step_id": "s10",
-     "t_start_ms": 1794219671110,
-     "t_end_ms": 1794219672114,
+     "t_start_ms": 1794237184016,
+     "t_end_ms": 1794237185021,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -216,7 +216,7 @@
       "Enter"
      ],
      "key_times": [
-      1794219671110
+      1794237184016
      ],
      "observation": {
       "speech_raw": "",
@@ -226,8 +226,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794219672114,
-     "t_end_ms": 1794219673318,
+     "t_start_ms": 1794237185021,
+     "t_end_ms": 1794237186225,
      "action": {
       "type": "key",
       "command": "Down"
@@ -236,10 +236,10 @@
       "Down"
      ],
      "key_times": [
-      1794219672114
+      1794237185021
      ],
      "observation": {
-      "speech_raw": "Level 1 Headings \u001d radio button \u001e  \u001dchecked\u001e \n2 of 7\nTo change the selection press Up or Down Arrow.",
+      "speech_raw": "Display\nAll Headings \u001d radio button \u001e  \u001dchecked\u001e \n1 of 7\nTo change the selection press Up or Down Arrow.",
       "settled": true
      },
      "step_success": true

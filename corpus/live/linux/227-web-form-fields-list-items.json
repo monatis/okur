@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "298f0c7c"
  },
  "trials": [
   {
@@ -16,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794219762201
+     "t_ms": 1794237276259
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794219762559
+     "t_ms": 1794237276621
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794219763864,
-     "t_end_ms": 1794219764869,
+     "t_start_ms": 1794237277926,
+     "t_end_ms": 1794237279231,
      "action": {
       "type": "key",
       "command": "Insert+F5"
@@ -36,18 +36,18 @@
       "Insert+F5"
      ],
      "key_times": [
-      1794219763864
+      1794237277926
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Select a Form Field \u001d dialog \u001e \nList1 \u001d List view \u001e \nNext slide Button\n1 of 10\nTo move to items use the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794219764869,
-     "t_end_ms": 1794219766074,
+     "t_start_ms": 1794237279231,
+     "t_end_ms": 1794237280436,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -56,18 +56,18 @@
       "DownArrow"
      ],
      "key_times": [
-      1794219764869
+      1794237279231
      ],
      "observation": {
-      "speech_raw": "Select a Form Field \u001d dialog \u001e \nList1 \u001d List view \u001e \nWrap check box not checked\n2 of 10\nTo move to items use the Arrow keys.",
+      "speech_raw": "Wrap check box not checked\n2 of 10",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794219766074,
-     "t_end_ms": 1794219767278,
+     "t_start_ms": 1794237280436,
+     "t_end_ms": 1794237281640,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -76,7 +76,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794219766074
+      1794237280436
      ],
      "observation": {
       "speech_raw": "Outline Button\n3 of 10",
@@ -86,8 +86,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794219767278,
-     "t_end_ms": 1794219768482,
+     "t_start_ms": 1794237281640,
+     "t_end_ms": 1794237282844,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -96,7 +96,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794219767278
+      1794237281640
      ],
      "observation": {
       "speech_raw": "Actions Button\n4 of 10",
@@ -106,8 +106,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794219768482,
-     "t_end_ms": 1794219769686,
+     "t_start_ms": 1794237282844,
+     "t_end_ms": 1794237284048,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -116,7 +116,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794219768482
+      1794237282844
      ],
      "observation": {
       "speech_raw": "Pick one Button\n5 of 10",
@@ -126,8 +126,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794219769686,
-     "t_end_ms": 1794219770890,
+     "t_start_ms": 1794237284048,
+     "t_end_ms": 1794237285252,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -136,7 +136,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794219769686
+      1794237284048
      ],
      "observation": {
       "speech_raw": "Fruit edit combo\n6 of 10",
@@ -146,8 +146,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794219770890,
-     "t_end_ms": 1794219772094,
+     "t_start_ms": 1794237285252,
+     "t_end_ms": 1794237286456,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -156,7 +156,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794219770890
+      1794237285252
      ],
      "observation": {
       "speech_raw": "Start Button\n7 of 10",
@@ -166,8 +166,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794219772094,
-     "t_end_ms": 1794219773298,
+     "t_start_ms": 1794237286456,
+     "t_end_ms": 1794237287761,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -176,7 +176,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794219772094
+      1794237286456
      ],
      "observation": {
       "speech_raw": "Notes Edit the lazy dog, then reads std::io again\n8 of 10",
@@ -186,8 +186,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794219773298,
-     "t_end_ms": 1794219774503,
+     "t_start_ms": 1794237287761,
+     "t_end_ms": 1794237288965,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -196,7 +196,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794219773298
+      1794237287761
      ],
      "observation": {
       "speech_raw": "First tool Button\n9 of 10",
@@ -206,8 +206,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794219774503,
-     "t_end_ms": 1794219775607,
+     "t_start_ms": 1794237288965,
+     "t_end_ms": 1794237290170,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -216,7 +216,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794219774503
+      1794237288965
      ],
      "observation": {
       "speech_raw": "Second tool Button\n10 of 10",
@@ -226,8 +226,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794219775607,
-     "t_end_ms": 1794219776711,
+     "t_start_ms": 1794237290170,
+     "t_end_ms": 1794237291274,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Escape\")"
@@ -236,7 +236,7 @@
       "Escape"
      ],
      "key_times": [
-      1794219775607
+      1794237290170
      ],
      "observation": {
       "speech_raw": "Web App Patterns \u001d document \u001e ",

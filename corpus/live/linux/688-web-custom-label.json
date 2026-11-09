@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "298f0c7c"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794228452658
+     "t_ms": 1794237705936
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794228454016,
-     "t_end_ms": 1794228455021,
+     "t_start_ms": 1794237707301,
+     "t_end_ms": 1794237708304,
      "action": {
       "type": "key",
       "command": "Insert+F2"
@@ -32,7 +32,7 @@
       "Insert+F2"
      ],
      "key_times": [
-      1794228454016
+      1794237707301
      ],
      "observation": {
       "speech_raw": "",
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794228455022,
-     "t_end_ms": 1794228456025,
+     "t_start_ms": 1794237708305,
+     "t_end_ms": 1794237709308,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -52,7 +52,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794228455022
+      1794237708305
      ],
      "observation": {
       "speech_raw": "main region",
@@ -62,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794228456025,
-     "t_end_ms": 1794228457029,
+     "t_start_ms": 1794237709308,
+     "t_end_ms": 1794237710313,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -72,7 +72,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794228456025
+      1794237709308
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e Book pickup",
@@ -82,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794228457029,
-     "t_end_ms": 1794228458032,
+     "t_start_ms": 1794237710313,
+     "t_end_ms": 1794237711317,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -92,7 +92,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794228457029
+      1794237710313
      ],
      "observation": {
       "speech_raw": "Branch",
@@ -102,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794228458032,
-     "t_end_ms": 1794228459036,
+     "t_start_ms": 1794237711317,
+     "t_end_ms": 1794237712320,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -112,7 +112,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794228458032
+      1794237711317
      ],
      "observation": {
       "speech_raw": " \u001d Edit \u001e ",
@@ -122,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794228459036,
-     "t_end_ms": 1794228460140,
+     "t_start_ms": 1794237712320,
+     "t_end_ms": 1794237713424,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -132,7 +132,7 @@
       "Enter"
      ],
      "key_times": [
-      1794228459036
+      1794237712320
      ],
      "observation": {
       "speech_raw": "Book Pickup - Riverside Library\n \u001d MainRegion \u001e \n \u001d FormRegion \u001e \nBranch \u001d Edit \u001e \nblank\nType in text.",
@@ -142,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794228460140,
-     "t_end_ms": 1794228461144,
+     "t_start_ms": 1794237713424,
+     "t_end_ms": 1794237714429,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -152,7 +152,7 @@
       "Enter"
      ],
      "key_times": [
-      1794228460140
+      1794237713424
      ],
      "observation": {
       "speech_raw": "",
@@ -162,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794228461144,
-     "t_end_ms": 1794228462149,
+     "t_start_ms": 1794237714429,
+     "t_end_ms": 1794237715433,
      "action": {
       "type": "key",
       "command": "E"
@@ -172,7 +172,7 @@
       "E"
      ],
      "key_times": [
-      1794228461145
+      1794237714429
      ],
      "observation": {
       "speech_raw": "",
@@ -182,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794228462149,
-     "t_end_ms": 1794228463355,
+     "t_start_ms": 1794237715433,
+     "t_end_ms": 1794237716639,
      "action": {
       "type": "key",
       "command": "Insert+Ctrl+Tab"
@@ -192,7 +192,7 @@
       "Insert+Ctrl+Tab"
      ],
      "key_times": [
-      1794228462149
+      1794237715433
      ],
      "observation": {
       "speech_raw": "Custom Label \u001d dialog \u001e \nEnter a custom label for this item \u001d Edit \u001e \nType in text.",
@@ -202,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794228463355,
-     "t_end_ms": 1794228464359,
+     "t_start_ms": 1794237716639,
+     "t_end_ms": 1794237717744,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"l\")"
@@ -212,7 +212,7 @@
       "l"
      ],
      "key_times": [
-      1794228463355
+      1794237716639
      ],
      "observation": {
       "speech_raw": "",
@@ -222,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794228464359,
-     "t_end_ms": 1794228465363,
+     "t_start_ms": 1794237717744,
+     "t_end_ms": 1794237718748,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"a\")"
@@ -232,7 +232,7 @@
       "a"
      ],
      "key_times": [
-      1794228464359
+      1794237717744
      ],
      "observation": {
       "speech_raw": "",
@@ -242,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794228465363,
-     "t_end_ms": 1794228466368,
+     "t_start_ms": 1794237718748,
+     "t_end_ms": 1794237719752,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"m\")"
@@ -252,7 +252,7 @@
       "m"
      ],
      "key_times": [
-      1794228465363
+      1794237718748
      ],
      "observation": {
       "speech_raw": "",
@@ -262,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794228466368,
-     "t_end_ms": 1794228467372,
+     "t_start_ms": 1794237719752,
+     "t_end_ms": 1794237720757,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"p\")"
@@ -272,7 +272,7 @@
       "p"
      ],
      "key_times": [
-      1794228466368
+      1794237719752
      ],
      "observation": {
       "speech_raw": "",
@@ -282,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794228467372,
-     "t_end_ms": 1794228468376,
+     "t_start_ms": 1794237720757,
+     "t_end_ms": 1794237721761,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -292,7 +292,7 @@
       "Enter"
      ],
      "key_times": [
-      1794228467372
+      1794237720757
      ],
      "observation": {
       "speech_raw": "",
@@ -302,8 +302,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794228468376,
-     "t_end_ms": 1794228469381,
+     "t_start_ms": 1794237721761,
+     "t_end_ms": 1794237722766,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -312,7 +312,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794228468376
+      1794237721761
      ],
      "observation": {
       "speech_raw": "lamp \u001d Edit \u001e \ne",
@@ -322,8 +322,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794228469381,
-     "t_end_ms": 1794228470386,
+     "t_start_ms": 1794237722766,
+     "t_end_ms": 1794237723771,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -332,7 +332,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794228469381
+      1794237722766
      ],
      "observation": {
       "speech_raw": "Book Pickup - Riverside Library",
@@ -342,8 +342,8 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794228470386,
-     "t_end_ms": 1794228471390,
+     "t_start_ms": 1794237723771,
+     "t_end_ms": 1794237724775,
      "action": {
       "type": "key",
       "command": "E"
@@ -352,7 +352,7 @@
       "E"
      ],
      "key_times": [
-      1794228470386
+      1794237723771
      ],
      "observation": {
       "speech_raw": "lamp \u001d Edit \u001e \ne",
@@ -362,8 +362,8 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794228471390,
-     "t_end_ms": 1794228472595,
+     "t_start_ms": 1794237724775,
+     "t_end_ms": 1794237725980,
      "action": {
       "type": "key",
       "command": "Insert+F5"
@@ -372,7 +372,7 @@
       "Insert+F5"
      ],
      "key_times": [
-      1794228471390
+      1794237724775
      ],
      "observation": {
       "speech_raw": "Select a Form Field \u001d dialog \u001e \nList1 \u001d List view \u001e \nlamp Edit e\n1 of 2\nTo move to items use the Arrow keys.",
@@ -382,8 +382,8 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794228472595,
-     "t_end_ms": 1794228473699,
+     "t_start_ms": 1794237725980,
+     "t_end_ms": 1794237727086,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Escape\")"
@@ -392,7 +392,7 @@
       "Escape"
      ],
      "key_times": [
-      1794228472595
+      1794237725980
      ],
      "observation": {
       "speech_raw": "lamp \u001d Edit \u001e \ne",
@@ -402,8 +402,8 @@
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794228473699,
-     "t_end_ms": 1794228474704,
+     "t_start_ms": 1794237727086,
+     "t_end_ms": 1794237728091,
      "action": {
       "type": "key",
       "command": "Insert+F2"
@@ -412,7 +412,7 @@
       "Insert+F2"
      ],
      "key_times": [
-      1794228473699
+      1794237727086
      ],
      "observation": {
       "speech_raw": "",
@@ -422,8 +422,8 @@
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794228474704,
-     "t_end_ms": 1794228475708,
+     "t_start_ms": 1794237728091,
+     "t_end_ms": 1794237729095,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -432,7 +432,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794228474704
+      1794237728091
      ],
      "observation": {
       "speech_raw": "Reserve \u001d Button \u001e ",
@@ -442,8 +442,8 @@
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794228475708,
-     "t_end_ms": 1794228476713,
+     "t_start_ms": 1794237729095,
+     "t_end_ms": 1794237730100,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -452,7 +452,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794228475708
+      1794237729095
      ],
      "observation": {
       "speech_raw": "main region end",
@@ -462,8 +462,8 @@
     },
     {
      "step_id": "s23",
-     "t_start_ms": 1794228476713,
-     "t_end_ms": 1794228477817,
+     "t_start_ms": 1794237730100,
+     "t_end_ms": 1794237731103,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -472,7 +472,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794228476713
+      1794237730100
      ],
      "observation": {
       "speech_raw": "main region end",
@@ -482,8 +482,8 @@
     },
     {
      "step_id": "s24",
-     "t_start_ms": 1794228477817,
-     "t_end_ms": 1794228478821,
+     "t_start_ms": 1794237731103,
+     "t_end_ms": 1794237732108,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -492,7 +492,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794228477817
+      1794237731103
      ],
      "observation": {
       "speech_raw": "main region end",
@@ -502,8 +502,8 @@
     },
     {
      "step_id": "s25",
-     "t_start_ms": 1794228478821,
-     "t_end_ms": 1794228479825,
+     "t_start_ms": 1794237732108,
+     "t_end_ms": 1794237733112,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -512,7 +512,7 @@
       "Enter"
      ],
      "key_times": [
-      1794228478821
+      1794237732108
      ],
      "observation": {
       "speech_raw": "",
@@ -522,8 +522,8 @@
     },
     {
      "step_id": "s26",
-     "t_start_ms": 1794228479825,
-     "t_end_ms": 1794228480829,
+     "t_start_ms": 1794237733112,
+     "t_end_ms": 1794237734116,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -532,7 +532,7 @@
       "Enter"
      ],
      "key_times": [
-      1794228479825
+      1794237733112
      ],
      "observation": {
       "speech_raw": "",
@@ -542,8 +542,8 @@
     },
     {
      "step_id": "s27",
-     "t_start_ms": 1794228480829,
-     "t_end_ms": 1794228481834,
+     "t_start_ms": 1794237734116,
+     "t_end_ms": 1794237735121,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -552,7 +552,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794228480829
+      1794237734116
      ],
      "observation": {
       "speech_raw": "main region end",
