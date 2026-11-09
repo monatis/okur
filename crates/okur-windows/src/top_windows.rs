@@ -89,13 +89,19 @@ pub fn close(id: u64) {
     switch_to(id);
     let hwnd = HWND(id as usize as *mut core::ffi::c_void);
     // SAFETY: a message posted to a window handle, which may be gone by now.
-    unsafe {
-        let _ = PostMessageW(
+    let posted = unsafe {
+        PostMessageW(
             Some(hwnd),
             WM_SYSCOMMAND,
             WPARAM(SC_CLOSE as usize),
             LPARAM(0),
-        );
+        )
+    };
+    // Refused for a window of a higher integrity (an elevated program, Okur without UI
+    // Access): nothing closes, and the Window List gives up waiting after its time (the code
+    // review of 2026-11-10, second pass, 3).
+    if let Err(e) = posted {
+        tracing::warn!(id, error = %e, "window list: the window refused to be asked to close");
     }
 }
 

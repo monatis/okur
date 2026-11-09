@@ -19,10 +19,20 @@ use crate::input::{Key, KeyAction, KeyEvent};
 /// is. Okur's dialogs take the focus within half a second on both platforms.
 const HOLD_MS: u64 = 2000;
 
-/// A dialog asked to show, by its id.
+/// A dialog asked to show, by its id, and when.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub(super) struct AskedDialog {
     pub(super) id: u32,
+    pub(super) at: std::time::Instant,
+}
+
+impl AskedDialog {
+    pub(super) fn now(id: u32) -> Self {
+        Self {
+            id,
+            at: std::time::Instant::now(),
+        }
+    }
 }
 
 /// The keys pressed while a dialog's focus is awaited, and until when they wait.
@@ -44,9 +54,13 @@ impl ScreenReaderEngine {
             .lock()
             .ok()
             .and_then(|mut asked| asked.take());
-        // Without the key clock the wait could not end in time: nothing is held.
-        if let Some(dialog) = asked.filter(|_| {
+        // Without the key clock the wait could not end in time: nothing is held. A dialog asked
+        // for longer ago than the wait is not awaited: one okur-ui never said shown (a wizard
+        // not in front) held the user's next key, whenever it came (the code review of
+        // 2026-11-10, second pass, 6).
+        if let Some(dialog) = asked.filter(|asked| {
             event.time_ms > 0
+                && asked.at.elapsed() < std::time::Duration::from_millis(HOLD_MS)
                 && self.settings_place.0.as_deref() != Some(OKUR_WINDOWS)
                 && self.actions.as_ref().is_some_and(|a| a.presses_keys())
         }) {

@@ -509,6 +509,9 @@ pub struct ScreenReaderEngine {
     window_list_asked: bool,
     /// The window the Window List's Delete asked to close, until the list comes back.
     window_closing: Option<window_list::ClosingWindow>,
+    /// One of Okur's dialogs said shown with no focus told since: it took the keys from the
+    /// virtual cursor, which it gives back if it closes before any focus is told.
+    shown_without_focus: Option<u32>,
     /// The system tray list while it is open, and whether its icons were asked for.
     tray_dialog: Option<crate::ui::tray::TrayDialog>,
     tray_asked: bool,
@@ -828,6 +831,7 @@ impl ScreenReaderEngine {
             window_list: None,
             window_list_asked: false,
             window_closing: None,
+            shown_without_focus: None,
             tray_dialog: None,
             tray_asked: false,
             jump_dialog: None,
@@ -2095,6 +2099,8 @@ impl ScreenReaderEngine {
         self.dialog_came(event);
         if let AccessibilityEvent::Focus(focus) = event {
             self.window_list_after_focus(focus);
+            // A focus told: the mode is the focus's again, whatever the dialog shown left.
+            self.shown_without_focus = None;
         }
         match event {
             AccessibilityEvent::Ui(crate::ui::FromUi::DialogClosed { id }) => {
@@ -2112,6 +2118,7 @@ impl ScreenReaderEngine {
                     .is_ok_and(|open| open.iter().any(|d| d.id == *id));
                 if open && self.app_mode == AppMode::VirtualBuffer {
                     self.app_mode = AppMode::NativeControl;
+                    self.shown_without_focus = Some(*id);
                 }
                 return None;
             }
@@ -2362,6 +2369,24 @@ impl ScreenReaderEngine {
                 self.handle_document_loaded(title, VirtualBuffer::from_aom(root))
             }
         };
+        // A dialog said shown, closed before any focus was told (GTK's, whose focus it never
+        // told, and the page's focus lost to a repeat filter): the virtual cursor it took the
+        // keys from has them back (the code review of 2026-11-10, second pass, 7).
+        // Another of Okur's dialogs opened in its place keeps them (Virtual HTML Features' list,
+        // Run Okur Manager's manager).
+        if let Some(id) = self.shown_without_focus {
+            let (gone, none_open) = self
+                .open_dialogs
+                .lock()
+                .map(|open| (open.iter().all(|d| d.id != id), open.is_empty()))
+                .unwrap_or((false, false));
+            if gone {
+                self.shown_without_focus = None;
+                if none_open && self.app_mode == AppMode::NativeControl {
+                    self.app_mode = AppMode::VirtualBuffer;
+                }
+            }
+        }
         self.refresh_stale_page();
         self.update_reading_highlight(false);
         spoken
@@ -3644,9 +3669,6 @@ impl ScreenReaderEngine {
             let here = self.app_mode;
             return self.show_list(dialog, here);
         };
-        if let Some(ui) = &self.ui {
-            ui.send(crate::ui::ToUi::DialogClose { id: list.id });
-        }
         let (mode, focus, place) = (
             self.list_return_mode,
             self.list_return_focus.take(),
@@ -3655,6 +3677,12 @@ impl ScreenReaderEngine {
         let shown = self.show_list(dialog, mode);
         self.list_return_focus = focus;
         self.list_return_place = place;
+        // Shown before the list it replaces goes, as Virtual HTML Features' list is: the focus
+        // moves from one to the other, never to the page between (the code review of
+        // 2026-11-10, second pass, 5).
+        if let Some(ui) = &self.ui {
+            ui.send(crate::ui::ToUi::DialogClose { id: list.id });
+        }
         shown
     }
 

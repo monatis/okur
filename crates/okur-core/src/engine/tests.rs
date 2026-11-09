@@ -11748,6 +11748,38 @@ fn an_own_dialog_shown_takes_the_keys_before_its_focus() {
     let offset = engine.cursor.offset;
     assert_eq!(down(&mut engine), KeyAction::PassThrough);
     assert_eq!(engine.cursor.offset, offset);
+    // Closed (Escape) before any focus was told: the virtual cursor has its keys back.
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(crate::ui::FromUi::DialogClosed {
+        id: skim,
+    }));
+    assert_eq!(down(&mut engine), KeyAction::Consume);
+    assert_ne!(engine.cursor.offset, offset);
+}
+
+/// A dialog asked for longer ago than the keys wait is not awaited: one okur-ui never said
+/// shown held the user's next key whenever it came (the code review of 2026-11-10, second
+/// pass, 6).
+#[test]
+fn a_dialog_asked_for_long_ago_holds_no_key() {
+    let (mut engine, _ui, actions) = links_page_engine();
+    let long_ago = std::time::Instant::now()
+        .checked_sub(std::time::Duration::from_secs(5))
+        .unwrap_or_else(std::time::Instant::now);
+    if let Ok(mut asked) = engine.dialog_asked.lock() {
+        *asked = Some(held_keys::AskedDialog {
+            id: 7,
+            at: long_ago,
+        });
+    }
+    engine.cursor.move_to_start();
+    let offset = engine.cursor.offset;
+    assert_eq!(
+        engine.handle_key_event(&key_at(Key::DownArrow, Modifiers::none(), 1_000)),
+        KeyAction::Consume
+    );
+    assert_ne!(engine.cursor.offset, offset);
+    assert!(engine.held_for_dialog.is_none());
+    let _ = actions;
 }
 
 /// Insert+F2's list, chosen in: the managers' id, then OK on row `row`.
@@ -11860,7 +11892,17 @@ fn run_manager_over_a_list_takes_its_place() {
     assert!(links > 0);
     engine.handle_key_event(&KeyEvent::new(Key::F(2), insert, true));
     let sent = ui.take();
-    assert!(sent.contains(&ToUi::DialogClose { id: links }), "{sent:?}");
+    // Shown before the Links List goes: the focus never falls to the page between.
+    let shown_at = sent
+        .iter()
+        .position(|m| matches!(m, ToUi::DialogShow { .. }));
+    let closed_at = sent
+        .iter()
+        .position(|m| *m == ToUi::DialogClose { id: links });
+    assert!(
+        shown_at.zip(closed_at).is_some_and(|(s, c)| s < c),
+        "{sent:?}"
+    );
     let managers = sent
         .iter()
         .find_map(|m| match m {
@@ -11945,10 +11987,20 @@ fn delete_in_the_window_list_closes_the_window_and_the_list_comes_back() {
             .filter(|(a, _)| a == "list windows")
             .count()
     };
+    // The list's own return of the focus to the window it was opened over, before the switch:
+    // the windows asked, the window there, no list, and nothing counted as the question
+    // answered when the focus then comes to the window.
+    let mut prompt_first = FocusEvent::new(Role::Edit).with_window_title("Command Prompt");
+    prompt_first.app = Some("cmd.exe".into());
+    engine.handle_accessibility_event(&AccessibilityEvent::Focus(prompt_first));
+    engine.handle_accessibility_event(&AccessibilityEvent::TopWindows(both.clone()));
+    assert!(ui.take().is_empty());
     let asked = lists_asked();
-    // Notepad's own window first, as it comes to the front: nothing asked.
+    // Notepad's own window, as it comes to the front: nothing asked.
     engine.handle_accessibility_event(&focus_in("notes.txt - Notepad", "Text editor"));
     assert_eq!(lists_asked(), asked);
+    engine.handle_accessibility_event(&AccessibilityEvent::TopWindows(both.clone()));
+    assert!(ui.take().is_empty());
     // Its question: the windows asked for, the window still there, no list.
     engine.handle_accessibility_event(&focus_in("Notepad", "Save"));
     assert_eq!(lists_asked(), asked + 1);
@@ -11966,5 +12018,54 @@ fn delete_in_the_window_list_closes_the_window_and_the_list_comes_back() {
     assert!(
         matches!(back.first(), Some(ToUi::DialogShow { dialog }) if dialog.title == "Window List"),
         "{back:?}"
+    );
+}
+
+/// The user's own Insert+F10 while a window closes from the Window List opens the list at
+/// once: the wait for the window to go is theirs no longer (the code review of 2026-11-10,
+/// second pass, 1).
+#[test]
+fn insert_f10_after_delete_opens_the_list() {
+    use crate::event::{TopWindow, WindowState};
+    use crate::ui::{FromUi, ToUi, Value};
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    engine.app_mode = AppMode::NativeControl;
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    engine.set_actions(Box::new(crate::actions::RecordingActions::reading_windows()));
+    let windows = vec![
+        TopWindow {
+            id: 11,
+            title: "Command Prompt".to_owned(),
+            state: WindowState::Restored,
+            on_top: false,
+        },
+        TopWindow {
+            id: 12,
+            title: "notes.txt - Notepad".to_owned(),
+            state: WindowState::Restored,
+            on_top: false,
+        },
+    ];
+    let mut f10 = KeyEvent::new(Key::F(10), Modifiers::none(), true);
+    f10.modifiers.insert = true;
+    engine.handle_key_event(&f10);
+    engine.handle_accessibility_event(&AccessibilityEvent::TopWindows(windows.clone()));
+    let id = shown_dialog(&ui);
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+        id,
+        control: "windows".into(),
+        value: Value::Selected(1),
+    }));
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id,
+        control: "close".into(),
+    }));
+    let _ = ui.take();
+    engine.handle_key_event(&f10);
+    engine.handle_accessibility_event(&AccessibilityEvent::TopWindows(windows));
+    assert!(
+        matches!(ui.take().first(), Some(ToUi::DialogShow { dialog }) if dialog.title == "Window List")
     );
 }

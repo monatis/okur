@@ -10,16 +10,26 @@ use crate::event::{FocusEvent, TopWindow};
 use crate::ui::windows::{Outcome, WindowListDialog};
 use crate::ui::{FromUi, ToUi};
 
+/// How long the Window List waits to come back after Delete: past it, a question of the
+/// application's left unanswered while the user works elsewhere brings no list up later (the
+/// code review of 2026-11-10, second pass, 1).
+const CLOSING_WAIT: std::time::Duration = std::time::Duration::from_secs(60);
+
 /// The window the Window List's Delete asked to close, until the list comes back.
 #[derive(Debug)]
 pub(super) struct ClosingWindow {
     id: u64,
     title: String,
-    /// The focus has left the window: its application's question, or another window once
-    /// it closed.
-    left: bool,
-    /// The focus came back to the window after it left: its application kept it (Cancel to
-    /// its question), and the list comes back all the same.
+    /// When it was asked to close.
+    asked: std::time::Instant,
+    /// The focus has been in the window since: the list's own return of the focus to the
+    /// window it was opened over comes first, and does not count as the window left.
+    reached: bool,
+    /// The focus has left the window after it was there: its application's question, or
+    /// another window once it closed.
+    away: bool,
+    /// The focus came back to the window after it was away: its application kept it (Cancel
+    /// to its question), and the list comes back all the same.
     answered: bool,
 }
 
@@ -29,6 +39,13 @@ impl ScreenReaderEngine {
     /// focus has come back to it (its application's question answered). Okur's own windows
     /// do not count: the list itself closing.
     pub(super) fn window_list_after_focus(&mut self, focus: &FocusEvent) {
+        if self
+            .window_closing
+            .as_ref()
+            .is_some_and(|closing| closing.asked.elapsed() > CLOSING_WAIT)
+        {
+            self.window_closing = None;
+        }
         let Some(closing) = self.window_closing.as_mut() else {
             return;
         };
@@ -40,11 +57,20 @@ impl ScreenReaderEngine {
         if own {
             return;
         }
+        // By its title: Windows' focus names no window handle. A twin of the same title is
+        // taken for it.
         let in_window = focus.window_title.as_deref() == Some(closing.title.as_str());
-        match (in_window, closing.left) {
-            (true, false) => return,
-            (true, true) => closing.answered = true,
-            (false, _) => closing.left = true,
+        match (in_window, closing.reached, closing.away) {
+            (true, false, _) => {
+                closing.reached = true;
+                return;
+            }
+            (true, true, false) => return,
+            (true, true, true) => closing.answered = true,
+            (false, true, _) => closing.away = true,
+            // Not yet there: the list's own return of the focus. The windows are asked all
+            // the same, for a window that closed before its focus was told.
+            (false, false, _) => {}
         }
         self.window_list_asked = self
             .actions
@@ -56,6 +82,8 @@ impl ScreenReaderEngine {
     /// ([`ScreenReaderEngine::open_window_list`]).
     pub(super) fn ask_window_list(&mut self) -> Option<String> {
         self.ui.as_ref()?;
+        // The user's own Insert+F10 ends any wait after Delete: this list is theirs.
+        self.window_closing = None;
         self.window_list_asked = self
             .actions
             .as_ref()
@@ -113,21 +141,24 @@ impl ScreenReaderEngine {
                     actions.switch_to_window(id);
                 }
             }
-            // Delete: the window chosen comes to the front and is asked to close; the list
-            // comes back once it is gone or its application's question is answered.
+            // Delete: the window chosen comes to the front and is asked to close, before the
+            // list goes (okur-ui gives the focus back as it closes, racing the switch); the
+            // list comes back once it is gone or its application's question is answered.
             Outcome::Close(id, title) => {
                 let dialog = self.window_list.take()?;
-                if let Some(ui) = &self.ui {
-                    ui.send(ToUi::DialogClose { id: dialog.id });
-                }
                 let closing = self
                     .actions
                     .as_ref()
                     .is_some_and(|actions| actions.close_window(id));
-                self.window_closing = closing.then_some(ClosingWindow {
+                if let Some(ui) = &self.ui {
+                    ui.send(ToUi::DialogClose { id: dialog.id });
+                }
+                self.window_closing = closing.then(|| ClosingWindow {
                     id,
                     title,
-                    left: false,
+                    asked: std::time::Instant::now(),
+                    reached: false,
+                    away: false,
                     answered: false,
                 });
             }

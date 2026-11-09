@@ -257,18 +257,35 @@ impl ScreenReaderEngine {
         let Some(page) = self.cursor.buffer.page().cloned() else {
             return;
         };
-        // The cursor at its node's start, as a label given leaves it: a label longer or shorter
-        // than its element's own name moved the text after it (the code review of 2026-11-10,
-        // 4).
+        // The cursor by its node, not its offset: a label longer or shorter than its element's
+        // own name moved the text after it (the code review of 2026-11-10, 4). Where it was in
+        // a node whose text stays (a paragraph read over several lines), it stays; in one
+        // whose label went, at its start, as a label given leaves it (second pass, 8).
         let offset = self.cursor.offset;
         let node = self.cursor.current_node_id;
+        let text_of = |buffer: &VirtualBuffer, id: usize| {
+            buffer.node(id).map(|n| (n.name.clone(), n.text.clone()))
+        };
+        let before = node.and_then(|id| {
+            let start = self.cursor.buffer.start_of(id)?;
+            Some((
+                offset.saturating_sub(start),
+                text_of(&self.cursor.buffer, id),
+            ))
+        });
         let rebuilt = VirtualBuffer::from_aom(&self.custom_labels.apply(place, &page));
         crate::retire::retire(std::mem::replace(&mut self.cursor.buffer, rebuilt));
         self.say_all = None;
-        match node.and_then(|id| self.cursor.buffer.start_of(id)) {
-            Some(start) => self.cursor.move_to(start),
-            None => self.cursor.move_to(offset),
-        }
+        let at = node.zip(before).and_then(|(id, (within, text))| {
+            let start = self.cursor.buffer.start_of(id)?;
+            let same = text == text_of(&self.cursor.buffer, id);
+            Some(if same {
+                start.saturating_add(within)
+            } else {
+                start
+            })
+        });
+        self.cursor.move_to(at.unwrap_or(offset));
     }
 }
 

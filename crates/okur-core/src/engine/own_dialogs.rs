@@ -47,7 +47,7 @@ impl UiHost for DialogWatch {
         };
         if let Some(id) = shown {
             if let Ok(mut asked) = self.asked.lock() {
-                *asked = Some(AskedDialog { id });
+                *asked = Some(AskedDialog::now(id));
             }
         }
         if let Ok(mut open) = self.open.lock() {
