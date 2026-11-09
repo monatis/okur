@@ -1255,11 +1255,21 @@ impl EventSource for AtspiEventSource {
                             {
                                 settle_toggle(&provider, &activated, element);
                             }
+                            // A focus and a control's change read with the ancestors walked
+                            // for its page, a window alone, anything else (a menu's item
+                            // highlighted) with its own up to its window.
+                            let walk = if Converter::reads_alone(&event.kind) {
+                                Some(&[][..])
+                            } else if focus || changed {
+                                Some(walked.as_slice())
+                            } else {
+                                None
+                            };
                             let native = target
                                 .filter(|_| {
-                                    Converter::wants_native(&event.kind, target, document.is_some())
+                                    converter.wants_native(&event.kind, target, document.is_some())
                                 })
-                                .and_then(|e| read_native(&provider, e, Some(&walked)));
+                                .and_then(|e| read_native(&provider, e, walk));
                             let reread = converter
                                 .wants_reread(&event.kind, target)
                                 .cloned()
@@ -1363,7 +1373,10 @@ mod page_id_tests {
         assert_eq!(after.get(1), before.get(2));
         assert!(after.get(2).is_some_and(|c| !before.contains(c)));
         assert!(before.get(1).is_some_and(|a| !ids.by_id.contains_key(a)));
-        let other = page_read(&mut ids, ":1.9/doc", &tree("/doc", vec![]));
+        // Another application's page, its objects on its own bus.
+        let mut other_page = tree("/doc", vec![]);
+        other_page.bus_name = ":1.9".to_owned();
+        let other = page_read(&mut ids, ":1.9/doc", &other_page);
         assert!(other.iter().all(|id| !after.contains(id)));
     }
 

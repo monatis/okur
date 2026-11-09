@@ -11,9 +11,13 @@ use okur_model::event_model::EventModel;
 use serde::{Deserialize, Serialize};
 use xa11y_core::{ElementData, EventKind, Role};
 
-use crate::focus::{focus_event, in_active_window, native_focus};
+use crate::focus::{
+    focus_event, in_active_window, is_menu_item_role, is_window, menu_in, menu_item_focus,
+    native_focus,
+};
 use crate::focus_track::{is_control_change, is_inside_change, FocusTrack, Reread};
 use crate::page::{to_aom_from, AtspiNode};
+use okur_core::event::{MenuEvent, PopupKind};
 
 /// A control outside a page as the driver read it: its subtree, and its ancestors' from its
 /// parent up to its window.
@@ -155,6 +159,26 @@ pub fn object_key(element: &ElementData) -> Option<String> {
     Some(format!("{}{}", raw("bus_name")?, raw("object_path")?))
 }
 
+/// Whether the event is a window without a name coming forward: Chrome's own menu's window.
+fn is_unnamed_window(kind: &EventKind, element: &ElementData) -> bool {
+    *kind == EventKind::WindowActivated && element.name.as_deref().is_none_or(str::is_empty)
+}
+
+/// Whether the event is a menu's item highlighted: Chrome on Linux selects its own menus'
+/// items, focusing none.
+fn is_menu_highlight(kind: &EventKind, element: &ElementData) -> bool {
+    *kind
+        == (EventKind::StateChanged {
+            flag: xa11y_core::StateFlag::Selected,
+            value: true,
+        })
+        && element
+            .raw
+            .get("atspi_role")
+            .and_then(|r| r.as_str())
+            .is_some_and(is_menu_item_role)
+}
+
 /// Whether the event's object has the focus.
 fn focused(target: Option<&ElementData>) -> bool {
     target.is_some_and(|e| e.states.focused)
@@ -188,6 +212,21 @@ pub struct Converter {
     /// The live regions' lines in the last read of each of the last pages, by page: a page
     /// read again says what its regions changed.
     live_lines: Vec<(String, std::collections::HashMap<String, Vec<String>>)>,
+    /// An application's own menus open (Chrome's app menu, Alt+F), outermost first, each by
+    /// its window's object: Chrome on Linux opens each in a window of its own and highlights
+    /// its items (AT-SPI's `selected`) without focusing them, where Windows' Chrome starts
+    /// menu mode and focuses its items [obs, 220/s1-s5].
+    menus: Vec<String>,
+    /// The last of those menus closed: menu mode ends as the focus or a window comes back,
+    /// unless another menu's window opens first.
+    menus_closing: bool,
+}
+
+/// What an application's own menu did, for one record: the engine's events, and whether the
+/// record is said by them alone (an item highlighted).
+struct MenuStep {
+    events: Vec<AccessibilityEvent>,
+    alone: bool,
 }
 
 /// How many pages' live regions are kept for their next read.
@@ -241,13 +280,120 @@ impl Converter {
     /// control's change, outside a page.
     /// In a page, a menu item focused, which may be a select's option: Chrome on Linux shows a
     /// select's open list as a menu in the combo box (276).
-    pub fn wants_native(kind: &EventKind, target: Option<&ElementData>, in_page: bool) -> bool {
+    /// Outside a page, a window coming forward without a name (Chrome's own menu's) is read
+    /// for the menu it may hold, and, while one is open, a menu's item highlighted with its
+    /// menu (a page's select highlights its hidden menu's items too: its value changing).
+    pub fn wants_native(
+        &self,
+        kind: &EventKind,
+        target: Option<&ElementData>,
+        in_page: bool,
+    ) -> bool {
         let focus = *kind == EventKind::FocusChanged;
         match target {
             None => false,
             Some(element) if in_page => focus && element.role == Role::MenuItem,
-            Some(_) => focus || is_control_change(kind, focused(target)),
+            Some(element) => {
+                focus
+                    || is_control_change(kind, focused(target))
+                    || is_unnamed_window(kind, element)
+                    || (!self.menus.is_empty() && is_menu_highlight(kind, element))
+            }
         }
+    }
+
+    /// Whether the event's object is read alone, without its ancestors: a window coming
+    /// forward.
+    pub fn reads_alone(kind: &EventKind) -> bool {
+        *kind == EventKind::WindowActivated
+    }
+
+    /// An application's own menu (Chrome's app menu, Alt+F) as Windows gives it: menu mode
+    /// and its popup started as its window comes forward, each item highlighted as its focus
+    /// with its place, the popup ended as its window goes, and menu mode as the focus or
+    /// another window comes back [obs, 220/s1-s5]. Keys go to the menu from its start, as the
+    /// engine passes them through in menu mode.
+    fn own_menu(&mut self, record: &AtspiRecord, object: Option<&str>, in_page: bool) -> MenuStep {
+        let mut events = Vec::new();
+        let mut alone = false;
+        let read = record.native.as_ref().filter(|r| !r.focus.role.is_empty());
+        let bus = record
+            .target
+            .as_ref()
+            .and_then(|t| t.raw.get("bus_name"))
+            .and_then(|b| b.as_str());
+        let highlight = !in_page
+            && !self.menus.is_empty()
+            && record
+                .target
+                .as_ref()
+                .is_some_and(|t| is_menu_highlight(&record.kind, t));
+        match &record.kind {
+            EventKind::WindowActivated => {
+                let menu = read.and_then(|r| menu_in(&r.focus));
+                match (menu, object) {
+                    (Some(menu), Some(window)) => {
+                        if self.menus.is_empty() && !self.menus_closing {
+                            events.push(AccessibilityEvent::Menu(MenuEvent::Start {
+                                launcher: false,
+                            }));
+                        }
+                        self.menus_closing = false;
+                        self.menus.push(window.to_owned());
+                        events.push(AccessibilityEvent::Menu(MenuEvent::PopupStart {
+                            kind: PopupKind::Plain,
+                        }));
+                        // An item highlighted as it opened.
+                        if let Some(item) = menu.children.iter().find(|c| {
+                            is_menu_item_role(&c.role) && c.has(crate::page::state::SELECTED)
+                        }) {
+                            let mut focus = menu_item_focus(item, Some(menu));
+                            focus.app = Some(record.app.clone()).filter(|a| !a.is_empty());
+                            focus.platform.window_id = Some(window.to_owned());
+                            events.push(AccessibilityEvent::Focus(focus));
+                        }
+                    }
+                    _ => {
+                        if std::mem::take(&mut self.menus_closing) {
+                            events.push(AccessibilityEvent::Menu(MenuEvent::End));
+                        }
+                    }
+                }
+            }
+            EventKind::WindowDeactivated => {
+                // It, and the submenus opened from it.
+                if let Some(at) = object.and_then(|o| self.menus.iter().position(|m| m == o)) {
+                    for _ in at..self.menus.len() {
+                        events.push(AccessibilityEvent::Menu(MenuEvent::PopupEnd));
+                    }
+                    self.menus.truncate(at);
+                    self.menus_closing = self.menus.is_empty();
+                }
+            }
+            EventKind::FocusChanged => {
+                if std::mem::take(&mut self.menus_closing) {
+                    events.push(AccessibilityEvent::Menu(MenuEvent::End));
+                }
+            }
+            _ if highlight => {
+                alone = true;
+                if let Some(read) = read.filter(|r| is_menu_item_role(&r.focus.role)) {
+                    let window = read
+                        .ancestors
+                        .iter()
+                        .find(|a| is_window(&a.role) && !a.path.is_empty())
+                        .zip(bus)
+                        .map(|(window, bus)| format!("{bus}{}", window.path));
+                    let menu = read.ancestors.first().filter(|m| m.role == "menu");
+                    let mut focus = menu_item_focus(&read.focus, menu);
+                    focus.app = Some(record.app.clone()).filter(|a| !a.is_empty());
+                    focus.platform.window_id = window;
+                    events.push(AccessibilityEvent::Focus(focus));
+                }
+            }
+            _ => {}
+        }
+        MenuStep { events, alone }
     }
 
     /// The focused control to read again, as something within it changed in its application.
@@ -383,6 +529,11 @@ impl Converter {
         let focus = record.kind == EventKind::FocusChanged;
         let changed = is_control_change(&record.kind, focused(target));
         let in_page = record.document.is_some();
+        let menu = self.own_menu(record, object.as_deref(), in_page);
+        events.extend(menu.events);
+        if menu.alone {
+            return events;
+        }
         let outside_page = (focus || changed) && !in_page;
         // A focus outside a page, and its control's change, read with what surrounds it: the
         // change names the control as its focus did.
@@ -790,6 +941,180 @@ mod tests {
             converter.convert_read(&here).as_slice(),
             [AccessibilityEvent::Focus(_)]
         ));
+    }
+
+    fn menu_item(name: &str, path: &str, states: &[u32]) -> AtspiNode {
+        let mut item = node("menu item", name, states);
+        item.path = path.to_owned();
+        item
+    }
+
+    fn chrome_menu(selected: Option<usize>) -> AtspiNode {
+        let mut menu = node("menu", "", &[]);
+        let names = [
+            "New tab Ctrl+T",
+            "New window Ctrl+N",
+            "Your Chrome Not signed in",
+        ];
+        for (at, name) in names.iter().enumerate() {
+            let states: &[u32] = if selected == Some(at) {
+                &[state::SELECTED]
+            } else {
+                &[]
+            };
+            let mut item = menu_item(name, &format!("/item/{at}"), states);
+            if at == 2 {
+                item.attributes
+                    .insert("haspopup".to_owned(), "menu".to_owned());
+            }
+            menu.children.push(item);
+            if at == 0 {
+                menu.children.push(node("separator", "", &[]));
+            }
+        }
+        menu
+    }
+
+    fn chrome_record(
+        kind: EventKind,
+        target: ElementData,
+        native: Option<NativeRead>,
+    ) -> AtspiRecord {
+        AtspiRecord {
+            app: "Google Chrome".to_owned(),
+            ..record(kind, target, native)
+        }
+    }
+
+    fn menu_window() -> ElementData {
+        let mut window = element(ElementRole::Window, "", "/menu-window", false);
+        window.name = None;
+        window
+    }
+
+    /// Chrome's own menu on Linux: its window comes forward holding it (menu mode and its popup
+    /// start, its keys the menu's), each item highlighted is said as its focus with its place
+    /// among the items, a submenu's item as one, and the window going ends the popup, then menu
+    /// mode as the page's window comes back [obs, 220/s1-s5].
+    #[test]
+    fn chromes_own_menu_is_menu_mode_and_its_highlighted_items() {
+        let mut converter = Converter::default();
+        let mut frame = window();
+        frame.children.push(chrome_menu(None));
+        let opened = chrome_record(
+            EventKind::WindowActivated,
+            menu_window(),
+            Some(NativeRead {
+                focus: frame,
+                ancestors: Vec::new(),
+                read_ms: 0,
+            }),
+        );
+        assert!(matches!(
+            converter.convert_read(&opened).as_slice(),
+            [
+                AccessibilityEvent::Menu(MenuEvent::Start { launcher: false }),
+                AccessibilityEvent::Menu(MenuEvent::PopupStart {
+                    kind: PopupKind::Plain
+                }),
+            ]
+        ));
+        let highlighted = |at: usize, name: &str| {
+            let mut item = element(ElementRole::MenuItem, name, &format!("/item/{at}"), false);
+            item.raw.insert(
+                "atspi_role".to_owned(),
+                serde_json::Value::String("menu item".to_owned()),
+            );
+            let mut menu = chrome_menu(Some(at));
+            let focus = menu
+                .children
+                .iter()
+                .find(|c| c.path == format!("/item/{at}"))
+                .cloned()
+                .unwrap_or_default();
+            menu.path = "/menu".to_owned();
+            let mut window = node("frame", "", &[state::ACTIVE]);
+            window.path = "/menu-window".to_owned();
+            chrome_record(
+                EventKind::StateChanged {
+                    flag: StateFlag::Selected,
+                    value: true,
+                },
+                item,
+                Some(NativeRead {
+                    focus,
+                    ancestors: vec![menu, window],
+                    read_ms: 0,
+                }),
+            )
+        };
+        let events = converter.convert_read(&highlighted(1, "New window Ctrl+N"));
+        assert!(matches!(
+            events.as_slice(),
+            [AccessibilityEvent::Focus(f)] if f.role == OkurRole::MenuItem
+                && f.name.as_deref() == Some("New window Ctrl+N")
+                && (f.item_index, f.item_count) == (Some(2), Some(3))
+                && f.states.expanded.is_none()
+        ));
+        let events = converter.convert_read(&highlighted(2, "Your Chrome Not signed in"));
+        assert!(matches!(
+            events.as_slice(),
+            [AccessibilityEvent::Focus(f)] if f.states.expanded == Some(false)
+                && (f.item_index, f.item_count) == (Some(3), Some(3))
+        ));
+        let mut gone = menu_window();
+        gone.role = ElementRole::Group;
+        let closed = chrome_record(EventKind::WindowDeactivated, gone, None);
+        assert!(matches!(
+            converter.convert_read(&closed).as_slice(),
+            [AccessibilityEvent::Menu(MenuEvent::PopupEnd)]
+        ));
+        let page_window = element(ElementRole::Window, "News - Google Chrome", "/1", false);
+        let back = chrome_record(EventKind::WindowActivated, page_window, None);
+        assert!(matches!(
+            converter.convert_read(&back).as_slice(),
+            [AccessibilityEvent::Menu(MenuEvent::End)]
+        ));
+    }
+
+    /// A window without a menu starts no menu mode, and an item highlighted with no menu open
+    /// is no menu's: a page's select highlights its hidden menu's items as its value changes.
+    #[test]
+    fn a_highlight_without_a_menu_open_is_no_menus() {
+        let mut converter = Converter::default();
+        let plain = chrome_record(
+            EventKind::WindowActivated,
+            menu_window(),
+            Some(read(node("panel", "", &[]))),
+        );
+        assert!(converter.convert_read(&plain).is_empty());
+        let mut item = element(ElementRole::MenuItem, "New tab Ctrl+T", "/item/0", false);
+        item.raw.insert(
+            "atspi_role".to_owned(),
+            serde_json::Value::String("menu item".to_owned()),
+        );
+        let mut menu = chrome_menu(Some(0));
+        menu.path = "/menu".to_owned();
+        let highlighted = chrome_record(
+            EventKind::StateChanged {
+                flag: StateFlag::Selected,
+                value: true,
+            },
+            item,
+            Some(NativeRead {
+                focus: menu_item("New tab Ctrl+T", "/item/0", &[state::SELECTED]),
+                ancestors: vec![menu, window()],
+                read_ms: 0,
+            }),
+        );
+        assert!(!converter
+            .convert_read(&highlighted)
+            .iter()
+            .any(|e| matches!(
+                e,
+                AccessibilityEvent::Menu(_) | AccessibilityEvent::Focus(_)
+            )));
+        assert!(!converter.wants_native(&highlighted.kind, highlighted.target.as_ref(), false));
     }
 
     /// Chrome on Linux shows a select's open list as a menu in its combo box: its focused item

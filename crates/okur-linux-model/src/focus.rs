@@ -290,6 +290,59 @@ fn first_label(node: &AtspiNode) -> Option<String> {
     find(node, &|n| n.role == "label" && !n.name.is_empty()).map(|label| label.name.clone())
 }
 
+/// The AT-SPI roles of a menu's items.
+const MENU_ITEM_ROLES: [&str; 3] = ["menu item", "check menu item", "radio menu item"];
+
+/// Whether `role` is a menu's item's AT-SPI role (a check or a radio item's too).
+pub fn is_menu_item_role(role: &str) -> bool {
+    MENU_ITEM_ROLES.contains(&role)
+}
+
+/// The menu within `node` that holds items, or `node` itself.
+pub(crate) fn menu_in(node: &AtspiNode) -> Option<&AtspiNode> {
+    let holds_items =
+        |n: &AtspiNode| n.role == "menu" && n.children.iter().any(|c| is_menu_item_role(&c.role));
+    if holds_items(node) {
+        return Some(node);
+    }
+    find(node, &holds_items)
+}
+
+/// A menu's item as the engine's focus: its name ("New tab Ctrl+T", its shortcut in it as
+/// Chrome names it), its place among its menu's items (a separator is none: "New window Ctrl+N
+/// | 3 of 24" [obs, 220/s2]), an item opening a menu said as a submenu ("Your Chrome Not signed
+/// in | sub menu | 5 of 24" [obs, 220/s4]), and a check or radio item's state.
+pub(crate) fn menu_item_focus(item: &AtspiNode, menu: Option<&AtspiNode>) -> FocusEvent {
+    use crate::page::state;
+    let mut event = FocusEvent::new(Role::MenuItem);
+    event.name = Some(item.name.trim().to_owned()).filter(|n| !n.is_empty());
+    if let Some(menu) = menu {
+        let items: Vec<&AtspiNode> = menu
+            .children
+            .iter()
+            .filter(|c| is_menu_item_role(&c.role))
+            .collect();
+        let same = |c: &&AtspiNode| match (c.path.is_empty(), item.path.is_empty()) {
+            (false, false) => c.path == item.path,
+            _ => c.name == item.name && c.states == item.states,
+        };
+        if let Some(at) = items.iter().position(same) {
+            event.item_index = Some(at + 1);
+            event.item_count = Some(items.len());
+        }
+    }
+    let opens_menu = item.attributes.contains_key("haspopup")
+        || item.has(state::EXPANDABLE)
+        || item.children.iter().any(|c| c.role == "menu");
+    if opens_menu {
+        event.states.expanded = Some(item.has(state::EXPANDED));
+    }
+    if item.role != "menu item" {
+        event.states.checked = Some(item.has(state::CHECKED));
+    }
+    event
+}
+
 /// The first node within `node` (itself left out), depth first, that `wanted` takes.
 fn find<'a>(node: &'a AtspiNode, wanted: &dyn Fn(&AtspiNode) -> bool) -> Option<&'a AtspiNode> {
     node.children.iter().find_map(|child| {
