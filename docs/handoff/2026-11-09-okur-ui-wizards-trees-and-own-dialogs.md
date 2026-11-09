@@ -95,6 +95,38 @@ From the commands named:
 
 The next job's check builds these first (okur-ui's GTK code does not build on the dev box); `main` stays at 3ed18eb0 until it passes.
 
+## night2's gap runs, imported (f691a3c3), and what they showed
+
+- **Figures.** `okur-lab live-baseline linux`: "6914/7935 steps match JAWS exactly; 166
+  accepted divergences not counted (512 runs, 0 could not be compared)" (gtk7's: 6806). The
+  Linux-only gaps (steps Windows' parity matches, Linux's replay does not) went from 944 steps
+  to 716.
+- **okur-ui is "okur-ui" on the bus at last**: 1205's trace names it, and the held S and Down
+  went to "Settings" and on to the third row in order.
+- **The dialogs' first focus is still a race in GTK.** 223's Links List had its first row's
+  focus 3 ms after the dialog was shown; 224's Heading List, 765's Word List and 926's JAWS
+  Find had none until the first Tab. db1e6423 has okur-ui check its window's focus a frame later,
+  place it again where none is, and log the window's state and focus.
+- **Skim Reading (760, 911):** the dialog shown, then the first Tab went to Chrome, which came
+  back to the front: the dialog seems never to have had the keyboard. To look into in the lab.
+- **Fixed from them, offline:**
+  - a group box said twice, and a radio group's box said on each arrow as Windows' is
+    (61108425);
+  - "Color or Attribute Rules:" with its colon, which Okur's Win32 dialog lacked too, unseen by
+    parity (61108425);
+  - a wizard page's question as its dialog's text (8fe053c8);
+  - check lists drawn on Linux, a row told its check (8fe053c8).
+- **The replay with all of it** (`okur-lab live-replay linux` after 8fe053c8): "7822/8101 steps
+  say what the run said; replayed, 7062/7935 match JAWS exactly". The runs are older than the
+  code, so "say what the run said" fell. ffb74f47's message quoted wrong figures, written
+  before the output; 8fe053c8 corrects them.
+- **Left:**
+  - 812's Rules History count (old-pc's JAWS kept 8 rules) and colors (Okur has 509, JAWS 514);
+  - 809/s12 (Space on another check box than JAWS's);
+  - 567's Up after typing, Chrome's address bar after Ctrl+T (no focus event on Linux), the
+    closed tab's late load;
+  - the desktop forms replica's radio group, which Down leaves in GTK.
+
 ## Next
 
 1. **When `night2`'s gap runs end** (fetch mid-job; the snapshot skips the run in progress):
