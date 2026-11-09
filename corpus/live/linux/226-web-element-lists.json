@@ -1,0 +1,130 @@
+{
+ "scenario_id": "226-web-element-lists",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "5bf54de3"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Escape",
+     "t_ms": 1794208709236
+    },
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794208709596
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794208710900,
+     "t_end_ms": 1794208711904,
+     "action": {
+      "type": "key",
+      "command": "Insert+F3"
+     },
+     "keys": [
+      "Insert+F3"
+     ],
+     "key_times": [
+      1794208710900
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794208711904,
+     "t_end_ms": 1794208712908,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"h\")"
+     },
+     "keys": [
+      "h"
+     ],
+     "key_times": [
+      1794208711904
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794208712908,
+     "t_end_ms": 1794208714414,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794208712908
+     ],
+     "observation": {
+      "speech_raw": "Okur has no Anchors List yet.\nWeb App Patterns  \u001d document \u001e\nPage has 5Regions, 10headings and 15links\nWeb App Patterns\n \u001d heading level 1 \u001e Web App Patterns\n \u001d heading level 2 \u001e Current links\nlist of 3 items\n\u2022 \u001d same page link \u001e  \u001dCurrent Page\u001e Overview\n\u2022 \u001d Link \u001e Settings\n\u2022 \u001d same page link \u001e  \u001dCurrent Step\u001e Step two\nlist end\n \u001d heading level 2 \u001e Described controls\nNext slide \u001d slide control \u001e \n \u001d chip \u001e Rust\nWrap \u001d toggle \u001e  \u001dnot checked\u001e \n \u001d heading level 2 \u001e Popup buttons\nOutline \u001d button menu \u001e \nActions \u001d button menu \u001e  \u001dcollapsed\u001e \nPick one \u001d Button \u001e  \u001dHas Popup\u001e  listbox\n \u001d heading level 2 \u001e Fruit search\nFruit\n \u001d edit combo \u001e  \u001dcollapsed\u001e \n \u001d heading level 2 \u001e Tab from here\nStart \u001d Button \u001e \n \u001d same page link \u001e Skipped link\ngroup start Featured\nGroup text\ngroup end Featured\nNotes\n \u001d Edit \u001e the lazy dog, then reads std::io again\n \u001d heading level 2 \u001e Repository files\nFiles navigation region\nlist of 1 items\n\u2022 \u001d same page link \u001e  \u001dCurrent Page\u001e README\nlist end\nFiles navigation region end\n \u001d heading level 2 \u001e Workbench region\nFirst tool \u001d Button \u001e \nSecond tool \u001d Button \u001e \nKeys:\nEnd of page\n \u001d heading level 2 \u001e Files table\ntable with 2 columns and 4 rows\nName\nMessage\n \u001d same page link \u001e alpha.rs\n \u001d same page link \u001e first commit\n \u001d same page link \u001e beta.rs\nno link\n \u001d same page link \u001e gamma.rs\n \u001d same page link \u001e third commit\ntable end\n \u001d heading level 2 \u001e Landmarks\nRelated complementary information\n \u001d same page link \u001e Aside link\nRelated complementary information end\nSite search region\n \u001d same page link \u001e Search link\nSite search region end\nUpdates region\n \u001d same page link \u001e Region link\nUpdates region end\ncontent information\n \u001d same page link \u001e Footer link\ncontent information end\nend",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794208714414,
+     "t_end_ms": 1794208715419,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794208714414
+     ],
+     "observation": {
+      "speech_raw": "content information end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794208715419,
+     "t_end_ms": 1794208716423,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794208715419
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

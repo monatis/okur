@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "5bf54de3"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794196157360
+     "t_ms": 1794210223724
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794196158721,
-     "t_end_ms": 1794196159825,
+     "t_start_ms": 1794210225087,
+     "t_end_ms": 1794210226191,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -31,7 +32,7 @@
       "Tab"
      ],
      "key_times": [
-      1794196158721
+      1794210225087
      ],
      "observation": {
       "speech_raw": "Create Your Account - Riverside Library\nFull name \u001d Edit \u001e \n \u001dRequired\u001e",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794196159825,
-     "t_end_ms": 1794196160930,
+     "t_start_ms": 1794210226191,
+     "t_end_ms": 1794210227295,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -51,7 +52,7 @@
       "Tab"
      ],
      "key_times": [
-      1794196159825
+      1794210226191
      ],
      "observation": {
       "speech_raw": "Email address \u001d Edit \u001e \nsam@example.com\nWe never share your email.",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794196160930,
-     "t_end_ms": 1794196162034,
+     "t_start_ms": 1794210227295,
+     "t_end_ms": 1794210228399,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -71,7 +72,7 @@
       "Tab"
      ],
      "key_times": [
-      1794196160930
+      1794210227295
      ],
      "observation": {
       "speech_raw": "Password \u001d password edit \u001e \n \u001dRequired\u001e   \u001d\u001e",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794196162034,
-     "t_end_ms": 1794196163138,
+     "t_start_ms": 1794210228399,
+     "t_end_ms": 1794210229503,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -91,7 +92,7 @@
       "Tab"
      ],
      "key_times": [
-      1794196162034
+      1794210228399
      ],
      "observation": {
       "speech_raw": "Membership type \u001d group \u001e \nAdult  \u001d radio button \u001e   \u001dchecked\u001e \n1 of 3",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794196163138,
-     "t_end_ms": 1794196164243,
+     "t_start_ms": 1794210229503,
+     "t_end_ms": 1794210230607,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -111,7 +112,7 @@
       "Tab"
      ],
      "key_times": [
-      1794196163138
+      1794210229503
      ],
      "observation": {
       "speech_raw": "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794196164243,
-     "t_end_ms": 1794196165347,
+     "t_start_ms": 1794210230607,
+     "t_end_ms": 1794210231712,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -131,7 +132,7 @@
       "Tab"
      ],
      "key_times": [
-      1794196164243
+      1794210230607
      ],
      "observation": {
       "speech_raw": "Accessibility needs \u001d edit \u001e \nblank",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794196165347,
-     "t_end_ms": 1794196166451,
+     "t_start_ms": 1794210231712,
+     "t_end_ms": 1794210232817,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -151,7 +152,7 @@
       "Tab"
      ],
      "key_times": [
-      1794196165347
+      1794210231712
      ],
      "observation": {
       "speech_raw": "Send me the monthly newsletter  \u001d check box \u001e   \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794196166451,
-     "t_end_ms": 1794196167555,
+     "t_start_ms": 1794210232817,
+     "t_end_ms": 1794210233922,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -171,7 +172,7 @@
       "Tab"
      ],
      "key_times": [
-      1794196166451
+      1794210232817
      ],
      "observation": {
       "speech_raw": "I agree to the terms of use  \u001d check box \u001e   \u001dnot checked\u001e \nTo check press Spacebar.",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794196167555,
-     "t_end_ms": 1794196168659,
+     "t_start_ms": 1794210233922,
+     "t_end_ms": 1794210235027,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -191,7 +192,7 @@
       "Tab"
      ],
      "key_times": [
-      1794196167555
+      1794210233922
      ],
      "observation": {
       "speech_raw": "terms of use  \u001d same page link \u001e \nTo activate press Enter.",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794196168659,
-     "t_end_ms": 1794196169764,
+     "t_start_ms": 1794210235027,
+     "t_end_ms": 1794210236131,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -211,7 +212,7 @@
       "Tab"
      ],
      "key_times": [
-      1794196168659
+      1794210235027
      ],
      "observation": {
       "speech_raw": "Create account  \u001d Button \u001e \nTo activate press Enter.",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794196169764,
-     "t_end_ms": 1794196170869,
+     "t_start_ms": 1794210236131,
+     "t_end_ms": 1794210237236,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -231,7 +232,7 @@
       "Tab"
      ],
      "key_times": [
-      1794196169764
+      1794210236131
      ],
      "observation": {
       "speech_raw": "Tab search \u001d button menu \u001e \nPress space to activate the menu, then navigate with arrow keys",
@@ -241,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794196170869,
-     "t_end_ms": 1794196172173,
+     "t_start_ms": 1794210237236,
+     "t_end_ms": 1794210238639,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -251,18 +252,18 @@
       "Tab"
      ],
      "key_times": [
-      1794196170869
+      1794210237236
      ],
      "observation": {
-      "speech_raw": "File \u001d Button \u001e \nTo activate press spacebar.",
+      "speech_raw": "File \u001d button menu \u001e \nPress space to activate the menu, then navigate with arrow keys",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794196172173,
-     "t_end_ms": 1794196173578,
+     "t_start_ms": 1794210238639,
+     "t_end_ms": 1794210240044,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -271,7 +272,7 @@
       "Tab"
      ],
      "key_times": [
-      1794196172173
+      1794210238639
      ],
      "observation": {
       "speech_raw": "Address and search bar \u001d Edit \u001e \n/root/okur/corpus/fixtures/signup-form.html\nType in text.",

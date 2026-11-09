@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "5bf54de3"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794192676020
+     "t_ms": 1794209327074
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794192677378,
-     "t_end_ms": 1794192678382,
+     "t_start_ms": 1794209328437,
+     "t_end_ms": 1794209329441,
      "action": {
       "type": "key",
       "command": "Insert+T"
@@ -31,7 +32,7 @@
       "Insert+T"
      ],
      "key_times": [
-      1794192677378
+      1794209328437
      ],
      "observation": {
       "speech_raw": "Title is\nCity Library Expands Evening Hours - Riverside Gazette - Google Chrome",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794192678383,
-     "t_end_ms": 1794192679387,
+     "t_start_ms": 1794209329441,
+     "t_end_ms": 1794209330445,
      "action": {
       "type": "key",
       "command": "H"
@@ -51,7 +52,7 @@
       "H"
      ],
      "key_times": [
-      1794192678383
+      1794209329441
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours\n \u001d heading level 1 \u001e",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794192679387,
-     "t_end_ms": 1794192680391,
+     "t_start_ms": 1794209330445,
+     "t_end_ms": 1794209331450,
      "action": {
       "type": "key",
       "command": "Insert+F"
@@ -71,7 +72,7 @@
       "Insert+F"
      ],
      "key_times": [
-      1794192679387
+      1794209330445
      ],
      "observation": {
       "speech_raw": "Font is bold  Liberation Serif 24 point",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794192680391,
-     "t_end_ms": 1794192681395,
+     "t_start_ms": 1794209331450,
+     "t_end_ms": 1794209332454,
      "action": {
       "type": "key",
       "command": "Down"
@@ -91,7 +92,7 @@
       "Down"
      ],
      "key_times": [
-      1794192680391
+      1794209331450
      ],
      "observation": {
       "speech_raw": "By ",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794192681395,
-     "t_end_ms": 1794192682400,
+     "t_start_ms": 1794209332454,
+     "t_end_ms": 1794209333458,
      "action": {
       "type": "key",
       "command": "Insert+F"
@@ -111,7 +112,7 @@
       "Insert+F"
      ],
      "key_times": [
-      1794192681395
+      1794209332454
      ],
      "observation": {
       "speech_raw": "Font is Liberation Serif 12 point",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794192682400,
-     "t_end_ms": 1794192683405,
+     "t_start_ms": 1794209333458,
+     "t_end_ms": 1794209334461,
      "action": {
       "type": "key",
       "command": "Down"
@@ -131,7 +132,7 @@
       "Down"
      ],
      "key_times": [
-      1794192682400
+      1794209333458
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Maria Lopez,",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794192683405,
-     "t_end_ms": 1794192684533,
+     "t_start_ms": 1794209334461,
+     "t_end_ms": 1794209335587,
      "action": {
       "type": "key",
       "command": "Insert+F"
@@ -152,8 +153,8 @@
       "Insert+F"
      ],
      "key_times": [
-      1794192683405,
-      1794192683527
+      1794209334461,
+      1794209334583
      ],
      "observation": {
       "speech_raw": "Font is underline  Liberation Serif 12 point\nFont information:\nunderline  Liberation Serif 12 point\n\u001d Link \u001e List Okur Hot Keys\nPress ESCAPE to close this message.",
@@ -163,8 +164,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794192684533,
-     "t_end_ms": 1794192685537,
+     "t_start_ms": 1794209335587,
+     "t_end_ms": 1794209336590,
      "action": {
       "type": "key",
       "command": "Down"
@@ -173,7 +174,7 @@
       "Down"
      ],
      "key_times": [
-      1794192684533
+      1794209335587
      ],
      "observation": {
       "speech_raw": "Press ESCAPE to close this message.",
@@ -183,8 +184,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794192685537,
-     "t_end_ms": 1794192686541,
+     "t_start_ms": 1794209336590,
+     "t_end_ms": 1794209337594,
      "action": {
       "type": "key",
       "command": "Down"
@@ -193,7 +194,7 @@
       "Down"
      ],
      "key_times": [
-      1794192685537
+      1794209336590
      ],
      "observation": {
       "speech_raw": "Press ESCAPE to close this message.",
@@ -203,8 +204,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794192686541,
-     "t_end_ms": 1794192687545,
+     "t_start_ms": 1794209337594,
+     "t_end_ms": 1794209338598,
      "action": {
       "type": "key",
       "command": "Down"
@@ -213,7 +214,7 @@
       "Down"
      ],
      "key_times": [
-      1794192686541
+      1794209337594
      ],
      "observation": {
       "speech_raw": "Press ESCAPE to close this message.",
@@ -223,8 +224,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794192687545,
-     "t_end_ms": 1794192688549,
+     "t_start_ms": 1794209338598,
+     "t_end_ms": 1794209339603,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -233,7 +234,7 @@
       "Escape"
      ],
      "key_times": [
-      1794192687545
+      1794209338598
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Maria Lopez,",
@@ -243,8 +244,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794192688549,
-     "t_end_ms": 1794192689554,
+     "t_start_ms": 1794209339603,
+     "t_end_ms": 1794209340607,
      "action": {
       "type": "key",
       "command": "Insert+F12"
@@ -253,10 +254,10 @@
       "Insert+F12"
      ],
      "key_times": [
-      1794192688549
+      1794209339603
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "10:28",
       "settled": true
      },
      "step_success": true

@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "5bf54de3"
  },
  "trials": [
   {
@@ -15,34 +16,36 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794203921093
+     "t_ms": 1794210046136
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794203922460,
-     "t_end_ms": 1794203923564,
+     "t_start_ms": 1794210047500,
+     "t_end_ms": 1794210051006,
      "action": {
       "type": "key",
       "command": "Insert+Down"
      },
      "keys": [
-      "Insert+Down"
+      "Insert+Down",
+      "Insert+T"
      ],
      "key_times": [
-      1794203922460
+      1794210047500,
+      1794210050002
      ],
      "observation": {
-      "speech_raw": "Virtual Cursor Keys - Keys Fixture\nbanner\nSite navigation region\nlist of 3 items\n\u2022 \u001d same page link \u001e Paragraphs\n\u2022 \u001d same page link \u001e Contact\n\u2022 \u001d same page link \u001e Lists\nlist end\nSite navigation region end\nbanner end\nmain region\n \u001d heading level 1 \u001e Virtual cursor keys\nText before any link in the page.\n \u001d same page link \u001e A link alone in its paragraph\nSome text with \n \u001d same page link \u001e a link inside it\n and more text after it.\n----- \u001d separator \u001e \n \u001d heading level 2 \u001e Paragraphs\nThe first paragraph has two sentences. This is the second sentence of it.\nThe second paragraph is short.\nA division holds this text.\nAnother division, with a span inside it.\n----- \u001d separator \u001e \n \u001d heading level 2 \u001e Contact\nWrite to \n \u001d Send Mail Link \u001e help@example.org\n or call.\n \u001dmark \u001e A highlighted phrase \u001dend mark \u001e  in a paragraph, and bold words too.\nA clickable division\nThis part flows to the lists.\nHas Flows To\n \u001d heading level 2 \u001e Lists\nHas Flows From\nlist of 2 items\n\u2022 First item\n\u2022 Second item\nlist end\nlist of 2 items\n1. Step one\n2. Step two\nlist end\nmain region end\ncontent information\nThe page ends here.\ncontent information end\nend",
+      "speech_raw": "Virtual Cursor Keys - Keys Fixture\nbanner\nSite navigation region\nlist of 3 items\n\u2022 \u001d same page link \u001e Paragraphs\n\u2022 \u001d same page link \u001e Contact\n\u2022 \u001d same page link \u001e Lists\nlist end\nSite navigation region end\nbanner end\nmain region\n \u001d heading level 1 \u001e Virtual cursor keys\nText before any link in the page.\n \u001d same page link \u001e A link alone in its paragraph\nSome text with \n \u001d same page link \u001e a link inside it\n and more text after it.\n----- \u001d separator \u001e \n \u001d heading level 2 \u001e Paragraphs\nThe first paragraph has two sentences. This is the second sentence of it.\nThe second paragraph is short.\nA division holds this text.\nAnother division, with a span inside it.\n----- \u001d separator \u001e \n \u001d heading level 2 \u001e Contact\nWrite to \n \u001d Send Mail Link \u001e help@example.org\n or call.\n \u001dmark \u001e A highlighted phrase \u001dend mark \u001e  in a paragraph, and bold words too.\nA clickable division\nThis part flows to the lists.\nHas Flows To\n \u001d heading level 2 \u001e Lists\nHas Flows From\nlist of 2 items\n\u2022 First item\n\u2022 Second item\nlist end\nlist of 2 items\n1. Step one\n2. Step two\nlist end\nmain region end\ncontent information\nThe page ends here.\ncontent information end\nend\nTitle is\nVirtual Cursor Keys - Keys Fixture - Google Chrome\ncontent information\nlevel 2",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794203923564,
-     "t_end_ms": 1794203924569,
+     "t_start_ms": 1794210051006,
+     "t_end_ms": 1794210052011,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -51,7 +54,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794203923564
+      1794210051006
      ],
      "observation": {
       "speech_raw": "content information end",

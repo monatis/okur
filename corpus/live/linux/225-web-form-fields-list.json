@@ -1,0 +1,250 @@
+{
+ "scenario_id": "225-web-form-fields-list",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "5bf54de3"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Escape",
+     "t_ms": 1794208671863
+    },
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794208672220
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794208673525,
+     "t_end_ms": 1794208674529,
+     "action": {
+      "type": "key",
+      "command": "Insert+F5"
+     },
+     "keys": [
+      "Insert+F5"
+     ],
+     "key_times": [
+      1794208673525
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794208674529,
+     "t_end_ms": 1794208675733,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794208674529
+     ],
+     "observation": {
+      "speech_raw": "Select a Form Field\nList1 \u001d List box \u001e \nNext slide Button\n1 of 10\nTo move to an item press the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794208675733,
+     "t_end_ms": 1794208676938,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794208675733
+     ],
+     "observation": {
+      "speech_raw": "Wrap check box not checked\n2 of 10",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794208676938,
+     "t_end_ms": 1794208678143,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794208676938
+     ],
+     "observation": {
+      "speech_raw": "Outline Button\n3 of 10",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794208678143,
+     "t_end_ms": 1794208679347,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794208678143
+     ],
+     "observation": {
+      "speech_raw": "Actions Button\n4 of 10",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794208679347,
+     "t_end_ms": 1794208680551,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794208679347
+     ],
+     "observation": {
+      "speech_raw": "Pick one Button\n5 of 10",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794208680551,
+     "t_end_ms": 1794208681755,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794208680551
+     ],
+     "observation": {
+      "speech_raw": "Fruit edit combo\n6 of 10",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794208681755,
+     "t_end_ms": 1794208682959,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794208681755
+     ],
+     "observation": {
+      "speech_raw": "Start Button\n7 of 10",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794208682959,
+     "t_end_ms": 1794208684163,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794208682959
+     ],
+     "observation": {
+      "speech_raw": "Notes Edit the lazy dog, then reads std::io again\n8 of 10",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794208684163,
+     "t_end_ms": 1794208685469,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794208684163
+     ],
+     "observation": {
+      "speech_raw": "Web App Patterns\n \u001d Edit \u001e the lazy dog, then reads std::io again\nNotes  \u001d edit \u001e \nthe lazy dog, then reads std::io again",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794208685469,
+     "t_end_ms": 1794208686574,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794208685469
+     ],
+     "observation": {
+      "speech_raw": "the lazy dog, then reads std::io again",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,250 @@
+{
+ "scenario_id": "222-web-links-list",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "5bf54de3"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Escape",
+     "t_ms": 1794208567534
+    },
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794208568790
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794208570095,
+     "t_end_ms": 1794208571100,
+     "action": {
+      "type": "key",
+      "command": "Insert+F7"
+     },
+     "keys": [
+      "Insert+F7"
+     ],
+     "key_times": [
+      1794208570095
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794208571100,
+     "t_end_ms": 1794208572105,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794208571100
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794208572105,
+     "t_end_ms": 1794208573309,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794208572105
+     ],
+     "observation": {
+      "speech_raw": "Web App Patterns\n\u2022 \u001d same page link \u001e  \u001dCurrent Page\u001e Overview\nTo activate press Enter.\nSettings  \u001d Link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794208573309,
+     "t_end_ms": 1794208574414,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794208573309
+     ],
+     "observation": {
+      "speech_raw": "Step two  \u001d same page link \u001e  \u001dCurrent Step\u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794208574414,
+     "t_end_ms": 1794208575518,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794208574414
+     ],
+     "observation": {
+      "speech_raw": "Next slide  \u001d slide control \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794208575519,
+     "t_end_ms": 1794208576622,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794208575519
+     ],
+     "observation": {
+      "speech_raw": "Rust  \u001d same page link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794208576622,
+     "t_end_ms": 1794208577626,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794208576622
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794208577626,
+     "t_end_ms": 1794208579231,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794208577626
+     ],
+     "observation": {
+      "speech_raw": "Wrap \u001d toggle \u001e  \u001dnot checked\u001e \nLinks List\nlinks \u001d List box \u001e \nCurrent Page Overview",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794208579231,
+     "t_end_ms": 1794208580435,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794208579231
+     ],
+     "observation": {
+      "speech_raw": "Settings\n2 of 15",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794208580435,
+     "t_end_ms": 1794208581438,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794208580435
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794208581438,
+     "t_end_ms": 1794208582442,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794208581438
+     ],
+     "observation": {
+      "speech_raw": "\u2022 \u001d same page link \u001e  \u001dCurrent Step\u001e Step two",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

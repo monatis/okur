@@ -1,0 +1,270 @@
+{
+ "scenario_id": "604-web-form-fields-list-edit-advanced",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "5bf54de3"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Escape",
+     "t_ms": 1794209101362
+    },
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794209101720
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794209103026,
+     "t_end_ms": 1794209104029,
+     "action": {
+      "type": "key",
+      "command": "Insert+F5"
+     },
+     "keys": [
+      "Insert+F5"
+     ],
+     "key_times": [
+      1794209103026
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794209104029,
+     "t_end_ms": 1794209105233,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794209104029
+     ],
+     "observation": {
+      "speech_raw": "Select a Form Field\nList1 \u001d List box \u001e \nWrap check box not checked\n2 of 10\nTo move to an item press the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794209105233,
+     "t_end_ms": 1794209106437,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794209105233
+     ],
+     "observation": {
+      "speech_raw": "Outline Button",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794209106437,
+     "t_end_ms": 1794209107640,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794209106437
+     ],
+     "observation": {
+      "speech_raw": "Actions Button",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794209107640,
+     "t_end_ms": 1794209108844,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794209107640
+     ],
+     "observation": {
+      "speech_raw": "Pick one Button",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794209108844,
+     "t_end_ms": 1794209110048,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794209108844
+     ],
+     "observation": {
+      "speech_raw": "Fruit edit combo",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794209110048,
+     "t_end_ms": 1794209111252,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794209110048
+     ],
+     "observation": {
+      "speech_raw": "Start Button",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794209111252,
+     "t_end_ms": 1794209112456,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794209111252
+     ],
+     "observation": {
+      "speech_raw": "Notes Edit the lazy dog, then reads std::io again",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794209112456,
+     "t_end_ms": 1794209113961,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794209112456
+     ],
+     "observation": {
+      "speech_raw": "Web App Patterns\n \u001d Edit \u001e the lazy dog, then reads std::io again\nNotes  \u001d edit \u001e \nthe lazy dog, then reads std::io again\nNotes \u001d edit \u001e \nContains text",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794209113961,
+     "t_end_ms": 1794209115064,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794209113961
+     ],
+     "observation": {
+      "speech_raw": "the lazy dog, then reads std::io again",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794209115064,
+     "t_end_ms": 1794209116069,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794209115064
+     ],
+     "observation": {
+      "speech_raw": "virtual PC",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794209116069,
+     "t_end_ms": 1794209117072,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794209116069
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e Repository files",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

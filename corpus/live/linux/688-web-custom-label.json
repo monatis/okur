@@ -1,0 +1,566 @@
+{
+ "scenario_id": "688-web-custom-label",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "5bf54de3"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794209139863
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794209141226,
+     "t_end_ms": 1794209142231,
+     "action": {
+      "type": "key",
+      "command": "Insert+F2"
+     },
+     "keys": [
+      "Insert+F2"
+     ],
+     "key_times": [
+      1794209141226
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794209142231,
+     "t_end_ms": 1794209143236,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794209142231
+     ],
+     "observation": {
+      "speech_raw": "main region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794209143236,
+     "t_end_ms": 1794209144240,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794209143236
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e Book pickup",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794209144240,
+     "t_end_ms": 1794209145243,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794209144240
+     ],
+     "observation": {
+      "speech_raw": "Branch",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794209145243,
+     "t_end_ms": 1794209146248,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794209145243
+     ],
+     "observation": {
+      "speech_raw": " \u001d Edit \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794209146248,
+     "t_end_ms": 1794209147352,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794209146248
+     ],
+     "observation": {
+      "speech_raw": "Book Pickup - Riverside Library\n \u001d MainRegion \u001e \n \u001d FormRegion \u001e \nBranch \u001d Edit \u001e \nblank\nType in text.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794209147352,
+     "t_end_ms": 1794209148357,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794209147352
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794209148357,
+     "t_end_ms": 1794209149360,
+     "action": {
+      "type": "key",
+      "command": "E"
+     },
+     "keys": [
+      "E"
+     ],
+     "key_times": [
+      1794209148357
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794209149360,
+     "t_end_ms": 1794209150866,
+     "action": {
+      "type": "key",
+      "command": "Insert+Ctrl+Tab"
+     },
+     "keys": [
+      "Insert+Ctrl+Tab"
+     ],
+     "key_times": [
+      1794209149361
+     ],
+     "observation": {
+      "speech_raw": "Custom Label\nEnter a custom label for this item",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794209150866,
+     "t_end_ms": 1794209151870,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"l\")"
+     },
+     "keys": [
+      "l"
+     ],
+     "key_times": [
+      1794209150866
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794209151870,
+     "t_end_ms": 1794209152874,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"a\")"
+     },
+     "keys": [
+      "a"
+     ],
+     "key_times": [
+      1794209151870
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794209152874,
+     "t_end_ms": 1794209153879,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"m\")"
+     },
+     "keys": [
+      "m"
+     ],
+     "key_times": [
+      1794209152874
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794209153879,
+     "t_end_ms": 1794209154883,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"p\")"
+     },
+     "keys": [
+      "p"
+     ],
+     "key_times": [
+      1794209153879
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794209154883,
+     "t_end_ms": 1794209155889,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794209154883
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794209155889,
+     "t_end_ms": 1794209156894,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794209155889
+     ],
+     "observation": {
+      "speech_raw": "Enter a custom label for this item",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794209156894,
+     "t_end_ms": 1794209157899,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "key_times": [
+      1794209156894
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s17",
+     "t_start_ms": 1794209157899,
+     "t_end_ms": 1794209158903,
+     "action": {
+      "type": "key",
+      "command": "E"
+     },
+     "keys": [
+      "E"
+     ],
+     "key_times": [
+      1794209157899
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s18",
+     "t_start_ms": 1794209158903,
+     "t_end_ms": 1794209160108,
+     "action": {
+      "type": "key",
+      "command": "Insert+F5"
+     },
+     "keys": [
+      "Insert+F5"
+     ],
+     "key_times": [
+      1794209158903
+     ],
+     "observation": {
+      "speech_raw": "Select a Form Field\nList1 \u001d List box \u001e \nTo move to an item press the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s19",
+     "t_start_ms": 1794209160108,
+     "t_end_ms": 1794209161213,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794209160108
+     ],
+     "observation": {
+      "speech_raw": "Branch \u001d Edit \u001e \nblank",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s20",
+     "t_start_ms": 1794209161213,
+     "t_end_ms": 1794209162218,
+     "action": {
+      "type": "key",
+      "command": "Insert+F2"
+     },
+     "keys": [
+      "Insert+F2"
+     ],
+     "key_times": [
+      1794209161213
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s21",
+     "t_start_ms": 1794209162218,
+     "t_end_ms": 1794209163322,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794209162218
+     ],
+     "observation": {
+      "speech_raw": "OK \u001d Button \u001e \nTo activate press spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s22",
+     "t_start_ms": 1794209163322,
+     "t_end_ms": 1794209164326,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794209163322
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s23",
+     "t_start_ms": 1794209164326,
+     "t_end_ms": 1794209165330,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794209164326
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s24",
+     "t_start_ms": 1794209165331,
+     "t_end_ms": 1794209166335,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794209165331
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s25",
+     "t_start_ms": 1794209166335,
+     "t_end_ms": 1794209167339,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794209166335
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s26",
+     "t_start_ms": 1794209167339,
+     "t_end_ms": 1794209168343,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794209167339
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s27",
+     "t_start_ms": 1794209168343,
+     "t_end_ms": 1794209169348,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794209168343
+     ],
+     "observation": {
+      "speech_raw": "elamp  \u001d Edit \u001e \ne",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

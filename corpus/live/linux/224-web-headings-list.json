@@ -1,0 +1,250 @@
+{
+ "scenario_id": "224-web-headings-list",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "5bf54de3"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Escape",
+     "t_ms": 1794208634595
+    },
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794208634950
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794208636255,
+     "t_end_ms": 1794208637258,
+     "action": {
+      "type": "key",
+      "command": "Insert+F6"
+     },
+     "keys": [
+      "Insert+F6"
+     ],
+     "key_times": [
+      1794208636255
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794208637259,
+     "t_end_ms": 1794208638462,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794208637259
+     ],
+     "observation": {
+      "speech_raw": "Heading List\nheadings \u001d List box \u001e \nWeb App Patterns : 1\n1 of 10\nTo move to an item press the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794208638463,
+     "t_end_ms": 1794208639667,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794208638463
+     ],
+     "observation": {
+      "speech_raw": "Current links : 2\n2 of 10",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794208639667,
+     "t_end_ms": 1794208640871,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794208639667
+     ],
+     "observation": {
+      "speech_raw": "Described controls : 2\n3 of 10",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794208640871,
+     "t_end_ms": 1794208642076,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794208640871
+     ],
+     "observation": {
+      "speech_raw": "Popup buttons : 2\n4 of 10",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794208642076,
+     "t_end_ms": 1794208643280,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794208642076
+     ],
+     "observation": {
+      "speech_raw": "Fruit search : 2\n5 of 10",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794208643280,
+     "t_end_ms": 1794208644485,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794208643280
+     ],
+     "observation": {
+      "speech_raw": "Tab from here : 2\n6 of 10",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794208644485,
+     "t_end_ms": 1794208645689,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794208644485
+     ],
+     "observation": {
+      "speech_raw": "Repository files : 2\n7 of 10",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794208645689,
+     "t_end_ms": 1794208646893,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794208645689
+     ],
+     "observation": {
+      "speech_raw": "Workbench region : 2\n8 of 10",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794208646893,
+     "t_end_ms": 1794208648197,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794208646893
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e Workbench region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794208648197,
+     "t_end_ms": 1794208649201,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794208648197
+     ],
+     "observation": {
+      "speech_raw": "First tool \u001d Button \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

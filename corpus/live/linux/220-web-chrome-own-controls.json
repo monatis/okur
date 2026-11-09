@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "5bf54de3"
  },
  "trials": [
   {
@@ -15,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794193090474
+     "t_ms": 1794209191974
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794193090836
+     "t_ms": 1794209192331
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794193092142,
-     "t_end_ms": 1794193093146,
+     "t_start_ms": 1794209193636,
+     "t_end_ms": 1794209194641,
      "action": {
       "type": "key",
       "command": "Alt+F"
@@ -35,7 +36,7 @@
       "Alt+F"
      ],
      "key_times": [
-      1794193092142
+      1794209193636
      ],
      "observation": {
       "speech_raw": "",
@@ -45,8 +46,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794193093146,
-     "t_end_ms": 1794193094149,
+     "t_start_ms": 1794209194641,
+     "t_end_ms": 1794209195845,
      "action": {
       "type": "key",
       "command": "Down"
@@ -55,18 +56,18 @@
       "Down"
      ],
      "key_times": [
-      1794193093146
+      1794209194641
      ],
      "observation": {
-      "speech_raw": "banner",
+      "speech_raw": " \u001d Context Menu \u001e \n\nTo navigate press Up or Down Arrow.\nNew tab Ctrl+T\n1 of 21",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794193094149,
-     "t_end_ms": 1794193095152,
+     "t_start_ms": 1794209195845,
+     "t_end_ms": 1794209197049,
      "action": {
       "type": "key",
       "command": "Down"
@@ -75,18 +76,18 @@
       "Down"
      ],
      "key_times": [
-      1794193094149
+      1794209195845
      ],
      "observation": {
-      "speech_raw": " \u001d same page link \u001e Riverside Gazette",
+      "speech_raw": "New window Ctrl+N\n2 of 21",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794193095152,
-     "t_end_ms": 1794193096156,
+     "t_start_ms": 1794209197049,
+     "t_end_ms": 1794209198255,
      "action": {
       "type": "key",
       "command": "Down"
@@ -95,18 +96,18 @@
       "Down"
      ],
      "key_times": [
-      1794193095152
+      1794209197049
      ],
      "observation": {
-      "speech_raw": "Primary navigation region",
+      "speech_raw": "New Incognito window Ctrl+Shift+N\n3 of 21",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794193096156,
-     "t_end_ms": 1794193097461,
+     "t_start_ms": 1794209198255,
+     "t_end_ms": 1794209199559,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -115,18 +116,18 @@
       "Escape"
      ],
      "key_times": [
-      1794193096156
+      1794209198255
      ],
      "observation": {
-      "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
+      "speech_raw": "Leaving menus\nCity Library Expands Evening Hours - Riverside Gazette",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794193097461,
-     "t_end_ms": 1794193098466,
+     "t_start_ms": 1794209199559,
+     "t_end_ms": 1794209200563,
      "action": {
       "type": "key",
       "command": "Down"
@@ -135,7 +136,7 @@
       "Down"
      ],
      "key_times": [
-      1794193097461
+      1794209199559
      ],
      "observation": {
       "speech_raw": "",
@@ -145,8 +146,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794193098466,
-     "t_end_ms": 1794193099970,
+     "t_start_ms": 1794209200563,
+     "t_end_ms": 1794209201967,
      "action": {
       "type": "key",
       "command": "Ctrl+L"
@@ -155,7 +156,7 @@
       "Ctrl+L"
      ],
      "key_times": [
-      1794193098466
+      1794209200563
      ],
      "observation": {
       "speech_raw": "Address and search bar \u001d Edit \u001e \nfile:///root/okur/corpus/fixtures/news-article.html\nType in text.",
@@ -165,8 +166,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794193099970,
-     "t_end_ms": 1794193100972,
+     "t_start_ms": 1794209201967,
+     "t_end_ms": 1794209202970,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -175,7 +176,7 @@
       "Escape"
      ],
      "key_times": [
-      1794193099970
+      1794209201967
      ],
      "observation": {
       "speech_raw": "",
@@ -185,8 +186,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794193100972,
-     "t_end_ms": 1794193102676,
+     "t_start_ms": 1794209202970,
+     "t_end_ms": 1794209204573,
      "action": {
       "type": "key",
       "command": "Down"
@@ -195,7 +196,7 @@
       "Down"
      ],
      "key_times": [
-      1794193100972
+      1794209202970
      ],
      "observation": {
       "speech_raw": "file:///root/okur/corpus/fixtures/news-article.html\nOmnibox Popup  \u001d document \u001e\nPage has no headings and no links\nOmnibox Popup\nlist of 2 items\nRemove Suggestion button, press Enter to remove, file:///root/okur/corpus/fixtures/news-article.html \u001d Button \u001e \nRemove suggestion\nlist end\nend",
@@ -205,8 +206,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794193102676,
-     "t_end_ms": 1794193103680,
+     "t_start_ms": 1794209204573,
+     "t_end_ms": 1794209205576,
      "action": {
       "type": "key",
       "command": "Ctrl+T"
@@ -215,7 +216,7 @@
       "Ctrl+T"
      ],
      "key_times": [
-      1794193102676
+      1794209204573
      ],
      "observation": {
       "speech_raw": "",
@@ -225,8 +226,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794193103680,
-     "t_end_ms": 1794193104684,
+     "t_start_ms": 1794209205576,
+     "t_end_ms": 1794209206578,
      "action": {
       "type": "key",
       "command": "Ctrl+W"
@@ -235,7 +236,7 @@
       "Ctrl+W"
      ],
      "key_times": [
-      1794193103680
+      1794209205576
      ],
      "observation": {
       "speech_raw": "",
@@ -245,8 +246,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794193104684,
-     "t_end_ms": 1794193105686,
+     "t_start_ms": 1794209206578,
+     "t_end_ms": 1794209207581,
      "action": {
       "type": "key",
       "command": "Down"
@@ -255,7 +256,7 @@
       "Down"
      ],
      "key_times": [
-      1794193104684
+      1794209206578
      ],
      "observation": {
       "speech_raw": "list end",
