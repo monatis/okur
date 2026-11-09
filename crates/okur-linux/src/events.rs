@@ -546,7 +546,10 @@ fn read_native(
         return None;
     };
     let started = std::time::Instant::now();
-    let focus = snapshot(provider.atspi_tree(&object, CONTROL_LIMIT));
+    // Read with each object's children at once, as a page is: a GTK list's item cost 130 ms
+    // read call by call, its list read whole beside it (37 objects; Okur's own Links List in
+    // gtk2), each arrow up to three reads.
+    let focus = snapshot(provider.atspi_tree_parallel(&object, CONTROL_LIMIT));
     let walked = match walked {
         Some(walked) => walked.to_vec(),
         None => walk_to_window(provider, &object),
@@ -557,7 +560,7 @@ fn read_native(
             break;
         }
         let limit = ancestor_limit(ancestors.len(), &parent.role, &focus);
-        let node = snapshot(provider.atspi_tree(&parent, limit));
+        let node = snapshot(provider.atspi_tree_parallel(&parent, limit));
         let window = is_window(&node.role);
         ancestors.push(node);
         // The window is the last read: its own parent, the application, is not read.
