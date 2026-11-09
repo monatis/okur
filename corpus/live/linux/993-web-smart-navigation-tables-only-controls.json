@@ -1,0 +1,425 @@
+{
+ "scenario_id": "993-web-smart-navigation-tables-only-controls",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "fcd2601b"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794204361574
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794204362939,
+     "t_end_ms": 1794204363943,
+     "action": {
+      "type": "key",
+      "command": "E"
+     },
+     "keys": [
+      "E"
+     ],
+     "key_times": [
+      1794204362939
+     ],
+     "observation": {
+      "speech_raw": "City \u001d Edit \u001e \nIzmir",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794204363943,
+     "t_end_ms": 1794204364947,
+     "action": {
+      "type": "key",
+      "command": "Left"
+     },
+     "keys": [
+      "Left"
+     ],
+     "key_times": [
+      1794204363943
+     ],
+     "observation": {
+      "speech_raw": "\n",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794204364947,
+     "t_end_ms": 1794204365950,
+     "action": {
+      "type": "key",
+      "command": "Left"
+     },
+     "keys": [
+      "Left"
+     ],
+     "key_times": [
+      1794204364947
+     ],
+     "observation": {
+      "speech_raw": "y",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794204365950,
+     "t_end_ms": 1794204366954,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794204365950
+     ],
+     "observation": {
+      "speech_raw": "\n",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794204366954,
+     "t_end_ms": 1794204367958,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794204366954
+     ],
+     "observation": {
+      "speech_raw": "I",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794204367958,
+     "t_end_ms": 1794204368962,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794204367958
+     ],
+     "observation": {
+      "speech_raw": "z",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794204368962,
+     "t_end_ms": 1794204369966,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794204368962
+     ],
+     "observation": {
+      "speech_raw": "m",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794204369966,
+     "t_end_ms": 1794204370971,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794204369966
+     ],
+     "observation": {
+      "speech_raw": "i",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794204370971,
+     "t_end_ms": 1794204371976,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Right"
+     },
+     "keys": [
+      "Ctrl+Right"
+     ],
+     "key_times": [
+      1794204370971
+     ],
+     "observation": {
+      "speech_raw": "Color",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794204371976,
+     "t_end_ms": 1794204372981,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Left"
+     },
+     "keys": [
+      "Ctrl+Left"
+     ],
+     "key_times": [
+      1794204371976
+     ],
+     "observation": {
+      "speech_raw": "Izmir",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794204372981,
+     "t_end_ms": 1794204373985,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Left"
+     },
+     "keys": [
+      "Ctrl+Left"
+     ],
+     "key_times": [
+      1794204372981
+     ],
+     "observation": {
+      "speech_raw": "City",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794204373985,
+     "t_end_ms": 1794204374990,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794204373985
+     ],
+     "observation": {
+      "speech_raw": " \u001d Edit \u001e Izmir",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794204374990,
+     "t_end_ms": 1794204375994,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794204374990
+     ],
+     "observation": {
+      "speech_raw": "z",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794204375994,
+     "t_end_ms": 1794204376998,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794204375994
+     ],
+     "observation": {
+      "speech_raw": "m",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794204376998,
+     "t_end_ms": 1794204378003,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794204376998
+     ],
+     "observation": {
+      "speech_raw": "i",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794204378003,
+     "t_end_ms": 1794204379007,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "key_times": [
+      1794204378003
+     ],
+     "observation": {
+      "speech_raw": "Activation Fixture",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s17",
+     "t_start_ms": 1794204379007,
+     "t_end_ms": 1794204380012,
+     "action": {
+      "type": "key",
+      "command": "B"
+     },
+     "keys": [
+      "B"
+     ],
+     "key_times": [
+      1794204379007
+     ],
+     "observation": {
+      "speech_raw": "Count  \u001d Button \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s18",
+     "t_start_ms": 1794204380012,
+     "t_end_ms": 1794204381016,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794204380012
+     ],
+     "observation": {
+      "speech_raw": "o",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s19",
+     "t_start_ms": 1794204381016,
+     "t_end_ms": 1794204382021,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794204381016
+     ],
+     "observation": {
+      "speech_raw": "u",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s20",
+     "t_start_ms": 1794204382021,
+     "t_end_ms": 1794204383025,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Right"
+     },
+     "keys": [
+      "Ctrl+Right"
+     ],
+     "key_times": [
+      1794204382021
+     ],
+     "observation": {
+      "speech_raw": "Custom",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

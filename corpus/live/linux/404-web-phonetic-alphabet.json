@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "aac6f125"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,41 +15,49 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794183881068
+     "t_ms": 1794194840539
     },
     {
      "key": "Down",
-     "t_ms": 1794183881429
+     "t_ms": 1794194840899
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794183882733,
-     "t_end_ms": 1794183883737,
+     "t_start_ms": 1794194842204,
+     "t_end_ms": 1794194843329,
      "action": {
       "type": "key",
       "command": "Numpad5"
      },
      "keys": [
+      "Numpad5",
       "Numpad5"
      ],
+     "key_times": [
+      1794194842204,
+      1794194842325
+     ],
      "observation": {
-      "speech_raw": "a",
+      "speech_raw": "a\na",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794183883737,
-     "t_end_ms": 1794183884740,
+     "t_start_ms": 1794194843329,
+     "t_end_ms": 1794194844332,
      "action": {
       "type": "key",
       "command": "Right"
      },
      "keys": [
       "Right"
+     ],
+     "key_times": [
+      1794194843329
      ],
      "observation": {
       "speech_raw": "b",
@@ -59,31 +67,39 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794183884740,
-     "t_end_ms": 1794183885744,
+     "t_start_ms": 1794194844332,
+     "t_end_ms": 1794194845457,
      "action": {
       "type": "key",
       "command": "Numpad5"
      },
      "keys": [
+      "Numpad5",
       "Numpad5"
      ],
+     "key_times": [
+      1794194844332,
+      1794194844454
+     ],
      "observation": {
-      "speech_raw": "b",
+      "speech_raw": "b\nb",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794183885744,
-     "t_end_ms": 1794183886748,
+     "t_start_ms": 1794194845457,
+     "t_end_ms": 1794194846461,
      "action": {
       "type": "key",
       "command": "Right"
      },
      "keys": [
       "Right"
+     ],
+     "key_times": [
+      1794194845457
      ],
      "observation": {
       "speech_raw": "c",
@@ -93,31 +109,39 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794183886748,
-     "t_end_ms": 1794183887752,
+     "t_start_ms": 1794194846461,
+     "t_end_ms": 1794194847586,
      "action": {
       "type": "key",
       "command": "Numpad5"
      },
      "keys": [
+      "Numpad5",
       "Numpad5"
      ],
+     "key_times": [
+      1794194846461,
+      1794194846582
+     ],
      "observation": {
-      "speech_raw": "c",
+      "speech_raw": "c\nc",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794183887752,
-     "t_end_ms": 1794183888757,
+     "t_start_ms": 1794194847586,
+     "t_end_ms": 1794194848590,
      "action": {
       "type": "key",
       "command": "Right"
      },
      "keys": [
       "Right"
+     ],
+     "key_times": [
+      1794194847586
      ],
      "observation": {
       "speech_raw": "d",
@@ -127,31 +151,39 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794183888757,
-     "t_end_ms": 1794183889761,
+     "t_start_ms": 1794194848590,
+     "t_end_ms": 1794194849715,
      "action": {
       "type": "key",
       "command": "Numpad5"
      },
      "keys": [
+      "Numpad5",
       "Numpad5"
      ],
+     "key_times": [
+      1794194848590,
+      1794194848711
+     ],
      "observation": {
-      "speech_raw": "d",
+      "speech_raw": "d\nd",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794183889761,
-     "t_end_ms": 1794183890765,
+     "t_start_ms": 1794194849715,
+     "t_end_ms": 1794194850720,
      "action": {
       "type": "key",
       "command": "Right"
      },
      "keys": [
       "Right"
+     ],
+     "key_times": [
+      1794194849715
      ],
      "observation": {
       "speech_raw": "e",
@@ -161,31 +193,39 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794183890765,
-     "t_end_ms": 1794183891870,
+     "t_start_ms": 1794194850720,
+     "t_end_ms": 1794194851846,
      "action": {
       "type": "key",
       "command": "Numpad5"
      },
      "keys": [
+      "Numpad5",
       "Numpad5"
      ],
+     "key_times": [
+      1794194850720,
+      1794194850841
+     ],
      "observation": {
-      "speech_raw": "e",
+      "speech_raw": "e\ne",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794183891870,
-     "t_end_ms": 1794183892874,
+     "t_start_ms": 1794194851846,
+     "t_end_ms": 1794194852849,
      "action": {
       "type": "key",
       "command": "Right"
      },
      "keys": [
       "Right"
+     ],
+     "key_times": [
+      1794194851846
      ],
      "observation": {
       "speech_raw": "f",
@@ -195,31 +235,39 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794183892874,
-     "t_end_ms": 1794183893878,
+     "t_start_ms": 1794194852849,
+     "t_end_ms": 1794194853975,
      "action": {
       "type": "key",
       "command": "Numpad5"
      },
      "keys": [
+      "Numpad5",
       "Numpad5"
      ],
+     "key_times": [
+      1794194852849,
+      1794194852971
+     ],
      "observation": {
-      "speech_raw": "f",
+      "speech_raw": "f\nf",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794183893878,
-     "t_end_ms": 1794183894882,
+     "t_start_ms": 1794194853975,
+     "t_end_ms": 1794194854979,
      "action": {
       "type": "key",
       "command": "Right"
      },
      "keys": [
       "Right"
+     ],
+     "key_times": [
+      1794194853975
      ],
      "observation": {
       "speech_raw": "g",
@@ -229,31 +277,39 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794183894882,
-     "t_end_ms": 1794183895886,
+     "t_start_ms": 1794194854979,
+     "t_end_ms": 1794194856105,
      "action": {
       "type": "key",
       "command": "Numpad5"
      },
      "keys": [
+      "Numpad5",
       "Numpad5"
      ],
+     "key_times": [
+      1794194854979,
+      1794194855100
+     ],
      "observation": {
-      "speech_raw": "g",
+      "speech_raw": "g\ng",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794183895886,
-     "t_end_ms": 1794183896890,
+     "t_start_ms": 1794194856105,
+     "t_end_ms": 1794194857109,
      "action": {
       "type": "key",
       "command": "Right"
      },
      "keys": [
       "Right"
+     ],
+     "key_times": [
+      1794194856105
      ],
      "observation": {
       "speech_raw": "h",
@@ -263,31 +319,39 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794183896890,
-     "t_end_ms": 1794183897895,
+     "t_start_ms": 1794194857109,
+     "t_end_ms": 1794194858235,
      "action": {
       "type": "key",
       "command": "Numpad5"
      },
      "keys": [
+      "Numpad5",
       "Numpad5"
      ],
+     "key_times": [
+      1794194857109,
+      1794194857230
+     ],
      "observation": {
-      "speech_raw": "h",
+      "speech_raw": "h\nh",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794183897895,
-     "t_end_ms": 1794183898899,
+     "t_start_ms": 1794194858235,
+     "t_end_ms": 1794194859239,
      "action": {
       "type": "key",
       "command": "Right"
      },
      "keys": [
       "Right"
+     ],
+     "key_times": [
+      1794194858235
      ],
      "observation": {
       "speech_raw": "i",
@@ -297,31 +361,39 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794183898899,
-     "t_end_ms": 1794183899904,
+     "t_start_ms": 1794194859239,
+     "t_end_ms": 1794194860365,
      "action": {
       "type": "key",
       "command": "Numpad5"
      },
      "keys": [
+      "Numpad5",
       "Numpad5"
      ],
+     "key_times": [
+      1794194859239,
+      1794194859360
+     ],
      "observation": {
-      "speech_raw": "i",
+      "speech_raw": "i\ni",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794183899904,
-     "t_end_ms": 1794183900908,
+     "t_start_ms": 1794194860365,
+     "t_end_ms": 1794194861369,
      "action": {
       "type": "key",
       "command": "Right"
      },
      "keys": [
       "Right"
+     ],
+     "key_times": [
+      1794194860365
      ],
      "observation": {
       "speech_raw": "j",
@@ -331,31 +403,39 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794183900908,
-     "t_end_ms": 1794183901912,
+     "t_start_ms": 1794194861369,
+     "t_end_ms": 1794194862495,
      "action": {
       "type": "key",
       "command": "Numpad5"
      },
      "keys": [
+      "Numpad5",
       "Numpad5"
      ],
+     "key_times": [
+      1794194861369,
+      1794194861491
+     ],
      "observation": {
-      "speech_raw": "j",
+      "speech_raw": "j\nj",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794183901912,
-     "t_end_ms": 1794183902917,
+     "t_start_ms": 1794194862495,
+     "t_end_ms": 1794194863500,
      "action": {
       "type": "key",
       "command": "Right"
      },
      "keys": [
       "Right"
+     ],
+     "key_times": [
+      1794194862495
      ],
      "observation": {
       "speech_raw": "k",
@@ -365,31 +445,39 @@
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794183902917,
-     "t_end_ms": 1794183903921,
+     "t_start_ms": 1794194863500,
+     "t_end_ms": 1794194864626,
      "action": {
       "type": "key",
       "command": "Numpad5"
      },
      "keys": [
+      "Numpad5",
       "Numpad5"
      ],
+     "key_times": [
+      1794194863500,
+      1794194863621
+     ],
      "observation": {
-      "speech_raw": "k",
+      "speech_raw": "k\nk",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794183903921,
-     "t_end_ms": 1794183904925,
+     "t_start_ms": 1794194864626,
+     "t_end_ms": 1794194865630,
      "action": {
       "type": "key",
       "command": "Right"
      },
      "keys": [
       "Right"
+     ],
+     "key_times": [
+      1794194864626
      ],
      "observation": {
       "speech_raw": "l",
@@ -399,31 +487,39 @@
     },
     {
      "step_id": "s23",
-     "t_start_ms": 1794183904925,
-     "t_end_ms": 1794183905930,
+     "t_start_ms": 1794194865630,
+     "t_end_ms": 1794194866756,
      "action": {
       "type": "key",
       "command": "Numpad5"
      },
      "keys": [
+      "Numpad5",
       "Numpad5"
      ],
+     "key_times": [
+      1794194865630,
+      1794194865751
+     ],
      "observation": {
-      "speech_raw": "l",
+      "speech_raw": "l\nl",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s24",
-     "t_start_ms": 1794183905930,
-     "t_end_ms": 1794183906934,
+     "t_start_ms": 1794194866756,
+     "t_end_ms": 1794194867760,
      "action": {
       "type": "key",
       "command": "Right"
      },
      "keys": [
       "Right"
+     ],
+     "key_times": [
+      1794194866756
      ],
      "observation": {
       "speech_raw": "m",
@@ -433,31 +529,39 @@
     },
     {
      "step_id": "s25",
-     "t_start_ms": 1794183906934,
-     "t_end_ms": 1794183907939,
+     "t_start_ms": 1794194867760,
+     "t_end_ms": 1794194868886,
      "action": {
       "type": "key",
       "command": "Numpad5"
      },
      "keys": [
+      "Numpad5",
       "Numpad5"
      ],
+     "key_times": [
+      1794194867760,
+      1794194867882
+     ],
      "observation": {
-      "speech_raw": "m",
+      "speech_raw": "m\nm",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s26",
-     "t_start_ms": 1794183907939,
-     "t_end_ms": 1794183908942,
+     "t_start_ms": 1794194868886,
+     "t_end_ms": 1794194869890,
      "action": {
       "type": "key",
       "command": "Right"
      },
      "keys": [
       "Right"
+     ],
+     "key_times": [
+      1794194868886
      ],
      "observation": {
       "speech_raw": "n",
@@ -467,31 +571,39 @@
     },
     {
      "step_id": "s27",
-     "t_start_ms": 1794183908942,
-     "t_end_ms": 1794183909947,
+     "t_start_ms": 1794194869890,
+     "t_end_ms": 1794194871016,
      "action": {
       "type": "key",
       "command": "Numpad5"
      },
      "keys": [
+      "Numpad5",
       "Numpad5"
      ],
+     "key_times": [
+      1794194869890,
+      1794194870011
+     ],
      "observation": {
-      "speech_raw": "n",
+      "speech_raw": "n\nn",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s28",
-     "t_start_ms": 1794183909947,
-     "t_end_ms": 1794183910951,
+     "t_start_ms": 1794194871016,
+     "t_end_ms": 1794194872019,
      "action": {
       "type": "key",
       "command": "Right"
      },
      "keys": [
       "Right"
+     ],
+     "key_times": [
+      1794194871016
      ],
      "observation": {
       "speech_raw": "o",
@@ -501,31 +613,39 @@
     },
     {
      "step_id": "s29",
-     "t_start_ms": 1794183910951,
-     "t_end_ms": 1794183911956,
+     "t_start_ms": 1794194872019,
+     "t_end_ms": 1794194873146,
      "action": {
       "type": "key",
       "command": "Numpad5"
      },
      "keys": [
+      "Numpad5",
       "Numpad5"
      ],
+     "key_times": [
+      1794194872019,
+      1794194872141
+     ],
      "observation": {
-      "speech_raw": "o",
+      "speech_raw": "o\no",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s30",
-     "t_start_ms": 1794183911956,
-     "t_end_ms": 1794183912960,
+     "t_start_ms": 1794194873146,
+     "t_end_ms": 1794194874149,
      "action": {
       "type": "key",
       "command": "Right"
      },
      "keys": [
       "Right"
+     ],
+     "key_times": [
+      1794194873146
      ],
      "observation": {
       "speech_raw": "p",
@@ -535,31 +655,39 @@
     },
     {
      "step_id": "s31",
-     "t_start_ms": 1794183912960,
-     "t_end_ms": 1794183913964,
+     "t_start_ms": 1794194874149,
+     "t_end_ms": 1794194875275,
      "action": {
       "type": "key",
       "command": "Numpad5"
      },
      "keys": [
+      "Numpad5",
       "Numpad5"
      ],
+     "key_times": [
+      1794194874149,
+      1794194874270
+     ],
      "observation": {
-      "speech_raw": "p",
+      "speech_raw": "p\np",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s32",
-     "t_start_ms": 1794183913964,
-     "t_end_ms": 1794183914968,
+     "t_start_ms": 1794194875275,
+     "t_end_ms": 1794194876279,
      "action": {
       "type": "key",
       "command": "Right"
      },
      "keys": [
       "Right"
+     ],
+     "key_times": [
+      1794194875275
      ],
      "observation": {
       "speech_raw": "q",
@@ -569,31 +697,39 @@
     },
     {
      "step_id": "s33",
-     "t_start_ms": 1794183914968,
-     "t_end_ms": 1794183915973,
+     "t_start_ms": 1794194876279,
+     "t_end_ms": 1794194877406,
      "action": {
       "type": "key",
       "command": "Numpad5"
      },
      "keys": [
+      "Numpad5",
       "Numpad5"
      ],
+     "key_times": [
+      1794194876279,
+      1794194876401
+     ],
      "observation": {
-      "speech_raw": "q",
+      "speech_raw": "q\nq",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s34",
-     "t_start_ms": 1794183915973,
-     "t_end_ms": 1794183916978,
+     "t_start_ms": 1794194877406,
+     "t_end_ms": 1794194878410,
      "action": {
       "type": "key",
       "command": "Right"
      },
      "keys": [
       "Right"
+     ],
+     "key_times": [
+      1794194877406
      ],
      "observation": {
       "speech_raw": "r",
@@ -603,31 +739,39 @@
     },
     {
      "step_id": "s35",
-     "t_start_ms": 1794183916978,
-     "t_end_ms": 1794183917982,
+     "t_start_ms": 1794194878410,
+     "t_end_ms": 1794194879537,
      "action": {
       "type": "key",
       "command": "Numpad5"
      },
      "keys": [
+      "Numpad5",
       "Numpad5"
      ],
+     "key_times": [
+      1794194878410,
+      1794194878532
+     ],
      "observation": {
-      "speech_raw": "r",
+      "speech_raw": "r\nr",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s36",
-     "t_start_ms": 1794183917982,
-     "t_end_ms": 1794183918987,
+     "t_start_ms": 1794194879537,
+     "t_end_ms": 1794194880540,
      "action": {
       "type": "key",
       "command": "Right"
      },
      "keys": [
       "Right"
+     ],
+     "key_times": [
+      1794194879537
      ],
      "observation": {
       "speech_raw": "s",
@@ -637,31 +781,39 @@
     },
     {
      "step_id": "s37",
-     "t_start_ms": 1794183918987,
-     "t_end_ms": 1794183919991,
+     "t_start_ms": 1794194880540,
+     "t_end_ms": 1794194881667,
      "action": {
       "type": "key",
       "command": "Numpad5"
      },
      "keys": [
+      "Numpad5",
       "Numpad5"
      ],
+     "key_times": [
+      1794194880540,
+      1794194880662
+     ],
      "observation": {
-      "speech_raw": "s",
+      "speech_raw": "s\ns",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s38",
-     "t_start_ms": 1794183919991,
-     "t_end_ms": 1794183920996,
+     "t_start_ms": 1794194881667,
+     "t_end_ms": 1794194882671,
      "action": {
       "type": "key",
       "command": "Right"
      },
      "keys": [
       "Right"
+     ],
+     "key_times": [
+      1794194881667
      ],
      "observation": {
       "speech_raw": "t",
@@ -671,31 +823,39 @@
     },
     {
      "step_id": "s39",
-     "t_start_ms": 1794183920996,
-     "t_end_ms": 1794183922000,
+     "t_start_ms": 1794194882671,
+     "t_end_ms": 1794194883797,
      "action": {
       "type": "key",
       "command": "Numpad5"
      },
      "keys": [
+      "Numpad5",
       "Numpad5"
      ],
+     "key_times": [
+      1794194882671,
+      1794194882793
+     ],
      "observation": {
-      "speech_raw": "t",
+      "speech_raw": "t\nt",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s40",
-     "t_start_ms": 1794183922000,
-     "t_end_ms": 1794183923005,
+     "t_start_ms": 1794194883797,
+     "t_end_ms": 1794194884801,
      "action": {
       "type": "key",
       "command": "Right"
      },
      "keys": [
       "Right"
+     ],
+     "key_times": [
+      1794194883797
      ],
      "observation": {
       "speech_raw": "u",
@@ -705,31 +865,39 @@
     },
     {
      "step_id": "s41",
-     "t_start_ms": 1794183923005,
-     "t_end_ms": 1794183924009,
+     "t_start_ms": 1794194884801,
+     "t_end_ms": 1794194885926,
      "action": {
       "type": "key",
       "command": "Numpad5"
      },
      "keys": [
+      "Numpad5",
       "Numpad5"
      ],
+     "key_times": [
+      1794194884801,
+      1794194884923
+     ],
      "observation": {
-      "speech_raw": "u",
+      "speech_raw": "u\nu",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s42",
-     "t_start_ms": 1794183924009,
-     "t_end_ms": 1794183925013,
+     "t_start_ms": 1794194885926,
+     "t_end_ms": 1794194886930,
      "action": {
       "type": "key",
       "command": "Right"
      },
      "keys": [
       "Right"
+     ],
+     "key_times": [
+      1794194885926
      ],
      "observation": {
       "speech_raw": "v",
@@ -739,31 +907,39 @@
     },
     {
      "step_id": "s43",
-     "t_start_ms": 1794183925013,
-     "t_end_ms": 1794183926030,
+     "t_start_ms": 1794194886930,
+     "t_end_ms": 1794194888056,
      "action": {
       "type": "key",
       "command": "Numpad5"
      },
      "keys": [
+      "Numpad5",
       "Numpad5"
      ],
+     "key_times": [
+      1794194886930,
+      1794194887052
+     ],
      "observation": {
-      "speech_raw": "v",
+      "speech_raw": "v\nv",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s44",
-     "t_start_ms": 1794183926030,
-     "t_end_ms": 1794183927033,
+     "t_start_ms": 1794194888056,
+     "t_end_ms": 1794194889060,
      "action": {
       "type": "key",
       "command": "Right"
      },
      "keys": [
       "Right"
+     ],
+     "key_times": [
+      1794194888056
      ],
      "observation": {
       "speech_raw": "w",
@@ -773,31 +949,39 @@
     },
     {
      "step_id": "s45",
-     "t_start_ms": 1794183927033,
-     "t_end_ms": 1794183928037,
+     "t_start_ms": 1794194889060,
+     "t_end_ms": 1794194890186,
      "action": {
       "type": "key",
       "command": "Numpad5"
      },
      "keys": [
+      "Numpad5",
       "Numpad5"
      ],
+     "key_times": [
+      1794194889060,
+      1794194889181
+     ],
      "observation": {
-      "speech_raw": "w",
+      "speech_raw": "w\nw",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s46",
-     "t_start_ms": 1794183928037,
-     "t_end_ms": 1794183929041,
+     "t_start_ms": 1794194890186,
+     "t_end_ms": 1794194891190,
      "action": {
       "type": "key",
       "command": "Right"
      },
      "keys": [
       "Right"
+     ],
+     "key_times": [
+      1794194890186
      ],
      "observation": {
       "speech_raw": "x",
@@ -807,31 +991,39 @@
     },
     {
      "step_id": "s47",
-     "t_start_ms": 1794183929041,
-     "t_end_ms": 1794183930045,
+     "t_start_ms": 1794194891190,
+     "t_end_ms": 1794194892315,
      "action": {
       "type": "key",
       "command": "Numpad5"
      },
      "keys": [
+      "Numpad5",
       "Numpad5"
      ],
+     "key_times": [
+      1794194891190,
+      1794194891311
+     ],
      "observation": {
-      "speech_raw": "x",
+      "speech_raw": "x\nx",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s48",
-     "t_start_ms": 1794183930045,
-     "t_end_ms": 1794183931048,
+     "t_start_ms": 1794194892315,
+     "t_end_ms": 1794194893319,
      "action": {
       "type": "key",
       "command": "Right"
      },
      "keys": [
       "Right"
+     ],
+     "key_times": [
+      1794194892315
      ],
      "observation": {
       "speech_raw": "y",
@@ -841,31 +1033,39 @@
     },
     {
      "step_id": "s49",
-     "t_start_ms": 1794183931048,
-     "t_end_ms": 1794183932153,
+     "t_start_ms": 1794194893319,
+     "t_end_ms": 1794194894446,
      "action": {
       "type": "key",
       "command": "Numpad5"
      },
      "keys": [
+      "Numpad5",
       "Numpad5"
      ],
+     "key_times": [
+      1794194893319,
+      1794194893440
+     ],
      "observation": {
-      "speech_raw": "y",
+      "speech_raw": "y\ny",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s50",
-     "t_start_ms": 1794183932153,
-     "t_end_ms": 1794183933157,
+     "t_start_ms": 1794194894446,
+     "t_end_ms": 1794194895449,
      "action": {
       "type": "key",
       "command": "Right"
      },
      "keys": [
       "Right"
+     ],
+     "key_times": [
+      1794194894446
      ],
      "observation": {
       "speech_raw": "z",
@@ -875,31 +1075,39 @@
     },
     {
      "step_id": "s51",
-     "t_start_ms": 1794183933157,
-     "t_end_ms": 1794183934161,
+     "t_start_ms": 1794194895449,
+     "t_end_ms": 1794194896575,
      "action": {
       "type": "key",
       "command": "Numpad5"
      },
      "keys": [
+      "Numpad5",
       "Numpad5"
      ],
+     "key_times": [
+      1794194895449,
+      1794194895570
+     ],
      "observation": {
-      "speech_raw": "z",
+      "speech_raw": "z\nz",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s52",
-     "t_start_ms": 1794183934161,
-     "t_end_ms": 1794183935166,
+     "t_start_ms": 1794194896575,
+     "t_end_ms": 1794194897578,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794194896575
      ],
      "observation": {
       "speech_raw": "ABC",
@@ -909,17 +1117,22 @@
     },
     {
      "step_id": "s53",
-     "t_start_ms": 1794183935166,
-     "t_end_ms": 1794183936170,
+     "t_start_ms": 1794194897578,
+     "t_end_ms": 1794194898704,
      "action": {
       "type": "key",
       "command": "Numpad5"
      },
      "keys": [
+      "Numpad5",
       "Numpad5"
      ],
+     "key_times": [
+      1794194897579,
+      1794194897700
+     ],
      "observation": {
-      "speech_raw": "A",
+      "speech_raw": "A\nA",
       "settled": true
      },
      "step_success": true

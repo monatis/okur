@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "12447157"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794179946651
+     "t_ms": 1794195695708
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794179948015,
-     "t_end_ms": 1794179949019,
+     "t_start_ms": 1794195697072,
+     "t_end_ms": 1794195698077,
      "action": {
       "type": "key",
       "command": "Shift+Period"
      },
      "keys": [
       "Shift+Period"
+     ],
+     "key_times": [
+      1794195697072
      ],
      "observation": {
       "speech_raw": "Document Reading Reference Fixture",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794179949019,
-     "t_end_ms": 1794179950023,
+     "t_start_ms": 1794195698077,
+     "t_end_ms": 1794195699081,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794195698077
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e The Accessibility Engine Specification",
@@ -55,14 +61,17 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794179950023,
-     "t_end_ms": 1794179951028,
+     "t_start_ms": 1794195699081,
+     "t_end_ms": 1794195700086,
      "action": {
       "type": "key",
       "command": "Shift+Period"
      },
      "keys": [
       "Shift+Period"
+     ],
+     "key_times": [
+      1794195699081
      ],
      "observation": {
       "speech_raw": "The screen reader engine parses the document object model into a clean virtual buffer.",
@@ -72,14 +81,17 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794179951028,
-     "t_end_ms": 1794179952033,
+     "t_start_ms": 1794195700086,
+     "t_end_ms": 1794195701090,
      "action": {
       "type": "key",
       "command": "Shift+Comma"
      },
      "keys": [
       "Shift+Comma"
+     ],
+     "key_times": [
+      1794195700086
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e The Accessibility Engine Specification",
@@ -89,14 +101,17 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794179952033,
-     "t_end_ms": 1794179953038,
+     "t_start_ms": 1794195701090,
+     "t_end_ms": 1794195702095,
      "action": {
       "type": "key",
       "command": "Alt+Win+End"
      },
      "keys": [
       "Alt+Win+End"
+     ],
+     "key_times": [
+      1794195701090
      ],
      "observation": {
       "speech_raw": "The screen reader engine parses the document object model into a clean virtual buffer.",
@@ -106,14 +121,17 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794179953038,
-     "t_end_ms": 1794179954044,
+     "t_start_ms": 1794195702095,
+     "t_end_ms": 1794195703101,
      "action": {
       "type": "key",
       "command": "Alt+Win+Home"
      },
      "keys": [
       "Alt+Win+Home"
+     ],
+     "key_times": [
+      1794195702095
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e The Accessibility Engine Specification",
@@ -123,14 +141,17 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794179954044,
-     "t_end_ms": 1794179955049,
+     "t_start_ms": 1794195703101,
+     "t_end_ms": 1794195704104,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794195703101
      ],
      "observation": {
       "speech_raw": "The screen reader engine parses the document object model into a clean virtual buffer.",

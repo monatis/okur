@@ -1,0 +1,309 @@
+{
+ "scenario_id": "836-web-landmarks-on-focus-advanced",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "fcd2601b"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Escape",
+     "t_ms": 1794201036567
+    },
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794201036928
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794201038233,
+     "t_end_ms": 1794201039337,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794201038233
+     ],
+     "observation": {
+      "speech_raw": "Web App Patterns\n \u001d heading level 1 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794201039337,
+     "t_end_ms": 1794201040341,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794201039337
+     ],
+     "observation": {
+      "speech_raw": "Current links\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794201040341,
+     "t_end_ms": 1794201041346,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794201040341
+     ],
+     "observation": {
+      "speech_raw": "Described controls\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794201041346,
+     "t_end_ms": 1794201042350,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794201041346
+     ],
+     "observation": {
+      "speech_raw": "Popup buttons\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794201042350,
+     "t_end_ms": 1794201043354,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794201042350
+     ],
+     "observation": {
+      "speech_raw": "Fruit search\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794201043354,
+     "t_end_ms": 1794201044358,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794201043354
+     ],
+     "observation": {
+      "speech_raw": "Tab from here\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794201044358,
+     "t_end_ms": 1794201045362,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794201044358
+     ],
+     "observation": {
+      "speech_raw": "Repository files\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794201045362,
+     "t_end_ms": 1794201046366,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794201045362
+     ],
+     "observation": {
+      "speech_raw": "Workbench region\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794201046366,
+     "t_end_ms": 1794201047370,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794201046366
+     ],
+     "observation": {
+      "speech_raw": "Files table\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794201047370,
+     "t_end_ms": 1794201048374,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794201047370
+     ],
+     "observation": {
+      "speech_raw": "Landmarks\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794201048374,
+     "t_end_ms": 1794201049478,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794201048374
+     ],
+     "observation": {
+      "speech_raw": "Web App Patterns\n \u001d same page link \u001e Aside link\nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794201049478,
+     "t_end_ms": 1794201050583,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794201049478
+     ],
+     "observation": {
+      "speech_raw": "Site \u001d SearchRegion \u001e \nSearch link  \u001d same page link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794201050583,
+     "t_end_ms": 1794201051687,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794201050583
+     ],
+     "observation": {
+      "speech_raw": "Updates \u001d Region \u001e \nRegion link  \u001d same page link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794201051687,
+     "t_end_ms": 1794201052792,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794201051687
+     ],
+     "observation": {
+      "speech_raw": " \u001d ContentInfoRegion \u001e \nFooter link  \u001d same page link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

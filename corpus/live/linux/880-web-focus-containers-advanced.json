@@ -1,0 +1,189 @@
+{
+ "scenario_id": "880-web-focus-containers-advanced",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "fcd2601b"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Escape",
+     "t_ms": 1794201960337
+    },
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794201960700
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794201962006,
+     "t_end_ms": 1794201963110,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794201962006
+     ],
+     "observation": {
+      "speech_raw": "Web App Patterns\n \u001d heading level 1 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794201963110,
+     "t_end_ms": 1794201964114,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794201963110
+     ],
+     "observation": {
+      "speech_raw": "Current links\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794201964114,
+     "t_end_ms": 1794201965118,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794201964114
+     ],
+     "observation": {
+      "speech_raw": "Described controls\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794201965118,
+     "t_end_ms": 1794201966121,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794201965118
+     ],
+     "observation": {
+      "speech_raw": "Popup buttons\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794201966121,
+     "t_end_ms": 1794201967126,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794201966121
+     ],
+     "observation": {
+      "speech_raw": "Fruit search\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794201967126,
+     "t_end_ms": 1794201968130,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794201967126
+     ],
+     "observation": {
+      "speech_raw": "Tab from here\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794201968130,
+     "t_end_ms": 1794201969134,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794201968130
+     ],
+     "observation": {
+      "speech_raw": "Repository files\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794201969134,
+     "t_end_ms": 1794201970239,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794201969134
+     ],
+     "observation": {
+      "speech_raw": "Web App Patterns\n\u2022 \u001d same page link \u001e  \u001dCurrent Page\u001e README\nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

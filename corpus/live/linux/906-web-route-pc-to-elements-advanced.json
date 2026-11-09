@@ -1,0 +1,345 @@
+{
+ "scenario_id": "906-web-route-pc-to-elements-advanced",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "fcd2601b"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794202834481
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794202835842,
+     "t_end_ms": 1794202836846,
+     "action": {
+      "type": "key",
+      "command": "1"
+     },
+     "keys": [
+      "1"
+     ],
+     "key_times": [
+      1794202835842
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours\n \u001d heading level 1 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794202836846,
+     "t_end_ms": 1794202837852,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+Delete"
+     },
+     "keys": [
+      "Ctrl+Insert+Delete"
+     ],
+     "key_times": [
+      1794202836846
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794202837852,
+     "t_end_ms": 1794202838856,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794202837852
+     ],
+     "observation": {
+      "speech_raw": "By ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794202838856,
+     "t_end_ms": 1794202839860,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794202838856
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Maria Lopez,",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794202839860,
+     "t_end_ms": 1794202840965,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+Delete"
+     },
+     "keys": [
+      "Ctrl+Insert+Delete"
+     ],
+     "key_times": [
+      1794202839860
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours - Riverside Gazette\n \u001d same page link \u001e Maria Lopez,\nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794202840965,
+     "t_end_ms": 1794202841971,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794202840965
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Maria Lopez,",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794202841971,
+     "t_end_ms": 1794202842974,
+     "action": {
+      "type": "key",
+      "command": "G"
+     },
+     "keys": [
+      "G"
+     ],
+     "key_times": [
+      1794202841971
+     ],
+     "observation": {
+      "speech_raw": "Front entrance of the Riverside City Library at dusk\n \u001d Graphic \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794202842974,
+     "t_end_ms": 1794202843980,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+Delete"
+     },
+     "keys": [
+      "Ctrl+Insert+Delete"
+     ],
+     "key_times": [
+      1794202842974
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794202843980,
+     "t_end_ms": 1794202844985,
+     "action": {
+      "type": "key",
+      "command": "L"
+     },
+     "keys": [
+      "L"
+     ],
+     "key_times": [
+      1794202843980
+     ],
+     "observation": {
+      "speech_raw": "list of 3 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794202844985,
+     "t_end_ms": 1794202845990,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+Delete"
+     },
+     "keys": [
+      "Ctrl+Insert+Delete"
+     ],
+     "key_times": [
+      1794202844985
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794202845990,
+     "t_end_ms": 1794202846995,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794202845990
+     ],
+     "observation": {
+      "speech_raw": "\u2022 Weekday hours: 9 a.m. to 9 p.m.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794202846995,
+     "t_end_ms": 1794202848001,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+Delete"
+     },
+     "keys": [
+      "Ctrl+Insert+Delete"
+     ],
+     "key_times": [
+      1794202846995
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794202848001,
+     "t_end_ms": 1794202849005,
+     "action": {
+      "type": "key",
+      "command": "T"
+     },
+     "keys": [
+      "T"
+     ],
+     "key_times": [
+      1794202848001
+     ],
+     "observation": {
+      "speech_raw": "3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794202849005,
+     "t_end_ms": 1794202850010,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Alt+Down"
+     },
+     "keys": [
+      "Ctrl+Alt+Down"
+     ],
+     "key_times": [
+      1794202849005
+     ],
+     "observation": {
+      "speech_raw": "Central\nRow 2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794202850010,
+     "t_end_ms": 1794202851015,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+Delete"
+     },
+     "keys": [
+      "Ctrl+Insert+Delete"
+     ],
+     "key_times": [
+      1794202850010
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794202851015,
+     "t_end_ms": 1794202852020,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794202851015
+     ],
+     "observation": {
+      "speech_raw": "Central",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

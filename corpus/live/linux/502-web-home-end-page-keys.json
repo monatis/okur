@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "aac6f125"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794184088988
+     "t_ms": 1794195090446
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794184090349,
-     "t_end_ms": 1794184091353,
+     "t_start_ms": 1794195091814,
+     "t_end_ms": 1794195092818,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794195091814
      ],
      "observation": {
       "speech_raw": "banner",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794184091353,
-     "t_end_ms": 1794184092357,
+     "t_start_ms": 1794195092818,
+     "t_end_ms": 1794195093822,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794195092818
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Riverside Gazette",
@@ -55,14 +61,17 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794184092357,
-     "t_end_ms": 1794184093361,
+     "t_start_ms": 1794195093822,
+     "t_end_ms": 1794195094825,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794195093822
      ],
      "observation": {
       "speech_raw": "Primary navigation region",
@@ -72,14 +81,17 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794184093361,
-     "t_end_ms": 1794184094365,
+     "t_start_ms": 1794195094825,
+     "t_end_ms": 1794195095829,
      "action": {
       "type": "key",
       "command": "Right"
      },
      "keys": [
       "Right"
+     ],
+     "key_times": [
+      1794195094825
      ],
      "observation": {
       "speech_raw": "r",
@@ -89,14 +101,17 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794184094365,
-     "t_end_ms": 1794184095369,
+     "t_start_ms": 1794195095829,
+     "t_end_ms": 1794195096832,
      "action": {
       "type": "key",
       "command": "End"
      },
      "keys": [
       "End"
+     ],
+     "key_times": [
+      1794195095829
      ],
      "observation": {
       "speech_raw": "",
@@ -106,14 +121,17 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794184095369,
-     "t_end_ms": 1794184096374,
+     "t_start_ms": 1794195096832,
+     "t_end_ms": 1794195097836,
      "action": {
       "type": "key",
       "command": "Home"
      },
      "keys": [
       "Home"
+     ],
+     "key_times": [
+      1794195096832
      ],
      "observation": {
       "speech_raw": "",
@@ -123,14 +141,17 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794184096374,
-     "t_end_ms": 1794184097378,
+     "t_start_ms": 1794195097836,
+     "t_end_ms": 1794195098840,
      "action": {
       "type": "key",
       "command": "PageDown"
      },
      "keys": [
       "PageDown"
+     ],
+     "key_times": [
+      1794195097836
      ],
      "observation": {
       "speech_raw": "list of 2 items nesting level 1",
@@ -140,14 +161,17 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794184097378,
-     "t_end_ms": 1794184098382,
+     "t_start_ms": 1794195098840,
+     "t_end_ms": 1794195099845,
      "action": {
       "type": "key",
       "command": "PageDown"
      },
      "keys": [
       "PageDown"
+     ],
+     "key_times": [
+      1794195098840
      ],
      "observation": {
       "speech_raw": "block quote end",
@@ -157,14 +181,17 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794184098382,
-     "t_end_ms": 1794184099386,
+     "t_start_ms": 1794195099845,
+     "t_end_ms": 1794195100849,
      "action": {
       "type": "key",
       "command": "PageUp"
      },
      "keys": [
       "PageUp"
+     ],
+     "key_times": [
+      1794195099845
      ],
      "observation": {
       "speech_raw": "list of 2 items nesting level 1",
@@ -174,14 +201,17 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794184099386,
-     "t_end_ms": 1794184100391,
+     "t_start_ms": 1794195100849,
+     "t_end_ms": 1794195101854,
      "action": {
       "type": "key",
       "command": "Ctrl+End"
      },
      "keys": [
       "Ctrl+End"
+     ],
+     "key_times": [
+      1794195100849
      ],
      "observation": {
       "speech_raw": "content information end",
@@ -191,14 +221,17 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794184100391,
-     "t_end_ms": 1794184101395,
+     "t_start_ms": 1794195101854,
+     "t_end_ms": 1794195102858,
      "action": {
       "type": "key",
       "command": "PageUp"
      },
      "keys": [
       "PageUp"
+     ],
+     "key_times": [
+      1794195101854
      ],
      "observation": {
       "speech_raw": " \u001d heading level 3 \u001e What readers said",

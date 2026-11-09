@@ -1,0 +1,285 @@
+{
+ "scenario_id": "738-form-tab-order-item-state-off",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "fcd2601b"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794200163298
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794200164663,
+     "t_end_ms": 1794200165767,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794200164663
+     ],
+     "observation": {
+      "speech_raw": "Create Your Account - Riverside Library\nFull name \u001d Edit \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794200165767,
+     "t_end_ms": 1794200166871,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794200165767
+     ],
+     "observation": {
+      "speech_raw": "Email address \u001d Edit \u001e \nsam@example.com\nWe never share your email.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794200166871,
+     "t_end_ms": 1794200167975,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794200166871
+     ],
+     "observation": {
+      "speech_raw": "Password \u001d password edit \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794200167975,
+     "t_end_ms": 1794200169079,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794200167975
+     ],
+     "observation": {
+      "speech_raw": "Membership type \u001d group \u001e \nAdult  \u001d radio button \u001e  \n1 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794200169079,
+     "t_end_ms": 1794200170184,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794200169079
+     ],
+     "observation": {
+      "speech_raw": "Home branch  \u001d Combo box \u001e  \nNorthside",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794200170184,
+     "t_end_ms": 1794200171289,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794200170184
+     ],
+     "observation": {
+      "speech_raw": "Accessibility needs \u001d edit \u001e \nblank",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794200171289,
+     "t_end_ms": 1794200172393,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794200171289
+     ],
+     "observation": {
+      "speech_raw": "Send me the monthly newsletter  \u001d check box \u001e  \nTo clear checkmark press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794200172393,
+     "t_end_ms": 1794200173498,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794200172393
+     ],
+     "observation": {
+      "speech_raw": "I agree to the terms of use  \u001d check box \u001e  \nTo check press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794200173498,
+     "t_end_ms": 1794200174602,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794200173498
+     ],
+     "observation": {
+      "speech_raw": "terms of use  \u001d same page link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794200174602,
+     "t_end_ms": 1794200175707,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794200174602
+     ],
+     "observation": {
+      "speech_raw": "Create account  \u001d Button \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794200175707,
+     "t_end_ms": 1794200176811,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794200175707
+     ],
+     "observation": {
+      "speech_raw": "Tab search \u001d button menu \u001e \nPress space to activate the menu, then navigate with arrow keys",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794200176811,
+     "t_end_ms": 1794200178216,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794200176811
+     ],
+     "observation": {
+      "speech_raw": "File \u001d Button \u001e \nTo activate press spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794200178216,
+     "t_end_ms": 1794200179621,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794200178216
+     ],
+     "observation": {
+      "speech_raw": "Address and search bar \u001d Edit \u001e \n/root/okur/corpus/fixtures/signup-form.html\nType in text.",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

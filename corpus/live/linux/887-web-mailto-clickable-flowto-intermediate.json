@@ -1,0 +1,205 @@
+{
+ "scenario_id": "887-web-mailto-clickable-flowto-intermediate",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "fcd2601b"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794202203105
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794202204469,
+     "t_end_ms": 1794202205573,
+     "action": {
+      "type": "key",
+      "command": "Backslash"
+     },
+     "keys": [
+      "Backslash"
+     ],
+     "key_times": [
+      1794202204469
+     ],
+     "observation": {
+      "speech_raw": "Virtual Cursor Keys - Keys Fixture\n \u001d Send Mail Link \u001e help@example.org\nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794202205573,
+     "t_end_ms": 1794202206576,
+     "action": {
+      "type": "key",
+      "command": "Backslash"
+     },
+     "keys": [
+      "Backslash"
+     ],
+     "key_times": [
+      1794202205573
+     ],
+     "observation": {
+      "speech_raw": "wrapping to top\nhelp@example.org \u001d Send Mail Link \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794202206576,
+     "t_end_ms": 1794202207580,
+     "action": {
+      "type": "key",
+      "command": "Shift+Backslash"
+     },
+     "keys": [
+      "Shift+Backslash"
+     ],
+     "key_times": [
+      1794202206576
+     ],
+     "observation": {
+      "speech_raw": "wrapping to bottom\nhelp@example.org \u001d Send Mail Link \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794202207580,
+     "t_end_ms": 1794202208584,
+     "action": {
+      "type": "key",
+      "command": "Slash"
+     },
+     "keys": [
+      "Slash"
+     ],
+     "key_times": [
+      1794202207580
+     ],
+     "observation": {
+      "speech_raw": "No clickable elements",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794202208584,
+     "t_end_ms": 1794202209589,
+     "action": {
+      "type": "key",
+      "command": "Slash"
+     },
+     "keys": [
+      "Slash"
+     ],
+     "key_times": [
+      1794202208584
+     ],
+     "observation": {
+      "speech_raw": "No clickable elements",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794202209589,
+     "t_end_ms": 1794202210594,
+     "action": {
+      "type": "key",
+      "command": "Shift+Slash"
+     },
+     "keys": [
+      "Shift+Slash"
+     ],
+     "key_times": [
+      1794202209589
+     ],
+     "observation": {
+      "speech_raw": "No clickable elements",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794202210594,
+     "t_end_ms": 1794202211598,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "key_times": [
+      1794202210594
+     ],
+     "observation": {
+      "speech_raw": "Virtual Cursor Keys - Keys Fixture",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794202211598,
+     "t_end_ms": 1794202212603,
+     "action": {
+      "type": "key",
+      "command": "Equals"
+     },
+     "keys": [
+      "Equals"
+     ],
+     "key_times": [
+      1794202211598
+     ],
+     "observation": {
+      "speech_raw": "No more flows found",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794202212603,
+     "t_end_ms": 1794202213608,
+     "action": {
+      "type": "key",
+      "command": "Shift+Equals"
+     },
+     "keys": [
+      "Shift+Equals"
+     ],
+     "key_times": [
+      1794202212603
+     ],
+     "observation": {
+      "speech_raw": "No more flows found",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

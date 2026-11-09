@@ -1,0 +1,225 @@
+{
+ "scenario_id": "961-web-live-updates-screen-echo-all",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "fcd2601b"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794203886605
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794203887972,
+     "t_end_ms": 1794203888975,
+     "action": {
+      "type": "key",
+      "command": "B"
+     },
+     "keys": [
+      "B"
+     ],
+     "key_times": [
+      1794203887972
+     ],
+     "observation": {
+      "speech_raw": "Send message  \u001d Button \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794203888975,
+     "t_end_ms": 1794203890245,
+     "action": {
+      "type": "key",
+      "command": "Enter"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794203888975
+     ],
+     "observation": {
+      "speech_raw": "Messages\nYou: Message 1\nMessage 1 sent",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794203890245,
+     "t_end_ms": 1794203891349,
+     "action": {
+      "type": "key",
+      "command": "Enter"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794203890245
+     ],
+     "observation": {
+      "speech_raw": "Messages\nYou: Message 2\nMessage 2 sent",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794203891349,
+     "t_end_ms": 1794203892353,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "key_times": [
+      1794203891349
+     ],
+     "observation": {
+      "speech_raw": "Team Chat - Live Updates Fixture",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794203892353,
+     "t_end_ms": 1794203893357,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794203892353
+     ],
+     "observation": {
+      "speech_raw": "main region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794203893357,
+     "t_end_ms": 1794203894361,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794203893357
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e Team chat",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794203894361,
+     "t_end_ms": 1794203895365,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794203894361
+     ],
+     "observation": {
+      "speech_raw": "group start Messages",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794203895365,
+     "t_end_ms": 1794203896370,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794203895365
+     ],
+     "observation": {
+      "speech_raw": "Ada: Good morning",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794203896370,
+     "t_end_ms": 1794203897374,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794203896370
+     ],
+     "observation": {
+      "speech_raw": "You: Message 1",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794203897374,
+     "t_end_ms": 1794203898379,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794203897374
+     ],
+     "observation": {
+      "speech_raw": "You: Message 2",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

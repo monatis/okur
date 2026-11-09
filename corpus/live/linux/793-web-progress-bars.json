@@ -1,0 +1,129 @@
+{
+ "scenario_id": "793-web-progress-bars",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "fcd2601b"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Escape",
+     "t_ms": 1794200342054
+    },
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794200342415
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794200343722,
+     "t_end_ms": 1794200344827,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794200343722
+     ],
+     "observation": {
+      "speech_raw": "Progress Bars Fixture\nStart upload  \u001d Button \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794200344827,
+     "t_end_ms": 1794200345831,
+     "action": {
+      "type": "key",
+      "command": "Enter"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794200344827
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794200345831,
+     "t_end_ms": 1794200346835,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794200345831
+     ],
+     "observation": {
+      "speech_raw": "Upload",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794200346835,
+     "t_end_ms": 1794200347839,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794200346835
+     ],
+     "observation": {
+      "speech_raw": "\u001d Progress bar \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794200347839,
+     "t_end_ms": 1794200348843,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794200347839
+     ],
+     "observation": {
+      "speech_raw": "Sync",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,165 @@
+{
+ "scenario_id": "758-web-mouse-keys-on-a-link",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "fcd2601b"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794200284689
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794200286050,
+     "t_end_ms": 1794200287154,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794200286050
+     ],
+     "observation": {
+      "speech_raw": "Weekend Events - Riverside Gazette\n\u2022 \u001d same page link \u001e News\nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794200287154,
+     "t_end_ms": 1794200288158,
+     "action": {
+      "type": "key",
+      "command": "Insert+NumpadMinus"
+     },
+     "keys": [
+      "Insert+NumpadMinus"
+     ],
+     "key_times": [
+      1794200287154
+     ],
+     "observation": {
+      "speech_raw": "Route Okur to PC",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794200288158,
+     "t_end_ms": 1794200289162,
+     "action": {
+      "type": "key",
+      "command": "NumpadMinus"
+     },
+     "keys": [
+      "NumpadMinus"
+     ],
+     "key_times": [
+      1794200288158
+     ],
+     "observation": {
+      "speech_raw": "Okur Cursor",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794200289162,
+     "t_end_ms": 1794200290166,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794200289162
+     ],
+     "observation": {
+      "speech_raw": "\u2022 News",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794200290166,
+     "t_end_ms": 1794200291171,
+     "action": {
+      "type": "key",
+      "command": "NumpadSlash"
+     },
+     "keys": [
+      "NumpadSlash"
+     ],
+     "key_times": [
+      1794200290166
+     ],
+     "observation": {
+      "speech_raw": "left mouse button",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794200291171,
+     "t_end_ms": 1794200292174,
+     "action": {
+      "type": "key",
+      "command": "NumpadPlus"
+     },
+     "keys": [
+      "NumpadPlus"
+     ],
+     "key_times": [
+      1794200291171
+     ],
+     "observation": {
+      "speech_raw": "virtual PC Cursor",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794200292174,
+     "t_end_ms": 1794200293180,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794200292174
+     ],
+     "observation": {
+      "speech_raw": "\u2022 \u001d same page link \u001e News",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

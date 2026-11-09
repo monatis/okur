@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "12447157"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794179552516
+     "t_ms": 1794194456504
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794179553878,
-     "t_end_ms": 1794179554982,
+     "t_start_ms": 1794194457872,
+     "t_end_ms": 1794194458976,
      "action": {
       "type": "key",
       "command": "Backslash"
      },
      "keys": [
       "Backslash"
+     ],
+     "key_times": [
+      1794194457872
      ],
      "observation": {
       "speech_raw": "Virtual Cursor Keys - Keys Fixture\n \u001d Send Mail Link \u001e help@example.org\nTo activate press Enter.",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794179554982,
-     "t_end_ms": 1794179555986,
+     "t_start_ms": 1794194458976,
+     "t_end_ms": 1794194459980,
      "action": {
       "type": "key",
       "command": "Backslash"
      },
      "keys": [
       "Backslash"
+     ],
+     "key_times": [
+      1794194458976
      ],
      "observation": {
       "speech_raw": "wrapping to top\nhelp@example.org \u001d Send Mail Link \u001e ",
@@ -55,14 +61,17 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794179555986,
-     "t_end_ms": 1794179556990,
+     "t_start_ms": 1794194459980,
+     "t_end_ms": 1794194460985,
      "action": {
       "type": "key",
       "command": "Shift+Backslash"
      },
      "keys": [
       "Shift+Backslash"
+     ],
+     "key_times": [
+      1794194459980
      ],
      "observation": {
       "speech_raw": "wrapping to bottom\nhelp@example.org \u001d Send Mail Link \u001e ",
@@ -72,14 +81,17 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794179556990,
-     "t_end_ms": 1794179557994,
+     "t_start_ms": 1794194460985,
+     "t_end_ms": 1794194461989,
      "action": {
       "type": "key",
       "command": "Slash"
      },
      "keys": [
       "Slash"
+     ],
+     "key_times": [
+      1794194460985
      ],
      "observation": {
       "speech_raw": "There are no clickable elements on this page.",
@@ -89,14 +101,17 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794179557994,
-     "t_end_ms": 1794179558998,
+     "t_start_ms": 1794194461989,
+     "t_end_ms": 1794194462993,
      "action": {
       "type": "key",
       "command": "Slash"
      },
      "keys": [
       "Slash"
+     ],
+     "key_times": [
+      1794194461989
      ],
      "observation": {
       "speech_raw": "There are no clickable elements on this page.",
@@ -106,14 +121,17 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794179558998,
-     "t_end_ms": 1794179560001,
+     "t_start_ms": 1794194462993,
+     "t_end_ms": 1794194463997,
      "action": {
       "type": "key",
       "command": "Shift+Slash"
      },
      "keys": [
       "Shift+Slash"
+     ],
+     "key_times": [
+      1794194462993
      ],
      "observation": {
       "speech_raw": "There are no clickable elements on this page.",
@@ -123,14 +141,17 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794179560001,
-     "t_end_ms": 1794179561005,
+     "t_start_ms": 1794194463997,
+     "t_end_ms": 1794194465003,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
      },
      "keys": [
       "Ctrl+Home"
+     ],
+     "key_times": [
+      1794194463997
      ],
      "observation": {
       "speech_raw": "Virtual Cursor Keys - Keys Fixture",
@@ -140,14 +161,17 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794179561005,
-     "t_end_ms": 1794179562009,
+     "t_start_ms": 1794194465003,
+     "t_end_ms": 1794194466008,
      "action": {
       "type": "key",
       "command": "Equals"
      },
      "keys": [
       "Equals"
+     ],
+     "key_times": [
+      1794194465003
      ],
      "observation": {
       "speech_raw": "No more flows found",
@@ -157,14 +181,17 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794179562009,
-     "t_end_ms": 1794179563015,
+     "t_start_ms": 1794194466008,
+     "t_end_ms": 1794194467013,
      "action": {
       "type": "key",
       "command": "Shift+Equals"
      },
      "keys": [
       "Shift+Equals"
+     ],
+     "key_times": [
+      1794194466008
      ],
      "observation": {
       "speech_raw": "No more flows found",

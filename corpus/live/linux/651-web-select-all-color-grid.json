@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "aac6f125"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794187117812
+     "t_ms": 1794198534129
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794187119173,
-     "t_end_ms": 1794187120177,
+     "t_start_ms": 1794198535494,
+     "t_end_ms": 1794198536499,
      "action": {
       "type": "key",
       "command": "Ctrl+A"
      },
      "keys": [
       "Ctrl+A"
+     ],
+     "key_times": [
+      1794198535494
      ],
      "observation": {
       "speech_raw": "selected\n4310 characters up to\n\n\nGrid 216, ff ff ff.",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794187120177,
-     "t_end_ms": 1794187121182,
+     "t_start_ms": 1794198536499,
+     "t_end_ms": 1794198537503,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
      },
      "keys": [
       "Ctrl+Home"
+     ],
+     "key_times": [
+      1794198536499
      ],
      "observation": {
       "speech_raw": "Color Grid",

@@ -1,0 +1,205 @@
+{
+ "scenario_id": "889-web-step-past-elements-intermediate",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "fcd2601b"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794202269380
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794202270746,
+     "t_end_ms": 1794202271750,
+     "action": {
+      "type": "key",
+      "command": "L"
+     },
+     "keys": [
+      "L"
+     ],
+     "key_times": [
+      1794202270746
+     ],
+     "observation": {
+      "speech_raw": "list of 3 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794202271750,
+     "t_end_ms": 1794202272754,
+     "action": {
+      "type": "key",
+      "command": "Shift+Period"
+     },
+     "keys": [
+      "Shift+Period"
+     ],
+     "key_times": [
+      1794202271750
+     ],
+     "observation": {
+      "speech_raw": "list end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794202272754,
+     "t_end_ms": 1794202273758,
+     "action": {
+      "type": "key",
+      "command": "Shift+Comma"
+     },
+     "keys": [
+      "Shift+Comma"
+     ],
+     "key_times": [
+      1794202272754
+     ],
+     "observation": {
+      "speech_raw": "list of 3 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794202273758,
+     "t_end_ms": 1794202274761,
+     "action": {
+      "type": "key",
+      "command": "L"
+     },
+     "keys": [
+      "L"
+     ],
+     "key_times": [
+      1794202273758
+     ],
+     "observation": {
+      "speech_raw": "list of 2 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794202274761,
+     "t_end_ms": 1794202275766,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794202274761
+     ],
+     "observation": {
+      "speech_raw": "\u2022 First item",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794202275766,
+     "t_end_ms": 1794202276771,
+     "action": {
+      "type": "key",
+      "command": "Shift+Period"
+     },
+     "keys": [
+      "Shift+Period"
+     ],
+     "key_times": [
+      1794202275766
+     ],
+     "observation": {
+      "speech_raw": "list end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794202276771,
+     "t_end_ms": 1794202277776,
+     "action": {
+      "type": "key",
+      "command": "Shift+Comma"
+     },
+     "keys": [
+      "Shift+Comma"
+     ],
+     "key_times": [
+      1794202276771
+     ],
+     "observation": {
+      "speech_raw": "list of 2 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794202277776,
+     "t_end_ms": 1794202278782,
+     "action": {
+      "type": "key",
+      "command": "Alt+Win+End"
+     },
+     "keys": [
+      "Alt+Win+End"
+     ],
+     "key_times": [
+      1794202277776
+     ],
+     "observation": {
+      "speech_raw": "list end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794202278782,
+     "t_end_ms": 1794202279787,
+     "action": {
+      "type": "key",
+      "command": "Alt+Win+Home"
+     },
+     "keys": [
+      "Alt+Win+Home"
+     ],
+     "key_times": [
+      1794202278782
+     ],
+     "observation": {
+      "speech_raw": "list of 2 items",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

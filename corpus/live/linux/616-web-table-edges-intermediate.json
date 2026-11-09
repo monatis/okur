@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "aac6f125"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794185661285
+     "t_ms": 1794196910947
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794185662652,
-     "t_end_ms": 1794185663656,
+     "t_start_ms": 1794196912315,
+     "t_end_ms": 1794196913319,
      "action": {
       "type": "key",
       "command": "T"
      },
      "keys": [
       "T"
+     ],
+     "key_times": [
+      1794196912315
      ],
      "observation": {
       "speech_raw": "3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794185663656,
-     "t_end_ms": 1794185664661,
+     "t_start_ms": 1794196913319,
+     "t_end_ms": 1794196914324,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Left"
      },
      "keys": [
       "Ctrl+Alt+Left"
+     ],
+     "key_times": [
+      1794196913319
      ],
      "observation": {
       "speech_raw": "beginning of row",
@@ -55,14 +61,17 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794185664661,
-     "t_end_ms": 1794185665667,
+     "t_start_ms": 1794196914324,
+     "t_end_ms": 1794196915329,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Up"
      },
      "keys": [
       "Ctrl+Alt+Up"
+     ],
+     "key_times": [
+      1794196914324
      ],
      "observation": {
       "speech_raw": "top of column",
@@ -72,14 +81,17 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794185665667,
-     "t_end_ms": 1794185666672,
+     "t_start_ms": 1794196915329,
+     "t_end_ms": 1794196916335,
      "action": {
       "type": "key",
       "command": "Win+Alt+Up"
      },
      "keys": [
       "Win+Alt+Up"
+     ],
+     "key_times": [
+      1794196915329
      ],
      "observation": {
       "speech_raw": "First row",
@@ -89,14 +101,17 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794185666672,
-     "t_end_ms": 1794185667678,
+     "t_start_ms": 1794196916335,
+     "t_end_ms": 1794196917340,
      "action": {
       "type": "key",
       "command": "Win+Alt+Left"
      },
      "keys": [
       "Win+Alt+Left"
+     ],
+     "key_times": [
+      1794196916335
      ],
      "observation": {
       "speech_raw": "First column",
@@ -106,14 +121,17 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794185667678,
-     "t_end_ms": 1794185668684,
+     "t_start_ms": 1794196917340,
+     "t_end_ms": 1794196918346,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+End"
      },
      "keys": [
       "Ctrl+Alt+End"
+     ],
+     "key_times": [
+      1794196917340
      ],
      "observation": {
       "speech_raw": "Details  Northside\n \u001d same page link \u001e Directions\nColumn 3, Row 3",
@@ -123,14 +141,17 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794185668684,
-     "t_end_ms": 1794185669691,
+     "t_start_ms": 1794196918346,
+     "t_end_ms": 1794196919351,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Right"
      },
      "keys": [
       "Ctrl+Alt+Right"
+     ],
+     "key_times": [
+      1794196918346
      ],
      "observation": {
       "speech_raw": "end of row",
@@ -140,14 +161,17 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794185669691,
-     "t_end_ms": 1794185670696,
+     "t_start_ms": 1794196919351,
+     "t_end_ms": 1794196920357,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Down"
      },
      "keys": [
       "Ctrl+Alt+Down"
+     ],
+     "key_times": [
+      1794196919351
      ],
      "observation": {
       "speech_raw": "bottom of column",
@@ -157,14 +181,17 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794185670696,
-     "t_end_ms": 1794185671702,
+     "t_start_ms": 1794196920357,
+     "t_end_ms": 1794196921463,
      "action": {
       "type": "key",
       "command": "Win+Alt+Down"
      },
      "keys": [
       "Win+Alt+Down"
+     ],
+     "key_times": [
+      1794196920357
      ],
      "observation": {
       "speech_raw": "Last row",
@@ -174,14 +201,17 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794185671702,
-     "t_end_ms": 1794185672707,
+     "t_start_ms": 1794196921463,
+     "t_end_ms": 1794196922468,
      "action": {
       "type": "key",
       "command": "Win+Alt+Right"
      },
      "keys": [
       "Win+Alt+Right"
+     ],
+     "key_times": [
+      1794196921463
      ],
      "observation": {
       "speech_raw": "Last column",

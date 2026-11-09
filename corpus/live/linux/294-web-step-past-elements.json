@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "12447157"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794179585652
+     "t_ms": 1794194489539
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794179587018,
-     "t_end_ms": 1794179588022,
+     "t_start_ms": 1794194490903,
+     "t_end_ms": 1794194491906,
      "action": {
       "type": "key",
       "command": "L"
      },
      "keys": [
       "L"
+     ],
+     "key_times": [
+      1794194490903
      ],
      "observation": {
       "speech_raw": "list of 3 items",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794179588022,
-     "t_end_ms": 1794179589026,
+     "t_start_ms": 1794194491906,
+     "t_end_ms": 1794194492910,
      "action": {
       "type": "key",
       "command": "Shift+Period"
      },
      "keys": [
       "Shift+Period"
+     ],
+     "key_times": [
+      1794194491906
      ],
      "observation": {
       "speech_raw": "list end",
@@ -55,14 +61,17 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794179589027,
-     "t_end_ms": 1794179590031,
+     "t_start_ms": 1794194492910,
+     "t_end_ms": 1794194493915,
      "action": {
       "type": "key",
       "command": "Shift+Comma"
      },
      "keys": [
       "Shift+Comma"
+     ],
+     "key_times": [
+      1794194492910
      ],
      "observation": {
       "speech_raw": "list of 3 items",
@@ -72,14 +81,17 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794179590031,
-     "t_end_ms": 1794179591035,
+     "t_start_ms": 1794194493915,
+     "t_end_ms": 1794194494919,
      "action": {
       "type": "key",
       "command": "L"
      },
      "keys": [
       "L"
+     ],
+     "key_times": [
+      1794194493915
      ],
      "observation": {
       "speech_raw": "list of 2 items",
@@ -89,14 +101,17 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794179591035,
-     "t_end_ms": 1794179592039,
+     "t_start_ms": 1794194494919,
+     "t_end_ms": 1794194495923,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794194494919
      ],
      "observation": {
       "speech_raw": "\u2022 First item",
@@ -106,14 +121,17 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794179592039,
-     "t_end_ms": 1794179593043,
+     "t_start_ms": 1794194495923,
+     "t_end_ms": 1794194496928,
      "action": {
       "type": "key",
       "command": "Shift+Period"
      },
      "keys": [
       "Shift+Period"
+     ],
+     "key_times": [
+      1794194495923
      ],
      "observation": {
       "speech_raw": "list end",
@@ -123,14 +141,17 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794179593043,
-     "t_end_ms": 1794179594048,
+     "t_start_ms": 1794194496928,
+     "t_end_ms": 1794194497933,
      "action": {
       "type": "key",
       "command": "Shift+Comma"
      },
      "keys": [
       "Shift+Comma"
+     ],
+     "key_times": [
+      1794194496928
      ],
      "observation": {
       "speech_raw": "list of 2 items",
@@ -140,14 +161,17 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794179594048,
-     "t_end_ms": 1794179595053,
+     "t_start_ms": 1794194497933,
+     "t_end_ms": 1794194498939,
      "action": {
       "type": "key",
       "command": "Alt+Win+End"
      },
      "keys": [
       "Alt+Win+End"
+     ],
+     "key_times": [
+      1794194497933
      ],
      "observation": {
       "speech_raw": "list end",
@@ -157,14 +181,17 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794179595053,
-     "t_end_ms": 1794179596059,
+     "t_start_ms": 1794194498939,
+     "t_end_ms": 1794194499944,
      "action": {
       "type": "key",
       "command": "Alt+Win+Home"
      },
      "keys": [
       "Alt+Win+Home"
+     ],
+     "key_times": [
+      1794194498939
      ],
      "observation": {
       "speech_raw": "list of 2 items",

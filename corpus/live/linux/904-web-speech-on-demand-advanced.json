@@ -1,0 +1,245 @@
+{
+ "scenario_id": "904-web-speech-on-demand-advanced",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "fcd2601b"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794202759074
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794202760439,
+     "t_end_ms": 1794202761442,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794202760439
+     ],
+     "observation": {
+      "speech_raw": "banner",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794202761442,
+     "t_end_ms": 1794202762447,
+     "action": {
+      "type": "key",
+      "command": "Insert+Space"
+     },
+     "keys": [
+      "Insert+Space"
+     ],
+     "key_times": [
+      1794202761442
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794202762447,
+     "t_end_ms": 1794202763451,
+     "action": {
+      "type": "key",
+      "command": "Shift+S"
+     },
+     "keys": [
+      "Shift+S"
+     ],
+     "key_times": [
+      1794202762447
+     ],
+     "observation": {
+      "speech_raw": "Not available in Full Speech mode",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794202763451,
+     "t_end_ms": 1794202764455,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794202763451
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Riverside Gazette",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794202764455,
+     "t_end_ms": 1794202765459,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794202764455
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Riverside Gazette",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794202765459,
+     "t_end_ms": 1794202766463,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794202765459
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours\n \u001d heading level 1 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794202766463,
+     "t_end_ms": 1794202767469,
+     "action": {
+      "type": "key",
+      "command": "Insert+T"
+     },
+     "keys": [
+      "Insert+T"
+     ],
+     "key_times": [
+      1794202766464
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours - Riverside Gazette - Google Chrome\narticle\n3\nCity Library Expands Evening Hours",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794202767469,
+     "t_end_ms": 1794202768475,
+     "action": {
+      "type": "key",
+      "command": "Insert+F12"
+     },
+     "keys": [
+      "Insert+F12"
+     ],
+     "key_times": [
+      1794202767469
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794202768475,
+     "t_end_ms": 1794202769480,
+     "action": {
+      "type": "key",
+      "command": "Insert+Space"
+     },
+     "keys": [
+      "Insert+Space"
+     ],
+     "key_times": [
+      1794202768475
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794202769480,
+     "t_end_ms": 1794202770485,
+     "action": {
+      "type": "key",
+      "command": "Shift+S"
+     },
+     "keys": [
+      "Shift+S"
+     ],
+     "key_times": [
+      1794202769480
+     ],
+     "observation": {
+      "speech_raw": "Not available in Full Speech mode",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794202770485,
+     "t_end_ms": 1794202771490,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794202770485
+     ],
+     "observation": {
+      "speech_raw": "By ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

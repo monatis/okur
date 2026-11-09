@@ -1,0 +1,485 @@
+{
+ "scenario_id": "949-web-selection-counts-to-the-top-advanced",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "fcd2601b"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794203544253
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794203545613,
+     "t_end_ms": 1794203546616,
+     "action": {
+      "type": "key",
+      "command": "2"
+     },
+     "keys": [
+      "2"
+     ],
+     "key_times": [
+      1794203545613
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours \u001d heading level 1 \u001e \nWhat changes\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794203546616,
+     "t_end_ms": 1794203547621,
+     "action": {
+      "type": "key",
+      "command": "2"
+     },
+     "keys": [
+      "2"
+     ],
+     "key_times": [
+      1794203546616
+     ],
+     "observation": {
+      "speech_raw": "Opening schedule\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794203547621,
+     "t_end_ms": 1794203548624,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794203547621
+     ],
+     "observation": {
+      "speech_raw": "table with 3 columns and 3 rows",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794203548624,
+     "t_end_ms": 1794203549630,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Shift+Home"
+     },
+     "keys": [
+      "Ctrl+Shift+Home"
+     ],
+     "key_times": [
+      1794203548624
+     ],
+     "observation": {
+      "speech_raw": "1000 characters up to\nnd\nOpening schedule",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794203549630,
+     "t_end_ms": 1794203550635,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "key_times": [
+      1794203549630
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794203550635,
+     "t_end_ms": 1794203551639,
+     "action": {
+      "type": "key",
+      "command": "3"
+     },
+     "keys": [
+      "3"
+     ],
+     "key_times": [
+      1794203550635
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours \u001d heading level 1 \u001e \nOpening schedule \u001d heading level 2 \u001e \nWhat readers said\n \u001d heading level 3 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794203551639,
+     "t_end_ms": 1794203552645,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Shift+Home"
+     },
+     "keys": [
+      "Ctrl+Shift+Home"
+     ],
+     "key_times": [
+      1794203551639
+     ],
+     "observation": {
+      "speech_raw": "1171 characters up to\nirections\ntable end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794203552645,
+     "t_end_ms": 1794203553650,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "key_times": [
+      1794203552645
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794203553650,
+     "t_end_ms": 1794203554655,
+     "action": {
+      "type": "key",
+      "command": "2"
+     },
+     "keys": [
+      "2"
+     ],
+     "key_times": [
+      1794203553650
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours \u001d heading level 1 \u001e \nWhat changes\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794203554655,
+     "t_end_ms": 1794203555659,
+     "action": {
+      "type": "key",
+      "command": "2"
+     },
+     "keys": [
+      "2"
+     ],
+     "key_times": [
+      1794203554655
+     ],
+     "observation": {
+      "speech_raw": "Opening schedule\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794203555659,
+     "t_end_ms": 1794203556663,
+     "action": {
+      "type": "key",
+      "command": "2"
+     },
+     "keys": [
+      "2"
+     ],
+     "key_times": [
+      1794203555659
+     ],
+     "observation": {
+      "speech_raw": "Related stories\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794203556663,
+     "t_end_ms": 1794203557669,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Shift+Home"
+     },
+     "keys": [
+      "Ctrl+Shift+Home"
+     ],
+     "key_times": [
+      1794203556663
+     ],
+     "observation": {
+      "speech_raw": "1805 characters up to\nmentary information",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794203557669,
+     "t_end_ms": 1794203558674,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+End"
+     },
+     "keys": [
+      "Ctrl+End"
+     ],
+     "key_times": [
+      1794203557669
+     ],
+     "observation": {
+      "speech_raw": "content information end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794203558674,
+     "t_end_ms": 1794203559679,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794203558674
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Contact us",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794203559679,
+     "t_end_ms": 1794203560684,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794203559679
+     ],
+     "observation": {
+      "speech_raw": "\u00a9 2026 Riverside Gazette. ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794203560684,
+     "t_end_ms": 1794203561688,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794203560684
+     ],
+     "observation": {
+      "speech_raw": "content information",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s17",
+     "t_start_ms": 1794203561688,
+     "t_end_ms": 1794203562694,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Shift+Home"
+     },
+     "keys": [
+      "Ctrl+Shift+Home"
+     ],
+     "key_times": [
+      1794203561688
+     ],
+     "observation": {
+      "speech_raw": "1953 characters up to\nary information end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s18",
+     "t_start_ms": 1794203562694,
+     "t_end_ms": 1794203563699,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+End"
+     },
+     "keys": [
+      "Ctrl+End"
+     ],
+     "key_times": [
+      1794203562694
+     ],
+     "observation": {
+      "speech_raw": "content information end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s19",
+     "t_start_ms": 1794203563699,
+     "t_end_ms": 1794203564703,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794203563699
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Contact us",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s20",
+     "t_start_ms": 1794203564703,
+     "t_end_ms": 1794203565709,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Shift+Home"
+     },
+     "keys": [
+      "Ctrl+Shift+Home"
+     ],
+     "key_times": [
+      1794203564703
+     ],
+     "observation": {
+      "speech_raw": "2000 characters up to\nRiverside Gazette. ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s21",
+     "t_start_ms": 1794203565709,
+     "t_end_ms": 1794203566713,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+End"
+     },
+     "keys": [
+      "Ctrl+End"
+     ],
+     "key_times": [
+      1794203565709
+     ],
+     "observation": {
+      "speech_raw": "content information end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s22",
+     "t_start_ms": 1794203566713,
+     "t_end_ms": 1794203567719,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Shift+Home"
+     },
+     "keys": [
+      "Ctrl+Shift+Home"
+     ],
+     "key_times": [
+      1794203566713
+     ],
+     "observation": {
+      "speech_raw": "2011 characters up to\nazette. \nContact us",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s23",
+     "t_start_ms": 1794203567719,
+     "t_end_ms": 1794203568724,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "key_times": [
+      1794203567719
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

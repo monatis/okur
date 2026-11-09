@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "aac6f125"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794186954762
+     "t_ms": 1794198371020
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794186956134,
-     "t_end_ms": 1794186957238,
+     "t_start_ms": 1794198372390,
+     "t_end_ms": 1794198373493,
      "action": {
       "type": "key",
       "command": "Tab"
      },
      "keys": [
       "Tab"
+     ],
+     "key_times": [
+      1794198372390
      ],
      "observation": {
       "speech_raw": "Create Your Account - Riverside Library\nFull name \u001d Edit \u001e \n \u001dRequired\u001e",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794186957238,
-     "t_end_ms": 1794186958242,
+     "t_start_ms": 1794198373493,
+     "t_end_ms": 1794198374497,
      "action": {
       "type": "key",
       "command": "Escape"
      },
      "keys": [
       "Escape"
+     ],
+     "key_times": [
+      1794198373493
      ],
      "observation": {
       "speech_raw": "",
@@ -55,14 +61,17 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794186958242,
-     "t_end_ms": 1794186959346,
+     "t_start_ms": 1794198374497,
+     "t_end_ms": 1794198375601,
      "action": {
       "type": "key",
       "command": "Tab"
      },
      "keys": [
       "Tab"
+     ],
+     "key_times": [
+      1794198374497
      ],
      "observation": {
       "speech_raw": "Email address \u001d Edit \u001e \nsam@example.com",
@@ -72,14 +81,17 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794186959346,
-     "t_end_ms": 1794186960349,
+     "t_start_ms": 1794198375601,
+     "t_end_ms": 1794198376604,
      "action": {
       "type": "key",
       "command": "Escape"
      },
      "keys": [
       "Escape"
+     ],
+     "key_times": [
+      1794198375601
      ],
      "observation": {
       "speech_raw": "",

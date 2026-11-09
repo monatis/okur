@@ -1,0 +1,305 @@
+{
+ "scenario_id": "986-web-screen-layout-controls",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "fcd2601b"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794204167721
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794204169085,
+     "t_end_ms": 1794204170089,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794204169085
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e Activation",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794204170089,
+     "t_end_ms": 1794204171092,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794204170089
+     ],
+     "observation": {
+      "speech_raw": "Plain text before the controls.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794204171092,
+     "t_end_ms": 1794204172096,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794204171092
+     ],
+     "observation": {
+      "speech_raw": "Count \u001d Button \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794204172096,
+     "t_end_ms": 1794204173100,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794204172096
+     ],
+     "observation": {
+      "speech_raw": "Custom button \u001d Button \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794204173100,
+     "t_end_ms": 1794204174104,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794204173100
+     ],
+     "observation": {
+      "speech_raw": "Subscribe \u001d check box \u001e  \u001dnot checked\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794204174104,
+     "t_end_ms": 1794204175109,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794204174104
+     ],
+     "observation": {
+      "speech_raw": "group start Size",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794204175109,
+     "t_end_ms": 1794204176113,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794204175109
+     ],
+     "observation": {
+      "speech_raw": "Small \u001d radio button \u001e  \u001dnot checked\u001e \n1 of 2",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794204176113,
+     "t_end_ms": 1794204177117,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794204176113
+     ],
+     "observation": {
+      "speech_raw": "Medium \u001d radio button \u001e  \u001dnot checked\u001e \n2 of 2",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794204177118,
+     "t_end_ms": 1794204178122,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794204177118
+     ],
+     "observation": {
+      "speech_raw": "group end Size",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794204178122,
+     "t_end_ms": 1794204179126,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794204178122
+     ],
+     "observation": {
+      "speech_raw": "Notify me \u001d check box \u001e  \u001dnot checked\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794204179126,
+     "t_end_ms": 1794204180131,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794204179126
+     ],
+     "observation": {
+      "speech_raw": "City",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794204180131,
+     "t_end_ms": 1794204181135,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794204180131
+     ],
+     "observation": {
+      "speech_raw": " \u001d Edit \u001e Izmir",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794204181135,
+     "t_end_ms": 1794204182140,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794204181135
+     ],
+     "observation": {
+      "speech_raw": "City",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794204182140,
+     "t_end_ms": 1794204183144,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794204182140
+     ],
+     "observation": {
+      "speech_raw": "Notify me \u001d check box \u001e  \u001dnot checked\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

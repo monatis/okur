@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "aac6f125"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794187279278
+     "t_ms": 1794198702264
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794187280638,
-     "t_end_ms": 1794187281642,
+     "t_start_ms": 1794198703623,
+     "t_end_ms": 1794198704627,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
      },
      "keys": [
       "Ctrl+Home"
+     ],
+     "key_times": [
+      1794198703623
      ],
      "observation": {
       "speech_raw": "Selection Sizes",
@@ -38,25 +41,54 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794187281642,
-     "t_end_ms": 1794187282646,
+     "t_start_ms": 1794198704627,
+     "t_end_ms": 1794198707208,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
+      "Down",
+      "Down",
+      "Down",
+      "Down",
+      "Down",
+      "Down",
+      "Down",
+      "Down",
+      "Down",
+      "Down",
+      "Down",
+      "Down",
+      "Down",
       "Down"
      ],
+     "key_times": [
+      1794198704627,
+      1794198704748,
+      1794198704869,
+      1794198704991,
+      1794198705112,
+      1794198705234,
+      1794198705355,
+      1794198705477,
+      1794198705599,
+      1794198705720,
+      1794198705841,
+      1794198705962,
+      1794198706083,
+      1794198706205
+     ],
      "observation": {
-      "speech_raw": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+      "speech_raw": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 02 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 03 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 04 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 05 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 06 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 07 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 08 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 09 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 10 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 11 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 12 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 13 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 14 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794187282646,
-     "t_end_ms": 1794187283651,
+     "t_start_ms": 1794198707208,
+     "t_end_ms": 1794198708214,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+End"
@@ -64,22 +96,28 @@
      "keys": [
       "Ctrl+Shift+End"
      ],
+     "key_times": [
+      1794198707208
+     ],
      "observation": {
-      "speech_raw": "1194 characters up to\nd of all of it here.",
+      "speech_raw": "Paragraph 14 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 15 of fifteen, eighty characters each: the very end of all of it here.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794187283651,
-     "t_end_ms": 1794187284657,
+     "t_start_ms": 1794198708214,
+     "t_end_ms": 1794198709218,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
      },
      "keys": [
       "Ctrl+Home"
+     ],
+     "key_times": [
+      1794198708214
      ],
      "observation": {
       "speech_raw": "Selection Sizes",
@@ -89,25 +127,50 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794187284657,
-     "t_end_ms": 1794187285661,
+     "t_start_ms": 1794198709218,
+     "t_end_ms": 1794198711559,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
+      "Down",
+      "Down",
+      "Down",
+      "Down",
+      "Down",
+      "Down",
+      "Down",
+      "Down",
+      "Down",
+      "Down",
+      "Down",
       "Down"
      ],
+     "key_times": [
+      1794198709218,
+      1794198709340,
+      1794198709461,
+      1794198709583,
+      1794198709704,
+      1794198709826,
+      1794198709947,
+      1794198710069,
+      1794198710191,
+      1794198710312,
+      1794198710434,
+      1794198710555
+     ],
      "observation": {
-      "speech_raw": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+      "speech_raw": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 02 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 03 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 04 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 05 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 06 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 07 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 08 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 09 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 10 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 11 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 12 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794187285661,
-     "t_end_ms": 1794187286667,
+     "t_start_ms": 1794198711559,
+     "t_end_ms": 1794198712565,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+End"
@@ -115,22 +178,28 @@
      "keys": [
       "Ctrl+Shift+End"
      ],
+     "key_times": [
+      1794198711559
+     ],
      "observation": {
-      "speech_raw": "1194 characters up to\nd of all of it here.",
+      "speech_raw": "Paragraph 12 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 13 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 14 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 15 of fifteen, eighty characters each: the very end of all of it here.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794187286667,
-     "t_end_ms": 1794187287672,
+     "t_start_ms": 1794198712565,
+     "t_end_ms": 1794198713570,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
      },
      "keys": [
       "Ctrl+Home"
+     ],
+     "key_times": [
+      1794198712565
      ],
      "observation": {
       "speech_raw": "Selection Sizes",
@@ -140,25 +209,46 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794187287672,
-     "t_end_ms": 1794187288677,
+     "t_start_ms": 1794198713570,
+     "t_end_ms": 1794198715669,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
+      "Down",
+      "Down",
+      "Down",
+      "Down",
+      "Down",
+      "Down",
+      "Down",
+      "Down",
+      "Down",
       "Down"
      ],
+     "key_times": [
+      1794198713570,
+      1794198713691,
+      1794198713813,
+      1794198713934,
+      1794198714056,
+      1794198714177,
+      1794198714299,
+      1794198714420,
+      1794198714542,
+      1794198714664
+     ],
      "observation": {
-      "speech_raw": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+      "speech_raw": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 02 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 03 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 04 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 05 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 06 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 07 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 08 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 09 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 10 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794187288677,
-     "t_end_ms": 1794187289683,
+     "t_start_ms": 1794198715669,
+     "t_end_ms": 1794198716674,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+End"
@@ -166,22 +256,28 @@
      "keys": [
       "Ctrl+Shift+End"
      ],
+     "key_times": [
+      1794198715669
+     ],
      "observation": {
-      "speech_raw": "1194 characters up to\nd of all of it here.",
+      "speech_raw": "Paragraph 10 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 11 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 12 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 13 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 14 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 15 of fifteen, eighty characters each: the very end of all of it here.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794187289683,
-     "t_end_ms": 1794187290688,
+     "t_start_ms": 1794198716674,
+     "t_end_ms": 1794198717679,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
      },
      "keys": [
       "Ctrl+Home"
+     ],
+     "key_times": [
+      1794198716674
      ],
      "observation": {
       "speech_raw": "Selection Sizes",
@@ -191,25 +287,42 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794187290688,
-     "t_end_ms": 1794187291692,
+     "t_start_ms": 1794198717679,
+     "t_end_ms": 1794198719534,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
+      "Down",
+      "Down",
+      "Down",
+      "Down",
+      "Down",
+      "Down",
+      "Down",
       "Down"
      ],
+     "key_times": [
+      1794198717679,
+      1794198717800,
+      1794198717922,
+      1794198718043,
+      1794198718165,
+      1794198718287,
+      1794198718408,
+      1794198718530
+     ],
      "observation": {
-      "speech_raw": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+      "speech_raw": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 02 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 03 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 04 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 05 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 06 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 07 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 08 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794187291692,
-     "t_end_ms": 1794187292698,
+     "t_start_ms": 1794198719534,
+     "t_end_ms": 1794198720540,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+End"
@@ -217,22 +330,28 @@
      "keys": [
       "Ctrl+Shift+End"
      ],
+     "key_times": [
+      1794198719534
+     ],
      "observation": {
-      "speech_raw": "1194 characters up to\nd of all of it here.",
+      "speech_raw": "Paragraph 08 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 09 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 10 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 11 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 12 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 13 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 14 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 15 of fifteen, eighty characters each: the very end of all of it here.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794187292698,
-     "t_end_ms": 1794187293703,
+     "t_start_ms": 1794198720540,
+     "t_end_ms": 1794198721545,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
      },
      "keys": [
       "Ctrl+Home"
+     ],
+     "key_times": [
+      1794198720540
      ],
      "observation": {
       "speech_raw": "Selection Sizes",
@@ -242,25 +361,38 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794187293703,
-     "t_end_ms": 1794187294708,
+     "t_start_ms": 1794198721545,
+     "t_end_ms": 1794198723156,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
+      "Down",
+      "Down",
+      "Down",
+      "Down",
+      "Down",
       "Down"
      ],
+     "key_times": [
+      1794198721545,
+      1794198721667,
+      1794198721788,
+      1794198721909,
+      1794198722031,
+      1794198722152
+     ],
      "observation": {
-      "speech_raw": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+      "speech_raw": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 02 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 03 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 04 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 05 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 06 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794187294708,
-     "t_end_ms": 1794187295714,
+     "t_start_ms": 1794198723156,
+     "t_end_ms": 1794198724162,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+End"
@@ -268,22 +400,28 @@
      "keys": [
       "Ctrl+Shift+End"
      ],
+     "key_times": [
+      1794198723156
+     ],
      "observation": {
-      "speech_raw": "1194 characters up to\nd of all of it here.",
+      "speech_raw": "Paragraph 06 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 07 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 08 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 09 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 10 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 11 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 12 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 13 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 14 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 15 of fifteen, eighty characters each: the very end of all of it here.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794187295714,
-     "t_end_ms": 1794187296719,
+     "t_start_ms": 1794198724162,
+     "t_end_ms": 1794198725166,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
      },
      "keys": [
       "Ctrl+Home"
+     ],
+     "key_times": [
+      1794198724162
      ],
      "observation": {
       "speech_raw": "Selection Sizes",
@@ -293,25 +431,36 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794187296719,
-     "t_end_ms": 1794187297724,
+     "t_start_ms": 1794198725166,
+     "t_end_ms": 1794198726656,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
+      "Down",
+      "Down",
+      "Down",
+      "Down",
       "Down"
      ],
+     "key_times": [
+      1794198725166,
+      1794198725287,
+      1794198725409,
+      1794198725530,
+      1794198725652
+     ],
      "observation": {
-      "speech_raw": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+      "speech_raw": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 02 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 03 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 04 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 05 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794187297724,
-     "t_end_ms": 1794187298729,
+     "t_start_ms": 1794198726656,
+     "t_end_ms": 1794198727662,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+End"
@@ -319,22 +468,28 @@
      "keys": [
       "Ctrl+Shift+End"
      ],
+     "key_times": [
+      1794198726656
+     ],
      "observation": {
-      "speech_raw": "1194 characters up to\nd of all of it here.",
+      "speech_raw": "Paragraph 05 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 06 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 07 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 08 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 09 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 10 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 11 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 12 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 13 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 14 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 15 of fifteen, eighty characters each: the very end of all of it here.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794187298729,
-     "t_end_ms": 1794187299733,
+     "t_start_ms": 1794198727662,
+     "t_end_ms": 1794198728666,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
      },
      "keys": [
       "Ctrl+Home"
+     ],
+     "key_times": [
+      1794198727662
      ],
      "observation": {
       "speech_raw": "Selection Sizes",
@@ -344,25 +499,34 @@
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794187299733,
-     "t_end_ms": 1794187300738,
+     "t_start_ms": 1794198728666,
+     "t_end_ms": 1794198730035,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
+      "Down",
+      "Down",
+      "Down",
       "Down"
      ],
+     "key_times": [
+      1794198728666,
+      1794198728787,
+      1794198728909,
+      1794198729030
+     ],
      "observation": {
-      "speech_raw": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+      "speech_raw": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 02 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 03 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 04 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794187300738,
-     "t_end_ms": 1794187301743,
+     "t_start_ms": 1794198730035,
+     "t_end_ms": 1794198731041,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+End"
@@ -370,22 +534,28 @@
      "keys": [
       "Ctrl+Shift+End"
      ],
+     "key_times": [
+      1794198730035
+     ],
      "observation": {
-      "speech_raw": "1194 characters up to\nd of all of it here.",
+      "speech_raw": "Paragraph 04 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 05 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 06 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 07 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 08 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 09 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 10 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 11 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 12 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 13 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 14 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 15 of fifteen, eighty characters each: the very end of all of it here.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794187301743,
-     "t_end_ms": 1794187302748,
+     "t_start_ms": 1794198731041,
+     "t_end_ms": 1794198732046,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
      },
      "keys": [
       "Ctrl+Home"
+     ],
+     "key_times": [
+      1794198731041
      ],
      "observation": {
       "speech_raw": "Selection Sizes",
@@ -395,25 +565,32 @@
     },
     {
      "step_id": "s23",
-     "t_start_ms": 1794187302748,
-     "t_end_ms": 1794187303752,
+     "t_start_ms": 1794198732046,
+     "t_end_ms": 1794198733293,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
+      "Down",
+      "Down",
       "Down"
      ],
+     "key_times": [
+      1794198732046,
+      1794198732167,
+      1794198732289
+     ],
      "observation": {
-      "speech_raw": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+      "speech_raw": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 02 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 03 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s24",
-     "t_start_ms": 1794187303752,
-     "t_end_ms": 1794187304758,
+     "t_start_ms": 1794198733293,
+     "t_end_ms": 1794198734299,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+End"
@@ -421,22 +598,28 @@
      "keys": [
       "Ctrl+Shift+End"
      ],
+     "key_times": [
+      1794198733293
+     ],
      "observation": {
-      "speech_raw": "1194 characters up to\nd of all of it here.",
+      "speech_raw": "1032 characters up to\nd of all of it here.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s25",
-     "t_start_ms": 1794187304758,
-     "t_end_ms": 1794187305763,
+     "t_start_ms": 1794198734299,
+     "t_end_ms": 1794198735304,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
      },
      "keys": [
       "Ctrl+Home"
+     ],
+     "key_times": [
+      1794198734299
      ],
      "observation": {
       "speech_raw": "Selection Sizes",
@@ -446,25 +629,30 @@
     },
     {
      "step_id": "s26",
-     "t_start_ms": 1794187305763,
-     "t_end_ms": 1794187306767,
+     "t_start_ms": 1794198735304,
+     "t_end_ms": 1794198736430,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
+      "Down",
       "Down"
      ],
+     "key_times": [
+      1794198735304,
+      1794198735426
+     ],
      "observation": {
-      "speech_raw": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+      "speech_raw": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.\nParagraph 02 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s27",
-     "t_start_ms": 1794187306767,
-     "t_end_ms": 1794187307773,
+     "t_start_ms": 1794198736430,
+     "t_end_ms": 1794198737437,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+End"
@@ -472,22 +660,28 @@
      "keys": [
       "Ctrl+Shift+End"
      ],
+     "key_times": [
+      1794198736430
+     ],
      "observation": {
-      "speech_raw": "1194 characters up to\nd of all of it here.",
+      "speech_raw": "1113 characters up to\nd of all of it here.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s28",
-     "t_start_ms": 1794187307773,
-     "t_end_ms": 1794187308778,
+     "t_start_ms": 1794198737437,
+     "t_end_ms": 1794198738442,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
      },
      "keys": [
       "Ctrl+Home"
+     ],
+     "key_times": [
+      1794198737437
      ],
      "observation": {
       "speech_raw": "Selection Sizes",
@@ -497,14 +691,17 @@
     },
     {
      "step_id": "s29",
-     "t_start_ms": 1794187308778,
-     "t_end_ms": 1794187309784,
+     "t_start_ms": 1794198738442,
+     "t_end_ms": 1794198739448,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+End"
      },
      "keys": [
       "Ctrl+Shift+End"
+     ],
+     "key_times": [
+      1794198738442
      ],
      "observation": {
       "speech_raw": "1210 characters up to\nd of all of it here.",

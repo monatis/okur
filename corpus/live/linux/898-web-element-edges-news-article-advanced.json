@@ -1,0 +1,625 @@
+{
+ "scenario_id": "898-web-element-edges-news-article-advanced",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "fcd2601b"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794202596674
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794202598035,
+     "t_end_ms": 1794202599039,
+     "action": {
+      "type": "key",
+      "command": "Shift+Period"
+     },
+     "keys": [
+      "Shift+Period"
+     ],
+     "key_times": [
+      1794202598035
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794202599039,
+     "t_end_ms": 1794202600044,
+     "action": {
+      "type": "key",
+      "command": "Shift+Comma"
+     },
+     "keys": [
+      "Shift+Comma"
+     ],
+     "key_times": [
+      1794202599039
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794202600044,
+     "t_end_ms": 1794202601048,
+     "action": {
+      "type": "key",
+      "command": "1"
+     },
+     "keys": [
+      "1"
+     ],
+     "key_times": [
+      1794202600044
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours\n \u001d heading level 1 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794202601048,
+     "t_end_ms": 1794202602052,
+     "action": {
+      "type": "key",
+      "command": "Shift+Period"
+     },
+     "keys": [
+      "Shift+Period"
+     ],
+     "key_times": [
+      1794202601048
+     ],
+     "observation": {
+      "speech_raw": "article end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794202602052,
+     "t_end_ms": 1794202603057,
+     "action": {
+      "type": "key",
+      "command": "Shift+Comma"
+     },
+     "keys": [
+      "Shift+Comma"
+     ],
+     "key_times": [
+      1794202602052
+     ],
+     "observation": {
+      "speech_raw": "article",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794202603057,
+     "t_end_ms": 1794202604061,
+     "action": {
+      "type": "key",
+      "command": "L"
+     },
+     "keys": [
+      "L"
+     ],
+     "key_times": [
+      1794202603057
+     ],
+     "observation": {
+      "speech_raw": "list of 3 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794202604061,
+     "t_end_ms": 1794202605065,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794202604061
+     ],
+     "observation": {
+      "speech_raw": "\u2022 Weekday hours: 9 a.m. to 9 p.m.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794202605065,
+     "t_end_ms": 1794202606069,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794202605065
+     ],
+     "observation": {
+      "speech_raw": "\u2022 Weekend hours, which do not change:",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794202606069,
+     "t_end_ms": 1794202607086,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794202606069
+     ],
+     "observation": {
+      "speech_raw": "list of 2 items nesting level 1",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794202607086,
+     "t_end_ms": 1794202608091,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794202607086
+     ],
+     "observation": {
+      "speech_raw": "\u25e6 Saturday: 10 a.m. to 6 p.m.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794202608091,
+     "t_end_ms": 1794202609096,
+     "action": {
+      "type": "key",
+      "command": "Shift+Period"
+     },
+     "keys": [
+      "Shift+Period"
+     ],
+     "key_times": [
+      1794202608091
+     ],
+     "observation": {
+      "speech_raw": "list end nesting level 1",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794202609096,
+     "t_end_ms": 1794202610102,
+     "action": {
+      "type": "key",
+      "command": "Shift+Period"
+     },
+     "keys": [
+      "Shift+Period"
+     ],
+     "key_times": [
+      1794202609096
+     ],
+     "observation": {
+      "speech_raw": "list end nesting level 1",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794202610102,
+     "t_end_ms": 1794202611107,
+     "action": {
+      "type": "key",
+      "command": "Shift+Comma"
+     },
+     "keys": [
+      "Shift+Comma"
+     ],
+     "key_times": [
+      1794202610102
+     ],
+     "observation": {
+      "speech_raw": "list of 2 items nesting level 1",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794202611107,
+     "t_end_ms": 1794202612112,
+     "action": {
+      "type": "key",
+      "command": "Shift+Comma"
+     },
+     "keys": [
+      "Shift+Comma"
+     ],
+     "key_times": [
+      1794202611107
+     ],
+     "observation": {
+      "speech_raw": "list of 2 items nesting level 1",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794202612112,
+     "t_end_ms": 1794202613117,
+     "action": {
+      "type": "key",
+      "command": "T"
+     },
+     "keys": [
+      "T"
+     ],
+     "key_times": [
+      1794202612112
+     ],
+     "observation": {
+      "speech_raw": "3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794202613117,
+     "t_end_ms": 1794202614121,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794202613117
+     ],
+     "observation": {
+      "speech_raw": "Weekdays",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s17",
+     "t_start_ms": 1794202614121,
+     "t_end_ms": 1794202615125,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794202614121
+     ],
+     "observation": {
+      "speech_raw": "Details",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s18",
+     "t_start_ms": 1794202615125,
+     "t_end_ms": 1794202616130,
+     "action": {
+      "type": "key",
+      "command": "Shift+Period"
+     },
+     "keys": [
+      "Shift+Period"
+     ],
+     "key_times": [
+      1794202615125
+     ],
+     "observation": {
+      "speech_raw": "table end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s19",
+     "t_start_ms": 1794202616130,
+     "t_end_ms": 1794202617135,
+     "action": {
+      "type": "key",
+      "command": "Shift+Comma"
+     },
+     "keys": [
+      "Shift+Comma"
+     ],
+     "key_times": [
+      1794202616130
+     ],
+     "observation": {
+      "speech_raw": "table with 3 columns and 3 rows",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s20",
+     "t_start_ms": 1794202617135,
+     "t_end_ms": 1794202618139,
+     "action": {
+      "type": "key",
+      "command": "3"
+     },
+     "keys": [
+      "3"
+     ],
+     "key_times": [
+      1794202617135
+     ],
+     "observation": {
+      "speech_raw": "What readers said\n \u001d heading level 3 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s21",
+     "t_start_ms": 1794202618139,
+     "t_end_ms": 1794202619144,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794202618139
+     ],
+     "observation": {
+      "speech_raw": "block quote",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s22",
+     "t_start_ms": 1794202619144,
+     "t_end_ms": 1794202620148,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794202619144
+     ],
+     "observation": {
+      "speech_raw": "Finally, I can study after work.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s23",
+     "t_start_ms": 1794202620148,
+     "t_end_ms": 1794202621153,
+     "action": {
+      "type": "key",
+      "command": "Shift+Period"
+     },
+     "keys": [
+      "Shift+Period"
+     ],
+     "key_times": [
+      1794202620148
+     ],
+     "observation": {
+      "speech_raw": "block quote end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s24",
+     "t_start_ms": 1794202621153,
+     "t_end_ms": 1794202622157,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794202621153
+     ],
+     "observation": {
+      "speech_raw": "The library board will review attendance in the fall. A long-standing complaint among students and working parents was that the reading rooms closed before",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s25",
+     "t_start_ms": 1794202622157,
+     "t_end_ms": 1794202623161,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794202622157
+     ],
+     "observation": {
+      "speech_raw": "most people finished their day, so the extended schedule is intended to make the collections, the public computers, and the quiet study spaces available",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s26",
+     "t_start_ms": 1794202623161,
+     "t_end_ms": 1794202624167,
+     "action": {
+      "type": "key",
+      "command": "Shift+Period"
+     },
+     "keys": [
+      "Shift+Period"
+     ],
+     "key_times": [
+      1794202623161
+     ],
+     "observation": {
+      "speech_raw": "article end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s27",
+     "t_start_ms": 1794202624167,
+     "t_end_ms": 1794202625172,
+     "action": {
+      "type": "key",
+      "command": "Shift+Comma"
+     },
+     "keys": [
+      "Shift+Comma"
+     ],
+     "key_times": [
+      1794202624167
+     ],
+     "observation": {
+      "speech_raw": "article",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s28",
+     "t_start_ms": 1794202625172,
+     "t_end_ms": 1794202626177,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+End"
+     },
+     "keys": [
+      "Ctrl+End"
+     ],
+     "key_times": [
+      1794202625172
+     ],
+     "observation": {
+      "speech_raw": "content information end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s29",
+     "t_start_ms": 1794202626177,
+     "t_end_ms": 1794202627182,
+     "action": {
+      "type": "key",
+      "command": "Shift+Comma"
+     },
+     "keys": [
+      "Shift+Comma"
+     ],
+     "key_times": [
+      1794202626177
+     ],
+     "observation": {
+      "speech_raw": "content information",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s30",
+     "t_start_ms": 1794202627182,
+     "t_end_ms": 1794202628187,
+     "action": {
+      "type": "key",
+      "command": "Shift+Period"
+     },
+     "keys": [
+      "Shift+Period"
+     ],
+     "key_times": [
+      1794202627182
+     ],
+     "observation": {
+      "speech_raw": "content information end",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

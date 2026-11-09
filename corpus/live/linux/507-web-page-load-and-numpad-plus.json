@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "12447157"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794179812292
+     "t_ms": 1794195125482
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794179813662,
-     "t_end_ms": 1794179814867,
+     "t_start_ms": 1794195126845,
+     "t_end_ms": 1794195128049,
      "action": {
       "type": "key",
       "command": "Ctrl+R"
      },
      "keys": [
       "Ctrl+R"
+     ],
+     "key_times": [
+      1794195126845
      ],
      "observation": {
       "speech_raw": "Create Your Account - Riverside Library  \u001d document \u001e\nPage has 1Region, 1heading and 1link\nCreate Your Account - Riverside Library\nmain region\n \u001d heading level 1 \u001e Create your account\nFields marked required must be filled in.\nFull name\n \u001dRequired\u001e  \u001d Edit \u001e \nEmail address\n \u001d Edit \u001e sam@example.com\nWe never share your email.\nPassword\n \u001dRequired\u001e  \u001d password edit \u001e \ngroup start Membership type\nAdult \u001d radio button \u001e  \u001dchecked\u001e \n1 of 3\nStudent \u001d radio button \u001e  \u001dnot checked\u001e \n2 of 3\nSenior \u001d radio button \u001e  \u001dnot checked\u001e \n3 of 3\ngroup end Membership type\nHome branch\n \u001d Combo box \u001e  \u001dcollapsed\u001e Northside\nAccessibility needs\n \u001d Edit \u001e \nSend me the monthly newsletter \u001d check box \u001e  \u001dchecked\u001e \nI agree to the terms of use \u001d check box \u001e  \u001dnot checked\u001e \nI agree to the \n \u001d same page link \u001e terms of use\nSave draft \u001d Button \u001e  \u001dUnavailable\u001e \nCreate account \u001d Button \u001e \nmain region end\nend",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794179814867,
-     "t_end_ms": 1794179815872,
+     "t_start_ms": 1794195128049,
+     "t_end_ms": 1794195129053,
      "action": {
       "type": "key",
       "command": "Insert+Up"
      },
      "keys": [
       "Insert+Up"
+     ],
+     "key_times": [
+      1794195128049
      ],
      "observation": {
       "speech_raw": "main region end",
@@ -55,14 +61,17 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794179815872,
-     "t_end_ms": 1794179816876,
+     "t_start_ms": 1794195129053,
+     "t_end_ms": 1794195130057,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
      },
      "keys": [
       "Ctrl+Home"
+     ],
+     "key_times": [
+      1794195129053
      ],
      "observation": {
       "speech_raw": "Create Your Account - Riverside Library",
@@ -72,14 +81,17 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794179816876,
-     "t_end_ms": 1794179817880,
+     "t_start_ms": 1794195130057,
+     "t_end_ms": 1794195131062,
      "action": {
       "type": "key",
       "command": "E"
      },
      "keys": [
       "E"
+     ],
+     "key_times": [
+      1794195130057
      ],
      "observation": {
       "speech_raw": "Full name \u001d Edit \u001e \n \u001dRequired\u001e \nblank",
@@ -89,14 +101,17 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794179817880,
-     "t_end_ms": 1794179818984,
+     "t_start_ms": 1794195131062,
+     "t_end_ms": 1794195132166,
      "action": {
       "type": "key",
       "command": "Enter"
      },
      "keys": [
       "Enter"
+     ],
+     "key_times": [
+      1794195131062
      ],
      "observation": {
       "speech_raw": "Create Your Account - Riverside Library\n \u001d MainRegion \u001e \n \u001d FormRegion \u001e \nFull name \u001d Edit \u001e \n \u001dRequired\u001e \nblank\nType in text.",
@@ -106,14 +121,17 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794179818984,
-     "t_end_ms": 1794179819988,
+     "t_start_ms": 1794195132166,
+     "t_end_ms": 1794195133169,
      "action": {
       "type": "key",
       "command": "NumpadPlus"
      },
      "keys": [
       "NumpadPlus"
+     ],
+     "key_times": [
+      1794195132166
      ],
      "observation": {
       "speech_raw": "virtual PC Cursor",
@@ -123,14 +141,17 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794179819988,
-     "t_end_ms": 1794179820993,
+     "t_start_ms": 1794195133169,
+     "t_end_ms": 1794195134174,
      "action": {
       "type": "key",
       "command": "Insert+Up"
      },
      "keys": [
       "Insert+Up"
+     ],
+     "key_times": [
+      1794195133169
      ],
      "observation": {
       "speech_raw": "Full name \u001d Edit \u001e \n \u001dRequired\u001e ",
@@ -140,14 +161,17 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794179820993,
-     "t_end_ms": 1794179821998,
+     "t_start_ms": 1794195134174,
+     "t_end_ms": 1794195135178,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794195134174
      ],
      "observation": {
       "speech_raw": "Email address",

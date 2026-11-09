@@ -1,0 +1,85 @@
+{
+ "scenario_id": "713-web-page-load-reading-off",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "fcd2601b"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794199539875
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794199541242,
+     "t_end_ms": 1794199542346,
+     "action": {
+      "type": "key",
+      "command": "F5"
+     },
+     "keys": [
+      "F5"
+     ],
+     "key_times": [
+      1794199541242
+     ],
+     "observation": {
+      "speech_raw": "Document Reading Reference Fixture  \u001d document \u001e\nPage has 1heading and no links",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794199542347,
+     "t_end_ms": 1794199543351,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794199542347
+     ],
+     "observation": {
+      "speech_raw": "Document Reading Reference Fixture",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794199543351,
+     "t_end_ms": 1794199544354,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794199543351
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e The Accessibility Engine Specification",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

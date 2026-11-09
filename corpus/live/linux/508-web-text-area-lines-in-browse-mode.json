@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "aac6f125"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794184124019
+     "t_ms": 1794195157816
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794184125382,
-     "t_end_ms": 1794184126386,
+     "t_start_ms": 1794195159180,
+     "t_end_ms": 1794195160184,
      "action": {
       "type": "key",
       "command": "E"
      },
      "keys": [
       "E"
+     ],
+     "key_times": [
+      1794195159180
      ],
      "observation": {
       "speech_raw": "Text \u001d edit \u001e \nContains text",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794184126386,
-     "t_end_ms": 1794184127390,
+     "t_start_ms": 1794195160184,
+     "t_end_ms": 1794195161188,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794195160184
      ],
      "observation": {
       "speech_raw": " \u001d Edit \u001e Mail ada@example.org or see https://example.org/a-b_c?x=1&y=2#top",
@@ -55,14 +61,17 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794184127390,
-     "t_end_ms": 1794184128394,
+     "t_start_ms": 1794195161188,
+     "t_end_ms": 1794195162192,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794195161188
      ],
      "observation": {
       "speech_raw": " \u001d Edit \u001e C:\\Users\\Ada\\notes.txt and /usr/local/bin",
@@ -72,14 +81,17 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794184128394,
-     "t_end_ms": 1794184129398,
+     "t_start_ms": 1794195162192,
+     "t_end_ms": 1794195163196,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794195162192
      ],
      "observation": {
       "speech_raw": " \u001d Edit \u001e Price $9.95, 50% off; total = 3 * 4 + 1 - 2 / 5 ^ 2 ~ 7",
@@ -89,14 +101,17 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794184129398,
-     "t_end_ms": 1794184130403,
+     "t_start_ms": 1794195163196,
+     "t_end_ms": 1794195164199,
      "action": {
       "type": "key",
       "command": "Up"
      },
      "keys": [
       "Up"
+     ],
+     "key_times": [
+      1794195163196
      ],
      "observation": {
       "speech_raw": " \u001d Edit \u001e C:\\Users\\Ada\\notes.txt and /usr/local/bin",
@@ -106,14 +121,17 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794184130403,
-     "t_end_ms": 1794184131408,
+     "t_start_ms": 1794195164199,
+     "t_end_ms": 1794195165204,
      "action": {
       "type": "key",
       "command": "Insert+Up"
      },
      "keys": [
       "Insert+Up"
+     ],
+     "key_times": [
+      1794195164199
      ],
      "observation": {
       "speech_raw": " \u001d Edit \u001e C:\\Users\\Ada\\notes.txt and /usr/local/bin",
@@ -123,14 +141,17 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794184131408,
-     "t_end_ms": 1794184132413,
+     "t_start_ms": 1794195165204,
+     "t_end_ms": 1794195166208,
      "action": {
       "type": "key",
       "command": "Ctrl+End"
      },
      "keys": [
       "Ctrl+End"
+     ],
+     "key_times": [
+      1794195165204
      ],
      "observation": {
       "speech_raw": "main region end",
@@ -140,14 +161,17 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794184132413,
-     "t_end_ms": 1794184133418,
+     "t_start_ms": 1794195166208,
+     "t_end_ms": 1794195167212,
      "action": {
       "type": "key",
       "command": "Up"
      },
      "keys": [
       "Up"
+     ],
+     "key_times": [
+      1794195166208
      ],
      "observation": {
       "speech_raw": " \u001d Edit \u001e teh quick brown fxo",
@@ -157,14 +181,17 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794184133418,
-     "t_end_ms": 1794184134422,
+     "t_start_ms": 1794195167212,
+     "t_end_ms": 1794195168217,
      "action": {
       "type": "key",
       "command": "Up"
      },
      "keys": [
       "Up"
+     ],
+     "key_times": [
+      1794195167212
      ],
      "observation": {
       "speech_raw": " \u001d Edit \u001e Say All reads this. It has three sentences. The last one ends here.",
@@ -174,14 +201,17 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794184134422,
-     "t_end_ms": 1794184135427,
+     "t_start_ms": 1794195168217,
+     "t_end_ms": 1794195169220,
      "action": {
       "type": "key",
       "command": "Up"
      },
      "keys": [
       "Up"
+     ],
+     "key_times": [
+      1794195168217
      ],
      "observation": {
       "speech_raw": " \u001d Edit \u001e \tone tab",

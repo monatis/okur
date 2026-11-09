@@ -1,0 +1,305 @@
+{
+ "scenario_id": "885-web-same-different-element-intermediate",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "fcd2601b"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794202126856
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794202128227,
+     "t_end_ms": 1794202129230,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794202128227
+     ],
+     "observation": {
+      "speech_raw": "banner",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794202129230,
+     "t_end_ms": 1794202130234,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794202129230
+     ],
+     "observation": {
+      "speech_raw": "Site navigation region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794202130234,
+     "t_end_ms": 1794202131237,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794202130234
+     ],
+     "observation": {
+      "speech_raw": "list of 3 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794202131237,
+     "t_end_ms": 1794202132242,
+     "action": {
+      "type": "key",
+      "command": "S"
+     },
+     "keys": [
+      "S"
+     ],
+     "key_times": [
+      1794202131237
+     ],
+     "observation": {
+      "speech_raw": "No more elements of same type found",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794202132242,
+     "t_end_ms": 1794202133246,
+     "action": {
+      "type": "key",
+      "command": "S"
+     },
+     "keys": [
+      "S"
+     ],
+     "key_times": [
+      1794202132242
+     ],
+     "observation": {
+      "speech_raw": "No more elements of same type found",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794202133246,
+     "t_end_ms": 1794202134250,
+     "action": {
+      "type": "key",
+      "command": "S"
+     },
+     "keys": [
+      "S"
+     ],
+     "key_times": [
+      1794202133246
+     ],
+     "observation": {
+      "speech_raw": "No more elements of same type found",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794202134250,
+     "t_end_ms": 1794202135254,
+     "action": {
+      "type": "key",
+      "command": "D"
+     },
+     "keys": [
+      "D"
+     ],
+     "key_times": [
+      1794202134250
+     ],
+     "observation": {
+      "speech_raw": "\u2022 \u001d same page link \u001e Paragraphs",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794202135254,
+     "t_end_ms": 1794202136258,
+     "action": {
+      "type": "key",
+      "command": "D"
+     },
+     "keys": [
+      "D"
+     ],
+     "key_times": [
+      1794202135254
+     ],
+     "observation": {
+      "speech_raw": "Paragraphs  \u001d same page link \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794202136258,
+     "t_end_ms": 1794202137263,
+     "action": {
+      "type": "key",
+      "command": "Shift+S"
+     },
+     "keys": [
+      "Shift+S"
+     ],
+     "key_times": [
+      1794202136258
+     ],
+     "observation": {
+      "speech_raw": "wrapping to bottom\na link inside it  \u001d same page link \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794202137263,
+     "t_end_ms": 1794202138269,
+     "action": {
+      "type": "key",
+      "command": "Shift+D"
+     },
+     "keys": [
+      "Shift+D"
+     ],
+     "key_times": [
+      1794202137263
+     ],
+     "observation": {
+      "speech_raw": "Some text with",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794202138269,
+     "t_end_ms": 1794202139274,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+Right"
+     },
+     "keys": [
+      "Ctrl+Insert+Right"
+     ],
+     "key_times": [
+      1794202138269
+     ],
+     "observation": {
+      "speech_raw": "a link inside it  \u001d same page link \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794202139274,
+     "t_end_ms": 1794202140280,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+Right"
+     },
+     "keys": [
+      "Ctrl+Insert+Right"
+     ],
+     "key_times": [
+      1794202139274
+     ],
+     "observation": {
+      "speech_raw": "and more text after it.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794202140280,
+     "t_end_ms": 1794202141285,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+Left"
+     },
+     "keys": [
+      "Ctrl+Insert+Left"
+     ],
+     "key_times": [
+      1794202140280
+     ],
+     "observation": {
+      "speech_raw": "a link inside it  \u001d same page link \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794202141285,
+     "t_end_ms": 1794202142290,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+Up"
+     },
+     "keys": [
+      "Ctrl+Insert+Up"
+     ],
+     "key_times": [
+      1794202141285
+     ],
+     "observation": {
+      "speech_raw": "A link alone in its paragraph  \u001d same page link \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

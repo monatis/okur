@@ -1,0 +1,365 @@
+{
+ "scenario_id": "876-web-current-and-described-advanced",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "fcd2601b"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794201810329
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794201811698,
+     "t_end_ms": 1794201812702,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794201811698
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e Web App Patterns",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794201812702,
+     "t_end_ms": 1794201813706,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794201812702
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e Current links",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794201813706,
+     "t_end_ms": 1794201814711,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794201813706
+     ],
+     "observation": {
+      "speech_raw": "list of 3 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794201814711,
+     "t_end_ms": 1794201815714,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794201814711
+     ],
+     "observation": {
+      "speech_raw": "\u2022 \u001d same page link \u001e  \u001dCurrent Page\u001e Overview",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794201815714,
+     "t_end_ms": 1794201816718,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794201815714
+     ],
+     "observation": {
+      "speech_raw": "\u2022 \u001d Link \u001e Settings",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794201816718,
+     "t_end_ms": 1794201817723,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794201816718
+     ],
+     "observation": {
+      "speech_raw": "\u2022 \u001d same page link \u001e  \u001dCurrent Step\u001e Step two",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794201817723,
+     "t_end_ms": 1794201818727,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794201817723
+     ],
+     "observation": {
+      "speech_raw": "list end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794201818727,
+     "t_end_ms": 1794201819732,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794201818727
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e Described controls",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794201819732,
+     "t_end_ms": 1794201820736,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794201819732
+     ],
+     "observation": {
+      "speech_raw": "Next slide \u001d slide control \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794201820736,
+     "t_end_ms": 1794201821741,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794201820736
+     ],
+     "observation": {
+      "speech_raw": " \u001d chip \u001e Rust",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794201821741,
+     "t_end_ms": 1794201822745,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794201821741
+     ],
+     "observation": {
+      "speech_raw": "Wrap \u001d toggle \u001e  \u001dnot checked\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794201822745,
+     "t_end_ms": 1794201823750,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794201822745
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e Popup buttons",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794201823750,
+     "t_end_ms": 1794201824754,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794201823750
+     ],
+     "observation": {
+      "speech_raw": "Outline \u001d button menu \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794201824754,
+     "t_end_ms": 1794201825758,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794201824754
+     ],
+     "observation": {
+      "speech_raw": "Actions \u001d button menu \u001e  \u001dcollapsed\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794201825758,
+     "t_end_ms": 1794201826763,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794201825758
+     ],
+     "observation": {
+      "speech_raw": "Pick one \u001d Button \u001e  \u001dHas Popup\u001e  listbox",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794201826763,
+     "t_end_ms": 1794201827768,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794201826763
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e Fruit search",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s17",
+     "t_start_ms": 1794201827768,
+     "t_end_ms": 1794201828773,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794201827768
+     ],
+     "observation": {
+      "speech_raw": "Fruit",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

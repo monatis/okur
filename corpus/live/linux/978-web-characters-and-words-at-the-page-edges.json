@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "12447157"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794180353802
+     "t_ms": 1794204000047
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794180355167,
-     "t_end_ms": 1794180356171,
+     "t_start_ms": 1794204001412,
+     "t_end_ms": 1794204002417,
      "action": {
       "type": "key",
       "command": "Left"
      },
      "keys": [
       "Left"
+     ],
+     "key_times": [
+      1794204001412
      ],
      "observation": {
       "speech_raw": "V",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794180356171,
-     "t_end_ms": 1794180357174,
+     "t_start_ms": 1794204002417,
+     "t_end_ms": 1794204003421,
      "action": {
       "type": "key",
       "command": "Left"
      },
      "keys": [
       "Left"
+     ],
+     "key_times": [
+      1794204002417
      ],
      "observation": {
       "speech_raw": "V",
@@ -55,14 +61,17 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794180357174,
-     "t_end_ms": 1794180358179,
+     "t_start_ms": 1794204003421,
+     "t_end_ms": 1794204004425,
      "action": {
       "type": "key",
       "command": "Ctrl+Left"
      },
      "keys": [
       "Ctrl+Left"
+     ],
+     "key_times": [
+      1794204003421
      ],
      "observation": {
       "speech_raw": "Virtual",
@@ -72,14 +81,17 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794180358179,
-     "t_end_ms": 1794180359184,
+     "t_start_ms": 1794204004425,
+     "t_end_ms": 1794204005429,
      "action": {
       "type": "key",
       "command": "Ctrl+Left"
      },
      "keys": [
       "Ctrl+Left"
+     ],
+     "key_times": [
+      1794204004425
      ],
      "observation": {
       "speech_raw": "Virtual",
@@ -89,14 +101,17 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794180359184,
-     "t_end_ms": 1794180360188,
+     "t_start_ms": 1794204005429,
+     "t_end_ms": 1794204006434,
      "action": {
       "type": "key",
       "command": "Up"
      },
      "keys": [
       "Up"
+     ],
+     "key_times": [
+      1794204005429
      ],
      "observation": {
       "speech_raw": "Virtual Cursor Keys - Keys Fixture",
@@ -106,14 +121,17 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794180360188,
-     "t_end_ms": 1794180361193,
+     "t_start_ms": 1794204006434,
+     "t_end_ms": 1794204007438,
      "action": {
       "type": "key",
       "command": "Up"
      },
      "keys": [
       "Up"
+     ],
+     "key_times": [
+      1794204006434
      ],
      "observation": {
       "speech_raw": "Virtual Cursor Keys - Keys Fixture",
@@ -123,14 +141,17 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794180361193,
-     "t_end_ms": 1794180362197,
+     "t_start_ms": 1794204007438,
+     "t_end_ms": 1794204008444,
      "action": {
       "type": "key",
       "command": "Ctrl+End"
      },
      "keys": [
       "Ctrl+End"
+     ],
+     "key_times": [
+      1794204007438
      ],
      "observation": {
       "speech_raw": "content information end",
@@ -140,14 +161,17 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794180362197,
-     "t_end_ms": 1794180363202,
+     "t_start_ms": 1794204008444,
+     "t_end_ms": 1794204009448,
      "action": {
       "type": "key",
       "command": "End"
      },
      "keys": [
       "End"
+     ],
+     "key_times": [
+      1794204008444
      ],
      "observation": {
       "speech_raw": "",
@@ -157,14 +181,17 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794180363202,
-     "t_end_ms": 1794180364206,
+     "t_start_ms": 1794204009448,
+     "t_end_ms": 1794204010452,
      "action": {
       "type": "key",
       "command": "Right"
      },
      "keys": [
       "Right"
+     ],
+     "key_times": [
+      1794204009448
      ],
      "observation": {
       "speech_raw": "",
@@ -174,14 +201,17 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794180364206,
-     "t_end_ms": 1794180365311,
+     "t_start_ms": 1794204010452,
+     "t_end_ms": 1794204011456,
      "action": {
       "type": "key",
       "command": "Right"
      },
      "keys": [
       "Right"
+     ],
+     "key_times": [
+      1794204010452
      ],
      "observation": {
       "speech_raw": "",
@@ -191,14 +221,17 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794180365311,
-     "t_end_ms": 1794180366316,
+     "t_start_ms": 1794204011456,
+     "t_end_ms": 1794204012461,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
      "keys": [
       "Ctrl+Right"
+     ],
+     "key_times": [
+      1794204011456
      ],
      "observation": {
       "speech_raw": "",
@@ -208,14 +241,17 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794180366316,
-     "t_end_ms": 1794180367320,
+     "t_start_ms": 1794204012461,
+     "t_end_ms": 1794204013466,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
      },
      "keys": [
       "Ctrl+Right"
+     ],
+     "key_times": [
+      1794204012461
      ],
      "observation": {
       "speech_raw": "",
@@ -225,14 +261,17 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794180367320,
-     "t_end_ms": 1794180368325,
+     "t_start_ms": 1794204013466,
+     "t_end_ms": 1794204014471,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794204013466
      ],
      "observation": {
       "speech_raw": "content information end",
@@ -242,14 +281,17 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794180368325,
-     "t_end_ms": 1794180369329,
+     "t_start_ms": 1794204014471,
+     "t_end_ms": 1794204015475,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794204014471
      ],
      "observation": {
       "speech_raw": "content information end",
@@ -259,14 +301,17 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794180369329,
-     "t_end_ms": 1794180370335,
+     "t_start_ms": 1794204015475,
+     "t_end_ms": 1794204016480,
      "action": {
       "type": "key",
       "command": "Insert+Up"
      },
      "keys": [
       "Insert+Up"
+     ],
+     "key_times": [
+      1794204015475
      ],
      "observation": {
       "speech_raw": "content information end",

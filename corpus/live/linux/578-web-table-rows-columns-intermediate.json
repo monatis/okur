@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "aac6f125"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794184983958
+     "t_ms": 1794196232212
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794184985323,
-     "t_end_ms": 1794184986327,
+     "t_start_ms": 1794196233576,
+     "t_end_ms": 1794196234580,
      "action": {
       "type": "key",
       "command": "T"
      },
      "keys": [
       "T"
+     ],
+     "key_times": [
+      1794196233576
      ],
      "observation": {
       "speech_raw": "3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794184986327,
-     "t_end_ms": 1794184987331,
+     "t_start_ms": 1794196234580,
+     "t_end_ms": 1794196235583,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794196234580
      ],
      "observation": {
       "speech_raw": "Weekdays",
@@ -55,14 +61,17 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794184987331,
-     "t_end_ms": 1794184988334,
+     "t_start_ms": 1794196235583,
+     "t_end_ms": 1794196236587,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794196235583
      ],
      "observation": {
       "speech_raw": "Details",
@@ -72,14 +81,17 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794184988334,
-     "t_end_ms": 1794184989339,
+     "t_start_ms": 1794196236587,
+     "t_end_ms": 1794196237590,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794196236587
      ],
      "observation": {
       "speech_raw": "Central",
@@ -89,14 +101,17 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794184989339,
-     "t_end_ms": 1794184990343,
+     "t_start_ms": 1794196237590,
+     "t_end_ms": 1794196238597,
      "action": {
       "type": "key",
       "command": "Win+Alt+Down"
      },
      "keys": [
       "Win+Alt+Down"
+     ],
+     "key_times": [
+      1794196237590
      ],
      "observation": {
       "speech_raw": "Northside10 a.m. to 8 p.m.Directions",
@@ -106,14 +121,17 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794184990343,
-     "t_end_ms": 1794184991349,
+     "t_start_ms": 1794196238597,
+     "t_end_ms": 1794196239602,
      "action": {
       "type": "key",
       "command": "Win+Alt+Down"
      },
      "keys": [
       "Win+Alt+Down"
+     ],
+     "key_times": [
+      1794196238597
      ],
      "observation": {
       "speech_raw": "Last row",
@@ -123,14 +141,17 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794184991349,
-     "t_end_ms": 1794184992355,
+     "t_start_ms": 1794196239602,
+     "t_end_ms": 1794196240609,
      "action": {
       "type": "key",
       "command": "Win+Alt+Up"
      },
      "keys": [
       "Win+Alt+Up"
+     ],
+     "key_times": [
+      1794196239602
      ],
      "observation": {
       "speech_raw": "Central9 a.m. to 9 p.m.Directions",
@@ -140,14 +161,17 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794184992355,
-     "t_end_ms": 1794184993360,
+     "t_start_ms": 1794196240609,
+     "t_end_ms": 1794196241615,
      "action": {
       "type": "key",
       "command": "Win+Alt+Right"
      },
      "keys": [
       "Win+Alt+Right"
+     ],
+     "key_times": [
+      1794196240609
      ],
      "observation": {
       "speech_raw": "Weekdays9 a.m. to 9 p.m.10 a.m. to 8 p.m.",
@@ -157,14 +181,17 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794184993360,
-     "t_end_ms": 1794184994366,
+     "t_start_ms": 1794196241615,
+     "t_end_ms": 1794196242620,
      "action": {
       "type": "key",
       "command": "Win+Alt+Left"
      },
      "keys": [
       "Win+Alt+Left"
+     ],
+     "key_times": [
+      1794196241615
      ],
      "observation": {
       "speech_raw": "BranchCentralNorthside",
@@ -174,14 +201,17 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794184994366,
-     "t_end_ms": 1794184995372,
+     "t_start_ms": 1794196242620,
+     "t_end_ms": 1794196243626,
      "action": {
       "type": "key",
       "command": "Alt+Win+Numpad5"
      },
      "keys": [
       "Alt+Win+Numpad5"
+     ],
+     "key_times": [
+      1794196242620
      ],
      "observation": {
       "speech_raw": "Central9 a.m. to 9 p.m.Directions",
@@ -191,14 +221,17 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794184995372,
-     "t_end_ms": 1794184996377,
+     "t_start_ms": 1794196243626,
+     "t_end_ms": 1794196244632,
      "action": {
       "type": "key",
       "command": "Alt+Win+Period"
      },
      "keys": [
       "Alt+Win+Period"
+     ],
+     "key_times": [
+      1794196243626
      ],
      "observation": {
       "speech_raw": "BranchCentralNorthside",

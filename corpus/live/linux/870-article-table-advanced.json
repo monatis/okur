@@ -1,0 +1,225 @@
+{
+ "scenario_id": "870-article-table-advanced",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "fcd2601b"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794201572219
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794201573588,
+     "t_end_ms": 1794201574592,
+     "action": {
+      "type": "key",
+      "command": "T"
+     },
+     "keys": [
+      "T"
+     ],
+     "key_times": [
+      1794201573588
+     ],
+     "observation": {
+      "speech_raw": "3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794201574592,
+     "t_end_ms": 1794201575598,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Alt+Right"
+     },
+     "keys": [
+      "Ctrl+Alt+Right"
+     ],
+     "key_times": [
+      1794201574592
+     ],
+     "observation": {
+      "speech_raw": "Weekdays\nColumn 2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794201575598,
+     "t_end_ms": 1794201576603,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Alt+Right"
+     },
+     "keys": [
+      "Ctrl+Alt+Right"
+     ],
+     "key_times": [
+      1794201575598
+     ],
+     "observation": {
+      "speech_raw": "Details\nColumn 3 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794201576603,
+     "t_end_ms": 1794201577608,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Alt+Right"
+     },
+     "keys": [
+      "Ctrl+Alt+Right"
+     ],
+     "key_times": [
+      1794201576603
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794201577608,
+     "t_end_ms": 1794201578614,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Alt+Down"
+     },
+     "keys": [
+      "Ctrl+Alt+Down"
+     ],
+     "key_times": [
+      1794201577608
+     ],
+     "observation": {
+      "speech_raw": "Central\n \u001d same page link \u001e Directions\nRow 2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794201578614,
+     "t_end_ms": 1794201579619,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Alt+Down"
+     },
+     "keys": [
+      "Ctrl+Alt+Down"
+     ],
+     "key_times": [
+      1794201578614
+     ],
+     "observation": {
+      "speech_raw": "Northside\n \u001d same page link \u001e Directions\nRow 3 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794201579619,
+     "t_end_ms": 1794201580625,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Alt+Down"
+     },
+     "keys": [
+      "Ctrl+Alt+Down"
+     ],
+     "key_times": [
+      1794201579619
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794201580625,
+     "t_end_ms": 1794201581630,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Alt+Left"
+     },
+     "keys": [
+      "Ctrl+Alt+Left"
+     ],
+     "key_times": [
+      1794201580625
+     ],
+     "observation": {
+      "speech_raw": "Weekdays \n10 a.m. to 8 p.m.\nColumn 2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794201581630,
+     "t_end_ms": 1794201582636,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Alt+Up"
+     },
+     "keys": [
+      "Ctrl+Alt+Up"
+     ],
+     "key_times": [
+      1794201581630
+     ],
+     "observation": {
+      "speech_raw": "Central\n9 a.m. to 9 p.m.\nRow 2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794201582636,
+     "t_end_ms": 1794201583641,
+     "action": {
+      "type": "key",
+      "command": "Shift+T"
+     },
+     "keys": [
+      "Shift+T"
+     ],
+     "key_times": [
+      1794201582636
+     ],
+     "observation": {
+      "speech_raw": "3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "12447157"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794179878985
+     "t_ms": 1794195399916
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794179880345,
-     "t_end_ms": 1794179881349,
+     "t_start_ms": 1794195401278,
+     "t_end_ms": 1794195402283,
      "action": {
       "type": "key",
       "command": "T"
      },
      "keys": [
       "T"
+     ],
+     "key_times": [
+      1794195401278
      ],
      "observation": {
       "speech_raw": "table with 4 columns and 4 rows\nQ3 Financial Summary Table\nColumn 1, Row 1\nQuarter",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794179881349,
-     "t_end_ms": 1794179882353,
+     "t_start_ms": 1794195402283,
+     "t_end_ms": 1794195403286,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794195402283
      ],
      "observation": {
       "speech_raw": "Revenue",
@@ -55,14 +61,17 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794179882353,
-     "t_end_ms": 1794179883356,
+     "t_start_ms": 1794195403286,
+     "t_end_ms": 1794195404290,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794195403286
      ],
      "observation": {
       "speech_raw": "Expenses",
@@ -72,14 +81,17 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794179883356,
-     "t_end_ms": 1794179884361,
+     "t_start_ms": 1794195404290,
+     "t_end_ms": 1794195405294,
      "action": {
       "type": "key",
       "command": "Insert+Space"
      },
      "keys": [
       "Insert+Space"
+     ],
+     "key_times": [
+      1794195404290
      ],
      "observation": {
       "speech_raw": "",
@@ -89,14 +101,17 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794179884361,
-     "t_end_ms": 1794179885365,
+     "t_start_ms": 1794195405294,
+     "t_end_ms": 1794195406299,
      "action": {
       "type": "key",
       "command": "T"
      },
      "keys": [
       "T"
+     ],
+     "key_times": [
+      1794195405294
      ],
      "observation": {
       "speech_raw": "Table layer",
@@ -106,14 +121,17 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794179885365,
-     "t_end_ms": 1794179886369,
+     "t_start_ms": 1794195406299,
+     "t_end_ms": 1794195407302,
      "action": {
       "type": "key",
       "command": "Right"
      },
      "keys": [
       "Right"
+     ],
+     "key_times": [
+      1794195406299
      ],
      "observation": {
       "speech_raw": "Profit\nColumn 4 of 4",
@@ -123,14 +141,17 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794179886369,
-     "t_end_ms": 1794179887374,
+     "t_start_ms": 1794195407302,
+     "t_end_ms": 1794195408307,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794195407302
      ],
      "observation": {
       "speech_raw": "Q1\n$3 \ufffd{.\ufffd\ufffd\ufffd00\nRow 2 of 4",
@@ -140,14 +161,17 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794179887374,
-     "t_end_ms": 1794179888378,
+     "t_start_ms": 1794195408307,
+     "t_end_ms": 1794195409311,
      "action": {
       "type": "key",
       "command": "Numpad5"
      },
      "keys": [
       "Numpad5"
+     ],
+     "key_times": [
+      1794195408307
      ],
      "observation": {
       "speech_raw": "Column 4, Row 2\nProfit  Q1\n$3 \ufffd{.\ufffd\ufffd\ufffd00",
@@ -157,14 +181,17 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794179888378,
-     "t_end_ms": 1794179889383,
+     "t_start_ms": 1794195409311,
+     "t_end_ms": 1794195410315,
      "action": {
       "type": "key",
       "command": "Left"
      },
      "keys": [
       "Left"
+     ],
+     "key_times": [
+      1794195409311
      ],
      "observation": {
       "speech_raw": "Expenses \n$7,000\nColumn 3 of 4",
@@ -174,14 +201,17 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794179889383,
-     "t_end_ms": 1794179890387,
+     "t_start_ms": 1794195410315,
+     "t_end_ms": 1794195411319,
      "action": {
       "type": "key",
       "command": "Up"
      },
      "keys": [
       "Up"
+     ],
+     "key_times": [
+      1794195410315
      ],
      "observation": {
       "speech_raw": "Expenses\nRow 1 of 4",
@@ -191,14 +221,17 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794179890387,
-     "t_end_ms": 1794179891393,
+     "t_start_ms": 1794195411319,
+     "t_end_ms": 1794195412324,
      "action": {
       "type": "key",
       "command": "Ctrl+End"
      },
      "keys": [
       "Ctrl+End"
+     ],
+     "key_times": [
+      1794195411319
      ],
      "observation": {
       "speech_raw": "Profit  Q3\n$8,800\nColumn 4, Row 4",
@@ -208,14 +241,17 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794179891393,
-     "t_end_ms": 1794179892398,
+     "t_start_ms": 1794195412324,
+     "t_end_ms": 1794195413329,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
      },
      "keys": [
       "Ctrl+Home"
+     ],
+     "key_times": [
+      1794195412324
      ],
      "observation": {
       "speech_raw": "Quarter\nColumn 1, Row 1",
@@ -225,14 +261,17 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794179892398,
-     "t_end_ms": 1794179893402,
+     "t_start_ms": 1794195413329,
+     "t_end_ms": 1794195414334,
      "action": {
       "type": "key",
       "command": "Ctrl+Down"
      },
      "keys": [
       "Ctrl+Down"
+     ],
+     "key_times": [
+      1794195413329
      ],
      "observation": {
       "speech_raw": "bottom of column\nQ3",
@@ -242,14 +281,17 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794179893402,
-     "t_end_ms": 1794179894407,
+     "t_start_ms": 1794195414334,
+     "t_end_ms": 1794195415339,
      "action": {
       "type": "key",
       "command": "Shift+Up"
      },
      "keys": [
       "Shift+Up"
+     ],
+     "key_times": [
+      1794195414334
      ],
      "observation": {
       "speech_raw": "Q3$18,000$9,200$8,800",
@@ -259,14 +301,17 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794179894407,
-     "t_end_ms": 1794179895412,
+     "t_start_ms": 1794195415339,
+     "t_end_ms": 1794195416344,
      "action": {
       "type": "key",
       "command": "Shift+Numpad5"
      },
      "keys": [
       "Shift+Numpad5"
+     ],
+     "key_times": [
+      1794195415339
      ],
      "observation": {
       "speech_raw": "QuarterQ1Q2Q3",
@@ -276,14 +321,17 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794179895412,
-     "t_end_ms": 1794179896417,
+     "t_start_ms": 1794195416344,
+     "t_end_ms": 1794195417349,
      "action": {
       "type": "key",
       "command": "Escape"
      },
      "keys": [
       "Escape"
+     ],
+     "key_times": [
+      1794195416344
      ],
      "observation": {
       "speech_raw": "",
@@ -293,14 +341,17 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794179896417,
-     "t_end_ms": 1794179897422,
+     "t_start_ms": 1794195417349,
+     "t_end_ms": 1794195418354,
      "action": {
       "type": "key",
       "command": "Insert+Up"
      },
      "keys": [
       "Insert+Up"
+     ],
+     "key_times": [
+      1794195417349
      ],
      "observation": {
       "speech_raw": "Q3",

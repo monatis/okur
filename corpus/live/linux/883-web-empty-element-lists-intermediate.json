@@ -1,0 +1,129 @@
+{
+ "scenario_id": "883-web-empty-element-lists-intermediate",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "fcd2601b"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Escape",
+     "t_ms": 1794202068014
+    },
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794202068376
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794202069681,
+     "t_end_ms": 1794202070685,
+     "action": {
+      "type": "key",
+      "command": "Insert+F7"
+     },
+     "keys": [
+      "Insert+F7"
+     ],
+     "key_times": [
+      1794202069681
+     ],
+     "observation": {
+      "speech_raw": "no links",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794202070685,
+     "t_end_ms": 1794202071689,
+     "action": {
+      "type": "key",
+      "command": "Insert+F5"
+     },
+     "keys": [
+      "Insert+F5"
+     ],
+     "key_times": [
+      1794202070685
+     ],
+     "observation": {
+      "speech_raw": "no form fields\nDocument Reading Reference Fixture \u001d document \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794202071689,
+     "t_end_ms": 1794202072694,
+     "action": {
+      "type": "key",
+      "command": "Insert+Ctrl+R"
+     },
+     "keys": [
+      "Insert+Ctrl+R"
+     ],
+     "key_times": [
+      1794202071689
+     ],
+     "observation": {
+      "speech_raw": "No regions were found on the page",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794202072694,
+     "t_end_ms": 1794202073699,
+     "action": {
+      "type": "key",
+      "command": "K"
+     },
+     "keys": [
+      "K"
+     ],
+     "key_times": [
+      1794202072694
+     ],
+     "observation": {
+      "speech_raw": "No PlaceMarkers",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794202073699,
+     "t_end_ms": 1794202074704,
+     "action": {
+      "type": "key",
+      "command": "Shift+K"
+     },
+     "keys": [
+      "Shift+K"
+     ],
+     "key_times": [
+      1794202073699
+     ],
+     "observation": {
+      "speech_raw": "No PlaceMarkers",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

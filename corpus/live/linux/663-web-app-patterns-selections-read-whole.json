@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "aac6f125"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794187418745
+     "t_ms": 1794198848341
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794187420104,
-     "t_end_ms": 1794187421108,
+     "t_start_ms": 1794198849706,
+     "t_end_ms": 1794198850710,
      "action": {
       "type": "key",
       "command": "H"
      },
      "keys": [
       "H"
+     ],
+     "key_times": [
+      1794198849706
      ],
      "observation": {
       "speech_raw": "Web App Patterns\n \u001d heading level 1 \u001e",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794187421108,
-     "t_end_ms": 1794187422112,
+     "t_start_ms": 1794198850710,
+     "t_end_ms": 1794198851714,
      "action": {
       "type": "key",
       "command": "H"
      },
      "keys": [
       "H"
+     ],
+     "key_times": [
+      1794198850710
      ],
      "observation": {
       "speech_raw": "Current links\n \u001d heading level 2 \u001e",
@@ -55,14 +61,17 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794187422112,
-     "t_end_ms": 1794187423116,
+     "t_start_ms": 1794198851714,
+     "t_end_ms": 1794198852718,
      "action": {
       "type": "key",
       "command": "H"
      },
      "keys": [
       "H"
+     ],
+     "key_times": [
+      1794198851714
      ],
      "observation": {
       "speech_raw": "Described controls\n \u001d heading level 2 \u001e",
@@ -72,14 +81,17 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794187423116,
-     "t_end_ms": 1794187424121,
+     "t_start_ms": 1794198852718,
+     "t_end_ms": 1794198853722,
      "action": {
       "type": "key",
       "command": "H"
      },
      "keys": [
       "H"
+     ],
+     "key_times": [
+      1794198852718
      ],
      "observation": {
       "speech_raw": "Popup buttons\n \u001d heading level 2 \u001e",
@@ -89,14 +101,17 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794187424121,
-     "t_end_ms": 1794187425127,
+     "t_start_ms": 1794198853722,
+     "t_end_ms": 1794198854728,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+End"
      },
      "keys": [
       "Ctrl+Shift+End"
+     ],
+     "key_times": [
+      1794198853722
      ],
      "observation": {
       "speech_raw": "selected\n \u001d heading level 2 \u001e Popup buttons\nOutline \u001d button menu \u001e \nActions \u001d button menu \u001e  \u001dcollapsed\u001e \nPick one \u001d Button \u001e  \u001dHas Popup\u001e  listbox\n \u001d heading level 2 \u001e Fruit search\nFruit\n \u001d heading level 2 \u001e Tab from here\nStart \u001d Button \u001e \n \u001d same page link \u001e Skipped link\ngroup start Featured\nGroup text\ngroup end Featured\nNotes\n \u001d Edit \u001e the lazy dog, then reads std::io again\n \u001d heading level 2 \u001e Repository files\nFiles navigation region\nlist of 1 items\n\u2022 \u001d same page link \u001e  \u001dCurrent Page\u001e README\nlist end\nFiles navigation region end\n \u001d heading level 2 \u001e Workbench region\nFirst tool \u001d Button \u001e \nSecond tool \u001d Button \u001e \nKeys:\nEnd of page\n \u001d heading level 2 \u001e Files table\ntable with 2 columns and 4 rows\nName\nMessage\n \u001d same page link \u001e alpha.rs\n \u001d same page link \u001e first commit\n \u001d same page link \u001e beta.rs\nno link\n \u001d same page link \u001e gamma.rs\n \u001d same page link \u001e third commit\ntable end\n \u001d heading level 2 \u001e Landmarks\nRelated complementary information\n \u001d same page link \u001e Aside link\nRelated complementary information end\nSite search region\n \u001d same page link \u001e Search link\nSite search region end\nUpdates region\n \u001d same page link \u001e Region link\nUpdates region end\ncontent information\n \u001d same page link \u001e Footer link\ncontent information end",
@@ -106,14 +121,17 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794187425127,
-     "t_end_ms": 1794187426132,
+     "t_start_ms": 1794198854728,
+     "t_end_ms": 1794198855733,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
      },
      "keys": [
       "Ctrl+Home"
+     ],
+     "key_times": [
+      1794198854728
      ],
      "observation": {
       "speech_raw": "Web App Patterns",
@@ -123,14 +141,17 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794187426132,
-     "t_end_ms": 1794187427136,
+     "t_start_ms": 1794198855733,
+     "t_end_ms": 1794198856737,
      "action": {
       "type": "key",
       "command": "H"
      },
      "keys": [
       "H"
+     ],
+     "key_times": [
+      1794198855733
      ],
      "observation": {
       "speech_raw": "Web App Patterns\n \u001d heading level 1 \u001e",
@@ -140,14 +161,17 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794187427136,
-     "t_end_ms": 1794187428141,
+     "t_start_ms": 1794198856737,
+     "t_end_ms": 1794198857741,
      "action": {
       "type": "key",
       "command": "H"
      },
      "keys": [
       "H"
+     ],
+     "key_times": [
+      1794198856737
      ],
      "observation": {
       "speech_raw": "Current links\n \u001d heading level 2 \u001e",
@@ -157,14 +181,17 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794187428141,
-     "t_end_ms": 1794187429145,
+     "t_start_ms": 1794198857741,
+     "t_end_ms": 1794198858745,
      "action": {
       "type": "key",
       "command": "H"
      },
      "keys": [
       "H"
+     ],
+     "key_times": [
+      1794198857741
      ],
      "observation": {
       "speech_raw": "Described controls\n \u001d heading level 2 \u001e",
@@ -174,14 +201,17 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794187429145,
-     "t_end_ms": 1794187430149,
+     "t_start_ms": 1794198858745,
+     "t_end_ms": 1794198859749,
      "action": {
       "type": "key",
       "command": "H"
      },
      "keys": [
       "H"
+     ],
+     "key_times": [
+      1794198858745
      ],
      "observation": {
       "speech_raw": "Popup buttons\n \u001d heading level 2 \u001e",
@@ -191,14 +221,17 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794187430149,
-     "t_end_ms": 1794187431153,
+     "t_start_ms": 1794198859749,
+     "t_end_ms": 1794198860753,
      "action": {
       "type": "key",
       "command": "H"
      },
      "keys": [
       "H"
+     ],
+     "key_times": [
+      1794198859749
      ],
      "observation": {
       "speech_raw": "Fruit search\n \u001d heading level 2 \u001e",
@@ -208,14 +241,17 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794187431153,
-     "t_end_ms": 1794187432158,
+     "t_start_ms": 1794198860753,
+     "t_end_ms": 1794198861758,
      "action": {
       "type": "key",
       "command": "H"
      },
      "keys": [
       "H"
+     ],
+     "key_times": [
+      1794198860753
      ],
      "observation": {
       "speech_raw": "Tab from here\n \u001d heading level 2 \u001e",
@@ -225,14 +261,17 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794187432158,
-     "t_end_ms": 1794187433163,
+     "t_start_ms": 1794198861758,
+     "t_end_ms": 1794198862763,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+End"
      },
      "keys": [
       "Ctrl+Shift+End"
+     ],
+     "key_times": [
+      1794198861758
      ],
      "observation": {
       "speech_raw": "selected\n \u001d heading level 2 \u001e Tab from here\nStart \u001d Button \u001e \n \u001d same page link \u001e Skipped link\ngroup start Featured\nGroup text\ngroup end Featured\nNotes\n \u001d Edit \u001e the lazy dog, then reads std::io again\n \u001d heading level 2 \u001e Repository files\nFiles navigation region\nlist of 1 items\n\u2022 \u001d same page link \u001e  \u001dCurrent Page\u001e README\nlist end\nFiles navigation region end\n \u001d heading level 2 \u001e Workbench region\nFirst tool \u001d Button \u001e \nSecond tool \u001d Button \u001e \nKeys:\nEnd of page\n \u001d heading level 2 \u001e Files table\ntable with 2 columns and 4 rows\nName\nMessage\n \u001d same page link \u001e alpha.rs\n \u001d same page link \u001e first commit\n \u001d same page link \u001e beta.rs\nno link\n \u001d same page link \u001e gamma.rs\n \u001d same page link \u001e third commit\ntable end\n \u001d heading level 2 \u001e Landmarks\nRelated complementary information\n \u001d same page link \u001e Aside link\nRelated complementary information end\nSite search region\n \u001d same page link \u001e Search link\nSite search region end\nUpdates region\n \u001d same page link \u001e Region link\nUpdates region end\ncontent information\n \u001d same page link \u001e Footer link\ncontent information end",
@@ -242,14 +281,17 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794187433163,
-     "t_end_ms": 1794187434168,
+     "t_start_ms": 1794198862763,
+     "t_end_ms": 1794198863769,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
      },
      "keys": [
       "Ctrl+Home"
+     ],
+     "key_times": [
+      1794198862763
      ],
      "observation": {
       "speech_raw": "Web App Patterns",
@@ -259,14 +301,17 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794187434168,
-     "t_end_ms": 1794187435172,
+     "t_start_ms": 1794198863769,
+     "t_end_ms": 1794198864773,
      "action": {
       "type": "key",
       "command": "H"
      },
      "keys": [
       "H"
+     ],
+     "key_times": [
+      1794198863769
      ],
      "observation": {
       "speech_raw": "Web App Patterns\n \u001d heading level 1 \u001e",
@@ -276,14 +321,17 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794187435172,
-     "t_end_ms": 1794187436177,
+     "t_start_ms": 1794198864773,
+     "t_end_ms": 1794198865777,
      "action": {
       "type": "key",
       "command": "H"
      },
      "keys": [
       "H"
+     ],
+     "key_times": [
+      1794198864773
      ],
      "observation": {
       "speech_raw": "Current links\n \u001d heading level 2 \u001e",
@@ -293,14 +341,17 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794187436177,
-     "t_end_ms": 1794187437183,
+     "t_start_ms": 1794198865777,
+     "t_end_ms": 1794198866782,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+End"
      },
      "keys": [
       "Ctrl+Shift+End"
+     ],
+     "key_times": [
+      1794198865777
      ],
      "observation": {
       "speech_raw": "selected\n \u001d heading level 2 \u001e Current links\nlist of 3 items\n\u2022 \u001d same page link \u001e  \u001dCurrent Page\u001e Overview\n\u2022 \u001d Link \u001e Settings\n\u2022 \u001d same page link \u001e  \u001dCurrent Step\u001e Step two\nlist end\n \u001d heading level 2 \u001e Described controls\nNext slide \u001d slide control \u001e \n \u001d chip \u001e Rust\nWrap \u001d toggle \u001e  \u001dnot checked\u001e \n \u001d heading level 2 \u001e Popup buttons\nOutline \u001d button menu \u001e \nActions \u001d button menu \u001e  \u001dcollapsed\u001e \nPick one \u001d Button \u001e  \u001dHas Popup\u001e  listbox\n \u001d heading level 2 \u001e Fruit search\nFruit\n \u001d heading level 2 \u001e Tab from here\nStart \u001d Button \u001e \n \u001d same page link \u001e Skipped link\ngroup start Featured\nGroup text\ngroup end Featured\nNotes\n \u001d Edit \u001e the lazy dog, then reads std::io again\n \u001d heading level 2 \u001e Repository files\nFiles navigation region\nlist of 1 items\n\u2022 \u001d same page link \u001e  \u001dCurrent Page\u001e README\nlist end\nFiles navigation region end\n \u001d heading level 2 \u001e Workbench region\nFirst tool \u001d Button \u001e \nSecond tool \u001d Button \u001e \nKeys:\nEnd of page\n \u001d heading level 2 \u001e Files table\ntable with 2 columns and 4 rows\nName\nMessage\n \u001d same page link \u001e alpha.rs\n \u001d same page link \u001e first commit\n \u001d same page link \u001e beta.rs\nno link\n \u001d same page link \u001e gamma.rs\n \u001d same page link \u001e third commit\ntable end\n \u001d heading level 2 \u001e Landmarks\nRelated complementary information\n \u001d same page link \u001e Aside link\nRelated complementary information end\nSite search region\n \u001d same page link \u001e Search link\nSite search region end\nUpdates region\n \u001d same page link \u001e Region link\nUpdates region end\ncontent information\n \u001d same page link \u001e Footer link\ncontent information end",
@@ -310,14 +361,17 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794187437183,
-     "t_end_ms": 1794187438188,
+     "t_start_ms": 1794198866782,
+     "t_end_ms": 1794198867787,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
      },
      "keys": [
       "Ctrl+Home"
+     ],
+     "key_times": [
+      1794198866782
      ],
      "observation": {
       "speech_raw": "Web App Patterns",

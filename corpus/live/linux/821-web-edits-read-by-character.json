@@ -1,0 +1,885 @@
+{
+ "scenario_id": "821-web-edits-read-by-character",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "fcd2601b"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794200533021
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794200534388,
+     "t_end_ms": 1794200535392,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794200534388
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e Edits and marks",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794200535392,
+     "t_end_ms": 1794200536396,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794200535392
+     ],
+     "observation": {
+      "speech_raw": "The price was  \u001dDeletion \u001e twelve \u001dend Deletion \u001e   \u001dInsertion \u001e ten \u001dend Insertion \u001e  dollars.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794200536396,
+     "t_end_ms": 1794200537399,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200536396
+     ],
+     "observation": {
+      "speech_raw": "h",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794200537399,
+     "t_end_ms": 1794200538402,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200537399
+     ],
+     "observation": {
+      "speech_raw": "e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794200538402,
+     "t_end_ms": 1794200539407,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200538402
+     ],
+     "observation": {
+      "speech_raw": " ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794200539407,
+     "t_end_ms": 1794200540411,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200539407
+     ],
+     "observation": {
+      "speech_raw": "p",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794200540412,
+     "t_end_ms": 1794200541416,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200540412
+     ],
+     "observation": {
+      "speech_raw": "r",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794200541416,
+     "t_end_ms": 1794200542420,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200541416
+     ],
+     "observation": {
+      "speech_raw": "i",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794200542420,
+     "t_end_ms": 1794200543424,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200542420
+     ],
+     "observation": {
+      "speech_raw": "c",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794200543424,
+     "t_end_ms": 1794200544429,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200543424
+     ],
+     "observation": {
+      "speech_raw": "e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794200544429,
+     "t_end_ms": 1794200545433,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200544429
+     ],
+     "observation": {
+      "speech_raw": " ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794200545433,
+     "t_end_ms": 1794200546438,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200545433
+     ],
+     "observation": {
+      "speech_raw": "w",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794200546438,
+     "t_end_ms": 1794200547442,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200546438
+     ],
+     "observation": {
+      "speech_raw": "a",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794200547442,
+     "t_end_ms": 1794200548447,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200547442
+     ],
+     "observation": {
+      "speech_raw": "s",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794200548447,
+     "t_end_ms": 1794200549451,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200548447
+     ],
+     "observation": {
+      "speech_raw": " ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794200549451,
+     "t_end_ms": 1794200550455,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200549451
+     ],
+     "observation": {
+      "speech_raw": " \u001dDeletion \u001e t",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s17",
+     "t_start_ms": 1794200550455,
+     "t_end_ms": 1794200551459,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200550455
+     ],
+     "observation": {
+      "speech_raw": "w",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s18",
+     "t_start_ms": 1794200551459,
+     "t_end_ms": 1794200552463,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200551459
+     ],
+     "observation": {
+      "speech_raw": "e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s19",
+     "t_start_ms": 1794200552463,
+     "t_end_ms": 1794200553468,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200552463
+     ],
+     "observation": {
+      "speech_raw": "l",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s20",
+     "t_start_ms": 1794200553468,
+     "t_end_ms": 1794200554472,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200553468
+     ],
+     "observation": {
+      "speech_raw": "v",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s21",
+     "t_start_ms": 1794200554472,
+     "t_end_ms": 1794200555477,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200554472
+     ],
+     "observation": {
+      "speech_raw": "e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s22",
+     "t_start_ms": 1794200555477,
+     "t_end_ms": 1794200556481,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200555477
+     ],
+     "observation": {
+      "speech_raw": " \u001dend Deletion \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s23",
+     "t_start_ms": 1794200556481,
+     "t_end_ms": 1794200557486,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200556481
+     ],
+     "observation": {
+      "speech_raw": " \u001dInsertion \u001e t",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s24",
+     "t_start_ms": 1794200557486,
+     "t_end_ms": 1794200558590,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200557486
+     ],
+     "observation": {
+      "speech_raw": "e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s25",
+     "t_start_ms": 1794200558590,
+     "t_end_ms": 1794200559594,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200558590
+     ],
+     "observation": {
+      "speech_raw": "n",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s26",
+     "t_start_ms": 1794200559594,
+     "t_end_ms": 1794200560598,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200559594
+     ],
+     "observation": {
+      "speech_raw": " \u001dend Insertion \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s27",
+     "t_start_ms": 1794200560598,
+     "t_end_ms": 1794200561603,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200560598
+     ],
+     "observation": {
+      "speech_raw": "d",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s28",
+     "t_start_ms": 1794200561603,
+     "t_end_ms": 1794200562607,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200561603
+     ],
+     "observation": {
+      "speech_raw": "o",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s29",
+     "t_start_ms": 1794200562607,
+     "t_end_ms": 1794200563612,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794200562607
+     ],
+     "observation": {
+      "speech_raw": "The price was  \u001dDeletion \u001e twelve \u001dend Deletion \u001e   \u001dInsertion \u001e ten \u001dend Insertion \u001e  dollars.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s30",
+     "t_start_ms": 1794200563612,
+     "t_end_ms": 1794200564617,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794200563612
+     ],
+     "observation": {
+      "speech_raw": " \u001dInsertion \u001e A whole line inserted.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s31",
+     "t_start_ms": 1794200564617,
+     "t_end_ms": 1794200565621,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794200564617
+     ],
+     "observation": {
+      "speech_raw": " \u001dend Insertion \u001e Search for  \u001dmark \u001e library \u001dend mark \u001e  found it.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s32",
+     "t_start_ms": 1794200565621,
+     "t_end_ms": 1794200566626,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200565621
+     ],
+     "observation": {
+      "speech_raw": "e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s33",
+     "t_start_ms": 1794200566626,
+     "t_end_ms": 1794200567630,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200566626
+     ],
+     "observation": {
+      "speech_raw": "a",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s34",
+     "t_start_ms": 1794200567630,
+     "t_end_ms": 1794200568634,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200567630
+     ],
+     "observation": {
+      "speech_raw": "r",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s35",
+     "t_start_ms": 1794200568634,
+     "t_end_ms": 1794200569639,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200568634
+     ],
+     "observation": {
+      "speech_raw": "c",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s36",
+     "t_start_ms": 1794200569639,
+     "t_end_ms": 1794200570643,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200569639
+     ],
+     "observation": {
+      "speech_raw": "h",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s37",
+     "t_start_ms": 1794200570643,
+     "t_end_ms": 1794200571648,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200570643
+     ],
+     "observation": {
+      "speech_raw": " ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s38",
+     "t_start_ms": 1794200571648,
+     "t_end_ms": 1794200572652,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200571648
+     ],
+     "observation": {
+      "speech_raw": "f",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s39",
+     "t_start_ms": 1794200572652,
+     "t_end_ms": 1794200573656,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200572652
+     ],
+     "observation": {
+      "speech_raw": "o",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s40",
+     "t_start_ms": 1794200573656,
+     "t_end_ms": 1794200574660,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200573656
+     ],
+     "observation": {
+      "speech_raw": "r",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s41",
+     "t_start_ms": 1794200574660,
+     "t_end_ms": 1794200575664,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200574660
+     ],
+     "observation": {
+      "speech_raw": " ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s42",
+     "t_start_ms": 1794200575664,
+     "t_end_ms": 1794200576668,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200575664
+     ],
+     "observation": {
+      "speech_raw": " \u001dmark \u001e l",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s43",
+     "t_start_ms": 1794200576668,
+     "t_end_ms": 1794200577672,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794200576668
+     ],
+     "observation": {
+      "speech_raw": "i",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

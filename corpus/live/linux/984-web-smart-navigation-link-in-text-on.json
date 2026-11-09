@@ -1,0 +1,305 @@
+{
+ "scenario_id": "984-web-smart-navigation-link-in-text-on",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "fcd2601b"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794204091348
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794204092713,
+     "t_end_ms": 1794204093717,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794204092713
+     ],
+     "observation": {
+      "speech_raw": "Virtual cursor keys\n \u001d heading level 1 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794204093717,
+     "t_end_ms": 1794204094721,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794204093717
+     ],
+     "observation": {
+      "speech_raw": "Text before any link in the page.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794204094721,
+     "t_end_ms": 1794204095725,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794204094721
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e A link alone in its paragraph",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794204095725,
+     "t_end_ms": 1794204096729,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794204095725
+     ],
+     "observation": {
+      "speech_raw": "Some text with ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794204096729,
+     "t_end_ms": 1794204097733,
+     "action": {
+      "type": "key",
+      "command": "End"
+     },
+     "keys": [
+      "End"
+     ],
+     "key_times": [
+      1794204096729
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794204097733,
+     "t_end_ms": 1794204098737,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794204097733
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e a link inside it",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794204098737,
+     "t_end_ms": 1794204099741,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794204098737
+     ],
+     "observation": {
+      "speech_raw": " ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794204099741,
+     "t_end_ms": 1794204100745,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794204099741
+     ],
+     "observation": {
+      "speech_raw": "a",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794204100745,
+     "t_end_ms": 1794204101750,
+     "action": {
+      "type": "key",
+      "command": "Left"
+     },
+     "keys": [
+      "Left"
+     ],
+     "key_times": [
+      1794204100745
+     ],
+     "observation": {
+      "speech_raw": " ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794204101750,
+     "t_end_ms": 1794204102855,
+     "action": {
+      "type": "key",
+      "command": "Left"
+     },
+     "keys": [
+      "Left"
+     ],
+     "key_times": [
+      1794204101750
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e a link inside it",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794204102855,
+     "t_end_ms": 1794204103859,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Right"
+     },
+     "keys": [
+      "Ctrl+Right"
+     ],
+     "key_times": [
+      1794204102855
+     ],
+     "observation": {
+      "speech_raw": "and",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794204103859,
+     "t_end_ms": 1794204104865,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Right"
+     },
+     "keys": [
+      "Ctrl+Right"
+     ],
+     "key_times": [
+      1794204103859
+     ],
+     "observation": {
+      "speech_raw": "more",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794204104865,
+     "t_end_ms": 1794204105870,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Left"
+     },
+     "keys": [
+      "Ctrl+Left"
+     ],
+     "key_times": [
+      1794204104865
+     ],
+     "observation": {
+      "speech_raw": "and",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794204105870,
+     "t_end_ms": 1794204106875,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Left"
+     },
+     "keys": [
+      "Ctrl+Left"
+     ],
+     "key_times": [
+      1794204105870
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e a link inside it",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

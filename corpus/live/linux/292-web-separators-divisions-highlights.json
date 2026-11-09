@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "12447157"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794179513432
+     "t_ms": 1794194417436
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794179514798,
-     "t_end_ms": 1794179515802,
+     "t_start_ms": 1794194418802,
+     "t_end_ms": 1794194419806,
      "action": {
       "type": "key",
       "command": "Minus"
      },
      "keys": [
       "Minus"
+     ],
+     "key_times": [
+      1794194418802
      ],
      "observation": {
       "speech_raw": "----- \u001d separator \u001e ",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794179515802,
-     "t_end_ms": 1794179516806,
+     "t_start_ms": 1794194419806,
+     "t_end_ms": 1794194420809,
      "action": {
       "type": "key",
       "command": "Minus"
      },
      "keys": [
       "Minus"
+     ],
+     "key_times": [
+      1794194419806
      ],
      "observation": {
       "speech_raw": "----- \u001d separator \u001e ",
@@ -55,14 +61,17 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794179516806,
-     "t_end_ms": 1794179517811,
+     "t_start_ms": 1794194420809,
+     "t_end_ms": 1794194421813,
      "action": {
       "type": "key",
       "command": "Minus"
      },
      "keys": [
       "Minus"
+     ],
+     "key_times": [
+      1794194420809
      ],
      "observation": {
       "speech_raw": "wrapping to top\n----- \u001d separator \u001e ",
@@ -72,14 +81,17 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794179517811,
-     "t_end_ms": 1794179518816,
+     "t_start_ms": 1794194421813,
+     "t_end_ms": 1794194422818,
      "action": {
       "type": "key",
       "command": "Shift+Minus"
      },
      "keys": [
       "Shift+Minus"
+     ],
+     "key_times": [
+      1794194421813
      ],
      "observation": {
       "speech_raw": "wrapping to bottom\n----- \u001d separator \u001e ",
@@ -89,14 +101,17 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794179518816,
-     "t_end_ms": 1794179519822,
+     "t_start_ms": 1794194422818,
+     "t_end_ms": 1794194423823,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
      },
      "keys": [
       "Ctrl+Home"
+     ],
+     "key_times": [
+      1794194422818
      ],
      "observation": {
       "speech_raw": "Virtual Cursor Keys - Keys Fixture",
@@ -106,14 +121,17 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794179519822,
-     "t_end_ms": 1794179520826,
+     "t_start_ms": 1794194423823,
+     "t_end_ms": 1794194424828,
      "action": {
       "type": "key",
       "command": "Z"
      },
      "keys": [
       "Z"
+     ],
+     "key_times": [
+      1794194423823
      ],
      "observation": {
       "speech_raw": "A division holds this text.",
@@ -123,14 +141,17 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794179520826,
-     "t_end_ms": 1794179521831,
+     "t_start_ms": 1794194424828,
+     "t_end_ms": 1794194425832,
      "action": {
       "type": "key",
       "command": "Z"
      },
      "keys": [
       "Z"
+     ],
+     "key_times": [
+      1794194424828
      ],
      "observation": {
       "speech_raw": "Another division, with a span inside it.",
@@ -140,14 +161,17 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794179521831,
-     "t_end_ms": 1794179522835,
+     "t_start_ms": 1794194425832,
+     "t_end_ms": 1794194426837,
      "action": {
       "type": "key",
       "command": "Z"
      },
      "keys": [
       "Z"
+     ],
+     "key_times": [
+      1794194425832
      ],
      "observation": {
       "speech_raw": "A clickable division",
@@ -157,14 +181,17 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794179522835,
-     "t_end_ms": 1794179523838,
+     "t_start_ms": 1794194426837,
+     "t_end_ms": 1794194427841,
      "action": {
       "type": "key",
       "command": "Z"
      },
      "keys": [
       "Z"
+     ],
+     "key_times": [
+      1794194426837
      ],
      "observation": {
       "speech_raw": "This part flows to the lists.\nHas Flows To",
@@ -174,14 +201,17 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794179523838,
-     "t_end_ms": 1794179524843,
+     "t_start_ms": 1794194427841,
+     "t_end_ms": 1794194428847,
      "action": {
       "type": "key",
       "command": "Shift+Z"
      },
      "keys": [
       "Shift+Z"
+     ],
+     "key_times": [
+      1794194427841
      ],
      "observation": {
       "speech_raw": "A clickable division",
@@ -191,14 +221,17 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794179524843,
-     "t_end_ms": 1794179525848,
+     "t_start_ms": 1794194428847,
+     "t_end_ms": 1794194429851,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
      },
      "keys": [
       "Ctrl+Home"
+     ],
+     "key_times": [
+      1794194428847
      ],
      "observation": {
       "speech_raw": "Virtual Cursor Keys - Keys Fixture",
@@ -208,14 +241,17 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794179525848,
-     "t_end_ms": 1794179526852,
+     "t_start_ms": 1794194429851,
+     "t_end_ms": 1794194430856,
      "action": {
       "type": "key",
       "command": "Y"
      },
      "keys": [
       "Y"
+     ],
+     "key_times": [
+      1794194429851
      ],
      "observation": {
       "speech_raw": "",
@@ -225,14 +261,17 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794179526852,
-     "t_end_ms": 1794179527856,
+     "t_start_ms": 1794194430856,
+     "t_end_ms": 1794194431859,
      "action": {
       "type": "key",
       "command": "Y"
      },
      "keys": [
       "Y"
+     ],
+     "key_times": [
+      1794194430856
      ],
      "observation": {
       "speech_raw": "",
@@ -242,14 +281,17 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794179527856,
-     "t_end_ms": 1794179528860,
+     "t_start_ms": 1794194431859,
+     "t_end_ms": 1794194432863,
      "action": {
       "type": "key",
       "command": "Y"
      },
      "keys": [
       "Y"
+     ],
+     "key_times": [
+      1794194431859
      ],
      "observation": {
       "speech_raw": "",
@@ -259,14 +301,17 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794179528860,
-     "t_end_ms": 1794179529865,
+     "t_start_ms": 1794194432863,
+     "t_end_ms": 1794194433868,
      "action": {
       "type": "key",
       "command": "Shift+Y"
      },
      "keys": [
       "Shift+Y"
+     ],
+     "key_times": [
+      1794194432863
      ],
      "observation": {
       "speech_raw": "",

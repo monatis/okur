@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "aac6f125"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794185627229
+     "t_ms": 1794196876887
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794185628589,
-     "t_end_ms": 1794185629593,
+     "t_start_ms": 1794196878253,
+     "t_end_ms": 1794196879256,
      "action": {
       "type": "key",
       "command": "T"
      },
      "keys": [
       "T"
+     ],
+     "key_times": [
+      1794196878253
      ],
      "observation": {
       "speech_raw": "table with 3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794185629593,
-     "t_end_ms": 1794185630597,
+     "t_start_ms": 1794196879256,
+     "t_end_ms": 1794196880262,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Left"
      },
      "keys": [
       "Ctrl+Alt+Left"
+     ],
+     "key_times": [
+      1794196879256
      ],
      "observation": {
       "speech_raw": "beginning of row",
@@ -55,14 +61,17 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794185630597,
-     "t_end_ms": 1794185631603,
+     "t_start_ms": 1794196880262,
+     "t_end_ms": 1794196881266,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Up"
      },
      "keys": [
       "Ctrl+Alt+Up"
+     ],
+     "key_times": [
+      1794196880262
      ],
      "observation": {
       "speech_raw": "top of column",
@@ -72,14 +81,17 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794185631603,
-     "t_end_ms": 1794185632608,
+     "t_start_ms": 1794196881266,
+     "t_end_ms": 1794196882272,
      "action": {
       "type": "key",
       "command": "Win+Alt+Up"
      },
      "keys": [
       "Win+Alt+Up"
+     ],
+     "key_times": [
+      1794196881266
      ],
      "observation": {
       "speech_raw": "You are on the first row of the table.",
@@ -89,14 +101,17 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794185632608,
-     "t_end_ms": 1794185633612,
+     "t_start_ms": 1794196882272,
+     "t_end_ms": 1794196883277,
      "action": {
       "type": "key",
       "command": "Win+Alt+Left"
      },
      "keys": [
       "Win+Alt+Left"
+     ],
+     "key_times": [
+      1794196882272
      ],
      "observation": {
       "speech_raw": "You are on the first column of the row.",
@@ -106,14 +121,17 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794185633612,
-     "t_end_ms": 1794185634617,
+     "t_start_ms": 1794196883277,
+     "t_end_ms": 1794196884283,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+End"
      },
      "keys": [
       "Ctrl+Alt+End"
+     ],
+     "key_times": [
+      1794196883277
      ],
      "observation": {
       "speech_raw": "Details  Northside\n \u001d same page link \u001e Directions\nColumn 3, Row 3",
@@ -123,14 +141,17 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794185634617,
-     "t_end_ms": 1794185635622,
+     "t_start_ms": 1794196884283,
+     "t_end_ms": 1794196885288,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Right"
      },
      "keys": [
       "Ctrl+Alt+Right"
+     ],
+     "key_times": [
+      1794196884283
      ],
      "observation": {
       "speech_raw": "end of row",
@@ -140,14 +161,17 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794185635622,
-     "t_end_ms": 1794185636628,
+     "t_start_ms": 1794196885288,
+     "t_end_ms": 1794196886294,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Down"
      },
      "keys": [
       "Ctrl+Alt+Down"
+     ],
+     "key_times": [
+      1794196885288
      ],
      "observation": {
       "speech_raw": "bottom of column",
@@ -157,14 +181,17 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794185636628,
-     "t_end_ms": 1794185637634,
+     "t_start_ms": 1794196886294,
+     "t_end_ms": 1794196887300,
      "action": {
       "type": "key",
       "command": "Win+Alt+Down"
      },
      "keys": [
       "Win+Alt+Down"
+     ],
+     "key_times": [
+      1794196886294
      ],
      "observation": {
       "speech_raw": "You are on the last row in the table.",
@@ -174,14 +201,17 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794185637634,
-     "t_end_ms": 1794185638640,
+     "t_start_ms": 1794196887300,
+     "t_end_ms": 1794196888306,
      "action": {
       "type": "key",
       "command": "Win+Alt+Right"
      },
      "keys": [
       "Win+Alt+Right"
+     ],
+     "key_times": [
+      1794196887300
      ],
      "observation": {
       "speech_raw": "You are on the last column in the row.",

@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "aac6f125"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794187511519
+     "t_ms": 1794198940790
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794187512882,
-     "t_end_ms": 1794187513885,
+     "t_start_ms": 1794198942154,
+     "t_end_ms": 1794198943159,
      "action": {
       "type": "key",
       "command": "E"
      },
      "keys": [
       "E"
+     ],
+     "key_times": [
+      1794198942154
      ],
      "observation": {
       "speech_raw": "Note \u001d Edit \u001e \nBring a lamp",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794187513885,
-     "t_end_ms": 1794187514889,
+     "t_start_ms": 1794198943159,
+     "t_end_ms": 1794198944163,
      "action": {
       "type": "key",
       "command": "Insert+5"
      },
      "keys": [
       "Insert+5"
+     ],
+     "key_times": [
+      1794198943159
      ],
      "observation": {
       "speech_raw": "navy on yellow",
@@ -55,14 +61,17 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794187514889,
-     "t_end_ms": 1794187515993,
+     "t_start_ms": 1794198944163,
+     "t_end_ms": 1794198945267,
      "action": {
       "type": "key",
       "command": "Enter"
      },
      "keys": [
       "Enter"
+     ],
+     "key_times": [
+      1794198944163
      ],
      "observation": {
       "speech_raw": "Event Notes - Riverside Library\n \u001d MainRegion \u001e \n \u001d FormRegion \u001e \nNote \u001d Edit \u001e \nBring a lamp\nType in text.",
@@ -72,14 +81,17 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794187515993,
-     "t_end_ms": 1794187516997,
+     "t_start_ms": 1794198945267,
+     "t_end_ms": 1794198946271,
      "action": {
       "type": "key",
       "command": "Insert+5"
      },
      "keys": [
       "Insert+5"
+     ],
+     "key_times": [
+      1794198945267
      ],
      "observation": {
       "speech_raw": "default on default",
@@ -89,14 +101,17 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794187516997,
-     "t_end_ms": 1794187518102,
+     "t_start_ms": 1794198946272,
+     "t_end_ms": 1794198947377,
      "action": {
       "type": "key",
       "command": "Tab"
      },
      "keys": [
       "Tab"
+     ],
+     "key_times": [
+      1794198946272
      ],
      "observation": {
       "speech_raw": "Reply \u001d Edit \u001e \nWill do\nType in text.",
@@ -106,14 +121,17 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794187518102,
-     "t_end_ms": 1794187519108,
+     "t_start_ms": 1794198947377,
+     "t_end_ms": 1794198948382,
      "action": {
       "type": "key",
       "command": "Insert+5"
      },
      "keys": [
       "Insert+5"
+     ],
+     "key_times": [
+      1794198947377
      ],
      "observation": {
       "speech_raw": "default on default",
@@ -123,14 +141,17 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794187519108,
-     "t_end_ms": 1794187520212,
+     "t_start_ms": 1794198948382,
+     "t_end_ms": 1794198949487,
      "action": {
       "type": "key",
       "command": "Tab"
      },
      "keys": [
       "Tab"
+     ],
+     "key_times": [
+      1794198948382
      ],
      "observation": {
       "speech_raw": "Plain \u001d Edit \u001e \nblank\nType in text.",
@@ -140,14 +161,17 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794187520212,
-     "t_end_ms": 1794187521217,
+     "t_start_ms": 1794198949487,
+     "t_end_ms": 1794198950492,
      "action": {
       "type": "key",
       "command": "Insert+5"
      },
      "keys": [
       "Insert+5"
+     ],
+     "key_times": [
+      1794198949487
      ],
      "observation": {
       "speech_raw": "default on default",
@@ -157,14 +181,17 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794187521217,
-     "t_end_ms": 1794187522221,
+     "t_start_ms": 1794198950492,
+     "t_end_ms": 1794198951496,
      "action": {
       "type": "key",
       "command": "Escape"
      },
      "keys": [
       "Escape"
+     ],
+     "key_times": [
+      1794198950492
      ],
      "observation": {
       "speech_raw": "virtual PC Cursor",
@@ -174,14 +201,17 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794187522221,
-     "t_end_ms": 1794187523227,
+     "t_start_ms": 1794198951496,
+     "t_end_ms": 1794198952501,
      "action": {
       "type": "key",
       "command": "Insert+5"
      },
      "keys": [
       "Insert+5"
+     ],
+     "key_times": [
+      1794198951496
      ],
      "observation": {
       "speech_raw": "default on default",
@@ -191,14 +221,17 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794187523227,
-     "t_end_ms": 1794187524232,
+     "t_start_ms": 1794198952501,
+     "t_end_ms": 1794198953507,
      "action": {
       "type": "key",
       "command": "Shift+E"
      },
      "keys": [
       "Shift+E"
+     ],
+     "key_times": [
+      1794198952501
      ],
      "observation": {
       "speech_raw": "Reply \u001d Edit \u001e \nWill do",
@@ -208,14 +241,17 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794187524232,
-     "t_end_ms": 1794187525237,
+     "t_start_ms": 1794198953507,
+     "t_end_ms": 1794198954512,
      "action": {
       "type": "key",
       "command": "Insert+5"
      },
      "keys": [
       "Insert+5"
+     ],
+     "key_times": [
+      1794198953507
      ],
      "observation": {
       "speech_raw": "red on white",

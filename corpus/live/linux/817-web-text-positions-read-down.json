@@ -1,0 +1,205 @@
+{
+ "scenario_id": "817-web-text-positions-read-down",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "fcd2601b"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794200416553
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794200417920,
+     "t_end_ms": 1794200418923,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794200417920
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e Raised and lowered text",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794200418923,
+     "t_end_ms": 1794200419928,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794200418923
+     ],
+     "observation": {
+      "speech_raw": "A plain line with nothing raised.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794200419928,
+     "t_end_ms": 1794200420932,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794200419928
+     ],
+     "observation": {
+      "speech_raw": "A mole holds 6 \u00d7 10 \u001dsuperscript \u001e 23 \u001dend superscript \u001e  particles.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794200420932,
+     "t_end_ms": 1794200421936,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794200420932
+     ],
+     "observation": {
+      "speech_raw": "The sum runs to xn at most.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794200421936,
+     "t_end_ms": 1794200422941,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794200421936
+     ],
+     "observation": {
+      "speech_raw": "Footnote marka after a word.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794200422941,
+     "t_end_ms": 1794200423945,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794200422941
+     ],
+     "observation": {
+      "speech_raw": "The scale uses log10 steps.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794200423945,
+     "t_end_ms": 1794200424949,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794200423945
+     ],
+     "observation": {
+      "speech_raw": "Each term xi is counted once.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794200424949,
+     "t_end_ms": 1794200425953,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794200424949
+     ],
+     "observation": {
+      "speech_raw": "The entry aij sits in row i.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794200425953,
+     "t_end_ms": 1794200426957,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794200425953
+     ],
+     "observation": {
+      "speech_raw": "Another plain line at the end.",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

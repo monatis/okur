@@ -1,0 +1,285 @@
+{
+ "scenario_id": "724-article-links-same-page-off",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "fcd2601b"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794199948360
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794199949727,
+     "t_end_ms": 1794199950731,
+     "action": {
+      "type": "key",
+      "command": "U"
+     },
+     "keys": [
+      "U"
+     ],
+     "key_times": [
+      1794199949727
+     ],
+     "observation": {
+      "speech_raw": " \u001d Link \u001e Riverside Gazette",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794199950731,
+     "t_end_ms": 1794199951735,
+     "action": {
+      "type": "key",
+      "command": "U"
+     },
+     "keys": [
+      "U"
+     ],
+     "key_times": [
+      1794199950731
+     ],
+     "observation": {
+      "speech_raw": "\u2022 \u001d Link \u001e News",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794199951735,
+     "t_end_ms": 1794199952739,
+     "action": {
+      "type": "key",
+      "command": "U"
+     },
+     "keys": [
+      "U"
+     ],
+     "key_times": [
+      1794199951735
+     ],
+     "observation": {
+      "speech_raw": "\u2022 \u001d Link \u001e Sports",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794199952739,
+     "t_end_ms": 1794199953743,
+     "action": {
+      "type": "key",
+      "command": "U"
+     },
+     "keys": [
+      "U"
+     ],
+     "key_times": [
+      1794199952739
+     ],
+     "observation": {
+      "speech_raw": "\u2022 \u001d Link \u001e Culture",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794199953743,
+     "t_end_ms": 1794199954748,
+     "action": {
+      "type": "key",
+      "command": "U"
+     },
+     "keys": [
+      "U"
+     ],
+     "key_times": [
+      1794199953743
+     ],
+     "observation": {
+      "speech_raw": "\u2022 \u001d Link \u001e Opinion",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794199954748,
+     "t_end_ms": 1794199955752,
+     "action": {
+      "type": "key",
+      "command": "U"
+     },
+     "keys": [
+      "U"
+     ],
+     "key_times": [
+      1794199954748
+     ],
+     "observation": {
+      "speech_raw": " \u001d Link \u001e Maria Lopez,",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794199955752,
+     "t_end_ms": 1794199956756,
+     "action": {
+      "type": "key",
+      "command": "U"
+     },
+     "keys": [
+      "U"
+     ],
+     "key_times": [
+      1794199955752
+     ],
+     "observation": {
+      "speech_raw": " \u001d Link \u001e study rooms",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794199956756,
+     "t_end_ms": 1794199957761,
+     "action": {
+      "type": "key",
+      "command": "U"
+     },
+     "keys": [
+      "U"
+     ],
+     "key_times": [
+      1794199956756
+     ],
+     "observation": {
+      "speech_raw": " \u001d Link \u001e Directions",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794199957761,
+     "t_end_ms": 1794199958865,
+     "action": {
+      "type": "key",
+      "command": "U"
+     },
+     "keys": [
+      "U"
+     ],
+     "key_times": [
+      1794199957761
+     ],
+     "observation": {
+      "speech_raw": " \u001d Link \u001e Directions",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794199958865,
+     "t_end_ms": 1794199959869,
+     "action": {
+      "type": "key",
+      "command": "U"
+     },
+     "keys": [
+      "U"
+     ],
+     "key_times": [
+      1794199958865
+     ],
+     "observation": {
+      "speech_raw": "\u2022 \u001d Link \u001e Council approves library budget",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794199959869,
+     "t_end_ms": 1794199960874,
+     "action": {
+      "type": "key",
+      "command": "U"
+     },
+     "keys": [
+      "U"
+     ],
+     "key_times": [
+      1794199959869
+     ],
+     "observation": {
+      "speech_raw": "\u2022 \u001d Link \u001e Spring book fair returns",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794199960874,
+     "t_end_ms": 1794199961879,
+     "action": {
+      "type": "key",
+      "command": "Shift+U"
+     },
+     "keys": [
+      "Shift+U"
+     ],
+     "key_times": [
+      1794199960874
+     ],
+     "observation": {
+      "speech_raw": "\u2022 \u001d Link \u001e Council approves library budget",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794199961879,
+     "t_end_ms": 1794199962883,
+     "action": {
+      "type": "key",
+      "command": "Shift+U"
+     },
+     "keys": [
+      "Shift+U"
+     ],
+     "key_times": [
+      1794199961879
+     ],
+     "observation": {
+      "speech_raw": " \u001d Link \u001e Directions",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

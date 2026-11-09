@@ -1,0 +1,321 @@
+{
+ "scenario_id": "696-web-followed-link-advanced",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "fcd2601b"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794199363959
+    },
+    {
+     "key": "Tab",
+     "t_ms": 1794199364315
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794199364617
+    },
+    {
+     "key": "Alt+Left",
+     "t_ms": 1794199364918
+    },
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794199365220
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794199366526,
+     "t_end_ms": 1794199367630,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794199366526
+     ],
+     "observation": {
+      "speech_raw": "Library News - Riverside Library\n\u2022 \u001dvisited\u001e  \u001d Link \u001e City Library Expands Evening Hours\nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794199367630,
+     "t_end_ms": 1794199368734,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794199367630
+     ],
+     "observation": {
+      "speech_raw": "Spring catalog  \u001d Link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794199368734,
+     "t_end_ms": 1794199369839,
+     "action": {
+      "type": "key",
+      "command": "Shift+Tab"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794199368734
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours  \u001d Link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794199369839,
+     "t_end_ms": 1794199370843,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "key_times": [
+      1794199369839
+     ],
+     "observation": {
+      "speech_raw": "Library News - Riverside Library",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794199370843,
+     "t_end_ms": 1794199371847,
+     "action": {
+      "type": "key",
+      "command": "V"
+     },
+     "keys": [
+      "V"
+     ],
+     "key_times": [
+      1794199370843
+     ],
+     "observation": {
+      "speech_raw": "\u2022 \u001dvisited\u001e  \u001d Link \u001e City Library Expands Evening Hours",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794199371847,
+     "t_end_ms": 1794199372852,
+     "action": {
+      "type": "key",
+      "command": "V"
+     },
+     "keys": [
+      "V"
+     ],
+     "key_times": [
+      1794199371847
+     ],
+     "observation": {
+      "speech_raw": "wrapping to top\n\u2022 \u001dvisited\u001e  \u001d Link \u001e City Library Expands Evening Hours",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794199372852,
+     "t_end_ms": 1794199373856,
+     "action": {
+      "type": "key",
+      "command": "U"
+     },
+     "keys": [
+      "U"
+     ],
+     "key_times": [
+      1794199372852
+     ],
+     "observation": {
+      "speech_raw": "\u2022 \u001d Link \u001e Spring catalog",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794199373856,
+     "t_end_ms": 1794199374862,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794199373856
+     ],
+     "observation": {
+      "speech_raw": "\u2022 \u001d Link \u001e Spring catalog",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794199374862,
+     "t_end_ms": 1794199375866,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "key_times": [
+      1794199374862
+     ],
+     "observation": {
+      "speech_raw": "Library News - Riverside Library",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794199375866,
+     "t_end_ms": 1794199376871,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794199375866
+     ],
+     "observation": {
+      "speech_raw": "main region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794199376871,
+     "t_end_ms": 1794199377876,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794199376871
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e Library news",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794199377876,
+     "t_end_ms": 1794199378881,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794199377876
+     ],
+     "observation": {
+      "speech_raw": "list of 3 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794199378881,
+     "t_end_ms": 1794199379886,
+     "action": {
+      "type": "key",
+      "command": "Insert+F7"
+     },
+     "keys": [
+      "Insert+F7"
+     ],
+     "key_times": [
+      1794199378881
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794199379886,
+     "t_end_ms": 1794199380890,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794199379886
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

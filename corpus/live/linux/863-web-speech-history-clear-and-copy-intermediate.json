@@ -1,0 +1,225 @@
+{
+ "scenario_id": "863-web-speech-history-clear-and-copy-intermediate",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "fcd2601b"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794201321243
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794201322611,
+     "t_end_ms": 1794201323614,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794201322611
+     ],
+     "observation": {
+      "speech_raw": "banner",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794201323614,
+     "t_end_ms": 1794201324619,
+     "action": {
+      "type": "key",
+      "command": "Insert+Space"
+     },
+     "keys": [
+      "Insert+Space"
+     ],
+     "key_times": [
+      1794201323614
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794201324619,
+     "t_end_ms": 1794201325623,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+H"
+     },
+     "keys": [
+      "Ctrl+H"
+     ],
+     "key_times": [
+      1794201324619
+     ],
+     "observation": {
+      "speech_raw": "Copy speech history to clipboard",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794201325623,
+     "t_end_ms": 1794201326628,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794201325623
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Riverside Gazette",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794201326628,
+     "t_end_ms": 1794201327633,
+     "action": {
+      "type": "key",
+      "command": "Insert+Space"
+     },
+     "keys": [
+      "Insert+Space"
+     ],
+     "key_times": [
+      1794201326628
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794201327633,
+     "t_end_ms": 1794201328638,
+     "action": {
+      "type": "key",
+      "command": "Shift+H"
+     },
+     "keys": [
+      "Shift+H"
+     ],
+     "key_times": [
+      1794201327633
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794201328638,
+     "t_end_ms": 1794201329643,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794201328638
+     ],
+     "observation": {
+      "speech_raw": "Primary navigation region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794201329643,
+     "t_end_ms": 1794201330648,
+     "action": {
+      "type": "key",
+      "command": "Insert+Space"
+     },
+     "keys": [
+      "Insert+Space"
+     ],
+     "key_times": [
+      1794201329643
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794201330648,
+     "t_end_ms": 1794201331652,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794201330648
+     ],
+     "observation": {
+      "speech_raw": "Speech History",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794201331652,
+     "t_end_ms": 1794201332655,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794201331652
+     ],
+     "observation": {
+      "speech_raw": "Primary navigation region",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

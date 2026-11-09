@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "aac6f125"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794186805176
+     "t_ms": 1794198221303
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794186806543,
-     "t_end_ms": 1794186807548,
+     "t_start_ms": 1794198222666,
+     "t_end_ms": 1794198223670,
      "action": {
       "type": "key",
       "command": "Insert+T"
      },
      "keys": [
       "Insert+T"
+     ],
+     "key_times": [
+      1794198222666
      ],
      "observation": {
       "speech_raw": "Structural Navigation Reference Fixture - Google Chrome",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794186807548,
-     "t_end_ms": 1794186808551,
+     "t_start_ms": 1794198223670,
+     "t_end_ms": 1794198224674,
      "action": {
       "type": "key",
       "command": "H"
      },
      "keys": [
       "H"
+     ],
+     "key_times": [
+      1794198223670
      ],
      "observation": {
       "speech_raw": "System Documentation\n \u001d heading level 1 \u001e",
@@ -55,14 +61,17 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794186808551,
-     "t_end_ms": 1794186809556,
+     "t_start_ms": 1794198224674,
+     "t_end_ms": 1794198225679,
      "action": {
       "type": "key",
       "command": "Insert+T"
      },
      "keys": [
       "Insert+T"
+     ],
+     "key_times": [
+      1794198224674
      ],
      "observation": {
       "speech_raw": "Structural Navigation Reference Fixture - Google Chrome\nbanner\n2\nSystem Documentation",
@@ -72,14 +81,17 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794186809556,
-     "t_end_ms": 1794186810560,
+     "t_start_ms": 1794198225679,
+     "t_end_ms": 1794198226683,
      "action": {
       "type": "key",
       "command": "H"
      },
      "keys": [
       "H"
+     ],
+     "key_times": [
+      1794198225679
      ],
      "observation": {
       "speech_raw": "Section Overview\n \u001d heading level 2 \u001e",
@@ -89,14 +101,17 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794186810560,
-     "t_end_ms": 1794186811565,
+     "t_start_ms": 1794198226683,
+     "t_end_ms": 1794198227688,
      "action": {
       "type": "key",
       "command": "Insert+T"
      },
      "keys": [
       "Insert+T"
+     ],
+     "key_times": [
+      1794198226683
      ],
      "observation": {
       "speech_raw": "Structural Navigation Reference Fixture - Google Chrome\nmain region\n2\nSection Overview",
@@ -106,14 +121,17 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794186811565,
-     "t_end_ms": 1794186812570,
+     "t_start_ms": 1794198227688,
+     "t_end_ms": 1794198228693,
      "action": {
       "type": "key",
       "command": "H"
      },
      "keys": [
       "H"
+     ],
+     "key_times": [
+      1794198227688
      ],
      "observation": {
       "speech_raw": "Subsection Details\n \u001d heading level 3 \u001e",
@@ -123,14 +141,17 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794186812570,
-     "t_end_ms": 1794186813575,
+     "t_start_ms": 1794198228693,
+     "t_end_ms": 1794198229698,
      "action": {
       "type": "key",
       "command": "Insert+T"
      },
      "keys": [
       "Insert+T"
+     ],
+     "key_times": [
+      1794198228693
      ],
      "observation": {
       "speech_raw": "Structural Navigation Reference Fixture - Google Chrome\nmain region\n2\nSubsection Details",
@@ -140,14 +161,17 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794186813575,
-     "t_end_ms": 1794186814580,
+     "t_start_ms": 1794198229698,
+     "t_end_ms": 1794198230702,
      "action": {
       "type": "key",
       "command": "H"
      },
      "keys": [
       "H"
+     ],
+     "key_times": [
+      1794198229698
      ],
      "observation": {
       "speech_raw": "Architecture Guide\n \u001d heading level 2 \u001e",
@@ -157,14 +181,17 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794186814580,
-     "t_end_ms": 1794186815585,
+     "t_start_ms": 1794198230702,
+     "t_end_ms": 1794198231707,
      "action": {
       "type": "key",
       "command": "Insert+T"
      },
      "keys": [
       "Insert+T"
+     ],
+     "key_times": [
+      1794198230702
      ],
      "observation": {
       "speech_raw": "Structural Navigation Reference Fixture - Google Chrome\nmain region\n2\nArchitecture Guide",
@@ -174,14 +201,17 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794186815585,
-     "t_end_ms": 1794186816590,
+     "t_start_ms": 1794198231707,
+     "t_end_ms": 1794198232711,
      "action": {
       "type": "key",
       "command": "H"
      },
      "keys": [
       "H"
+     ],
+     "key_times": [
+      1794198231707
      ],
      "observation": {
       "speech_raw": "Helpful Resources\n \u001d heading level 2 \u001e",
@@ -191,14 +221,17 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794186816590,
-     "t_end_ms": 1794186817594,
+     "t_start_ms": 1794198232711,
+     "t_end_ms": 1794198233717,
      "action": {
       "type": "key",
       "command": "Insert+T"
      },
      "keys": [
       "Insert+T"
+     ],
+     "key_times": [
+      1794198232711
      ],
      "observation": {
       "speech_raw": "Structural Navigation Reference Fixture - Google Chrome\nQuick Reference complementary information\n2\nHelpful Resources",
@@ -208,14 +241,17 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794186817594,
-     "t_end_ms": 1794186818599,
+     "t_start_ms": 1794198233717,
+     "t_end_ms": 1794198234721,
      "action": {
       "type": "key",
       "command": "Ctrl+End"
      },
      "keys": [
       "Ctrl+End"
+     ],
+     "key_times": [
+      1794198233717
      ],
      "observation": {
       "speech_raw": "content information end",
@@ -225,14 +261,17 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794186818599,
-     "t_end_ms": 1794186819603,
+     "t_start_ms": 1794198234721,
+     "t_end_ms": 1794198235726,
      "action": {
       "type": "key",
       "command": "Insert+T"
      },
      "keys": [
       "Insert+T"
+     ],
+     "key_times": [
+      1794198234721
      ],
      "observation": {
       "speech_raw": "Structural Navigation Reference Fixture - Google Chrome\ncontent information\n2",

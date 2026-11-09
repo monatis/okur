@@ -1,0 +1,329 @@
+{
+ "scenario_id": "921-web-tab-from-virtual-cursor-advanced",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "fcd2601b"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Escape",
+     "t_ms": 1794203169261
+    },
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794203169622
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794203170928,
+     "t_end_ms": 1794203171932,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794203170928
+     ],
+     "observation": {
+      "speech_raw": "Web App Patterns\n \u001d heading level 1 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794203171932,
+     "t_end_ms": 1794203172935,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794203171932
+     ],
+     "observation": {
+      "speech_raw": "Current links\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794203172935,
+     "t_end_ms": 1794203173939,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794203172935
+     ],
+     "observation": {
+      "speech_raw": "Described controls\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794203173939,
+     "t_end_ms": 1794203174943,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794203173940
+     ],
+     "observation": {
+      "speech_raw": "Popup buttons\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794203174943,
+     "t_end_ms": 1794203175948,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794203174943
+     ],
+     "observation": {
+      "speech_raw": "Fruit search\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794203175948,
+     "t_end_ms": 1794203176952,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794203175948
+     ],
+     "observation": {
+      "speech_raw": "Tab from here\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794203176952,
+     "t_end_ms": 1794203178056,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794203176952
+     ],
+     "observation": {
+      "speech_raw": "Web App Patterns\nStart  \u001d Button \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794203178056,
+     "t_end_ms": 1794203179060,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794203178056
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Skipped link",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794203179060,
+     "t_end_ms": 1794203180064,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794203179060
+     ],
+     "observation": {
+      "speech_raw": "group start Featured",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794203180064,
+     "t_end_ms": 1794203181068,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794203180064
+     ],
+     "observation": {
+      "speech_raw": "Group text",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794203181068,
+     "t_end_ms": 1794203182173,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794203181068
+     ],
+     "observation": {
+      "speech_raw": "Notes \u001d edit \u001e \nContains text",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794203182173,
+     "t_end_ms": 1794203183177,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "key_times": [
+      1794203182173
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794203183177,
+     "t_end_ms": 1794203184181,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794203183177
+     ],
+     "observation": {
+      "speech_raw": "Notes",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794203184181,
+     "t_end_ms": 1794203185186,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794203184181
+     ],
+     "observation": {
+      "speech_raw": "group end Featured",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794203185186,
+     "t_end_ms": 1794203186291,
+     "action": {
+      "type": "key",
+      "command": "Shift+Tab"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794203185186
+     ],
+     "observation": {
+      "speech_raw": "Skipped link  \u001d same page link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "12447157"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794180013929
+     "t_ms": 1794195861502
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794180015293,
-     "t_end_ms": 1794180016297,
+     "t_start_ms": 1794195862861,
+     "t_end_ms": 1794195863865,
      "action": {
       "type": "key",
       "command": "E"
      },
      "keys": [
       "E"
+     ],
+     "key_times": [
+      1794195862861
      ],
      "observation": {
       "speech_raw": "Full name \u001d Edit \u001e \n \u001dRequired\u001e \nblank",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794180016297,
-     "t_end_ms": 1794180017301,
+     "t_start_ms": 1794195863865,
+     "t_end_ms": 1794195864869,
      "action": {
       "type": "key",
       "command": "Insert+Up"
      },
      "keys": [
       "Insert+Up"
+     ],
+     "key_times": [
+      1794195863865
      ],
      "observation": {
       "speech_raw": "Full name \u001d Edit \u001e \n \u001dRequired\u001e ",
@@ -55,14 +61,17 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794180017301,
-     "t_end_ms": 1794180018305,
+     "t_start_ms": 1794195864869,
+     "t_end_ms": 1794195865873,
      "action": {
       "type": "key",
       "command": "E"
      },
      "keys": [
       "E"
+     ],
+     "key_times": [
+      1794195864869
      ],
      "observation": {
       "speech_raw": "Email address \u001d Edit \u001e \nsam@example.com\nWe never share your email.",
@@ -72,14 +81,17 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794180018305,
-     "t_end_ms": 1794180019309,
+     "t_start_ms": 1794195865873,
+     "t_end_ms": 1794195866877,
      "action": {
       "type": "key",
       "command": "Insert+Up"
      },
      "keys": [
       "Insert+Up"
+     ],
+     "key_times": [
+      1794195865873
      ],
      "observation": {
       "speech_raw": "Email address \u001d Edit \u001e \nsam@example.com",
@@ -89,14 +101,17 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794180019309,
-     "t_end_ms": 1794180020314,
+     "t_start_ms": 1794195866877,
+     "t_end_ms": 1794195867880,
      "action": {
       "type": "key",
       "command": "C"
      },
      "keys": [
       "C"
+     ],
+     "key_times": [
+      1794195866877
      ],
      "observation": {
       "speech_raw": "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside",
@@ -106,14 +121,17 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794180020314,
-     "t_end_ms": 1794180021319,
+     "t_start_ms": 1794195867880,
+     "t_end_ms": 1794195868885,
      "action": {
       "type": "key",
       "command": "Insert+Up"
      },
      "keys": [
       "Insert+Up"
+     ],
+     "key_times": [
+      1794195867880
      ],
      "observation": {
       "speech_raw": "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside",
@@ -123,14 +141,17 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794180021319,
-     "t_end_ms": 1794180022323,
+     "t_start_ms": 1794195868885,
+     "t_end_ms": 1794195869889,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794195868885
      ],
      "observation": {
       "speech_raw": "Accessibility needs",
@@ -140,14 +161,17 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794180022323,
-     "t_end_ms": 1794180023328,
+     "t_start_ms": 1794195869889,
+     "t_end_ms": 1794195870894,
      "action": {
       "type": "key",
       "command": "Up"
      },
      "keys": [
       "Up"
+     ],
+     "key_times": [
+      1794195869889
      ],
      "observation": {
       "speech_raw": " \u001d Combo box \u001e  \u001dcollapsed\u001e Northside",
@@ -157,14 +181,17 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794180023328,
-     "t_end_ms": 1794180024333,
+     "t_start_ms": 1794195870894,
+     "t_end_ms": 1794195871899,
      "action": {
       "type": "key",
       "command": "Insert+Up"
      },
      "keys": [
       "Insert+Up"
+     ],
+     "key_times": [
+      1794195870894
      ],
      "observation": {
       "speech_raw": "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside",
@@ -174,14 +201,17 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794180024333,
-     "t_end_ms": 1794180025338,
+     "t_start_ms": 1794195871899,
+     "t_end_ms": 1794195872904,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
      },
      "keys": [
       "Ctrl+Home"
+     ],
+     "key_times": [
+      1794195871899
      ],
      "observation": {
       "speech_raw": "Create Your Account - Riverside Library",
@@ -191,14 +221,17 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794180025338,
-     "t_end_ms": 1794180026342,
+     "t_start_ms": 1794195872904,
+     "t_end_ms": 1794195874008,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794195872904
      ],
      "observation": {
       "speech_raw": "main region",
@@ -208,14 +241,17 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794180026342,
-     "t_end_ms": 1794180027346,
+     "t_start_ms": 1794195874008,
+     "t_end_ms": 1794195875013,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794195874008
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e Create your account",
@@ -225,14 +261,17 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794180027346,
-     "t_end_ms": 1794180028350,
+     "t_start_ms": 1794195875013,
+     "t_end_ms": 1794195876017,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794195875013
      ],
      "observation": {
       "speech_raw": "Fields marked required must be filled in.",
@@ -242,14 +281,17 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794180028350,
-     "t_end_ms": 1794180029355,
+     "t_start_ms": 1794195876017,
+     "t_end_ms": 1794195877021,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794195876017
      ],
      "observation": {
       "speech_raw": "Full name",
@@ -259,14 +301,17 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794180029355,
-     "t_end_ms": 1794180030359,
+     "t_start_ms": 1794195877021,
+     "t_end_ms": 1794195878025,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794195877021
      ],
      "observation": {
       "speech_raw": " \u001dRequired\u001e  \u001d Edit \u001e ",
@@ -276,14 +321,17 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794180030359,
-     "t_end_ms": 1794180031364,
+     "t_start_ms": 1794195878025,
+     "t_end_ms": 1794195879031,
      "action": {
       "type": "key",
       "command": "Insert+Up"
      },
      "keys": [
       "Insert+Up"
+     ],
+     "key_times": [
+      1794195878025
      ],
      "observation": {
       "speech_raw": "Full name \u001d Edit \u001e \n \u001dRequired\u001e ",
@@ -293,14 +341,17 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794180031364,
-     "t_end_ms": 1794180032369,
+     "t_start_ms": 1794195879031,
+     "t_end_ms": 1794195880035,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
      },
      "keys": [
       "Ctrl+Home"
+     ],
+     "key_times": [
+      1794195879031
      ],
      "observation": {
       "speech_raw": "Create Your Account - Riverside Library",
@@ -310,14 +361,17 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794180032369,
-     "t_end_ms": 1794180033473,
+     "t_start_ms": 1794195880035,
+     "t_end_ms": 1794195881140,
      "action": {
       "type": "key",
       "command": "Tab"
      },
      "keys": [
       "Tab"
+     ],
+     "key_times": [
+      1794195880035
      ],
      "observation": {
       "speech_raw": "Create Your Account - Riverside Library\n \u001d MainRegion \u001e \n \u001d FormRegion \u001e \nFull name \u001d Edit \u001e \n \u001dRequired\u001e \nblank\nType in text.",
@@ -327,14 +381,17 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794180033473,
-     "t_end_ms": 1794180034477,
+     "t_start_ms": 1794195881140,
+     "t_end_ms": 1794195882145,
      "action": {
       "type": "key",
       "command": "NumpadPlus"
      },
      "keys": [
       "NumpadPlus"
+     ],
+     "key_times": [
+      1794195881140
      ],
      "observation": {
       "speech_raw": "virtual PC Cursor",
@@ -344,14 +401,17 @@
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794180034477,
-     "t_end_ms": 1794180035481,
+     "t_start_ms": 1794195882145,
+     "t_end_ms": 1794195883150,
      "action": {
       "type": "key",
       "command": "Insert+Up"
      },
      "keys": [
       "Insert+Up"
+     ],
+     "key_times": [
+      1794195882145
      ],
      "observation": {
       "speech_raw": "Full name \u001d Edit \u001e \n \u001dRequired\u001e ",

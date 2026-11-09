@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "12447157"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794179920177
+     "t_ms": 1794195507542
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794179921538,
-     "t_end_ms": 1794179922743,
+     "t_start_ms": 1794195508903,
+     "t_end_ms": 1794195510109,
      "action": {
       "type": "key",
       "command": "Ctrl+R"
      },
      "keys": [
       "Ctrl+R"
+     ],
+     "key_times": [
+      1794195508903
      ],
      "observation": {
       "speech_raw": "Tables Navigation Reference Fixture  \u001d document \u001e\nPage has 1heading and no links\nTables Navigation Reference Fixture\n \u001d heading level 1 \u001e Quarterly Financial Summary\ntable with 4 columns and 4 rows\nQ3 Financial Summary Table\nQuarter\nRevenue\nExpenses\nProfit\nQ1\n$10,000\n$7,000\n$3 \ufffd{.\ufffd\ufffd\ufffd00\nQ2\n$14,000\n$8,500\n$5,500\nQ3\n$18,000\n$9,200\n$8,800\ntable end\nend",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794179922743,
-     "t_end_ms": 1794179923747,
+     "t_start_ms": 1794195510109,
+     "t_end_ms": 1794195511113,
      "action": {
       "type": "key",
       "command": "Insert+Up"
      },
      "keys": [
       "Insert+Up"
+     ],
+     "key_times": [
+      1794195510109
      ],
      "observation": {
       "speech_raw": "table end",

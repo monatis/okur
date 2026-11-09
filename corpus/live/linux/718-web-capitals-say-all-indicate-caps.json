@@ -1,0 +1,287 @@
+{
+ "scenario_id": "718-web-capitals-say-all-indicate-caps",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "fcd2601b"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794199702309
+    },
+    {
+     "key": "Down",
+     "t_ms": 1794199702666
+    },
+    {
+     "key": "Down",
+     "t_ms": 1794199702968
+    },
+    {
+     "key": "Down",
+     "t_ms": 1794199703269
+    },
+    {
+     "key": "Down",
+     "t_ms": 1794199703571
+    },
+    {
+     "key": "Down",
+     "t_ms": 1794199703873
+    },
+    {
+     "key": "Down",
+     "t_ms": 1794199704174
+    },
+    {
+     "key": "Down",
+     "t_ms": 1794199704475
+    },
+    {
+     "key": "Down",
+     "t_ms": 1794199704777
+    },
+    {
+     "key": "Down",
+     "t_ms": 1794199705079
+    },
+    {
+     "key": "Down",
+     "t_ms": 1794199705380
+    },
+    {
+     "key": "Down",
+     "t_ms": 1794199705682
+    },
+    {
+     "key": "Down",
+     "t_ms": 1794199705983
+    },
+    {
+     "key": "Down",
+     "t_ms": 1794199706284
+    },
+    {
+     "key": "Down",
+     "t_ms": 1794199706586
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794199707890,
+     "t_end_ms": 1794199708895,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794199707890
+     ],
+     "observation": {
+      "speech_raw": "Ada READ me B x",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794199708895,
+     "t_end_ms": 1794199709900,
+     "action": {
+      "type": "key",
+      "command": "CapsLock+K"
+     },
+     "keys": [
+      "CapsLock+K"
+     ],
+     "key_times": [
+      1794199708895
+     ],
+     "observation": {
+      "speech_raw": "Ada",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794199709900,
+     "t_end_ms": 1794199711027,
+     "action": {
+      "type": "key",
+      "command": "CapsLock+K"
+     },
+     "keys": [
+      "CapsLock+K",
+      "CapsLock+K"
+     ],
+     "key_times": [
+      1794199709900,
+      1794199710022
+     ],
+     "observation": {
+      "speech_raw": "Ada\nAda",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794199711027,
+     "t_end_ms": 1794199712032,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Right"
+     },
+     "keys": [
+      "Ctrl+Right"
+     ],
+     "key_times": [
+      1794199711027
+     ],
+     "observation": {
+      "speech_raw": "READ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794199712032,
+     "t_end_ms": 1794199713037,
+     "action": {
+      "type": "key",
+      "command": "CapsLock+K"
+     },
+     "keys": [
+      "CapsLock+K"
+     ],
+     "key_times": [
+      1794199712032
+     ],
+     "observation": {
+      "speech_raw": "READ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794199713037,
+     "t_end_ms": 1794199714165,
+     "action": {
+      "type": "key",
+      "command": "CapsLock+K"
+     },
+     "keys": [
+      "CapsLock+K",
+      "CapsLock+K"
+     ],
+     "key_times": [
+      1794199713037,
+      1794199713160
+     ],
+     "observation": {
+      "speech_raw": "READ\nREAD",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794199714165,
+     "t_end_ms": 1794199715170,
+     "action": {
+      "type": "key",
+      "command": "CapsLock+I"
+     },
+     "keys": [
+      "CapsLock+I"
+     ],
+     "key_times": [
+      1794199714165
+     ],
+     "observation": {
+      "speech_raw": "Ada READ me B x",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794199715170,
+     "t_end_ms": 1794199716297,
+     "action": {
+      "type": "key",
+      "command": "CapsLock+I"
+     },
+     "keys": [
+      "CapsLock+I",
+      "CapsLock+I"
+     ],
+     "key_times": [
+      1794199715170,
+      1794199715292
+     ],
+     "observation": {
+      "speech_raw": "Ada READ me B x\nAda READ me B x",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794199716297,
+     "t_end_ms": 1794199717301,
+     "action": {
+      "type": "key",
+      "command": "Home"
+     },
+     "keys": [
+      "Home"
+     ],
+     "key_times": [
+      1794199716297
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794199717301,
+     "t_end_ms": 1794199718406,
+     "action": {
+      "type": "key",
+      "command": "Insert+Down"
+     },
+     "keys": [
+      "Insert+Down"
+     ],
+     "key_times": [
+      1794199717301
+     ],
+     "observation": {
+      "speech_raw": "Ada READ me B x\nJAWS sister-in-law 2:00 P.M. aB9 \u00e9 \u20ac\n\n    four spaces\n\tone tab\nSay All reads this. It has three sentences. The last one ends here.\nteh quick brown fxo\nText\n \u001d Edit \u001e Hello, world. Is it done? Yes! Wait; maybe: no.\n \u001d Edit \u001e Mail ada@example.org or see https://example.org/a-b_c?x=1&y=2#top\n \u001d Edit \u001e C:\\Users\\Ada\\notes.txt and /usr/local/bin\n \u001d Edit \u001e Price $9.95, 50% off; total = 3 * 4 + 1 - 2 / 5 ^ 2 ~ 7\n \u001d Edit \u001e fn main() { let v = [1, 2]; v.len() } // done <ok> | a && b\n \u001d Edit \u001e \"double\" 'single' \u201ccurly\u201d \u2018curly\u2019 \u2014 em \u2013 en \u2026 ellipsis \u2022 bullet\n \u001d Edit \u001e ===== ----- ..... !!!!! ##### ***\n \u001d Edit \u001e MenuBar getElementById XMLHttpRequest iPhone McDonald PowerShell\n \u001d Edit \u001e System32 x86_64 COVID19 123RON 1st 2nd 3rd\n \u001d Edit \u001e 7 42 1234 54321 123456 1-800-444-4443 2.5 1,000,000 10:30\n \u001d Edit \u001e 03-16-00 3/2/2002 1/3 $0.02 $1,250.50\n \u001d Edit \u001e Ada READ me B x\n \u001d Edit \u001e JAWS sister-in-law 2:00 P.M. aB9 \u00e9 \u20ac\n \u001d Edit \u001e \n \u001d Edit \u001e     four spaces\n \u001d Edit \u001e \tone tab\n \u001d Edit \u001e Say All reads this. It has three sentences. The last one ends here.\n \u001d Edit \u001e teh quick brown fxo\nmain region end\nend",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "aac6f125"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794187819531
+     "t_ms": 1794199248009
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794187820896,
-     "t_end_ms": 1794187821900,
+     "t_start_ms": 1794199249369,
+     "t_end_ms": 1794199250473,
      "action": {
       "type": "key",
       "command": "H"
      },
      "keys": [
       "H"
+     ],
+     "key_times": [
+      1794199249369
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours\n \u001d heading level 1 \u001e",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794187821900,
-     "t_end_ms": 1794187822904,
+     "t_start_ms": 1794199250473,
+     "t_end_ms": 1794199251477,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794199250473
      ],
      "observation": {
       "speech_raw": "By ",
@@ -55,14 +61,17 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794187822904,
-     "t_end_ms": 1794187823908,
+     "t_start_ms": 1794199251477,
+     "t_end_ms": 1794199252480,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794199251477
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Maria Lopez,",
@@ -72,14 +81,17 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794187823908,
-     "t_end_ms": 1794187824913,
+     "t_start_ms": 1794199252480,
+     "t_end_ms": 1794199253485,
      "action": {
       "type": "key",
       "command": "Ctrl+Win+K"
      },
      "keys": [
       "Ctrl+Win+K"
+     ],
+     "key_times": [
+      1794199252480
      ],
      "observation": {
       "speech_raw": "Temporary PlaceMarker set\n \u001d same page link \u001e Maria Lopez,",
@@ -89,14 +101,17 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794187824913,
-     "t_end_ms": 1794187825918,
+     "t_start_ms": 1794199253485,
+     "t_end_ms": 1794199254490,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
      },
      "keys": [
       "Ctrl+Home"
+     ],
+     "key_times": [
+      1794199253485
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
@@ -106,14 +121,17 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794187825918,
-     "t_end_ms": 1794187826922,
+     "t_start_ms": 1794199254490,
+     "t_end_ms": 1794199255495,
      "action": {
       "type": "key",
       "command": "K"
      },
      "keys": [
       "K"
+     ],
+     "key_times": [
+      1794199254490
      ],
      "observation": {
       "speech_raw": "Maria Lopez  \u001d same page link \u001e ",
@@ -123,14 +141,17 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794187826922,
-     "t_end_ms": 1794187827927,
+     "t_start_ms": 1794199255495,
+     "t_end_ms": 1794199256500,
      "action": {
       "type": "key",
       "command": "K"
      },
      "keys": [
       "K"
+     ],
+     "key_times": [
+      1794199255495
      ],
      "observation": {
       "speech_raw": "Maria Lopez  \u001d same page link \u001e ",
@@ -140,14 +161,17 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794187827927,
-     "t_end_ms": 1794187828932,
+     "t_start_ms": 1794199256500,
+     "t_end_ms": 1794199257505,
      "action": {
       "type": "key",
       "command": "Shift+K"
      },
      "keys": [
       "Shift+K"
+     ],
+     "key_times": [
+      1794199256500
      ],
      "observation": {
       "speech_raw": "Maria Lopez  \u001d same page link \u001e ",
@@ -157,14 +181,17 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794187828932,
-     "t_end_ms": 1794187829938,
+     "t_start_ms": 1794199257505,
+     "t_end_ms": 1794199258510,
      "action": {
       "type": "key",
       "command": "Insert+Up"
      },
      "keys": [
       "Insert+Up"
+     ],
+     "key_times": [
+      1794199257505
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Maria Lopez,",
@@ -174,14 +201,17 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794187829938,
-     "t_end_ms": 1794187830943,
+     "t_start_ms": 1794199258510,
+     "t_end_ms": 1794199259516,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
      },
      "keys": [
       "Ctrl+Home"
+     ],
+     "key_times": [
+      1794199258510
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
@@ -191,14 +221,17 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794187830943,
-     "t_end_ms": 1794187831948,
+     "t_start_ms": 1794199259516,
+     "t_end_ms": 1794199260522,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+K"
      },
      "keys": [
       "Ctrl+Shift+K"
+     ],
+     "key_times": [
+      1794199259516
      ],
      "observation": {
       "speech_raw": "",
@@ -208,14 +241,17 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794187831948,
-     "t_end_ms": 1794187832953,
+     "t_start_ms": 1794199260522,
+     "t_end_ms": 1794199261526,
      "action": {
       "type": "key",
       "command": "Escape"
      },
      "keys": [
       "Escape"
+     ],
+     "key_times": [
+      1794199260522
      ],
      "observation": {
       "speech_raw": "",
@@ -225,14 +261,17 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794187832953,
-     "t_end_ms": 1794187833957,
+     "t_start_ms": 1794199261526,
+     "t_end_ms": 1794199262531,
      "action": {
       "type": "key",
       "command": "7"
      },
      "keys": [
       "7"
+     ],
+     "key_times": [
+      1794199261526
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Maria Lopez,",
@@ -242,14 +281,17 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794187833957,
-     "t_end_ms": 1794187834962,
+     "t_start_ms": 1794199262531,
+     "t_end_ms": 1794199263536,
      "action": {
       "type": "key",
       "command": "Shift+7"
      },
      "keys": [
       "Shift+7"
+     ],
+     "key_times": [
+      1794199262531
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Maria Lopez,",

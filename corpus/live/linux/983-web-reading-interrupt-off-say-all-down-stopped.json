@@ -1,0 +1,65 @@
+{
+ "scenario_id": "983-web-reading-interrupt-off-say-all-down-stopped",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "fcd2601b"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794204065257
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794204066620,
+     "t_end_ms": 1794204067725,
+     "action": {
+      "type": "key",
+      "command": "Insert+Down"
+     },
+     "keys": [
+      "Insert+Down"
+     ],
+     "key_times": [
+      1794204066620
+     ],
+     "observation": {
+      "speech_raw": "Virtual Cursor Keys - Keys Fixture\nbanner\nSite navigation region\nlist of 3 items\n\u2022 \u001d same page link \u001e Paragraphs\n\u2022 \u001d same page link \u001e Contact\n\u2022 \u001d same page link \u001e Lists\nlist end\nSite navigation region end\nbanner end\nmain region\n \u001d heading level 1 \u001e Virtual cursor keys\nText before any link in the page.\n \u001d same page link \u001e A link alone in its paragraph\nSome text with \n \u001d same page link \u001e a link inside it\n and more text after it.\n----- \u001d separator \u001e \n \u001d heading level 2 \u001e Paragraphs\nThe first paragraph has two sentences. This is the second sentence of it.\nThe second paragraph is short.\nA division holds this text.\nAnother division, with a span inside it.\n----- \u001d separator \u001e \n \u001d heading level 2 \u001e Contact\nWrite to \n \u001d Send Mail Link \u001e help@example.org\n or call.\n \u001dmark \u001e A highlighted phrase \u001dend mark \u001e  in a paragraph, and bold words too.\nA clickable division\nThis part flows to the lists.\nHas Flows To\n \u001d heading level 2 \u001e Lists\nHas Flows From\nlist of 2 items\n\u2022 First item\n\u2022 Second item\nlist end\nlist of 2 items\n1. Step one\n2. Step two\nlist end\nmain region end\ncontent information\nThe page ends here.\ncontent information end\nend",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794204067725,
+     "t_end_ms": 1794204068730,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794204067725
+     ],
+     "observation": {
+      "speech_raw": "content information end",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

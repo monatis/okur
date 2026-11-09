@@ -1,0 +1,345 @@
+{
+ "scenario_id": "700-web-speech-on-demand-mode",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "fcd2601b"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794199403551
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794199404917,
+     "t_end_ms": 1794199405921,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794199404917
+     ],
+     "observation": {
+      "speech_raw": "banner",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794199405921,
+     "t_end_ms": 1794199406926,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794199405921
+     ],
+     "observation": {
+      "speech_raw": "banner",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794199406926,
+     "t_end_ms": 1794199407930,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794199406926
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours\n \u001d heading level 1 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794199407930,
+     "t_end_ms": 1794199408933,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794199407930
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e City Library Expands Evening Hours",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794199408933,
+     "t_end_ms": 1794199409937,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794199408933
+     ],
+     "observation": {
+      "speech_raw": "By ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794199409937,
+     "t_end_ms": 1794199410941,
+     "action": {
+      "type": "key",
+      "command": "Insert+T"
+     },
+     "keys": [
+      "Insert+T"
+     ],
+     "key_times": [
+      1794199409937
+     ],
+     "observation": {
+      "speech_raw": "Title is\nCity Library Expands Evening Hours - Riverside Gazette - Google Chrome\narticle\nlevel 3\nheading is City Library Expands Evening Hours",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794199410941,
+     "t_end_ms": 1794199411946,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "key_times": [
+      1794199410941
+     ],
+     "observation": {
+      "speech_raw": "black on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794199411946,
+     "t_end_ms": 1794199412951,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Right"
+     },
+     "keys": [
+      "Ctrl+Right"
+     ],
+     "key_times": [
+      1794199411946
+     ],
+     "observation": {
+      "speech_raw": "Maria",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794199412951,
+     "t_end_ms": 1794199414055,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794199412951
+     ],
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours - Riverside Gazette\n \u001d same page link \u001e study rooms\nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794199414055,
+     "t_end_ms": 1794199415060,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794199414055
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e study rooms",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794199415060,
+     "t_end_ms": 1794199416066,
+     "action": {
+      "type": "key",
+      "command": "Insert+Space"
+     },
+     "keys": [
+      "Insert+Space"
+     ],
+     "key_times": [
+      1794199415060
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794199416066,
+     "t_end_ms": 1794199417070,
+     "action": {
+      "type": "key",
+      "command": "S"
+     },
+     "keys": [
+      "S"
+     ],
+     "key_times": [
+      1794199416066
+     ],
+     "observation": {
+      "speech_raw": "Full Speech",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794199417070,
+     "t_end_ms": 1794199418074,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794199417070
+     ],
+     "observation": {
+      "speech_raw": " open in May.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794199418074,
+     "t_end_ms": 1794199419079,
+     "action": {
+      "type": "key",
+      "command": "Insert+Space"
+     },
+     "keys": [
+      "Insert+Space"
+     ],
+     "key_times": [
+      1794199418074
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794199419079,
+     "t_end_ms": 1794199420084,
+     "action": {
+      "type": "key",
+      "command": "S"
+     },
+     "keys": [
+      "S"
+     ],
+     "key_times": [
+      1794199419079
+     ],
+     "observation": {
+      "speech_raw": "Speech On Demand",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794199420084,
+     "t_end_ms": 1794199421089,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794199420084
+     ],
+     "observation": {
+      "speech_raw": "list end",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

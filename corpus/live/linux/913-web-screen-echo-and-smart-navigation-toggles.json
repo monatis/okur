@@ -1,0 +1,205 @@
+{
+ "scenario_id": "913-web-screen-echo-and-smart-navigation-toggles",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "fcd2601b"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794202967892
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794202969255,
+     "t_end_ms": 1794202970260,
+     "action": {
+      "type": "key",
+      "command": "Insert+S"
+     },
+     "keys": [
+      "Insert+S"
+     ],
+     "key_times": [
+      1794202969255
+     ],
+     "observation": {
+      "speech_raw": "All",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794202970260,
+     "t_end_ms": 1794202971264,
+     "action": {
+      "type": "key",
+      "command": "Insert+S"
+     },
+     "keys": [
+      "Insert+S"
+     ],
+     "key_times": [
+      1794202970260
+     ],
+     "observation": {
+      "speech_raw": "None",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794202971264,
+     "t_end_ms": 1794202972268,
+     "action": {
+      "type": "key",
+      "command": "Insert+S"
+     },
+     "keys": [
+      "Insert+S"
+     ],
+     "key_times": [
+      1794202971264
+     ],
+     "observation": {
+      "speech_raw": "Highlighted",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794202972268,
+     "t_end_ms": 1794202973272,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794202972268
+     ],
+     "observation": {
+      "speech_raw": "banner",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794202973272,
+     "t_end_ms": 1794202974277,
+     "action": {
+      "type": "key",
+      "command": "Insert+X"
+     },
+     "keys": [
+      "Insert+X"
+     ],
+     "key_times": [
+      1794202973272
+     ],
+     "observation": {
+      "speech_raw": "Smart Navigation: Controls and Tables",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794202974278,
+     "t_end_ms": 1794202975282,
+     "action": {
+      "type": "key",
+      "command": "Insert+X"
+     },
+     "keys": [
+      "Insert+X"
+     ],
+     "key_times": [
+      1794202974278
+     ],
+     "observation": {
+      "speech_raw": "Smart Navigation: Off",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794202975282,
+     "t_end_ms": 1794202976288,
+     "action": {
+      "type": "key",
+      "command": "Insert+X"
+     },
+     "keys": [
+      "Insert+X"
+     ],
+     "key_times": [
+      1794202975282
+     ],
+     "observation": {
+      "speech_raw": "Smart Navigation: Controls and Tables",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794202976288,
+     "t_end_ms": 1794202977293,
+     "action": {
+      "type": "key",
+      "command": "Insert+X"
+     },
+     "keys": [
+      "Insert+X"
+     ],
+     "key_times": [
+      1794202976288
+     ],
+     "observation": {
+      "speech_raw": "Smart Navigation: Off",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794202977293,
+     "t_end_ms": 1794202978297,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794202977293
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Riverside Gazette",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}
