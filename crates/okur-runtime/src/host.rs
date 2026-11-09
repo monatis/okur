@@ -638,12 +638,18 @@ pub async fn run(
                 let page = match &mut event {
                     Some(AccessibilityEvent::DocumentLoaded { title, root }) => {
                         let url = root.attributes.get("url").cloned();
+                        // A page the platform read again, unloaded, is the held one's refresh
+                        // wherever the focus is (okur_core::aom::READ_AGAIN_ATTR).
+                        let read_again = root
+                            .attributes
+                            .contains_key(okur_core::aom::READ_AGAIN_ATTR);
                         give_way_to_keys();
                         let read = {
                             let eng = lock_engine(&engine_events);
                             unless_it_panics("page loaded", || {
                                 (
-                                    eng.is_page_in_front(title, url.as_deref()),
+                                    eng.is_page_in_front(title, url.as_deref())
+                                        || (read_again && eng.is_page_held(title, url.as_deref())),
                                     eng.reading_marks(),
                                 )
                             })

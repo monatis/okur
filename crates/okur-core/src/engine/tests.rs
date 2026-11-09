@@ -10449,6 +10449,40 @@ fn a_reload_key_that_reloads_nothing_is_forgotten() {
     assert!(engine.reload_asked.is_none());
 }
 
+/// A page the platform read again as the focus came back to it (Linux, after Okur's dialog
+/// closed) is the held page's refresh though the focus was away from it, said nothing; one
+/// loaded is a load, announced; after a reload asked, the page read again is announced too.
+#[test]
+fn a_page_read_again_away_from_it_is_its_refresh() {
+    let page = |read_again: bool| {
+        let mut root = AomNode::new(0, Role::Document)
+            .with_name("News")
+            .with_children(vec![AomNode::new(1, Role::Paragraph).with_text("Text")]);
+        root.attributes
+            .insert("url".to_owned(), "file:///news.html".to_owned());
+        if read_again {
+            root.attributes
+                .insert(crate::aom::READ_AGAIN_ATTR.to_owned(), "true".to_owned());
+        }
+        root
+    };
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page(false)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    // The focus in one of Okur's dialogs: away from the page.
+    engine.app_mode = AppMode::NativeControl;
+    assert!(engine
+        .handle_document_loaded("News", VirtualBuffer::from_aom(&page(true)))
+        .is_none());
+    assert!(engine
+        .handle_document_loaded("News", VirtualBuffer::from_aom(&page(false)))
+        .is_some_and(|said| said.contains("News")));
+    engine.app_mode = AppMode::NativeControl;
+    engine.reload_asked = Some(std::time::Instant::now());
+    assert!(engine
+        .handle_document_loaded("News", VirtualBuffer::from_aom(&page(true)))
+        .is_some());
+}
+
 /// Excel's titles set in a workbook are kept for the next session, as JAWS keeps them in the
 /// workbook's settings (JAWS 2025 help, popapps.chm, Excel Row and Column Title Reading): set
 /// in one engine, saved, and a new engine given them reads the workbook with its titles.

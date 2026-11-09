@@ -246,6 +246,12 @@ impl NodeStates {
 /// every capture of a page while the object lives.
 pub const UNIQUE_ID_ATTR: &str = "ia2_unique_id";
 
+/// AOM attribute of a page's root that the platform read again, unloaded: the page it gave
+/// before, read once more as the focus came back to it (Linux reads the page in front as its
+/// document takes the focus; Windows tells a page only as it loads). Such a page is a refresh
+/// of the one held wherever the focus was, unless a reload was asked.
+pub const READ_AGAIN_ATTR: &str = "read_again";
+
 /// Accessibility Object Model (AOM) node.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AomNode {

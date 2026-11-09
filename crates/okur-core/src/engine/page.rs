@@ -67,11 +67,18 @@ impl ScreenReaderEngine {
     /// Whether a page captured with `title` and address `url` is the one already read: by its
     /// address, by its title when it has none.
     pub fn is_page_in_front(&self, title: &str, url: Option<&str>) -> bool {
-        self.app_mode == AppMode::VirtualBuffer
-            && match (self.cursor.buffer.document_url(), url) {
-                (Some(old), Some(new)) => old == new,
-                _ => self.cursor.buffer.document_title() == Some(title),
-            }
+        self.app_mode == AppMode::VirtualBuffer && self.is_page_held(title, url)
+    }
+
+    /// Whether a page captured with `title` and address `url` is the one the buffer holds,
+    /// wherever the focus is: a page the platform read again as the focus came back to it is
+    /// its refresh (Escape from Okur's Skim Reading dialog, Alt+Tab back on Linux: 530/s11 in
+    /// gtk2's run was announced as a new load and read through).
+    pub fn is_page_held(&self, title: &str, url: Option<&str>) -> bool {
+        match (self.cursor.buffer.document_url(), url) {
+            (Some(old), Some(new)) => old == new,
+            _ => self.cursor.buffer.document_title() == Some(title),
+        }
     }
 
     /// A capture of the page already read, built without the engine (the live screen reader
@@ -81,11 +88,13 @@ impl ScreenReaderEngine {
     pub fn handle_page_refreshed(&mut self, title: &str, buffer: VirtualBuffer) {
         // After Ctrl+R or F5 the page comes back as a refresh: it is a new load, announced
         // and read [obs, 507/s1; live9, where the reload came as "page refreshed"].
-        if self.reload_pending() && self.is_page_in_front(title, buffer.document_url()) {
+        let held = self.is_page_in_front(title, buffer.document_url())
+            || (buffer.read_again() && self.is_page_held(title, buffer.document_url()));
+        if self.reload_pending() && held {
             let _ = self.handle_document_loaded(title, buffer);
             return;
         }
-        if self.is_page_in_front(title, buffer.document_url()) {
+        if held {
             if let Some(old) = self.pending_page.replace(buffer) {
                 crate::retire::retire(old);
             }
@@ -115,7 +124,8 @@ impl ScreenReaderEngine {
         // After Ctrl+R or F5 the same page is loaded anew, and announced [obs, 507/s1].
         let reloaded = self.reload_pending();
         self.reload_asked = None;
-        if self.is_page_in_front(title, buffer.document_url()) && !reloaded {
+        let read_again = buffer.read_again() && self.is_page_held(title, buffer.document_url());
+        if (self.is_page_in_front(title, buffer.document_url()) || read_again) && !reloaded {
             // Applied once the events of this change are handled: several live regions can
             // change at once, and each is compared with the page before the change
             // [obs, 206/s2].

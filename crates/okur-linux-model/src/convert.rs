@@ -237,6 +237,9 @@ pub struct Converter {
     /// The last of those menus closed: menu mode ends as the focus or a window comes back,
     /// unless another menu's window opens first.
     menus_closing: bool,
+    /// The page given the engine last: its document and its address. Read again as the focus
+    /// comes back to it, it is marked so ([`okur_core::aom::READ_AGAIN_ATTR`]).
+    page_given: Option<(String, Option<String>)>,
 }
 
 /// An application's own menu open: its window's object, and the menu as it was read when the
@@ -599,7 +602,17 @@ impl Converter {
             self.page_ids = crate::page::page_ids(&page.root, page.base);
             self.page_places = crate::page::item_places(&page.root);
             self.page_applications = crate::page::applications(&page.root);
-            let root = to_aom_from(&page.root, page.base);
+            let mut root = to_aom_from(&page.root, page.base);
+            // The page given last, at the same address, read again (the focus back on it from
+            // Okur's dialog or another program): its refresh, not a load.
+            let given = Some((page.document.clone(), page.root.uri.clone()));
+            if self.page_given == given {
+                root.attributes.insert(
+                    okur_core::aom::READ_AGAIN_ATTR.to_owned(),
+                    "true".to_owned(),
+                );
+            }
+            self.page_given = given;
             // What its live regions changed since it was read last, said before the page is
             // refreshed [obs, 206/s2].
             let regions = crate::live::regions(&page.root);
@@ -1318,6 +1331,36 @@ mod tests {
         let other = element(ElementRole::ProgressBar, "Elsewhere", "/other", false);
         let elsewhere = chrome_record(EventKind::ValueChanged, other, None);
         assert!(converter.convert_read(&elsewhere).is_empty());
+    }
+
+    /// The page given last read again at the same address is marked as read again, for the
+    /// engine to take as its refresh; another page, or the same document at another address,
+    /// is not.
+    #[test]
+    fn the_page_given_last_read_again_is_marked() {
+        let mut converter = Converter::default();
+        let read = |uri: &str| {
+            let mut root = node("document web", "News", &[]);
+            root.uri = Some(uri.to_owned());
+            AtspiRecord::page(
+                0,
+                PageRead {
+                    document: ":1.5/doc".to_owned(),
+                    base: 0,
+                    root,
+                    read_ms: 0,
+                },
+            )
+        };
+        let marked = |events: Vec<AccessibilityEvent>| {
+            events.iter().any(|e| {
+                matches!(e, AccessibilityEvent::DocumentLoaded { root, .. }
+                    if root.attributes.contains_key(okur_core::aom::READ_AGAIN_ATTR))
+            })
+        };
+        assert!(!marked(converter.convert_read(&read("file:///a.html"))));
+        assert!(marked(converter.convert_read(&read("file:///a.html"))));
+        assert!(!marked(converter.convert_read(&read("file:///b.html"))));
     }
 
     /// A window without a menu starts no menu mode, and an item highlighted with no menu open

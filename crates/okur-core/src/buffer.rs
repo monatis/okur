@@ -1265,6 +1265,14 @@ impl VirtualBuffer {
         self.tabs.iter().find(|t| t.node_id == node_id)
     }
 
+    /// Whether the platform read the page again rather than loaded it
+    /// ([`crate::aom::READ_AGAIN_ATTR`]).
+    pub fn read_again(&self) -> bool {
+        self.page
+            .as_deref()
+            .is_some_and(|page| page.attributes.contains_key(crate::aom::READ_AGAIN_ATTR))
+    }
+
     /// The page's address, when it has one.
     pub fn document_url(&self) -> Option<&str> {
         self.page
