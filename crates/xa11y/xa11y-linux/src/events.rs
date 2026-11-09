@@ -138,8 +138,11 @@ pub(crate) fn subscribe_desktop(wanted: Option<KindFilter>) -> Result<Subscripti
     subscribe(wanted, Sources::Desktop(Mutex::new(HashMap::new())))
 }
 
-/// The kinds of event a subscriber takes: the others are dropped before their element is read.
-pub type KindFilter = Box<dyn Fn(&EventKind) -> bool + Send + Sync>;
+/// The events a subscriber takes, by their kind and their object (its application's bus name
+/// and its path): the others are dropped before their element is read. A screen reader takes a
+/// page's children and text changes from its live regions' objects alone, which it knows by
+/// their paths.
+pub type KindFilter = Box<dyn Fn(&EventKind, &str, &str) -> bool + Send + Sync>;
 
 fn subscribe(wanted: Option<KindFilter>, sources: Sources) -> Result<Subscription> {
     // The senders the match rules and the registration name: an
@@ -403,7 +406,11 @@ impl EventContext {
         // the subscriber takes, costs nothing more (a page loading sends
         // thousands; the code review of 2026-11-08). The role only adds a text
         // kind beside a value change, so it is read when a kind is wanted.
-        let wanted = |kind: &EventKind| self.wanted.as_ref().is_none_or(|w| w(kind));
+        let wanted = |kind: &EventKind| {
+            self.wanted
+                .as_ref()
+                .is_none_or(|w| w(kind, sender.as_str(), path.as_str()))
+        };
         let unread = signal_to_kinds(iface.as_str(), member.as_str(), &detail, detail1, None);
         if !unread.iter().any(wanted) {
             return;

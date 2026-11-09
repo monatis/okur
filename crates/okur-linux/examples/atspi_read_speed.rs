@@ -29,7 +29,7 @@ fn main() {
             std::process::exit(1);
         }
     };
-    let subscription = match provider.subscribe_desktop_kinds(Box::new(|kind| {
+    let subscription = match provider.subscribe_desktop_kinds(Box::new(|kind, _, _| {
         matches!(kind, EventKind::FocusChanged | EventKind::DocumentLoaded)
     })) {
         Ok(subscription) => subscription,

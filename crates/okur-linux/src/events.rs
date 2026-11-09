@@ -34,6 +34,73 @@ pub type TraceOut = Arc<Mutex<Option<std::io::BufWriter<std::fs::File>>>>;
 /// reads.
 pub type FocusedObject = Arc<Mutex<Option<AtspiObject>>>;
 
+/// The objects of the live regions of the last pages read, by page: their children and text
+/// changing tells a region's change, which the page read again says (okur_linux_model::live).
+/// Written by the event thread as it gives the engine a page, read by the subscription's filter
+/// for every children or text signal.
+type LiveObjects = Arc<std::sync::RwLock<Vec<LivePage>>>;
+
+/// A page's live objects: its document's bus name and path, and their paths.
+struct LivePage {
+    bus: String,
+    document: String,
+    paths: std::collections::HashSet<String>,
+}
+
+/// Whether `kind` on the object at `bus` and `path` is heard: what the converter takes, and a
+/// live region's children or text changing.
+fn heard(live: &LiveObjects, kind: &EventKind, bus: &str, path: &str) -> bool {
+    if okur_linux_model::focus_track::is_heard(kind) {
+        return true;
+    }
+    matches!(kind, EventKind::StructureChanged | EventKind::TextChanged)
+        && live_page_of(live, bus, path).is_some()
+}
+
+/// The document of the page whose live region holds the object at `bus` and `path`.
+fn live_page_of(live: &LiveObjects, bus: &str, path: &str) -> Option<AtspiObject> {
+    let pages = live
+        .read()
+        .unwrap_or_else(std::sync::PoisonError::into_inner);
+    pages
+        .iter()
+        .find(|page| page.bus == bus && page.paths.contains(path))
+        .map(|page| AtspiObject {
+            bus_name: page.bus.clone(),
+            path: page.document.clone(),
+            role: "document web".to_owned(),
+        })
+}
+
+/// The live objects of the pages `record` gives the engine, in place of those pages' before.
+fn note_live_pages(live: &LiveObjects, record: &AtspiRecord) {
+    if record.pages.is_empty() {
+        return;
+    }
+    let mut pages = live
+        .write()
+        .unwrap_or_else(std::sync::PoisonError::into_inner);
+    for page in &record.pages {
+        let Some(at) = page.document.find('/') else {
+            continue;
+        };
+        let (bus, document) = page.document.split_at(at);
+        pages.retain(|p| !(p.bus == bus && p.document == document));
+        let paths = okur_linux_model::live::live_paths(&page.root);
+        if paths.is_empty() {
+            continue;
+        }
+        pages.push(LivePage {
+            bus: bus.to_owned(),
+            document: document.to_owned(),
+            paths,
+        });
+        if pages.len() > usize::try_from(PAGES_KEPT).unwrap_or(4) {
+            pages.remove(0);
+        }
+    }
+}
+
 /// What reading a text field at its caret needs of the event source: the focused object, and
 /// the trace the read is written to ([`crate::actions::LinuxActions`]).
 #[derive(Clone, Default)]
@@ -461,9 +528,11 @@ fn deliver(
     delivery: &mut Delivery,
     converter: &mut Converter,
     trace: &TraceOut,
+    live: &LiveObjects,
     sink: &EventSink,
 ) -> bool {
     for record in delivery.take_ready() {
+        note_live_pages(live, &record);
         let said = converter.convert_read(&record);
         if !hand(trace, &record, said, sink) {
             return false;
@@ -516,7 +585,9 @@ pub fn capture_page(
 ) -> Result<(okur_linux_model::page::AtspiNode, Duration), RuntimeError> {
     let provider = LinuxProvider::new().map_err(|e| source_error("the bus", e))?;
     let subscription = provider
-        .subscribe_desktop_kinds(Box::new(okur_linux_model::focus_track::is_heard))
+        .subscribe_desktop_kinds(Box::new(|kind, _, _| {
+            okur_linux_model::focus_track::is_heard(kind)
+        }))
         .map_err(|e| source_error("the desktop's events", e))?;
     let started = std::time::Instant::now();
     while started.elapsed() < wait {
@@ -612,9 +683,15 @@ impl EventSource for AtspiEventSource {
             tracing::warn!("the desktop not told a screen reader runs: {e}");
         }
         let provider = LinuxProvider::new().map_err(|e| source_error("the bus", e))?;
-        let subscription = provider
-            .subscribe_desktop_kinds(Box::new(okur_linux_model::focus_track::is_heard))
-            .map_err(|e| source_error("the desktop's events", e))?;
+        let live: LiveObjects = Arc::default();
+        let subscription = {
+            let live = Arc::clone(&live);
+            provider
+                .subscribe_desktop_kinds(Box::new(move |kind, bus, path| {
+                    heard(&live, kind, bus, path)
+                }))
+                .map_err(|e| source_error("the desktop's events", e))?
+        };
         tracing::debug!("AT-SPI: the desktop's events subscribed");
         if let Some(path) = &self.trace {
             let file = std::fs::File::create(path).map_err(|e| source_error("the trace", e))?;
@@ -656,7 +733,7 @@ impl EventSource for AtspiEventSource {
                     if delivery.is_holding() {
                         drop_pages(delivery.expire(unix_ms()), &reader, &mut converter);
                     }
-                    if !deliver(&mut delivery, &mut converter, &trace, &sink) {
+                    if !deliver(&mut delivery, &mut converter, &trace, &live, &sink) {
                         return;
                     }
                     // Short while a page is awaited, so that it comes at once when the bus is
@@ -686,8 +763,35 @@ impl EventSource for AtspiEventSource {
                                 );
                                 // In its place, cancelling no page: it was not read.
                                 let _ = delivery.push(twin, false);
-                                if !deliver(&mut delivery, &mut converter, &trace, &sink) {
+                                if !deliver(&mut delivery, &mut converter, &trace, &live, &sink) {
                                     return;
+                                }
+                                continue;
+                            }
+                            // A live region's children or text changed: its page is read again,
+                            // and the converter says what the region changed (once per page
+                            // while a read is awaited).
+                            if matches!(
+                                event.kind,
+                                EventKind::StructureChanged | EventKind::TextChanged
+                            ) {
+                                let page = target.and_then(AtspiObject::of).and_then(|object| {
+                                    live_page_of(&live, &object.bus_name, &object.path)
+                                });
+                                if let Some(document) = page {
+                                    tracing::debug!(
+                                        document = %key_of(&document),
+                                        "a live region changed: its page read again"
+                                    );
+                                    ask_page(
+                                        &document,
+                                        at_ms,
+                                        &mut reader,
+                                        &mut delivery,
+                                        &mut converter,
+                                        &provider,
+                                        &objects,
+                                    );
                                 }
                                 continue;
                             }
@@ -770,7 +874,7 @@ impl EventSource for AtspiEventSource {
                             };
                             let cancelled = delivery.push(record, true);
                             drop_pages(cancelled, &reader, &mut converter);
-                            if !deliver(&mut delivery, &mut converter, &trace, &sink) {
+                            if !deliver(&mut delivery, &mut converter, &trace, &live, &sink) {
                                 return;
                             }
                         }

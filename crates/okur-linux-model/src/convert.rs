@@ -142,7 +142,13 @@ pub struct Converter {
     page_places: std::collections::HashMap<String, crate::page::ItemPlace>,
     /// The application regions that page's objects are in, by their paths.
     page_applications: std::collections::HashMap<String, std::sync::Arc<str>>,
+    /// The live regions' lines in the last read of each of the last pages, by page: a page
+    /// read again says what its regions changed.
+    live_lines: Vec<(String, std::collections::HashMap<String, Vec<String>>)>,
 }
+
+/// How many pages' live regions are kept for their next read.
+const LIVE_PAGES_KEPT: usize = 4;
 
 impl Converter {
     /// Whether the event is GTK's second focus event for one move, passed over before anything
@@ -227,6 +233,29 @@ impl Converter {
             self.page_places = crate::page::item_places(&page.root);
             self.page_applications = crate::page::applications(&page.root);
             let root = to_aom_from(&page.root, page.base);
+            // What its live regions changed since it was read last, said before the page is
+            // refreshed [obs, 206/s2].
+            let regions = crate::live::regions(&page.root);
+            let lines = crate::live::region_lines(&root, &regions, &self.page_ids);
+            let at = self
+                .live_lines
+                .iter()
+                .position(|(document, _)| *document == page.document);
+            let before = at
+                .and_then(|i| self.live_lines.get(i))
+                .map(|(_, lines)| lines);
+            for live in crate::live::changes(&regions, before, &lines) {
+                events.push(AccessibilityEvent::LiveRegion(live));
+            }
+            if let Some(i) = at {
+                self.live_lines.remove(i);
+            }
+            if !regions.is_empty() {
+                self.live_lines.push((page.document.clone(), lines));
+                if self.live_lines.len() > LIVE_PAGES_KEPT {
+                    self.live_lines.remove(0);
+                }
+            }
             let title = root.name.clone().unwrap_or_default();
             events.push(AccessibilityEvent::DocumentLoaded { title, root });
         }
@@ -788,6 +817,66 @@ mod tests {
                     && f.container_is_list_box
                     && f.item_index == Some(2)
                     && f.item_count == Some(2)
+        ));
+    }
+
+    /// A page read again whose log gained a message says the log's change before the page is
+    /// refreshed, as Windows' live region event comes before its page [obs, 206/s2]; the first
+    /// read, and a read with nothing changed, say no change.
+    #[test]
+    fn a_live_regions_change_comes_before_its_page() {
+        let read = |messages: &[&str]| {
+            let mut root = node("document web", "Team Chat", &[]);
+            root.path = "/doc".to_owned();
+            let mut log = node("log", "Messages", &[]);
+            log.path = "/log".to_owned();
+            for (key, value) in [
+                ("live", "polite"),
+                ("container-live", "polite"),
+                ("id", "log"),
+            ] {
+                log.attributes.insert(key.to_owned(), value.to_owned());
+            }
+            for (i, message) in messages.iter().enumerate() {
+                let mut text = node("static", message, &[]);
+                text.text = Some((*message).to_owned());
+                text.path = format!("/message/{i}");
+                text.attributes
+                    .insert("container-live".to_owned(), "polite".to_owned());
+                log.children.push(text);
+            }
+            root.children.push(log);
+            AtspiRecord::page(
+                0,
+                PageRead {
+                    document: ":1.5/doc".to_owned(),
+                    base: 0,
+                    root,
+                    read_ms: 0,
+                },
+            )
+        };
+        let mut converter = Converter::default();
+        let first = converter.convert_read(&read(&["Ada: Good morning"]));
+        assert!(matches!(
+            first.as_slice(),
+            [AccessibilityEvent::DocumentLoaded { .. }]
+        ));
+        let second = converter.convert_read(&read(&["Ada: Good morning", "You: Message 1"]));
+        assert!(
+            matches!(
+                second.as_slice(),
+                [AccessibilityEvent::LiveRegion(live), AccessibilityEvent::DocumentLoaded { .. }]
+                    if live.text.ends_with("You: Message 1")
+                        && live.container_name.as_deref() == Some("Messages")
+                        && live.region_id.as_deref() == Some("log")
+            ),
+            "{second:?}"
+        );
+        let third = converter.convert_read(&read(&["Ada: Good morning", "You: Message 1"]));
+        assert!(matches!(
+            third.as_slice(),
+            [AccessibilityEvent::DocumentLoaded { .. }]
         ));
     }
 
