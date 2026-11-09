@@ -11724,3 +11724,28 @@ fn custom_label_delete_all_takes_the_sites_labels_away() {
     assert!(engine.cursor.current_line().contains("Branch"));
     assert!(!engine.custom_labels.has("library.example"));
 }
+
+/// One of Okur's dialogs up with the keyboard in it (okur-ui's DialogShown) takes the keys
+/// before its focus is told: GTK told none for Skim Reading's first radio, and the Downs after
+/// moved the virtual cursor in the page (816/s2-s4 in night2). A dialog not Okur's, or none
+/// open, leaves the page its keys.
+#[test]
+fn an_own_dialog_shown_takes_the_keys_before_its_focus() {
+    let (mut engine, ui, _) = links_page_engine();
+    engine.cursor.move_to_start();
+    let down = |engine: &mut ScreenReaderEngine| {
+        engine.handle_key_event(&KeyEvent::new(Key::DownArrow, Modifiers::none(), true))
+    };
+    // Shown for a dialog not open: the page keeps its keys.
+    engine.handle_accessibility_event(&dialog_shown(99));
+    let offset = engine.cursor.offset;
+    assert_eq!(down(&mut engine), KeyAction::Consume);
+    assert_ne!(engine.cursor.offset, offset);
+    let _ = engine.execute(crate::command::Command::SkimReadDialog);
+    let skim = shown_dialog(&ui);
+    assert!(skim > 0);
+    engine.handle_accessibility_event(&dialog_shown(skim));
+    let offset = engine.cursor.offset;
+    assert_eq!(down(&mut engine), KeyAction::PassThrough);
+    assert_eq!(engine.cursor.offset, offset);
+}

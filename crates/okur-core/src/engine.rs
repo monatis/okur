@@ -2089,8 +2089,21 @@ impl ScreenReaderEngine {
             AccessibilityEvent::Ui(crate::ui::FromUi::DialogClosed { id }) => {
                 self.own_dialog_closed(*id);
             }
-            // Only the keys held for it wait on it.
-            AccessibilityEvent::Ui(crate::ui::FromUi::DialogShown { .. }) => return None,
+            // Only the keys held for it wait on it. One of Okur's dialogs up with the keyboard in
+            // it takes the keys from now, before its focus is told, as a list dialog takes them
+            // as it is asked for (`show_list` [obs, 242/s2]): GTK told no focus for Skim
+            // Reading's first radio, and the Downs after it moved the virtual cursor in the page
+            // (816/s2-s4 in night2).
+            AccessibilityEvent::Ui(crate::ui::FromUi::DialogShown { id }) => {
+                let open = self
+                    .open_dialogs
+                    .lock()
+                    .is_ok_and(|open| open.iter().any(|d| d.id == *id));
+                if open && self.app_mode == AppMode::VirtualBuffer {
+                    self.app_mode = AppMode::NativeControl;
+                }
+                return None;
+            }
             AccessibilityEvent::Ui(message) => self.own_dialog_heard(message),
             _ => {}
         }
