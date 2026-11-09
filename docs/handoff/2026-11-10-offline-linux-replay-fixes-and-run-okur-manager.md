@@ -88,10 +88,11 @@ From the commands named, each after the commit given:
   A run that needs a rule from an earlier scenario cannot pass alone on Linux.
 - **Skim Reading (816, 760, 911) and the lists (224, 765, 926):** the dialog shown and no
   focus in it, or no keyboard; the keys went to the page. db1e6423's log lines say why.
-- **Okur's Win32 dialogs:** okur-ui's Win32 dialog is owned by the Okur dialog in front as it
-  opens, so on Windows the Dictionary Manager would be named before its Add Dictionary
-  Definition, where JAWS names none (1157/s5). Parity cannot see it (it replays JAWS's
-  dialogs). The owner should come from the engine, as on Linux.
+- **Okur's Win32 dialogs** (fixed after, 7022a7b9): okur-ui's Win32 dialog is owned by the
+  Okur dialog in front as it opens, so on Windows the Dictionary Manager was named before its
+  Add Dictionary Definition, where JAWS names none (1157/s5). The engine's owner is now what is
+  said on every platform; parity's mirrored dialogs gained 748/s20 and 751/s21 by it
+  (`okur-lab parity`: "12689/13284 steps match exactly"; `--api atspi`: "12331/13284").
 
 ## Next
 
@@ -104,6 +105,5 @@ From the commands named, each after the commit given:
      705, 748, 751, 241, 256, 274, 548, 549, 554, 301, 303, 304, 809, 567, 688, 763), and read
      okur-ui's "dialog {id} shown: active ..., focus ..." lines;
    - the spelling dictionary of the lab's Chrome.
-2. The Win32 dialogs' owner from the engine (above).
-3. Custom Label Delete (one label): what JAWS does, from its help, then on old-pc.
-4. Run Okur Manager's other managers, as each is built.
+2. Custom Label Delete (one label): what JAWS does, from its help, then on old-pc.
+3. Run Okur Manager's other managers, as each is built.
