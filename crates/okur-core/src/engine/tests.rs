@@ -2086,7 +2086,7 @@ fn a_flexible_web_rule_is_saved_and_holds_when_the_page_loads() {
     assert!(!ui
         .take()
         .iter()
-        .any(|m| matches!(m, ToUi::DialogShow { .. })));
+        .any(|m| matches!(m, crate::ui::ToUi::DialogShow { .. })));
 
     // A heading hidden and left unsaved: loading the page again asks, after its title alone.
     let heading = engine.cursor.buffer.start_of(3).unwrap_or_default();
@@ -11195,4 +11195,157 @@ fn excel_shift_f2_edits_the_cells_note() {
         .iter()
         .any(|(request, _)| request == "sheet note write Check totals"));
     assert!(ui.take().contains(&ToUi::DialogClose { id }));
+}
+
+/// A page with links for the keys held for the Links List.
+fn links_page_engine() -> (
+    ScreenReaderEngine,
+    crate::ui::RecordingUiHost,
+    crate::actions::RecordingActions,
+) {
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Web Menus")
+        .with_children(vec![
+            AomNode::new(1, Role::Heading { level: 1 }).with_text("Web Menus"),
+            AomNode::new(
+                2,
+                Role::Link {
+                    href: Some("https://example.com/a".into()),
+                },
+            )
+            .with_name("Alpha"),
+            AomNode::new(3, Role::List).with_children(vec![AomNode::new(4, Role::ListItem)
+                .with_children(vec![AomNode::new(5, Role::Text).with_text("One")])]),
+        ]);
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(VirtualBuffer::from_aom(&page)),
+        Box::new(MockSpeechOutput::new()),
+    );
+    engine.handle_focus_event(&page_document());
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    engine.cursor.move_to_start();
+    (engine, ui, actions)
+}
+
+/// A key pressed at `at` on the key clock.
+fn key_at(key: Key, modifiers: Modifiers, at: u64) -> KeyEvent {
+    KeyEvent {
+        time_ms: at,
+        ..KeyEvent::new(key, modifiers, true)
+    }
+}
+
+/// The focus in one of Okur's windows: the Links List's first item.
+fn okur_ui_focus() -> FocusEvent {
+    let mut item = FocusEvent::new(Role::ListItem)
+        .with_name("Alpha")
+        .with_window_title("Links List");
+    item.app = Some("okur-ui.exe".into());
+    item
+}
+
+/// Insert+F7, then keys before the Links List has the focus: they are the list's, not the
+/// page's (L would have moved the virtual cursor to the page's list), pressed again in order,
+/// each with its modifiers, as the dialog's focus comes; the modifiers and the Okur key go on
+/// as ever.
+#[test]
+fn keys_pressed_before_a_dialogs_focus_are_held_for_it() {
+    let (mut engine, ui, actions) = links_page_engine();
+    let insert = Modifiers {
+        insert: true,
+        ..Modifiers::none()
+    };
+    let shift = Modifiers {
+        shift: true,
+        ..Modifiers::none()
+    };
+    assert_eq!(
+        engine.handle_key_event(&key_at(Key::F(7), insert, 1_000)),
+        KeyAction::Consume
+    );
+    assert!(ui.take().iter().any(
+        |m| matches!(m, crate::ui::ToUi::DialogShow { dialog } if dialog.title == "Links List")
+    ));
+    let offset = engine.cursor.offset;
+    // A modifier pressed alone goes on.
+    assert_eq!(
+        engine.handle_key_event(&key_at(Key::Shift, shift, 1_050)),
+        KeyAction::PassThrough
+    );
+    for (key, modifiers, at) in [
+        (Key::Alpha('L'), Modifiers::none(), 1_100),
+        (Key::DownArrow, Modifiers::none(), 1_150),
+        (Key::Tab, shift, 1_200),
+    ] {
+        assert_eq!(
+            engine.handle_key_event(&key_at(key, modifiers, at)),
+            KeyAction::Consume,
+            "{key:?}"
+        );
+    }
+    assert_eq!(engine.cursor.offset, offset);
+    assert!(actions.take_pressed().is_empty());
+    engine.handle_accessibility_event(&AccessibilityEvent::Focus(okur_ui_focus()));
+    assert_eq!(
+        actions.take_pressed(),
+        [
+            vec![Key::Alpha('L')],
+            vec![Key::DownArrow],
+            vec![Key::Shift, Key::Tab],
+        ]
+    );
+    // In the dialog, keys are not held.
+    engine.handle_key_event(&key_at(Key::DownArrow, Modifiers::none(), 1_400));
+    assert!(actions.take_pressed().is_empty());
+}
+
+/// A dialog whose focus does not come: the keys held for it go where the focus is once
+/// two seconds have passed since it was asked for, by the next key or by time alone.
+#[test]
+fn keys_held_for_a_dialog_that_does_not_come_go_on() {
+    let (mut engine, _ui, actions) = links_page_engine();
+    let insert = Modifiers {
+        insert: true,
+        ..Modifiers::none()
+    };
+    engine.handle_key_event(&key_at(Key::F(7), insert, 1_000));
+    assert_eq!(
+        engine.handle_key_event(&key_at(Key::Alpha('L'), Modifiers::none(), 1_100)),
+        KeyAction::Consume
+    );
+    engine.on_time(2_900);
+    assert!(actions.take_pressed().is_empty());
+    engine.on_time(3_100);
+    assert_eq!(actions.take_pressed(), [vec![Key::Alpha('L')]]);
+    // A key after the wait is the page's at once, the held ones pressed before it.
+    engine.handle_key_event(&key_at(Key::F(7), insert, 5_000));
+    engine.handle_key_event(&key_at(Key::Alpha('K'), Modifiers::none(), 5_100));
+    assert_ne!(
+        engine.handle_key_event(&key_at(Key::Alpha('H'), Modifiers::none(), 7_200)),
+        KeyAction::Consume
+    );
+    assert_eq!(actions.take_pressed(), [vec![Key::Alpha('K')]]);
+}
+
+/// A dialog asked for from one of Okur's own windows holds no key: the focus is already
+/// where the keys go, and a dialog shown again takes no new focus.
+#[test]
+fn no_key_is_held_for_a_dialog_asked_for_in_okurs_windows() {
+    let (mut engine, ui, actions) = links_page_engine();
+    engine.handle_focus_event(&okur_ui_focus());
+    let insert = Modifiers {
+        insert: true,
+        ..Modifiers::none()
+    };
+    engine.handle_key_event(&key_at(Key::F(7), insert, 1_000));
+    assert!(ui
+        .take()
+        .iter()
+        .any(|m| matches!(m, crate::ui::ToUi::DialogShow { .. })));
+    engine.handle_key_event(&key_at(Key::DownArrow, Modifiers::none(), 1_100));
+    engine.on_time(5_000);
+    assert!(actions.take_pressed().is_empty());
 }

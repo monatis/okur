@@ -29,6 +29,7 @@ mod dictionary;
 mod find;
 mod flexible_web;
 mod focus;
+mod held_keys;
 mod help;
 mod highlight;
 mod information;
@@ -325,6 +326,11 @@ pub struct ScreenReaderEngine {
     sounds: Option<Box<dyn crate::sound::SoundOutput>>,
     /// Okur's own windows (`okur-ui`); None when headless.
     ui: Option<Box<dyn crate::ui::UiHost>>,
+    /// Set as a dialog is asked to show, until a key or the focus coming to Okur's windows
+    /// takes it ([`held_keys`]).
+    dialog_asked: std::sync::Arc<std::sync::atomic::AtomicBool>,
+    /// The keys pressed while a dialog asked for has not yet taken the focus.
+    held_for_dialog: Option<held_keys::HeldForDialog>,
     /// Where changed settings are kept; None when headless.
     settings_store: Option<Box<dyn crate::settings::SettingsStore>>,
     /// The settings in their layers; `settings` is what they give where the focus is.
@@ -737,6 +743,8 @@ impl ScreenReaderEngine {
             clock: None,
             sounds: None,
             ui: None,
+            dialog_asked: std::sync::Arc::default(),
+            held_for_dialog: None,
             settings_store: None,
             settings_layers: crate::settings_layers::SettingsLayers::default(),
             settings_place: (None, None),
@@ -1168,6 +1176,10 @@ impl ScreenReaderEngine {
         }
         if !event.is_down {
             return KeyAction::PassThrough;
+        }
+        // A key pressed while one of Okur's dialogs is on its way is the dialog's.
+        if let Some(action) = self.hold_for_dialog(event) {
+            return action;
         }
         // Any key ends the wait for a character's phonetic spelling, said only after a pause.
         self.phonetic_due = None;
@@ -2065,6 +2077,7 @@ impl ScreenReaderEngine {
     /// Handles an incoming accessibility event from the OS event listener.
     pub fn handle_accessibility_event(&mut self, event: &AccessibilityEvent) -> Option<String> {
         self.sync_speech_mode();
+        self.dialog_came(event);
         if !matches!(
             event,
             AccessibilityEvent::LiveRegion(_)
@@ -2319,7 +2332,10 @@ impl ScreenReaderEngine {
 
     /// Gives the engine its own windows (`okur-ui`).
     pub fn set_ui(&mut self, ui: Box<dyn crate::ui::UiHost>) {
-        self.ui = Some(ui);
+        self.ui = Some(Box::new(held_keys::DialogWatch {
+            inner: ui,
+            asked: std::sync::Arc::clone(&self.dialog_asked),
+        }));
     }
 
     /// Gives the engine where changed settings are kept.

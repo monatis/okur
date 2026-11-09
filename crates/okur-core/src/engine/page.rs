@@ -1117,6 +1117,7 @@ impl ScreenReaderEngine {
     /// asked for when the event stream is quiet ([`Self::on_idle`]); replay asks before each
     /// recorded event too, as one due before it came first.
     pub fn on_time(&mut self, now_ms: u64) -> Option<String> {
+        self.held_keys_due(now_ms);
         let forms = self.forms_mode_after_delay(now_ms);
         let phonetic = self.phonetic_after_pause(now_ms);
         forms.or(phonetic)

@@ -282,9 +282,17 @@ mod windows_actions {
         }
     }
 
-    /// The virtual key of a key the screen reader sends for a reading command.
+    /// The virtual key of a key the screen reader sends: a reading command's, or one held for
+    /// a dialog. Every key the keyboard hook reports has one, the inverse of its
+    /// `translate_vk_code`: the punctuation places by their scan codes, in the layout in use.
     fn virtual_key(key: &okur_core::Key) -> Option<u16> {
         use okur_core::Key;
+        use windows::Win32::UI::Input::KeyboardAndMouse::{MapVirtualKeyW, MAPVK_VSC_TO_VK};
+        let place = |scan: u32| {
+            // SAFETY: a plain query of the keyboard layout in use.
+            let vk = unsafe { MapVirtualKeyW(scan, MAPVK_VSC_TO_VK) };
+            u16::try_from(vk).ok().filter(|vk| *vk != 0)
+        };
         Some(match key {
             Key::UpArrow => 0x26,
             Key::DownArrow => 0x28,
@@ -294,9 +302,41 @@ mod windows_actions {
             Key::End => 0x23,
             Key::PageUp => 0x21,
             Key::PageDown => 0x22,
+            Key::Tab => 0x09,
+            Key::Enter => 0x0D,
+            Key::Escape => 0x1B,
+            Key::Space => 0x20,
+            Key::Backspace => 0x08,
+            Key::Delete => 0x2E,
+            Key::Insert => 0x2D,
+            Key::CapsLock => 0x14,
+            Key::ScrollLock => 0x91,
+            Key::Alpha(c) if c.is_ascii_uppercase() => u16::from(*c as u8),
+            Key::Alpha(_) => return None,
+            Key::Digit(d) if *d <= 9 => 0x30 + u16::from(*d),
+            Key::Digit(_) => return None,
+            Key::F(n) if (1..=24).contains(n) => 0x6F + u16::from(*n),
+            Key::F(_) => return None,
+            Key::Semicolon => 0xBA,
+            Key::Apostrophe => 0xDE,
+            Key::Comma => place(0x33)?,
+            Key::Period => place(0x34)?,
+            Key::Minus => place(0x0C)?,
+            Key::Equals => place(0x0D)?,
+            Key::Slash => place(0x35)?,
+            Key::Backslash => place(0x2B)?,
+            Key::LeftBracket => place(0x1A)?,
+            Key::RightBracket => place(0x1B)?,
+            Key::Numpad5 => 0x0C,
+            Key::NumpadPlus => 0x6B,
+            Key::NumpadMinus => 0x6D,
+            Key::NumpadSlash => 0x6F,
+            Key::NumpadStar => 0x6A,
             Key::Control => 0x11,
+            Key::Alt => 0x12,
             Key::Shift => 0x10,
-            _ => return None,
+            Key::Windows => 0x5B,
+            Key::Other(vk) => u16::try_from(*vk).ok()?,
         })
     }
 
@@ -1385,6 +1425,10 @@ mod windows_actions {
 
         fn page_changed(&self, now: bool) -> bool {
             crate::events::windows::refresh_changed_page(now)
+        }
+
+        fn presses_keys(&self) -> bool {
+            true
         }
 
         fn press(&self, chord: &[okur_core::Key]) -> bool {

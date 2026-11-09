@@ -508,6 +508,12 @@ pub trait ApplicationActions: Send {
         false
     }
 
+    /// Whether [`Self::press`] can press any key the keyboard hook reports: the keys held for
+    /// one of Okur's dialogs are pressed again as its focus comes.
+    fn presses_keys(&self) -> bool {
+        false
+    }
+
     /// Captures the page in front again and delivers it as
     /// [`crate::event::AccessibilityEvent::DocumentLoaded`]: the focus landed on an element
     /// the buffer does not hold yet (WhatsApp's search results, built as the search box is
@@ -971,6 +977,10 @@ impl ApplicationActions for RecordingActions {
         if let Ok(mut log) = self.log.lock() {
             log.push(("cancel file recognition".to_owned(), 0));
         }
+    }
+
+    fn presses_keys(&self) -> bool {
+        true
     }
 
     fn press(&self, chord: &[crate::input::Key]) -> bool {
