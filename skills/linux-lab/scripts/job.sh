@@ -5,6 +5,7 @@
 #   bash skills/linux-lab/scripts/job.sh start probe1 'bash /mnt/d/okur-linux/a11y-stack.sh bash /mnt/d/okur-linux/probe-chrome.sh'
 #   bash skills/linux-lab/scripts/job.sh wait probe1 [lines]   # until it ends, then its exit and log
 #   bash skills/linux-lab/scripts/job.sh log probe1 [lines]    # the log so far
+#   bash skills/linux-lab/scripts/job.sh stop probe1            # the distribution stopped, job too
 # The command is written into a bash file pushed to the lab, so no quoting passes through
 # PowerShell. Never start a job while a JAWS batch runs (run-batch.ps1 shuts WSL down).
 set -euo pipefail
@@ -14,7 +15,7 @@ JOBS=D:/okur-linux/jobs
 action=${1:-}
 name=${2:-}
 case "$name" in
-    ''|*[!A-Za-z0-9_-]*) echo "usage: job.sh start|wait|log <name> ..." >&2; exit 2 ;;
+    ''|*[!A-Za-z0-9_-]*) echo "usage: job.sh start|wait|log|stop <name> ..." >&2; exit 2 ;;
 esac
 remote() { timeout 90 opendesk exec --peer "$PEER" --timeout 60 "$1" 2>&1 | tr -d '\000'; }
 show_log() {
@@ -46,5 +47,10 @@ EOF
     log)
         show_log "${3:-60}"
         ;;
-    *) echo "usage: job.sh start|wait|log <name> ..." >&2; exit 2 ;;
+    stop)
+        # Every process of the distribution goes with it (the job, Xvfb, Chrome, Okur), which
+        # a11y-stack.sh's own ending would not see; the job is marked stopped.
+        remote "wsl.exe --terminate $DISTRO | Out-Null; Set-Content -Path $JOBS/$name.done -Value stopped; 'stopped $name'"
+        ;;
+    *) echo "usage: job.sh start|wait|log|stop <name> ..." >&2; exit 2 ;;
 esac
