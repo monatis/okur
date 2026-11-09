@@ -1,0 +1,38 @@
+{
+  "id": "1205-web-links-list-letter-at-once",
+  "name": "Insert+F7, then S 30 ms after it, before the Links List has the focus: the list's first-letter search (Settings), not the page's quick key; then Down and Escape. Okur holds the keys typed before its dialog's focus (e78db0b3). Research on Linux first: JAWS's elevated Links List refuses the harness's own keys (222 uses TypeKey), so a JAWS recording needs another route",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/web-app-patterns.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Escape",
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+F7",
+      "during": [
+        {
+          "command": "S",
+          "after_ms": 30
+        }
+      ],
+      "settle_max_ms": 15000
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Escape"
+    }
+  ]
+}

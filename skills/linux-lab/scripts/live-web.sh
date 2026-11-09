@@ -18,12 +18,19 @@ cargo build -q -p okur-core --example script_key || exit 1
 runs=/mnt/d/okur-linux/runs
 mkdir -p "$runs"
 for id in "$@"; do
+    # An id, or (for research, never imported) a scenario not yet recorded: corpus/pending/...
     scenario=$(ls corpus/scenarios/"$id"*.json 2>/dev/null | head -1)
+    out="$runs/$(basename "$scenario")"
+    case "$id" in corpus/pending/*.json)
+        scenario=$id
+        mkdir -p /mnt/d/okur-linux/research
+        out=/mnt/d/okur-linux/research/$(basename "$scenario") ;;
+    esac
     if [ -z "$scenario" ]; then
         echo "$id: no scenario"
         continue
     fi
-    python3 /mnt/d/okur-linux/run-scenario-linux.py "$scenario" "$runs/$(basename "$scenario")"
+    python3 /mnt/d/okur-linux/run-scenario-linux.py "$scenario" "$out"
     pkill -f "user-data-dir=/tmp" 2>/dev/null
     sleep 1
 done
