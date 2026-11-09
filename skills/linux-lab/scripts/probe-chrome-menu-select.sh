@@ -58,19 +58,37 @@ def chrome():
             return app
     return None
 
+MENU_ITEMS = ("menu item", "check menu item", "radio menu item")
+
 def find_menu(node, depth=0):
-    if node is None or depth > 8:
+    """A menu holding menu items, as Okur's driver finds one (okur-linux-model's menu_in);
+    the gtk4 run of this probe asked for more than three children and found none."""
+    if node is None or depth > 12:
         return None
     try:
-        if node.get_role_name() == "menu" and node.get_child_count() > 3:
+        count = node.get_child_count()
+        if node.get_role_name() == "menu" and any(
+                node.get_child_at_index(i).get_role_name() in MENU_ITEMS
+                for i in range(min(count, 8))):
             return node
-        for i in range(node.get_child_count()):
+        for i in range(count):
             found = find_menu(node.get_child_at_index(i), depth + 1)
             if found:
                 return found
-    except Exception:
+    except Exception as error:
+        log("FIND ?", depth, error)
         return None
     return None
+
+def outline(node, depth=0, limit=4):
+    """A window's roles and names to `limit` levels, for a menu not found."""
+    try:
+        log("  " * depth + node.get_role_name(), repr(node.get_name()), node.get_child_count())
+        if depth < limit:
+            for i in range(min(node.get_child_count(), 12)):
+                outline(node.get_child_at_index(i), depth + 1, limit)
+    except Exception as error:
+        log("  " * depth + "?", error)
 
 def selected_items(menu):
     names = []
@@ -91,7 +109,10 @@ def steps():
             if menu:
                 break
     if not menu:
-        log("NO MENU FOUND")
+        log("NO MENU FOUND; Chrome's windows:")
+        if app:
+            for i in range(app.get_child_count()):
+                outline(app.get_child_at_index(i))
         GLib.idle_add(Atspi.event_quit); return
     log("MENU", menu.get_child_count(), "items; selected:", selected_items(menu))
     selection = menu.get_selection_iface()
