@@ -29,7 +29,7 @@ log=$(sed 's/\x1b\[[0-9;]*m//g' "$out/okur")
 regions=$(grep -c 'a live region read again' <<< "$log")
 pages=$(grep -c 'the changed page read again' <<< "$log")
 echo "region reads: $regions; their times (ms):"
-grep 'a live region read again' <<< "$log" | grep -o 'ms=[0-9]*' | sort -t= -k2 -n | tr '\n' ' '
+grep 'a live region read again' <<< "$log" | grep -o 'ms=[0-9]*' | cut -d= -f2 | sort -n | tr '\n' ' '
 echo
 echo "page reads after a change: $pages"
 echo "--- what was said"
