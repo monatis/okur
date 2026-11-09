@@ -126,6 +126,12 @@ with no change to the `KeyboardHook` port:
    window's focus said as it comes forward, the drop-down's place and open list, the tree's
    depth; then a dialog, and Qt.
 
+**Status, 2026-11-09:**
+- **Live runs.** 83 scenarios (80 web, 3 desktop) on `okur run`, with the settings JAWS recorded each with, keep their traces: 796/829 steps match JAWS (`corpus/live/linux-baseline.json`).
+- **Replay.** `okur-lab live-replay linux` replays them off the lab and says what every run said. It is ratcheted (`corpus/live/linux-replay-baseline.json`), so gaps are found and fixed without the lab.
+- **Coverage.** 273 more recorded web scenarios are being run for the first time (the job `wide1`).
+- **Handoffs:** [`../handoff/2026-11-08-linux-event-model-and-one-okur.md`](../handoff/2026-11-08-linux-event-model-and-one-okur.md), [`../handoff/2026-11-09-linux-replay-exact-and-the-second-review.md`](../handoff/2026-11-09-linux-replay-exact-and-the-second-review.md).
+
 ## 3. Meanwhile
 
 The Windows work goes on beside it (the dictionary's rest, the Settings Center features of the
