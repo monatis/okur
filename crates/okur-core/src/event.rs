@@ -898,6 +898,12 @@ pub struct FocusEvent {
     /// which JAWS says before the control's name ("Speech Rate: left right slider").
     #[serde(default)]
     pub group_box: Option<String>,
+    /// Whether the platform read the focus's dialog box as its toolkit gives it (Windows: its
+    /// group boxes, a combo box's place, or that it has none, as a WPF combo box): with it
+    /// unread, a toolkit that gives none of it (GTK), Okur's own dialogs tell it from their
+    /// specs.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub dialog_box_read: bool,
     /// When a dialog box is in front: its default button, the one Enter presses, which Insert+E
     /// says where the focus is not on a button [obs, 540/s2].
     #[serde(default)]
@@ -1203,6 +1209,7 @@ impl FocusEvent {
             dialog_page: None,
             wizard_page: None,
             group_box: None,
+            dialog_box_read: false,
             default_button: None,
             dialog_buttons: Vec::new(),
             dialog_lines: Vec::new(),

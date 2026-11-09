@@ -1,16 +1,24 @@
 //! Okur's own dialogs as the engine asked okur-ui to show them: what the platform may not say
-//! of them. GTK 4 marks no button the default (the Linux lab's 222: no button had AT-SPI's
-//! IS_DEFAULT), so on Linux a focus in Okur's Links List was in no dialog box, and Insert+E
-//! said "Not in a dialog box" there; Windows' dialogs say both. A focus in one of Okur's
-//! windows whose title is a dialog it showed is in a dialog box, and its default button is the
-//! one the dialog's spec makes the default, where the platform names none.
+//! of them, told from the dialog's spec where it does not. Windows' dialogs say it all; GTK 4's
+//! do not:
+//! - no button is the default (the Linux lab's 222: no button had AT-SPI's IS_DEFAULT), so a
+//!   focus in Okur's Links List was in no dialog box, and Insert+E said "Not in a dialog box";
+//! - a group box names no control in it: JAWS's "Use Rule Type: Read First Sentence of Every
+//!   Paragraph radio button checked" was "Read First Sentence..." alone (812/s2 in full5);
+//! - a drop-down gives no place: "Rules History: Combo box <New> 1 of 8" lost its "1 of 8"
+//!   (812/s5).
+//!
+//! A focus in one of Okur's windows whose title is a dialog it showed is in a dialog box, its
+//! default button the spec's default; its control, found in the spec by its label, has its
+//! group box and a drop-down its choice's place, each where the platform says none.
 
 use std::sync::{Arc, Mutex};
 
 use super::held_keys::AskedDialog;
 use super::{ScreenReaderEngine, OKUR_WINDOWS};
+use crate::aom::Role;
 use crate::event::FocusEvent;
-use crate::ui::{ControlKind, DialogSpec, ToUi, UiHost};
+use crate::ui::{Control, ControlKind, DialogSpec, ToUi, UiHost};
 
 /// The dialogs okur-ui shows, as the engine last told it of them.
 pub(super) type OpenDialogs = Arc<Mutex<Vec<DialogSpec>>>;
@@ -67,6 +75,43 @@ fn kept(open: &mut Vec<DialogSpec>, message: &ToUi) {
     }
 }
 
+/// The control of `controls` the focus is on, by its index: the one its label names, of a kind
+/// its role can be; a radio button by its option among a group's.
+fn control_of(controls: &[Control], focus: &FocusEvent) -> Option<usize> {
+    let name = focus.name.as_deref()?.trim();
+    controls.iter().position(|c| match (&c.kind, &focus.role) {
+        (ControlKind::Radios { options, .. }, Role::RadioButton) => {
+            options.iter().any(|o| shown(o).trim() == name)
+        }
+        (ControlKind::Choice { .. } | ControlKind::ComboEdit { .. }, Role::ComboBox)
+        | (ControlKind::CheckBox { .. }, Role::CheckBox)
+        | (ControlKind::Edit { .. } | ControlKind::SearchBox { .. }, Role::Edit)
+        | (ControlKind::Slider { .. }, Role::Slider)
+        | (ControlKind::Button { .. }, Role::Button) => shown(&c.label).trim() == name,
+        _ => false,
+    })
+}
+
+/// The group box the control at `at` is in, as okur-ui draws it: a radio group's own label
+/// (its options are in a box it names); else the group before it, up to the buttons, which end
+/// a group box.
+fn group_box_of(controls: &[Control], at: usize) -> Option<String> {
+    let control = controls.get(at)?;
+    if let ControlKind::Radios { .. } = control.kind {
+        return Some(shown(&control.label)).filter(|label| !label.trim().is_empty());
+    }
+    if matches!(control.kind, ControlKind::Button { .. }) {
+        return None;
+    }
+    controls
+        .get(..at)?
+        .iter()
+        .rev()
+        .take_while(|c| !matches!(c.kind, ControlKind::Button { .. }))
+        .find(|c| c.kind == ControlKind::Group)
+        .map(|group| shown(&group.label))
+}
+
 /// A label as it is shown: its access key's mark gone, "&&" a plain "&".
 fn shown(label: &str) -> String {
     let mut out = String::new();
@@ -92,15 +137,16 @@ impl ScreenReaderEngine {
         }
     }
 
-    /// `focus` in one of Okur's dialogs, told it is in a dialog box and its default button
-    /// where the platform does not say; none when nothing is to be told.
+    /// `focus` in one of Okur's dialogs, told what its spec says and the platform did not: in
+    /// a dialog box, its default button, its control's group box, a drop-down's place; none
+    /// when nothing is to be told.
     pub(super) fn as_own_dialog_focus(&self, focus: &FocusEvent) -> Option<FocusEvent> {
         let okur_windows = focus
             .app
             .as_deref()
             .map(crate::settings_layers::application_id)
             .is_some_and(|app| app == OKUR_WINDOWS);
-        if !okur_windows || (focus.in_dialog_box && focus.default_button.is_some()) {
+        if !okur_windows {
             return None;
         }
         let title = focus.window_title.as_deref()?;
@@ -114,6 +160,24 @@ impl ScreenReaderEngine {
         told.in_dialog_box = true;
         if told.default_button.is_none() {
             told.default_button = default;
+        }
+        if let Some(at) = control_of(&dialog.controls, focus) {
+            if told.group_box.is_none() && !focus.dialog_box_read {
+                told.group_box = group_box_of(&dialog.controls, at);
+            }
+            let choice = dialog.controls.get(at).and_then(|c| match &c.kind {
+                ControlKind::Choice { options, .. } if focus.role == Role::ComboBox => {
+                    Some(options)
+                }
+                _ => None,
+            });
+            if let (Some(options), None, false) = (choice, told.item_index, focus.dialog_box_read) {
+                let value = focus.value.as_deref().map(str::trim);
+                if let Some(i) = options.iter().position(|o| Some(shown(o).trim()) == value) {
+                    told.item_index = Some(i + 1);
+                    told.item_count = Some(options.len());
+                }
+            }
         }
         (told != *focus).then_some(told)
     }
@@ -132,6 +196,74 @@ mod tests {
             enabled: true,
             hidden: false,
         }
+    }
+
+    /// A control of Okur's own dialog, found by its label: its group box (the group before it,
+    /// or a radio group's own label), and a drop-down's choice's place.
+    #[test]
+    fn a_control_has_its_group_box_and_a_drop_downs_place() {
+        let controls = vec![
+            Control {
+                id: "rule".to_owned(),
+                label: "Use Rule &Type:".to_owned(),
+                kind: ControlKind::Radios {
+                    options: vec![
+                        "Read &First Line".to_owned(),
+                        "Read First &Sentence".to_owned(),
+                    ],
+                    selected: 0,
+                },
+                enabled: true,
+                hidden: false,
+            },
+            Control {
+                id: "colors".to_owned(),
+                label: "Color or Attribute Rules".to_owned(),
+                kind: ControlKind::Group,
+                enabled: true,
+                hidden: false,
+            },
+            Control {
+                id: "text_color".to_owned(),
+                label: "&Text Color:".to_owned(),
+                kind: ControlKind::Choice {
+                    options: vec!["*".to_owned(), "Red".to_owned(), "Blue".to_owned()],
+                    selected: 0,
+                },
+                enabled: true,
+                hidden: false,
+            },
+            button("ok", "OK", true),
+            Control {
+                id: "after".to_owned(),
+                label: "&Bold".to_owned(),
+                kind: ControlKind::CheckBox { checked: false },
+                enabled: true,
+                hidden: false,
+            },
+        ];
+        let mut radio = FocusEvent::new(Role::RadioButton).with_name("Read First Sentence");
+        radio.states.checked = Some(true);
+        let at = control_of(&controls, &radio);
+        assert_eq!(at, Some(0));
+        assert_eq!(
+            at.and_then(|at| group_box_of(&controls, at)).as_deref(),
+            Some("Use Rule Type:")
+        );
+        let mut combo = FocusEvent::new(Role::ComboBox).with_name("Text Color:");
+        combo.value = Some("Red".to_owned());
+        let at = control_of(&controls, &combo);
+        assert_eq!(at, Some(2));
+        assert_eq!(
+            at.and_then(|at| group_box_of(&controls, at)).as_deref(),
+            Some("Color or Attribute Rules")
+        );
+        // After the buttons, no group box.
+        let bold = FocusEvent::new(Role::CheckBox).with_name("Bold");
+        assert_eq!(
+            control_of(&controls, &bold).and_then(|at| group_box_of(&controls, at)),
+            None
+        );
     }
 
     /// Shown, its default moved and a label changed, then closed: the dialogs kept follow.

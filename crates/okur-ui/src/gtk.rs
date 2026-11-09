@@ -36,6 +36,8 @@ pub fn run() {
     // knows Okur's own windows by it, as by okur-ui's process on Windows. GTK names the
     // application by its program name where no other is set.
     glib::set_prgname(Some("okur-ui"));
+    // Its application name too: the traces still had none (gtk4's 222 at 298f0c7c).
+    glib::set_application_name("okur-ui");
     if let Err(e) = gtk::init() {
         eprintln!("okur-ui: no display for GTK: {e}");
         for _ in std::io::stdin().lock().lines() {}

@@ -226,6 +226,8 @@ pub fn focus_event_from_chain(
     };
 
     let mut event = okur_core::FocusEvent::new(role);
+    // UI Automation gives a dialog box's group boxes and places, or none where there are none.
+    event.dialog_box_read = true;
     if event.role == Role::MenuItem {
         const UIA_MENUBAR: i32 = 50010;
         event.in_menu_bar = chain

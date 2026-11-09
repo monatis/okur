@@ -339,8 +339,13 @@ impl EventContext {
                     get_name(&self.conn, &root).unwrap_or_default(),
                     connection_pid(&self.conn, sender).unwrap_or(0),
                 );
-                if let Ok(mut known) = known.lock() {
-                    known.insert(sender.to_string(), app.clone());
+                // A name not yet given (an application's first events, before its root is up:
+                // okur-ui's windows came with none in every Linux trace) is asked again with its
+                // next event, not kept.
+                if !app.0.is_empty() {
+                    if let Ok(mut known) = known.lock() {
+                        known.insert(sender.to_string(), app.clone());
+                    }
                 }
                 Some(app)
             }
