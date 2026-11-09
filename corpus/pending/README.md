@@ -20,6 +20,7 @@ To record one:
 | 627 | The clipboard keys in their key map's order. Round 91 was inconclusive: Windows+Insert+X reached Windows' own Win+X menu from the harness's keys. Sent with UI Access by `okur-lab-keys` it does too, Windows key first or Insert first (old-pc, 2026-10-22): an injected Windows-key chord is Windows', so these keys are recorded by script name (825) | `desktop-editor.ps1` |
 | 628 | The layer's help and Command Search. Round 91 was inconclusive on old-pc's Turkish keyboard layout | `desktop-editor.ps1` |
 | 665 | Say Window in Notepad's Font dialog, waited for long enough to read its 187 fonts (round 115) | `desktop-notepad.ps1` |
+| 1207 | Custom Label Delete from Run JAWS Manager: on a labelled field, on one with none, and on text (written 2026-11-10 while old-pc was offline; Okur waits for it before building the command) | `custom-label.html` (in `corpus/fixtures/`) |
 
 Office on old-pc is not activated (2026-10-19): Word and Excel open Microsoft's Office Activation
 Wizard and say "Product Activation Failed", which held the fixtures' automation in round 17. The

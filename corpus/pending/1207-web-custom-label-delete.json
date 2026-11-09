@@ -1,0 +1,200 @@
+{
+  "id": "1207-web-custom-label-delete",
+  "name": "Custom Label Delete (Insert+F2, its third manager) on a page's field: Custom Label Delete All first for a clean start, E to the field, Insert+Ctrl+Tab and \"lamp\", Ctrl+Home and E to it again, then Custom Label Delete on it, Insert+Up, Ctrl+Home and E; again on the field with no label, Insert+Up; then on the page's first line (text), Insert+Up. What JAWS says as one label is deleted, with none, and on text (JAWS's guide, Surf's Up chapter 19: move to the element, Insert+F2, Custom Label Delete, Enter). Keys in JAWS's own dialogs are typed by JAWS (TypeKey), which its elevated dialogs take",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/custom-label.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+F2"
+    },
+    {
+      "id": "s2",
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+    },
+    {
+      "id": "s3",
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+    },
+    {
+      "id": "s4",
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+    },
+    {
+      "id": "s5",
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+    },
+    {
+      "id": "s6",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+    },
+    {
+      "id": "s7",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "E"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Insert+Ctrl+Tab"
+    },
+    {
+      "id": "s10",
+      "type": "jaws_function",
+      "command": "TypeKey(\"l\")"
+    },
+    {
+      "id": "s11",
+      "type": "jaws_function",
+      "command": "TypeKey(\"a\")"
+    },
+    {
+      "id": "s12",
+      "type": "jaws_function",
+      "command": "TypeKey(\"m\")"
+    },
+    {
+      "id": "s13",
+      "type": "jaws_function",
+      "command": "TypeKey(\"p\")"
+    },
+    {
+      "id": "s14",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "E"
+    },
+    {
+      "id": "s17",
+      "type": "key",
+      "command": "Insert+F2"
+    },
+    {
+      "id": "s18",
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+    },
+    {
+      "id": "s19",
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+    },
+    {
+      "id": "s20",
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+    },
+    {
+      "id": "s21",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+    },
+    {
+      "id": "s22",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s23",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s24",
+      "type": "key",
+      "command": "E"
+    },
+    {
+      "id": "s25",
+      "type": "key",
+      "command": "Insert+F2"
+    },
+    {
+      "id": "s26",
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+    },
+    {
+      "id": "s27",
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+    },
+    {
+      "id": "s28",
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+    },
+    {
+      "id": "s29",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+    },
+    {
+      "id": "s30",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s31",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s32",
+      "type": "key",
+      "command": "Insert+F2"
+    },
+    {
+      "id": "s33",
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+    },
+    {
+      "id": "s34",
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+    },
+    {
+      "id": "s35",
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+    },
+    {
+      "id": "s36",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+    },
+    {
+      "id": "s37",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ]
+}
