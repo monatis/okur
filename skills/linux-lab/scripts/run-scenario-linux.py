@@ -126,8 +126,14 @@ def typed_by_jaws(call):
     match = re.fullmatch(r'\s*TypeString\("(.*)"\)\s*', call)
     if not match:
         return None
+    return typed(match.group(1))
+
+
+def typed(text):
+    """Characters typed as written, as the keys that type them on the lab's US layout; None for
+    a character without a key here."""
     keys = []
-    for c in match.group(1):
+    for c in text:
         if re.fullmatch(r"[a-z0-9]", c):
             keys.append(c)
         elif re.fullmatch(r"[A-Z]", c):
@@ -325,10 +331,14 @@ def main():
     for step in scenario.get("steps", []):
         kind = step.get("type")
         command = step.get("command", "")
-        if kind == "key":
+        if kind in ("key", "key_ui_access"):
             # "repeat": the chord pressed again 120 ms after each release, as run-scenario.ps1
-            # presses it for JAWS's "twice quickly" commands.
+            # presses it for JAWS's "twice quickly" commands. A key sent with UI Access (into
+            # an elevated window on Windows) is a key here.
             keys = [command] * max(1, int(step.get("repeat", 1)))
+        elif kind == "text" and typed(command):
+            # Characters typed as written (1151's "abc").
+            keys = typed(command)
         elif kind == "keyboard":
             keys = sendkeys(command)
         elif kind == "jaws_script" and command in script_keys:
