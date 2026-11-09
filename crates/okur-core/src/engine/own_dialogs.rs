@@ -102,6 +102,48 @@ fn kept(open: &mut Vec<DialogSpec>, message: &ToUi) {
                 *chosen = *selected;
             }
         }
+        ToUi::DialogRows {
+            id,
+            control,
+            rows,
+            checked,
+            selected,
+        } => {
+            let controls = open
+                .iter_mut()
+                .filter(|d| d.id == *id)
+                .flat_map(|d| d.controls.iter_mut());
+            for c in controls.filter(|c| c.id == *control) {
+                if let ControlKind::CheckList {
+                    rows: kept_rows,
+                    checked: kept_checked,
+                    selected: chosen,
+                    ..
+                } = &mut c.kind
+                {
+                    kept_rows.clone_from(rows);
+                    kept_checked.clone_from(checked);
+                    *chosen = *selected;
+                }
+            }
+        }
+        ToUi::DialogSet {
+            id,
+            control,
+            value: value @ (Value::Selected(_) | Value::ItemChecked(..)),
+        } if check_list_of(open, *id, control).is_some() => {
+            if let Some((checked, chosen)) = check_list_of(open, *id, control) {
+                match value {
+                    Value::Selected(i) => *chosen = *i,
+                    Value::ItemChecked(i, now) => {
+                        if let Some(check) = checked.get_mut(*i) {
+                            *check = *now;
+                        }
+                    }
+                    _ => {}
+                }
+            }
+        }
         ToUi::DialogSet { id, control, value } => {
             if let Some((items, chosen)) = tree_of(open, *id, control) {
                 match value {
@@ -237,6 +279,18 @@ fn heard(open: &mut [DialogSpec], message: &FromUi) {
     let FromUi::DialogChanged { id, control, value } = message else {
         return;
     };
+    if let Some((checked, chosen)) = check_list_of(open, *id, control) {
+        match value {
+            Value::Selected(i) => *chosen = *i,
+            Value::ItemChecked(i, now) => {
+                if let Some(check) = checked.get_mut(*i) {
+                    *check = *now;
+                }
+            }
+            _ => {}
+        }
+        return;
+    }
     let Some((items, chosen)) = tree_of(open, *id, control) else {
         return;
     };
@@ -249,6 +303,38 @@ fn heard(open: &mut [DialogSpec], message: &FromUi) {
         }
         _ => {}
     }
+}
+
+/// The checks and the choice of dialog `id`'s check list `control`, as kept.
+fn check_list_of<'a>(
+    open: &'a mut [DialogSpec],
+    id: u32,
+    control: &str,
+) -> Option<(&'a mut Vec<bool>, &'a mut usize)> {
+    open.iter_mut()
+        .filter(|d| d.id == id)
+        .flat_map(|d| d.controls.iter_mut())
+        .find(|c| c.id == control)
+        .and_then(|c| match &mut c.kind {
+            ControlKind::CheckList {
+                checked, selected, ..
+            } => Some((checked, selected)),
+            _ => None,
+        })
+}
+
+/// The check a row of a check list of Okur's has (`rows`, `checked` and `chosen` as kept): the
+/// row its name gives (its first cell, or its cells), else the chosen one.
+fn check_of(name: &str, rows: &[Vec<String>], checked: &[bool], chosen: usize) -> Option<bool> {
+    let name = name.trim();
+    let row = rows
+        .iter()
+        .position(|cells| {
+            cells.first().is_some_and(|first| first.trim() == name)
+                || cells.join(" ").trim() == name
+        })
+        .unwrap_or(chosen);
+    checked.get(row).copied()
 }
 
 /// `focus` as an item of a tree of Okur's (`label` its tree's, `items` and `chosen` as kept):
@@ -404,6 +490,40 @@ impl ScreenReaderEngine {
         told.in_dialog_box = true;
         if told.default_button.is_none() {
             told.default_button = default;
+        }
+        // A row of a check list of Okur's: its check, as Windows' list view with check boxes
+        // gives it ("Hide ComplementaryRegion 1 from the top ... checked | 1 of 1" [obs,
+        // 742/s18]).
+        let check_list = dialog.controls.iter().find_map(|c| match &c.kind {
+            ControlKind::CheckList {
+                rows,
+                checked,
+                selected,
+                ..
+            } => Some((rows, checked, *selected)),
+            _ => None,
+        });
+        if let (Some((rows, checked, chosen)), false, None) =
+            (check_list, focus.dialog_box_read, told.states.checked)
+        {
+            if matches!(focus.role, Role::ListItem | Role::TableRow) {
+                let name = focus.name.as_deref().unwrap_or_default();
+                told.states.checked = check_of(name, rows, checked, chosen);
+            }
+        }
+        // A wizard's page: its question, its first message, is the dialog's text, said as the
+        // focus comes into the page, as Windows' wizard page is ("Flexible Web dialog | What
+        // would you like to do?" [obs, 705/s3; 742/s6]).
+        let wizard = dialog
+            .controls
+            .iter()
+            .any(|c| c.id == WIZARD_NEXT && c.hidden);
+        if wizard && !focus.dialog_box_read && told.dialog_text.as_deref().is_none_or(str::is_empty)
+        {
+            told.dialog_text = dialog.controls.iter().find_map(|c| match &c.kind {
+                ControlKind::Message { text } => Some(text.clone()),
+                _ => None,
+            });
         }
         // A row of a tree of Okur's: its item as the spec has it.
         let tree = dialog.controls.iter().find_map(|c| match &c.kind {

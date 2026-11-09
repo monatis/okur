@@ -197,6 +197,8 @@ struct ShownList {
     view: ListWidget,
     items: gtk::StringList,
     selection: gtk::SingleSelection,
+    /// A check list's rows' checks, by row: Space turns the chosen row's.
+    checks: Option<Rc<RefCell<Vec<bool>>>>,
 }
 
 #[derive(Clone)]
@@ -287,6 +289,7 @@ impl ShownList {
                 view,
                 items: items.clone(),
                 selection: selection.clone(),
+                checks: None,
             };
             if list.jump_to(letter) {
                 glib::Propagation::Stop
@@ -575,9 +578,9 @@ impl Ui {
                 id,
                 control,
                 rows,
+                checked,
                 selected,
-                ..
-            } => ui.rows(id, &control, &rows, selected),
+            } => ui.rows(id, &control, &rows, &checked, selected),
             ToUi::DialogSet { id, control, value } => ui.set(id, &control, &value),
             ToUi::DialogTree {
                 id,
@@ -934,6 +937,13 @@ impl Ui {
                 choice.set_selected(u32::try_from(*i).unwrap_or(u32::MAX));
             }
             (Shown::List(list), Value::Selected(i)) => list.select(*i, false),
+            (Shown::List(list), Value::ItemChecked(i, now)) => {
+                if let Some(checks) = &list.checks {
+                    if let Some(check) = checks.borrow_mut().get_mut(*i) {
+                        *check = *now;
+                    }
+                }
+            }
             (Shown::Tree(tree), Value::Selected(i)) => tree.select(*i, false),
             // An item's text and check box changed in place, as Windows' tree changes it: filled
             // again, its rows went and GTK gave the focus to the dialog's first control (the
@@ -959,13 +969,23 @@ impl Ui {
     }
 
     /// Replaces a table's rows and selects one (Manage Key Labels after a label changed).
-    fn rows(&self, id: u32, control: &str, rows: &[Vec<String>], selected: usize) {
+    fn rows(
+        &self,
+        id: u32,
+        control: &str,
+        rows: &[Vec<String>],
+        checked: &[bool],
+        selected: usize,
+    ) {
         let dialogs = self.dialogs.borrow();
         let Some(dialog) = dialogs.get(&id) else {
             return;
         };
         dialog.setting.set(true);
         if let Some(Shown::List(list)) = dialog.controls.get(control) {
+            if let Some(checks) = &list.checks {
+                *checks.borrow_mut() = checked.to_vec();
+            }
             list.fill_rows(rows);
             list.select(selected, false);
         }
@@ -1469,6 +1489,7 @@ fn build(
                 view,
                 items: model,
                 selection: selection.clone(),
+                checks: None,
             };
             list.fill(items);
             list.select(*selected, false);
@@ -1666,6 +1687,90 @@ fn build(
             place.append(&scrolled);
             (Shown::Tree(tree), Some(label))
         }
+        // A check list: a column view of its rows, each with its check, which Space turns and
+        // okur-ui tells as Windows' list view with check boxes tells it (Value::ItemChecked):
+        // JAWS's Save Temporary Customizations and its rules list [obs, 742/s18, 748/s12]. Not
+        // drawn on Linux before, the wizard's Save page's Tab passed it by (742/s18 in night2).
+        ControlKind::CheckList {
+            columns,
+            rows,
+            checked,
+            selected,
+            ..
+        } => {
+            let model = gtk::StringList::new(&[]);
+            let selection = gtk::SingleSelection::new(Some(model.clone()));
+            selection.set_autoselect(true);
+            selection.set_can_unselect(false);
+            let view = gtk::ColumnView::new(Some(selection.clone()));
+            let titles: Vec<String> = if columns.is_empty() {
+                vec![plain(&control.label)]
+            } else {
+                columns.iter().map(|title| plain(title)).collect()
+            };
+            for (n, title) in titles.iter().enumerate() {
+                let column = gtk::ColumnViewColumn::new(Some(title), Some(text_cells(n)));
+                column.set_expand(true);
+                view.append_column(&column);
+            }
+            view.set_tab_behavior(gtk::ListTabBehavior::Item);
+            let checks = Rc::new(RefCell::new(checked.clone()));
+            let list = ShownList {
+                view: ListWidget::Columns(view),
+                items: model,
+                selection: selection.clone(),
+                checks: Some(Rc::clone(&checks)),
+            };
+            list.fill_rows(rows);
+            list.select(*selected, false);
+            list.search_by_letter();
+            let widget = list.widget();
+            widget.update_property(&[gtk::accessible::Property::Label(&plain(&control.label))]);
+            {
+                let (setting, name) = (Rc::clone(setting), name.clone());
+                selection.connect_selected_notify(move |selection| {
+                    let at = selection.selected();
+                    if at == gtk::INVALID_LIST_POSITION {
+                        return;
+                    }
+                    if let Ok(i) = usize::try_from(at) {
+                        changed(id, &name, &setting, Value::Selected(i));
+                    }
+                });
+            }
+            // Space turns the chosen row's check.
+            let keys = gtk::EventControllerKey::new();
+            {
+                let (setting, name) = (Rc::clone(setting), name.clone());
+                let selection = selection.clone();
+                keys.connect_key_pressed(move |_, key, _, modifiers| {
+                    if key != gtk::gdk::Key::space || !modifiers.is_empty() {
+                        return glib::Propagation::Proceed;
+                    }
+                    let Ok(at) = usize::try_from(selection.selected()) else {
+                        return glib::Propagation::Proceed;
+                    };
+                    let turned = checks.borrow_mut().get_mut(at).map(|check| {
+                        *check = !*check;
+                        *check
+                    });
+                    if let Some(now) = turned {
+                        changed(id, &name, &setting, Value::ItemChecked(at, now));
+                    }
+                    glib::Propagation::Stop
+                });
+            }
+            widget.add_controller(keys);
+            let window = window.downgrade();
+            if let ListWidget::Columns(view) = &list.view {
+                view.connect_activate(move |_, _| press_default(&window));
+            }
+            let scrolled = gtk::ScrolledWindow::new();
+            scrolled.set_min_content_height(160);
+            scrolled.set_child(Some(&widget));
+            place.append(&scrolled);
+            (Shown::List(list), None)
+        }
         // A table: a column view of its columns, none selected until the user picks a row.
         ControlKind::Table {
             columns,
@@ -1688,6 +1793,7 @@ fn build(
                 view: ListWidget::Columns(view),
                 items: model,
                 selection: selection.clone(),
+                checks: None,
             };
             list.fill_rows(rows);
             match selected {
