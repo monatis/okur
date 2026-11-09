@@ -8,6 +8,12 @@ license.workspace = true
 [dependencies]
 okur-ui-model = { workspace = true }
 
+# GTK 4 on Linux: built in the lab, where its development files are (setup.sh); the dev box's
+# Linux clippy leaves this crate out.
+[target.'cfg(target_os = "linux")'.dependencies]
+gtk4 = "0.10"
+serde_json = { workspace = true }
+
 [target.'cfg(windows)'.dependencies]
 windows = { version = "0.62", features = [
     "Win32_Foundation",

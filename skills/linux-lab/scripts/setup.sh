@@ -15,6 +15,7 @@ apt-get install -y -q --no-install-recommends \
     libdbus-1-dev libxcb1-dev libxkbcommon-dev libx11-dev libxtst-dev libxi-dev \
     xvfb x11-utils x11-xserver-utils xauth dbus dbus-x11 xdotool xinput python3-xlib \
     at-spi2-core libatk-adaptor libatk-bridge2.0-0 python3-gi gir1.2-atspi-2.0 gir1.2-gtk-4.0 \
+    libgtk-4-dev \
     fluxbox gtk-4-examples gtk-3-examples gstreamer1.0-plugins-base \
     speech-dispatcher speech-dispatcher-espeak-ng espeak-ng pulseaudio pulseaudio-utils python3-speechd \
     mutter libglib2.0-bin \

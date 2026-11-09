@@ -7,6 +7,8 @@
 
 #[cfg(windows)]
 mod dialog;
+#[cfg(target_os = "linux")]
+mod gtk;
 #[cfg(windows)]
 mod main_window;
 #[cfg(any(windows, test))]
@@ -21,9 +23,11 @@ mod wizard;
 fn main() {
     #[cfg(windows)]
     win32::run();
+    #[cfg(target_os = "linux")]
+    gtk::run();
     // No renderer on this platform yet: what Okur sends is read and dropped, so that Okur
     // never waits on a full pipe.
-    #[cfg(not(windows))]
+    #[cfg(not(any(windows, target_os = "linux")))]
     {
         use std::io::BufRead;
         for _ in std::io::stdin().lock().lines() {}
