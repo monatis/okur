@@ -1,0 +1,122 @@
+{
+  "id": "1210-web-element-information",
+  "name": "Element information on a page's first link (JAWS's keystrokes: Display Basic Element Information, Insert+Shift+F1; Display Advanced Element Information, Insert+Ctrl+Shift+F1): Tab to the link, each opened, read from its top line by line, and closed with Escape. What the viewer holds, for Okur's own (the everyday gaps' item 41)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Insert+Shift+F1",
+      "settle_max_ms": 8000
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Insert+Ctrl+Shift+F1",
+      "settle_max_ms": 8000
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s17",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s18",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s19",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s20",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s21",
+      "type": "key",
+      "command": "Escape"
+    }
+  ]
+}
