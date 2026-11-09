@@ -4535,6 +4535,23 @@ impl LinuxProvider {
         })
     }
 
+    /// The state bits of the object at `bus_name` and `path` (its Accessible interface's
+    /// GetState, the two halves as one, by `AtspiStateType`'s ordinals): one call, for a state
+    /// polled while it changes.
+    pub fn atspi_state_bits(&self, bus_name: &str, path: &str) -> Result<u64> {
+        let aref = AccessibleRef {
+            bus_name: bus_name.to_owned(),
+            path: path.to_owned(),
+        };
+        match self.state_bits(&aref) {
+            (bits, true) => Ok(bits),
+            (_, false) => Err(Error::Platform {
+                code: -1,
+                message: "GetState failed".to_owned(),
+            }),
+        }
+    }
+
     /// The whole text of the object at `bus_name` and `path`: its Text interface's GetText to
     /// the end.
     pub fn atspi_text(&self, bus_name: &str, path: &str) -> Result<String> {

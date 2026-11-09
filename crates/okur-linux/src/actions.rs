@@ -23,7 +23,7 @@ use okur_linux_model::convert::{AtspiRecord, TextRead};
 use okur_runtime::events::EventSink;
 use xa11y_linux::{AtspiObject, AtspiTextPosition, LinuxProvider};
 
-use crate::events::{PageObjects, TextReads};
+use crate::events::{DriverShared, PageObjects};
 
 /// A call on the bus for the worker: an object's bus name and path.
 enum Request {
@@ -54,9 +54,9 @@ pub struct LinuxActions {
 
 impl LinuxActions {
     /// Actions on the objects of the pages `objects` holds, as the event source reads them;
-    /// caret reads of the field `text` names as focused, written to its trace and given to the
+    /// caret reads of the field `shared` names as focused, written to its trace and given to the
     /// engine through `sink`.
-    pub fn new(objects: PageObjects, text: TextReads, sink: EventSink) -> Self {
+    pub fn new(objects: PageObjects, shared: DriverShared, sink: EventSink) -> Self {
         let (requests, received) = channel::<Request>();
         let worker = std::thread::Builder::new()
             .name("okur-linux-actions".to_owned())
@@ -87,6 +87,19 @@ impl LinuxActions {
                             }
                         }
                         Request::Activate(bus, path) => {
+                            // Its focus, if Chrome focuses it as it toggles it, waits for its
+                            // state (events.rs's settle_toggle).
+                            *shared
+                                .activated
+                                .lock()
+                                .unwrap_or_else(std::sync::PoisonError::into_inner) = Some((
+                                AtspiObject {
+                                    bus_name: bus.clone(),
+                                    path: path.clone(),
+                                    role: String::new(),
+                                },
+                                Instant::now(),
+                            ));
                             if let Err(e) = provider.atspi_do_action(&bus, &path, 0) {
                                 tracing::debug!("not activated: {e}");
                             }
@@ -95,7 +108,7 @@ impl LinuxActions {
                             if pending.iter().any(|r| matches!(r, Request::Text(..))) {
                                 continue;
                             }
-                            if !read_text(&provider, &text, &sink, before.map(|b| *b), in_page) {
+                            if !read_text(&provider, &shared, &sink, before.map(|b| *b), in_page) {
                                 return;
                             }
                         }
@@ -205,7 +218,7 @@ fn misspelled(
 /// field that cannot be read (no Text interface, the object gone) is no answer.
 fn read_text(
     provider: &LinuxProvider,
-    reads: &TextReads,
+    reads: &DriverShared,
     sink: &EventSink,
     before: Option<TextContext>,
     in_page: bool,

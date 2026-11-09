@@ -101,15 +101,86 @@ fn note_live_pages(live: &LiveObjects, record: &AtspiRecord) {
     }
 }
 
-/// What reading a text field at its caret needs of the event source: the focused object, and
-/// the trace the read is written to ([`crate::actions::LinuxActions`]).
+/// The element Okur last activated (Enter or Space on a page's check box), and when.
+pub type Activated = Arc<Mutex<Option<(AtspiObject, std::time::Instant)>>>;
+
+/// What the event source and the actions share ([`crate::actions::LinuxActions`]): the focused
+/// object and the trace, for reading a text field at its caret; the element last activated, for
+/// its focus to wait for its state.
 #[derive(Clone, Default)]
-pub struct TextReads {
+pub struct DriverShared {
     pub trace: TraceOut,
     pub focused: FocusedObject,
+    pub activated: Activated,
 }
 
-impl TextReads {
+/// How long after Okur activated it a toggle's focus is taken as the activation's.
+const ACTIVATION_FRESH: Duration = Duration::from_millis(500);
+
+/// How long a toggle's focus waits for the activation to change its state.
+const TOGGLE_WAIT: Duration = Duration::from_millis(80);
+
+/// A page's check box, radio button or toggle button focused as Okur activated it: Chrome
+/// focuses it before it toggles it (the focus 7 ms after Space, its checked state 15 ms
+/// [obs, 229/s8]), and its focus is read with its state once toggled, as Windows reads its focus
+/// after the event: "Subscribe check box checked". Polled for at most [`TOGGLE_WAIT`]; an
+/// activation that changes nothing (a radio button already checked) leaves it as it was.
+fn settle_toggle(provider: &LinuxProvider, activated: &Activated, target: &mut ElementData) {
+    use okur_linux_model::page::state;
+    let switch = target.role == Role::Switch;
+    if !matches!(target.role, Role::CheckBox | Role::RadioButton) && !switch {
+        return;
+    }
+    let Some(object) = AtspiObject::of(target) else {
+        return;
+    };
+    let fresh = {
+        let mut last = activated
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner);
+        let fresh = last.as_ref().is_some_and(|(o, at)| {
+            o.bus_name == object.bus_name
+                && o.path == object.path
+                && at.elapsed() < ACTIVATION_FRESH
+        });
+        if fresh {
+            *last = None;
+        }
+        fresh
+    };
+    if !fresh {
+        return;
+    }
+    let bit = |n: u32| 1u64.checked_shl(n).unwrap_or(0);
+    let on_bits = if switch {
+        bit(state::CHECKED) | bit(state::PRESSED)
+    } else {
+        bit(state::CHECKED)
+    };
+    let before = target.states.checked;
+    let started = std::time::Instant::now();
+    while started.elapsed() < TOGGLE_WAIT {
+        let Ok(bits) = provider.atspi_state_bits(&object.bus_name, &object.path) else {
+            return;
+        };
+        let now = Some(if bits & on_bits != 0 {
+            xa11y_core::Toggled::On
+        } else {
+            xa11y_core::Toggled::Off
+        });
+        if now != before {
+            tracing::debug!(
+                ms = started.elapsed().as_millis(),
+                "an activated toggle's focus: its new state"
+            );
+            target.states.checked = now;
+            return;
+        }
+        std::thread::sleep(Duration::from_millis(4));
+    }
+}
+
+impl DriverShared {
     /// Writes `record` to the trace, where there is one, and gives the engine `said`: false
     /// once the engine has gone.
     pub fn hand(
@@ -631,7 +702,7 @@ pub struct AtspiEventSource {
     /// Where each event's record is written, one JSON line each, for the run to be replayed.
     trace: Option<std::path::PathBuf>,
     /// The trace's writer and the focused object, shared with the actions' caret reads.
-    text_reads: TextReads,
+    shared: DriverShared,
 }
 
 struct Running {
@@ -659,8 +730,8 @@ impl AtspiEventSource {
     }
 
     /// The focused object and the trace, for reading a text field at its caret.
-    pub fn text_reads(&self) -> TextReads {
-        self.text_reads.clone()
+    pub fn shared(&self) -> DriverShared {
+        self.shared.clone()
     }
 }
 
@@ -696,14 +767,15 @@ impl EventSource for AtspiEventSource {
         if let Some(path) = &self.trace {
             let file = std::fs::File::create(path).map_err(|e| source_error("the trace", e))?;
             *self
-                .text_reads
+                .shared
                 .trace
                 .lock()
                 .unwrap_or_else(std::sync::PoisonError::into_inner) =
                 Some(std::io::BufWriter::new(file));
         }
-        let trace = Arc::clone(&self.text_reads.trace);
-        let focused = Arc::clone(&self.text_reads.focused);
+        let trace = Arc::clone(&self.shared.trace);
+        let focused = Arc::clone(&self.shared.focused);
+        let activated = Arc::clone(&self.shared.activated);
         let stop = Arc::new(AtomicBool::new(false));
         let thread = {
             let stop = Arc::clone(&stop);
@@ -851,6 +923,14 @@ impl EventSource for AtspiEventSource {
                                     );
                                 }
                             }
+                            // A page's toggle Okur activated: its focus with its state once
+                            // toggled.
+                            let mut snapshot = event.target.clone();
+                            if let (true, true, Some(element)) =
+                                (focus, document.is_some(), snapshot.as_mut())
+                            {
+                                settle_toggle(&provider, &activated, element);
+                            }
                             let native = target
                                 .filter(|_| {
                                     Converter::wants_native(&event.kind, target, document.is_some())
@@ -864,7 +944,7 @@ impl EventSource for AtspiEventSource {
                                 at_ms,
                                 kind: event.kind.clone(),
                                 app: event.app_name.clone(),
-                                target: event.target.clone(),
+                                target: snapshot,
                                 document: document.as_ref().map(key_of),
                                 // Pages come as records of their own, before this one.
                                 pages: Vec::new(),

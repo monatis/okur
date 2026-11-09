@@ -67,7 +67,7 @@ impl System {
             None => okur_linux::events::AtspiEventSource::new(),
         };
         let objects = event_source.objects();
-        let text_reads = event_source.text_reads();
+        let shared = event_source.shared();
         Platform {
             keyboard_hook: Box::new(okur_linux::keyboard::X11KeyboardHook::new()),
             event_source: Box::new(event_source),
@@ -77,7 +77,7 @@ impl System {
             // field read at its caret.
             actions: Some(Box::new(move |sink| {
                 Box::new(okur_linux::actions::LinuxActions::new(
-                    objects, text_reads, sink,
+                    objects, shared, sink,
                 )) as Box<dyn okur_core::actions::ApplicationActions>
             })),
             clock: None,
