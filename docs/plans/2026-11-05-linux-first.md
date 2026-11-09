@@ -150,6 +150,9 @@ with no change to the `KeyboardHook` port:
   - A dialog box's box is read once per window (79a1208e): a box whose buttons or text change after (a wizard's page) keeps the first read.
   - An alert inside a frame (GTK's info bar) is taken as the window, and its focus as one in a window behind (the fourth review, 9).
   - A GTK list's arrow costs up to three reads (its focus, the selection going, coming), about 70 ms each.
+  - Chrome's tabs and address bar: after Escape in the address bar Linux's Chrome keeps its focus there, and Down reads the address (220/s9); after Ctrl+W, the closed tab's late load is announced as a page with no headings (220/s12). Both matched by saying nothing before.
+  - After the Form Fields List moved into a text area, Escape went to Chrome live (228/s11) though the replay, with okur-ui's records, leaves forms mode as JAWS does: a debug line (f5c9f29d) names the application region if that is the cause.
+  - The visited links of JAWS's machine (its Chrome profile's history) are not visited in the lab's fresh profile (682, 907, 908): the environment's, as the fonts are.
   - GTK's drop-down count and tree depth (301, 303, 304).
   - The regions entered on a check box's focus after Space (288/s2: "MainRegion FormRegion").
   - The fonts the lab has (Liberation Serif for Times New Roman, 209), which are the environment's.
