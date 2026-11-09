@@ -363,7 +363,12 @@ def main():
             if not press(during["command"]):
                 pressed = False
                 break
-        settled = settle(log, offset)
+        # A step that waits longer for its speech to end, as run-scenario.ps1 waits for it:
+        # "quiet_ms" past the phonetic pause (3000 in 1141, whose phonetic spelling is the
+        # step's), "settle_max_ms" for a long reading. Never under the second the log needs.
+        quiet = max(1.0, int(step.get("quiet_ms", 0)) / 1000)
+        longest = max(10.0, int(step.get("settle_max_ms", 0)) / 1000)
+        settled = settle(log, offset, quiet=quiet, longest=longest)
         said, offset = said_since(log, offset)
         # A step Okur was no longer running for heard nothing, and one whose key was not
         # pressed was another step: never a result.
