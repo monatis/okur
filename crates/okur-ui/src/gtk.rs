@@ -23,6 +23,17 @@ use okur_ui_model::{decode, encode, Control, ControlKind, DialogSpec, FromUi, To
 /// Draws what Okur sends until its input ends; without a display, reads and drops it, so that
 /// Okur never waits on a full pipe.
 pub fn run() {
+    // Okur's dialogs are plain controls, drawn at once by GTK's cairo renderer, without the
+    // GPU renderer's start: the lab's Links List came 5.4 s after Insert+F7 with OpenGL drawn
+    // in software (gtk2, 2026-11-09). A renderer the user chose is kept. Set before GTK starts
+    // and before any thread does, as the environment is read then.
+    if std::env::var_os("GSK_RENDERER").is_none() {
+        std::env::set_var("GSK_RENDERER", "cairo");
+    }
+    // Its name on the accessibility bus, which had none (gtk2's trace of 222): the engine
+    // knows Okur's own windows by it, as by okur-ui's process on Windows. GTK names the
+    // application by its program name where no other is set.
+    glib::set_prgname(Some("okur-ui"));
     if let Err(e) = gtk::init() {
         eprintln!("okur-ui: no display for GTK: {e}");
         for _ in std::io::stdin().lock().lines() {}

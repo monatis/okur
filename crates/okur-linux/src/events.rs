@@ -1067,6 +1067,10 @@ impl EventSource for AtspiEventSource {
                 // Live regions heard changing, read once their signals pause, by their objects.
                 let mut dirty: std::collections::HashMap<AtspiObject, DirtyRegion> =
                     std::collections::HashMap::new();
+                // Whether each application is Chromium's, by its bus name: its menus open in
+                // windows of their own, read as they come forward.
+                let mut chromium: std::collections::HashMap<String, bool> =
+                    std::collections::HashMap::new();
                 while !stop.load(Ordering::SeqCst) {
                     // The pages the reader read, into their places; what waited for them, and
                     // for pages waited for too long, goes on.
@@ -1294,9 +1298,22 @@ impl EventSource for AtspiEventSource {
                             } else {
                                 None
                             };
+                            // A window coming forward is read for a menu in Chromium's alone:
+                            // GTK's dialog window cost 295 ms to read, its 66 objects (gtk2).
+                            let menu_window = event.kind == EventKind::WindowActivated
+                                && target
+                                    .and_then(|e| e.raw.get("bus_name"))
+                                    .and_then(|b| b.as_str())
+                                    .is_some_and(|bus| {
+                                        *chromium.entry(bus.to_owned()).or_insert_with(|| {
+                                            provider.atspi_toolkit_name(bus).as_deref()
+                                                == Some("Chromium")
+                                        })
+                                    });
                             let native = target
                                 .filter(|_| {
                                     converter.wants_native(&event.kind, target, document.is_some())
+                                        && (event.kind != EventKind::WindowActivated || menu_window)
                                 })
                                 .and_then(|e| read_native(&provider, e, walk));
                             let reread = converter

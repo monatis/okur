@@ -518,6 +518,20 @@ impl LinuxProvider {
         (actions, indices)
     }
 
+    /// The toolkit the application at `bus_name` names itself by (its Application interface's
+    /// `ToolkitName`: "GTK", "Chromium", "Qt"); none where it names none.
+    pub fn atspi_toolkit_name(&self, bus_name: &str) -> Option<String> {
+        self.make_proxy(
+            bus_name,
+            "/org/a11y/atspi/accessible/root",
+            "org.a11y.atspi.Application",
+        )
+        .ok()?
+        .get_property::<String>("ToolkitName")
+        .ok()
+        .filter(|name| !name.is_empty())
+    }
+
     /// Return true when the accessible's application identifies itself as GTK
     /// via `org.a11y.atspi.Application.ToolkitName`.
     ///
