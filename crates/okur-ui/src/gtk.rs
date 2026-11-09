@@ -178,12 +178,14 @@ impl Shown {
 /// a list view (one column, as the element lists' list view on Windows: "links List view"), a
 /// list view for a list box. Tab leaves either after its item, as a Windows list is one stop;
 /// GTK's list box moved Tab from row to row (224 in gtk2).
+#[derive(Clone)]
 struct ShownList {
     view: ListWidget,
     items: gtk::StringList,
     selection: gtk::SingleSelection,
 }
 
+#[derive(Clone)]
 enum ListWidget {
     Columns(gtk::ColumnView),
     Rows(gtk::ListView),
@@ -366,8 +368,11 @@ impl Ui {
         outer.set_margin_bottom(12);
         outer.set_margin_start(12);
         outer.set_margin_end(12);
-        let buttons = gtk::Box::new(gtk::Orientation::Horizontal, 8);
-        buttons.set_halign(gtk::Align::End);
+        // The buttons in a row where they come, consecutive ones together: the controls stand
+        // in the spec's order, which is the Tab order (a list, its buttons, then its radio
+        // groups: "Move To Link Button" after the list [obs, 222/s2]; one row of them at the
+        // end had Tab reach the radios first).
+        let mut button_row: Option<gtk::Box> = None;
         let mut controls = HashMap::new();
         let mut labels = HashMap::new();
         // A group box holds the controls after it, up to the next group or the buttons.
@@ -384,15 +389,25 @@ impl Ui {
                 frame.set_child(Some(&inner));
                 outer.append(&frame);
                 place = inner;
+                button_row = None;
                 continue;
             }
             let target = if matches!(control.kind, ControlKind::Button { .. }) {
+                // A group box ends at its buttons.
                 place = outer.clone();
-                &buttons
+                button_row
+                    .get_or_insert_with(|| {
+                        let row = gtk::Box::new(gtk::Orientation::Horizontal, 8);
+                        row.set_halign(gtk::Align::End);
+                        outer.append(&row);
+                        row
+                    })
+                    .clone()
             } else {
-                &place
+                button_row = None;
+                place.clone()
             };
-            let (shown, label) = build(ui, id, control, target, &window, &setting);
+            let (shown, label) = build(ui, id, control, &target, &window, &setting);
             if let Some(widget) = shown.widget() {
                 widget.set_sensitive(control.enabled);
                 widget.set_visible(!control.hidden);
@@ -412,7 +427,6 @@ impl Ui {
             }
             controls.insert(control.id.clone(), shown);
         }
-        outer.append(&buttons);
         window.set_child(Some(&outer));
         // Escape and the close box are the dialog's Cancel: Okur is told it was cancelled, and
         // it goes.
@@ -446,16 +460,23 @@ impl Ui {
         );
         window.present();
         if let Some(first) = first {
-            first.grab_focus();
             // A list taking the focus as the dialog opens has it on its selected item, as
-            // Windows' list does: "links List view | Current Page Overview | 1 of 15".
-            if let Some(dialog) = ui.dialogs.borrow().get(&id) {
-                for shown in dialog.controls.values() {
-                    if let Shown::List(list) = shown {
-                        if list.widget() == first {
-                            list.take_focus();
-                        }
-                    }
+            // Windows' list does: "links List view | Current Page Overview | 1 of 15". Once GTK
+            // has laid the dialog out (an idle comes after its layout): focused at once, the
+            // row's object was gone as Okur read it, and the list and place went unsaid
+            // (222/s1 in full5).
+            let list = ui.dialogs.borrow().get(&id).and_then(|dialog| {
+                dialog.controls.values().find_map(|shown| match shown {
+                    Shown::List(list) if list.widget() == first => Some(list.clone()),
+                    _ => None,
+                })
+            });
+            match list {
+                Some(list) => {
+                    let _ = glib::idle_add_local_once(move || list.take_focus());
+                }
+                None => {
+                    first.grab_focus();
                 }
             }
         }
