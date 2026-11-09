@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "5bf54de3"
+  "commit": "ebcc22e6"
  },
  "trials": [
   {
@@ -16,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794208671863
+     "t_ms": 1794211193575
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794208672220
+     "t_ms": 1794211193932
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794208673525,
-     "t_end_ms": 1794208674529,
+     "t_start_ms": 1794211195239,
+     "t_end_ms": 1794211196545,
      "action": {
       "type": "key",
       "command": "Insert+F5"
@@ -36,18 +36,18 @@
       "Insert+F5"
      ],
      "key_times": [
-      1794208673525
+      1794211195239
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Select a Form Field\nList1 \u001d List box \u001e \nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794208674529,
-     "t_end_ms": 1794208675733,
+     "t_start_ms": 1794211196545,
+     "t_end_ms": 1794211197649,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -56,18 +56,18 @@
       "Tab"
      ],
      "key_times": [
-      1794208674529
+      1794211196545
      ],
      "observation": {
-      "speech_raw": "Select a Form Field\nList1 \u001d List box \u001e \nNext slide Button\n1 of 10\nTo move to an item press the Arrow keys.",
+      "speech_raw": "List1 \u001d List box \u001e \nNext slide Button\n1 of 10\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794208675733,
-     "t_end_ms": 1794208676938,
+     "t_start_ms": 1794211197649,
+     "t_end_ms": 1794211198754,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -76,7 +76,7 @@
       "Tab"
      ],
      "key_times": [
-      1794208675733
+      1794211197649
      ],
      "observation": {
       "speech_raw": "Wrap check box not checked\n2 of 10",
@@ -86,8 +86,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794208676938,
-     "t_end_ms": 1794208678143,
+     "t_start_ms": 1794211198754,
+     "t_end_ms": 1794211199858,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -96,7 +96,7 @@
       "Tab"
      ],
      "key_times": [
-      1794208676938
+      1794211198754
      ],
      "observation": {
       "speech_raw": "Outline Button\n3 of 10",
@@ -106,8 +106,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794208678143,
-     "t_end_ms": 1794208679347,
+     "t_start_ms": 1794211199858,
+     "t_end_ms": 1794211200962,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -116,7 +116,7 @@
       "Tab"
      ],
      "key_times": [
-      1794208678143
+      1794211199858
      ],
      "observation": {
       "speech_raw": "Actions Button\n4 of 10",
@@ -126,8 +126,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794208679347,
-     "t_end_ms": 1794208680551,
+     "t_start_ms": 1794211200962,
+     "t_end_ms": 1794211202066,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -136,7 +136,7 @@
       "Tab"
      ],
      "key_times": [
-      1794208679347
+      1794211200962
      ],
      "observation": {
       "speech_raw": "Pick one Button\n5 of 10",
@@ -146,8 +146,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794208680551,
-     "t_end_ms": 1794208681755,
+     "t_start_ms": 1794211202066,
+     "t_end_ms": 1794211203171,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -156,7 +156,7 @@
       "Tab"
      ],
      "key_times": [
-      1794208680551
+      1794211202066
      ],
      "observation": {
       "speech_raw": "Fruit edit combo\n6 of 10",
@@ -166,8 +166,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794208681755,
-     "t_end_ms": 1794208682959,
+     "t_start_ms": 1794211203171,
+     "t_end_ms": 1794211204375,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -176,7 +176,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794208681755
+      1794211203171
      ],
      "observation": {
       "speech_raw": "Start Button\n7 of 10",
@@ -186,8 +186,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794208682959,
-     "t_end_ms": 1794208684163,
+     "t_start_ms": 1794211204375,
+     "t_end_ms": 1794211205480,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -196,7 +196,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794208682959
+      1794211204375
      ],
      "observation": {
       "speech_raw": "Notes Edit the lazy dog, then reads std::io again\n8 of 10",
@@ -206,8 +206,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794208684163,
-     "t_end_ms": 1794208685469,
+     "t_start_ms": 1794211205480,
+     "t_end_ms": 1794211206985,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -216,18 +216,18 @@
       "Enter"
      ],
      "key_times": [
-      1794208684163
+      1794211205480
      ],
      "observation": {
-      "speech_raw": "Web App Patterns\n \u001d Edit \u001e the lazy dog, then reads std::io again\nNotes  \u001d edit \u001e \nthe lazy dog, then reads std::io again",
+      "speech_raw": "Web App Patterns\n \u001d Edit \u001e the lazy dog, then reads std::io again\nNotes  \u001d edit \u001e \nthe lazy dog, then reads std::io again\nNotes \u001d edit \u001e \nContains text",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794208685469,
-     "t_end_ms": 1794208686574,
+     "t_start_ms": 1794211206985,
+     "t_end_ms": 1794211208090,
      "action": {
       "type": "key",
       "command": "Down"
@@ -236,7 +236,7 @@
       "Down"
      ],
      "key_times": [
-      1794208685469
+      1794211206985
      ],
      "observation": {
       "speech_raw": "the lazy dog, then reads std::io again",

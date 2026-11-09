@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "5bf54de3"
+  "commit": "ebcc22e6"
  },
  "trials": [
   {
@@ -16,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794208567534
+     "t_ms": 1794211118965
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794208568790
+     "t_ms": 1794211119327
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794208570095,
-     "t_end_ms": 1794208571100,
+     "t_start_ms": 1794211120631,
+     "t_end_ms": 1794211121936,
      "action": {
       "type": "key",
       "command": "Insert+F7"
@@ -36,18 +36,18 @@
       "Insert+F7"
      ],
      "key_times": [
-      1794208570095
+      1794211120631
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Links List\nlinks \u001d List box \u001e \nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794208571100,
-     "t_end_ms": 1794208572105,
+     "t_start_ms": 1794211121937,
+     "t_end_ms": 1794211123141,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -56,18 +56,18 @@
       "Tab"
      ],
      "key_times": [
-      1794208571100
+      1794211121937
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "links \u001d List box \u001e \nCurrent Page Overview\n1 of 15\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794208572105,
-     "t_end_ms": 1794208573309,
+     "t_start_ms": 1794211123141,
+     "t_end_ms": 1794211124345,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -76,127 +76,7 @@
       "Tab"
      ],
      "key_times": [
-      1794208572105
-     ],
-     "observation": {
-      "speech_raw": "Web App Patterns\n\u2022 \u001d same page link \u001e  \u001dCurrent Page\u001e Overview\nTo activate press Enter.\nSettings  \u001d Link \u001e \nTo activate press Enter.",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
-     "step_id": "s4",
-     "t_start_ms": 1794208573309,
-     "t_end_ms": 1794208574414,
-     "action": {
-      "type": "jaws_function",
-      "command": "TypeKey(\"Tab\")"
-     },
-     "keys": [
-      "Tab"
-     ],
-     "key_times": [
-      1794208573309
-     ],
-     "observation": {
-      "speech_raw": "Step two  \u001d same page link \u001e  \u001dCurrent Step\u001e \nTo activate press Enter.",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
-     "step_id": "s5",
-     "t_start_ms": 1794208574414,
-     "t_end_ms": 1794208575518,
-     "action": {
-      "type": "jaws_function",
-      "command": "TypeKey(\"Tab\")"
-     },
-     "keys": [
-      "Tab"
-     ],
-     "key_times": [
-      1794208574414
-     ],
-     "observation": {
-      "speech_raw": "Next slide  \u001d slide control \u001e \nTo activate press Enter.",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
-     "step_id": "s6",
-     "t_start_ms": 1794208575519,
-     "t_end_ms": 1794208576622,
-     "action": {
-      "type": "jaws_function",
-      "command": "TypeKey(\"Tab\")"
-     },
-     "keys": [
-      "Tab"
-     ],
-     "key_times": [
-      1794208575519
-     ],
-     "observation": {
-      "speech_raw": "Rust  \u001d same page link \u001e \nTo activate press Enter.",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
-     "step_id": "s7",
-     "t_start_ms": 1794208576622,
-     "t_end_ms": 1794208577626,
-     "action": {
-      "type": "jaws_function",
-      "command": "TypeKey(\"Tab\")"
-     },
-     "keys": [
-      "Tab"
-     ],
-     "key_times": [
-      1794208576622
-     ],
-     "observation": {
-      "speech_raw": "",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
-     "step_id": "s8",
-     "t_start_ms": 1794208577626,
-     "t_end_ms": 1794208579231,
-     "action": {
-      "type": "jaws_function",
-      "command": "TypeKey(\"DownArrow\")"
-     },
-     "keys": [
-      "DownArrow"
-     ],
-     "key_times": [
-      1794208577626
-     ],
-     "observation": {
-      "speech_raw": "Wrap \u001d toggle \u001e  \u001dnot checked\u001e \nLinks List\nlinks \u001d List box \u001e \nCurrent Page Overview",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
-     "step_id": "s9",
-     "t_start_ms": 1794208579231,
-     "t_end_ms": 1794208580435,
-     "action": {
-      "type": "jaws_function",
-      "command": "TypeKey(\"DownArrow\")"
-     },
-     "keys": [
-      "DownArrow"
-     ],
-     "key_times": [
-      1794208579231
+      1794211123141
      ],
      "observation": {
       "speech_raw": "Settings\n2 of 15",
@@ -205,9 +85,129 @@
      "step_success": true
     },
     {
+     "step_id": "s4",
+     "t_start_ms": 1794211124345,
+     "t_end_ms": 1794211125448,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794211124345
+     ],
+     "observation": {
+      "speech_raw": "Current Step Step two\n3 of 15",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794211125448,
+     "t_end_ms": 1794211126653,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794211125448
+     ],
+     "observation": {
+      "speech_raw": "Rust\n4 of 15",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794211126653,
+     "t_end_ms": 1794211127857,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794211126653
+     ],
+     "observation": {
+      "speech_raw": "Skipped link\n5 of 15",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794211127857,
+     "t_end_ms": 1794211129061,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794211127857
+     ],
+     "observation": {
+      "speech_raw": "Current Page README\n6 of 15",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794211129061,
+     "t_end_ms": 1794211130266,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794211129061
+     ],
+     "observation": {
+      "speech_raw": "alpha.rs\n7 of 15",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794211130266,
+     "t_end_ms": 1794211131469,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794211130266
+     ],
+     "observation": {
+      "speech_raw": "first commit\n8 of 15",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
      "step_id": "s10",
-     "t_start_ms": 1794208580435,
-     "t_end_ms": 1794208581438,
+     "t_start_ms": 1794211131470,
+     "t_end_ms": 1794211132774,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -216,18 +216,18 @@
       "Enter"
      ],
      "key_times": [
-      1794208580435
+      1794211131470
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "To activate press Enter.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794208581438,
-     "t_end_ms": 1794208582442,
+     "t_start_ms": 1794211132774,
+     "t_end_ms": 1794211133778,
      "action": {
       "type": "key",
       "command": "Down"
@@ -236,10 +236,10 @@
       "Down"
      ],
      "key_times": [
-      1794208581438
+      1794211132774
      ],
      "observation": {
-      "speech_raw": "\u2022 \u001d same page link \u001e  \u001dCurrent Step\u001e Step two",
+      "speech_raw": " \u001d same page link \u001e beta.rs",
       "settled": true
      },
      "step_success": true

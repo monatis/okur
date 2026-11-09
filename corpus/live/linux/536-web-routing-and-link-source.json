@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "ebcc22e6"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794195440950
+     "t_ms": 1794211931846
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794195442309,
-     "t_end_ms": 1794195443413,
+     "t_start_ms": 1794211933215,
+     "t_end_ms": 1794211934318,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -31,7 +32,7 @@
       "Tab"
      ],
      "key_times": [
-      1794195442309
+      1794211933215
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette\n \u001d same page link \u001e Riverside Gazette\nTo activate press Enter.",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794195443413,
-     "t_end_ms": 1794195444419,
+     "t_start_ms": 1794211934318,
+     "t_end_ms": 1794211935323,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+F7"
@@ -51,7 +52,7 @@
       "Ctrl+Insert+F7"
      ],
      "key_times": [
-      1794195443413
+      1794211934318
      ],
      "observation": {
       "speech_raw": "file:///root/okur/corpus/fixtures/news-article.html#top",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794195444419,
-     "t_end_ms": 1794195445423,
+     "t_start_ms": 1794211935323,
+     "t_end_ms": 1794211936328,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -71,7 +72,7 @@
       "Escape"
      ],
      "key_times": [
-      1794195444419
+      1794211935323
      ],
      "observation": {
       "speech_raw": "",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794195445423,
-     "t_end_ms": 1794195446427,
+     "t_start_ms": 1794211936328,
+     "t_end_ms": 1794211937331,
      "action": {
       "type": "key",
       "command": "Down"
@@ -91,7 +92,7 @@
       "Down"
      ],
      "key_times": [
-      1794195445423
+      1794211936328
      ],
      "observation": {
       "speech_raw": "Primary navigation region",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794195446427,
-     "t_end_ms": 1794195447432,
+     "t_start_ms": 1794211937331,
+     "t_end_ms": 1794211938336,
      "action": {
       "type": "key",
       "command": "Down"
@@ -111,7 +112,7 @@
       "Down"
      ],
      "key_times": [
-      1794195446427
+      1794211937331
      ],
      "observation": {
       "speech_raw": "list of 4 items",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794195447432,
-     "t_end_ms": 1794195448437,
+     "t_start_ms": 1794211938336,
+     "t_end_ms": 1794211939340,
      "action": {
       "type": "key",
       "command": "Insert+Delete"
@@ -131,7 +132,7 @@
       "Insert+Delete"
      ],
      "key_times": [
-      1794195447432
+      1794211938336
      ],
      "observation": {
       "speech_raw": "Route Virtual to PC\n \u001d same page link \u001e Riverside Gazette",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794195448437,
-     "t_end_ms": 1794195449442,
+     "t_start_ms": 1794211939340,
+     "t_end_ms": 1794211940346,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -151,7 +152,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794195448437
+      1794211939340
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Riverside Gazette",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794195449442,
-     "t_end_ms": 1794195450446,
+     "t_start_ms": 1794211940346,
+     "t_end_ms": 1794211941350,
      "action": {
       "type": "key",
       "command": "Down"
@@ -171,7 +172,7 @@
       "Down"
      ],
      "key_times": [
-      1794195449442
+      1794211940346
      ],
      "observation": {
       "speech_raw": "Primary navigation region",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794195450446,
-     "t_end_ms": 1794195451449,
+     "t_start_ms": 1794211941350,
+     "t_end_ms": 1794211942354,
      "action": {
       "type": "key",
       "command": "Down"
@@ -191,7 +192,7 @@
       "Down"
      ],
      "key_times": [
-      1794195450446
+      1794211941350
      ],
      "observation": {
       "speech_raw": "list of 4 items",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794195451449,
-     "t_end_ms": 1794195452455,
+     "t_start_ms": 1794211942354,
+     "t_end_ms": 1794211943560,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+Delete"
@@ -211,18 +212,18 @@
       "Ctrl+Insert+Delete"
      ],
      "key_times": [
-      1794195451449
+      1794211942354
      ],
      "observation": {
-      "speech_raw": "Route PC to Virtual Cursor",
+      "speech_raw": "Route PC to Virtual Cursor\nlist of 4 items",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794195452455,
-     "t_end_ms": 1794195453460,
+     "t_start_ms": 1794211943561,
+     "t_end_ms": 1794211944565,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -231,7 +232,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794195452455
+      1794211943561
      ],
      "observation": {
       "speech_raw": "list of 4 items",
@@ -241,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794195453460,
-     "t_end_ms": 1794195454465,
+     "t_start_ms": 1794211944565,
+     "t_end_ms": 1794211945570,
      "action": {
       "type": "key",
       "command": "Insert+F9"
@@ -251,7 +252,7 @@
       "Insert+F9"
      ],
      "key_times": [
-      1794195453460
+      1794211944565
      ],
      "observation": {
       "speech_raw": "No frames found in page",
@@ -261,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794195454465,
-     "t_end_ms": 1794195455469,
+     "t_start_ms": 1794211945570,
+     "t_end_ms": 1794211946575,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -271,7 +272,7 @@
       "Escape"
      ],
      "key_times": [
-      1794195454465
+      1794211945570
      ],
      "observation": {
       "speech_raw": "",
@@ -281,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794195455469,
-     "t_end_ms": 1794195456474,
+     "t_start_ms": 1794211946575,
+     "t_end_ms": 1794211947579,
      "action": {
       "type": "key",
       "command": "H"
@@ -291,7 +292,7 @@
       "H"
      ],
      "key_times": [
-      1794195455469
+      1794211946575
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours\n \u001d heading level 1 \u001e",
@@ -301,8 +302,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794195456474,
-     "t_end_ms": 1794195457480,
+     "t_start_ms": 1794211947579,
+     "t_end_ms": 1794211948586,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+Shift+Enter"
@@ -311,7 +312,7 @@
       "Ctrl+Insert+Shift+Enter"
      ],
      "key_times": [
-      1794195456474
+      1794211947579
      ],
      "observation": {
       "speech_raw": "wrapping to bottom\nRelated stories\n \u001d heading level 2 \u001e",
@@ -321,8 +322,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794195457480,
-     "t_end_ms": 1794195458484,
+     "t_start_ms": 1794211948586,
+     "t_end_ms": 1794211949591,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -331,7 +332,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794195457480
+      1794211948586
      ],
      "observation": {
       "speech_raw": " \u001d heading level 2 \u001e Related stories",

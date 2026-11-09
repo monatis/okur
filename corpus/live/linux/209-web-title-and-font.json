@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "5bf54de3"
+  "commit": "ebcc22e6"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794209327074
+     "t_ms": 1794212296655
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794209328437,
-     "t_end_ms": 1794209329441,
+     "t_start_ms": 1794212298019,
+     "t_end_ms": 1794212299524,
      "action": {
       "type": "key",
       "command": "Insert+T"
@@ -32,7 +32,7 @@
       "Insert+T"
      ],
      "key_times": [
-      1794209328437
+      1794212298019
      ],
      "observation": {
       "speech_raw": "Title is\nCity Library Expands Evening Hours - Riverside Gazette - Google Chrome",
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794209329441,
-     "t_end_ms": 1794209330445,
+     "t_start_ms": 1794212299524,
+     "t_end_ms": 1794212300528,
      "action": {
       "type": "key",
       "command": "H"
@@ -52,7 +52,7 @@
       "H"
      ],
      "key_times": [
-      1794209329441
+      1794212299524
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours\n \u001d heading level 1 \u001e",
@@ -62,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794209330445,
-     "t_end_ms": 1794209331450,
+     "t_start_ms": 1794212300528,
+     "t_end_ms": 1794212301532,
      "action": {
       "type": "key",
       "command": "Insert+F"
@@ -72,7 +72,7 @@
       "Insert+F"
      ],
      "key_times": [
-      1794209330445
+      1794212300528
      ],
      "observation": {
       "speech_raw": "Font is bold  Liberation Serif 24 point",
@@ -82,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794209331450,
-     "t_end_ms": 1794209332454,
+     "t_start_ms": 1794212301532,
+     "t_end_ms": 1794212302537,
      "action": {
       "type": "key",
       "command": "Down"
@@ -92,7 +92,7 @@
       "Down"
      ],
      "key_times": [
-      1794209331450
+      1794212301532
      ],
      "observation": {
       "speech_raw": "By ",
@@ -102,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794209332454,
-     "t_end_ms": 1794209333458,
+     "t_start_ms": 1794212302537,
+     "t_end_ms": 1794212303542,
      "action": {
       "type": "key",
       "command": "Insert+F"
@@ -112,7 +112,7 @@
       "Insert+F"
      ],
      "key_times": [
-      1794209332454
+      1794212302537
      ],
      "observation": {
       "speech_raw": "Font is Liberation Serif 12 point",
@@ -122,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794209333458,
-     "t_end_ms": 1794209334461,
+     "t_start_ms": 1794212303542,
+     "t_end_ms": 1794212304547,
      "action": {
       "type": "key",
       "command": "Down"
@@ -132,7 +132,7 @@
       "Down"
      ],
      "key_times": [
-      1794209333458
+      1794212303542
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Maria Lopez,",
@@ -142,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794209334461,
-     "t_end_ms": 1794209335587,
+     "t_start_ms": 1794212304547,
+     "t_end_ms": 1794212305674,
      "action": {
       "type": "key",
       "command": "Insert+F"
@@ -153,8 +153,8 @@
       "Insert+F"
      ],
      "key_times": [
-      1794209334461,
-      1794209334583
+      1794212304547,
+      1794212304669
      ],
      "observation": {
       "speech_raw": "Font is underline  Liberation Serif 12 point\nFont information:\nunderline  Liberation Serif 12 point\n\u001d Link \u001e List Okur Hot Keys\nPress ESCAPE to close this message.",
@@ -164,8 +164,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794209335587,
-     "t_end_ms": 1794209336590,
+     "t_start_ms": 1794212305674,
+     "t_end_ms": 1794212306679,
      "action": {
       "type": "key",
       "command": "Down"
@@ -174,7 +174,7 @@
       "Down"
      ],
      "key_times": [
-      1794209335587
+      1794212305674
      ],
      "observation": {
       "speech_raw": "Press ESCAPE to close this message.",
@@ -184,8 +184,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794209336590,
-     "t_end_ms": 1794209337594,
+     "t_start_ms": 1794212306679,
+     "t_end_ms": 1794212307683,
      "action": {
       "type": "key",
       "command": "Down"
@@ -194,7 +194,7 @@
       "Down"
      ],
      "key_times": [
-      1794209336590
+      1794212306679
      ],
      "observation": {
       "speech_raw": "Press ESCAPE to close this message.",
@@ -204,8 +204,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794209337594,
-     "t_end_ms": 1794209338598,
+     "t_start_ms": 1794212307683,
+     "t_end_ms": 1794212308687,
      "action": {
       "type": "key",
       "command": "Down"
@@ -214,7 +214,7 @@
       "Down"
      ],
      "key_times": [
-      1794209337594
+      1794212307683
      ],
      "observation": {
       "speech_raw": "Press ESCAPE to close this message.",
@@ -224,8 +224,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794209338598,
-     "t_end_ms": 1794209339603,
+     "t_start_ms": 1794212308687,
+     "t_end_ms": 1794212309692,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -234,7 +234,7 @@
       "Escape"
      ],
      "key_times": [
-      1794209338598
+      1794212308687
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Maria Lopez,",
@@ -244,8 +244,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794209339603,
-     "t_end_ms": 1794209340607,
+     "t_start_ms": 1794212309692,
+     "t_end_ms": 1794212310697,
      "action": {
       "type": "key",
       "command": "Insert+F12"
@@ -254,10 +254,10 @@
       "Insert+F12"
      ],
      "key_times": [
-      1794209339603
+      1794212309692
      ],
      "observation": {
-      "speech_raw": "10:28",
+      "speech_raw": "11:18",
       "settled": true
      },
      "step_success": true

@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "ebcc22e6"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794195984203
+     "t_ms": 1794211891537
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794195985564,
-     "t_end_ms": 1794195986568,
+     "t_start_ms": 1794211892901,
+     "t_end_ms": 1794211893905,
      "action": {
       "type": "key",
       "command": "1"
@@ -31,7 +32,7 @@
       "1"
      ],
      "key_times": [
-      1794195985564
+      1794211892901
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours\n \u001d heading level 1 \u001e",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794195986568,
-     "t_end_ms": 1794195987573,
+     "t_start_ms": 1794211893905,
+     "t_end_ms": 1794211894910,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+Delete"
@@ -51,7 +52,7 @@
       "Ctrl+Insert+Delete"
      ],
      "key_times": [
-      1794195986568
+      1794211893905
      ],
      "observation": {
       "speech_raw": "Route PC to Virtual Cursor",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794195987573,
-     "t_end_ms": 1794195988577,
+     "t_start_ms": 1794211894910,
+     "t_end_ms": 1794211895914,
      "action": {
       "type": "key",
       "command": "Down"
@@ -71,7 +72,7 @@
       "Down"
      ],
      "key_times": [
-      1794195987573
+      1794211894910
      ],
      "observation": {
       "speech_raw": "By ",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794195988577,
-     "t_end_ms": 1794195989689,
+     "t_start_ms": 1794211895914,
+     "t_end_ms": 1794211896919,
      "action": {
       "type": "key",
       "command": "Down"
@@ -91,7 +92,7 @@
       "Down"
      ],
      "key_times": [
-      1794195988577
+      1794211895914
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Maria Lopez,",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794195989689,
-     "t_end_ms": 1794195990797,
+     "t_start_ms": 1794211896919,
+     "t_end_ms": 1794211898025,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+Delete"
@@ -111,7 +112,7 @@
       "Ctrl+Insert+Delete"
      ],
      "key_times": [
-      1794195989689
+      1794211896919
      ],
      "observation": {
       "speech_raw": "Route PC to Virtual Cursor\nCity Library Expands Evening Hours - Riverside Gazette\n \u001d same page link \u001e Maria Lopez,\nTo activate press Enter.",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794195990797,
-     "t_end_ms": 1794195991801,
+     "t_start_ms": 1794211898025,
+     "t_end_ms": 1794211899030,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -131,7 +132,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794195990797
+      1794211898025
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Maria Lopez,",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794195991801,
-     "t_end_ms": 1794195992806,
+     "t_start_ms": 1794211899030,
+     "t_end_ms": 1794211900033,
      "action": {
       "type": "key",
       "command": "G"
@@ -151,7 +152,7 @@
       "G"
      ],
      "key_times": [
-      1794195991801
+      1794211899030
      ],
      "observation": {
       "speech_raw": "Front entrance of the Riverside City Library at dusk\n \u001d Graphic \u001e ",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794195992806,
-     "t_end_ms": 1794195993812,
+     "t_start_ms": 1794211900033,
+     "t_end_ms": 1794211901241,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+Delete"
@@ -171,18 +172,18 @@
       "Ctrl+Insert+Delete"
      ],
      "key_times": [
-      1794195992806
+      1794211900033
      ],
      "observation": {
-      "speech_raw": "Route PC to Virtual Cursor",
+      "speech_raw": "Route PC to Virtual Cursor\nFront entrance of the Riverside City Library at dusk\n \u001d Graphic \u001e ",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794195993812,
-     "t_end_ms": 1794195994816,
+     "t_start_ms": 1794211901241,
+     "t_end_ms": 1794211902245,
      "action": {
       "type": "key",
       "command": "L"
@@ -191,7 +192,7 @@
       "L"
      ],
      "key_times": [
-      1794195993812
+      1794211901241
      ],
      "observation": {
       "speech_raw": "list of 3 items",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794195994816,
-     "t_end_ms": 1794195995822,
+     "t_start_ms": 1794211902245,
+     "t_end_ms": 1794211903251,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+Delete"
@@ -211,7 +212,7 @@
       "Ctrl+Insert+Delete"
      ],
      "key_times": [
-      1794195994816
+      1794211902245
      ],
      "observation": {
       "speech_raw": "Route PC to Virtual Cursor",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794195995822,
-     "t_end_ms": 1794195996827,
+     "t_start_ms": 1794211903251,
+     "t_end_ms": 1794211904255,
      "action": {
       "type": "key",
       "command": "Down"
@@ -231,7 +232,7 @@
       "Down"
      ],
      "key_times": [
-      1794195995822
+      1794211903251
      ],
      "observation": {
       "speech_raw": "\u2022 Weekday hours: 9 a.m. to 9 p.m.",
@@ -241,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794195996827,
-     "t_end_ms": 1794195997832,
+     "t_start_ms": 1794211904255,
+     "t_end_ms": 1794211905261,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+Delete"
@@ -251,7 +252,7 @@
       "Ctrl+Insert+Delete"
      ],
      "key_times": [
-      1794195996827
+      1794211904255
      ],
      "observation": {
       "speech_raw": "Route PC to Virtual Cursor",
@@ -261,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794195997832,
-     "t_end_ms": 1794195998837,
+     "t_start_ms": 1794211905261,
+     "t_end_ms": 1794211906264,
      "action": {
       "type": "key",
       "command": "T"
@@ -271,7 +272,7 @@
       "T"
      ],
      "key_times": [
-      1794195997832
+      1794211905261
      ],
      "observation": {
       "speech_raw": "table with 3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch",
@@ -281,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794195998837,
-     "t_end_ms": 1794195999842,
+     "t_start_ms": 1794211906264,
+     "t_end_ms": 1794211907271,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Down"
@@ -291,7 +292,7 @@
       "Ctrl+Alt+Down"
      ],
      "key_times": [
-      1794195998837
+      1794211906264
      ],
      "observation": {
       "speech_raw": "Central\nRow 2 of 3",
@@ -301,8 +302,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794195999842,
-     "t_end_ms": 1794196000848,
+     "t_start_ms": 1794211907271,
+     "t_end_ms": 1794211908277,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+Delete"
@@ -311,7 +312,7 @@
       "Ctrl+Insert+Delete"
      ],
      "key_times": [
-      1794195999842
+      1794211907271
      ],
      "observation": {
       "speech_raw": "Route PC to Virtual Cursor",
@@ -321,8 +322,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794196000848,
-     "t_end_ms": 1794196001853,
+     "t_start_ms": 1794211908277,
+     "t_end_ms": 1794211909282,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -331,7 +332,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794196000848
+      1794211908277
      ],
      "observation": {
       "speech_raw": "Central",

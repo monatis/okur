@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "ebcc22e6"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794199123549
+     "t_ms": 1794211524868
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794199124909,
-     "t_end_ms": 1794199126013,
+     "t_start_ms": 1794211526230,
+     "t_end_ms": 1794211527334,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -31,7 +32,7 @@
       "Tab"
      ],
      "key_times": [
-      1794199124909
+      1794211526230
      ],
      "observation": {
       "speech_raw": "Reading List - Riverside Library\n\u2022 \u001d Link \u001e This reading list\nTo activate press Enter.",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794199126013,
-     "t_end_ms": 1794199127117,
+     "t_start_ms": 1794211527334,
+     "t_end_ms": 1794211528438,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -51,7 +52,7 @@
       "Tab"
      ],
      "key_times": [
-      1794199126013
+      1794211527334
      ],
      "observation": {
       "speech_raw": "Spring catalog  \u001d Link \u001e \nTo activate press Enter.",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794199127117,
-     "t_end_ms": 1794199128222,
+     "t_start_ms": 1794211528438,
+     "t_end_ms": 1794211529542,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -71,7 +72,7 @@
       "Tab"
      ],
      "key_times": [
-      1794199127117
+      1794211528438
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours  \u001d Link \u001e \nTo activate press Enter.",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794199128222,
-     "t_end_ms": 1794199129326,
+     "t_start_ms": 1794211529542,
+     "t_end_ms": 1794211530646,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -91,7 +92,7 @@
       "Tab"
      ],
      "key_times": [
-      1794199128222
+      1794211529542
      ],
      "observation": {
       "speech_raw": "Volunteer form  \u001d Link \u001e \nTo activate press Enter.",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794199129326,
-     "t_end_ms": 1794199130431,
+     "t_start_ms": 1794211530646,
+     "t_end_ms": 1794211531750,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -111,7 +112,7 @@
       "Tab"
      ],
      "key_times": [
-      1794199129326
+      1794211530646
      ],
      "observation": {
       "speech_raw": "Opening hours  \u001d same page link \u001e \nTo activate press Enter.",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794199130431,
-     "t_end_ms": 1794199131436,
+     "t_start_ms": 1794211531750,
+     "t_end_ms": 1794211532755,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -131,7 +132,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794199130431
+      1794211531750
      ],
      "observation": {
       "speech_raw": "Reading List - Riverside Library",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794199131436,
-     "t_end_ms": 1794199132441,
+     "t_start_ms": 1794211532755,
+     "t_end_ms": 1794211533760,
      "action": {
       "type": "key",
       "command": "V"
@@ -151,7 +152,7 @@
       "V"
      ],
      "key_times": [
-      1794199131436
+      1794211532755
      ],
      "observation": {
       "speech_raw": "There are no visited links on this page.",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794199132441,
-     "t_end_ms": 1794199133445,
+     "t_start_ms": 1794211533760,
+     "t_end_ms": 1794211534763,
      "action": {
       "type": "key",
       "command": "V"
@@ -171,7 +172,7 @@
       "V"
      ],
      "key_times": [
-      1794199132441
+      1794211533760
      ],
      "observation": {
       "speech_raw": "There are no visited links on this page.",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794199133445,
-     "t_end_ms": 1794199134449,
+     "t_start_ms": 1794211534763,
+     "t_end_ms": 1794211535767,
      "action": {
       "type": "key",
       "command": "V"
@@ -191,7 +192,7 @@
       "V"
      ],
      "key_times": [
-      1794199133445
+      1794211534763
      ],
      "observation": {
       "speech_raw": "There are no visited links on this page.",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794199134449,
-     "t_end_ms": 1794199135453,
+     "t_start_ms": 1794211535767,
+     "t_end_ms": 1794211536773,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -211,7 +212,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794199134449
+      1794211535767
      ],
      "observation": {
       "speech_raw": "Reading List - Riverside Library",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794199135453,
-     "t_end_ms": 1794199136458,
+     "t_start_ms": 1794211536773,
+     "t_end_ms": 1794211537777,
      "action": {
       "type": "key",
       "command": "U"
@@ -231,7 +232,7 @@
       "U"
      ],
      "key_times": [
-      1794199135453
+      1794211536773
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d Link \u001e This reading list",
@@ -241,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794199136458,
-     "t_end_ms": 1794199137462,
+     "t_start_ms": 1794211537777,
+     "t_end_ms": 1794211538781,
      "action": {
       "type": "key",
       "command": "U"
@@ -251,7 +252,7 @@
       "U"
      ],
      "key_times": [
-      1794199136458
+      1794211537777
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d Link \u001e Spring catalog",
@@ -261,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794199137462,
-     "t_end_ms": 1794199138466,
+     "t_start_ms": 1794211538781,
+     "t_end_ms": 1794211539785,
      "action": {
       "type": "key",
       "command": "U"
@@ -271,7 +272,7 @@
       "U"
      ],
      "key_times": [
-      1794199137462
+      1794211538781
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d Link \u001e City Library Expands Evening Hours",
@@ -281,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794199138466,
-     "t_end_ms": 1794199139471,
+     "t_start_ms": 1794211539785,
+     "t_end_ms": 1794211540791,
      "action": {
       "type": "key",
       "command": "Shift+V"
@@ -291,7 +292,7 @@
       "Shift+V"
      ],
      "key_times": [
-      1794199138466
+      1794211539785
      ],
      "observation": {
       "speech_raw": "There are no visited links on this page.",
@@ -301,8 +302,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794199139471,
-     "t_end_ms": 1794199140476,
+     "t_start_ms": 1794211540791,
+     "t_end_ms": 1794211541796,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -311,7 +312,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794199139471
+      1794211540791
      ],
      "observation": {
       "speech_raw": "Reading List - Riverside Library",
@@ -321,8 +322,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794199140476,
-     "t_end_ms": 1794199141481,
+     "t_start_ms": 1794211541796,
+     "t_end_ms": 1794211542800,
      "action": {
       "type": "key",
       "command": "Down"
@@ -331,7 +332,7 @@
       "Down"
      ],
      "key_times": [
-      1794199140476
+      1794211541796
      ],
      "observation": {
       "speech_raw": "main region",
@@ -341,8 +342,8 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794199141481,
-     "t_end_ms": 1794199142485,
+     "t_start_ms": 1794211542800,
+     "t_end_ms": 1794211543805,
      "action": {
       "type": "key",
       "command": "Down"
@@ -351,7 +352,7 @@
       "Down"
      ],
      "key_times": [
-      1794199141481
+      1794211542800
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e Reading list",
@@ -361,8 +362,8 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794199142485,
-     "t_end_ms": 1794199143490,
+     "t_start_ms": 1794211543805,
+     "t_end_ms": 1794211544810,
      "action": {
       "type": "key",
       "command": "Down"
@@ -371,7 +372,7 @@
       "Down"
      ],
      "key_times": [
-      1794199142485
+      1794211543805
      ],
      "observation": {
       "speech_raw": "Pages you have opened before are marked as visited.",
@@ -381,8 +382,8 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794199143490,
-     "t_end_ms": 1794199144494,
+     "t_start_ms": 1794211544810,
+     "t_end_ms": 1794211545814,
      "action": {
       "type": "key",
       "command": "Down"
@@ -391,7 +392,7 @@
       "Down"
      ],
      "key_times": [
-      1794199143490
+      1794211544810
      ],
      "observation": {
       "speech_raw": "list of 5 items",
@@ -401,8 +402,8 @@
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794199144494,
-     "t_end_ms": 1794199145498,
+     "t_start_ms": 1794211545814,
+     "t_end_ms": 1794211546819,
      "action": {
       "type": "key",
       "command": "Down"
@@ -411,7 +412,7 @@
       "Down"
      ],
      "key_times": [
-      1794199144494
+      1794211545814
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d Link \u001e This reading list",
@@ -421,8 +422,8 @@
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794199145498,
-     "t_end_ms": 1794199146502,
+     "t_start_ms": 1794211546819,
+     "t_end_ms": 1794211547823,
      "action": {
       "type": "key",
       "command": "Insert+F7"
@@ -431,7 +432,7 @@
       "Insert+F7"
      ],
      "key_times": [
-      1794199145498
+      1794211546819
      ],
      "observation": {
       "speech_raw": "",
@@ -441,8 +442,8 @@
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794199146502,
-     "t_end_ms": 1794199147506,
+     "t_start_ms": 1794211547823,
+     "t_end_ms": 1794211548827,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -451,7 +452,7 @@
       "Escape"
      ],
      "key_times": [
-      1794199146502
+      1794211547823
      ],
      "observation": {
       "speech_raw": "",
