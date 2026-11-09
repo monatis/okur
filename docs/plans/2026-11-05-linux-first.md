@@ -134,6 +134,23 @@ with no change to the `KeyboardHook` port:
 - **From the code review of 2026-11-09:** finding 2 built: a live region's change reads the region alone and splices it into the page the engine has (PagePartsLoaded, its objects numbered after the page's); the page is captured again only where the region cannot be spliced, once its changes settle, as Windows does. To measure: probe-live-ticker.sh (2,000 objects, a region ticking every second). Open: a live region added to the page after its read is not heard until the page is read again (finding 7).
 - **Handoffs:** [`../handoff/2026-11-08-linux-event-model-and-one-okur.md`](../handoff/2026-11-08-linux-event-model-and-one-okur.md), [`../handoff/2026-11-09-linux-replay-exact-and-the-second-review.md`](../handoff/2026-11-09-linux-replay-exact-and-the-second-review.md).
 
+### Okur's own dialogs on Linux (next, once the lab is free)
+
+Okur's dialogs (the element lists, Find, PlaceMarkers, Skim Reading, Settings Center) are
+`okur-ui`'s, drawn from the generic `okur_ui_model::DialogSpec` (about ten control kinds, trees,
+menus, the main window, the wizard). Off Windows `okur-ui` reads and drops what Okur sends, so on
+Linux they are silent (687, 692, 530, 515's Insert+Shift+F1). The design, from
+`helper-ui-architecture.md` (GTK 4 on Linux):
+- A GTK 4 renderer in `okur-ui` behind `cfg(target_os = "linux")`, through gtk4-rs, a
+  Linux-target dependency. The dev box cannot build gtk4-sys for Linux (its build script finds
+  GTK through pkg-config), so the dev box's Linux clippy keeps to the crates it names; the lab's
+  `check-linux.sh` builds and lints `okur-ui` too, with `libgtk-4-dev` from `setup.sh`.
+- Okur reads its own GTK dialogs through AT-SPI like any GTK application's (301, 303 and 304
+  already do), so the same reading makes them right, as on Windows.
+- In order: the element lists (a list and its buttons: Insert+F7, F6, F5), then Find, the
+  PlaceMarker list, Skim Reading, then Settings Center's tree.
+- Each built against its scenarios replayed live in the lab, as the web ones are.
+
 ## 3. Meanwhile
 
 The Windows work goes on beside it (the dictionary's rest, the Settings Center features of the
