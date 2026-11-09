@@ -424,6 +424,11 @@ impl ScreenReaderEngine {
         if let Some(at) = control_of(&dialog.controls, focus) {
             if told.group_box.is_none() && !focus.dialog_box_read {
                 told.group_box = group_box_of(&dialog.controls, at);
+                // GTK's frame names the group as one entered too: said once, as the box
+                // ("Use Rule Type: Use Rule Type: Read First Line", 769/s1 in night2).
+                if let Some(group) = told.group_box.as_deref().map(str::trim) {
+                    told.groups.retain(|entry| entry.name.trim() != group);
+                }
             }
             let choice = dialog.controls.get(at).and_then(|c| match &c.kind {
                 ControlKind::Choice { options, .. } if focus.role == Role::ComboBox => {

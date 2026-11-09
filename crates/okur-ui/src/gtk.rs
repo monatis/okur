@@ -1059,10 +1059,31 @@ fn after_layout(window: &gtk::Window, then: impl FnOnce() + 'static) {
 /// asked for the dialog go to it then, not to the window before it.
 fn focus_and_tell_shown(ui: &Rc<Ui>, window: &gtk::Window, id: u32, first: Option<gtk::Widget>) {
     let ui = Rc::clone(ui);
+    let weak = window.downgrade();
     once_active(window, move || {
-        ui.focus_first(id, first);
+        ui.focus_first(id, first.clone());
         // After the first focus, which a list places in an idle of its own.
-        let _ = glib::idle_add_local_once(move || send(&FromUi::DialogShown { id }));
+        let _ = glib::idle_add_local_once(move || {
+            send(&FromUi::DialogShown { id });
+            // A frame later, the focus in the dialog, or placed once more: night2's Heading
+            // List, Word List and JAWS Find (224, 765, 926 at ec1e5cac) had none reported,
+            // where 223's Links List had its first row's 3 ms after the dialog was shown.
+            let Some(window) = weak.upgrade() else {
+                return;
+            };
+            let check = window.clone();
+            after_layout(&window, move || {
+                let focus = gtk::prelude::GtkWindowExt::focus(&check);
+                eprintln!(
+                    "okur-ui: dialog {id} shown: active {}, focus {:?}",
+                    check.is_active(),
+                    focus.as_ref().map(|f| f.type_().name())
+                );
+                if focus.is_none() {
+                    ui.focus_first(id, first);
+                }
+            });
+        });
     });
 }
 
