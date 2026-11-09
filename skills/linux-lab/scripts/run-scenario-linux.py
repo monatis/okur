@@ -78,7 +78,12 @@ NAMES = {
     "period": "period", "slash": "slash", "semicolon": "semicolon", "apostrophe": "apostrophe",
     "minus": "minus", "equals": "equal", "leftbracket": "bracketleft",
     "rightbracket": "bracketright", "backslash": "backslash",
+    # JAWS's own key names, in its TypeKey calls.
+    "downarrow": "Down", "uparrow": "Up", "leftarrow": "Left", "rightarrow": "Right",
 }
+# Characters typed by their key, beside letters and digits (TypeString).
+TYPED = {" ": "space", ".": "period", ",": "comma", "-": "minus", "/": "slash",
+         ";": "semicolon", "'": "apostrophe", "=": "equals", "*": "Shift+8"}
 # The modifiers by the keysym of the key that holds each.
 MODIFIERS = {"ctrl": "Control_L", "control": "Control_L", "alt": "Alt_L", "shift": "Shift_L",
              "win": "Super_L", "windows": "Super_L", "insert": "Insert",
@@ -109,6 +114,29 @@ def chord(name):
     else:
         key = NAMES.get(key.lower(), key)
     return mods + [key]
+
+
+def typed_by_jaws(call):
+    """What a JAWS function call types (JAWS typed it itself into its own dialogs, which refuse
+    other keys), as the keys Okur's user presses in Okur's: TypeKey("Tab") a chord, TypeString
+    ("sum") its characters. None for another function, or a character without a key here."""
+    match = re.fullmatch(r'\s*TypeKey\("(.+)"\)\s*', call)
+    if match:
+        return [match.group(1)]
+    match = re.fullmatch(r'\s*TypeString\("(.*)"\)\s*', call)
+    if not match:
+        return None
+    keys = []
+    for c in match.group(1):
+        if re.fullmatch(r"[a-z0-9]", c):
+            keys.append(c)
+        elif re.fullmatch(r"[A-Z]", c):
+            keys.append("Shift+" + c.lower())
+        elif c in TYPED:
+            keys.append(TYPED[c])
+        else:
+            return None
+    return keys
 
 
 def sendkeys(text):
@@ -252,7 +280,9 @@ def main():
                              *(["--trace", trace] if trace else [])],
                             stdin=subprocess.DEVNULL, stdout=okur_out, stderr=subprocess.STDOUT,
                             env={**os.environ, "RUST_LOG": os.environ.get(
-                                "RUST_LOG", "okur_linux=debug,okur_core=debug")})
+                                # Every crate's warnings too: okur-ui's errors come into Okur's
+                                # log as okur_runtime's (its GTK dialogs, 222 in gtk1).
+                                "RUST_LOG", "warn,okur_linux=debug,okur_core=debug")})
     started.append(okur)
     time.sleep(4)
     if replica:
@@ -304,6 +334,10 @@ def main():
         elif kind == "jaws_script" and command in script_keys:
             # JAWS ran its script itself; Okur's user presses the key Okur binds to it.
             keys = [script_keys[command]]
+        elif kind == "jaws_function" and typed_by_jaws(command):
+            # The keys JAWS typed into its dialog, which Okur's user types into Okur's, as
+            # run-scenario.ps1 sends them where JAWS does not run.
+            keys = typed_by_jaws(command)
         else:
             success = False
             results.append({"step_id": step["id"], "action": {"type": kind, "command": command},
