@@ -433,7 +433,7 @@ skim-unit-lines = Lines Containing Text Rule
 skim-unit-sentences = Sentences Containing Text Rule
 skim-unit-paragraphs = Paragraphs Containing Text Rule
 # The group around the colors and the attributes [obs, 777/s16].
-skim-color-rules = Color or Attribute Rules
+skim-color-rules = Color or Attribute Rules:
 skim-delete = &Delete Rule
 skim-delete-all = Delete A&ll Rules
 skim-text-color = Text Color:
