@@ -99,6 +99,8 @@ pub struct LinuxActions {
     shared: DriverShared,
     /// The worker's queue; none when its thread could not start.
     worker: Option<Sender<Request>>,
+    /// Presses keys for Okur; none without the X keyboard.
+    keys: Option<crate::keyboard::X11KeySender>,
 }
 
 impl LinuxActions {
@@ -243,7 +245,14 @@ impl LinuxActions {
             objects,
             shared: kept,
             worker,
+            keys: None,
         }
+    }
+
+    /// The same actions, pressing keys through `keys`.
+    pub fn with_keys(mut self, keys: crate::keyboard::X11KeySender) -> Self {
+        self.keys = Some(keys);
+        self
     }
 
     /// Asks the worker for `request` on `node`'s object: whether it was asked.
@@ -493,6 +502,16 @@ impl ApplicationActions for LinuxActions {
 
     fn activate(&self, node: &AomNode) -> bool {
         self.ask(node, Request::Activate)
+    }
+
+    fn presses_keys(&self) -> bool {
+        self.keys.is_some()
+    }
+
+    /// A reading command's key (CapsLock+O's Down in a text field), or a key held for one of
+    /// Okur's dialogs, pressed through XTest and read back as Okur's own.
+    fn press(&self, chord: &[okur_core::Key]) -> bool {
+        self.keys.as_ref().is_some_and(|keys| keys.press(chord))
     }
 
     /// The page in front changed outside its live regions, or a region's change was said: the

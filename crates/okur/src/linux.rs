@@ -68,8 +68,10 @@ impl System {
         };
         let objects = event_source.objects();
         let shared = event_source.shared();
+        let keyboard_hook = okur_linux::keyboard::X11KeyboardHook::new();
+        let keys = keyboard_hook.key_sender();
         Platform {
-            keyboard_hook: Box::new(okur_linux::keyboard::X11KeyboardHook::new()),
+            keyboard_hook: Box::new(keyboard_hook),
             event_source: Box::new(event_source),
             synthesizers: synthesizers(),
             // okur-ui's messages kept in the trace beside the events, for a replay.
@@ -79,9 +81,9 @@ impl System {
             // Enter and Space on a page's elements, the focus given to them, and a text
             // field read at its caret.
             actions: Some(Box::new(move |sink| {
-                Box::new(okur_linux::actions::LinuxActions::new(
-                    objects, shared, sink,
-                )) as Box<dyn okur_core::actions::ApplicationActions>
+                Box::new(
+                    okur_linux::actions::LinuxActions::new(objects, shared, sink).with_keys(keys),
+                ) as Box<dyn okur_core::actions::ApplicationActions>
             })),
             // Say System Time and Date (Insert+F12): the local time in the user's locale.
             clock: Some(Box::new(okur_linux::clock::LinuxClock)),

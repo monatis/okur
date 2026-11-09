@@ -20,7 +20,7 @@ libc = "0.2"
 serde = { workspace = true }
 serde_json = { workspace = true }
 tracing = { workspace = true }
-x11rb = { version = "0.14", default-features = false, features = ["xinput", "xkb"] }
+x11rb = { version = "0.14", default-features = false, features = ["xinput", "xkb", "xtest"] }
 xa11y-core = { workspace = true }
 xa11y-linux = { workspace = true }
 
