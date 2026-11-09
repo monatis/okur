@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ad9029d7"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794240486240
+     "t_ms": 1794245478890
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794240486601
+     "t_ms": 1794245479245
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794240487906,
-     "t_end_ms": 1794240489211,
+     "t_start_ms": 1794245480551,
+     "t_end_ms": 1794245481857,
      "action": {
       "type": "key",
       "command": "Insert+F3"
@@ -36,7 +36,7 @@
       "Insert+F3"
      ],
      "key_times": [
-      1794240487906
+      1794245480551
      ],
      "observation": {
       "speech_raw": "Virtual HTML Features \u001d dialog \u001e \nList1 \u001d List view \u001e \nAnchors List\n1 of 22\nTo move to items use the Arrow keys.",
@@ -46,8 +46,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794240489211,
-     "t_end_ms": 1794240490415,
+     "t_start_ms": 1794245481857,
+     "t_end_ms": 1794245483061,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -56,7 +56,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240489211
+      1794245481857
      ],
      "observation": {
       "speech_raw": "Articles List",
@@ -66,8 +66,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794240490415,
-     "t_end_ms": 1794240491518,
+     "t_start_ms": 1794245483061,
+     "t_end_ms": 1794245484265,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -76,7 +76,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240490415
+      1794245483061
      ],
      "observation": {
       "speech_raw": "Block Quotes List",
@@ -86,8 +86,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794240491518,
-     "t_end_ms": 1794240492723,
+     "t_start_ms": 1794245484265,
+     "t_end_ms": 1794245485470,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -96,7 +96,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240491518
+      1794245484265
      ],
      "observation": {
       "speech_raw": "Buttons List",
@@ -106,8 +106,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794240492723,
-     "t_end_ms": 1794240493927,
+     "t_start_ms": 1794245485470,
+     "t_end_ms": 1794245486674,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -116,7 +116,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240492723
+      1794245485470
      ],
      "observation": {
       "speech_raw": "Check Boxes List",
@@ -126,8 +126,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794240493927,
-     "t_end_ms": 1794240495131,
+     "t_start_ms": 1794245486674,
+     "t_end_ms": 1794245487878,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -136,7 +136,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240493927
+      1794245486674
      ],
      "observation": {
       "speech_raw": "Controls (Selectable ARIA, combo, lists and trees) List",
@@ -146,8 +146,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794240495131,
-     "t_end_ms": 1794240496336,
+     "t_start_ms": 1794245487878,
+     "t_end_ms": 1794245489082,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -156,7 +156,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240495131
+      1794245487878
      ],
      "observation": {
       "speech_raw": "Divisions List",
@@ -166,8 +166,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794240496336,
-     "t_end_ms": 1794240497540,
+     "t_start_ms": 1794245489082,
+     "t_end_ms": 1794245490286,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -176,7 +176,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240496336
+      1794245489082
      ],
      "observation": {
       "speech_raw": "Edit Boxes List",
@@ -186,8 +186,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794240497540,
-     "t_end_ms": 1794240498744,
+     "t_start_ms": 1794245490286,
+     "t_end_ms": 1794245491390,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -196,7 +196,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240497540
+      1794245490286
      ],
      "observation": {
       "speech_raw": "Form Fields List",
@@ -206,8 +206,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794240498745,
-     "t_end_ms": 1794240499949,
+     "t_start_ms": 1794245491390,
+     "t_end_ms": 1794245492594,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -216,7 +216,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240498745
+      1794245491390
      ],
      "observation": {
       "speech_raw": "Frames List",
@@ -226,8 +226,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794240499949,
-     "t_end_ms": 1794240501154,
+     "t_start_ms": 1794245492594,
+     "t_end_ms": 1794245493798,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -236,7 +236,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240499949
+      1794245492594
      ],
      "observation": {
       "speech_raw": "Graphics List",
@@ -246,8 +246,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794240501154,
-     "t_end_ms": 1794240502360,
+     "t_start_ms": 1794245493798,
+     "t_end_ms": 1794245495003,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -256,7 +256,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240501154
+      1794245493798
      ],
      "observation": {
       "speech_raw": "Headings List",
@@ -266,8 +266,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794240502360,
-     "t_end_ms": 1794240503565,
+     "t_start_ms": 1794245495003,
+     "t_end_ms": 1794245496106,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -276,7 +276,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240502360
+      1794245495003
      ],
      "observation": {
       "speech_raw": "Links List",
@@ -286,8 +286,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794240503565,
-     "t_end_ms": 1794240504769,
+     "t_start_ms": 1794245496106,
+     "t_end_ms": 1794245497310,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -296,7 +296,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240503565
+      1794245496106
      ],
      "observation": {
       "speech_raw": "List Items List",
@@ -306,8 +306,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794240504769,
-     "t_end_ms": 1794240505874,
+     "t_start_ms": 1794245497310,
+     "t_end_ms": 1794245498414,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -316,7 +316,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240504769
+      1794245497310
      ],
      "observation": {
       "speech_raw": "Lists List",
@@ -326,8 +326,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794240505874,
-     "t_end_ms": 1794240507078,
+     "t_start_ms": 1794245498414,
+     "t_end_ms": 1794245499618,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -336,7 +336,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240505874
+      1794245498414
      ],
      "observation": {
       "speech_raw": "Paragraphs List",
@@ -346,8 +346,8 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794240507078,
-     "t_end_ms": 1794240508282,
+     "t_start_ms": 1794245499618,
+     "t_end_ms": 1794245500823,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -356,7 +356,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240507078
+      1794245499618
      ],
      "observation": {
       "speech_raw": "PlaceMarkers",
@@ -366,8 +366,8 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794240508282,
-     "t_end_ms": 1794240509487,
+     "t_start_ms": 1794245500823,
+     "t_end_ms": 1794245502027,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -376,7 +376,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240508282
+      1794245500823
      ],
      "observation": {
       "speech_raw": "Radio Buttons List",
@@ -386,8 +386,8 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794240509487,
-     "t_end_ms": 1794240510692,
+     "t_start_ms": 1794245502027,
+     "t_end_ms": 1794245503231,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -396,7 +396,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240509487
+      1794245502027
      ],
      "observation": {
       "speech_raw": "Regions List",
@@ -406,8 +406,8 @@
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794240510692,
-     "t_end_ms": 1794240511897,
+     "t_start_ms": 1794245503231,
+     "t_end_ms": 1794245504436,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -416,7 +416,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240510692
+      1794245503231
      ],
      "observation": {
       "speech_raw": "Smart Glance Highlight List",
@@ -426,8 +426,8 @@
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794240511897,
-     "t_end_ms": 1794240513101,
+     "t_start_ms": 1794245504436,
+     "t_end_ms": 1794245505640,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -436,7 +436,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240511897
+      1794245504436
      ],
      "observation": {
       "speech_raw": "Tables List",
@@ -446,8 +446,8 @@
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794240513101,
-     "t_end_ms": 1794240514305,
+     "t_start_ms": 1794245505640,
+     "t_end_ms": 1794245506844,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -456,7 +456,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240513101
+      1794245505640
      ],
      "observation": {
       "speech_raw": "Tabs List",
@@ -466,8 +466,8 @@
     },
     {
      "step_id": "s23",
-     "t_start_ms": 1794240514305,
-     "t_end_ms": 1794240515410,
+     "t_start_ms": 1794245506844,
+     "t_end_ms": 1794245507948,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -476,7 +476,7 @@
       "Tab"
      ],
      "key_times": [
-      1794240514305
+      1794245506844
      ],
      "observation": {
       "speech_raw": "OK \u001d Button \u001e \nTo activate press spacebar.",
@@ -486,8 +486,8 @@
     },
     {
      "step_id": "s24",
-     "t_start_ms": 1794240515410,
-     "t_end_ms": 1794240516514,
+     "t_start_ms": 1794245507948,
+     "t_end_ms": 1794245509052,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -496,7 +496,7 @@
       "Tab"
      ],
      "key_times": [
-      1794240515410
+      1794245507948
      ],
      "observation": {
       "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
@@ -506,8 +506,8 @@
     },
     {
      "step_id": "s25",
-     "t_start_ms": 1794240516514,
-     "t_end_ms": 1794240517719,
+     "t_start_ms": 1794245509052,
+     "t_end_ms": 1794245510156,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -516,7 +516,7 @@
       "Tab"
      ],
      "key_times": [
-      1794240516514
+      1794245509052
      ],
      "observation": {
       "speech_raw": "List1 \u001d List view \u001e \nTabs List\n22 of 22\nTo move to items use the Arrow keys.",
@@ -526,8 +526,8 @@
     },
     {
      "step_id": "s26",
-     "t_start_ms": 1794240517719,
-     "t_end_ms": 1794240518723,
+     "t_start_ms": 1794245510156,
+     "t_end_ms": 1794245511160,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Escape\")"
@@ -536,7 +536,7 @@
       "Escape"
      ],
      "key_times": [
-      1794240517719
+      1794245510156
      ],
      "observation": {
       "speech_raw": "",

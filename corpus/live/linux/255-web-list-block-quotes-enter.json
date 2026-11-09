@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794220784273
+     "t_ms": 1794244437194
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794220784635
+     "t_ms": 1794244437552
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794220785942,
-     "t_end_ms": 1794220786947,
+     "t_start_ms": 1794244438858,
+     "t_end_ms": 1794244440063,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+Q"
@@ -36,18 +36,18 @@
       "Ctrl+Insert+Q"
      ],
      "key_times": [
-      1794220785942
+      1794244438858
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Select a Block Quote \u001d dialog \u001e \nList1 \u001d List view \u001e \nFinally, I can study after work.\n1 of 1\nTo move to items use the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794220786948,
-     "t_end_ms": 1794220787952,
+     "t_start_ms": 1794244440063,
+     "t_end_ms": 1794244441066,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -56,7 +56,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794220786948
+      1794244440063
      ],
      "observation": {
       "speech_raw": "",
@@ -66,8 +66,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794220787952,
-     "t_end_ms": 1794220789056,
+     "t_start_ms": 1794244441066,
+     "t_end_ms": 1794244442170,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -76,7 +76,7 @@
       "Enter"
      ],
      "key_times": [
-      1794220787952
+      1794244441066
      ],
      "observation": {
       "speech_raw": "block quote",
@@ -86,8 +86,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794220789056,
-     "t_end_ms": 1794220790061,
+     "t_start_ms": 1794244442171,
+     "t_end_ms": 1794244443175,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -96,7 +96,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794220789056
+      1794244442171
      ],
      "observation": {
       "speech_raw": "block quote",
@@ -106,8 +106,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794220790061,
-     "t_end_ms": 1794220791065,
+     "t_start_ms": 1794244443175,
+     "t_end_ms": 1794244444178,
      "action": {
       "type": "key",
       "command": "Down"
@@ -116,7 +116,7 @@
       "Down"
      ],
      "key_times": [
-      1794220790061
+      1794244443175
      ],
      "observation": {
       "speech_raw": "Finally, I can study after work.",

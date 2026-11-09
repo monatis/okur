@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794234831388
+     "t_ms": 1794248870772
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794234832750,
-     "t_end_ms": 1794234833755,
+     "t_start_ms": 1794248872133,
+     "t_end_ms": 1794248873440,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+Insert+Down"
@@ -32,18 +32,18 @@
       "Ctrl+Shift+Insert+Down"
      ],
      "key_times": [
-      1794234832750
+      1794248872133
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Skim Reading \u001d dialog \u001e \nUse Rule Type:\nRead First Line of Every Paragraph \u001d radio button \u001e  \u001dchecked\u001e \n1 of 4\nTo change the selection press Up or Down Arrow.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794234833755,
-     "t_end_ms": 1794234835059,
+     "t_start_ms": 1794248873440,
+     "t_end_ms": 1794248874746,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -52,18 +52,18 @@
       "Tab"
      ],
      "key_times": [
-      1794234833755
+      1794248873441
      ],
      "observation": {
-      "speech_raw": "City Library Expands Evening Hours - Riverside Gazette\n \u001d same page link \u001e Riverside Gazette\nTo activate press Enter.",
+      "speech_raw": "Skim Reading Indication \u001d check box \u001e  \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794234835059,
-     "t_end_ms": 1794234836162,
+     "t_start_ms": 1794248874746,
+     "t_end_ms": 1794248875850,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -72,18 +72,18 @@
       "Tab"
      ],
      "key_times": [
-      1794234835059
+      1794248874746
      ],
      "observation": {
-      "speech_raw": "Primary \u001d NavigationRegion \u001e \n \u001d list \u001e \nwith 4 items\nNews  \u001d same page link \u001e \nTo activate press Enter.",
+      "speech_raw": "Start Skim Reading \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794234836162,
-     "t_end_ms": 1794234837267,
+     "t_start_ms": 1794248875850,
+     "t_end_ms": 1794248876954,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -92,18 +92,18 @@
       "Tab"
      ],
      "key_times": [
-      1794234836162
+      1794248875850
      ],
      "observation": {
-      "speech_raw": "Sports  \u001d same page link \u001e \nTo activate press Enter.",
+      "speech_raw": "Create Summary \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794234837267,
-     "t_end_ms": 1794234838372,
+     "t_start_ms": 1794248876954,
+     "t_end_ms": 1794248878059,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -112,18 +112,18 @@
       "Tab"
      ],
      "key_times": [
-      1794234837267
+      1794248876954
      ],
      "observation": {
-      "speech_raw": "Culture  \u001d same page link \u001e \nTo activate press Enter.",
+      "speech_raw": "Close \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794234838372,
-     "t_end_ms": 1794234839477,
+     "t_start_ms": 1794248878059,
+     "t_end_ms": 1794248879163,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -132,18 +132,18 @@
       "Tab"
      ],
      "key_times": [
-      1794234838372
+      1794248878059
      ],
      "observation": {
-      "speech_raw": "Opinion  \u001d same page link \u001e \nTo activate press Enter.",
+      "speech_raw": "Help \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794234839477,
-     "t_end_ms": 1794234840581,
+     "t_start_ms": 1794248879164,
+     "t_end_ms": 1794248880369,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -152,18 +152,18 @@
       "Tab"
      ],
      "key_times": [
-      1794234839477
+      1794248879164
      ],
      "observation": {
-      "speech_raw": " \u001d MainRegion \u001e \nMaria Lopez  \u001d same page link \u001e \nTo activate press Enter.",
+      "speech_raw": "Use Rule Type:\nRead First Line of Every Paragraph \u001d radio button \u001e  \u001dchecked\u001e \n1 of 4\nTo change the selection press Up or Down Arrow.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794234840581,
-     "t_end_ms": 1794234841686,
+     "t_start_ms": 1794248880369,
+     "t_end_ms": 1794248881674,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -172,18 +172,18 @@
       "Tab"
      ],
      "key_times": [
-      1794234840581
+      1794248880369
      ],
      "observation": {
-      "speech_raw": " \u001d list \u001e \nwith 3 items\nstudy rooms  \u001d same page link \u001e \nTo activate press Enter.",
+      "speech_raw": "Skim Reading Indication \u001d check box \u001e  \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794234841686,
-     "t_end_ms": 1794234842790,
+     "t_start_ms": 1794248881674,
+     "t_end_ms": 1794248882779,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -192,18 +192,18 @@
       "Tab"
      ],
      "key_times": [
-      1794234841686
+      1794248881674
      ],
      "observation": {
-      "speech_raw": "Details\nDirections  \u001d same page link \u001e \ncol 3 row 2\nTo activate press Enter.",
+      "speech_raw": "Start Skim Reading \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794234842790,
-     "t_end_ms": 1794234843895,
+     "t_start_ms": 1794248882779,
+     "t_end_ms": 1794248883883,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -212,18 +212,18 @@
       "Tab"
      ],
      "key_times": [
-      1794234842790
+      1794248882779
      ],
      "observation": {
-      "speech_raw": "Directions  \u001d same page link \u001e \nRow 3\nTo activate press Enter.",
+      "speech_raw": "Create Summary \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794234843895,
-     "t_end_ms": 1794234844999,
+     "t_start_ms": 1794248883883,
+     "t_end_ms": 1794248884987,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -232,18 +232,18 @@
       "Tab"
      ],
      "key_times": [
-      1794234843895
+      1794248883883
      ],
      "observation": {
-      "speech_raw": "Related stories \u001d ComplementaryRegion \u001e \n \u001d list \u001e \nwith 2 items\nCouncil approves library budget  \u001d same page link \u001e \nTo activate press Enter.",
+      "speech_raw": "Close \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794234844999,
-     "t_end_ms": 1794234846103,
+     "t_start_ms": 1794248884987,
+     "t_end_ms": 1794248886092,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -252,18 +252,18 @@
       "Tab"
      ],
      "key_times": [
-      1794234844999
+      1794248884987
      ],
      "observation": {
-      "speech_raw": "Spring book fair returns  \u001d same page link \u001e \nTo activate press Enter.",
+      "speech_raw": "Help \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794234846103,
-     "t_end_ms": 1794234847208,
+     "t_start_ms": 1794248886092,
+     "t_end_ms": 1794248887297,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -272,18 +272,18 @@
       "Tab"
      ],
      "key_times": [
-      1794234846103
+      1794248886092
      ],
      "observation": {
-      "speech_raw": " \u001d ContentInfoRegion \u001e \nContact us  \u001d same page link \u001e \nTo activate press Enter.",
+      "speech_raw": "Use Rule Type:\nRead First Line of Every Paragraph \u001d radio button \u001e  \u001dchecked\u001e \n1 of 4\nTo change the selection press Up or Down Arrow.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794234847208,
-     "t_end_ms": 1794234848212,
+     "t_start_ms": 1794248887297,
+     "t_end_ms": 1794248888301,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Escape\")"
@@ -292,7 +292,7 @@
       "Escape"
      ],
      "key_times": [
-      1794234847208
+      1794248887297
      ],
      "observation": {
       "speech_raw": "",
@@ -302,8 +302,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794234848212,
-     "t_end_ms": 1794234849218,
+     "t_start_ms": 1794248888301,
+     "t_end_ms": 1794248889306,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -312,10 +312,10 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794234848212
+      1794248888301
      ],
      "observation": {
-      "speech_raw": " \u001d same page link \u001e Contact us",
+      "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
       "settled": true
      },
      "step_success": true

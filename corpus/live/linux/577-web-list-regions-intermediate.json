@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794224688198
+     "t_ms": 1794245342738
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794224688557
+     "t_ms": 1794245343095
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794224689862,
-     "t_end_ms": 1794224691069,
+     "t_start_ms": 1794245344401,
+     "t_end_ms": 1794245345708,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+R"
@@ -36,18 +36,18 @@
       "Ctrl+Insert+R"
      ],
      "key_times": [
-      1794224689862
+      1794245344401
      ],
      "observation": {
-      "speech_raw": "Document Regions \u001d dialog \u001e \nMove To region start \u001d Button \u001e \nTo activate press spacebar.",
+      "speech_raw": "Document Regions \u001d dialog \u001e \nRegions \u001d Tree view \u001e \nBanner Opened\n1 item\nTo move through or expand items use the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794224691069,
-     "t_end_ms": 1794224692073,
+     "t_start_ms": 1794245345708,
+     "t_end_ms": 1794245346812,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -56,18 +56,18 @@
       "DownArrow"
      ],
      "key_times": [
-      1794224691069
+      1794245345708
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "1\nPrimary Navigation\n1 of 1\nBanner",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794224692073,
-     "t_end_ms": 1794224693077,
+     "t_start_ms": 1794245346812,
+     "t_end_ms": 1794245347916,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -76,18 +76,18 @@
       "DownArrow"
      ],
      "key_times": [
-      1794224692073
+      1794245346812
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "0\nMain\n2 of 4",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794224693077,
-     "t_end_ms": 1794224694181,
+     "t_start_ms": 1794245347916,
+     "t_end_ms": 1794245349020,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -96,27 +96,7 @@
       "Tab"
      ],
      "key_times": [
-      1794224693077
-     ],
-     "observation": {
-      "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
-     "step_id": "s5",
-     "t_start_ms": 1794224694181,
-     "t_end_ms": 1794224695285,
-     "action": {
-      "type": "jaws_function",
-      "command": "TypeKey(\"Tab\")"
-     },
-     "keys": [
-      "Tab"
-     ],
-     "key_times": [
-      1794224694181
+      1794245347916
      ],
      "observation": {
       "speech_raw": "Move To region start \u001d Button \u001e \nTo activate press spacebar.",
@@ -125,9 +105,9 @@
      "step_success": true
     },
     {
-     "step_id": "s6",
-     "t_start_ms": 1794224695285,
-     "t_end_ms": 1794224696390,
+     "step_id": "s5",
+     "t_start_ms": 1794245349020,
+     "t_end_ms": 1794245350124,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -136,7 +116,7 @@
       "Tab"
      ],
      "key_times": [
-      1794224695285
+      1794245349020
      ],
      "observation": {
       "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
@@ -145,9 +125,9 @@
      "step_success": true
     },
     {
-     "step_id": "s7",
-     "t_start_ms": 1794224696390,
-     "t_end_ms": 1794224697494,
+     "step_id": "s6",
+     "t_start_ms": 1794245350124,
+     "t_end_ms": 1794245351228,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -156,7 +136,27 @@
       "Tab"
      ],
      "key_times": [
-      1794224696390
+      1794245350124
+     ],
+     "observation": {
+      "speech_raw": "Regions \u001d Tree view \u001e \nMain\n2 of 4\nTo move through or expand items use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794245351228,
+     "t_end_ms": 1794245352331,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794245351228
      ],
      "observation": {
       "speech_raw": "Move To region start \u001d Button \u001e \nTo activate press spacebar.",
@@ -166,8 +166,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794224697494,
-     "t_end_ms": 1794224698498,
+     "t_start_ms": 1794245352331,
+     "t_end_ms": 1794245353335,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Escape\")"
@@ -176,7 +176,7 @@
       "Escape"
      ],
      "key_times": [
-      1794224697494
+      1794245352331
      ],
      "observation": {
       "speech_raw": "",

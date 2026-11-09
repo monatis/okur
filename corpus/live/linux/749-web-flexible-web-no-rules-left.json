@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794230638852
+     "t_ms": 1794247388280
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794230640221,
-     "t_end_ms": 1794230641226,
+     "t_start_ms": 1794247389647,
+     "t_end_ms": 1794247390651,
      "action": {
       "type": "key",
       "command": "Insert+Space"
@@ -32,7 +32,7 @@
       "Insert+Space"
      ],
      "key_times": [
-      1794230640221
+      1794247389647
      ],
      "observation": {
       "speech_raw": "",
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794230641226,
-     "t_end_ms": 1794230642230,
+     "t_start_ms": 1794247390651,
+     "t_end_ms": 1794247391855,
      "action": {
       "type": "key",
       "command": "X"
@@ -52,18 +52,18 @@
       "X"
      ],
      "key_times": [
-      1794230641226
+      1794247390651
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Flexible Web \u001d dialog \u001e \nCreate a new customization \u001d radio button \u001e  \u001dchecked\u001e \n1 of 5\nTo change the selection press Up or Down Arrow.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794230642230,
-     "t_end_ms": 1794230643234,
+     "t_start_ms": 1794247391855,
+     "t_end_ms": 1794247392959,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -72,18 +72,18 @@
       "DownArrow"
      ],
      "key_times": [
-      1794230642230
+      1794247391855
      ],
      "observation": {
-      "speech_raw": "banner",
+      "speech_raw": "Enable Flexible Web \u001d check box \u001e  \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794230643234,
-     "t_end_ms": 1794230644237,
+     "t_start_ms": 1794247392959,
+     "t_end_ms": 1794247393963,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Escape\")"
@@ -92,7 +92,7 @@
       "Escape"
      ],
      "key_times": [
-      1794230643234
+      1794247392959
      ],
      "observation": {
       "speech_raw": "",

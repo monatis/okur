@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ad9029d7"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794240965608
+     "t_ms": 1794246900713
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794240966973,
-     "t_end_ms": 1794240967976,
+     "t_start_ms": 1794246902078,
+     "t_end_ms": 1794246903082,
      "action": {
       "type": "key",
       "command": "H"
@@ -32,7 +32,7 @@
       "H"
      ],
      "key_times": [
-      1794240966973
+      1794246902078
      ],
      "observation": {
       "speech_raw": "Weekend events\n \u001d heading level 1 \u001e",
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794240967976,
-     "t_end_ms": 1794240968981,
+     "t_start_ms": 1794246903082,
+     "t_end_ms": 1794246904086,
      "action": {
       "type": "key",
       "command": "Insert+Space"
@@ -52,7 +52,7 @@
       "Insert+Space"
      ],
      "key_times": [
-      1794240967976
+      1794246903082
      ],
      "observation": {
       "speech_raw": "",
@@ -62,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794240968981,
-     "t_end_ms": 1794240970185,
+     "t_start_ms": 1794246904086,
+     "t_end_ms": 1794246905290,
      "action": {
       "type": "key",
       "command": "X"
@@ -72,7 +72,7 @@
       "X"
      ],
      "key_times": [
-      1794240968981
+      1794246904086
      ],
      "observation": {
       "speech_raw": "Flexible Web \u001d dialog \u001e \nCreate a new customization \u001d radio button \u001e  \u001dchecked\u001e \n1 of 5\nTo change the selection press Up or Down Arrow.",
@@ -82,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794240970186,
-     "t_end_ms": 1794240971591,
+     "t_start_ms": 1794246905290,
+     "t_end_ms": 1794246906695,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+N\")"
@@ -92,7 +92,7 @@
       "Alt+N"
      ],
      "key_times": [
-      1794240970186
+      1794246905290
      ],
      "observation": {
       "speech_raw": "Choose an Action \u001d dialog \u001e \nHide an element \u001d radio button \u001e  \u001dchecked\u001e \n1 of 2\nTo change the selection press Up or Down Arrow.",
@@ -102,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794240971591,
-     "t_end_ms": 1794240972795,
+     "t_start_ms": 1794246906695,
+     "t_end_ms": 1794246907799,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -112,7 +112,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240971591
+      1794246906695
      ],
      "observation": {
       "speech_raw": "Start reading at an element \u001d radio button \u001e  \u001dchecked\u001e \n2 of 2\nTo change the selection press Up or Down Arrow.",
@@ -122,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794240972795,
-     "t_end_ms": 1794240974201,
+     "t_start_ms": 1794246907799,
+     "t_end_ms": 1794246909206,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+N\")"
@@ -132,18 +132,18 @@
       "Alt+N"
      ],
      "key_times": [
-      1794240972795
+      1794246907799
      ],
      "observation": {
-      "speech_raw": "_Start reading at an element \u001d radio button \u001e  \u001dnot checked\u001e \nTo change the selection press Up or Down Arrow.\nChoose an element \u001d dialog \u001e \nWhich of the following elements would you like to customize? \u001d List box \u001e \nheading level 1 Weekend events\n1 of 2\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Choose an element \u001d dialog \u001e \nWhich of the following elements would you like to customize? \u001d List box \u001e \nheading level 1 Weekend events\n1 of 2\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794240974201,
-     "t_end_ms": 1794240975606,
+     "t_start_ms": 1794246909206,
+     "t_end_ms": 1794246910611,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+N\")"
@@ -152,7 +152,7 @@
       "Alt+N"
      ],
      "key_times": [
-      1794240974201
+      1794246909206
      ],
      "observation": {
       "speech_raw": "To move to an item press the Arrow keys.\nChoose a customization \u001d dialog \u001e \nSelect a customization \u001d List box \u001e \nStart at heading level 1 1 from the top with text: \"Weekend events\", and with id = \"events\"\n1 of 6\nTo move to an item press the Arrow keys.",
@@ -162,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794240975606,
-     "t_end_ms": 1794240976711,
+     "t_start_ms": 1794246910611,
+     "t_end_ms": 1794246911716,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -172,7 +172,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240975606
+      1794246910611
      ],
      "observation": {
       "speech_raw": "Start at any heading level 1 with text: \"Weekend events\"\n2 of 6",
@@ -182,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794240976711,
-     "t_end_ms": 1794240977815,
+     "t_start_ms": 1794246911716,
+     "t_end_ms": 1794246912819,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -192,7 +192,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240976711
+      1794246911716
      ],
      "observation": {
       "speech_raw": "Start at any heading level 1 with id = \"events\"\n3 of 6",
@@ -202,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794240977815,
-     "t_end_ms": 1794240978920,
+     "t_start_ms": 1794246912820,
+     "t_end_ms": 1794246913924,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -212,7 +212,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240977815
+      1794246912820
      ],
      "observation": {
       "speech_raw": "Start at heading level 1 1 from the top\n4 of 6",
@@ -222,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794240978920,
-     "t_end_ms": 1794240980024,
+     "t_start_ms": 1794246913924,
+     "t_end_ms": 1794246915028,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -232,7 +232,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240978920
+      1794246913924
      ],
      "observation": {
       "speech_raw": "Start at heading level 1 1 from the bottom\n5 of 6",
@@ -242,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794240980024,
-     "t_end_ms": 1794240981128,
+     "t_start_ms": 1794246915028,
+     "t_end_ms": 1794246916133,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -252,7 +252,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240980024
+      1794246915028
      ],
      "observation": {
       "speech_raw": "Start at any heading level 1\n6 of 6",
@@ -262,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794240981128,
-     "t_end_ms": 1794240982132,
+     "t_start_ms": 1794246916133,
+     "t_end_ms": 1794246917137,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Escape\")"
@@ -272,7 +272,7 @@
       "Escape"
      ],
      "key_times": [
-      1794240981128
+      1794246916133
      ],
      "observation": {
       "speech_raw": "",
@@ -282,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794240982132,
-     "t_end_ms": 1794240983136,
+     "t_start_ms": 1794246917137,
+     "t_end_ms": 1794246918141,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Escape\")"
@@ -292,7 +292,7 @@
       "Escape"
      ],
      "key_times": [
-      1794240982132
+      1794246917137
      ],
      "observation": {
       "speech_raw": "",
@@ -302,8 +302,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794240983136,
-     "t_end_ms": 1794240984141,
+     "t_start_ms": 1794246918141,
+     "t_end_ms": 1794246919147,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -312,7 +312,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794240983136
+      1794246918141
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e Weekend events",

@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794220549069
+     "t_ms": 1794244317710
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794220549431
+     "t_ms": 1794244318073
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794220550736,
-     "t_end_ms": 1794220551743,
+     "t_start_ms": 1794244319378,
+     "t_end_ms": 1794244320584,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+C"
@@ -36,18 +36,18 @@
       "Ctrl+Insert+C"
      ],
      "key_times": [
-      1794220550736
+      1794244319378
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Selectable ARIA controls, comboboxes, listboxes or treeviews \u001d dialog \u001e \nList1 \u001d List view \u001e \nHome branch\n1 of 1\nTo move to items use the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794220551743,
-     "t_end_ms": 1794220552747,
+     "t_start_ms": 1794244320584,
+     "t_end_ms": 1794244321587,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -56,7 +56,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794220551743
+      1794244320584
      ],
      "observation": {
       "speech_raw": "",
@@ -66,8 +66,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794220552747,
-     "t_end_ms": 1794220553851,
+     "t_start_ms": 1794244321587,
+     "t_end_ms": 1794244322691,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -76,7 +76,7 @@
       "Enter"
      ],
      "key_times": [
-      1794220552747
+      1794244321587
      ],
      "observation": {
       "speech_raw": "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside",
@@ -86,8 +86,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794220553851,
-     "t_end_ms": 1794220554856,
+     "t_start_ms": 1794244322691,
+     "t_end_ms": 1794244323696,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -96,7 +96,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794220553851
+      1794244322691
      ],
      "observation": {
       "speech_raw": "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside",
@@ -106,8 +106,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794220554856,
-     "t_end_ms": 1794220555861,
+     "t_start_ms": 1794244323696,
+     "t_end_ms": 1794244324700,
      "action": {
       "type": "key",
       "command": "Down"
@@ -116,7 +116,7 @@
       "Down"
      ],
      "key_times": [
-      1794220554856
+      1794244323696
      ],
      "observation": {
       "speech_raw": "Accessibility needs",

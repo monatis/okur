@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794220635905
+     "t_ms": 1794244347874
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794220636265
+     "t_ms": 1794244348231
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794220637571,
-     "t_end_ms": 1794220638576,
+     "t_start_ms": 1794244349537,
+     "t_end_ms": 1794244350743,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+X"
@@ -36,18 +36,18 @@
       "Ctrl+Insert+X"
      ],
      "key_times": [
-      1794220637571
+      1794244349537
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Select a Check Box \u001d dialog \u001e \nList1 \u001d List view \u001e \nSend me the monthly newsletter check box checked\n1 of 2\nTo move to items use the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794220638576,
-     "t_end_ms": 1794220639679,
+     "t_start_ms": 1794244350743,
+     "t_end_ms": 1794244351847,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -56,18 +56,18 @@
       "DownArrow"
      ],
      "key_times": [
-      1794220638576
+      1794244350743
      ],
      "observation": {
-      "speech_raw": "Select a Check Box \u001d dialog \u001e \nList1 \u001d List view \u001e \nI agree to the terms of use check box not checked\n2 of 2\nTo move to items use the Arrow keys.",
+      "speech_raw": "I agree to the terms of use check box not checked\n2 of 2",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794220639679,
-     "t_end_ms": 1794220640884,
+     "t_start_ms": 1794244351847,
+     "t_end_ms": 1794244353051,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -76,7 +76,7 @@
       "Enter"
      ],
      "key_times": [
-      1794220639679
+      1794244351847
      ],
      "observation": {
       "speech_raw": "Create Your Account - Riverside Library\nI agree to the terms of use  \u001d check box \u001e   \u001dnot checked\u001e \nTo check press Spacebar.",
@@ -86,8 +86,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794220640884,
-     "t_end_ms": 1794220641889,
+     "t_start_ms": 1794244353051,
+     "t_end_ms": 1794244354055,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -96,7 +96,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794220640884
+      1794244353051
      ],
      "observation": {
       "speech_raw": "I agree to the terms of use \u001d check box \u001e  \u001dnot checked\u001e ",
@@ -106,8 +106,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794220641889,
-     "t_end_ms": 1794220642893,
+     "t_start_ms": 1794244354055,
+     "t_end_ms": 1794244355060,
      "action": {
       "type": "key",
       "command": "Down"
@@ -116,7 +116,7 @@
       "Down"
      ],
      "key_times": [
-      1794220641889
+      1794244354055
      ],
      "observation": {
       "speech_raw": "I agree to the ",

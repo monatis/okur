@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794221718861
+     "t_ms": 1794244589023
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794221719219
+     "t_ms": 1794244589380
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794221720525,
-     "t_end_ms": 1794221721629,
+     "t_start_ms": 1794244590685,
+     "t_end_ms": 1794244591789,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -36,7 +36,7 @@
       "Tab"
      ],
      "key_times": [
-      1794221720525
+      1794244590685
      ],
      "observation": {
       "speech_raw": "Web Chat\nChats  \u001d Toggle button \u001e  \u001dPressed\u001e \nTo toggle the state press spacebar.",
@@ -46,8 +46,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794221721629,
-     "t_end_ms": 1794221722633,
+     "t_start_ms": 1794244591789,
+     "t_end_ms": 1794244592794,
      "action": {
       "type": "key",
       "command": "H"
@@ -56,7 +56,7 @@
       "H"
      ],
      "key_times": [
-      1794221721629
+      1794244591789
      ],
      "observation": {
       "speech_raw": "Web Chat\n \u001d heading level 1 \u001e",
@@ -66,8 +66,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794221722633,
-     "t_end_ms": 1794221723637,
+     "t_start_ms": 1794244592794,
+     "t_end_ms": 1794244593797,
      "action": {
       "type": "key",
       "command": "H"
@@ -76,7 +76,7 @@
       "H"
      ],
      "key_times": [
-      1794221722633
+      1794244592794
      ],
      "observation": {
       "speech_raw": "Messages\n \u001d heading level 2 \u001e",
@@ -86,8 +86,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794221723637,
-     "t_end_ms": 1794221724642,
+     "t_start_ms": 1794244593797,
+     "t_end_ms": 1794244594801,
      "action": {
       "type": "key",
       "command": "Down"
@@ -96,7 +96,7 @@
       "Down"
      ],
      "key_times": [
-      1794221723637
+      1794244593797
      ],
      "observation": {
       "speech_raw": "You:",
@@ -106,8 +106,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794221724642,
-     "t_end_ms": 1794221725646,
+     "t_start_ms": 1794244594801,
+     "t_end_ms": 1794244595806,
      "action": {
       "type": "key",
       "command": "Down"
@@ -116,7 +116,7 @@
       "Down"
      ],
      "key_times": [
-      1794221724642
+      1794244594801
      ],
      "observation": {
       "speech_raw": "Good morning",
@@ -126,8 +126,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794221725646,
-     "t_end_ms": 1794221726651,
+     "t_start_ms": 1794244595806,
+     "t_end_ms": 1794244596809,
      "action": {
       "type": "key",
       "command": "Down"
@@ -136,7 +136,7 @@
       "Down"
      ],
      "key_times": [
-      1794221725646
+      1794244595806
      ],
      "observation": {
       "speech_raw": "09:00 Read \u001d Button \u001e ",
@@ -146,8 +146,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794221726651,
-     "t_end_ms": 1794221727655,
+     "t_start_ms": 1794244596809,
+     "t_end_ms": 1794244597813,
      "action": {
       "type": "key",
       "command": "Down"
@@ -156,7 +156,7 @@
       "Down"
      ],
      "key_times": [
-      1794221726651
+      1794244596809
      ],
      "observation": {
       "speech_raw": "See you at noon",
@@ -166,8 +166,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794221727655,
-     "t_end_ms": 1794221728760,
+     "t_start_ms": 1794244597813,
+     "t_end_ms": 1794244598919,
      "action": {
       "type": "key",
       "command": "Shift+Tab"
@@ -176,7 +176,7 @@
       "Shift+Tab"
      ],
      "key_times": [
-      1794221727655
+      1794244597813
      ],
      "observation": {
       "speech_raw": "You Good morning 09:00 Read Press the right or left arrow key for more options",
@@ -186,8 +186,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794221728760,
-     "t_end_ms": 1794221729865,
+     "t_start_ms": 1794244598919,
+     "t_end_ms": 1794244600024,
      "action": {
       "type": "key",
       "command": "Down"
@@ -196,7 +196,7 @@
       "Down"
      ],
      "key_times": [
-      1794221728760
+      1794244598919
      ],
      "observation": {
       "speech_raw": "You See you at noon 09:05 Read Press the right or left arrow key for more options",
@@ -206,8 +206,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794221729865,
-     "t_end_ms": 1794221730870,
+     "t_start_ms": 1794244600024,
+     "t_end_ms": 1794244601028,
      "action": {
       "type": "key",
       "command": "Insert+3"
@@ -216,7 +216,7 @@
       "Insert+3"
      ],
      "key_times": [
-      1794221729865
+      1794244600024
      ],
      "observation": {
       "speech_raw": "Enter key to pass through",
@@ -226,8 +226,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794221730870,
-     "t_end_ms": 1794221731974,
+     "t_start_ms": 1794244601028,
+     "t_end_ms": 1794244602134,
      "action": {
       "type": "key",
       "command": "Down"
@@ -236,7 +236,7 @@
       "Down"
      ],
      "key_times": [
-      1794221730870
+      1794244601028
      ],
      "observation": {
       "speech_raw": "You Bring the notes 09:10 Read Press the right or left arrow key for more options",
@@ -246,8 +246,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794221731974,
-     "t_end_ms": 1794221732979,
+     "t_start_ms": 1794244602134,
+     "t_end_ms": 1794244603138,
      "action": {
       "type": "key",
       "command": "Insert+3"
@@ -256,7 +256,7 @@
       "Insert+3"
      ],
      "key_times": [
-      1794221731974
+      1794244602134
      ],
      "observation": {
       "speech_raw": "Enter key to pass through",
@@ -266,8 +266,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794221732979,
-     "t_end_ms": 1794221734084,
+     "t_start_ms": 1794244603138,
+     "t_end_ms": 1794244604243,
      "action": {
       "type": "key",
       "command": "Right"
@@ -276,7 +276,7 @@
       "Right"
      ],
      "key_times": [
-      1794221732979
+      1794244603138
      ],
      "observation": {
       "speech_raw": "Open message options  \u001d Button \u001e  \u001dcollapsed\u001e \nTo activate press Enter.",
@@ -286,8 +286,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794221734084,
-     "t_end_ms": 1794221735489,
+     "t_start_ms": 1794244604243,
+     "t_end_ms": 1794244605648,
      "action": {
       "type": "key",
       "command": "Enter"
@@ -296,7 +296,7 @@
       "Enter"
      ],
      "key_times": [
-      1794221734084
+      1794244604243
      ],
      "observation": {
       "speech_raw": "Message info\nTo move through items press up or down arrow.\nLeaving menus\n \u001d dialog \u001e \n\ud83d\udc4d  \u001d Toggle button \u001e  \u001dNot pressed\u001e \nTo toggle the state press spacebar.",
@@ -306,8 +306,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794221735489,
-     "t_end_ms": 1794221736593,
+     "t_start_ms": 1794244605648,
+     "t_end_ms": 1794244606753,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -316,7 +316,7 @@
       "Tab"
      ],
      "key_times": [
-      1794221735489
+      1794244605648
      ],
      "observation": {
       "speech_raw": "Message info\nTo move through items press up or down arrow.",
@@ -326,8 +326,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794221736593,
-     "t_end_ms": 1794221737698,
+     "t_start_ms": 1794244606753,
+     "t_end_ms": 1794244607857,
      "action": {
       "type": "key",
       "command": "Down"
@@ -336,7 +336,7 @@
       "Down"
      ],
      "key_times": [
-      1794221736593
+      1794244606753
      ],
      "observation": {
       "speech_raw": "Reply",
@@ -346,8 +346,8 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794221737698,
-     "t_end_ms": 1794221738802,
+     "t_start_ms": 1794244607857,
+     "t_end_ms": 1794244608961,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -356,7 +356,7 @@
       "Escape"
      ],
      "key_times": [
-      1794221737698
+      1794244607857
      ],
      "observation": {
       "speech_raw": "Leaving menus\n \u001d MainRegion \u001e \nYou Bring the notes 09:10 Read Press the right or left arrow key for more options",

@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "298f0c7c"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794237834445
+     "t_ms": 1794245064744
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794237835807,
-     "t_end_ms": 1794237836811,
+     "t_start_ms": 1794245066103,
+     "t_end_ms": 1794245067107,
      "action": {
       "type": "key",
       "command": "Down"
@@ -32,7 +32,7 @@
       "Down"
      ],
      "key_times": [
-      1794237835807
+      1794245066103
      ],
      "observation": {
       "speech_raw": "banner",
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794237836811,
-     "t_end_ms": 1794237837815,
+     "t_start_ms": 1794245067107,
+     "t_end_ms": 1794245068111,
      "action": {
       "type": "key",
       "command": "Insert+5"
@@ -52,7 +52,7 @@
       "Insert+5"
      ],
      "key_times": [
-      1794237836811
+      1794245067107
      ],
      "observation": {
       "speech_raw": "default on default",
@@ -62,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794237837815,
-     "t_end_ms": 1794237838820,
+     "t_start_ms": 1794245068111,
+     "t_end_ms": 1794245069116,
      "action": {
       "type": "key",
       "command": "Down"
@@ -72,7 +72,7 @@
       "Down"
      ],
      "key_times": [
-      1794237837815
+      1794245068111
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Riverside Gazette",
@@ -82,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794237838820,
-     "t_end_ms": 1794237839824,
+     "t_start_ms": 1794245069116,
+     "t_end_ms": 1794245070121,
      "action": {
       "type": "key",
       "command": "Insert+5"
@@ -92,7 +92,7 @@
       "Insert+5"
      ],
      "key_times": [
-      1794237838820
+      1794245069116
      ],
      "observation": {
       "speech_raw": "blue2 on white",
@@ -102,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794237839824,
-     "t_end_ms": 1794237840829,
+     "t_start_ms": 1794245070121,
+     "t_end_ms": 1794245071125,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -112,7 +112,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794237839824
+      1794245070121
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
@@ -122,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794237840829,
-     "t_end_ms": 1794237845836,
+     "t_start_ms": 1794245071125,
+     "t_end_ms": 1794245076132,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+Down"
@@ -133,8 +133,8 @@
       "Ctrl"
      ],
      "key_times": [
-      1794237840829,
-      1794237844832
+      1794245071125,
+      1794245075127
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette\nbanner\n \u001d same page link \u001e Riverside Gazette\nlist of 4 items\n\u2022 \u001d same page link \u001e News\n\u2022 \u001d same page link \u001e Sports\n\u2022 \u001d same page link \u001e Culture\n\u2022 \u001d same page link \u001e Opinion\nlist end\nPrimary navigation region end\nbanner end\nmain region\narticle\n \u001d heading level 1 \u001e City Library Expands Evening Hours\nBy \nThe Riverside City Library will stay open until 9 p.m. on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which\nFront entrance of the Riverside City Library at dusk\n \u001d Graphic \u001e \nMembership costs $5.99 a month, e.g. for adults; children join free. Questions go to help@riverside-library.org \u2014 or call 555-0142. Attendance rose 3.5%\nlist of 3 items\n\u2022 Weekday hours: 9 a.m. to 9 p.m.\n\u2022 Weekend hours, which do not change:\n\u25e6 Saturday: 10 a.m. to 6 p.m.\n\u25e6 Sunday: noon to 5 p.m.\nlist end nesting level 1\n\u2022 New \nlist end\n \u001d heading level 2 \u001e Opening schedule\ntable with 3 columns and 3 rows\nBranch hours after the change\nCentral\nNorthside\ntable end\n \u001d heading level 3 \u001e What readers said\nblock quote\nFinally, I can study after work.\nblock quote end\nThe library board will review attendance in the fall. A long-standing complaint among students and working parents was that the reading rooms closed before\nlist of 3 items\n1. Board vote in March\n2. Hiring in April\n3. Review in October\nlist end\narticle end\nmain region end\nRelated stories complementary information\n \u001d heading level 2 \u001e Related stories\nlist of 2 items\n\u2022 \u001d same page link \u001e Council approves library budget\n\u2022 \u001d same page link \u001e Spring book fair returns\nlist end\nRelated stories complementary information end\ncontent information\n\u00a9 2026 Riverside Gazette. \ncontent information end\ncontent",
@@ -144,8 +144,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794237845836,
-     "t_end_ms": 1794237846841,
+     "t_start_ms": 1794245076132,
+     "t_end_ms": 1794245077137,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -154,7 +154,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794237845836
+      1794245076132
      ],
      "observation": {
       "speech_raw": "content information end",
@@ -164,8 +164,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794237846841,
-     "t_end_ms": 1794237848149,
+     "t_start_ms": 1794245077137,
+     "t_end_ms": 1794245078444,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+Shift+Down"
@@ -174,18 +174,18 @@
       "Ctrl+Insert+Shift+Down"
      ],
      "key_times": [
-      1794237846841
+      1794245077137
      ],
      "observation": {
-      "speech_raw": "Skim Reading \u001d dialog \u001e \nUse Rule Type:\nRead First Line of Every Paragraph",
+      "speech_raw": "Skim Reading \u001d dialog \u001e \nUse Rule Type:\nUse Rule Type: Read First Line of Every Paragraph \u001d radio button \u001e  \u001dchecked\u001e \n1 of 4\nTo change the selection press Up or Down Arrow.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794237848149,
-     "t_end_ms": 1794237849453,
+     "t_start_ms": 1794245078444,
+     "t_end_ms": 1794245079748,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -194,18 +194,18 @@
       "Tab"
      ],
      "key_times": [
-      1794237848149
+      1794245078444
      ],
      "observation": {
-      "speech_raw": "Skim Reading Indication \u001d check box \u001e  \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
+      "speech_raw": "Color or Attribute Rules Skim Reading Indication \u001d check box \u001e  \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794237849453,
-     "t_end_ms": 1794237850558,
+     "t_start_ms": 1794245079748,
+     "t_end_ms": 1794245080853,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -214,7 +214,7 @@
       "Tab"
      ],
      "key_times": [
-      1794237849453
+      1794245079748
      ],
      "observation": {
       "speech_raw": "Start Skim Reading \u001d Button \u001e \nTo activate press spacebar.",
@@ -224,8 +224,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794237850558,
-     "t_end_ms": 1794237851561,
+     "t_start_ms": 1794245080853,
+     "t_end_ms": 1794245081856,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -234,7 +234,7 @@
       "Escape"
      ],
      "key_times": [
-      1794237850558
+      1794245080853
      ],
      "observation": {
       "speech_raw": "",
@@ -244,8 +244,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794237851561,
-     "t_end_ms": 1794237852566,
+     "t_start_ms": 1794245081856,
+     "t_end_ms": 1794245082861,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -254,7 +254,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794237851561
+      1794245081856
      ],
      "observation": {
       "speech_raw": "content information end",

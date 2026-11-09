@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794231354822
+     "t_ms": 1794247920433
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794231356188,
-     "t_end_ms": 1794231357495,
+     "t_start_ms": 1794247921796,
+     "t_end_ms": 1794247923103,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+Insert+Down"
@@ -32,18 +32,18 @@
       "Ctrl+Shift+Insert+Down"
      ],
      "key_times": [
-      1794231356188
+      1794247921796
      ],
      "observation": {
-      "speech_raw": "Skim Reading \u001d dialog \u001e \nUse Rule Type:\nRead First Line of Every Paragraph",
+      "speech_raw": "Skim Reading \u001d dialog \u001e \nUse Rule Type:\nUse Rule Type: Read First Line of Every Paragraph \u001d radio button \u001e  \u001dchecked\u001e \n1 of 4\nTo change the selection press Up or Down Arrow.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794231357496,
-     "t_end_ms": 1794231358700,
+     "t_start_ms": 1794247923103,
+     "t_end_ms": 1794247924307,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -52,7 +52,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794231357496
+      1794247923103
      ],
      "observation": {
       "speech_raw": "Read First Sentence of Every Paragraph \u001d radio button \u001e  \u001dchecked\u001e \n2 of 4\nTo change the selection press Up or Down Arrow.",
@@ -62,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794231358700,
-     "t_end_ms": 1794231359904,
+     "t_start_ms": 1794247924307,
+     "t_end_ms": 1794247925511,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -72,7 +72,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794231358700
+      1794247924307
      ],
      "observation": {
       "speech_raw": "Text Rules Apply for Reading \u001d radio button \u001e  \u001dchecked\u001e \n3 of 4\nTo change the selection press Up or Down Arrow.",
@@ -82,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794231359904,
-     "t_end_ms": 1794231361108,
+     "t_start_ms": 1794247925511,
+     "t_end_ms": 1794247926715,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -92,7 +92,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794231359904
+      1794247925511
      ],
      "observation": {
       "speech_raw": "Attributes and Color Rules Apply for Reading \u001d radio button \u001e  \u001dchecked\u001e \n4 of 4\nTo change the selection press Up or Down Arrow.",
@@ -102,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794231361108,
-     "t_end_ms": 1794231362212,
+     "t_start_ms": 1794247926715,
+     "t_end_ms": 1794247927820,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -112,18 +112,18 @@
       "Tab"
      ],
      "key_times": [
-      1794231361108
+      1794247926715
      ],
      "observation": {
-      "speech_raw": "Rules History: \u001d Combo box \u001e \n<New>\nTo change the selection use the Arrow keys.",
+      "speech_raw": "Rules History: \u001d Combo box \u001e \n<New>\n1 of 1\nTo change the selection use the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794231362212,
-     "t_end_ms": 1794231363416,
+     "t_start_ms": 1794247927820,
+     "t_end_ms": 1794247929024,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -132,18 +132,18 @@
       "Tab"
      ],
      "key_times": [
-      1794231362212
+      1794247927820
      ],
      "observation": {
-      "speech_raw": "Text Color: \u001d Combo box \u001e \n*\nTo change the selection use the Arrow keys.",
+      "speech_raw": "Color or Attribute Rules Text Color: \u001d Combo box \u001e \n*\n1 of 509\nTo change the selection use the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794231363416,
-     "t_end_ms": 1794231364521,
+     "t_start_ms": 1794247929024,
+     "t_end_ms": 1794247930229,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -152,18 +152,18 @@
       "Tab"
      ],
      "key_times": [
-      1794231363416
+      1794247929024
      ],
      "observation": {
-      "speech_raw": "Background Color: \u001d Combo box \u001e \n*\nTo change the selection use the Arrow keys.",
+      "speech_raw": "Color or Attribute Rules Background Color: \u001d Combo box \u001e \n*\n1 of 509\nTo change the selection use the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794231364521,
-     "t_end_ms": 1794231365826,
+     "t_start_ms": 1794247930229,
+     "t_end_ms": 1794247931534,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -172,18 +172,18 @@
       "Tab"
      ],
      "key_times": [
-      1794231364521
+      1794247930229
      ],
      "observation": {
-      "speech_raw": "Bold \u001d check box \u001e  \u001dnot checked\u001e \nTo check press Spacebar.",
+      "speech_raw": "Color or Attribute Rules Bold \u001d check box \u001e  \u001dnot checked\u001e \nTo check press Spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794231365826,
-     "t_end_ms": 1794231367030,
+     "t_start_ms": 1794247931534,
+     "t_end_ms": 1794247932839,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Space\")"
@@ -192,7 +192,7 @@
       "Space"
      ],
      "key_times": [
-      1794231365826
+      1794247931534
      ],
      "observation": {
       "speech_raw": "\u001dchecked\u001e",
@@ -202,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794231367030,
-     "t_end_ms": 1794231368335,
+     "t_start_ms": 1794247932839,
+     "t_end_ms": 1794247934143,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -212,18 +212,18 @@
       "Tab"
      ],
      "key_times": [
-      1794231367030
+      1794247932839
      ],
      "observation": {
-      "speech_raw": "Italic \u001d check box \u001e  \u001dnot checked\u001e \nTo check press Spacebar.",
+      "speech_raw": "Color or Attribute Rules Italic \u001d check box \u001e  \u001dnot checked\u001e \nTo check press Spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794231368335,
-     "t_end_ms": 1794231369539,
+     "t_start_ms": 1794247934143,
+     "t_end_ms": 1794247935348,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Space\")"
@@ -232,7 +232,7 @@
       "Space"
      ],
      "key_times": [
-      1794231368335
+      1794247934143
      ],
      "observation": {
       "speech_raw": "\u001dchecked\u001e",
@@ -242,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794231369539,
-     "t_end_ms": 1794231370845,
+     "t_start_ms": 1794247935348,
+     "t_end_ms": 1794247936654,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+S\")"
@@ -252,7 +252,7 @@
       "Alt+S"
      ],
      "key_times": [
-      1794231369539
+      1794247935348
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e City Library Expands Evening Hours\nThe Riverside City Library will stay open until 9 p.m. on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which\nmost respondents asked for later hours.\n \u001d heading level 2 \u001e What changes\n \u001d heading level 2 \u001e Opening schedule\nBranch\nWeekdays\nDetails\nCentral\nNorthside\n \u001d heading level 3 \u001e What readers said\n \u001d heading level 2 \u001e Related stories\n12 matches found\nRelated",

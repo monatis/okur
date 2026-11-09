@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "298f0c7c"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794238766416
+     "t_ms": 1794244860544
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794238767784,
-     "t_end_ms": 1794238768788,
+     "t_start_ms": 1794244861906,
+     "t_end_ms": 1794244862910,
      "action": {
       "type": "key",
       "command": "T"
@@ -32,7 +32,7 @@
       "T"
      ],
      "key_times": [
-      1794238767784
+      1794244861906
      ],
      "observation": {
       "speech_raw": "table with 2 columns and 3 rows\nColumn 1, Row 1\nBranch",
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794238768788,
-     "t_end_ms": 1794238769793,
+     "t_start_ms": 1794244862910,
+     "t_end_ms": 1794244863916,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Down"
@@ -52,7 +52,7 @@
       "Ctrl+Alt+Down"
      ],
      "key_times": [
-      1794238768788
+      1794244862910
      ],
      "observation": {
       "speech_raw": "Central\nRow 2 of 3",
@@ -62,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794238769793,
-     "t_end_ms": 1794238770798,
+     "t_start_ms": 1794244863916,
+     "t_end_ms": 1794244864922,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Right"
@@ -72,7 +72,7 @@
       "Ctrl+Alt+Right"
      ],
      "key_times": [
-      1794238769793
+      1794244863916
      ],
      "observation": {
       "speech_raw": "Opens \n9 am\nColumn 2 of 2",
@@ -82,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794238770798,
-     "t_end_ms": 1794238771802,
+     "t_start_ms": 1794244864922,
+     "t_end_ms": 1794244865925,
      "action": {
       "type": "key",
       "command": "T"
@@ -92,7 +92,7 @@
       "T"
      ],
      "key_times": [
-      1794238770798
+      1794244864922
      ],
      "observation": {
       "speech_raw": "table with 2 columns and 3 rows\nColumn 1, Row 1\nBook",
@@ -102,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794238771802,
-     "t_end_ms": 1794238772808,
+     "t_start_ms": 1794244865925,
+     "t_end_ms": 1794244866931,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Down"
@@ -112,7 +112,7 @@
       "Ctrl+Alt+Down"
      ],
      "key_times": [
-      1794238771802
+      1794244865925
      ],
      "observation": {
       "speech_raw": "Atlas\nclickable\nRow 2 of 3",
@@ -122,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794238772808,
-     "t_end_ms": 1794238773813,
+     "t_start_ms": 1794244866931,
+     "t_end_ms": 1794244867937,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Right"
@@ -132,7 +132,7 @@
       "Ctrl+Alt+Right"
      ],
      "key_times": [
-      1794238772808
+      1794244866931
      ],
      "observation": {
       "speech_raw": "Due \nMonday\nclickable\nColumn 2 of 2",

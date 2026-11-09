@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ad9029d7"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794240651231
+     "t_ms": 1794244555683
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794240651590
+     "t_ms": 1794244556042
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794240652895,
-     "t_end_ms": 1794240654201,
+     "t_start_ms": 1794244557347,
+     "t_end_ms": 1794244558654,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+R"
@@ -36,18 +36,18 @@
       "Ctrl+Insert+R"
      ],
      "key_times": [
-      1794240652895
+      1794244557347
      ],
      "observation": {
-      "speech_raw": "Document Regions \u001d dialog \u001e \nRegions \u001d Tree view \u001e \nBanner Opened\n1 of 5\nTo move through or expand items use the Arrow keys.",
+      "speech_raw": "Document Regions \u001d dialog \u001e \nRegions \u001d Tree view \u001e \nBanner Opened\n1 item\nTo move through or expand items use the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794240654201,
-     "t_end_ms": 1794240655405,
+     "t_start_ms": 1794244558654,
+     "t_end_ms": 1794244559857,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -56,18 +56,18 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240654201
+      1794244558654
      ],
      "observation": {
-      "speech_raw": "Primary Navigation\n2 of 5",
+      "speech_raw": "level 1\nPrimary Navigation\n1 of 1\nBanner",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794240655405,
-     "t_end_ms": 1794240656608,
+     "t_start_ms": 1794244559857,
+     "t_end_ms": 1794244560961,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -76,18 +76,18 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240655405
+      1794244559857
      ],
      "observation": {
-      "speech_raw": "Main\n3 of 5",
+      "speech_raw": "level 0\nMain\n2 of 4",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794240656608,
-     "t_end_ms": 1794240657712,
+     "t_start_ms": 1794244560961,
+     "t_end_ms": 1794244562065,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -96,18 +96,18 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240656608
+      1794244560961
      ],
      "observation": {
-      "speech_raw": "Related stories Complementary information\n4 of 5",
+      "speech_raw": "Related stories Complementary information",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794240657712,
-     "t_end_ms": 1794240658817,
+     "t_start_ms": 1794244562065,
+     "t_end_ms": 1794244563170,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -116,18 +116,18 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240657712
+      1794244562065
      ],
      "observation": {
-      "speech_raw": "Content information\n5 of 5",
+      "speech_raw": "Content information",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794240658817,
-     "t_end_ms": 1794240659822,
+     "t_start_ms": 1794244563170,
+     "t_end_ms": 1794244564174,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -136,7 +136,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794240658817
+      1794244563170
      ],
      "observation": {
       "speech_raw": "",
@@ -146,8 +146,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794240659822,
-     "t_end_ms": 1794240660926,
+     "t_start_ms": 1794244564174,
+     "t_end_ms": 1794244565278,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"UpArrow\")"
@@ -156,18 +156,18 @@
       "UpArrow"
      ],
      "key_times": [
-      1794240659822
+      1794244564174
      ],
      "observation": {
-      "speech_raw": "Related stories Complementary information\n4 of 5",
+      "speech_raw": "Related stories Complementary information",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794240660926,
-     "t_end_ms": 1794240661930,
+     "t_start_ms": 1794244565278,
+     "t_end_ms": 1794244566282,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Escape\")"
@@ -176,7 +176,7 @@
       "Escape"
      ],
      "key_times": [
-      1794240660926
+      1794244565278
      ],
      "observation": {
       "speech_raw": "",

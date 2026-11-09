@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "298f0c7c"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794237999913
+     "t_ms": 1794244084382
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794238000275
+     "t_ms": 1794244084735
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794238001581,
-     "t_end_ms": 1794238002586,
+     "t_start_ms": 1794244086040,
+     "t_end_ms": 1794244087044,
      "action": {
       "type": "key",
       "command": "Alt+F"
@@ -36,7 +36,7 @@
       "Alt+F"
      ],
      "key_times": [
-      1794238001581
+      1794244086040
      ],
      "observation": {
       "speech_raw": "",
@@ -46,8 +46,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794238002586,
-     "t_end_ms": 1794238003690,
+     "t_start_ms": 1794244087044,
+     "t_end_ms": 1794244088149,
      "action": {
       "type": "key",
       "command": "Down"
@@ -56,7 +56,7 @@
       "Down"
      ],
      "key_times": [
-      1794238002586
+      1794244087044
      ],
      "observation": {
       "speech_raw": " \u001d Context Menu \u001e \n\nTo navigate press Up or Down Arrow.\nNew tab Ctrl+T\n1 of 21",
@@ -66,8 +66,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794238003690,
-     "t_end_ms": 1794238004794,
+     "t_start_ms": 1794244088149,
+     "t_end_ms": 1794244089253,
      "action": {
       "type": "key",
       "command": "Down"
@@ -76,7 +76,7 @@
       "Down"
      ],
      "key_times": [
-      1794238003690
+      1794244088149
      ],
      "observation": {
       "speech_raw": "New window Ctrl+N\n2 of 21",
@@ -86,8 +86,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794238004794,
-     "t_end_ms": 1794238005899,
+     "t_start_ms": 1794244089253,
+     "t_end_ms": 1794244090356,
      "action": {
       "type": "key",
       "command": "Down"
@@ -96,7 +96,7 @@
       "Down"
      ],
      "key_times": [
-      1794238004794
+      1794244089253
      ],
      "observation": {
       "speech_raw": "New Incognito window Ctrl+Shift+N\n3 of 21",
@@ -106,8 +106,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794238005899,
-     "t_end_ms": 1794238007203,
+     "t_start_ms": 1794244090356,
+     "t_end_ms": 1794244091660,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -116,7 +116,7 @@
       "Escape"
      ],
      "key_times": [
-      1794238005899
+      1794244090356
      ],
      "observation": {
       "speech_raw": "Leaving menus\nCity Library Expands Evening Hours - Riverside Gazette",
@@ -126,8 +126,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794238007203,
-     "t_end_ms": 1794238008207,
+     "t_start_ms": 1794244091660,
+     "t_end_ms": 1794244092663,
      "action": {
       "type": "key",
       "command": "Down"
@@ -136,7 +136,7 @@
       "Down"
      ],
      "key_times": [
-      1794238007203
+      1794244091660
      ],
      "observation": {
       "speech_raw": "",
@@ -146,8 +146,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794238008207,
-     "t_end_ms": 1794238009411,
+     "t_start_ms": 1794244092663,
+     "t_end_ms": 1794244093867,
      "action": {
       "type": "key",
       "command": "Ctrl+L"
@@ -156,7 +156,7 @@
       "Ctrl+L"
      ],
      "key_times": [
-      1794238008207
+      1794244092663
      ],
      "observation": {
       "speech_raw": "Address and search bar \u001d Edit \u001e \nfile:///root/okur/corpus/fixtures/news-article.html\nType in text.",
@@ -166,8 +166,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794238009411,
-     "t_end_ms": 1794238010414,
+     "t_start_ms": 1794244093867,
+     "t_end_ms": 1794244094870,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -176,7 +176,7 @@
       "Escape"
      ],
      "key_times": [
-      1794238009411
+      1794244093867
      ],
      "observation": {
       "speech_raw": "",
@@ -186,8 +186,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794238010414,
-     "t_end_ms": 1794238011717,
+     "t_start_ms": 1794244094870,
+     "t_end_ms": 1794244096174,
      "action": {
       "type": "key",
       "command": "Down"
@@ -196,7 +196,7 @@
       "Down"
      ],
      "key_times": [
-      1794238010414
+      1794244094870
      ],
      "observation": {
       "speech_raw": "file:///root/okur/corpus/fixtures/news-article.html",
@@ -206,8 +206,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794238011717,
-     "t_end_ms": 1794238012721,
+     "t_start_ms": 1794244096174,
+     "t_end_ms": 1794244097179,
      "action": {
       "type": "key",
       "command": "Ctrl+T"
@@ -216,7 +216,7 @@
       "Ctrl+T"
      ],
      "key_times": [
-      1794238011717
+      1794244096174
      ],
      "observation": {
       "speech_raw": "",
@@ -226,8 +226,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794238012721,
-     "t_end_ms": 1794238013725,
+     "t_start_ms": 1794244097179,
+     "t_end_ms": 1794244098182,
      "action": {
       "type": "key",
       "command": "Ctrl+W"
@@ -236,7 +236,7 @@
       "Ctrl+W"
      ],
      "key_times": [
-      1794238012721
+      1794244097179
      ],
      "observation": {
       "speech_raw": "",
@@ -246,8 +246,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794238013725,
-     "t_end_ms": 1794238015028,
+     "t_start_ms": 1794244098183,
+     "t_end_ms": 1794244099486,
      "action": {
       "type": "key",
       "command": "Down"
@@ -256,7 +256,7 @@
       "Down"
      ],
      "key_times": [
-      1794238013725
+      1794244098183
      ],
      "observation": {
       "speech_raw": "  \u001d document \u001e\nPage has no headings and no links\n  \u001d document \u001e\nPage has no headings and no links\nfile:///root/okur/corpus/fixtures/news-article.html",

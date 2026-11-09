@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794227125887
+     "t_ms": 1794245916815
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794227127247,
-     "t_end_ms": 1794227128252,
+     "t_start_ms": 1794245918175,
+     "t_end_ms": 1794245919481,
      "action": {
       "type": "key",
       "command": "Ctrl+F"
@@ -32,18 +32,18 @@
       "Ctrl+F"
      ],
      "key_times": [
-      1794227127247
+      1794245918175
      ],
      "observation": {
-      "speech_raw": "Virtual Find",
+      "speech_raw": "Virtual Find\nOkur Find \u001d dialog \u001e \nFind what: \u001d Edit \u001e \nType in text.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794227128252,
-     "t_end_ms": 1794227129256,
+     "t_start_ms": 1794245919481,
+     "t_end_ms": 1794245920485,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"b\")"
@@ -52,18 +52,18 @@
       "b"
      ],
      "key_times": [
-      1794227128252
+      1794245919481
      ],
      "observation": {
-      "speech_raw": "There are no buttons on this page.",
+      "speech_raw": "",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794227129256,
-     "t_end_ms": 1794227130260,
+     "t_start_ms": 1794245920485,
+     "t_end_ms": 1794245921489,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"o\")"
@@ -72,18 +72,18 @@
       "o"
      ],
      "key_times": [
-      1794227129256
+      1794245920485
      ],
      "observation": {
-      "speech_raw": "article",
+      "speech_raw": "",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794227130260,
-     "t_end_ms": 1794227131264,
+     "t_start_ms": 1794245921489,
+     "t_end_ms": 1794245922493,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"a\")"
@@ -92,18 +92,18 @@
       "a"
      ],
      "key_times": [
-      1794227130260
+      1794245921489
      ],
      "observation": {
-      "speech_raw": "There are no radio buttons on this page.",
+      "speech_raw": "",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794227131264,
-     "t_end_ms": 1794227132267,
+     "t_start_ms": 1794245922493,
+     "t_end_ms": 1794245923497,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"r\")"
@@ -112,18 +112,18 @@
       "r"
      ],
      "key_times": [
-      1794227131264
+      1794245922493
      ],
      "observation": {
-      "speech_raw": "Related stories complementary information",
+      "speech_raw": "",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794227132267,
-     "t_end_ms": 1794227133271,
+     "t_start_ms": 1794245923497,
+     "t_end_ms": 1794245924502,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"d\")"
@@ -132,18 +132,18 @@
       "d"
      ],
      "key_times": [
-      1794227132267
+      1794245923497
      ],
      "observation": {
-      "speech_raw": "Related stories\n \u001d heading level 2 \u001e",
+      "speech_raw": "",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794227133271,
-     "t_end_ms": 1794227134275,
+     "t_start_ms": 1794245924502,
+     "t_end_ms": 1794245925606,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -152,18 +152,18 @@
       "Enter"
      ],
      "key_times": [
-      1794227133271
+      1794245924502
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "The Riverside City Library will stay open until 9 p.m. on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794227134275,
-     "t_end_ms": 1794227135280,
+     "t_start_ms": 1794245925606,
+     "t_end_ms": 1794245926610,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -172,18 +172,18 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794227134275
+      1794245925606
      ],
      "observation": {
-      "speech_raw": " \u001d heading level 2 \u001e Related stories",
+      "speech_raw": "The Riverside City Library will stay open until 9 p.m. on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794227135280,
-     "t_end_ms": 1794227136283,
+     "t_start_ms": 1794245926610,
+     "t_end_ms": 1794245927614,
      "action": {
       "type": "key",
       "command": "F3"
@@ -192,18 +192,18 @@
       "F3"
      ],
      "key_times": [
-      1794227135280
+      1794245926610
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "The library board will review attendance in the fall. A long-standing complaint among students and working parents was that the reading rooms closed before",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794227136283,
-     "t_end_ms": 1794227137287,
+     "t_start_ms": 1794245927614,
+     "t_end_ms": 1794245928619,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -212,18 +212,18 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794227136283
+      1794245927614
      ],
      "observation": {
-      "speech_raw": " \u001d heading level 2 \u001e Related stories",
+      "speech_raw": "The library board will review attendance in the fall. A long-standing complaint among students and working parents was that the reading rooms closed before",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794227137287,
-     "t_end_ms": 1794227138291,
+     "t_start_ms": 1794245928619,
+     "t_end_ms": 1794245929623,
      "action": {
       "type": "key",
       "command": "F3"
@@ -232,18 +232,18 @@
       "F3"
      ],
      "key_times": [
-      1794227137287
+      1794245928619
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "1. Board vote in March",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794227138291,
-     "t_end_ms": 1794227139295,
+     "t_start_ms": 1794245929623,
+     "t_end_ms": 1794245930628,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -252,18 +252,18 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794227138291
+      1794245929623
      ],
      "observation": {
-      "speech_raw": " \u001d heading level 2 \u001e Related stories",
+      "speech_raw": "1. Board vote in March",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794227139295,
-     "t_end_ms": 1794227140300,
+     "t_start_ms": 1794245930628,
+     "t_end_ms": 1794245931633,
      "action": {
       "type": "key",
       "command": "Shift+F3"
@@ -272,18 +272,18 @@
       "Shift+F3"
      ],
      "key_times": [
-      1794227139295
+      1794245930628
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "The library board will review attendance in the fall. A long-standing complaint among students and working parents was that the reading rooms closed before",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794227140300,
-     "t_end_ms": 1794227141305,
+     "t_start_ms": 1794245931633,
+     "t_end_ms": 1794245932638,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -292,18 +292,18 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794227140300
+      1794245931633
      ],
      "observation": {
-      "speech_raw": " \u001d heading level 2 \u001e Related stories",
+      "speech_raw": "The library board will review attendance in the fall. A long-standing complaint among students and working parents was that the reading rooms closed before",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794227141305,
-     "t_end_ms": 1794227142310,
+     "t_start_ms": 1794245932638,
+     "t_end_ms": 1794245933643,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -312,7 +312,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794227141305
+      1794245932638
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
@@ -322,8 +322,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794227142310,
-     "t_end_ms": 1794227143314,
+     "t_start_ms": 1794245933643,
+     "t_end_ms": 1794245934647,
      "action": {
       "type": "key",
       "command": "F3"
@@ -332,18 +332,18 @@
       "F3"
      ],
      "key_times": [
-      1794227142310
+      1794245933643
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "The Riverside City Library will stay open until 9 p.m. on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794227143314,
-     "t_end_ms": 1794227144319,
+     "t_start_ms": 1794245934647,
+     "t_end_ms": 1794245935652,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -352,10 +352,10 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794227143314
+      1794245934647
      ],
      "observation": {
-      "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
+      "speech_raw": "The Riverside City Library will stay open until 9 p.m. on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which",
       "settled": true
      },
      "step_success": true

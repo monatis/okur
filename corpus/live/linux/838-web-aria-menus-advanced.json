@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794232542161
+     "t_ms": 1794248399944
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794232542522
+     "t_ms": 1794248400301
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794232543827,
-     "t_end_ms": 1794232544931,
+     "t_start_ms": 1794248401606,
+     "t_end_ms": 1794248402710,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -36,7 +36,7 @@
       "Tab"
      ],
      "key_times": [
-      1794232543827
+      1794248401606
      ],
      "observation": {
       "speech_raw": "Web Menus\nFile \u001d menu \u001e  \u001dsub menu\u001e  \u001dcollapsed\u001e \nTo move through items press up or down arrow.",
@@ -46,8 +46,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794232544931,
-     "t_end_ms": 1794232545935,
+     "t_start_ms": 1794248402710,
+     "t_end_ms": 1794248403714,
      "action": {
       "type": "key",
       "command": "Down"
@@ -56,7 +56,7 @@
       "Down"
      ],
      "key_times": [
-      1794232544931
+      1794248402710
      ],
      "observation": {
       "speech_raw": "Edit \u001d menu \u001e  \u001dsub menu\u001e  \u001dcollapsed\u001e ",
@@ -66,8 +66,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794232545935,
-     "t_end_ms": 1794232546939,
+     "t_start_ms": 1794248403714,
+     "t_end_ms": 1794248404717,
      "action": {
       "type": "key",
       "command": "Down"
@@ -76,7 +76,7 @@
       "Down"
      ],
      "key_times": [
-      1794232545935
+      1794248403714
      ],
      "observation": {
       "speech_raw": "Help \u001d menu \u001e ",
@@ -86,8 +86,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794232546939,
-     "t_end_ms": 1794232547943,
+     "t_start_ms": 1794248404717,
+     "t_end_ms": 1794248405722,
      "action": {
       "type": "key",
       "command": "Down"
@@ -96,7 +96,7 @@
       "Down"
      ],
      "key_times": [
-      1794232546939
+      1794248404717
      ],
      "observation": {
       "speech_raw": "MenuBar end",
@@ -106,8 +106,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794232547943,
-     "t_end_ms": 1794232548947,
+     "t_start_ms": 1794248405722,
+     "t_end_ms": 1794248406725,
      "action": {
       "type": "key",
       "command": "Right"
@@ -116,7 +116,7 @@
       "Right"
      ],
      "key_times": [
-      1794232547943
+      1794248405722
      ],
      "observation": {
       "speech_raw": "e",
@@ -126,8 +126,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794232548947,
-     "t_end_ms": 1794232550052,
+     "t_start_ms": 1794248406725,
+     "t_end_ms": 1794248407830,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -136,7 +136,7 @@
       "Escape"
      ],
      "key_times": [
-      1794232548947
+      1794248406725
      ],
      "observation": {
       "speech_raw": "Leaving menus\nNotes \u001d edit \u001e \nContains text",
@@ -146,8 +146,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794232550052,
-     "t_end_ms": 1794232551056,
+     "t_start_ms": 1794248407830,
+     "t_end_ms": 1794248408833,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -156,7 +156,7 @@
       "Escape"
      ],
      "key_times": [
-      1794232550052
+      1794248407830
      ],
      "observation": {
       "speech_raw": "",
@@ -166,8 +166,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794232551056,
-     "t_end_ms": 1794232552061,
+     "t_start_ms": 1794248408833,
+     "t_end_ms": 1794248409836,
      "action": {
       "type": "key",
       "command": "Right"
@@ -176,7 +176,7 @@
       "Right"
      ],
      "key_times": [
-      1794232551056
+      1794248408833
      ],
      "observation": {
       "speech_raw": "i",
@@ -186,8 +186,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794232552061,
-     "t_end_ms": 1794232553064,
+     "t_start_ms": 1794248409836,
+     "t_end_ms": 1794248410839,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -196,7 +196,7 @@
       "Escape"
      ],
      "key_times": [
-      1794232552061
+      1794248409836
      ],
      "observation": {
       "speech_raw": "",
@@ -206,8 +206,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794232553064,
-     "t_end_ms": 1794232554171,
+     "t_start_ms": 1794248410839,
+     "t_end_ms": 1794248411943,
      "action": {
       "type": "key",
       "command": "Alt+Shift+F"
@@ -216,7 +216,7 @@
       "Alt+Shift+F"
      ],
      "key_times": [
-      1794232553064
+      1794248410839
      ],
      "observation": {
       "speech_raw": "New \u001d menu \u001e \nTo move through items press up or down arrow.",
@@ -226,8 +226,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794232554171,
-     "t_end_ms": 1794232555275,
+     "t_start_ms": 1794248411943,
+     "t_end_ms": 1794248413046,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -236,7 +236,7 @@
       "Escape"
      ],
      "key_times": [
-      1794232554171
+      1794248411943
      ],
      "observation": {
       "speech_raw": "File \u001d menu \u001e  \u001dsub menu\u001e  \u001dexpanded\u001e ",
@@ -246,8 +246,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794232555275,
-     "t_end_ms": 1794232556380,
+     "t_start_ms": 1794248413046,
+     "t_end_ms": 1794248414150,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -256,7 +256,7 @@
       "Escape"
      ],
      "key_times": [
-      1794232555275
+      1794248413046
      ],
      "observation": {
       "speech_raw": "Leaving menus\nNotes \u001d edit \u001e \nContains text",

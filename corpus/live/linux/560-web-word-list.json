@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794224071320
+     "t_ms": 1794245235879
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794224072683,
-     "t_end_ms": 1794224073989,
+     "t_start_ms": 1794245237243,
+     "t_end_ms": 1794245238550,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+W"
@@ -32,7 +32,7 @@
       "Ctrl+Insert+W"
      ],
      "key_times": [
-      1794224072683
+      1794245237243
      ],
      "observation": {
       "speech_raw": "Word List \u001d dialog \u001e \nList1 \u001d List view \u001e \nm (10)\n1 of 143\nTo move to items use the Arrow keys.",
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794224073989,
-     "t_end_ms": 1794224074993,
+     "t_start_ms": 1794245238550,
+     "t_end_ms": 1794245239554,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Escape\")"
@@ -52,7 +52,7 @@
       "Escape"
      ],
      "key_times": [
-      1794224073989
+      1794245238550
      ],
      "observation": {
       "speech_raw": "",
@@ -62,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794224074993,
-     "t_end_ms": 1794224075996,
+     "t_start_ms": 1794245239554,
+     "t_end_ms": 1794245240558,
      "action": {
       "type": "key",
       "command": "W"
@@ -72,7 +72,7 @@
       "W"
      ],
      "key_times": [
-      1794224074993
+      1794245239554
      ],
      "observation": {
       "speech_raw": "No word list has been created.\nTo create the word list, press control+Insert+W.",
@@ -82,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794224075996,
-     "t_end_ms": 1794224077201,
+     "t_start_ms": 1794245240558,
+     "t_end_ms": 1794245241765,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+W"
@@ -92,7 +92,7 @@
       "Ctrl+Insert+W"
      ],
      "key_times": [
-      1794224075996
+      1794245240558
      ],
      "observation": {
       "speech_raw": "Word List \u001d dialog \u001e \nList1 \u001d List view \u001e \nm (10)\n1 of 143\nTo move to items use the Arrow keys.",
@@ -102,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794224077201,
-     "t_end_ms": 1794224078406,
+     "t_start_ms": 1794245241765,
+     "t_end_ms": 1794245242969,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Down\")"
@@ -112,7 +112,7 @@
       "Down"
      ],
      "key_times": [
-      1794224077201
+      1794245241765
      ],
      "observation": {
       "speech_raw": "end (7)\n2 of 143",
@@ -122,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794224078406,
-     "t_end_ms": 1794224079510,
+     "t_start_ms": 1794245242969,
+     "t_end_ms": 1794245244074,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -132,7 +132,7 @@
       "Enter"
      ],
      "key_times": [
-      1794224078406
+      1794245242969
      ],
      "observation": {
       "speech_raw": "list end",
@@ -142,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794224079511,
-     "t_end_ms": 1794224080516,
+     "t_start_ms": 1794245244074,
+     "t_end_ms": 1794245245079,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -152,7 +152,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794224079511
+      1794245244074
      ],
      "observation": {
       "speech_raw": "list end",
@@ -162,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794224080516,
-     "t_end_ms": 1794224081520,
+     "t_start_ms": 1794245245079,
+     "t_end_ms": 1794245246084,
      "action": {
       "type": "key",
       "command": "W"
@@ -172,7 +172,7 @@
       "W"
      ],
      "key_times": [
-      1794224080516
+      1794245245079
      ],
      "observation": {
       "speech_raw": "Primary navigation region end",
@@ -182,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794224081520,
-     "t_end_ms": 1794224082524,
+     "t_start_ms": 1794245246084,
+     "t_end_ms": 1794245247088,
      "action": {
       "type": "key",
       "command": "W"
@@ -192,7 +192,7 @@
       "W"
      ],
      "key_times": [
-      1794224081520
+      1794245246084
      ],
      "observation": {
       "speech_raw": "banner end",
@@ -202,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794224082524,
-     "t_end_ms": 1794224083530,
+     "t_start_ms": 1794245247088,
+     "t_end_ms": 1794245248094,
      "action": {
       "type": "key",
       "command": "Shift+W"
@@ -212,7 +212,7 @@
       "Shift+W"
      ],
      "key_times": [
-      1794224082524
+      1794245247088
      ],
      "observation": {
       "speech_raw": "Primary navigation region end",

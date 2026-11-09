@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794222495904
+     "t_ms": 1794244674768
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794222497270,
-     "t_end_ms": 1794222498474,
+     "t_start_ms": 1794244676130,
+     "t_end_ms": 1794244677334,
      "action": {
       "type": "key",
       "command": "J"
@@ -32,7 +32,7 @@
       "J"
      ],
      "key_times": [
-      1794222497270
+      1794244676130
      ],
      "observation": {
       "speech_raw": "Jump To Line \u001d dialog \u001e \nEnter Line Number (1 to 73): \u001d Edit \u001e \n1\nType in text.",
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794222498475,
-     "t_end_ms": 1794222499478,
+     "t_start_ms": 1794244677334,
+     "t_end_ms": 1794244678338,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"1\")"
@@ -52,7 +52,7 @@
       "1"
      ],
      "key_times": [
-      1794222498475
+      1794244677334
      ],
      "observation": {
       "speech_raw": "",
@@ -62,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794222499478,
-     "t_end_ms": 1794222500482,
+     "t_start_ms": 1794244678338,
+     "t_end_ms": 1794244679341,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"2\")"
@@ -72,7 +72,7 @@
       "2"
      ],
      "key_times": [
-      1794222499478
+      1794244678338
      ],
      "observation": {
       "speech_raw": "",
@@ -82,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794222500482,
-     "t_end_ms": 1794222501987,
+     "t_start_ms": 1794244679341,
+     "t_end_ms": 1794244680646,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -92,7 +92,7 @@
       "Enter"
      ],
      "key_times": [
-      1794222500482
+      1794244679341
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette \u001d document \u001e \nCity Library Expands Evening Hours - Riverside Gazette - Google Chrome",
@@ -102,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794222501987,
-     "t_end_ms": 1794222502991,
+     "t_start_ms": 1794244680646,
+     "t_end_ms": 1794244681650,
      "action": {
       "type": "key",
       "command": "Shift+J"
@@ -112,7 +112,7 @@
       "Shift+J"
      ],
      "key_times": [
-      1794222501987
+      1794244680646
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
@@ -122,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794222502991,
-     "t_end_ms": 1794222503995,
+     "t_start_ms": 1794244681650,
+     "t_end_ms": 1794244682654,
      "action": {
       "type": "key",
       "command": "W"
@@ -132,7 +132,7 @@
       "W"
      ],
      "key_times": [
-      1794222502991
+      1794244681650
      ],
      "observation": {
       "speech_raw": "No word list has been created.\nTo create the word list, press control+Insert+W.",
@@ -142,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794222503995,
-     "t_end_ms": 1794222505000,
+     "t_start_ms": 1794244682654,
+     "t_end_ms": 1794244683658,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Escape\")"
@@ -152,7 +152,7 @@
       "Escape"
      ],
      "key_times": [
-      1794222503995
+      1794244682654
      ],
      "observation": {
       "speech_raw": "",
@@ -162,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794222505000,
-     "t_end_ms": 1794222506004,
+     "t_start_ms": 1794244683658,
+     "t_end_ms": 1794244684663,
      "action": {
       "type": "key",
       "command": "Shift+W"
@@ -172,7 +172,7 @@
       "Shift+W"
      ],
      "key_times": [
-      1794222505000
+      1794244683658
      ],
      "observation": {
       "speech_raw": "No word list has been created.\nTo create the word list, press control+Insert+W.",
@@ -182,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794222506004,
-     "t_end_ms": 1794222507009,
+     "t_start_ms": 1794244684663,
+     "t_end_ms": 1794244685667,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Escape\")"
@@ -192,7 +192,7 @@
       "Escape"
      ],
      "key_times": [
-      1794222506004
+      1794244684663
      ],
      "observation": {
       "speech_raw": "",

@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ad9029d7"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794241047968
+     "t_ms": 1794247076715
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794241049325,
-     "t_end_ms": 1794241050329,
+     "t_start_ms": 1794247078077,
+     "t_end_ms": 1794247079081,
      "action": {
       "type": "key",
       "command": "R"
@@ -32,7 +32,7 @@
       "R"
      ],
      "key_times": [
-      1794241049325
+      1794247078077
      ],
      "observation": {
       "speech_raw": "banner",
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794241050329,
-     "t_end_ms": 1794241051333,
+     "t_start_ms": 1794247079081,
+     "t_end_ms": 1794247080086,
      "action": {
       "type": "key",
       "command": "R"
@@ -52,7 +52,7 @@
       "R"
      ],
      "key_times": [
-      1794241050329
+      1794247079081
      ],
      "observation": {
       "speech_raw": "Sections navigation region",
@@ -62,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794241051333,
-     "t_end_ms": 1794241052337,
+     "t_start_ms": 1794247080086,
+     "t_end_ms": 1794247081090,
      "action": {
       "type": "key",
       "command": "R"
@@ -72,7 +72,7 @@
       "R"
      ],
      "key_times": [
-      1794241051333
+      1794247080086
      ],
      "observation": {
       "speech_raw": "Advertisement complementary information",
@@ -82,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794241052337,
-     "t_end_ms": 1794241053341,
+     "t_start_ms": 1794247081090,
+     "t_end_ms": 1794247082094,
      "action": {
       "type": "key",
       "command": "Down"
@@ -92,7 +92,7 @@
       "Down"
      ],
      "key_times": [
-      1794241052337
+      1794247081090
      ],
      "observation": {
       "speech_raw": "Spring sale at Main Street Shoes: two pairs for the price of one.",
@@ -102,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794241053341,
-     "t_end_ms": 1794241054345,
+     "t_start_ms": 1794247082094,
+     "t_end_ms": 1794247083099,
      "action": {
       "type": "key",
       "command": "Insert+Space"
@@ -112,7 +112,7 @@
       "Insert+Space"
      ],
      "key_times": [
-      1794241053341
+      1794247082094
      ],
      "observation": {
       "speech_raw": "",
@@ -122,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794241054345,
-     "t_end_ms": 1794241055548,
+     "t_start_ms": 1794247083099,
+     "t_end_ms": 1794247084303,
      "action": {
       "type": "key",
       "command": "X"
@@ -132,7 +132,7 @@
       "X"
      ],
      "key_times": [
-      1794241054345
+      1794247083099
      ],
      "observation": {
       "speech_raw": "Flexible Web \u001d dialog \u001e \nCreate a new customization \u001d radio button \u001e  \u001dchecked\u001e \n1 of 5\nTo change the selection press Up or Down Arrow.",
@@ -142,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794241055548,
-     "t_end_ms": 1794241056954,
+     "t_start_ms": 1794247084304,
+     "t_end_ms": 1794247085709,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+N\")"
@@ -152,7 +152,7 @@
       "Alt+N"
      ],
      "key_times": [
-      1794241055548
+      1794247084304
      ],
      "observation": {
       "speech_raw": "Choose an Action \u001d dialog \u001e \nHide an element \u001d radio button \u001e  \u001dchecked\u001e \n1 of 2\nTo change the selection press Up or Down Arrow.",
@@ -162,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794241056954,
-     "t_end_ms": 1794241058360,
+     "t_start_ms": 1794247085709,
+     "t_end_ms": 1794247087116,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+N\")"
@@ -172,18 +172,18 @@
       "Alt+N"
      ],
      "key_times": [
-      1794241056954
+      1794247085709
      ],
      "observation": {
-      "speech_raw": "_Hide an element \u001d radio button \u001e  \u001dnot checked\u001e \nTo change the selection press Up or Down Arrow.\nChoose an element \u001d dialog \u001e \nWhich of the following elements would you like to customize? \u001d List box \u001e \nComplementaryRegion Advertisement\n1 of 1\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Choose an element \u001d dialog \u001e \nWhich of the following elements would you like to customize? \u001d List box \u001e \nComplementaryRegion Advertisement\n1 of 1\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794241058360,
-     "t_end_ms": 1794241059767,
+     "t_start_ms": 1794247087116,
+     "t_end_ms": 1794247088523,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+N\")"
@@ -192,7 +192,7 @@
       "Alt+N"
      ],
      "key_times": [
-      1794241058360
+      1794247087116
      ],
      "observation": {
       "speech_raw": "To move to an item press the Arrow keys.\nChoose a customization \u001d dialog \u001e \nSelect a customization \u001d List box \u001e \nHide ComplementaryRegion 1 from the top with text: \"Advertisement\"\n1 of 5\nTo move to an item press the Arrow keys.",
@@ -202,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794241059767,
-     "t_end_ms": 1794241060772,
+     "t_start_ms": 1794247088523,
+     "t_end_ms": 1794247089527,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -212,7 +212,7 @@
       "Enter"
      ],
      "key_times": [
-      1794241059767
+      1794247088523
      ],
      "observation": {
       "speech_raw": "",
@@ -222,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794241060772,
-     "t_end_ms": 1794241061777,
+     "t_start_ms": 1794247089527,
+     "t_end_ms": 1794247090532,
      "action": {
       "type": "key",
       "command": "Insert+Space"
@@ -232,7 +232,7 @@
       "Insert+Space"
      ],
      "key_times": [
-      1794241060772
+      1794247089527
      ],
      "observation": {
       "speech_raw": "",
@@ -242,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794241061777,
-     "t_end_ms": 1794241062982,
+     "t_start_ms": 1794247090532,
+     "t_end_ms": 1794247091736,
      "action": {
       "type": "key",
       "command": "X"
@@ -252,7 +252,7 @@
       "X"
      ],
      "key_times": [
-      1794241061777
+      1794247090532
      ],
      "observation": {
       "speech_raw": "Flexible Web \u001d dialog \u001e \nCreate a new customization \u001d radio button \u001e  \u001dchecked\u001e \n1 of 5\nTo change the selection press Up or Down Arrow.",
@@ -262,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794241062982,
-     "t_end_ms": 1794241064086,
+     "t_start_ms": 1794247091736,
+     "t_end_ms": 1794247092840,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -272,7 +272,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794241062982
+      1794247091736
      ],
      "observation": {
       "speech_raw": "Retry Hide ComplementaryRegion 1 from the top with text: \"Advertisement\" \u001d radio button \u001e  \u001dchecked\u001e \n2 of 5\nTo change the selection press Up or Down Arrow.",
@@ -282,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794241064086,
-     "t_end_ms": 1794241065191,
+     "t_start_ms": 1794247092840,
+     "t_end_ms": 1794247093945,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -292,7 +292,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794241064086
+      1794247092840
      ],
      "observation": {
       "speech_raw": "Undo Hide ComplementaryRegion 1 from the top with text: \"Advertisement\" \u001d radio button \u001e  \u001dchecked\u001e \n3 of 5\nTo change the selection press Up or Down Arrow.",
@@ -302,8 +302,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794241065191,
-     "t_end_ms": 1794241066295,
+     "t_start_ms": 1794247093945,
+     "t_end_ms": 1794247095049,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -312,7 +312,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794241065191
+      1794247093945
      ],
      "observation": {
       "speech_raw": "Save temporary customizations as a rule \u001d radio button \u001e  \u001dchecked\u001e \n4 of 5\nTo change the selection press Up or Down Arrow.",
@@ -322,8 +322,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794241066295,
-     "t_end_ms": 1794241067701,
+     "t_start_ms": 1794247095049,
+     "t_end_ms": 1794247096455,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+N\")"
@@ -332,18 +332,18 @@
       "Alt+N"
      ],
      "key_times": [
-      1794241066295
+      1794247095049
      ],
      "observation": {
-      "speech_raw": "_Save temporary customizations as a rule \u001d radio button \u001e  \u001dnot checked\u001e \nTo change the selection press Up or Down Arrow.\nSave Temporary Customizations \u001d dialog \u001e \nRule Name: \u001d Edit \u001e \nType in text.",
+      "speech_raw": "Save Temporary Customizations \u001d dialog \u001e \nRule Name: \u001d Edit \u001e \nType in text.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794241067701,
-     "t_end_ms": 1794241068905,
+     "t_start_ms": 1794247096455,
+     "t_end_ms": 1794247097559,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -352,7 +352,7 @@
       "Tab"
      ],
      "key_times": [
-      1794241067701
+      1794247096455
      ],
      "observation": {
       "speech_raw": "How would you like this rule to apply? \u001d Combo box \u001e \nTo the current site\nTo change the selection use the Arrow keys.",
@@ -362,8 +362,8 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794241068905,
-     "t_end_ms": 1794241070009,
+     "t_start_ms": 1794247097559,
+     "t_end_ms": 1794247098663,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -372,7 +372,7 @@
       "Tab"
      ],
      "key_times": [
-      1794241068905
+      1794247097559
      ],
      "observation": {
       "speech_raw": "< Back \u001d Button \u001e \nTo activate press spacebar.",
@@ -382,8 +382,8 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794241070009,
-     "t_end_ms": 1794241071114,
+     "t_start_ms": 1794247098663,
+     "t_end_ms": 1794247099768,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -392,7 +392,7 @@
       "Tab"
      ],
      "key_times": [
-      1794241070009
+      1794247098663
      ],
      "observation": {
       "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
@@ -402,8 +402,8 @@
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794241071114,
-     "t_end_ms": 1794241072218,
+     "t_start_ms": 1794247099768,
+     "t_end_ms": 1794247100872,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -412,7 +412,7 @@
       "Tab"
      ],
      "key_times": [
-      1794241071114
+      1794247099768
      ],
      "observation": {
       "speech_raw": "Rule Name: \u001d Edit \u001e \nType in text.",
@@ -422,8 +422,8 @@
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794241072218,
-     "t_end_ms": 1794241073322,
+     "t_start_ms": 1794247100872,
+     "t_end_ms": 1794247101976,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -432,7 +432,7 @@
       "Tab"
      ],
      "key_times": [
-      1794241072218
+      1794247100872
      ],
      "observation": {
       "speech_raw": "How would you like this rule to apply? \u001d Combo box \u001e \nTo the current site\nTo change the selection use the Arrow keys.",
@@ -442,8 +442,8 @@
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794241073322,
-     "t_end_ms": 1794241074327,
+     "t_start_ms": 1794247101976,
+     "t_end_ms": 1794247102980,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Escape\")"
@@ -452,7 +452,7 @@
       "Escape"
      ],
      "key_times": [
-      1794241073322
+      1794247101976
      ],
      "observation": {
       "speech_raw": "",
@@ -462,8 +462,8 @@
     },
     {
      "step_id": "s23",
-     "t_start_ms": 1794241074327,
-     "t_end_ms": 1794241075331,
+     "t_start_ms": 1794247102980,
+     "t_end_ms": 1794247103984,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Escape\")"
@@ -472,7 +472,7 @@
       "Escape"
      ],
      "key_times": [
-      1794241074327
+      1794247102980
      ],
      "observation": {
       "speech_raw": "",
@@ -482,8 +482,8 @@
     },
     {
      "step_id": "s24",
-     "t_start_ms": 1794241075331,
-     "t_end_ms": 1794241076336,
+     "t_start_ms": 1794247103984,
+     "t_end_ms": 1794247104989,
      "action": {
       "type": "key",
       "command": "Insert+Space"
@@ -492,7 +492,7 @@
       "Insert+Space"
      ],
      "key_times": [
-      1794241075331
+      1794247103984
      ],
      "observation": {
       "speech_raw": "",
@@ -502,8 +502,8 @@
     },
     {
      "step_id": "s25",
-     "t_start_ms": 1794241076336,
-     "t_end_ms": 1794241077541,
+     "t_start_ms": 1794247104989,
+     "t_end_ms": 1794247106194,
      "action": {
       "type": "key",
       "command": "X"
@@ -512,7 +512,7 @@
       "X"
      ],
      "key_times": [
-      1794241076336
+      1794247104989
      ],
      "observation": {
       "speech_raw": "Flexible Web \u001d dialog \u001e \nCreate a new customization \u001d radio button \u001e  \u001dchecked\u001e \n1 of 5\nTo change the selection press Up or Down Arrow.",
@@ -522,8 +522,8 @@
     },
     {
      "step_id": "s26",
-     "t_start_ms": 1794241077541,
-     "t_end_ms": 1794241078645,
+     "t_start_ms": 1794247106194,
+     "t_end_ms": 1794247107298,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -532,7 +532,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794241077541
+      1794247106194
      ],
      "observation": {
       "speech_raw": "Retry Hide ComplementaryRegion 1 from the top with text: \"Advertisement\" \u001d radio button \u001e  \u001dchecked\u001e \n2 of 5\nTo change the selection press Up or Down Arrow.",
@@ -542,8 +542,8 @@
     },
     {
      "step_id": "s27",
-     "t_start_ms": 1794241078645,
-     "t_end_ms": 1794241079749,
+     "t_start_ms": 1794247107298,
+     "t_end_ms": 1794247108403,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -552,7 +552,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794241078645
+      1794247107298
      ],
      "observation": {
       "speech_raw": "Undo Hide ComplementaryRegion 1 from the top with text: \"Advertisement\" \u001d radio button \u001e  \u001dchecked\u001e \n3 of 5\nTo change the selection press Up or Down Arrow.",
@@ -562,8 +562,8 @@
     },
     {
      "step_id": "s28",
-     "t_start_ms": 1794241079749,
-     "t_end_ms": 1794241080753,
+     "t_start_ms": 1794247108403,
+     "t_end_ms": 1794247109407,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -572,7 +572,7 @@
       "Enter"
      ],
      "key_times": [
-      1794241079749
+      1794247108403
      ],
      "observation": {
       "speech_raw": "",
@@ -582,8 +582,8 @@
     },
     {
      "step_id": "s29",
-     "t_start_ms": 1794241080753,
-     "t_end_ms": 1794241081758,
+     "t_start_ms": 1794247109407,
+     "t_end_ms": 1794247110412,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -592,10 +592,10 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794241080753
+      1794247109407
      ],
      "observation": {
-      "speech_raw": "Undo Hide ComplementaryRegion 1 from the top with text: \"Advertisement\" \u001d radio button \u001e  \u001dchecked\u001e \n3 of 5",
+      "speech_raw": "Three events open to everyone this weekend.",
       "settled": true
      },
      "step_success": true

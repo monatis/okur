@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "application": "corpus/fixtures/linux/desktop-forms.py",
-  "commit": "240fb118"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,34 +16,34 @@
    "reset_keys": [
     {
      "key": "Tab",
-     "t_ms": 1794225146728
+     "t_ms": 1794245558016
     },
     {
      "key": "Tab",
-     "t_ms": 1794225147081
+     "t_ms": 1794245558371
     },
     {
      "key": "Tab",
-     "t_ms": 1794225147382
+     "t_ms": 1794245558672
     },
     {
      "key": "Tab",
-     "t_ms": 1794225147683
+     "t_ms": 1794245558974
     },
     {
      "key": "Tab",
-     "t_ms": 1794225147985
+     "t_ms": 1794245559275
     },
     {
      "key": "Tab",
-     "t_ms": 1794225148286
+     "t_ms": 1794245559576
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794225149591,
-     "t_end_ms": 1794225150694,
+     "t_start_ms": 1794245560880,
+     "t_end_ms": 1794245561985,
      "action": {
       "type": "key",
       "command": "Down"
@@ -52,7 +52,7 @@
       "Down"
      ],
      "key_times": [
-      1794225149591
+      1794245560880
      ],
      "observation": {
       "speech_raw": "Cherries",
@@ -62,8 +62,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794225150694,
-     "t_end_ms": 1794225151698,
+     "t_start_ms": 1794245561985,
+     "t_end_ms": 1794245562988,
      "action": {
       "type": "key",
       "command": "Down"
@@ -72,7 +72,7 @@
       "Down"
      ],
      "key_times": [
-      1794225150694
+      1794245561985
      ],
      "observation": {
       "speech_raw": "",
@@ -82,8 +82,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794225151698,
-     "t_end_ms": 1794225152802,
+     "t_start_ms": 1794245562988,
+     "t_end_ms": 1794245564093,
      "action": {
       "type": "key",
       "command": "Up"
@@ -92,7 +92,7 @@
       "Up"
      ],
      "key_times": [
-      1794225151698
+      1794245562988
      ],
      "observation": {
       "speech_raw": "Bananas",
@@ -102,8 +102,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794225152802,
-     "t_end_ms": 1794225153906,
+     "t_start_ms": 1794245564093,
+     "t_end_ms": 1794245565196,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -112,7 +112,7 @@
       "Tab"
      ],
      "key_times": [
-      1794225152802
+      1794245564093
      ],
      "observation": {
       "speech_raw": " \u001d Tree view \u001e \nDocuments \u001dclosed\u001e \n1 of 2\nTo move through or expand items use the Arrow keys.",
@@ -122,8 +122,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794225153906,
-     "t_end_ms": 1794225155011,
+     "t_start_ms": 1794245565196,
+     "t_end_ms": 1794245566301,
      "action": {
       "type": "key",
       "command": "Down"
@@ -132,7 +132,7 @@
       "Down"
      ],
      "key_times": [
-      1794225153906
+      1794245565196
      ],
      "observation": {
       "speech_raw": "Pictures\n2 of 2",
@@ -142,8 +142,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794225155011,
-     "t_end_ms": 1794225156116,
+     "t_start_ms": 1794245566301,
+     "t_end_ms": 1794245567405,
      "action": {
       "type": "key",
       "command": "Up"
@@ -152,7 +152,7 @@
       "Up"
      ],
      "key_times": [
-      1794225155011
+      1794245566301
      ],
      "observation": {
       "speech_raw": "Documents \u001dclosed\u001e \n1 of 2",
@@ -162,8 +162,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794225156116,
-     "t_end_ms": 1794225157220,
+     "t_start_ms": 1794245567405,
+     "t_end_ms": 1794245568509,
      "action": {
       "type": "key",
       "command": "Right"
@@ -172,7 +172,7 @@
       "Right"
      ],
      "key_times": [
-      1794225156116
+      1794245567405
      ],
      "observation": {
       "speech_raw": "Documents\n \u001dopen\u001e ",
@@ -182,8 +182,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794225157220,
-     "t_end_ms": 1794225158324,
+     "t_start_ms": 1794245568509,
+     "t_end_ms": 1794245569614,
      "action": {
       "type": "key",
       "command": "Down"
@@ -192,7 +192,7 @@
       "Down"
      ],
      "key_times": [
-      1794225157220
+      1794245568509
      ],
      "observation": {
       "speech_raw": "Reports\n2 of 4",
@@ -202,8 +202,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794225158324,
-     "t_end_ms": 1794225159529,
+     "t_start_ms": 1794245569614,
+     "t_end_ms": 1794245570818,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -212,7 +212,7 @@
       "Tab"
      ],
      "key_times": [
-      1794225158324
+      1794245569614
      ],
      "observation": {
       "speech_raw": " \u001d List view \u001e \nbudget.xlsx\n24 KB\n1 of 3\nTo move to items use the Arrow keys.",
@@ -222,8 +222,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794225159529,
-     "t_end_ms": 1794225160733,
+     "t_start_ms": 1794245570818,
+     "t_end_ms": 1794245572022,
      "action": {
       "type": "key",
       "command": "Down"
@@ -232,7 +232,7 @@
       "Down"
      ],
      "key_times": [
-      1794225159529
+      1794245570818
      ],
      "observation": {
       "speech_raw": "notes.txt\n2 KB",
@@ -242,8 +242,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794225160733,
-     "t_end_ms": 1794225161937,
+     "t_start_ms": 1794245572022,
+     "t_end_ms": 1794245573227,
      "action": {
       "type": "key",
       "command": "Down"
@@ -252,7 +252,7 @@
       "Down"
      ],
      "key_times": [
-      1794225160733
+      1794245572022
      ],
      "observation": {
       "speech_raw": "photo.jpg\n1.2 MB",
@@ -262,8 +262,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794225161937,
-     "t_end_ms": 1794225163242,
+     "t_start_ms": 1794245573227,
+     "t_end_ms": 1794245574531,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -272,7 +272,7 @@
       "Tab"
      ],
      "key_times": [
-      1794225161937
+      1794245573227
      ],
      "observation": {
       "speech_raw": "General \u001d Tab \u001e  \u001dselected\u001e \nTo switch pages, press Control+PageDown.",
@@ -282,8 +282,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794225163242,
-     "t_end_ms": 1794225164547,
+     "t_start_ms": 1794245574531,
+     "t_end_ms": 1794245575836,
      "action": {
       "type": "key",
       "command": "Right"
@@ -292,7 +292,7 @@
       "Right"
      ],
      "key_times": [
-      1794225163242
+      1794245574531
      ],
      "observation": {
       "speech_raw": "Advanced \u001d Tab \u001e  \u001dselected\u001e \nTo switch pages, press Control+PageDown.",

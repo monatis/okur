@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794220665394
+     "t_ms": 1794244377717
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794220665761
+     "t_ms": 1794244378076
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794220667066,
-     "t_end_ms": 1794220668072,
+     "t_start_ms": 1794244379382,
+     "t_end_ms": 1794244380588,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+G"
@@ -36,18 +36,18 @@
       "Ctrl+Insert+G"
      ],
      "key_times": [
-      1794220667066
+      1794244379382
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Select a Graphic \u001d dialog \u001e \nList1 \u001d List view \u001e \nFront entrance of the Riverside City Library at dusk\n1 of 1\nTo move to items use the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794220668072,
-     "t_end_ms": 1794220669075,
+     "t_start_ms": 1794244380588,
+     "t_end_ms": 1794244381591,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -56,7 +56,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794220668072
+      1794244380588
      ],
      "observation": {
       "speech_raw": "",
@@ -66,8 +66,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794220669075,
-     "t_end_ms": 1794220670180,
+     "t_start_ms": 1794244381592,
+     "t_end_ms": 1794244382695,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -76,7 +76,7 @@
       "Enter"
      ],
      "key_times": [
-      1794220669075
+      1794244381592
      ],
      "observation": {
       "speech_raw": "Front entrance of the Riverside City Library at dusk\n \u001d Graphic \u001e ",
@@ -86,8 +86,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794220670180,
-     "t_end_ms": 1794220671185,
+     "t_start_ms": 1794244382695,
+     "t_end_ms": 1794244383700,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -96,7 +96,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794220670180
+      1794244382695
      ],
      "observation": {
       "speech_raw": "Front entrance of the Riverside City Library at dusk\n \u001d Graphic \u001e ",
@@ -106,8 +106,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794220671185,
-     "t_end_ms": 1794220672188,
+     "t_start_ms": 1794244383700,
+     "t_end_ms": 1794244384704,
      "action": {
       "type": "key",
       "command": "Down"
@@ -116,7 +116,7 @@
       "Down"
      ],
      "key_times": [
-      1794220671185
+      1794244383700
      ],
      "observation": {
       "speech_raw": " \u001d heading level 2 \u001e What changes",

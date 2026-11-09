@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794230963078
+     "t_ms": 1794247613464
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794230964442,
-     "t_end_ms": 1794230965747,
+     "t_start_ms": 1794247614827,
+     "t_end_ms": 1794247616134,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+W"
@@ -32,7 +32,7 @@
       "Ctrl+Insert+W"
      ],
      "key_times": [
-      1794230964442
+      1794247614827
      ],
      "observation": {
       "speech_raw": "Word List \u001d dialog \u001e \nList1 \u001d List view \u001e \nm (10)\n1 of 143\nTo move to items use the Arrow keys.",
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794230965747,
-     "t_end_ms": 1794230966751,
+     "t_start_ms": 1794247616134,
+     "t_end_ms": 1794247617438,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"R\")"
@@ -52,18 +52,18 @@
       "R"
      ],
      "key_times": [
-      1794230965747
+      1794247616134
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Riverside (5)\n4 of 143",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794230966751,
-     "t_end_ms": 1794230967854,
+     "t_start_ms": 1794247617438,
+     "t_end_ms": 1794247618541,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -72,18 +72,18 @@
       "Enter"
      ],
      "key_times": [
-      1794230966751
+      1794247617438
      ],
      "observation": {
-      "speech_raw": "Primary navigation region",
+      "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794230967854,
-     "t_end_ms": 1794230968859,
+     "t_start_ms": 1794247618541,
+     "t_end_ms": 1794247619546,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -92,18 +92,18 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794230967854
+      1794247618541
      ],
      "observation": {
-      "speech_raw": "Primary navigation region",
+      "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794230968859,
-     "t_end_ms": 1794230969863,
+     "t_start_ms": 1794247619546,
+     "t_end_ms": 1794247620550,
      "action": {
       "type": "key",
       "command": "W"
@@ -112,18 +112,18 @@
       "W"
      ],
      "key_times": [
-      1794230968859
+      1794247619546
      ],
      "observation": {
-      "speech_raw": "list of 4 items",
+      "speech_raw": " \u001d same page link \u001e Riverside Gazette",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794230969863,
-     "t_end_ms": 1794230970868,
+     "t_start_ms": 1794247620550,
+     "t_end_ms": 1794247621555,
      "action": {
       "type": "key",
       "command": "W"
@@ -132,18 +132,18 @@
       "W"
      ],
      "key_times": [
-      1794230969863
+      1794247620550
      ],
      "observation": {
-      "speech_raw": "Primary navigation region end",
+      "speech_raw": "The Riverside City Library will stay open until 9 p.m. on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794230970868,
-     "t_end_ms": 1794230971872,
+     "t_start_ms": 1794247621555,
+     "t_end_ms": 1794247622559,
      "action": {
       "type": "key",
       "command": "W"
@@ -152,18 +152,18 @@
       "W"
      ],
      "key_times": [
-      1794230970868
+      1794247621555
      ],
      "observation": {
-      "speech_raw": "main region",
+      "speech_raw": "Front entrance of the Riverside City Library at dusk\n \u001d Graphic \u001e ",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794230971872,
-     "t_end_ms": 1794230972876,
+     "t_start_ms": 1794247622559,
+     "t_end_ms": 1794247623563,
      "action": {
       "type": "key",
       "command": "W"
@@ -172,18 +172,18 @@
       "W"
      ],
      "key_times": [
-      1794230971872
+      1794247622559
      ],
      "observation": {
-      "speech_raw": " \u001d same page link \u001e Maria Lopez,",
+      "speech_raw": "Membership costs $5.99 a month, e.g. for adults; children join free. Questions go to help@riverside-library.org \u2014 or call 555-0142. Attendance rose 3.5%",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794230972876,
-     "t_end_ms": 1794230973880,
+     "t_start_ms": 1794247623563,
+     "t_end_ms": 1794247624568,
      "action": {
       "type": "key",
       "command": "W"
@@ -192,18 +192,18 @@
       "W"
      ],
      "key_times": [
-      1794230972876
+      1794247623563
      ],
      "observation": {
-      "speech_raw": "published March 14, 2026",
+      "speech_raw": "\u00a9 2026 Riverside Gazette. ",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794230973880,
-     "t_end_ms": 1794230974886,
+     "t_start_ms": 1794247624568,
+     "t_end_ms": 1794247625573,
      "action": {
       "type": "key",
       "command": "Shift+W"
@@ -212,18 +212,18 @@
       "Shift+W"
      ],
      "key_times": [
-      1794230973880
+      1794247624568
      ],
      "observation": {
-      "speech_raw": " \u001d same page link \u001e Maria Lopez,",
+      "speech_raw": "Membership costs $5.99 a month, e.g. for adults; children join free. Questions go to help@riverside-library.org \u2014 or call 555-0142. Attendance rose 3.5%",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794230974886,
-     "t_end_ms": 1794230975891,
+     "t_start_ms": 1794247625573,
+     "t_end_ms": 1794247626578,
      "action": {
       "type": "key",
       "command": "Shift+W"
@@ -232,18 +232,18 @@
       "Shift+W"
      ],
      "key_times": [
-      1794230974886
+      1794247625573
      ],
      "observation": {
-      "speech_raw": "main region",
+      "speech_raw": "Front entrance of the Riverside City Library at dusk\n \u001d Graphic \u001e ",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794230975891,
-     "t_end_ms": 1794230976895,
+     "t_start_ms": 1794247626578,
+     "t_end_ms": 1794247627583,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -252,10 +252,10 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794230975891
+      1794247626578
      ],
      "observation": {
-      "speech_raw": "main region",
+      "speech_raw": "Front entrance of the Riverside City Library at dusk\n \u001d Graphic \u001e ",
       "settled": true
      },
      "step_success": true

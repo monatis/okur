@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794230999645
+     "t_ms": 1794247650243
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794231001008,
-     "t_end_ms": 1794231002313,
+     "t_start_ms": 1794247651601,
+     "t_end_ms": 1794247652607,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+W"
@@ -32,18 +32,18 @@
       "Ctrl+Insert+W"
      ],
      "key_times": [
-      1794231001008
+      1794247651601
      ],
      "observation": {
-      "speech_raw": "Word List \u001d dialog \u001e \nList1 \u001d List view \u001e \nm (10)\n1 of 143\nTo move to items use the Arrow keys.",
+      "speech_raw": "",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794231002313,
-     "t_end_ms": 1794231003417,
+     "t_start_ms": 1794247652608,
+     "t_end_ms": 1794247653711,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -52,18 +52,18 @@
       "Tab"
      ],
      "key_times": [
-      1794231002313
+      1794247652608
      ],
      "observation": {
-      "speech_raw": "OK \u001d Button \u001e \nTo activate press spacebar.",
+      "speech_raw": "Word List \u001d dialog \u001e \nOK \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794231003417,
-     "t_end_ms": 1794231004521,
+     "t_start_ms": 1794247653711,
+     "t_end_ms": 1794247654815,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -72,7 +72,7 @@
       "Tab"
      ],
      "key_times": [
-      1794231003417
+      1794247653711
      ],
      "observation": {
       "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
@@ -82,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794231004521,
-     "t_end_ms": 1794231005624,
+     "t_start_ms": 1794247654815,
+     "t_end_ms": 1794247655919,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -92,7 +92,7 @@
       "Tab"
      ],
      "key_times": [
-      1794231004521
+      1794247654815
      ],
      "observation": {
       "speech_raw": "Summary \u001d Button \u001e \nTo activate press spacebar.",
@@ -102,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794231005624,
-     "t_end_ms": 1794231006829,
+     "t_start_ms": 1794247655919,
+     "t_end_ms": 1794247657123,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -112,7 +112,7 @@
       "Tab"
      ],
      "key_times": [
-      1794231005624
+      1794247655919
      ],
      "observation": {
       "speech_raw": "List1 \u001d List view \u001e \nm (10)\n1 of 143\nTo move to items use the Arrow keys.",
@@ -122,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794231006830,
-     "t_end_ms": 1794231007839,
+     "t_start_ms": 1794247657123,
+     "t_end_ms": 1794247659234,
      "action": {
       "type": "jaws_function",
       "command": "TypeString(\"library\")"
@@ -138,24 +138,24 @@
       "y"
      ],
      "key_times": [
-      1794231006830,
-      1794231006831,
-      1794231006832,
-      1794231006833,
-      1794231006833,
-      1794231006834,
-      1794231006835
+      1794247657123,
+      1794247657124,
+      1794247657126,
+      1794247657127,
+      1794247657127,
+      1794247657128,
+      1794247657129
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "1 of 143\nyear\n143 of 143",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794231007839,
-     "t_end_ms": 1794231008943,
+     "t_start_ms": 1794247659234,
+     "t_end_ms": 1794247660338,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -164,18 +164,18 @@
       "Enter"
      ],
      "key_times": [
-      1794231007839
+      1794247659234
      ],
      "observation": {
-      "speech_raw": "Primary navigation region",
+      "speech_raw": "last year, and staff say they can't wait.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794231008943,
-     "t_end_ms": 1794231009947,
+     "t_start_ms": 1794247660338,
+     "t_end_ms": 1794247661342,
      "action": {
       "type": "key",
       "command": "W"
@@ -184,18 +184,18 @@
       "W"
      ],
      "key_times": [
-      1794231008943
+      1794247660338
      ],
      "observation": {
-      "speech_raw": "list of 4 items",
+      "speech_raw": "wrapping to top\nlast year, and staff say they can't wait.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794231009947,
-     "t_end_ms": 1794231010951,
+     "t_start_ms": 1794247661342,
+     "t_end_ms": 1794247662347,
      "action": {
       "type": "key",
       "command": "W"
@@ -204,18 +204,18 @@
       "W"
      ],
      "key_times": [
-      1794231009947
+      1794247661342
      ],
      "observation": {
-      "speech_raw": "Primary navigation region end",
+      "speech_raw": "wrapping to top\nlast year, and staff say they can't wait.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794231010951,
-     "t_end_ms": 1794231011956,
+     "t_start_ms": 1794247662347,
+     "t_end_ms": 1794247663351,
      "action": {
       "type": "key",
       "command": "W"
@@ -224,18 +224,18 @@
       "W"
      ],
      "key_times": [
-      1794231010951
+      1794247662347
      ],
      "observation": {
-      "speech_raw": "main region",
+      "speech_raw": "wrapping to top\nlast year, and staff say they can't wait.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794231011956,
-     "t_end_ms": 1794231012960,
+     "t_start_ms": 1794247663351,
+     "t_end_ms": 1794247664355,
      "action": {
       "type": "key",
       "command": "W"
@@ -244,18 +244,18 @@
       "W"
      ],
      "key_times": [
-      1794231011956
+      1794247663351
      ],
      "observation": {
-      "speech_raw": " \u001d same page link \u001e Maria Lopez,",
+      "speech_raw": "wrapping to top\nlast year, and staff say they can't wait.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794231012960,
-     "t_end_ms": 1794231013965,
+     "t_start_ms": 1794247664355,
+     "t_end_ms": 1794247665360,
      "action": {
       "type": "key",
       "command": "Shift+W"
@@ -264,18 +264,18 @@
       "Shift+W"
      ],
      "key_times": [
-      1794231012960
+      1794247664355
      ],
      "observation": {
-      "speech_raw": "main region",
+      "speech_raw": "wrapping to bottom\nlast year, and staff say they can't wait.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794231013965,
-     "t_end_ms": 1794231014971,
+     "t_start_ms": 1794247665360,
+     "t_end_ms": 1794247666365,
      "action": {
       "type": "key",
       "command": "Shift+W"
@@ -284,18 +284,18 @@
       "Shift+W"
      ],
      "key_times": [
-      1794231013965
+      1794247665360
      ],
      "observation": {
-      "speech_raw": "Primary navigation region end",
+      "speech_raw": "wrapping to bottom\nlast year, and staff say they can't wait.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794231014971,
-     "t_end_ms": 1794231015976,
+     "t_start_ms": 1794247666365,
+     "t_end_ms": 1794247667370,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -304,10 +304,10 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794231014971
+      1794247666365
      ],
      "observation": {
-      "speech_raw": "Primary navigation region end",
+      "speech_raw": "last year, and staff say they can't wait.",
       "settled": true
      },
      "step_success": true

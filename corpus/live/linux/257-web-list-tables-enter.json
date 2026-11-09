@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794220843864
+     "t_ms": 1794244496501
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794220844231
+     "t_ms": 1794244496858
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794220845537,
-     "t_end_ms": 1794220846543,
+     "t_start_ms": 1794244498163,
+     "t_end_ms": 1794244499368,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+T"
@@ -36,18 +36,18 @@
       "Ctrl+Insert+T"
      ],
      "key_times": [
-      1794220845537
+      1794244498163
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Select a Table \u001d dialog \u001e \nList1 \u001d List view \u001e \nBranch hours after the change 3x3\n1 of 1\nTo move to items use the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794220846543,
-     "t_end_ms": 1794220847548,
+     "t_start_ms": 1794244499368,
+     "t_end_ms": 1794244500372,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -56,7 +56,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794220846543
+      1794244499368
      ],
      "observation": {
       "speech_raw": "",
@@ -66,8 +66,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794220847548,
-     "t_end_ms": 1794220848652,
+     "t_start_ms": 1794244500372,
+     "t_end_ms": 1794244501476,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -76,7 +76,7 @@
       "Enter"
      ],
      "key_times": [
-      1794220847548
+      1794244500372
      ],
      "observation": {
       "speech_raw": "table with 3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch",
@@ -86,8 +86,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794220848652,
-     "t_end_ms": 1794220849656,
+     "t_start_ms": 1794244501476,
+     "t_end_ms": 1794244502480,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -96,7 +96,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794220848652
+      1794244501476
      ],
      "observation": {
       "speech_raw": "Branch",
@@ -106,8 +106,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794220849656,
-     "t_end_ms": 1794220850660,
+     "t_start_ms": 1794244502480,
+     "t_end_ms": 1794244503484,
      "action": {
       "type": "key",
       "command": "Down"
@@ -116,7 +116,7 @@
       "Down"
      ],
      "key_times": [
-      1794220849656
+      1794244502480
      ],
      "observation": {
       "speech_raw": "Weekdays",

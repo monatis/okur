@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794220166250
+     "t_ms": 1794244187784
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794220166610
+     "t_ms": 1794244188144
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794220167915,
-     "t_end_ms": 1794220168920,
+     "t_start_ms": 1794244189450,
+     "t_end_ms": 1794244190756,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+L"
@@ -36,18 +36,18 @@
       "Ctrl+Insert+L"
      ],
      "key_times": [
-      1794220167915
+      1794244189450
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Select a List \u001d dialog \u001e \nList1 \u001d List view \u001e \n\u2022 News\u2022 Sports\u2022 Culture\u2022 Opinion\n1 of 5\nTo move to items use the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794220168921,
-     "t_end_ms": 1794220170124,
+     "t_start_ms": 1794244190756,
+     "t_end_ms": 1794244191960,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -56,18 +56,18 @@
       "DownArrow"
      ],
      "key_times": [
-      1794220168921
+      1794244190756
      ],
      "observation": {
-      "speech_raw": "Select a List \u001d dialog \u001e \nList1 \u001d List view \u001e \n\u2022 Weekday hours: 9 a.m. to 9 p.m.\u2022 Weekend hours, which do not change:\u25e6 Saturday: 10 a.m. to 6 p.m.\u25e6 Sunday: noon to 5 p.m.\u2022 New study rooms open in May.\n2 of 5\nTo move to items use the Arrow keys.",
+      "speech_raw": "\u2022 Weekday hours: 9 a.m. to 9 p.m.\u2022 Weekend hours, which do not change:\u25e6 Saturday: 10 a.m. to 6 p.m.\u25e6 Sunday: noon to 5 p.m.\u2022 New study rooms open in May.\n2 of 5",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794220170124,
-     "t_end_ms": 1794220171327,
+     "t_start_ms": 1794244191960,
+     "t_end_ms": 1794244193064,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -76,7 +76,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794220170124
+      1794244191960
      ],
      "observation": {
       "speech_raw": "\u25e6 Saturday: 10 a.m. to 6 p.m.\u25e6 Sunday: noon to 5 p.m.\n3 of 5",
@@ -86,8 +86,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794220171327,
-     "t_end_ms": 1794220172432,
+     "t_start_ms": 1794244193064,
+     "t_end_ms": 1794244194168,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -96,7 +96,7 @@
       "Tab"
      ],
      "key_times": [
-      1794220171327
+      1794244193064
      ],
      "observation": {
       "speech_raw": "OK \u001d Button \u001e \nTo activate press spacebar.",
@@ -106,8 +106,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794220172432,
-     "t_end_ms": 1794220173537,
+     "t_start_ms": 1794244194168,
+     "t_end_ms": 1794244195273,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -116,7 +116,7 @@
       "Tab"
      ],
      "key_times": [
-      1794220172432
+      1794244194168
      ],
      "observation": {
       "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
@@ -126,8 +126,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794220173537,
-     "t_end_ms": 1794220174641,
+     "t_start_ms": 1794244195273,
+     "t_end_ms": 1794244196377,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -136,7 +136,7 @@
       "Tab"
      ],
      "key_times": [
-      1794220173537
+      1794244195273
      ],
      "observation": {
       "speech_raw": "List1 \u001d List view \u001e \n\u25e6 Saturday: 10 a.m. to 6 p.m.\u25e6 Sunday: noon to 5 p.m.\n3 of 5\nTo move to items use the Arrow keys.",
@@ -146,8 +146,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794220174641,
-     "t_end_ms": 1794220175746,
+     "t_start_ms": 1794244196377,
+     "t_end_ms": 1794244197482,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -156,7 +156,7 @@
       "Tab"
      ],
      "key_times": [
-      1794220174641
+      1794244196377
      ],
      "observation": {
       "speech_raw": "OK \u001d Button \u001e \nTo activate press spacebar.",
@@ -166,8 +166,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794220175746,
-     "t_end_ms": 1794220176750,
+     "t_start_ms": 1794244197482,
+     "t_end_ms": 1794244198486,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Escape\")"
@@ -176,7 +176,7 @@
       "Escape"
      ],
      "key_times": [
-      1794220175746
+      1794244197482
      ],
      "observation": {
       "speech_raw": "",

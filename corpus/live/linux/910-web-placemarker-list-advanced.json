@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794234751930
+     "t_ms": 1794248790891
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794234753293,
-     "t_end_ms": 1794234754297,
+     "t_start_ms": 1794248792254,
+     "t_end_ms": 1794248793358,
      "action": {
       "type": "key",
       "command": "H"
@@ -32,7 +32,7 @@
       "H"
      ],
      "key_times": [
-      1794234753293
+      1794248792254
      ],
      "observation": {
       "speech_raw": "Reading room rules\n \u001d heading level 1 \u001e",
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794234754297,
-     "t_end_ms": 1794234755302,
+     "t_start_ms": 1794248793358,
+     "t_end_ms": 1794248794664,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+K"
@@ -52,18 +52,18 @@
       "Ctrl+Shift+K"
      ],
      "key_times": [
-      1794234754297
+      1794248793358
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "PlaceMarker List \u001d dialog \u001e \nPlaceMarker",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794234755303,
-     "t_end_ms": 1794234756506,
+     "t_start_ms": 1794248794664,
+     "t_end_ms": 1794248795768,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -72,27 +72,7 @@
       "Tab"
      ],
      "key_times": [
-      1794234755303
-     ],
-     "observation": {
-      "speech_raw": "PlaceMarker List \u001d dialog \u001e \nDisplay PlaceMarkers For:\nAll \u001d radio button \u001e  \u001dchecked\u001e \n3 of 3\nTo change the selection press Up or Down Arrow.",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
-     "step_id": "s4",
-     "t_start_ms": 1794234756506,
-     "t_end_ms": 1794234757610,
-     "action": {
-      "type": "jaws_function",
-      "command": "TypeKey(\"Tab\")"
-     },
-     "keys": [
-      "Tab"
-     ],
-     "key_times": [
-      1794234756506
+      1794248794664
      ],
      "observation": {
       "speech_raw": "Add... \u001d Button \u001e \nTo activate press spacebar.",
@@ -101,9 +81,9 @@
      "step_success": true
     },
     {
-     "step_id": "s5",
-     "t_start_ms": 1794234757610,
-     "t_end_ms": 1794234758714,
+     "step_id": "s4",
+     "t_start_ms": 1794248795768,
+     "t_end_ms": 1794248796872,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -112,7 +92,7 @@
       "Tab"
      ],
      "key_times": [
-      1794234757610
+      1794248795768
      ],
      "observation": {
       "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
@@ -121,9 +101,9 @@
      "step_success": true
     },
     {
-     "step_id": "s6",
-     "t_start_ms": 1794234758714,
-     "t_end_ms": 1794234759919,
+     "step_id": "s5",
+     "t_start_ms": 1794248796872,
+     "t_end_ms": 1794248797976,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -132,7 +112,27 @@
       "Tab"
      ],
      "key_times": [
-      1794234758714
+      1794248796872
+     ],
+     "observation": {
+      "speech_raw": "Display PlaceMarkers For:\nAll \u001d radio button \u001e  \u001dchecked\u001e \n3 of 3\nTo change the selection press Up or Down Arrow.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794248797976,
+     "t_end_ms": 1794248799181,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794248797976
      ],
      "observation": {
       "speech_raw": "PlaceMarker",
@@ -142,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794234759919,
-     "t_end_ms": 1794234761023,
+     "t_start_ms": 1794248799181,
+     "t_end_ms": 1794248800285,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -152,27 +152,7 @@
       "Tab"
      ],
      "key_times": [
-      1794234759919
-     ],
-     "observation": {
-      "speech_raw": "Display PlaceMarkers For:\nAll \u001d radio button \u001e  \u001dchecked\u001e \n3 of 3\nTo change the selection press Up or Down Arrow.",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
-     "step_id": "s8",
-     "t_start_ms": 1794234761023,
-     "t_end_ms": 1794234762127,
-     "action": {
-      "type": "jaws_function",
-      "command": "TypeKey(\"Tab\")"
-     },
-     "keys": [
-      "Tab"
-     ],
-     "key_times": [
-      1794234761023
+      1794248799181
      ],
      "observation": {
       "speech_raw": "Add... \u001d Button \u001e \nTo activate press spacebar.",
@@ -181,9 +161,9 @@
      "step_success": true
     },
     {
-     "step_id": "s9",
-     "t_start_ms": 1794234762127,
-     "t_end_ms": 1794234763232,
+     "step_id": "s8",
+     "t_start_ms": 1794248800285,
+     "t_end_ms": 1794248801390,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -192,7 +172,7 @@
       "Tab"
      ],
      "key_times": [
-      1794234762127
+      1794248800285
      ],
      "observation": {
       "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
@@ -201,9 +181,9 @@
      "step_success": true
     },
     {
-     "step_id": "s10",
-     "t_start_ms": 1794234763232,
-     "t_end_ms": 1794234764436,
+     "step_id": "s9",
+     "t_start_ms": 1794248801390,
+     "t_end_ms": 1794248802494,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -212,7 +192,27 @@
       "Tab"
      ],
      "key_times": [
-      1794234763232
+      1794248801390
+     ],
+     "observation": {
+      "speech_raw": "Display PlaceMarkers For:\nAll \u001d radio button \u001e  \u001dchecked\u001e \n3 of 3\nTo change the selection press Up or Down Arrow.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794248802494,
+     "t_end_ms": 1794248803699,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794248802494
      ],
      "observation": {
       "speech_raw": "PlaceMarker",
@@ -222,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794234764436,
-     "t_end_ms": 1794234765440,
+     "t_start_ms": 1794248803699,
+     "t_end_ms": 1794248804704,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Escape\")"
@@ -232,7 +232,7 @@
       "Escape"
      ],
      "key_times": [
-      1794234764436
+      1794248803699
      ],
      "observation": {
       "speech_raw": "",
@@ -242,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794234765440,
-     "t_end_ms": 1794234766645,
+     "t_start_ms": 1794248804704,
+     "t_end_ms": 1794248805909,
      "action": {
       "type": "key",
       "command": "K"
@@ -252,18 +252,18 @@
       "K"
      ],
      "key_times": [
-      1794234765440
+      1794248804704
      ],
      "observation": {
-      "speech_raw": "PlaceMarker List \u001d dialog \u001e \n \u001d List box \u001e \nTo move to an item press the Arrow keys.",
+      "speech_raw": "PlaceMarker List \u001d dialog \u001e \nPlaceMarker",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794234766645,
-     "t_end_ms": 1794234767650,
+     "t_start_ms": 1794248805909,
+     "t_end_ms": 1794248806913,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -272,10 +272,10 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794234766645
+      1794248805909
      ],
      "observation": {
-      "speech_raw": " \u001d List box \u001e ",
+      "speech_raw": "PlaceMarker",
       "settled": true
      },
      "step_success": true

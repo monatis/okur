@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794224031796
+     "t_ms": 1794245196812
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794224033155,
-     "t_end_ms": 1794224034360,
+     "t_start_ms": 1794245198171,
+     "t_end_ms": 1794245199376,
      "action": {
       "type": "key",
       "command": "J"
@@ -32,7 +32,7 @@
       "J"
      ],
      "key_times": [
-      1794224033155
+      1794245198171
      ],
      "observation": {
       "speech_raw": "Jump To Line \u001d dialog \u001e \nEnter Line Number (1 to 73): \u001d Edit \u001e \n1\nType in text.",
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794224034360,
-     "t_end_ms": 1794224035364,
+     "t_start_ms": 1794245199376,
+     "t_end_ms": 1794245200379,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"1\")"
@@ -52,7 +52,7 @@
       "1"
      ],
      "key_times": [
-      1794224034360
+      1794245199376
      ],
      "observation": {
       "speech_raw": "",
@@ -62,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794224035364,
-     "t_end_ms": 1794224036368,
+     "t_start_ms": 1794245200379,
+     "t_end_ms": 1794245201382,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"2\")"
@@ -72,7 +72,7 @@
       "2"
      ],
      "key_times": [
-      1794224035364
+      1794245200379
      ],
      "observation": {
       "speech_raw": "",
@@ -82,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794224036368,
-     "t_end_ms": 1794224037872,
+     "t_start_ms": 1794245201382,
+     "t_end_ms": 1794245202686,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -92,7 +92,7 @@
       "Enter"
      ],
      "key_times": [
-      1794224036368
+      1794245201382
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette \u001d document \u001e \nCity Library Expands Evening Hours - Riverside Gazette - Google Chrome",
@@ -102,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794224037872,
-     "t_end_ms": 1794224038877,
+     "t_start_ms": 1794245202686,
+     "t_end_ms": 1794245203691,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -112,7 +112,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794224037872
+      1794245202686
      ],
      "observation": {
       "speech_raw": "banner end",
@@ -122,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794224038877,
-     "t_end_ms": 1794224039881,
+     "t_start_ms": 1794245203691,
+     "t_end_ms": 1794245204695,
      "action": {
       "type": "key",
       "command": "Down"
@@ -132,7 +132,7 @@
       "Down"
      ],
      "key_times": [
-      1794224038877
+      1794245203691
      ],
      "observation": {
       "speech_raw": "main region",
@@ -142,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794224039881,
-     "t_end_ms": 1794224040887,
+     "t_start_ms": 1794245204695,
+     "t_end_ms": 1794245205699,
      "action": {
       "type": "key",
       "command": "Shift+J"
@@ -152,7 +152,7 @@
       "Shift+J"
      ],
      "key_times": [
-      1794224039881
+      1794245204695
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
@@ -162,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794224040887,
-     "t_end_ms": 1794224041891,
+     "t_start_ms": 1794245205699,
+     "t_end_ms": 1794245206704,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -172,7 +172,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794224040887
+      1794245205699
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
@@ -182,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794224041891,
-     "t_end_ms": 1794224043095,
+     "t_start_ms": 1794245206704,
+     "t_end_ms": 1794245207908,
      "action": {
       "type": "key",
       "command": "J"
@@ -192,7 +192,7 @@
       "J"
      ],
      "key_times": [
-      1794224041891
+      1794245206704
      ],
      "observation": {
       "speech_raw": "Jump To Line \u001d dialog \u001e \nEnter Line Number (1 to 73): \u001d Edit \u001e \n1\nType in text.",
@@ -202,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794224043095,
-     "t_end_ms": 1794224044099,
+     "t_start_ms": 1794245207908,
+     "t_end_ms": 1794245208912,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"9\")"
@@ -212,7 +212,7 @@
       "9"
      ],
      "key_times": [
-      1794224043095
+      1794245207908
      ],
      "observation": {
       "speech_raw": "",
@@ -222,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794224044099,
-     "t_end_ms": 1794224045104,
+     "t_start_ms": 1794245208912,
+     "t_end_ms": 1794245209915,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"9\")"
@@ -232,7 +232,7 @@
       "9"
      ],
      "key_times": [
-      1794224044099
+      1794245208912
      ],
      "observation": {
       "speech_raw": "",
@@ -242,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794224045104,
-     "t_end_ms": 1794224046609,
+     "t_start_ms": 1794245209915,
+     "t_end_ms": 1794245211219,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -252,7 +252,7 @@
       "Enter"
      ],
      "key_times": [
-      1794224045104
+      1794245209915
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette \u001d document \u001e \nCity Library Expands Evening Hours - Riverside Gazette - Google Chrome",
@@ -262,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794224046609,
-     "t_end_ms": 1794224047613,
+     "t_start_ms": 1794245211219,
+     "t_end_ms": 1794245212222,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Escape\")"
@@ -272,7 +272,7 @@
       "Escape"
      ],
      "key_times": [
-      1794224046609
+      1794245211219
      ],
      "observation": {
       "speech_raw": "",
@@ -282,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794224047613,
-     "t_end_ms": 1794224048618,
+     "t_start_ms": 1794245212222,
+     "t_end_ms": 1794245213227,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -292,7 +292,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794224047613
+      1794245212222
      ],
      "observation": {
       "speech_raw": "content information end",

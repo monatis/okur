@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "application": "corpus/fixtures/linux/desktop-forms.py",
-  "commit": "240fb118"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -17,8 +17,8 @@
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794225666450,
-     "t_end_ms": 1794225667510,
+     "t_start_ms": 1794245774144,
+     "t_end_ms": 1794245775201,
      "action": {
       "type": "key",
       "command": "Alt"
@@ -27,7 +27,7 @@
       "Alt"
      ],
      "key_times": [
-      1794225666450
+      1794245774144
      ],
      "observation": {
       "speech_raw": "",
@@ -37,8 +37,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794225667510,
-     "t_end_ms": 1794225668614,
+     "t_start_ms": 1794245775201,
+     "t_end_ms": 1794245776306,
      "action": {
       "type": "key",
       "command": "Down"
@@ -47,7 +47,7 @@
       "Down"
      ],
      "key_times": [
-      1794225667510
+      1794245775201
      ],
      "observation": {
       "speech_raw": "SR Desktop Fixture\nNotes: \u001d Edit \u001e \nType in text.",
@@ -57,8 +57,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794225668614,
-     "t_end_ms": 1794225669920,
+     "t_start_ms": 1794245776306,
+     "t_end_ms": 1794245777610,
      "action": {
       "type": "key",
       "command": "Down"
@@ -67,7 +67,7 @@
       "Down"
      ],
      "key_times": [
-      1794225668614
+      1794245776306
      ],
      "observation": {
       "speech_raw": "\n",
@@ -77,8 +77,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794225669920,
-     "t_end_ms": 1794225671225,
+     "t_start_ms": 1794245777610,
+     "t_end_ms": 1794245778915,
      "action": {
       "type": "key",
       "command": "Down"
@@ -87,7 +87,7 @@
       "Down"
      ],
      "key_times": [
-      1794225669920
+      1794245777610
      ],
      "observation": {
       "speech_raw": "\n",
@@ -97,8 +97,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794225671225,
-     "t_end_ms": 1794225672529,
+     "t_start_ms": 1794245778915,
+     "t_end_ms": 1794245780219,
      "action": {
       "type": "key",
       "command": "Right"
@@ -107,7 +107,7 @@
       "Right"
      ],
      "key_times": [
-      1794225671225
+      1794245778915
      ],
      "observation": {
       "speech_raw": "\n",
@@ -117,8 +117,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794225672529,
-     "t_end_ms": 1794225673834,
+     "t_start_ms": 1794245780219,
+     "t_end_ms": 1794245781524,
      "action": {
       "type": "key",
       "command": "Down"
@@ -127,7 +127,7 @@
       "Down"
      ],
      "key_times": [
-      1794225672529
+      1794245780219
      ],
      "observation": {
       "speech_raw": "\n",
@@ -137,8 +137,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794225673834,
-     "t_end_ms": 1794225674838,
+     "t_start_ms": 1794245781524,
+     "t_end_ms": 1794245782528,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -147,7 +147,7 @@
       "Escape"
      ],
      "key_times": [
-      1794225673834
+      1794245781524
      ],
      "observation": {
       "speech_raw": "",
@@ -157,8 +157,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794225674838,
-     "t_end_ms": 1794225675842,
+     "t_start_ms": 1794245782528,
+     "t_end_ms": 1794245783532,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -167,7 +167,7 @@
       "Escape"
      ],
      "key_times": [
-      1794225674838
+      1794245782528
      ],
      "observation": {
       "speech_raw": "",

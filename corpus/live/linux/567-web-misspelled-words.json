@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ad9029d7"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794241462135
+     "t_ms": 1794245305853
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794241463504,
-     "t_end_ms": 1794241464608,
+     "t_start_ms": 1794245307227,
+     "t_end_ms": 1794245308331,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -32,7 +32,7 @@
       "Tab"
      ],
      "key_times": [
-      1794241463504
+      1794245307227
      ],
      "observation": {
       "speech_raw": "Create Your Account - Riverside Library\n \u001d MainRegion \u001e \n \u001d FormRegion \u001e \nFull name \u001d Edit \u001e \n \u001dRequired\u001e \nblank\nType in text.",
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794241464608,
-     "t_end_ms": 1794241465629,
+     "t_start_ms": 1794245308331,
+     "t_end_ms": 1794245309348,
      "action": {
       "type": "text",
       "command": "teh quick brown fxo"
@@ -70,25 +70,25 @@
       "o"
      ],
      "key_times": [
-      1794241464608,
-      1794241464609,
-      1794241464610,
-      1794241464611,
-      1794241464611,
-      1794241464612,
-      1794241464614,
-      1794241464615,
-      1794241464616,
-      1794241464617,
-      1794241464618,
-      1794241464619,
-      1794241464620,
-      1794241464620,
-      1794241464622,
-      1794241464623,
-      1794241464624,
-      1794241464624,
-      1794241464625
+      1794245308331,
+      1794245308333,
+      1794245308333,
+      1794245308334,
+      1794245308335,
+      1794245308335,
+      1794245308336,
+      1794245308336,
+      1794245308337,
+      1794245308337,
+      1794245308338,
+      1794245308338,
+      1794245308339,
+      1794245308339,
+      1794245308340,
+      1794245308340,
+      1794245308341,
+      1794245308342,
+      1794245308343
      ],
      "observation": {
       "speech_raw": "",
@@ -98,8 +98,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794241465629,
-     "t_end_ms": 1794241466634,
+     "t_start_ms": 1794245309348,
+     "t_end_ms": 1794245310353,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -108,18 +108,18 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794241465629
+      1794245309348
      ],
      "observation": {
-      "speech_raw": "Full name  \u001d Edit \u001e  \u001dRequired\u001e \nt",
+      "speech_raw": "Full name  \u001d Edit \u001e  \u001dRequired\u001e \nteh quick brown fxo",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794241466634,
-     "t_end_ms": 1794241467740,
+     "t_start_ms": 1794245310353,
+     "t_end_ms": 1794245311457,
      "action": {
       "type": "key",
       "command": "Ctrl+Left"
@@ -128,27 +128,7 @@
       "Ctrl+Left"
      ],
      "key_times": [
-      1794241466634
-     ],
-     "observation": {
-      "speech_raw": "\n",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
-     "step_id": "s5",
-     "t_start_ms": 1794241467740,
-     "t_end_ms": 1794241468845,
-     "action": {
-      "type": "key",
-      "command": "Ctrl+Left"
-     },
-     "keys": [
-      "Ctrl+Left"
-     ],
-     "key_times": [
-      1794241467740
+      1794245310353
      ],
      "observation": {
       "speech_raw": "fxo",
@@ -157,9 +137,9 @@
      "step_success": true
     },
     {
-     "step_id": "s6",
-     "t_start_ms": 1794241468845,
-     "t_end_ms": 1794241469950,
+     "step_id": "s5",
+     "t_start_ms": 1794245311457,
+     "t_end_ms": 1794245312562,
      "action": {
       "type": "key",
       "command": "Ctrl+Left"
@@ -168,7 +148,7 @@
       "Ctrl+Left"
      ],
      "key_times": [
-      1794241468845
+      1794245311457
      ],
      "observation": {
       "speech_raw": "brown",
@@ -177,9 +157,9 @@
      "step_success": true
     },
     {
-     "step_id": "s7",
-     "t_start_ms": 1794241469950,
-     "t_end_ms": 1794241471056,
+     "step_id": "s6",
+     "t_start_ms": 1794245312562,
+     "t_end_ms": 1794245313667,
      "action": {
       "type": "key",
       "command": "Ctrl+Left"
@@ -188,7 +168,7 @@
       "Ctrl+Left"
      ],
      "key_times": [
-      1794241469950
+      1794245312562
      ],
      "observation": {
       "speech_raw": "quick",
@@ -197,9 +177,29 @@
      "step_success": true
     },
     {
+     "step_id": "s7",
+     "t_start_ms": 1794245313667,
+     "t_end_ms": 1794245314772,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Left"
+     },
+     "keys": [
+      "Ctrl+Left"
+     ],
+     "key_times": [
+      1794245313667
+     ],
+     "observation": {
+      "speech_raw": "teh",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
      "step_id": "s8",
-     "t_start_ms": 1794241471056,
-     "t_end_ms": 1794241472061,
+     "t_start_ms": 1794245314772,
+     "t_end_ms": 1794245315877,
      "action": {
       "type": "key",
       "command": "Insert+Numpad5"
@@ -208,18 +208,18 @@
       "Insert+Numpad5"
      ],
      "key_times": [
-      1794241471056
+      1794245314772
      ],
      "observation": {
-      "speech_raw": "quick",
+      "speech_raw": "teh",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794241472061,
-     "t_end_ms": 1794241473166,
+     "t_start_ms": 1794245315877,
+     "t_end_ms": 1794245316981,
      "action": {
       "type": "key",
       "command": "Down"
@@ -228,7 +228,7 @@
       "Down"
      ],
      "key_times": [
-      1794241472061
+      1794245315877
      ],
      "observation": {
       "speech_raw": "teh quick brown fxo",
@@ -238,8 +238,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794241473166,
-     "t_end_ms": 1794241474170,
+     "t_start_ms": 1794245316981,
+     "t_end_ms": 1794245318085,
      "action": {
       "type": "key",
       "command": "Up"
@@ -248,7 +248,27 @@
       "Up"
      ],
      "key_times": [
-      1794241473166
+      1794245316981
+     ],
+     "observation": {
+      "speech_raw": "teh quick brown fxo",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794245318085,
+     "t_end_ms": 1794245319089,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794245318085
      ],
      "observation": {
       "speech_raw": "Full name",
@@ -257,29 +277,9 @@
      "step_success": true
     },
     {
-     "step_id": "s11",
-     "t_start_ms": 1794241474170,
-     "t_end_ms": 1794241475174,
-     "action": {
-      "type": "key",
-      "command": "Up"
-     },
-     "keys": [
-      "Up"
-     ],
-     "key_times": [
-      1794241474170
-     ],
-     "observation": {
-      "speech_raw": "Fields marked required must be filled in.",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
      "step_id": "s12",
-     "t_start_ms": 1794241475174,
-     "t_end_ms": 1794241476178,
+     "t_start_ms": 1794245319089,
+     "t_end_ms": 1794245320093,
      "action": {
       "type": "key",
       "command": "Down"
@@ -288,10 +288,10 @@
       "Down"
      ],
      "key_times": [
-      1794241475174
+      1794245319089
      ],
      "observation": {
-      "speech_raw": "Full name",
+      "speech_raw": "",
       "settled": true
      },
      "step_success": true

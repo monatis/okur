@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794231288597
+     "t_ms": 1794247854692
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794231289963,
-     "t_end_ms": 1794231290969,
+     "t_start_ms": 1794247856054,
+     "t_end_ms": 1794247857060,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+Insert+Down"
@@ -32,7 +32,7 @@
       "Ctrl+Shift+Insert+Down"
      ],
      "key_times": [
-      1794231289963
+      1794247856054
      ],
      "observation": {
       "speech_raw": "",
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794231290969,
-     "t_end_ms": 1794231291973,
+     "t_start_ms": 1794247857061,
+     "t_end_ms": 1794247858064,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -52,7 +52,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794231290969
+      1794247857061
      ],
      "observation": {
       "speech_raw": "banner",
@@ -62,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794231291973,
-     "t_end_ms": 1794231292976,
+     "t_start_ms": 1794247858064,
+     "t_end_ms": 1794247859068,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -72,7 +72,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794231291973
+      1794247858064
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Riverside Gazette",
@@ -82,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794231292976,
-     "t_end_ms": 1794231293980,
+     "t_start_ms": 1794247859069,
+     "t_end_ms": 1794247860072,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -92,7 +92,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794231292976
+      1794247859069
      ],
      "observation": {
       "speech_raw": "Primary navigation region",
@@ -102,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794231293980,
-     "t_end_ms": 1794231295284,
+     "t_start_ms": 1794247860072,
+     "t_end_ms": 1794247861377,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -112,7 +112,7 @@
       "Tab"
      ],
      "key_times": [
-      1794231293980
+      1794247860072
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette\n\u2022 \u001d same page link \u001e News\nTo activate press Enter.",
@@ -122,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794231295284,
-     "t_end_ms": 1794231296389,
+     "t_start_ms": 1794247861377,
+     "t_end_ms": 1794247862482,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -132,7 +132,7 @@
       "Tab"
      ],
      "key_times": [
-      1794231295284
+      1794247861377
      ],
      "observation": {
       "speech_raw": "Sports  \u001d same page link \u001e \nTo activate press Enter.",
@@ -142,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794231296389,
-     "t_end_ms": 1794231297493,
+     "t_start_ms": 1794247862482,
+     "t_end_ms": 1794247863587,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -152,7 +152,7 @@
       "Tab"
      ],
      "key_times": [
-      1794231296389
+      1794247862482
      ],
      "observation": {
       "speech_raw": "Culture  \u001d same page link \u001e \nTo activate press Enter.",
@@ -162,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794231297493,
-     "t_end_ms": 1794231298597,
+     "t_start_ms": 1794247863587,
+     "t_end_ms": 1794247864691,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -172,7 +172,7 @@
       "Tab"
      ],
      "key_times": [
-      1794231297493
+      1794247863587
      ],
      "observation": {
       "speech_raw": "Opinion  \u001d same page link \u001e \nTo activate press Enter.",
@@ -182,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794231298598,
-     "t_end_ms": 1794231299702,
+     "t_start_ms": 1794247864691,
+     "t_end_ms": 1794247865696,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Space\")"
@@ -192,7 +192,7 @@
       "Space"
      ],
      "key_times": [
-      1794231298598
+      1794247864691
      ],
      "observation": {
       "speech_raw": "",
@@ -202,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794231299702,
-     "t_end_ms": 1794231300707,
+     "t_start_ms": 1794247865696,
+     "t_end_ms": 1794247866701,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+S\")"
@@ -212,7 +212,7 @@
       "Alt+S"
      ],
      "key_times": [
-      1794231299702
+      1794247865696
      ],
      "observation": {
       "speech_raw": "",

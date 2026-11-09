@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "298f0c7c"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794237499477
+     "t_ms": 1794245441947
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794237499833
+     "t_ms": 1794245442302
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794237501139,
-     "t_end_ms": 1794237502444,
+     "t_start_ms": 1794245443608,
+     "t_end_ms": 1794245444913,
      "action": {
       "type": "key",
       "command": "Insert+F7"
@@ -36,7 +36,7 @@
       "Insert+F7"
      ],
      "key_times": [
-      1794237501139
+      1794245443608
      ],
      "observation": {
       "speech_raw": "Links List \u001d dialog \u001e \nlinks \u001d List view \u001e \nCurrent Page Overview\n1 of 15\nTo move to items use the Arrow keys.",
@@ -46,8 +46,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794237502444,
-     "t_end_ms": 1794237503548,
+     "t_start_ms": 1794245444913,
+     "t_end_ms": 1794245446017,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -56,7 +56,7 @@
       "Tab"
      ],
      "key_times": [
-      1794237502444
+      1794245444913
      ],
      "observation": {
       "speech_raw": "Move To Link \u001d Button \u001e \nTo activate press spacebar.",
@@ -66,8 +66,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794237503548,
-     "t_end_ms": 1794237504652,
+     "t_start_ms": 1794245446017,
+     "t_end_ms": 1794245447121,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -76,7 +76,7 @@
       "Tab"
      ],
      "key_times": [
-      1794237503548
+      1794245446017
      ],
      "observation": {
       "speech_raw": "Activate Link \u001d Button \u001e \nTo activate press spacebar.",
@@ -86,8 +86,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794237504652,
-     "t_end_ms": 1794237505757,
+     "t_start_ms": 1794245447121,
+     "t_end_ms": 1794245448225,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -96,7 +96,7 @@
       "Tab"
      ],
      "key_times": [
-      1794237504652
+      1794245447121
      ],
      "observation": {
       "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
@@ -106,8 +106,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794237505757,
-     "t_end_ms": 1794237506861,
+     "t_start_ms": 1794245448225,
+     "t_end_ms": 1794245449329,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -116,7 +116,7 @@
       "Tab"
      ],
      "key_times": [
-      1794237505757
+      1794245448225
      ],
      "observation": {
       "speech_raw": "Sort Links\nIn Tab Order \u001d radio button \u001e  \u001dchecked\u001e \n1 of 2\nTo change the selection press Up or Down Arrow.",
@@ -126,8 +126,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794237506861,
-     "t_end_ms": 1794237507966,
+     "t_start_ms": 1794245449329,
+     "t_end_ms": 1794245450534,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -136,7 +136,7 @@
       "Tab"
      ],
      "key_times": [
-      1794237506861
+      1794245449329
      ],
      "observation": {
       "speech_raw": "Display\nAll Links \u001d radio button \u001e  \u001dchecked\u001e \n1 of 3\nTo change the selection press Up or Down Arrow.",
@@ -146,8 +146,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794237507966,
-     "t_end_ms": 1794237509070,
+     "t_start_ms": 1794245450534,
+     "t_end_ms": 1794245451738,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -156,7 +156,7 @@
       "Tab"
      ],
      "key_times": [
-      1794237507966
+      1794245450534
      ],
      "observation": {
       "speech_raw": "links \u001d List view \u001e \nCurrent Page Overview\n1 of 15\nTo move to items use the Arrow keys.",
@@ -166,8 +166,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794237509070,
-     "t_end_ms": 1794237510274,
+     "t_start_ms": 1794245451738,
+     "t_end_ms": 1794245452942,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -176,7 +176,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794237509070
+      1794245451738
      ],
      "observation": {
       "speech_raw": "Settings",
@@ -186,8 +186,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794237510274,
-     "t_end_ms": 1794237511479,
+     "t_start_ms": 1794245452942,
+     "t_end_ms": 1794245454146,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -196,7 +196,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794237510274
+      1794245452942
      ],
      "observation": {
       "speech_raw": "Current Step Step two",
@@ -206,8 +206,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794237511479,
-     "t_end_ms": 1794237512583,
+     "t_start_ms": 1794245454146,
+     "t_end_ms": 1794245455250,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -216,7 +216,7 @@
       "Enter"
      ],
      "key_times": [
-      1794237511479
+      1794245454146
      ],
      "observation": {
       "speech_raw": "To activate press Enter.",
@@ -226,8 +226,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794237512583,
-     "t_end_ms": 1794237513587,
+     "t_start_ms": 1794245455250,
+     "t_end_ms": 1794245456255,
      "action": {
       "type": "key",
       "command": "Down"
@@ -236,7 +236,7 @@
       "Down"
      ],
      "key_times": [
-      1794237512583
+      1794245455250
      ],
      "observation": {
       "speech_raw": "list end",

@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794228820300
+     "t_ms": 1794246393068
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794228821662,
-     "t_end_ms": 1794228822666,
+     "t_start_ms": 1794246394428,
+     "t_end_ms": 1794246395432,
      "action": {
       "type": "key",
       "command": "H"
@@ -32,7 +32,7 @@
       "H"
      ],
      "key_times": [
-      1794228821662
+      1794246394428
      ],
      "observation": {
       "speech_raw": "Reading room rules\n \u001d heading level 1 \u001e",
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794228822666,
-     "t_end_ms": 1794228823670,
+     "t_start_ms": 1794246395432,
+     "t_end_ms": 1794246396436,
      "action": {
       "type": "key",
       "command": "H"
@@ -52,7 +52,7 @@
       "H"
      ],
      "key_times": [
-      1794228822666
+      1794246395432
      ],
      "observation": {
       "speech_raw": "Food and drink\n \u001d heading level 2 \u001e",
@@ -62,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794228823670,
-     "t_end_ms": 1794228824674,
+     "t_start_ms": 1794246396436,
+     "t_end_ms": 1794246397440,
      "action": {
       "type": "key",
       "command": "Down"
@@ -72,7 +72,7 @@
       "Down"
      ],
      "key_times": [
-      1794228823670
+      1794246396436
      ],
      "observation": {
       "speech_raw": "Water in a closed bottle is allowed; meals are not.",
@@ -82,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794228824674,
-     "t_end_ms": 1794228825880,
+     "t_start_ms": 1794246397440,
+     "t_end_ms": 1794246398746,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+K"
@@ -92,18 +92,18 @@
       "Ctrl+Shift+K"
      ],
      "key_times": [
-      1794228824674
+      1794246397440
      ],
      "observation": {
-      "speech_raw": "PlaceMarker List \u001d dialog \u001e \n \u001d List box \u001e \nTo move to an item press the Arrow keys.",
+      "speech_raw": "PlaceMarker List \u001d dialog \u001e \nPlaceMarker",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794228825880,
-     "t_end_ms": 1794228827285,
+     "t_start_ms": 1794246398746,
+     "t_end_ms": 1794246400151,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -112,7 +112,7 @@
       "Enter"
      ],
      "key_times": [
-      1794228825880
+      1794246398746
      ],
      "observation": {
       "speech_raw": "Add PlaceMarker \u001d dialog \u001e \nName: \u001d Edit \u001e \nWater in a closed bottle is allowed; meals are not.\nType in text.",
@@ -122,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794228827285,
-     "t_end_ms": 1794228828289,
+     "t_start_ms": 1794246400151,
+     "t_end_ms": 1794246401156,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -132,7 +132,7 @@
       "Enter"
      ],
      "key_times": [
-      1794228827285
+      1794246400151
      ],
      "observation": {
       "speech_raw": "",
@@ -142,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794228828289,
-     "t_end_ms": 1794228829294,
+     "t_start_ms": 1794246401156,
+     "t_end_ms": 1794246402160,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Escape\")"
@@ -152,7 +152,7 @@
       "Escape"
      ],
      "key_times": [
-      1794228828289
+      1794246401156
      ],
      "observation": {
       "speech_raw": "",
@@ -162,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794228829294,
-     "t_end_ms": 1794228830299,
+     "t_start_ms": 1794246402160,
+     "t_end_ms": 1794246403165,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -172,7 +172,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794228829294
+      1794246402160
      ],
      "observation": {
       "speech_raw": "Reading Room Rules - Riverside Library",
@@ -182,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794228830299,
-     "t_end_ms": 1794228831303,
+     "t_start_ms": 1794246403165,
+     "t_end_ms": 1794246404170,
      "action": {
       "type": "key",
       "command": "K"
@@ -192,7 +192,7 @@
       "K"
      ],
      "key_times": [
-      1794228830299
+      1794246403165
      ],
      "observation": {
       "speech_raw": "Water in a closed bottle is allowed; meals are not.",
@@ -202,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794228831303,
-     "t_end_ms": 1794228832308,
+     "t_start_ms": 1794246404170,
+     "t_end_ms": 1794246405175,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -212,7 +212,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794228831303
+      1794246404170
      ],
      "observation": {
       "speech_raw": "Water in a closed bottle is allowed; meals are not.",
@@ -222,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794228832308,
-     "t_end_ms": 1794228833312,
+     "t_start_ms": 1794246405175,
+     "t_end_ms": 1794246406178,
      "action": {
       "type": "key",
       "command": "K"
@@ -232,7 +232,7 @@
       "K"
      ],
      "key_times": [
-      1794228832308
+      1794246405175
      ],
      "observation": {
       "speech_raw": "Water in a closed bottle is allowed; meals are not.",
@@ -242,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794228833312,
-     "t_end_ms": 1794228834318,
+     "t_start_ms": 1794246406178,
+     "t_end_ms": 1794246407183,
      "action": {
       "type": "key",
       "command": "Shift+K"
@@ -252,7 +252,7 @@
       "Shift+K"
      ],
      "key_times": [
-      1794228833312
+      1794246406178
      ],
      "observation": {
       "speech_raw": "Water in a closed bottle is allowed; meals are not.",
@@ -262,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794228834318,
-     "t_end_ms": 1794228835322,
+     "t_start_ms": 1794246407183,
+     "t_end_ms": 1794246408188,
      "action": {
       "type": "key",
       "command": "7"
@@ -272,7 +272,7 @@
       "7"
      ],
      "key_times": [
-      1794228834318
+      1794246407183
      ],
      "observation": {
       "speech_raw": "Water in a closed bottle is allowed; meals are not.",
@@ -282,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794228835322,
-     "t_end_ms": 1794228836326,
+     "t_start_ms": 1794246408188,
+     "t_end_ms": 1794246409192,
      "action": {
       "type": "key",
       "command": "8"
@@ -292,7 +292,7 @@
       "8"
      ],
      "key_times": [
-      1794228835322
+      1794246408188
      ],
      "observation": {
       "speech_raw": "No place marker #2",
@@ -302,8 +302,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794228836326,
-     "t_end_ms": 1794228837331,
+     "t_start_ms": 1794246409192,
+     "t_end_ms": 1794246410198,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -312,7 +312,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794228836326
+      1794246409192
      ],
      "observation": {
       "speech_raw": "Reading Room Rules - Riverside Library",
@@ -322,8 +322,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794228837331,
-     "t_end_ms": 1794228838337,
+     "t_start_ms": 1794246410198,
+     "t_end_ms": 1794246411203,
      "action": {
       "type": "key",
       "command": "Shift+7"
@@ -332,7 +332,7 @@
       "Shift+7"
      ],
      "key_times": [
-      1794228837331
+      1794246410198
      ],
      "observation": {
       "speech_raw": "Water in a closed bottle is allowed; meals are not.",
@@ -342,8 +342,8 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794228838337,
-     "t_end_ms": 1794228839342,
+     "t_start_ms": 1794246411203,
+     "t_end_ms": 1794246412208,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -352,7 +352,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794228838337
+      1794246411203
      ],
      "observation": {
       "speech_raw": "Water in a closed bottle is allowed; meals are not.",
@@ -362,8 +362,8 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794228839342,
-     "t_end_ms": 1794228840550,
+     "t_start_ms": 1794246412208,
+     "t_end_ms": 1794246413414,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+K"
@@ -372,7 +372,7 @@
       "Ctrl+Shift+K"
      ],
      "key_times": [
-      1794228839342
+      1794246412208
      ],
      "observation": {
       "speech_raw": "PlaceMarker List \u001d dialog \u001e \nPlaceMarker \u001d List view \u001e \nWater in a closed bottle is allowed; meals are not.\nDocument\n1 of 1\nTo move to items use the Arrow keys.",
@@ -382,8 +382,8 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794228840550,
-     "t_end_ms": 1794228841654,
+     "t_start_ms": 1794246413414,
+     "t_end_ms": 1794246414518,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -392,27 +392,7 @@
       "Tab"
      ],
      "key_times": [
-      1794228840550
-     ],
-     "observation": {
-      "speech_raw": "Display PlaceMarkers For:\nAll \u001d radio button \u001e  \u001dchecked\u001e \n3 of 3\nTo change the selection press Up or Down Arrow.",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
-     "step_id": "s20",
-     "t_start_ms": 1794228841654,
-     "t_end_ms": 1794228842759,
-     "action": {
-      "type": "jaws_function",
-      "command": "TypeKey(\"Tab\")"
-     },
-     "keys": [
-      "Tab"
-     ],
-     "key_times": [
-      1794228841654
+      1794246413414
      ],
      "observation": {
       "speech_raw": "Add... \u001d Button \u001e \nTo activate press spacebar.",
@@ -421,9 +401,9 @@
      "step_success": true
     },
     {
-     "step_id": "s21",
-     "t_start_ms": 1794228842759,
-     "t_end_ms": 1794228843864,
+     "step_id": "s20",
+     "t_start_ms": 1794246414518,
+     "t_end_ms": 1794246415623,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -432,7 +412,7 @@
       "Tab"
      ],
      "key_times": [
-      1794228842759
+      1794246414518
      ],
      "observation": {
       "speech_raw": "Remove All \u001d Button \u001e \nTo activate press spacebar.",
@@ -441,9 +421,9 @@
      "step_success": true
     },
     {
-     "step_id": "s22",
-     "t_start_ms": 1794228843864,
-     "t_end_ms": 1794228844969,
+     "step_id": "s21",
+     "t_start_ms": 1794246415623,
+     "t_end_ms": 1794246416728,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -452,7 +432,7 @@
       "Tab"
      ],
      "key_times": [
-      1794228843864
+      1794246415623
      ],
      "observation": {
       "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
@@ -461,9 +441,9 @@
      "step_success": true
     },
     {
-     "step_id": "s23",
-     "t_start_ms": 1794228844969,
-     "t_end_ms": 1794228846073,
+     "step_id": "s22",
+     "t_start_ms": 1794246416728,
+     "t_end_ms": 1794246417833,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -472,7 +452,27 @@
       "Tab"
      ],
      "key_times": [
-      1794228844969
+      1794246416728
+     ],
+     "observation": {
+      "speech_raw": "Display PlaceMarkers For:\nDisplay PlaceMarkers For: All \u001d radio button \u001e  \u001dchecked\u001e \n3 of 3\nTo change the selection press Up or Down Arrow.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s23",
+     "t_start_ms": 1794246417833,
+     "t_end_ms": 1794246419037,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794246417833
      ],
      "observation": {
       "speech_raw": "PlaceMarker \u001d List view \u001e \nWater in a closed bottle is allowed; meals are not.\nDocument\n1 of 1\nTo move to items use the Arrow keys.",
@@ -482,8 +482,8 @@
     },
     {
      "step_id": "s24",
-     "t_start_ms": 1794228846073,
-     "t_end_ms": 1794228847178,
+     "t_start_ms": 1794246419037,
+     "t_end_ms": 1794246420143,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -492,27 +492,7 @@
       "Tab"
      ],
      "key_times": [
-      1794228846073
-     ],
-     "observation": {
-      "speech_raw": "Display PlaceMarkers For:\nAll \u001d radio button \u001e  \u001dchecked\u001e \n3 of 3\nTo change the selection press Up or Down Arrow.",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
-     "step_id": "s25",
-     "t_start_ms": 1794228847178,
-     "t_end_ms": 1794228848282,
-     "action": {
-      "type": "jaws_function",
-      "command": "TypeKey(\"Tab\")"
-     },
-     "keys": [
-      "Tab"
-     ],
-     "key_times": [
-      1794228847178
+      1794246419037
      ],
      "observation": {
       "speech_raw": "Add... \u001d Button \u001e \nTo activate press spacebar.",
@@ -521,9 +501,9 @@
      "step_success": true
     },
     {
-     "step_id": "s26",
-     "t_start_ms": 1794228848282,
-     "t_end_ms": 1794228849387,
+     "step_id": "s25",
+     "t_start_ms": 1794246420143,
+     "t_end_ms": 1794246421248,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -532,7 +512,7 @@
       "Tab"
      ],
      "key_times": [
-      1794228848282
+      1794246420143
      ],
      "observation": {
       "speech_raw": "Remove All \u001d Button \u001e \nTo activate press spacebar.",
@@ -541,9 +521,29 @@
      "step_success": true
     },
     {
+     "step_id": "s26",
+     "t_start_ms": 1794246421248,
+     "t_end_ms": 1794246422352,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794246421248
+     ],
+     "observation": {
+      "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
      "step_id": "s27",
-     "t_start_ms": 1794228849387,
-     "t_end_ms": 1794228850492,
+     "t_start_ms": 1794246422352,
+     "t_end_ms": 1794246423758,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+V\")"
@@ -552,18 +552,18 @@
       "Alt+V"
      ],
      "key_times": [
-      1794228849387
+      1794246422352
      ],
      "observation": {
-      "speech_raw": "PlaceMarker RemoveAll Warning \u001d dialog \u001e \nYes \u001d Button \u001e \nTo activate press spacebar.",
+      "speech_raw": "PlaceMarker RemoveAll Warning \u001d dialog \u001e \nAre you sure you want to remove all PlaceMarkers?\nYes \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s28",
-     "t_start_ms": 1794228850492,
-     "t_end_ms": 1794228851596,
+     "t_start_ms": 1794246423758,
+     "t_end_ms": 1794246424762,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -572,7 +572,7 @@
       "Enter"
      ],
      "key_times": [
-      1794228850492
+      1794246423758
      ],
      "observation": {
       "speech_raw": "",
@@ -582,8 +582,8 @@
     },
     {
      "step_id": "s29",
-     "t_start_ms": 1794228851596,
-     "t_end_ms": 1794228852599,
+     "t_start_ms": 1794246424762,
+     "t_end_ms": 1794246425767,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Escape\")"
@@ -592,7 +592,7 @@
       "Escape"
      ],
      "key_times": [
-      1794228851596
+      1794246424762
      ],
      "observation": {
       "speech_raw": "",
@@ -602,8 +602,8 @@
     },
     {
      "step_id": "s30",
-     "t_start_ms": 1794228852599,
-     "t_end_ms": 1794228853804,
+     "t_start_ms": 1794246425767,
+     "t_end_ms": 1794246426972,
      "action": {
       "type": "key",
       "command": "K"
@@ -612,18 +612,18 @@
       "K"
      ],
      "key_times": [
-      1794228852599
+      1794246425767
      ],
      "observation": {
-      "speech_raw": "PlaceMarker List \u001d dialog \u001e \n \u001d List box \u001e \nTo move to an item press the Arrow keys.",
+      "speech_raw": "PlaceMarker List \u001d dialog \u001e \nPlaceMarker",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s31",
-     "t_start_ms": 1794228853804,
-     "t_end_ms": 1794228854808,
+     "t_start_ms": 1794246426972,
+     "t_end_ms": 1794246427976,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Escape\")"
@@ -632,7 +632,7 @@
       "Escape"
      ],
      "key_times": [
-      1794228853804
+      1794246426972
      ],
      "observation": {
       "speech_raw": "",

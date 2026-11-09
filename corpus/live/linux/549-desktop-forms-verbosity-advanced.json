@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "application": "corpus/fixtures/linux/desktop-forms.py",
-  "commit": "240fb118"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -17,8 +17,8 @@
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794223716857,
-     "t_end_ms": 1794223717913,
+     "t_start_ms": 1794245128241,
+     "t_end_ms": 1794245129297,
      "action": {
       "type": "key",
       "command": "Insert+Tab"
@@ -27,7 +27,7 @@
       "Insert+Tab"
      ],
      "key_times": [
-      1794223716857
+      1794245128241
      ],
      "observation": {
       "speech_raw": "",
@@ -37,8 +37,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794223717913,
-     "t_end_ms": 1794223719017,
+     "t_start_ms": 1794245129297,
+     "t_end_ms": 1794245130402,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -47,7 +47,7 @@
       "Tab"
      ],
      "key_times": [
-      1794223717913
+      1794245129297
      ],
      "observation": {
       "speech_raw": "SR Desktop Fixture\nNotes: \u001d Edit \u001e \nType in text.",
@@ -57,8 +57,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794223719017,
-     "t_end_ms": 1794223720121,
+     "t_start_ms": 1794245130402,
+     "t_end_ms": 1794245131506,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -67,7 +67,7 @@
       "Tab"
      ],
      "key_times": [
-      1794223719017
+      1794245130402
      ],
      "observation": {
       "speech_raw": "Subscribe to updates \u001d check box \u001e  \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
@@ -77,8 +77,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794223720121,
-     "t_end_ms": 1794223721226,
+     "t_start_ms": 1794245131506,
+     "t_end_ms": 1794245132610,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -87,7 +87,7 @@
       "Tab"
      ],
      "key_times": [
-      1794223720121
+      1794245131506
      ],
      "observation": {
       "speech_raw": "Remember me \u001d check box \u001e  \u001dnot checked\u001e \nTo check press Spacebar.",
@@ -97,8 +97,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794223721226,
-     "t_end_ms": 1794223722531,
+     "t_start_ms": 1794245132610,
+     "t_end_ms": 1794245133915,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -107,7 +107,7 @@
       "Tab"
      ],
      "key_times": [
-      1794223721226
+      1794245132610
      ],
      "observation": {
       "speech_raw": "Plan\nPro \u001d radio button \u001e  \u001dchecked\u001e \n2 of 3\nTo change the selection press Up or Down Arrow.",
@@ -117,8 +117,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794223722531,
-     "t_end_ms": 1794223723636,
+     "t_start_ms": 1794245133915,
+     "t_end_ms": 1794245135019,
      "action": {
       "type": "key",
       "command": "Down"
@@ -127,7 +127,7 @@
       "Down"
      ],
      "key_times": [
-      1794223722531
+      1794245133915
      ],
      "observation": {
       "speech_raw": "Country: \u001d Combo box \u001e \nGermany\nTo change the selection use the Arrow keys.",
@@ -137,8 +137,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794223723636,
-     "t_end_ms": 1794223724741,
+     "t_start_ms": 1794245135019,
+     "t_end_ms": 1794245136124,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -147,7 +147,7 @@
       "Tab"
      ],
      "key_times": [
-      1794223723636
+      1794245135019
      ],
      "observation": {
       "speech_raw": "Fruit: \u001d List box \u001e \nBananas\n2 of 3\nTo move to an item press the Arrow keys.",
@@ -157,8 +157,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794223724741,
-     "t_end_ms": 1794223725845,
+     "t_start_ms": 1794245136124,
+     "t_end_ms": 1794245137228,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -167,7 +167,7 @@
       "Tab"
      ],
      "key_times": [
-      1794223724741
+      1794245136124
      ],
      "observation": {
       "speech_raw": " \u001d Tree view \u001e \nDocuments \u001dclosed\u001e \n1 of 2\nTo move through or expand items use the Arrow keys.",
@@ -177,8 +177,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794223725845,
-     "t_end_ms": 1794223726950,
+     "t_start_ms": 1794245137228,
+     "t_end_ms": 1794245138332,
      "action": {
       "type": "key",
       "command": "Down"
@@ -187,7 +187,7 @@
       "Down"
      ],
      "key_times": [
-      1794223725845
+      1794245137228
      ],
      "observation": {
       "speech_raw": "Pictures\n2 of 2",
@@ -197,8 +197,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794223726950,
-     "t_end_ms": 1794223728054,
+     "t_start_ms": 1794245138332,
+     "t_end_ms": 1794245139536,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -207,7 +207,7 @@
       "Tab"
      ],
      "key_times": [
-      1794223726950
+      1794245138332
      ],
      "observation": {
       "speech_raw": " \u001d List view \u001e \nbudget.xlsx\n24 KB\n1 of 3\nTo move to items use the Arrow keys.",
@@ -217,8 +217,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794223728054,
-     "t_end_ms": 1794223729359,
+     "t_start_ms": 1794245139536,
+     "t_end_ms": 1794245140842,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -227,7 +227,7 @@
       "Tab"
      ],
      "key_times": [
-      1794223728054
+      1794245139536
      ],
      "observation": {
       "speech_raw": "General \u001d Tab \u001e  \u001dselected\u001e \nTo switch pages, press Control+PageDown.",
@@ -237,8 +237,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794223729359,
-     "t_end_ms": 1794223730564,
+     "t_start_ms": 1794245140842,
+     "t_end_ms": 1794245142047,
      "action": {
       "type": "key",
       "command": "Shift+Tab"
@@ -247,7 +247,7 @@
       "Shift+Tab"
      ],
      "key_times": [
-      1794223729359
+      1794245140842
      ],
      "observation": {
       "speech_raw": " \u001d List view \u001e \nbudget.xlsx\n24 KB\n1 of 3\nTo move to items use the Arrow keys.",
@@ -257,8 +257,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794223730564,
-     "t_end_ms": 1794223731570,
+     "t_start_ms": 1794245142047,
+     "t_end_ms": 1794245143052,
      "action": {
       "type": "key",
       "command": "Insert+Tab"
@@ -267,7 +267,7 @@
       "Insert+Tab"
      ],
      "key_times": [
-      1794223730564
+      1794245142047
      ],
      "observation": {
       "speech_raw": " \u001d List view \u001e \nbudget.xlsx\n24 KB\n1 of 3\nTo move to items use the Arrow keys.",
@@ -277,8 +277,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794223731570,
-     "t_end_ms": 1794223732575,
+     "t_start_ms": 1794245143052,
+     "t_end_ms": 1794245144057,
      "action": {
       "type": "key",
       "command": "Insert+B"
@@ -287,7 +287,7 @@
       "Insert+B"
      ],
      "key_times": [
-      1794223731570
+      1794245143052
      ],
      "observation": {
       "speech_raw": "",

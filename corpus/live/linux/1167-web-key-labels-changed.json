@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "298f0c7c"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794238400635
+     "t_ms": 1794243939516
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794238402003,
-     "t_end_ms": 1794238403006,
+     "t_start_ms": 1794243940880,
+     "t_end_ms": 1794243941884,
      "action": {
       "type": "key",
       "command": "E"
@@ -32,7 +32,7 @@
       "E"
      ],
      "key_times": [
-      1794238402003
+      1794243940880
      ],
      "observation": {
       "speech_raw": "City \u001d Edit \u001e \nIzmir",
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794238403006,
-     "t_end_ms": 1794238404111,
+     "t_start_ms": 1794243941884,
+     "t_end_ms": 1794243942988,
      "action": {
       "type": "key",
       "command": "Enter"
@@ -52,7 +52,7 @@
       "Enter"
      ],
      "key_times": [
-      1794238403006
+      1794243941884
      ],
      "observation": {
       "speech_raw": "Activation Fixture\nCity \u001d Edit \u001e \nIzmir\nType in text.",
@@ -62,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794238404111,
-     "t_end_ms": 1794238405215,
+     "t_start_ms": 1794243942988,
+     "t_end_ms": 1794243944092,
      "action": {
       "type": "key",
       "command": "End"
@@ -72,7 +72,7 @@
       "End"
      ],
      "key_times": [
-      1794238404111
+      1794243942988
      ],
      "observation": {
       "speech_raw": "\n",
@@ -82,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794238405215,
-     "t_end_ms": 1794238406219,
+     "t_start_ms": 1794243944092,
+     "t_end_ms": 1794243945095,
      "action": {
       "type": "key",
       "command": "F2"
@@ -92,7 +92,7 @@
       "F2"
      ],
      "key_times": [
-      1794238405215
+      1794243944092
      ],
      "observation": {
       "speech_raw": "",
@@ -102,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794238406219,
-     "t_end_ms": 1794238407224,
+     "t_start_ms": 1794243945095,
+     "t_end_ms": 1794243946099,
      "action": {
       "type": "key",
       "command": "Space"
@@ -112,7 +112,7 @@
       "Space"
      ],
      "key_times": [
-      1794238406219
+      1794243945095
      ],
      "observation": {
       "speech_raw": "",
@@ -122,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794238407224,
-     "t_end_ms": 1794238408228,
+     "t_start_ms": 1794243946099,
+     "t_end_ms": 1794243947103,
      "action": {
       "type": "key",
       "command": "A"
@@ -132,7 +132,7 @@
       "A"
      ],
      "key_times": [
-      1794238407224
+      1794243946099
      ],
      "observation": {
       "speech_raw": "",
@@ -142,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794238408228,
-     "t_end_ms": 1794238409332,
+     "t_start_ms": 1794243947103,
+     "t_end_ms": 1794243948207,
      "action": {
       "type": "key",
       "command": "Home"
@@ -152,7 +152,7 @@
       "Home"
      ],
      "key_times": [
-      1794238408228
+      1794243947103
      ],
      "observation": {
       "speech_raw": "I",
@@ -162,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794238409332,
-     "t_end_ms": 1794238410437,
+     "t_start_ms": 1794243948207,
+     "t_end_ms": 1794243949311,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -172,7 +172,7 @@
       "Tab"
      ],
      "key_times": [
-      1794238409332
+      1794243948207
      ],
      "observation": {
       "speech_raw": "Color  \u001d Combo box \u001e   \u001dcollapsed\u001e \nRed\nTo change the selection use the Arrow keys.",
@@ -182,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794238410437,
-     "t_end_ms": 1794238411543,
+     "t_start_ms": 1794243949311,
+     "t_end_ms": 1794243950416,
      "action": {
       "type": "key",
       "command": "Shift+Tab"
@@ -192,7 +192,7 @@
       "Shift+Tab"
      ],
      "key_times": [
-      1794238410437
+      1794243949311
      ],
      "observation": {
       "speech_raw": "City \u001d Edit \u001e \nIzmir a\nType in text.",
@@ -202,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794238411543,
-     "t_end_ms": 1794238412648,
+     "t_start_ms": 1794243950416,
+     "t_end_ms": 1794243951421,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -212,7 +212,7 @@
       "Escape"
      ],
      "key_times": [
-      1794238411543
+      1794243950416
      ],
      "observation": {
       "speech_raw": "virtual PC Cursor",

@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "application": "corpus/fixtures/linux/desktop-forms.py",
-  "commit": "240fb118"
+  "commit": "ec1e5cac6"
  },
  "trials": [
   {
@@ -17,8 +17,8 @@
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794225470600,
-     "t_end_ms": 1794225471657,
+     "t_start_ms": 1794245692178,
+     "t_end_ms": 1794245693232,
      "action": {
       "type": "key",
       "command": "Insert+F1"
@@ -27,7 +27,7 @@
       "Insert+F1"
      ],
      "key_times": [
-      1794225470600
+      1794245692178
      ],
      "observation": {
       "speech_raw": "Tab goes to the next control and Shift+Tab to the one before. Insert+Tab says where you are.\n\u001d Link \u001e List Okur Hot Keys\nPress ESCAPE to close this message.",
@@ -37,8 +37,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794225471657,
-     "t_end_ms": 1794225472661,
+     "t_start_ms": 1794245693232,
+     "t_end_ms": 1794245694236,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -47,7 +47,7 @@
       "Escape"
      ],
      "key_times": [
-      1794225471657
+      1794245693232
      ],
      "observation": {
       "speech_raw": "",
@@ -57,8 +57,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794225472661,
-     "t_end_ms": 1794225473766,
+     "t_start_ms": 1794245694236,
+     "t_end_ms": 1794245695341,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -67,7 +67,7 @@
       "Tab"
      ],
      "key_times": [
-      1794225472661
+      1794245694236
      ],
      "observation": {
       "speech_raw": "SR Desktop Fixture\nNotes: \u001d Edit \u001e \nType in text.",
@@ -77,8 +77,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794225473766,
-     "t_end_ms": 1794225474871,
+     "t_start_ms": 1794245695341,
+     "t_end_ms": 1794245696446,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -87,7 +87,7 @@
       "Tab"
      ],
      "key_times": [
-      1794225473766
+      1794245695341
      ],
      "observation": {
       "speech_raw": "Subscribe to updates \u001d check box \u001e  \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
@@ -97,8 +97,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794225474871,
-     "t_end_ms": 1794225475876,
+     "t_start_ms": 1794245696446,
+     "t_end_ms": 1794245697451,
      "action": {
       "type": "key",
       "command": "Insert+F1"
@@ -107,7 +107,7 @@
       "Insert+F1"
      ],
      "key_times": [
-      1794225474871
+      1794245696446
      ],
      "observation": {
       "speech_raw": "Press the Spacebar to check or clear this box.\n\u001d Link \u001e List Okur Hot Keys\nPress ESCAPE to close this message.",
@@ -117,8 +117,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794225475876,
-     "t_end_ms": 1794225476880,
+     "t_start_ms": 1794245697451,
+     "t_end_ms": 1794245698456,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -127,7 +127,7 @@
       "Escape"
      ],
      "key_times": [
-      1794225475876
+      1794245697451
      ],
      "observation": {
       "speech_raw": "Subscribe to updates \u001d check box \u001e  \u001dchecked\u001e ",
@@ -137,8 +137,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794225476880,
-     "t_end_ms": 1794225477984,
+     "t_start_ms": 1794245698456,
+     "t_end_ms": 1794245699560,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -147,7 +147,7 @@
       "Tab"
      ],
      "key_times": [
-      1794225476880
+      1794245698456
      ],
      "observation": {
       "speech_raw": "Remember me \u001d check box \u001e  \u001dnot checked\u001e \nTo check press Spacebar.",
@@ -157,8 +157,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794225477984,
-     "t_end_ms": 1794225479289,
+     "t_start_ms": 1794245699560,
+     "t_end_ms": 1794245700864,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -167,7 +167,7 @@
       "Tab"
      ],
      "key_times": [
-      1794225477984
+      1794245699560
      ],
      "observation": {
       "speech_raw": "Plan\nPro \u001d radio button \u001e  \u001dchecked\u001e \n2 of 3\nTo change the selection press Up or Down Arrow.",
@@ -177,8 +177,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794225479289,
-     "t_end_ms": 1794225480493,
+     "t_start_ms": 1794245700864,
+     "t_end_ms": 1794245701968,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -187,7 +187,7 @@
       "Tab"
      ],
      "key_times": [
-      1794225479289
+      1794245700864
      ],
      "observation": {
       "speech_raw": "Country: \u001d Combo box \u001e \nGermany\nTo change the selection use the Arrow keys.",
@@ -197,8 +197,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794225480493,
-     "t_end_ms": 1794225481498,
+     "t_start_ms": 1794245701968,
+     "t_end_ms": 1794245702973,
      "action": {
       "type": "key",
       "command": "Insert+F1"
@@ -207,7 +207,7 @@
       "Insert+F1"
      ],
      "key_times": [
-      1794225480493
+      1794245701968
      ],
      "observation": {
       "speech_raw": "Up and Down Arrow, or an item's first letter, choose an item. Alt+Down Arrow opens the list.\n\u001d Link \u001e List Okur Hot Keys\nPress ESCAPE to close this message.",
@@ -217,8 +217,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794225481498,
-     "t_end_ms": 1794225482502,
+     "t_start_ms": 1794245702973,
+     "t_end_ms": 1794245703977,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -227,7 +227,7 @@
       "Escape"
      ],
      "key_times": [
-      1794225481498
+      1794245702973
      ],
      "observation": {
       "speech_raw": "Germany",
@@ -237,8 +237,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794225482502,
-     "t_end_ms": 1794225483606,
+     "t_start_ms": 1794245703977,
+     "t_end_ms": 1794245705082,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -247,7 +247,7 @@
       "Tab"
      ],
      "key_times": [
-      1794225482502
+      1794245703977
      ],
      "observation": {
       "speech_raw": "Fruit: \u001d List box \u001e \nBananas\n2 of 3\nTo move to an item press the Arrow keys.",
@@ -257,8 +257,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794225483606,
-     "t_end_ms": 1794225484611,
+     "t_start_ms": 1794245705082,
+     "t_end_ms": 1794245706087,
      "action": {
       "type": "key",
       "command": "Insert+F1"
@@ -267,7 +267,7 @@
       "Insert+F1"
      ],
      "key_times": [
-      1794225483606
+      1794245705082
      ],
      "observation": {
       "speech_raw": "Up and Down Arrow move through this list, and an item's first letter goes to it.\n\u001d Link \u001e List Okur Hot Keys\nPress ESCAPE to close this message.",
@@ -277,8 +277,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794225484611,
-     "t_end_ms": 1794225485615,
+     "t_start_ms": 1794245706087,
+     "t_end_ms": 1794245707091,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -287,7 +287,7 @@
       "Escape"
      ],
      "key_times": [
-      1794225484611
+      1794245706087
      ],
      "observation": {
       "speech_raw": "Bananas\n2 of 3",
@@ -297,8 +297,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794225485615,
-     "t_end_ms": 1794225486820,
+     "t_start_ms": 1794245707091,
+     "t_end_ms": 1794245708196,
      "action": {
       "type": "key",
       "command": "Shift+Tab"
@@ -307,7 +307,7 @@
       "Shift+Tab"
      ],
      "key_times": [
-      1794225485615
+      1794245707091
      ],
      "observation": {
       "speech_raw": "Country: \u001d Combo box \u001e \nGermany\nTo change the selection use the Arrow keys.",
@@ -317,8 +317,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794225486820,
-     "t_end_ms": 1794225487927,
+     "t_start_ms": 1794245708196,
+     "t_end_ms": 1794245709402,
      "action": {
       "type": "key",
       "command": "Shift+Tab"
@@ -327,7 +327,7 @@
       "Shift+Tab"
      ],
      "key_times": [
-      1794225486820
+      1794245708196
      ],
      "observation": {
       "speech_raw": "Plan\nPro \u001d radio button \u001e  \u001dchecked\u001e \n2 of 3\nTo change the selection press Up or Down Arrow.",
@@ -337,8 +337,8 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794225487927,
-     "t_end_ms": 1794225489032,
+     "t_start_ms": 1794245709402,
+     "t_end_ms": 1794245710507,
      "action": {
       "type": "key",
       "command": "Shift+Tab"
@@ -347,7 +347,7 @@
       "Shift+Tab"
      ],
      "key_times": [
-      1794225487927
+      1794245709402
      ],
      "observation": {
       "speech_raw": "Remember me \u001d check box \u001e  \u001dnot checked\u001e \nTo check press Spacebar.",
@@ -357,8 +357,8 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794225489032,
-     "t_end_ms": 1794225490137,
+     "t_start_ms": 1794245710507,
+     "t_end_ms": 1794245711612,
      "action": {
       "type": "key",
       "command": "Shift+Tab"
@@ -367,7 +367,7 @@
       "Shift+Tab"
      ],
      "key_times": [
-      1794225489032
+      1794245710507
      ],
      "observation": {
       "speech_raw": "Subscribe to updates \u001d check box \u001e  \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
@@ -377,8 +377,8 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794225490137,
-     "t_end_ms": 1794225491242,
+     "t_start_ms": 1794245711612,
+     "t_end_ms": 1794245712718,
      "action": {
       "type": "key",
       "command": "Shift+Tab"
@@ -387,7 +387,7 @@
       "Shift+Tab"
      ],
      "key_times": [
-      1794225490137
+      1794245711612
      ],
      "observation": {
       "speech_raw": "Notes: \u001d Edit \u001e \nType in text.",
@@ -397,8 +397,8 @@
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794225491242,
-     "t_end_ms": 1794225492550,
+     "t_start_ms": 1794245712718,
+     "t_end_ms": 1794245714023,
      "action": {
       "type": "key",
       "command": "Shift+Tab"
@@ -407,7 +407,7 @@
       "Shift+Tab"
      ],
      "key_times": [
-      1794225491242
+      1794245712718
      ],
      "observation": {
       "speech_raw": "Name: \u001d Edit \u001e \nAda\nType in text.",
@@ -417,8 +417,8 @@
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794225492550,
-     "t_end_ms": 1794225493555,
+     "t_start_ms": 1794245714023,
+     "t_end_ms": 1794245715028,
      "action": {
       "type": "key",
       "command": "Insert+F1"
@@ -427,7 +427,7 @@
       "Insert+F1"
      ],
      "key_times": [
-      1794225492550
+      1794245714023
      ],
      "observation": {
       "speech_raw": "Type here. The arrow keys move through the text and read what they pass.\n\u001d Link \u001e List Okur Hot Keys\nPress ESCAPE to close this message.",
@@ -437,8 +437,8 @@
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794225493555,
-     "t_end_ms": 1794225494560,
+     "t_start_ms": 1794245715028,
+     "t_end_ms": 1794245716132,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -447,7 +447,7 @@
       "Escape"
      ],
      "key_times": [
-      1794225493555
+      1794245715028
      ],
      "observation": {
       "speech_raw": "",
