@@ -91,6 +91,7 @@ From the commands named:
 - Okur's wizards kept as dialogs, Next or Finish their default (b118ef81): Insert+E in a wizard on Linux.
 - The sixth code review's fixes (af369c04): a tree's arrows told and its items changed in place; a kept item's children opened with it; a wizard page's first focus after its layout; a drop-down's Enter and its open list's Escape; unasked field reads (`FieldText`) never a key's answer; xa11y-linux's application looked up after the kinds' filter; a drop-down's replaced choices kept; a radio group's first focus on its checked option.
 - The buffer's depth test steadier on the shared machine (17da7d0b).
+- A window's focus looked for as it comes forward (ccd734c3): GTK reports none for the control focused as its window comes (548/s1, Insert+Tab silent); a named window, not Chromium's nor okur-ui's, is looked through 150 ms after it came, unless a focus came meanwhile.
 
 The next job's check builds these first (okur-ui's GTK code does not build on the dev box); `main` stays at 3ed18eb0 until it passes.
 
