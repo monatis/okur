@@ -1,0 +1,34 @@
+{
+  "id": "1209-desktop-window-list-delete",
+  "name": "The Window List's Delete (JAWS 2024.2403 and later): Insert+F10, S to the fixture's window (SR Dialog Fixture), Delete, which closes it, then what comes back (the list, Sight and Sound's article says) and Escape. Keys in JAWS's own dialogs are typed by JAWS (TypeKey)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-dialogs.ps1",
+  "target_app": "desktop",
+  "reset": {
+    "keys": []
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+F10"
+    },
+    {
+      "id": "s2",
+      "type": "jaws_function",
+      "command": "TypeKey(\"S\")"
+    },
+    {
+      "id": "s3",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Delete\")",
+      "settle_max_ms": 15000
+    },
+    {
+      "id": "s4",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+    }
+  ]
+}

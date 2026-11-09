@@ -22,6 +22,7 @@ To record one:
 | 665 | Say Window in Notepad's Font dialog, waited for long enough to read its 187 fonts (round 115) | `desktop-notepad.ps1` |
 | 1207 | Custom Label Delete from Run JAWS Manager: on a labelled field, on one with none, and on text (written 2026-11-10 while old-pc was offline; Okur waits for it before building the command) | `custom-label.html` (in `corpus/fixtures/`) |
 | 1208 | A text area whose first line wraps: Say Line and the arrows, whether JAWS reads its lines as shown or as written (1206 on Linux read the written line) | `wrapped-text-area.html` (here) |
+| 1209 | The Window List's Delete: the fixture's window closed from the list, and what JAWS says as the list comes back (Okur built it from Sight and Sound's article, fa56ef50) | `desktop-dialogs.ps1` (in `corpus/fixtures/`) |
 
 Office on old-pc is not activated (2026-10-19): Word and Excel open Microsoft's Office Activation
 Wizard and say "Product Activation Failed", which held the fixtures' automation in round 17. The
