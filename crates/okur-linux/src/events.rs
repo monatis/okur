@@ -287,7 +287,12 @@ pub struct DriverShared {
     pub focused: FocusedObject,
     pub activated: Activated,
     pub page_wanted: Arc<Mutex<Option<PageWanted>>>,
+    /// The actions' worker, which reads a text field at its caret as its focus is delivered.
+    pub(crate) field_reads: FieldReads,
 }
+
+/// Where the event loop asks the actions' worker for a field's read.
+pub(crate) type FieldReads = Arc<Mutex<Option<std::sync::mpsc::Sender<crate::actions::Request>>>>;
 
 /// How long after Okur activated it a toggle's focus is taken as the activation's.
 const ACTIVATION_FRESH: Duration = Duration::from_millis(500);
@@ -819,7 +824,7 @@ fn deliver(
     converter: &mut Converter,
     trace: &TraceOut,
     live: &LiveObjects,
-    focused: &FocusedObject,
+    (focused, field_reads): (&FocusedObject, &FieldReads),
     sink: &EventSink,
 ) -> bool {
     for record in delivery.take_ready() {
@@ -838,8 +843,25 @@ fn deliver(
                 .unwrap_or_else(std::sync::PoisonError::into_inner) = Some(object);
         }
         let said = converter.convert_read(&record);
+        // An editable control focused: read at its caret once the engine has its focus, as
+        // Windows' focus carries the field's text.
+        let field = record.kind == EventKind::FocusChanged
+            && record
+                .target
+                .as_ref()
+                .is_some_and(|e| e.states.focused && e.states.editable);
+        let in_page = record.document.is_some();
         if !hand(trace, record, said, sink) {
             return false;
+        }
+        if field {
+            if let Some(reads) = field_reads
+                .lock()
+                .unwrap_or_else(std::sync::PoisonError::into_inner)
+                .as_ref()
+            {
+                let _ = reads.send(crate::actions::Request::FieldFocused(in_page));
+            }
         }
     }
     true
@@ -1017,6 +1039,7 @@ impl EventSource for AtspiEventSource {
         let trace = Arc::clone(&self.shared.trace);
         let focused = Arc::clone(&self.shared.focused);
         let activated = Arc::clone(&self.shared.activated);
+        let field_reads = Arc::clone(&self.shared.field_reads);
         let page_wanted = Arc::clone(&self.shared.page_wanted);
         let stop = Arc::new(AtomicBool::new(false));
         let thread = {
@@ -1061,7 +1084,7 @@ impl EventSource for AtspiEventSource {
                         &mut converter,
                         &trace,
                         &live,
-                        &focused,
+                        (&focused, &field_reads),
                         &sink,
                     ) {
                         return;
@@ -1122,7 +1145,7 @@ impl EventSource for AtspiEventSource {
                         &mut converter,
                         &trace,
                         &live,
-                        &focused,
+                        (&focused, &field_reads),
                         &sink,
                     ) {
                         return;
@@ -1165,7 +1188,7 @@ impl EventSource for AtspiEventSource {
                                     &mut converter,
                                     &trace,
                                     &live,
-                                    &focused,
+                                    (&focused, &field_reads),
                                     &sink,
                                 ) {
                                     return;
@@ -1296,7 +1319,7 @@ impl EventSource for AtspiEventSource {
                                 &mut converter,
                                 &trace,
                                 &live,
-                                &focused,
+                                (&focused, &field_reads),
                                 &sink,
                             ) {
                                 return;

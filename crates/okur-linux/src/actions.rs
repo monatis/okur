@@ -26,7 +26,7 @@ use xa11y_linux::{AtspiObject, AtspiTextPosition, LinuxProvider};
 use crate::events::{DriverShared, PageObjects};
 
 /// A call on the bus for the worker: an object's bus name and path.
-enum Request {
+pub(crate) enum Request {
     Focus(String, String),
     Activate(String, String),
     /// The focused text field read at its caret, after the key the engine asked it for: what
@@ -34,6 +34,10 @@ enum Request {
     Text(Option<Box<TextContext>>, bool),
     /// The focused text field's caret put at a character.
     Caret(usize),
+    /// The text field that just took the focus read at its caret at once, as Windows' focus
+    /// carries its text: Say Color right after (676/s4) and the lines read before any key
+    /// need it. Whether the field is a page's.
+    FieldFocused(bool),
 }
 
 /// How long a caret read waits for the key to move the caret, or change the text or the
@@ -65,6 +69,11 @@ impl LinuxActions {
     /// engine through `sink`.
     pub fn new(objects: PageObjects, shared: DriverShared, sink: EventSink) -> Self {
         let (requests, received) = channel::<Request>();
+        // The event loop asks for a field's read as its focus is delivered.
+        *shared
+            .field_reads
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner) = Some(requests.clone());
         let kept = shared.clone();
         let worker = std::thread::Builder::new()
             .name("okur-linux-actions".to_owned())
@@ -144,11 +153,20 @@ impl LinuxActions {
                                 tracing::debug!("not activated: {e}");
                             }
                         }
+                        // A newer read asked (a key held down, another field focused) is answered
+                        // alone.
+                        Request::Text(..) | Request::FieldFocused(..)
+                            if pending.iter().any(|r| {
+                                matches!(r, Request::Text(..) | Request::FieldFocused(..))
+                            }) => {}
                         Request::Text(before, in_page) => {
-                            if pending.iter().any(|r| matches!(r, Request::Text(..))) {
-                                continue;
+                            let before = before.map(|b| *b);
+                            if !read_text(&provider, &shared, &sink, before, in_page, true) {
+                                return;
                             }
-                            if !read_text(&provider, &shared, &sink, before.map(|b| *b), in_page) {
+                        }
+                        Request::FieldFocused(in_page) => {
+                            if !read_text(&provider, &shared, &sink, None, in_page, false) {
                                 return;
                             }
                         }
@@ -286,6 +304,7 @@ fn read_text(
     sink: &EventSink,
     before: Option<TextContext>,
     in_page: bool,
+    after_key: bool,
 ) -> bool {
     let started = Instant::now();
     let focused = reads
@@ -307,20 +326,23 @@ fn read_text(
             .map_err(|e| tracing::debug!("caret read: the caret not read: {e}"))
             .ok()
     };
-    let known = match before.as_ref().map(place_known) {
-        Some((caret, _, length)) => Some((caret, length)),
-        None => caret_and_length().and_then(|(caret, length)| {
-            Some((usize::try_from(caret).ok()?, usize::try_from(length).ok()?))
-        }),
-    };
-    loop {
-        let now = caret_and_length().and_then(|(caret, length)| {
-            Some((usize::try_from(caret).ok()?, usize::try_from(length).ok()?))
-        });
-        if now.is_none() || now != known || started.elapsed() >= SETTLE {
-            break;
+    // A field read as it took the focus is read at once: no key moves it.
+    if after_key {
+        let known = match before.as_ref().map(place_known) {
+            Some((caret, _, length)) => Some((caret, length)),
+            None => caret_and_length().and_then(|(caret, length)| {
+                Some((usize::try_from(caret).ok()?, usize::try_from(length).ok()?))
+            }),
+        };
+        loop {
+            let now = caret_and_length().and_then(|(caret, length)| {
+                Some((usize::try_from(caret).ok()?, usize::try_from(length).ok()?))
+            });
+            if now.is_none() || now != known || started.elapsed() >= SETTLE {
+                break;
+            }
+            std::thread::sleep(POLL);
         }
-        std::thread::sleep(POLL);
     }
     let place = provider
         .atspi_text_position(&object.bus_name, &object.path)
