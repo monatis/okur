@@ -145,11 +145,16 @@ with no change to the `KeyboardHook` port:
   - The renderer's second increment: trees, tables, check lists, menus, the wizard, the main window, the viewer.
 - **Known Linux gaps, not yet built:**
   - Alt+F on Chrome highlights no item on Linux, so Okur says the menu only at the first Down (Windows' Chrome highlights the first item as it opens).
-  - A live region added after its page's read (finding 7 of the second review).
+  - A live region added after its page's read (finding 7 of the second review): since 90d63662 a page changing outside its regions is captured again, which finds a new region at its next capture; its first change before that is not said.
+  - Keys pressed between Okur's dialog asked for and its focus come go to the page (Insert+F7 then a letter at once is the page's quick key). The engine could hold them for the dialog.
+  - A dialog box's box is read once per window (79a1208e): a box whose buttons or text change after (a wizard's page) keeps the first read.
+  - An alert inside a frame (GTK's info bar) is taken as the window, and its focus as one in a window behind (the fourth review, 9).
+  - A GTK list's arrow costs up to three reads (its focus, the selection going, coming), about 70 ms each.
   - GTK's drop-down count and tree depth (301, 303, 304).
   - The regions entered on a check box's focus after Space (288/s2: "MainRegion FormRegion").
   - The fonts the lab has (Liberation Serif for Times New Roman, 209), which are the environment's.
-- **Reviews:** the third pass's findings 1 to 8 built (3dc4cbca); 9 (one call per table part's default action) is kept.
+- **Reviews:** the third pass's findings 1 to 8 built (3dc4cbca); 9 (one call per table part's default action) is kept. The fourth pass's (Okur's GTK dialogs, the read-again rule, the regions' order) built in 240fb118, 79a1208e and b3f3639f; 9 is kept.
+- **Since the handoff of the evening (e8f41bfe):** okur-ui's messages in the trace (fa7403d8), `job.sh stop`, the fourth review's fixes, a dialog box read once (79a1208e), okur-ui woken for each message (b3f3639f), a page's changes outside its regions captured again (90d63662). The full run `full5` (512 scenarios at 240fb118) runs; what came after it is checked in the run after it.
 - **Handoffs:** [`../handoff/2026-11-09-linux-replay-exact-and-the-second-review.md`](../handoff/2026-11-09-linux-replay-exact-and-the-second-review.md), [`../handoff/2026-11-09-linux-text-fields-live-regions-and-wide1.md`](../handoff/2026-11-09-linux-text-fields-live-regions-and-wide1.md).
 
 ### Okur's own dialogs on Linux (begun 2026-11-09)
