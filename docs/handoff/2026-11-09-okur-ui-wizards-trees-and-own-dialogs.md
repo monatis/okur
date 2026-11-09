@@ -75,11 +75,11 @@ From the commands named:
   (1156/s22). Okur's Win32 dialog likely says it too, unseen by parity, which replays JAWS's
   dialog.
 - The tree's first focus (241/s1) was still silent in gtk7, before the tree fill and the
-  application name; night1b shows it.
+  application name; night2 shows it.
 
 ## Lab state
 
-`night1b` runs at df7462e5:
+`night2` runs at ec1e5cac (night1b, at df7462e5, was stopped for the tree fill, 1b3c9e1b, and the focused field read again as it is typed in, ec1e5cac: 567's Insert+Up said "t" for "teh quick brown fxo", each Ctrl+Left the word before):
 1. the check;
 2. the research runs 1205 and 1206;
 3. the 132 scenarios with Linux-only gaps (`D:\okur-linux\gaps1-ids.txt`: Windows' parity
@@ -88,7 +88,7 @@ From the commands named:
 
 ## Next
 
-1. **When `night1b`'s gap runs end** (fetch mid-job; the snapshot skips the run in progress):
+1. **When `night2`'s gap runs end** (fetch mid-job; the snapshot skips the run in progress):
    - import them;
    - read 1205 (the frame wait) and 1206 (CapsLock+O in a text area);
    - read the dialogs' first focus and the application name in their traces.
