@@ -114,9 +114,31 @@ const REFRESH_QUIET: Duration = Duration::from_millis(700);
 /// The longest a changed page waits for quiet.
 const REFRESH_MAX_DELAY: Duration = Duration::from_secs(3);
 
-/// Whether `kind` on the object at `bus` and `path` is heard: what the converter takes, and a
-/// live region's children or text changing.
-fn heard(live: &LiveObjects, kind: &EventKind, bus: &str, path: &str) -> bool {
+/// Whether the object at `bus` and `path` is the one the engine has the focus on.
+fn is_focused(focused: &FocusedObject, bus: &str, path: &str) -> bool {
+    focused
+        .lock()
+        .unwrap_or_else(std::sync::PoisonError::into_inner)
+        .as_ref()
+        .is_some_and(|object| object.bus_name == bus && object.path == path)
+}
+
+/// Whether `kind` on the object at `bus` and `path` is heard: what the converter takes, a live
+/// region's children or text changing, and the focused field's text changing (typed in it).
+fn heard(
+    live: &LiveObjects,
+    focused: &FocusedObject,
+    kind: &EventKind,
+    bus: &str,
+    path: &str,
+) -> bool {
+    // The focused field's text, changed by typing: read again, as Windows' text events keep
+    // the engine's copy current. Unheard, the field was read only at the next command, which
+    // spoke the read before it ("t" for "teh quick brown fxo" at Insert+Up, each Ctrl+Left the
+    // word before: 567 in gtk7).
+    if *kind == EventKind::TextChanged && is_focused(focused, bus, path) {
+        return true;
+    }
     // A value changing is heard from a read page's progress bars alone: each heard event costs
     // its object's read, and sliders and scroll bars change anywhere (the code review of
     // 2026-11-09, third pass, 8).
@@ -1138,9 +1160,10 @@ impl EventSource for AtspiEventSource {
         let live: LiveObjects = Arc::default();
         let subscription = {
             let live = Arc::clone(&live);
+            let focused = Arc::clone(&self.shared.focused);
             provider
                 .subscribe_desktop_kinds(Box::new(move |kind, bus, path| {
-                    heard(&live, kind, bus, path)
+                    heard(&live, &focused, kind, bus, path)
                 }))
                 .map_err(|e| source_error("the desktop's events", e))?
         };
@@ -1337,6 +1360,25 @@ impl EventSource for AtspiEventSource {
                                     &sink,
                                 ) {
                                     return;
+                                }
+                                continue;
+                            }
+                            // The focused field's text changed (typed in it): read again at its
+                            // caret, silently, as its focus's read is; reads asked meanwhile
+                            // give way to the newest.
+                            let typed = event.kind == EventKind::TextChanged
+                                && target.and_then(AtspiObject::of).is_some_and(|object| {
+                                    is_focused(&focused, &object.bus_name, &object.path)
+                                });
+                            if typed {
+                                if let Some(reads) = field_reads
+                                    .lock()
+                                    .unwrap_or_else(std::sync::PoisonError::into_inner)
+                                    .as_ref()
+                                {
+                                    let _ = reads.send(crate::actions::Request::FieldFocused(
+                                        focus_page.is_some(),
+                                    ));
                                 }
                                 continue;
                             }
@@ -1595,6 +1637,7 @@ mod heard_tests {
     /// this page's.
     #[test]
     fn a_pages_first_change_is_heard_once() {
+        let no_focus = FocusedObject::default();
         let live: LiveObjects = Arc::default();
         let page = |objects: &[&str]| LivePage {
             bus: ":1.5".to_owned(),
@@ -1607,16 +1650,43 @@ mod heard_tests {
         live.write()
             .unwrap_or_else(std::sync::PoisonError::into_inner)
             .push(page(&["/doc", "/section"]));
-        assert!(!heard(&live, &EventKind::TextChanged, ":1.5", "/section"));
+        assert!(!heard(
+            &live,
+            &no_focus,
+            &EventKind::TextChanged,
+            ":1.5",
+            "/section"
+        ));
+        // The focused field's text changing (typed in it) is heard.
+        let field: FocusedObject = Arc::new(Mutex::new(Some(AtspiObject {
+            bus_name: ":1.5".to_owned(),
+            path: "/section".to_owned(),
+            role: "entry".to_owned(),
+        })));
         assert!(heard(
             &live,
+            &field,
+            &EventKind::TextChanged,
+            ":1.5",
+            "/section"
+        ));
+        assert!(heard(
+            &live,
+            &no_focus,
             &EventKind::StructureChanged,
             ":1.5",
             "/section"
         ));
-        assert!(!heard(&live, &EventKind::StructureChanged, ":1.5", "/doc"));
         assert!(!heard(
             &live,
+            &no_focus,
+            &EventKind::StructureChanged,
+            ":1.5",
+            "/doc"
+        ));
+        assert!(!heard(
+            &live,
+            &no_focus,
             &EventKind::StructureChanged,
             ":1.9",
             "/section"
@@ -1627,7 +1697,13 @@ mod heard_tests {
         );
         // Asked for again, it is heard again.
         rearm(&live, ":1.5/doc");
-        assert!(heard(&live, &EventKind::StructureChanged, ":1.5", "/doc"));
+        assert!(heard(
+            &live,
+            &no_focus,
+            &EventKind::StructureChanged,
+            ":1.5",
+            "/doc"
+        ));
     }
 }
 
