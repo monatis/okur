@@ -496,6 +496,7 @@ fn snapshot(tree: AtspiTree) -> okur_linux_model::page::AtspiNode {
         relations: tree.relations,
         description: tree.description,
         uri: tree.uri,
+        default_action: tree.default_action,
         // Given by give_ids, from the page's ids.
         id: None,
         children: tree.children.into_iter().map(snapshot).collect(),

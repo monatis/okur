@@ -464,6 +464,20 @@ impl LinuxProvider {
         )
     }
 
+    /// The object's first action's name, as the application gives it (its Action interface's
+    /// GetName(0)), unmapped: none where it has no action.
+    fn default_action_name(&self, aref: &AccessibleRef) -> Option<String> {
+        let proxy = self
+            .make_proxy(&aref.bus_name, &aref.path, "org.a11y.atspi.Action")
+            .ok()?;
+        let reply = proxy.call_method("GetName", &(0i32,)).ok()?;
+        reply
+            .body()
+            .deserialize::<String>()
+            .ok()
+            .filter(|name| !name.is_empty())
+    }
+
     /// Get available actions via Action interface, returning both the action list
     /// and a map of each action name to its AT-SPI2 integer index for direct `DoAction(i)`.
     ///
@@ -4227,6 +4241,9 @@ pub struct AtspiTree {
     /// An address: a link's (its Hyperlink interface's URI), or a document's (its Document
     /// interface's `URI` attribute), as Chrome gives them.
     pub uri: Option<String>,
+    /// A table's, a row's or a cell's default action, as the application names it (Chromium's
+    /// "click", "clickAncestor": a click listener on it or above it).
+    pub default_action: Option<String>,
     /// The object: its application's bus name and its path, for acting on it later
     /// ([`LinuxProvider::atspi_do_action`], [`LinuxProvider::atspi_grab_focus`]).
     pub bus_name: String,
@@ -4640,6 +4657,14 @@ impl LinuxProvider {
             "document web" | "document frame" => self.get_document_uri(aref),
             _ => None,
         };
+        // A table's parts alone: whether a click listener answers them is said in a table
+        // ("clickable"), one call each, where every other object would cost it too.
+        let default_action = match role.as_str() {
+            "table" | "table row" | "table cell" | "table column header" | "table row header" => {
+                self.default_action_name(aref)
+            }
+            _ => None,
+        };
         let mut node = AtspiTree {
             role,
             name: self.get_name(aref).unwrap_or_default(),
@@ -4655,6 +4680,7 @@ impl LinuxProvider {
             description: None,
             relations: self.get_relations(aref),
             uri,
+            default_action,
             bus_name: aref.bus_name.clone(),
             path: aref.path.clone(),
             children: Vec::new(),

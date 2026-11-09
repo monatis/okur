@@ -28,6 +28,7 @@ pub fn is_heard(kind: &EventKind) -> bool {
         kind,
         EventKind::FocusChanged
             | EventKind::NameChanged
+            | EventKind::ValueChanged
             | EventKind::DocumentLoaded
             | EventKind::WindowActivated
             | EventKind::WindowDeactivated

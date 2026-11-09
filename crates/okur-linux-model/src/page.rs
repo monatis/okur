@@ -71,6 +71,10 @@ pub struct AtspiNode {
     /// An address: a link's, or the document's.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub uri: Option<String>,
+    /// A table's, a row's or a cell's default action, as Chromium names it: "click" (a click
+    /// listener on it), "clickAncestor" (one above it).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub default_action: Option<String>,
     /// The id the driver gave its object, kept while its page is one of the last read: a page
     /// read again gives an object the id it had, as IA2's unique ids stay on Windows (the code
     /// review of 2026-11-09, second pass, findings 2 and 7). None in the traces before it, whose
@@ -390,6 +394,9 @@ fn numbered(node: &AtspiNode, next: &mut i32, ids: &HashMap<&str, i32>) -> WebNo
             .filter(|t| !t.is_empty() && !t.contains('\u{fffc}'))
             .or_else(|| chosen_item(node)),
         WebRole::Link | WebRole::Document => node.uri.clone(),
+        // A progress bar's or a meter's, as Chrome writes it ("40", "86.0274"), as MSAA's value
+        // gives it on Windows.
+        WebRole::ProgressBar => node.attribute("valuetext").map(str::to_owned),
         _ => None,
     };
     let number = |key: &str| node.attribute(key).and_then(|v| v.parse::<i32>().ok());
@@ -412,12 +419,22 @@ fn numbered(node: &AtspiNode, next: &mut i32, ids: &HashMap<&str, i32>) -> WebNo
         unique_id: Some(unique_id),
         description: node.description.clone(),
         relations,
+        default_action: node.default_action.as_deref().map(action_name),
         children: node
             .children
             .iter()
             .map(|child| numbered(child, next, ids))
             .collect(),
         ..WebNode::default()
+    }
+}
+
+/// A default action's name as MSAA's is on Windows ("click ancestor"): Chromium names it
+/// "clickAncestor" over AT-SPI.
+fn action_name(name: &str) -> String {
+    match name {
+        "clickAncestor" | "click-ancestor" => "click ancestor".to_owned(),
+        other => other.to_owned(),
     }
 }
 
@@ -460,6 +477,27 @@ mod tests {
         node.attributes
             .insert("display".to_owned(), "block".to_owned());
         node
+    }
+
+    /// A table cell's default action is MSAA's name for it, which the web model reads as a
+    /// click listener above it ("clickable" [obs, 3154/s4]); a progress bar's value is Chrome's
+    /// value text ("100 Progress bar" [obs, 793/s4]).
+    #[test]
+    fn a_cells_default_action_and_a_progress_bars_value() {
+        let mut cell = node("table cell", "Atlas", vec![]);
+        cell.default_action = Some("clickAncestor".to_owned());
+        let mut bar = node("progress bar", "Upload", vec![]);
+        bar.attributes
+            .insert("valuetext".to_owned(), "100".to_owned());
+        let root = node("document web", "Tables", vec![cell, bar]);
+        let web = atspi_to_web(&root);
+        let cell = web.children.first();
+        assert_eq!(
+            cell.and_then(|c| c.default_action.as_deref()),
+            Some("click ancestor")
+        );
+        let bar = web.children.get(1);
+        assert_eq!(bar.and_then(|b| b.value.as_deref()), Some("100"));
     }
 
     /// A list box's items have its name and their places, their own where Chrome gives them,

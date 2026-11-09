@@ -159,6 +159,15 @@ pub fn object_key(element: &ElementData) -> Option<String> {
     Some(format!("{}{}", raw("bus_name")?, raw("object_path")?))
 }
 
+/// A value as a number says it: whole without its fraction ("40"), else as it is ("86.0274").
+fn number(value: f64) -> String {
+    if value.fract() == 0.0 && value.abs() < 1e15 {
+        format!("{value:.0}")
+    } else {
+        value.to_string()
+    }
+}
+
 /// Whether the event is a window without a name coming forward: Chrome's own menu's window.
 fn is_unnamed_window(kind: &EventKind, element: &ElementData) -> bool {
     *kind == EventKind::WindowActivated && element.name.as_deref().is_none_or(str::is_empty)
@@ -306,6 +315,35 @@ impl Converter {
     /// forward.
     pub fn reads_alone(kind: &EventKind) -> bool {
         *kind == EventKind::WindowActivated
+    }
+
+    /// A page's progress bar or meter changing: its new value, the bar found in the page by
+    /// its object's id, as Windows' converter gives Chrome's ("10", "40", "100" [obs, 793/s2];
+    /// "86.0274" [obs, 3113/s1]). Chrome on Linux tells it by the bar's `accessible-value`.
+    /// A bar outside the page given last, or another object's value, says nothing here.
+    fn progress(&self, record: &AtspiRecord) -> Option<AccessibilityEvent> {
+        let target = record.target.as_ref()?;
+        if target.role != Role::ProgressBar {
+            return None;
+        }
+        let path = target.raw.get("object_path").and_then(|p| p.as_str())?;
+        let id = self.page_ids.get(path)?;
+        let value = target
+            .value
+            .as_deref()
+            .map(str::trim)
+            .filter(|v| !v.is_empty())
+            .map(str::to_owned)
+            .or_else(|| target.numeric_value.map(number))?;
+        let mut bar = FocusEvent::new(okur_core::aom::Role::ProgressBar);
+        bar.name = target.name.clone().filter(|n| !n.trim().is_empty());
+        bar.value = Some(value);
+        bar.in_document = true;
+        bar.unique_id = Some(id.to_string());
+        Some(AccessibilityEvent::ProgressChanged {
+            bar,
+            at_ms: record.at_ms,
+        })
     }
 
     /// An application's own menu (Chrome's app menu, Alt+F) as Windows gives it: menu mode
@@ -532,6 +570,10 @@ impl Converter {
         let menu = self.own_menu(record, object.as_deref(), in_page);
         events.extend(menu.events);
         if menu.alone {
+            return events;
+        }
+        if record.kind == EventKind::ValueChanged {
+            events.extend(self.progress(record));
             return events;
         }
         let outside_page = (focus || changed) && !in_page;
@@ -1075,6 +1117,33 @@ mod tests {
             converter.convert_read(&back).as_slice(),
             [AccessibilityEvent::Menu(MenuEvent::End)]
         ));
+    }
+
+    /// A page's progress bar changing says its new value, the bar named by its page id; a bar
+    /// the page given last does not hold says nothing.
+    #[test]
+    fn a_page_progress_bars_value_change_is_its_progress() {
+        let mut converter = Converter::default();
+        converter.page_ids.insert("/bar".to_owned(), 41);
+        let mut bar = element(ElementRole::ProgressBar, "Upload", "/bar", false);
+        bar.numeric_value = Some(40.0);
+        let changed = chrome_record(EventKind::ValueChanged, bar.clone(), None);
+        assert!(matches!(
+            converter.convert_read(&changed).as_slice(),
+            [AccessibilityEvent::ProgressChanged { bar, .. }]
+                if bar.value.as_deref() == Some("40")
+                    && bar.unique_id.as_deref() == Some("41")
+                    && bar.name.as_deref() == Some("Upload")
+        ));
+        bar.numeric_value = Some(86.0274);
+        let meter = chrome_record(EventKind::ValueChanged, bar.clone(), None);
+        assert!(matches!(
+            converter.convert_read(&meter).as_slice(),
+            [AccessibilityEvent::ProgressChanged { bar, .. }] if bar.value.as_deref() == Some("86.0274")
+        ));
+        let other = element(ElementRole::ProgressBar, "Elsewhere", "/other", false);
+        let elsewhere = chrome_record(EventKind::ValueChanged, other, None);
+        assert!(converter.convert_read(&elsewhere).is_empty());
     }
 
     /// A window without a menu starts no menu mode, and an item highlighted with no menu open
