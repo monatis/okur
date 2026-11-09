@@ -399,6 +399,19 @@ pub fn dialog_box(window: &AtspiNode) -> DialogBox {
     dialog
 }
 
+/// Whether a dialog box's read goes into an object of AT-SPI role `role`: its containers,
+/// where its buttons and text are, and its buttons, for their labels. Its fields' insides (a
+/// list's items, a tree's) are not read: what they hold is not the box's (the code review of
+/// 2026-11-09, fifth pass, 4: the Links List read whole was its 15 items and more).
+pub fn dialog_reads_within(role: &str) -> bool {
+    is_dialog_container(role) || matches!(role, "push button" | "button")
+}
+
+/// The containers a dialog box's buttons and text are found in.
+fn is_dialog_container(role: &str) -> bool {
+    matches!(role, "panel" | "filler" | "frame" | "dialog" | "alert")
+}
+
 fn collect_dialog(
     node: &AtspiNode,
     dialog: &mut DialogBox,
@@ -427,7 +440,7 @@ fn collect_dialog(
                     labels.push(text.to_owned());
                 }
             }
-            "panel" | "filler" | "frame" | "dialog" | "alert" => {
+            role if is_dialog_container(role) => {
                 collect_dialog(child, dialog, labels, fields);
             }
             "separator" | "image" | "icon" => {}
@@ -613,6 +626,55 @@ mod tests {
         let read = dialog_box(&find);
         assert_eq!(read.default_button.as_deref(), Some("Find Next"));
         assert_eq!(read.text, None);
+    }
+
+    /// A dialog box read only within its containers and buttons (`dialog_reads_within`) is the
+    /// box read whole: a list's items, left out, are none of its buttons or text.
+    #[test]
+    fn a_dialog_read_without_its_lists_items_is_the_same_box() {
+        let button = |name: &str, default: bool| {
+            let mut button = node("push button", name, Vec::new());
+            if default {
+                button.states |= 1 << crate::page::state::IS_DEFAULT;
+            }
+            button
+        };
+        fn pruned(node: &AtspiNode, root: bool) -> AtspiNode {
+            let mut kept = node.clone();
+            kept.children = if root || dialog_reads_within(&node.role) {
+                node.children.iter().map(|c| pruned(c, false)).collect()
+            } else {
+                Vec::new()
+            };
+            kept
+        }
+        let items = (0..40)
+            .map(|i| {
+                node(
+                    "list item",
+                    &format!("Link {i}"),
+                    vec![label("inside an item")],
+                )
+            })
+            .collect();
+        let mut nameless = button("", true);
+        nameless.children = vec![label("Activate Link")];
+        let links = node(
+            "dialog",
+            "Links List",
+            vec![
+                node(
+                    "filler",
+                    "",
+                    vec![node("list", "links", items), label("Note")],
+                ),
+                node("panel", "", vec![nameless, button("Cancel", false)]),
+            ],
+        );
+        let whole = dialog_box(&links);
+        assert_eq!(dialog_box(&pruned(&links, true)), whole);
+        assert_eq!(whole.default_button.as_deref(), Some("Activate Link"));
+        assert_eq!(whole.buttons, ["Activate Link", "Cancel"]);
     }
 
     #[test]

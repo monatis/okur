@@ -673,9 +673,11 @@ fn read_native(
             if dialog_known(&key) {
                 return None;
             }
-            Some(snapshot(
-                provider.atspi_tree_parallel(&window, DIALOG_LIMIT),
-            ))
+            Some(snapshot(provider.atspi_tree_parallel_within(
+                &window,
+                DIALOG_LIMIT,
+                &okur_linux_model::focus::dialog_reads_within,
+            )))
         });
     // What a focus costs, for the review's estimates (2026-11-08) to become numbers.
     let objects = count(&focus) + ancestors.iter().map(count).sum::<usize>();

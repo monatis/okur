@@ -4417,7 +4417,23 @@ impl LinuxProvider {
         stop: &std::sync::atomic::AtomicBool,
     ) -> AtspiTree {
         let left = std::sync::atomic::AtomicUsize::new(limit);
-        self.read_tree_parallel(&object.reference(), &left, stop)
+        self.read_tree_parallel(&object.reference(), &left, stop, &|_| true)
+    }
+
+    /// [`Self::atspi_tree_parallel`], the children read only of the objects whose role's name
+    /// `within` takes (the root's always): a dialog's window read for its buttons and text,
+    /// not its lists' items.
+    pub fn atspi_tree_parallel_within(
+        &self,
+        object: &AtspiObject,
+        limit: usize,
+        within: &(dyn Fn(&str) -> bool + Sync),
+    ) -> AtspiTree {
+        let left = std::sync::atomic::AtomicUsize::new(limit);
+        let stop = std::sync::atomic::AtomicBool::new(false);
+        self.read_tree_parallel(&object.reference(), &left, &stop, &|role| {
+            role == object.role || within(role)
+        })
     }
 
     fn read_tree_parallel(
@@ -4425,6 +4441,7 @@ impl LinuxProvider {
         aref: &AccessibleRef,
         left: &std::sync::atomic::AtomicUsize,
         stop: &std::sync::atomic::AtomicBool,
+        within: &(dyn Fn(&str) -> bool + Sync),
     ) -> AtspiTree {
         if stop.load(Ordering::SeqCst) {
             left.store(0, Ordering::SeqCst);
@@ -4440,11 +4457,14 @@ impl LinuxProvider {
             }
         }
         let mut node = self.read_node(aref);
+        if !within(&node.role) {
+            return node;
+        }
         let children = self.get_atspi_children(aref).unwrap_or_default();
         node.children = children
             .par_iter()
             .filter(|_| left.load(Ordering::SeqCst) > 0)
-            .map(|child| self.read_tree_parallel(child, left, stop))
+            .map(|child| self.read_tree_parallel(child, left, stop, within))
             .collect();
         node
     }
