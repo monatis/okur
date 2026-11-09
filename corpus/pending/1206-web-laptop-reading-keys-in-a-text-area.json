@@ -1,0 +1,49 @@
+{
+  "id": "1206-web-laptop-reading-keys-in-a-text-area",
+  "name": "The laptop layout's reading keys in a text area (old-pc runs the laptop layout): Tab twice into Body, CapsLock+O (Say Next Line: the field's Down), CapsLock+I (Say Line), CapsLock+U (Say Prior Line: Up), CapsLock+L (Say Next Word: Ctrl+Right). Okur presses the field's own key for each while CapsLock is down (f31824ee, 51547c3b); on Linux that key waits for the letter's release. Research on Linux first, then a JAWS recording",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/editing.html",
+  "target_app": "chrome",
+  "okur_set": [
+    "keyboard.layout=laptop"
+  ],
+  "reset": {
+    "keys": [
+      "Escape",
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "CapsLock+O"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "CapsLock+I"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "CapsLock+U"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "CapsLock+L"
+    }
+  ]
+}

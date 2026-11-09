@@ -283,7 +283,11 @@ def main():
                              "--settings", settings,
                              *([] if recorded or not verbosity
                                else ["--set", "web_verbosity=" + verbosity]),
-                             *(["--trace", trace] if trace else [])],
+                             *(["--trace", trace] if trace else []),
+                             # A research scenario, never recorded, names the settings it needs
+                             # (corpus/pending/1206: the laptop layout old-pc runs).
+                             *[arg for wanted in scenario.get("okur_set", [])
+                               for arg in ("--set", wanted)]],
                             stdin=subprocess.DEVNULL, stdout=okur_out, stderr=subprocess.STDOUT,
                             env={**os.environ, "RUST_LOG": os.environ.get(
                                 # Every crate's warnings too: okur-ui's errors come into Okur's
