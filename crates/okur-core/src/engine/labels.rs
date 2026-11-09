@@ -257,11 +257,18 @@ impl ScreenReaderEngine {
         let Some(page) = self.cursor.buffer.page().cloned() else {
             return;
         };
+        // The cursor at its node's start, as a label given leaves it: a label longer or shorter
+        // than its element's own name moved the text after it (the code review of 2026-11-10,
+        // 4).
         let offset = self.cursor.offset;
+        let node = self.cursor.current_node_id;
         let rebuilt = VirtualBuffer::from_aom(&self.custom_labels.apply(place, &page));
         crate::retire::retire(std::mem::replace(&mut self.cursor.buffer, rebuilt));
         self.say_all = None;
-        self.cursor.move_to(offset);
+        match node.and_then(|id| self.cursor.buffer.start_of(id)) {
+            Some(start) => self.cursor.move_to(start),
+            None => self.cursor.move_to(offset),
+        }
     }
 }
 

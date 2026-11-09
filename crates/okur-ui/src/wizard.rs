@@ -120,6 +120,7 @@ fn create_page(page: &DialogSpec, kept: &mut Vec<Kept>) -> Option<HPROPSHEETPAGE
 pub fn show(spec: &WizardSpec) {
     if let Some(sheet) = sheet_of(spec.id) {
         crate::dialog::bring_forward(sheet);
+        crate::dialog::tell_shown(spec.id, sheet);
         return;
     }
     // SAFETY: a plain query.
@@ -177,6 +178,8 @@ pub fn show(spec: &WizardSpec) {
     });
     set_buttons(sheet, spec.buttons);
     crate::dialog::bring_forward(sheet);
+    // Shown, as a dialog is: the keys Okur held since it asked for the wizard go to it.
+    crate::dialog::tell_shown(spec.id, sheet);
 }
 
 /// Turns wizard `id` to `page`, with `buttons`: the page is added and shown, the focus on its

@@ -244,11 +244,11 @@ pub fn native_focus(
     // items | To move to items use the Arrow keys." [obs, 699/s6, 704/s3].
     let empty_table = match focus.children.as_slice() {
         [table] if focus.role == "scroll pane" && table.role == "tree table" => {
+            // Its rows' list there and empty: a table without one is not known to be empty
+            // (the code review of 2026-11-10, 7).
             Some(table).filter(|t| {
-                t.children
-                    .iter()
-                    .filter(|c| c.role == "list")
-                    .all(|rows| rows.children.is_empty())
+                let mut rows = t.children.iter().filter(|c| c.role == "list").peekable();
+                rows.peek().is_some() && rows.all(|rows| rows.children.is_empty())
             })
         }
         _ => None,
@@ -1123,6 +1123,18 @@ mod tests {
         );
         let full = pane(vec![node("table row", "Rules Document", vec![])]);
         let event = native_focus(FocusEvent::new(Role::Group), &full, &[window()]);
+        assert!(!event.list_view);
+        // A table whose rows' list was not read is not known to be empty.
+        let unread = node(
+            "scroll pane",
+            "",
+            vec![node(
+                "tree table",
+                "PlaceMarker",
+                vec![node("table row", "PlaceMarker Type", vec![])],
+            )],
+        );
+        let event = native_focus(FocusEvent::new(Role::Group), &unread, &[window()]);
         assert!(!event.list_view);
     }
 

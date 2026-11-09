@@ -764,11 +764,16 @@ impl Converter {
                 events.extend(name().map(AccessibilityEvent::WindowRenamed));
             }
             // A window in front whose activation no event told: GTK 4 tells none over AT-SPI,
-            // only the window's active state (okur-ui's wizard in the lab's run of 743).
+            // only the window's active state (okur-ui's wizard in the lab's run of 743). The
+            // state is read with the event, not as it came, and can be stale (a GTK 3 window
+            // read active as it was left): the window must be the focused application's too
+            // (the code review of 2026-11-10, 5).
             EventKind::NameChanged
-                if target.is_some_and(|t| {
-                    matches!(t.role, Role::Dialog | Role::Window) && t.states.active
-                }) =>
+                if record.document.is_none()
+                    && self.track.in_focused_application(object.as_deref())
+                    && target.is_some_and(|t| {
+                        matches!(t.role, Role::Dialog | Role::Window) && t.states.active
+                    }) =>
             {
                 events.extend(name().map(AccessibilityEvent::WindowRenamed));
             }
@@ -2038,13 +2043,28 @@ mod tests {
 
     /// A window in front renamed is told the engine, as Windows' converter tells it: GTK 4's
     /// window, whose activation no event tells, by its active state (okur-ui's wizard turning
-    /// a page, 743/s8 at ec1e5cac); a window not in front is not.
+    /// a page, 743/s8 at ec1e5cac), its application's control focused; a window not active, or
+    /// another application's while the focus is elsewhere (its state read stale), is not.
     #[test]
     fn a_window_in_front_renamed_is_told() {
-        let renamed = |active: bool| {
+        let renamed = |active: bool, bus: &str| {
             let mut wizard = element(ElementRole::Dialog, "Choose an element", "/wizard", false);
             wizard.states.active = active;
+            wizard.raw.insert(
+                "bus_name".to_owned(),
+                serde_json::Value::String(bus.to_owned()),
+            );
             let mut converter = Converter::default();
+            let radio = element(ElementRole::RadioButton, "Hide an element", "/radio", true);
+            let _ = converter.convert_read(&record(
+                EventKind::FocusChanged,
+                radio,
+                Some(read(node(
+                    "radio button",
+                    "Hide an element",
+                    &[state::FOCUSED],
+                ))),
+            ));
             converter
                 .convert_read(&record(EventKind::NameChanged, wizard, None))
                 .into_iter()
@@ -2054,8 +2074,9 @@ mod tests {
                 })
                 .collect::<Vec<_>>()
         };
-        assert_eq!(renamed(true), vec!["Choose an element".to_owned()]);
-        assert!(renamed(false).is_empty());
+        assert_eq!(renamed(true, ":1.5"), vec!["Choose an element".to_owned()]);
+        assert!(renamed(false, ":1.5").is_empty());
+        assert!(renamed(true, ":1.9").is_empty());
     }
 
     /// A page read off the event thread comes as a record of its own: the engine is given the

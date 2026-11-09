@@ -795,6 +795,7 @@ impl Ui {
         let id = spec.id;
         if let Some(dialog) = ui.dialogs.borrow().get(&id) {
             dialog.window.present();
+            once_active(&dialog.window, move || send(&FromUi::DialogShown { id }));
             return;
         }
         let window = gtk::Window::builder()
@@ -862,8 +863,8 @@ impl Ui {
         set_wizard_buttons(&shown, &window, spec.buttons);
         ui.wizards.borrow_mut().insert(id, shown);
         window.present();
-        let ui = Rc::clone(ui);
-        once_active(&window, move || ui.focus_first(id, first));
+        // Shown, as a dialog is: the keys Okur held since it asked for the wizard go to it.
+        focus_and_tell_shown(ui, &window, id, first);
     }
 
     /// Turns wizard `id` to `page`, with `buttons`, the focus on its first control: the page
@@ -1267,7 +1268,16 @@ fn changed(id: u32, control: &str, setting: &Rc<Cell<bool>>, value: Value) {
     }
 }
 
-/// A vertical box with a dialog's margins.
+/// The modifiers a key is held with, as a chord: Shift, Ctrl, Alt, Super and Meta, not the
+/// locks (Caps Lock on left every key "with a modifier": the code review of 2026-11-10, 8).
+fn held() -> gtk::gdk::ModifierType {
+    gtk::gdk::ModifierType::SHIFT_MASK
+        | gtk::gdk::ModifierType::CONTROL_MASK
+        | gtk::gdk::ModifierType::ALT_MASK
+        | gtk::gdk::ModifierType::SUPER_MASK
+        | gtk::gdk::ModifierType::META_MASK
+}
+
 /// The arrows go round a group of radios, choosing the one they come to, as a Win32 dialog's
 /// radio group does: GTK's own arrows leave the group at either end. Down on the last of Skim
 /// Reading's rule types went on to Rules History (763/s5 in night2), where JAWS's dialog
@@ -1289,7 +1299,8 @@ fn go_round(buttons: &[gtk::CheckButton]) {
                 Key::Up | Key::Left | Key::KP_Up | Key::KP_Left => false,
                 _ => return glib::Propagation::Proceed,
             };
-            if !modifiers.is_empty() {
+            // A key held with it (Caps Lock and Num Lock do not count): GTK's own.
+            if modifiers.intersects(held()) {
                 return glib::Propagation::Proceed;
             }
             // The next one round, forward or back: at + n, or at + count - n, both under
@@ -1311,6 +1322,7 @@ fn go_round(buttons: &[gtk::CheckButton]) {
     }
 }
 
+/// A vertical box with a dialog's margins.
 fn margined_box() -> gtk::Box {
     let outer = gtk::Box::new(gtk::Orientation::Vertical, 8);
     outer.set_margin_top(12);
@@ -1787,7 +1799,7 @@ fn build(
                 let (setting, name) = (Rc::clone(setting), name.clone());
                 let selection = selection.clone();
                 keys.connect_key_pressed(move |_, key, _, modifiers| {
-                    if key != gtk::gdk::Key::space || !modifiers.is_empty() {
+                    if key != gtk::gdk::Key::space || modifiers.intersects(held()) {
                         return glib::Propagation::Proceed;
                     }
                     let Ok(at) = usize::try_from(selection.selected()) else {

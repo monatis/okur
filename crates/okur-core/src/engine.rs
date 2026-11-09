@@ -387,6 +387,10 @@ pub struct ScreenReaderEngine {
     list_return_mode: AppMode,
     /// The native focus a list dialog was opened from, which closing it gives back.
     list_return_focus: Option<FocusEvent>,
+    /// The application and site whose settings were in force as the list dialog opened: the
+    /// list's own focus is in Okur's windows, and a manager run from Run Okur Manager is for
+    /// the application it was opened over.
+    list_return_place: (Option<String>, Option<String>),
     /// The focused document's headings were asked for its Heading List, which opens when they
     /// come.
     document_headings_asked: bool,
@@ -775,6 +779,7 @@ impl ScreenReaderEngine {
             list_dialog: None,
             list_return_mode: AppMode::VirtualBuffer,
             list_return_focus: None,
+            list_return_place: (None, None),
             document_headings_asked: false,
             document_links_asked: false,
             document_fields_asked: false,
@@ -3624,10 +3629,27 @@ impl ScreenReaderEngine {
 
     /// Run Okur Manager (Insert+F2), JAWS's Run JAWS Manager: Okur's managers in a list, the
     /// first chosen, wherever the focus is; OK runs the chosen one from there [obs, 688/s1-s6].
+    /// Opened over another list dialog, it takes that list's place: the list closes, and what
+    /// the list was opened from is what Run Okur Manager returns to and runs its manager for.
     pub(crate) fn open_run_manager(&mut self) -> Option<String> {
+        self.ui.as_ref()?;
         let dialog = crate::ui::lists::ListDialog::managers(self.dialog_count + 1);
-        let here = self.app_mode;
-        self.show_list(dialog, here)
+        let Some(list) = self.list_dialog.take() else {
+            let here = self.app_mode;
+            return self.show_list(dialog, here);
+        };
+        if let Some(ui) = &self.ui {
+            ui.send(crate::ui::ToUi::DialogClose { id: list.id });
+        }
+        let (mode, focus, place) = (
+            self.list_return_mode,
+            self.list_return_focus.take(),
+            self.list_return_place.clone(),
+        );
+        let shown = self.show_list(dialog, mode);
+        self.list_return_focus = focus;
+        self.list_return_place = place;
+        shown
     }
 
     /// A manager chosen in Run Okur Manager, run from where the dialog was opened; one Okur
@@ -3672,6 +3694,7 @@ impl ScreenReaderEngine {
         self.list_dialog = Some(dialog);
         self.list_return_mode = return_mode;
         self.list_return_focus = self.last_native_focus.clone();
+        self.list_return_place = self.settings_place.clone();
         // The keys are the dialog's now, before its window reports the focus: a Down the
         // window has yet to take must not move the virtual cursor [obs, 242/s2].
         self.app_mode = AppMode::NativeControl;
@@ -4389,6 +4412,14 @@ impl ScreenReaderEngine {
             Outcome::Run(manager) => {
                 let managers = self.list_dialog.take();
                 self.app_mode = self.list_return_mode;
+                // For the application and the focus it was opened over, not Okur's list's own:
+                // the Dictionary Manager opened for okur-ui, and Settings Center would have
+                // changed okur-ui's settings (the code review of 2026-11-10, 2).
+                if let Some(focus) = self.list_return_focus.take() {
+                    self.last_native_focus = Some(focus);
+                }
+                let (application, site) = self.list_return_place.clone();
+                self.settings_place(application.as_deref(), site);
                 let dialog_asked = std::sync::Arc::clone(&self.dialog_asked);
                 let asked = || {
                     dialog_asked

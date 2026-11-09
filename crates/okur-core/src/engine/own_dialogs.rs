@@ -39,9 +39,15 @@ pub(super) struct DialogWatch {
 
 impl UiHost for DialogWatch {
     fn send(&self, message: ToUi) {
-        if let ToUi::DialogShow { dialog } = &message {
+        // A dialog or a wizard: okur-ui says each shown (`FromUi::DialogShown`).
+        let shown = match &message {
+            ToUi::DialogShow { dialog } => Some(dialog.id),
+            ToUi::WizardShow { wizard } => Some(wizard.id),
+            _ => None,
+        };
+        if let Some(id) = shown {
             if let Ok(mut asked) = self.asked.lock() {
-                *asked = Some(AskedDialog { id: dialog.id });
+                *asked = Some(AskedDialog { id });
             }
         }
         if let Ok(mut open) = self.open.lock() {

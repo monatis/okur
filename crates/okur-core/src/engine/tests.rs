@@ -11749,3 +11749,140 @@ fn an_own_dialog_shown_takes_the_keys_before_its_focus() {
     assert_eq!(down(&mut engine), KeyAction::PassThrough);
     assert_eq!(engine.cursor.offset, offset);
 }
+
+/// Insert+F2's list, chosen in: the managers' id, then OK on row `row`.
+fn run_manager_row(engine: &mut ScreenReaderEngine, ui: &crate::ui::RecordingUiHost, row: usize) {
+    use crate::ui::{FromUi, Value};
+    let insert = Modifiers {
+        insert: true,
+        ..Modifiers::none()
+    };
+    engine.handle_key_event(&KeyEvent::new(Key::F(2), insert, true));
+    let id = shown_dialog(ui);
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+        id,
+        control: "managers".into(),
+        value: Value::Selected(row),
+    }));
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id,
+        control: "ok".into(),
+    }));
+}
+
+/// Flexible Web from Run Okur Manager: its wizard is said as its focus comes, not muted as a
+/// quiet return from a dialog (the code review of 2026-11-10, 1).
+#[test]
+fn flexible_web_from_run_manager_is_said() {
+    use crate::ui::ToUi;
+    let (mut engine, ui, _) = links_page_engine();
+    run_manager_row(&mut engine, &ui, 7);
+    let wizard = ui.take().into_iter().find_map(|m| match m {
+        ToUi::WizardShow { wizard } => Some(wizard.page.title),
+        _ => None,
+    });
+    let title = wizard.unwrap_or_default();
+    assert!(!title.is_empty());
+    let mut radio = FocusEvent::new(Role::RadioButton)
+        .with_name("Create a new customization")
+        .with_window_title(&title);
+    radio.app = Some("okur-ui.exe".into());
+    radio.states.checked = Some(true);
+    let said = engine.handle_accessibility_event(&AccessibilityEvent::Focus(radio));
+    assert!(
+        said.as_deref().is_some_and(|s| s.contains(&title)),
+        "{said:?}"
+    );
+}
+
+/// A manager from Run Okur Manager is for the application it was opened over, not for Okur's
+/// list, whose own focus came between: the Dictionary Manager for Notepad (the code review of
+/// 2026-11-10, 2).
+#[test]
+fn run_managers_manager_is_for_the_application_before() {
+    use crate::ui::{FromUi, ToUi, Value};
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document))),
+        Box::new(MockSpeechOutput::new()),
+    );
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let mut edit = FocusEvent::new(Role::Edit)
+        .with_name("Text editor")
+        .with_window_title("notes.txt - Notepad");
+    edit.app = Some("notepad.exe".into());
+    engine.handle_accessibility_event(&AccessibilityEvent::Focus(edit));
+    let insert = Modifiers {
+        insert: true,
+        ..Modifiers::none()
+    };
+    engine.handle_key_event(&KeyEvent::new(Key::F(2), insert, true));
+    let id = shown_dialog(&ui);
+    // The list's own focus, in Okur's windows.
+    let mut row = FocusEvent::new(Role::ListItem)
+        .with_name("Commands Search")
+        .with_window_title("Run Okur Manager");
+    row.app = Some("okur-ui.exe".into());
+    engine.handle_accessibility_event(&AccessibilityEvent::Focus(row));
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+        id,
+        control: "managers".into(),
+        value: Value::Selected(6),
+    }));
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id,
+        control: "ok".into(),
+    }));
+    let shown = ui.take().into_iter().find_map(|m| match m {
+        ToUi::DialogShow { dialog } => Some(format!("{dialog:?}")),
+        _ => None,
+    });
+    assert!(
+        shown
+            .as_deref()
+            .is_some_and(|d| d.contains("notepad") && !d.contains("okur-ui")),
+        "{shown:?}"
+    );
+}
+
+/// Run Okur Manager opened over the Links List takes its place: the list closes, and the
+/// manager runs from the page the list was opened over (the code review of 2026-11-10, 3).
+#[test]
+fn run_manager_over_a_list_takes_its_place() {
+    use crate::ui::ToUi;
+    let (mut engine, ui, _) = links_page_engine();
+    let insert = Modifiers {
+        insert: true,
+        ..Modifiers::none()
+    };
+    engine.handle_key_event(&KeyEvent::new(Key::F(7), insert, true));
+    let links = shown_dialog(&ui);
+    assert!(links > 0);
+    engine.handle_key_event(&KeyEvent::new(Key::F(2), insert, true));
+    let sent = ui.take();
+    assert!(sent.contains(&ToUi::DialogClose { id: links }), "{sent:?}");
+    let managers = sent
+        .iter()
+        .find_map(|m| match m {
+            ToUi::DialogShow { dialog } => Some(dialog.id),
+            _ => None,
+        })
+        .unwrap_or_default();
+    assert!(managers > links);
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(crate::ui::FromUi::DialogChanged {
+        id: managers,
+        control: "managers".into(),
+        value: crate::ui::Value::Selected(7),
+    }));
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(crate::ui::FromUi::DialogPressed {
+        id: managers,
+        control: "ok".into(),
+    }));
+    // Flexible Web opens: the page's, where the Links List was opened.
+    let sent = ui.take();
+    assert!(
+        sent.iter().any(|m| matches!(m, ToUi::WizardShow { .. })),
+        "{sent:?}"
+    );
+    assert!(engine.list_dialog.is_none());
+}
