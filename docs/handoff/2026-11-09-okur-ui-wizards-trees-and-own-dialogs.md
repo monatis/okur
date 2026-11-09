@@ -89,10 +89,10 @@ From the commands named:
 ## After night2 began (not yet built in the lab)
 
 - Okur's wizards kept as dialogs, Next or Finish their default (b118ef81): Insert+E in a wizard on Linux.
-- The sixth code review's fixes (af369c04): a tree's arrows told and its items changed in place; a kept item's children opened with it; a wizard page's first focus after its layout; a drop-down's Enter and its open list's Escape; unasked field reads () never a key's answer; xa11y-linux's application looked up after the kinds' filter; a drop-down's replaced choices kept; a radio group's first focus on its checked option.
+- The sixth code review's fixes (af369c04): a tree's arrows told and its items changed in place; a kept item's children opened with it; a wizard page's first focus after its layout; a drop-down's Enter and its open list's Escape; unasked field reads (`FieldText`) never a key's answer; xa11y-linux's application looked up after the kinds' filter; a drop-down's replaced choices kept; a radio group's first focus on its checked option.
 - The buffer's depth test steadier on the shared machine (17da7d0b).
 
-The next job's check builds these first (okur-ui's GTK code does not build on the dev box);  stays at 3ed18eb0 until it passes.
+The next job's check builds these first (okur-ui's GTK code does not build on the dev box); `main` stays at 3ed18eb0 until it passes.
 
 ## Next
 
