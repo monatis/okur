@@ -33,8 +33,31 @@ pub const WINDOW_DEPTH: usize = 12;
 const CHROME_SITE_INFORMATION: &str = "LocationIconView";
 
 /// Whether an AT-SPI role is a window's: where a native focus's read of its ancestors ends.
+/// An alert is one only at the top ([`window_index`]).
 pub fn is_window(role: &str) -> bool {
     matches!(role, "frame" | "dialog" | "window" | "alert")
+}
+
+/// Which of `ancestors` (from the parent up, each's AT-SPI role given by `role`) is the
+/// window: the first frame, dialog or window, or an alert with none of them above it. An
+/// alert inside a window is a part of it (GTK's info bar), not a window of its own: taken as
+/// one, its focus was a focus in a window behind, and the window's title its text (the code
+/// review of 2026-11-09, fourth pass, 9). A message box is an alert at the top.
+pub fn window_index<T>(ancestors: &[T], role: impl Fn(&T) -> &str) -> Option<usize> {
+    let framing = |a: &T| matches!(role(a), "frame" | "dialog" | "window");
+    ancestors.iter().enumerate().find_map(|(i, a)| {
+        let window = framing(a)
+            || (role(a) == "alert"
+                && !ancestors
+                    .get(i + 1..)
+                    .is_some_and(|above| above.iter().any(framing)));
+        window.then_some(i)
+    })
+}
+
+/// The window among a read's `ancestors` ([`window_index`]).
+pub fn window_of(ancestors: &[AtspiNode]) -> Option<&AtspiNode> {
+    window_index(ancestors, |a| a.role.as_str()).and_then(|i| ancestors.get(i))
 }
 
 /// The read plan for a native focus's ancestors, what [`native_focus`] needs of each: the
@@ -61,10 +84,7 @@ pub fn ancestor_limit(index: usize, role: &str, focus: &AtspiNode) -> usize {
 /// carry the state (the lab's 301, 303 and 304, 2026-11-08).
 pub fn in_active_window(ancestors: &[AtspiNode]) -> bool {
     use crate::page::state;
-    ancestors
-        .iter()
-        .find(|a| is_window(&a.role))
-        .is_none_or(|window| window.has(state::ACTIVE))
+    window_of(ancestors).is_none_or(|window| window.has(state::ACTIVE))
 }
 
 /// A native control's focus (GTK's, a toolkit's outside a page) read with what surrounds it, as
@@ -92,9 +112,7 @@ pub fn native_focus(
     use crate::page::state;
     let parent = ancestors.first();
     let grandparent = ancestors.get(1);
-    let window = ancestors
-        .iter()
-        .find(|a| matches!(a.role.as_str(), "frame" | "dialog" | "window" | "alert"));
+    let window = window_of(ancestors);
     event.window_title = window.map(|a| a.name.clone()).filter(|n| !n.is_empty());
     // A dialog box ("Links List dialog", Okur's own GTK dialogs; a GTK dialog, an alert), said
     // with its role as its focus comes, as Windows' dialog box is. Not yet a dialog box to
@@ -666,6 +684,21 @@ mod tests {
             (Some(500), Some(1000))
         );
         assert!(is_window("frame") && is_window("dialog") && !is_window("panel"));
+    }
+
+    /// GTK's info bar, an alert inside its window, is no window: the frame above it is, and
+    /// its title the window's; a message box, an alert at the top, is its own window.
+    #[test]
+    fn an_alert_inside_a_window_is_part_of_it() {
+        let roles = |roles: &[&'static str]| roles.to_vec();
+        let index = |ancestors: &[&str]| window_index(ancestors, |r| r);
+        assert_eq!(
+            index(&roles(&["panel", "alert", "filler", "frame"])),
+            Some(3)
+        );
+        assert_eq!(index(&roles(&["panel", "alert"])), Some(1));
+        assert_eq!(index(&roles(&["alert", "dialog"])), Some(1));
+        assert_eq!(index(&roles(&["panel", "filler"])), None);
     }
 
     use xa11y_core::Role as AtRole;

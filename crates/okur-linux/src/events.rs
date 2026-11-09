@@ -12,7 +12,9 @@ use std::time::Duration;
 use okur_core::event::AccessibilityEvent;
 use okur_linux_model::convert::{AtspiRecord, Converter, NativeRead, PageRead};
 use okur_linux_model::delivery::Delivery;
-use okur_linux_model::focus::{ancestor_limit, is_window, CONTROL_LIMIT, WINDOW_DEPTH};
+use okur_linux_model::focus::{
+    ancestor_limit, is_window, window_index, CONTROL_LIMIT, WINDOW_DEPTH,
+};
 use okur_runtime::events::{EventSink, EventSource};
 use okur_runtime::RuntimeError;
 use xa11y_core::{ElementData, EventKind, RecvStatus, Role};
@@ -606,7 +608,9 @@ fn walk_to_window(provider: &LinuxProvider, object: &AtspiObject) -> Vec<AtspiOb
         if walked.len() >= WINDOW_DEPTH {
             break;
         }
-        next = if is_window(&parent.role) {
+        // An alert may be a part of its window (GTK's info bar): the walk goes on above it, to
+        // the window or the application.
+        next = if is_window(&parent.role) && parent.role != "alert" {
             None
         } else {
             provider.atspi_parent(&parent)
@@ -643,13 +647,14 @@ fn read_native(
     };
     let mut ancestors = Vec::new();
     let mut window_object = None;
-    for parent in walked {
+    let window_at = window_index(&walked, |o| o.role.as_str());
+    for (index, parent) in walked.into_iter().enumerate() {
         if ancestors.len() >= WINDOW_DEPTH {
             break;
         }
         let limit = ancestor_limit(ancestors.len(), &parent.role, &focus);
         let node = snapshot(provider.atspi_tree_parallel(&parent, limit));
-        let window = is_window(&node.role);
+        let window = window_at == Some(index);
         ancestors.push(node);
         // The window is the last read: its own parent, the application, is not read.
         if window {

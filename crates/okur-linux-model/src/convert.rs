@@ -390,10 +390,7 @@ impl Converter {
             .into_iter()
             .flatten()
         {
-            let window = read
-                .ancestors
-                .iter()
-                .find(|a| crate::focus::is_window(&a.role) && !a.path.is_empty());
+            let window = crate::focus::window_of(&read.ancestors).filter(|a| !a.path.is_empty());
             if let (Some(dialog), Some(window), Some(bus)) = (read.dialog.as_ref(), window, bus) {
                 let key = format!("{bus}{}", window.path);
                 self.dialog_box = Some((key, crate::focus::dialog_box(dialog)));
@@ -976,10 +973,7 @@ fn native_control(
     // Its window by the window's object, its application's bus name and its path: two windows
     // of one title are two windows.
     let bus = element.raw.get("bus_name").and_then(|v| v.as_str());
-    control.platform.window_id = read
-        .ancestors
-        .iter()
-        .find(|a| crate::focus::is_window(&a.role))
+    control.platform.window_id = crate::focus::window_of(&read.ancestors)
         .filter(|window| !window.path.is_empty())
         .zip(bus)
         .map(|(window, bus)| format!("{bus}{}", window.path));
