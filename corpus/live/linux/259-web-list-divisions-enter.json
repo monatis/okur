@@ -1,0 +1,130 @@
+{
+ "scenario_id": "259-web-list-divisions-enter",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Escape",
+     "t_ms": 1794220902641
+    },
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794220903005
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794220904309,
+     "t_end_ms": 1794220905616,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+Z"
+     },
+     "keys": [
+      "Ctrl+Insert+Z"
+     ],
+     "key_times": [
+      1794220904309
+     ],
+     "observation": {
+      "speech_raw": "Select a Division \u001d dialog \u001e \nList1 \u001d List view \u001e \nYou:Good morning09:00 ReadSee you at noon09:05 ReadBring the notes09:10 Read\n1 of 17\nTo move to items use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794220905616,
+     "t_end_ms": 1794220906820,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794220905616
+     ],
+     "observation": {
+      "speech_raw": "You:Good morning09:00 Read\n2 of 17",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794220906820,
+     "t_end_ms": 1794220907924,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794220906820
+     ],
+     "observation": {
+      "speech_raw": "You:",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794220907924,
+     "t_end_ms": 1794220908930,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794220907924
+     ],
+     "observation": {
+      "speech_raw": "You:",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794220908930,
+     "t_end_ms": 1794220909934,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794220908930
+     ],
+     "observation": {
+      "speech_raw": "Good morning",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

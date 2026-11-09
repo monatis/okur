@@ -1,0 +1,130 @@
+{
+ "scenario_id": "247-web-list-buttons-enter",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Escape",
+     "t_ms": 1794220519270
+    },
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794220519632
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794220520938,
+     "t_end_ms": 1794220522144,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+B"
+     },
+     "keys": [
+      "Ctrl+Insert+B"
+     ],
+     "key_times": [
+      1794220520938
+     ],
+     "observation": {
+      "speech_raw": "Select a Button \u001d dialog \u001e \nList1 \u001d List view \u001e \nSave draft Button Unavailable\n1 of 2\nTo move to items use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794220522144,
+     "t_end_ms": 1794220523248,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794220522144
+     ],
+     "observation": {
+      "speech_raw": "Create account Button\n2 of 2",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794220523248,
+     "t_end_ms": 1794220524453,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794220523248
+     ],
+     "observation": {
+      "speech_raw": "Create Your Account - Riverside Library\nCreate account  \u001d Button \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794220524453,
+     "t_end_ms": 1794220525458,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794220524453
+     ],
+     "observation": {
+      "speech_raw": "Create account \u001d Button \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794220525458,
+     "t_end_ms": 1794220526463,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794220525458
+     ],
+     "observation": {
+      "speech_raw": "main region end",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

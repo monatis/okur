@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": null,
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794189583964
+     "t_ms": 1794215611880
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794189585329,
-     "t_end_ms": 1794189586333,
+     "t_start_ms": 1794215613243,
+     "t_end_ms": 1794215614247,
      "action": {
       "type": "keyboard",
       "command": "{DOWN}"
@@ -31,7 +32,7 @@
       "Down"
      ],
      "key_times": [
-      1794189585329
+      1794215613243
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e The Accessibility Engine Specification",

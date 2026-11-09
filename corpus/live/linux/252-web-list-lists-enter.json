@@ -1,0 +1,130 @@
+{
+ "scenario_id": "252-web-list-lists-enter",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Escape",
+     "t_ms": 1794220694878
+    },
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794220695246
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794220696552,
+     "t_end_ms": 1794220697557,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+L"
+     },
+     "keys": [
+      "Ctrl+Insert+L"
+     ],
+     "key_times": [
+      1794220696552
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794220697557,
+     "t_end_ms": 1794220698761,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794220697557
+     ],
+     "observation": {
+      "speech_raw": "Select a List \u001d dialog \u001e \nList1 \u001d List view \u001e \n\u2022 Weekday hours: 9 a.m. to 9 p.m.\u2022 Weekend hours, which do not change:\u25e6 Saturday: 10 a.m. to 6 p.m.\u25e6 Sunday: noon to 5 p.m.\u2022 New study rooms open in May.\n2 of 5\nTo move to items use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794220698761,
+     "t_end_ms": 1794220699866,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794220698761
+     ],
+     "observation": {
+      "speech_raw": "list of 3 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794220699866,
+     "t_end_ms": 1794220700871,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794220699866
+     ],
+     "observation": {
+      "speech_raw": "list of 3 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794220700871,
+     "t_end_ms": 1794220701875,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794220700871
+     ],
+     "observation": {
+      "speech_raw": "\u2022 Weekday hours: 9 a.m. to 9 p.m.",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

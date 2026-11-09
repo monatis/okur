@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794193232039
+     "t_ms": 1794221016049
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794193232404
+     "t_ms": 1794221016408
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794193233708,
-     "t_end_ms": 1794193234713,
+     "t_start_ms": 1794221017714,
+     "t_end_ms": 1794221018719,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+B"
@@ -35,7 +36,7 @@
       "Ctrl+Insert+B"
      ],
      "key_times": [
-      1794193233708
+      1794221017714
      ],
      "observation": {
       "speech_raw": "no Buttons were found",
@@ -45,8 +46,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794193234713,
-     "t_end_ms": 1794193235718,
+     "t_start_ms": 1794221018719,
+     "t_end_ms": 1794221019723,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -55,7 +56,7 @@
       "Escape"
      ],
      "key_times": [
-      1794193234713
+      1794221018719
      ],
      "observation": {
       "speech_raw": "",

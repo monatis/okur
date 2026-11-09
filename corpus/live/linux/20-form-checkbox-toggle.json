@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794192179141
+     "t_ms": 1794218550593
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794192180504,
-     "t_end_ms": 1794192181508,
+     "t_start_ms": 1794218551954,
+     "t_end_ms": 1794218552958,
      "action": {
       "type": "key",
       "command": "X"
@@ -31,7 +32,7 @@
       "X"
      ],
      "key_times": [
-      1794192180504
+      1794218551954
      ],
      "observation": {
       "speech_raw": "I accept terms and conditions  \u001d check box \u001e   \u001dnot checked\u001e ",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794192181508,
-     "t_end_ms": 1794192182612,
+     "t_start_ms": 1794218552958,
+     "t_end_ms": 1794218554062,
      "action": {
       "type": "key",
       "command": "Space"
@@ -51,10 +52,10 @@
       "Space"
      ],
      "key_times": [
-      1794192181508
+      1794218552958
      ],
      "observation": {
-      "speech_raw": "Forms and Interaction Reference Fixture\nI accept terms and conditions  \u001d check box \u001e   \u001dnot checked\u001e \nTo check press Spacebar.\n \u001dchecked\u001e ",
+      "speech_raw": "Forms and Interaction Reference Fixture\nI accept terms and conditions  \u001d check box \u001e   \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
       "settled": true
      },
      "step_success": true

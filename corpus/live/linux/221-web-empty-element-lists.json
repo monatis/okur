@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ccb4c70a"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794207689215
+     "t_ms": 1794219563558
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794207689576
+     "t_ms": 1794219563921
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794207690881,
-     "t_end_ms": 1794207691885,
+     "t_start_ms": 1794219565226,
+     "t_end_ms": 1794219566231,
      "action": {
       "type": "key",
       "command": "Insert+F7"
@@ -35,7 +36,7 @@
       "Insert+F7"
      ],
      "key_times": [
-      1794207690881
+      1794219565226
      ],
      "observation": {
       "speech_raw": "no links",
@@ -45,8 +46,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794207691885,
-     "t_end_ms": 1794207692890,
+     "t_start_ms": 1794219566231,
+     "t_end_ms": 1794219567236,
      "action": {
       "type": "key",
       "command": "Insert+F5"
@@ -55,7 +56,7 @@
       "Insert+F5"
      ],
      "key_times": [
-      1794207691885
+      1794219566231
      ],
      "observation": {
       "speech_raw": "no form fields were found\nDocument Reading Reference Fixture \u001d document \u001e ",
@@ -65,8 +66,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794207692890,
-     "t_end_ms": 1794207693896,
+     "t_start_ms": 1794219567236,
+     "t_end_ms": 1794219568242,
      "action": {
       "type": "key",
       "command": "Insert+Ctrl+R"
@@ -75,7 +76,7 @@
       "Insert+Ctrl+R"
      ],
      "key_times": [
-      1794207692890
+      1794219567236
      ],
      "observation": {
       "speech_raw": "No regions were found on the page",
@@ -85,8 +86,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794207693896,
-     "t_end_ms": 1794207694899,
+     "t_start_ms": 1794219568242,
+     "t_end_ms": 1794219569247,
      "action": {
       "type": "key",
       "command": "K"
@@ -95,7 +96,7 @@
       "K"
      ],
      "key_times": [
-      1794207693896
+      1794219568242
      ],
      "observation": {
       "speech_raw": "There are no PlaceMarkers on this page.",
@@ -105,8 +106,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794207694899,
-     "t_end_ms": 1794207695904,
+     "t_start_ms": 1794219569247,
+     "t_end_ms": 1794219570252,
      "action": {
       "type": "key",
       "command": "Shift+K"
@@ -115,7 +116,7 @@
       "Shift+K"
      ],
      "key_times": [
-      1794207694899
+      1794219569247
      ],
      "observation": {
       "speech_raw": "There are no PlaceMarkers on this page.",

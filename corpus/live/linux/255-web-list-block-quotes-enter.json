@@ -1,0 +1,130 @@
+{
+ "scenario_id": "255-web-list-block-quotes-enter",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Escape",
+     "t_ms": 1794220784273
+    },
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794220784635
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794220785942,
+     "t_end_ms": 1794220786947,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+Q"
+     },
+     "keys": [
+      "Ctrl+Insert+Q"
+     ],
+     "key_times": [
+      1794220785942
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794220786948,
+     "t_end_ms": 1794220787952,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794220786948
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794220787952,
+     "t_end_ms": 1794220789056,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794220787952
+     ],
+     "observation": {
+      "speech_raw": "block quote",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794220789056,
+     "t_end_ms": 1794220790061,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794220789056
+     ],
+     "observation": {
+      "speech_raw": "block quote",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794220790061,
+     "t_end_ms": 1794220791065,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794220790061
+     ],
+     "observation": {
+      "speech_raw": "Finally, I can study after work.",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

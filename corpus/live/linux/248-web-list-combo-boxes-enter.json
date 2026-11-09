@@ -1,0 +1,130 @@
+{
+ "scenario_id": "248-web-list-combo-boxes-enter",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Escape",
+     "t_ms": 1794220549069
+    },
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794220549431
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794220550736,
+     "t_end_ms": 1794220551743,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+C"
+     },
+     "keys": [
+      "Ctrl+Insert+C"
+     ],
+     "key_times": [
+      1794220550736
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794220551743,
+     "t_end_ms": 1794220552747,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794220551743
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794220552747,
+     "t_end_ms": 1794220553851,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794220552747
+     ],
+     "observation": {
+      "speech_raw": "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794220553851,
+     "t_end_ms": 1794220554856,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794220553851
+     ],
+     "observation": {
+      "speech_raw": "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794220554856,
+     "t_end_ms": 1794220555861,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794220554856
+     ],
+     "observation": {
+      "speech_raw": "Accessibility needs",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

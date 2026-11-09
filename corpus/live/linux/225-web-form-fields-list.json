@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ebcc22e6"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -16,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794211193575
+     "t_ms": 1794219696025
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794211193932
+     "t_ms": 1794219696383
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794211195239,
-     "t_end_ms": 1794211196545,
+     "t_start_ms": 1794219697688,
+     "t_end_ms": 1794219698893,
      "action": {
       "type": "key",
       "command": "Insert+F5"
@@ -36,18 +36,18 @@
       "Insert+F5"
      ],
      "key_times": [
-      1794211195239
+      1794219697688
      ],
      "observation": {
-      "speech_raw": "Select a Form Field\nList1 \u001d List box \u001e \nTo move to an item press the Arrow keys.",
+      "speech_raw": "Select a Form Field \u001d dialog \u001e \nList1 \u001d List view \u001e \nNext slide Button\n1 of 10\nTo move to items use the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794211196545,
-     "t_end_ms": 1794211197649,
+     "t_start_ms": 1794219698893,
+     "t_end_ms": 1794219699997,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -56,18 +56,18 @@
       "Tab"
      ],
      "key_times": [
-      1794211196545
+      1794219698893
      ],
      "observation": {
-      "speech_raw": "List1 \u001d List box \u001e \nNext slide Button\n1 of 10\nTo move to an item press the Arrow keys.",
+      "speech_raw": "OK \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794211197649,
-     "t_end_ms": 1794211198754,
+     "t_start_ms": 1794219699997,
+     "t_end_ms": 1794219701101,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -76,7 +76,107 @@
       "Tab"
      ],
      "key_times": [
-      1794211197649
+      1794219699997
+     ],
+     "observation": {
+      "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794219701101,
+     "t_end_ms": 1794219702306,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794219701101
+     ],
+     "observation": {
+      "speech_raw": "List1 \u001d List view \u001e \nNext slide Button\n1 of 10\nTo move to items use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794219702306,
+     "t_end_ms": 1794219703411,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794219702306
+     ],
+     "observation": {
+      "speech_raw": "OK \u001d Button \u001e \nTo activate press spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794219703411,
+     "t_end_ms": 1794219704515,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794219703411
+     ],
+     "observation": {
+      "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794219704515,
+     "t_end_ms": 1794219705620,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794219704515
+     ],
+     "observation": {
+      "speech_raw": "List1 \u001d List view \u001e \nNext slide Button\n1 of 10\nTo move to items use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794219705620,
+     "t_end_ms": 1794219706824,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794219705620
      ],
      "observation": {
       "speech_raw": "Wrap check box not checked\n2 of 10",
@@ -85,18 +185,18 @@
      "step_success": true
     },
     {
-     "step_id": "s4",
-     "t_start_ms": 1794211198754,
-     "t_end_ms": 1794211199858,
+     "step_id": "s9",
+     "t_start_ms": 1794219706824,
+     "t_end_ms": 1794219707929,
      "action": {
       "type": "jaws_function",
-      "command": "TypeKey(\"Tab\")"
+      "command": "TypeKey(\"DownArrow\")"
      },
      "keys": [
-      "Tab"
+      "DownArrow"
      ],
      "key_times": [
-      1794211198754
+      1794219706824
      ],
      "observation": {
       "speech_raw": "Outline Button\n3 of 10",
@@ -105,109 +205,9 @@
      "step_success": true
     },
     {
-     "step_id": "s5",
-     "t_start_ms": 1794211199858,
-     "t_end_ms": 1794211200962,
-     "action": {
-      "type": "jaws_function",
-      "command": "TypeKey(\"Tab\")"
-     },
-     "keys": [
-      "Tab"
-     ],
-     "key_times": [
-      1794211199858
-     ],
-     "observation": {
-      "speech_raw": "Actions Button\n4 of 10",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
-     "step_id": "s6",
-     "t_start_ms": 1794211200962,
-     "t_end_ms": 1794211202066,
-     "action": {
-      "type": "jaws_function",
-      "command": "TypeKey(\"Tab\")"
-     },
-     "keys": [
-      "Tab"
-     ],
-     "key_times": [
-      1794211200962
-     ],
-     "observation": {
-      "speech_raw": "Pick one Button\n5 of 10",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
-     "step_id": "s7",
-     "t_start_ms": 1794211202066,
-     "t_end_ms": 1794211203171,
-     "action": {
-      "type": "jaws_function",
-      "command": "TypeKey(\"Tab\")"
-     },
-     "keys": [
-      "Tab"
-     ],
-     "key_times": [
-      1794211202066
-     ],
-     "observation": {
-      "speech_raw": "Fruit edit combo\n6 of 10",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
-     "step_id": "s8",
-     "t_start_ms": 1794211203171,
-     "t_end_ms": 1794211204375,
-     "action": {
-      "type": "jaws_function",
-      "command": "TypeKey(\"DownArrow\")"
-     },
-     "keys": [
-      "DownArrow"
-     ],
-     "key_times": [
-      1794211203171
-     ],
-     "observation": {
-      "speech_raw": "Start Button\n7 of 10",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
-     "step_id": "s9",
-     "t_start_ms": 1794211204375,
-     "t_end_ms": 1794211205480,
-     "action": {
-      "type": "jaws_function",
-      "command": "TypeKey(\"DownArrow\")"
-     },
-     "keys": [
-      "DownArrow"
-     ],
-     "key_times": [
-      1794211204375
-     ],
-     "observation": {
-      "speech_raw": "Notes Edit the lazy dog, then reads std::io again\n8 of 10",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
      "step_id": "s10",
-     "t_start_ms": 1794211205480,
-     "t_end_ms": 1794211206985,
+     "t_start_ms": 1794219707929,
+     "t_end_ms": 1794219709133,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -216,18 +216,18 @@
       "Enter"
      ],
      "key_times": [
-      1794211205480
+      1794219707929
      ],
      "observation": {
-      "speech_raw": "Web App Patterns\n \u001d Edit \u001e the lazy dog, then reads std::io again\nNotes  \u001d edit \u001e \nthe lazy dog, then reads std::io again\nNotes \u001d edit \u001e \nContains text",
+      "speech_raw": "Web App Patterns\nOutline \u001d button menu \u001e \nOutline  \u001d button menu \u001e \nPress space to activate the menu, then navigate with arrow keys",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794211206985,
-     "t_end_ms": 1794211208090,
+     "t_start_ms": 1794219709133,
+     "t_end_ms": 1794219710137,
      "action": {
       "type": "key",
       "command": "Down"
@@ -236,10 +236,10 @@
       "Down"
      ],
      "key_times": [
-      1794211206985
+      1794219709133
      ],
      "observation": {
-      "speech_raw": "the lazy dog, then reads std::io again",
+      "speech_raw": "Actions \u001d button menu \u001e  \u001dcollapsed\u001e ",
       "settled": true
      },
      "step_success": true

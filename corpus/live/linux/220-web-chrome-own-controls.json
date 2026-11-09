@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ebcc22e6"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -16,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794211651976
+     "t_ms": 1794219524782
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794211652333
+     "t_ms": 1794219525141
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794211653639,
-     "t_end_ms": 1794211654644,
+     "t_start_ms": 1794219526446,
+     "t_end_ms": 1794219527450,
      "action": {
       "type": "key",
       "command": "Alt+F"
@@ -36,7 +36,7 @@
       "Alt+F"
      ],
      "key_times": [
-      1794211653639
+      1794219526446
      ],
      "observation": {
       "speech_raw": "",
@@ -46,8 +46,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794211654644,
-     "t_end_ms": 1794211655748,
+     "t_start_ms": 1794219527450,
+     "t_end_ms": 1794219528554,
      "action": {
       "type": "key",
       "command": "Down"
@@ -56,7 +56,7 @@
       "Down"
      ],
      "key_times": [
-      1794211654644
+      1794219527450
      ],
      "observation": {
       "speech_raw": " \u001d Context Menu \u001e \n\nTo navigate press Up or Down Arrow.\nNew tab Ctrl+T\n1 of 21",
@@ -66,8 +66,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794211655748,
-     "t_end_ms": 1794211656852,
+     "t_start_ms": 1794219528554,
+     "t_end_ms": 1794219529658,
      "action": {
       "type": "key",
       "command": "Down"
@@ -76,7 +76,7 @@
       "Down"
      ],
      "key_times": [
-      1794211655748
+      1794219528554
      ],
      "observation": {
       "speech_raw": "New window Ctrl+N\n2 of 21",
@@ -86,8 +86,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794211656852,
-     "t_end_ms": 1794211657956,
+     "t_start_ms": 1794219529658,
+     "t_end_ms": 1794219530763,
      "action": {
       "type": "key",
       "command": "Down"
@@ -96,7 +96,7 @@
       "Down"
      ],
      "key_times": [
-      1794211656852
+      1794219529658
      ],
      "observation": {
       "speech_raw": "New Incognito window Ctrl+Shift+N\n3 of 21",
@@ -106,8 +106,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794211657956,
-     "t_end_ms": 1794211659261,
+     "t_start_ms": 1794219530763,
+     "t_end_ms": 1794219532067,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -116,7 +116,7 @@
       "Escape"
      ],
      "key_times": [
-      1794211657956
+      1794219530763
      ],
      "observation": {
       "speech_raw": "Leaving menus\nCity Library Expands Evening Hours - Riverside Gazette",
@@ -126,8 +126,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794211659261,
-     "t_end_ms": 1794211660264,
+     "t_start_ms": 1794219532067,
+     "t_end_ms": 1794219533071,
      "action": {
       "type": "key",
       "command": "Down"
@@ -136,7 +136,7 @@
       "Down"
      ],
      "key_times": [
-      1794211659261
+      1794219532067
      ],
      "observation": {
       "speech_raw": "",
@@ -146,8 +146,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794211660264,
-     "t_end_ms": 1794211661467,
+     "t_start_ms": 1794219533071,
+     "t_end_ms": 1794219534375,
      "action": {
       "type": "key",
       "command": "Ctrl+L"
@@ -156,7 +156,7 @@
       "Ctrl+L"
      ],
      "key_times": [
-      1794211660264
+      1794219533071
      ],
      "observation": {
       "speech_raw": "Address and search bar \u001d Edit \u001e \nfile:///root/okur/corpus/fixtures/news-article.html\nType in text.",
@@ -166,8 +166,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794211661467,
-     "t_end_ms": 1794211662671,
+     "t_start_ms": 1794219534375,
+     "t_end_ms": 1794219535379,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -176,18 +176,18 @@
       "Escape"
      ],
      "key_times": [
-      1794211661467
+      1794219534375
      ],
      "observation": {
-      "speech_raw": "Omnibox Popup  \u001d document \u001e\nPage has no headings and no links\nOmnibox Popup\nlist of 1 items\nlist end\nend",
+      "speech_raw": "",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794211662671,
-     "t_end_ms": 1794211663674,
+     "t_start_ms": 1794219535379,
+     "t_end_ms": 1794219536683,
      "action": {
       "type": "key",
       "command": "Down"
@@ -196,18 +196,18 @@
       "Down"
      ],
      "key_times": [
-      1794211662671
+      1794219535379
      ],
      "observation": {
-      "speech_raw": "list end",
+      "speech_raw": "file:///root/okur/corpus/fixtures/news-article.html",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794211663674,
-     "t_end_ms": 1794211664678,
+     "t_start_ms": 1794219536683,
+     "t_end_ms": 1794219537687,
      "action": {
       "type": "key",
       "command": "Ctrl+T"
@@ -216,7 +216,7 @@
       "Ctrl+T"
      ],
      "key_times": [
-      1794211663674
+      1794219536683
      ],
      "observation": {
       "speech_raw": "",
@@ -226,8 +226,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794211664678,
-     "t_end_ms": 1794211666683,
+     "t_start_ms": 1794219537687,
+     "t_end_ms": 1794219538690,
      "action": {
       "type": "key",
       "command": "Ctrl+W"
@@ -236,18 +236,18 @@
       "Ctrl+W"
      ],
      "key_times": [
-      1794211664678
+      1794219537687
      ],
      "observation": {
-      "speech_raw": "  \u001d document \u001e\nPage has no headings and no links\n  \u001d document \u001e\nPage has no headings and no links",
+      "speech_raw": "",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794211666683,
-     "t_end_ms": 1794211667686,
+     "t_start_ms": 1794219538690,
+     "t_end_ms": 1794219540495,
      "action": {
       "type": "key",
       "command": "Down"
@@ -256,10 +256,10 @@
       "Down"
      ],
      "key_times": [
-      1794211666683
+      1794219538690
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "file:///root/okur/corpus/fixtures/news-article.html\n  \u001d document \u001e\nPage has no headings and no links",
       "settled": true
      },
      "step_success": true

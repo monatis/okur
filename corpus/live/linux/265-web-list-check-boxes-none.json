@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794193312257
+     "t_ms": 1794221094990
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794193312621
+     "t_ms": 1794221095355
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794193313926,
-     "t_end_ms": 1794193314931,
+     "t_start_ms": 1794221096659,
+     "t_end_ms": 1794221097665,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+X"
@@ -35,7 +36,7 @@
       "Ctrl+Insert+X"
      ],
      "key_times": [
-      1794193313926
+      1794221096659
      ],
      "observation": {
       "speech_raw": "no Check boxes were found",
@@ -45,8 +46,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794193314931,
-     "t_end_ms": 1794193315935,
+     "t_start_ms": 1794221097665,
+     "t_end_ms": 1794221098669,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -55,7 +56,7 @@
       "Escape"
      ],
      "key_times": [
-      1794193314931
+      1794221097665
      ],
      "observation": {
       "speech_raw": "",

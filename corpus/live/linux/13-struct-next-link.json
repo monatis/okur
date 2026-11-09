@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": null,
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794192073201
+     "t_ms": 1794218366560
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794192074570,
-     "t_end_ms": 1794192075573,
+     "t_start_ms": 1794218367928,
+     "t_end_ms": 1794218368931,
      "action": {
       "type": "jaws_script",
       "command": "MoveToNextUnvisitedLink"
@@ -31,7 +32,7 @@
       "U"
      ],
      "key_times": [
-      1794192074570
+      1794218367928
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Overview Link",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794192075573,
-     "t_end_ms": 1794192076577,
+     "t_start_ms": 1794218368931,
+     "t_end_ms": 1794218369935,
      "action": {
       "type": "jaws_script",
       "command": "MoveToNextUnvisitedLink"
@@ -51,7 +52,7 @@
       "U"
      ],
      "key_times": [
-      1794192075573
+      1794218368931
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Architecture Link",

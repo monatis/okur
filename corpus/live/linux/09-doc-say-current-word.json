@@ -1,0 +1,66 @@
+{
+ "scenario_id": "09-doc-say-current-word",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": null,
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794215790980
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794215792346,
+     "t_end_ms": 1794215793350,
+     "action": {
+      "type": "keyboard",
+      "command": "{DOWN}"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794215792346
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e The Accessibility Engine Specification",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794215793350,
+     "t_end_ms": 1794215794355,
+     "action": {
+      "type": "jaws_script",
+      "command": "SayWord"
+     },
+     "keys": [
+      "Insert+Numpad5"
+     ],
+     "key_times": [
+      1794215793350
+     ],
+     "observation": {
+      "speech_raw": "The",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

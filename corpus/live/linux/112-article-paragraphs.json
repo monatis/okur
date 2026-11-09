@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794190349617
+     "t_ms": 1794216427784
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794190350979,
-     "t_end_ms": 1794190351985,
+     "t_start_ms": 1794216429145,
+     "t_end_ms": 1794216430150,
      "action": {
       "type": "key",
       "command": "Ctrl+Down"
@@ -31,7 +32,7 @@
       "Ctrl+Down"
      ],
      "key_times": [
-      1794190350979
+      1794216429145
      ],
      "observation": {
       "speech_raw": "banner",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794190351985,
-     "t_end_ms": 1794190352989,
+     "t_start_ms": 1794216430150,
+     "t_end_ms": 1794216431155,
      "action": {
       "type": "key",
       "command": "Ctrl+Down"
@@ -51,7 +52,7 @@
       "Ctrl+Down"
      ],
      "key_times": [
-      1794190351985
+      1794216430150
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Riverside Gazette Primary navigation region",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794190352989,
-     "t_end_ms": 1794190353993,
+     "t_start_ms": 1794216431155,
+     "t_end_ms": 1794216432159,
      "action": {
       "type": "key",
       "command": "Ctrl+Down"
@@ -71,7 +72,7 @@
       "Ctrl+Down"
      ],
      "key_times": [
-      1794190352989
+      1794216431155
      ],
      "observation": {
       "speech_raw": "list of 4 items",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794190353993,
-     "t_end_ms": 1794190354998,
+     "t_start_ms": 1794216432159,
+     "t_end_ms": 1794216433164,
      "action": {
       "type": "key",
       "command": "Ctrl+Down"
@@ -91,7 +92,7 @@
       "Ctrl+Down"
      ],
      "key_times": [
-      1794190353993
+      1794216432159
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e News",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794190354998,
-     "t_end_ms": 1794190356003,
+     "t_start_ms": 1794216433164,
+     "t_end_ms": 1794216434169,
      "action": {
       "type": "key",
       "command": "Ctrl+Down"
@@ -111,7 +112,7 @@
       "Ctrl+Down"
      ],
      "key_times": [
-      1794190354998
+      1794216433164
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Sports",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794190356003,
-     "t_end_ms": 1794190357008,
+     "t_start_ms": 1794216434169,
+     "t_end_ms": 1794216435175,
      "action": {
       "type": "key",
       "command": "Ctrl+Down"
@@ -131,7 +132,7 @@
       "Ctrl+Down"
      ],
      "key_times": [
-      1794190356003
+      1794216434169
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Culture",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794190357008,
-     "t_end_ms": 1794190358013,
+     "t_start_ms": 1794216435175,
+     "t_end_ms": 1794216436180,
      "action": {
       "type": "key",
       "command": "Ctrl+Down"
@@ -151,7 +152,7 @@
       "Ctrl+Down"
      ],
      "key_times": [
-      1794190357008
+      1794216435175
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Opinion",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794190358013,
-     "t_end_ms": 1794190359018,
+     "t_start_ms": 1794216436180,
+     "t_end_ms": 1794216437185,
      "action": {
       "type": "key",
       "command": "Ctrl+Down"
@@ -171,7 +172,7 @@
       "Ctrl+Down"
      ],
      "key_times": [
-      1794190358013
+      1794216436180
      ],
      "observation": {
       "speech_raw": "list end",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794190359018,
-     "t_end_ms": 1794190360050,
+     "t_start_ms": 1794216437185,
+     "t_end_ms": 1794216438190,
      "action": {
       "type": "key",
       "command": "Ctrl+Down"
@@ -191,7 +192,7 @@
       "Ctrl+Down"
      ],
      "key_times": [
-      1794190359018
+      1794216437185
      ],
      "observation": {
       "speech_raw": "Primary navigation region end",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794190360050,
-     "t_end_ms": 1794190361055,
+     "t_start_ms": 1794216438190,
+     "t_end_ms": 1794216439196,
      "action": {
       "type": "key",
       "command": "Ctrl+Down"
@@ -211,7 +212,7 @@
       "Ctrl+Down"
      ],
      "key_times": [
-      1794190360050
+      1794216438190
      ],
      "observation": {
       "speech_raw": "banner end",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794190361055,
-     "t_end_ms": 1794190362061,
+     "t_start_ms": 1794216439196,
+     "t_end_ms": 1794216440200,
      "action": {
       "type": "key",
       "command": "Ctrl+Down"
@@ -231,7 +232,7 @@
       "Ctrl+Down"
      ],
      "key_times": [
-      1794190361055
+      1794216439196
      ],
      "observation": {
       "speech_raw": "main region",
@@ -241,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794190362061,
-     "t_end_ms": 1794190363065,
+     "t_start_ms": 1794216440200,
+     "t_end_ms": 1794216441206,
      "action": {
       "type": "key",
       "command": "Ctrl+Down"
@@ -251,7 +252,7 @@
       "Ctrl+Down"
      ],
      "key_times": [
-      1794190362061
+      1794216440200
      ],
      "observation": {
       "speech_raw": "article",
@@ -261,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794190363065,
-     "t_end_ms": 1794190364070,
+     "t_start_ms": 1794216441206,
+     "t_end_ms": 1794216442211,
      "action": {
       "type": "key",
       "command": "Ctrl+Down"
@@ -271,7 +272,7 @@
       "Ctrl+Down"
      ],
      "key_times": [
-      1794190363065
+      1794216441206
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e City Library Expands Evening Hours",
@@ -281,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794190364070,
-     "t_end_ms": 1794190365075,
+     "t_start_ms": 1794216442211,
+     "t_end_ms": 1794216443217,
      "action": {
       "type": "key",
       "command": "Ctrl+Down"
@@ -291,7 +292,7 @@
       "Ctrl+Down"
      ],
      "key_times": [
-      1794190364070
+      1794216442211
      ],
      "observation": {
       "speech_raw": "By   \u001d same page link \u001e Maria Lopez, published March 14, 2026",
@@ -301,8 +302,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794190365075,
-     "t_end_ms": 1794190366080,
+     "t_start_ms": 1794216443217,
+     "t_end_ms": 1794216444222,
      "action": {
       "type": "key",
       "command": "Ctrl+Down"
@@ -311,7 +312,7 @@
       "Ctrl+Down"
      ],
      "key_times": [
-      1794190365075
+      1794216443217
      ],
      "observation": {
       "speech_raw": "The Riverside City Library will stay open until 9 p.m. on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which most respondents asked for later hours.",
@@ -321,8 +322,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794190366080,
-     "t_end_ms": 1794190367085,
+     "t_start_ms": 1794216444222,
+     "t_end_ms": 1794216445226,
      "action": {
       "type": "key",
       "command": "Ctrl+Down"
@@ -331,7 +332,7 @@
       "Ctrl+Down"
      ],
      "key_times": [
-      1794190366080
+      1794216444222
      ],
      "observation": {
       "speech_raw": "Front entrance of the Riverside City Library at dusk\n \u001d Graphic \u001e   \u001d heading level 2 \u001e What changes",
@@ -341,8 +342,8 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794190367085,
-     "t_end_ms": 1794190368090,
+     "t_start_ms": 1794216445226,
+     "t_end_ms": 1794216446232,
      "action": {
       "type": "key",
       "command": "Ctrl+Down"
@@ -351,7 +352,7 @@
       "Ctrl+Down"
      ],
      "key_times": [
-      1794190367085
+      1794216445226
      ],
      "observation": {
       "speech_raw": "Membership costs $5.99 a month, e.g. for adults; children join free. Questions go to help@riverside-library.org \u2014 or call 555-0142. Attendance rose 3.5% last year, and staff say they can't wait.",
@@ -361,8 +362,8 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794190368090,
-     "t_end_ms": 1794190369095,
+     "t_start_ms": 1794216446232,
+     "t_end_ms": 1794216447236,
      "action": {
       "type": "key",
       "command": "Ctrl+Down"
@@ -371,7 +372,7 @@
       "Ctrl+Down"
      ],
      "key_times": [
-      1794190368090
+      1794216446232
      ],
      "observation": {
       "speech_raw": "list of 3 items",
@@ -381,8 +382,8 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794190369095,
-     "t_end_ms": 1794190370100,
+     "t_start_ms": 1794216447236,
+     "t_end_ms": 1794216448241,
      "action": {
       "type": "key",
       "command": "Ctrl+Down"
@@ -391,7 +392,7 @@
       "Ctrl+Down"
      ],
      "key_times": [
-      1794190369095
+      1794216447236
      ],
      "observation": {
       "speech_raw": "\u2022 Weekday hours: 9 a.m. to 9 p.m.",
@@ -401,8 +402,8 @@
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794190370100,
-     "t_end_ms": 1794190371105,
+     "t_start_ms": 1794216448241,
+     "t_end_ms": 1794216449246,
      "action": {
       "type": "key",
       "command": "Ctrl+Down"
@@ -411,7 +412,7 @@
       "Ctrl+Down"
      ],
      "key_times": [
-      1794190370100
+      1794216448241
      ],
      "observation": {
       "speech_raw": "\u2022 Weekend hours, which do not change: list of 2 items nesting level 1",
@@ -421,8 +422,8 @@
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794190371105,
-     "t_end_ms": 1794190372110,
+     "t_start_ms": 1794216449246,
+     "t_end_ms": 1794216450251,
      "action": {
       "type": "key",
       "command": "Ctrl+Up"
@@ -431,7 +432,7 @@
       "Ctrl+Up"
      ],
      "key_times": [
-      1794190371105
+      1794216449246
      ],
      "observation": {
       "speech_raw": "\u2022 Weekday hours: 9 a.m. to 9 p.m.",
@@ -441,8 +442,8 @@
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794190372110,
-     "t_end_ms": 1794190373116,
+     "t_start_ms": 1794216450251,
+     "t_end_ms": 1794216451255,
      "action": {
       "type": "key",
       "command": "Ctrl+Up"
@@ -451,7 +452,7 @@
       "Ctrl+Up"
      ],
      "key_times": [
-      1794190372110
+      1794216450251
      ],
      "observation": {
       "speech_raw": "list of 3 items",
@@ -461,8 +462,8 @@
     },
     {
      "step_id": "s23",
-     "t_start_ms": 1794190373116,
-     "t_end_ms": 1794190374121,
+     "t_start_ms": 1794216451255,
+     "t_end_ms": 1794216452260,
      "action": {
       "type": "key",
       "command": "Ctrl+Up"
@@ -471,7 +472,7 @@
       "Ctrl+Up"
      ],
      "key_times": [
-      1794190373116
+      1794216451255
      ],
      "observation": {
       "speech_raw": "Membership costs $5.99 a month, e.g. for adults; children join free. Questions go to help@riverside-library.org \u2014 or call 555-0142. Attendance rose 3.5% last year, and staff say they can't wait.",

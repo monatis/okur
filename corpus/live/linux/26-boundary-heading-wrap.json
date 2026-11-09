@@ -1,0 +1,86 @@
+{
+ "scenario_id": "26-boundary-heading-wrap",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": null,
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794220932505
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794220933874,
+     "t_end_ms": 1794220934878,
+     "action": {
+      "type": "jaws_script",
+      "command": "MoveToNextHeading"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794220933874
+     ],
+     "observation": {
+      "speech_raw": "First Boundary Heading\n \u001d heading level 1 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794220934878,
+     "t_end_ms": 1794220935882,
+     "action": {
+      "type": "jaws_script",
+      "command": "MoveToNextHeading"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794220934878
+     ],
+     "observation": {
+      "speech_raw": "Second Boundary Heading\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794220935882,
+     "t_end_ms": 1794220936886,
+     "action": {
+      "type": "jaws_script",
+      "command": "MoveToNextHeading"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794220935882
+     ],
+     "observation": {
+      "speech_raw": "wrapping to top\nFirst Boundary Heading\n \u001d heading level 1 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

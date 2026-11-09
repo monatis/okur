@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794193444365
+     "t_ms": 1794221251990
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794193444726
+     "t_ms": 1794221252353
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794193446031,
-     "t_end_ms": 1794193447036,
+     "t_start_ms": 1794221253658,
+     "t_end_ms": 1794221254663,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+Q"
@@ -35,7 +36,7 @@
       "Ctrl+Insert+Q"
      ],
      "key_times": [
-      1794193446031
+      1794221253658
      ],
      "observation": {
       "speech_raw": "no block quotes were found",
@@ -45,8 +46,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794193447037,
-     "t_end_ms": 1794193448041,
+     "t_start_ms": 1794221254663,
+     "t_end_ms": 1794221255666,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -55,7 +56,7 @@
       "Escape"
      ],
      "key_times": [
-      1794193447037
+      1794221254663
      ],
      "observation": {
       "speech_raw": "",

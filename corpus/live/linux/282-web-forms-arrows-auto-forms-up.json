@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+End",
-     "t_ms": 1794193921185
+     "t_ms": 1794221761667
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794193922554,
-     "t_end_ms": 1794193923557,
+     "t_start_ms": 1794221763027,
+     "t_end_ms": 1794221764031,
      "action": {
       "type": "key",
       "command": "Up"
@@ -31,7 +32,7 @@
       "Up"
      ],
      "key_times": [
-      1794193922554
+      1794221763027
      ],
      "observation": {
       "speech_raw": "Create account \u001d Button \u001e ",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794193923557,
-     "t_end_ms": 1794193924560,
+     "t_start_ms": 1794221764031,
+     "t_end_ms": 1794221765035,
      "action": {
       "type": "key",
       "command": "Up"
@@ -51,7 +52,7 @@
       "Up"
      ],
      "key_times": [
-      1794193923557
+      1794221764031
      ],
      "observation": {
       "speech_raw": "Save draft \u001d Button \u001e  \u001dUnavailable\u001e ",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794193924560,
-     "t_end_ms": 1794193925564,
+     "t_start_ms": 1794221765035,
+     "t_end_ms": 1794221766039,
      "action": {
       "type": "key",
       "command": "Up"
@@ -71,7 +72,7 @@
       "Up"
      ],
      "key_times": [
-      1794193924560
+      1794221765035
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e terms of use",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794193925564,
-     "t_end_ms": 1794193926567,
+     "t_start_ms": 1794221766039,
+     "t_end_ms": 1794221767043,
      "action": {
       "type": "key",
       "command": "Up"
@@ -91,7 +92,7 @@
       "Up"
      ],
      "key_times": [
-      1794193925564
+      1794221766039
      ],
      "observation": {
       "speech_raw": "I agree to the ",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794193926567,
-     "t_end_ms": 1794193927572,
+     "t_start_ms": 1794221767043,
+     "t_end_ms": 1794221768048,
      "action": {
       "type": "key",
       "command": "Up"
@@ -111,7 +112,7 @@
       "Up"
      ],
      "key_times": [
-      1794193926568
+      1794221767043
      ],
      "observation": {
       "speech_raw": "I agree to the terms of use \u001d check box \u001e  \u001dnot checked\u001e ",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794193927572,
-     "t_end_ms": 1794193928577,
+     "t_start_ms": 1794221768048,
+     "t_end_ms": 1794221769052,
      "action": {
       "type": "key",
       "command": "Up"
@@ -131,7 +132,7 @@
       "Up"
      ],
      "key_times": [
-      1794193927572
+      1794221768048
      ],
      "observation": {
       "speech_raw": "Send me the monthly newsletter \u001d check box \u001e  \u001dchecked\u001e ",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794193928577,
-     "t_end_ms": 1794193929581,
+     "t_start_ms": 1794221769052,
+     "t_end_ms": 1794221770057,
      "action": {
       "type": "key",
       "command": "Up"
@@ -151,7 +152,7 @@
       "Up"
      ],
      "key_times": [
-      1794193928577
+      1794221769052
      ],
      "observation": {
       "speech_raw": "Accessibility needs \u001d edit \u001e",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794193929581,
-     "t_end_ms": 1794193930586,
+     "t_start_ms": 1794221770057,
+     "t_end_ms": 1794221771061,
      "action": {
       "type": "key",
       "command": "Up"
@@ -171,7 +172,7 @@
       "Up"
      ],
      "key_times": [
-      1794193929581
+      1794221770057
      ],
      "observation": {
       "speech_raw": "Accessibility needs",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794193930586,
-     "t_end_ms": 1794193931590,
+     "t_start_ms": 1794221771061,
+     "t_end_ms": 1794221772065,
      "action": {
       "type": "key",
       "command": "Up"
@@ -191,7 +192,7 @@
       "Up"
      ],
      "key_times": [
-      1794193930586
+      1794221771061
      ],
      "observation": {
       "speech_raw": " \u001d Combo box \u001e  \u001dcollapsed\u001e Northside",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794193931590,
-     "t_end_ms": 1794193932595,
+     "t_start_ms": 1794221772065,
+     "t_end_ms": 1794221773069,
      "action": {
       "type": "key",
       "command": "Up"
@@ -211,7 +212,7 @@
       "Up"
      ],
      "key_times": [
-      1794193931590
+      1794221772065
      ],
      "observation": {
       "speech_raw": "Home branch",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794193932595,
-     "t_end_ms": 1794193933599,
+     "t_start_ms": 1794221773069,
+     "t_end_ms": 1794221774073,
      "action": {
       "type": "key",
       "command": "Up"
@@ -231,7 +232,7 @@
       "Up"
      ],
      "key_times": [
-      1794193932595
+      1794221773069
      ],
      "observation": {
       "speech_raw": "group end Membership type",
@@ -241,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794193933599,
-     "t_end_ms": 1794193934604,
+     "t_start_ms": 1794221774073,
+     "t_end_ms": 1794221775077,
      "action": {
       "type": "key",
       "command": "Up"
@@ -251,7 +252,7 @@
       "Up"
      ],
      "key_times": [
-      1794193933599
+      1794221774073
      ],
      "observation": {
       "speech_raw": "Senior \u001d radio button \u001e  \u001dnot checked\u001e \n3 of 3",
@@ -261,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794193934604,
-     "t_end_ms": 1794193935608,
+     "t_start_ms": 1794221775077,
+     "t_end_ms": 1794221776081,
      "action": {
       "type": "key",
       "command": "Up"
@@ -271,7 +272,7 @@
       "Up"
      ],
      "key_times": [
-      1794193934604
+      1794221775077
      ],
      "observation": {
       "speech_raw": "Student \u001d radio button \u001e  \u001dnot checked\u001e \n2 of 3",
@@ -281,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794193935608,
-     "t_end_ms": 1794193936612,
+     "t_start_ms": 1794221776081,
+     "t_end_ms": 1794221777086,
      "action": {
       "type": "key",
       "command": "Up"
@@ -291,7 +292,7 @@
       "Up"
      ],
      "key_times": [
-      1794193935608
+      1794221776081
      ],
      "observation": {
       "speech_raw": "Adult \u001d radio button \u001e  \u001dchecked\u001e \n1 of 3",
@@ -301,8 +302,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794193936612,
-     "t_end_ms": 1794193937616,
+     "t_start_ms": 1794221777086,
+     "t_end_ms": 1794221778089,
      "action": {
       "type": "key",
       "command": "Up"
@@ -311,7 +312,7 @@
       "Up"
      ],
      "key_times": [
-      1794193936612
+      1794221777086
      ],
      "observation": {
       "speech_raw": "group start Membership type",
@@ -321,8 +322,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794193937616,
-     "t_end_ms": 1794193938621,
+     "t_start_ms": 1794221778089,
+     "t_end_ms": 1794221779093,
      "action": {
       "type": "key",
       "command": "Up"
@@ -331,7 +332,7 @@
       "Up"
      ],
      "key_times": [
-      1794193937616
+      1794221778089
      ],
      "observation": {
       "speech_raw": "Password \u001d password edit \u001e \n \u001dRequired\u001e ",
@@ -341,8 +342,8 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794193938621,
-     "t_end_ms": 1794193939625,
+     "t_start_ms": 1794221779093,
+     "t_end_ms": 1794221780098,
      "action": {
       "type": "key",
       "command": "Up"
@@ -351,7 +352,7 @@
       "Up"
      ],
      "key_times": [
-      1794193938621
+      1794221779093
      ],
      "observation": {
       "speech_raw": "Password",
@@ -361,8 +362,8 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794193939625,
-     "t_end_ms": 1794193940630,
+     "t_start_ms": 1794221780098,
+     "t_end_ms": 1794221781101,
      "action": {
       "type": "key",
       "command": "Up"
@@ -371,7 +372,7 @@
       "Up"
      ],
      "key_times": [
-      1794193939625
+      1794221780098
      ],
      "observation": {
       "speech_raw": "We never share your email.",
@@ -381,8 +382,8 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794193940630,
-     "t_end_ms": 1794193941634,
+     "t_start_ms": 1794221781101,
+     "t_end_ms": 1794221782106,
      "action": {
       "type": "key",
       "command": "Up"
@@ -391,7 +392,7 @@
       "Up"
      ],
      "key_times": [
-      1794193940630
+      1794221781101
      ],
      "observation": {
       "speech_raw": "Email address \u001d Edit \u001e \nsam@example.com",
@@ -401,8 +402,8 @@
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794193941634,
-     "t_end_ms": 1794193942638,
+     "t_start_ms": 1794221782106,
+     "t_end_ms": 1794221783110,
      "action": {
       "type": "key",
       "command": "Up"
@@ -411,7 +412,7 @@
       "Up"
      ],
      "key_times": [
-      1794193941634
+      1794221782106
      ],
      "observation": {
       "speech_raw": "Email address",
@@ -421,8 +422,8 @@
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794193942638,
-     "t_end_ms": 1794193943642,
+     "t_start_ms": 1794221783110,
+     "t_end_ms": 1794221784114,
      "action": {
       "type": "key",
       "command": "Up"
@@ -431,7 +432,7 @@
       "Up"
      ],
      "key_times": [
-      1794193942638
+      1794221783110
      ],
      "observation": {
       "speech_raw": "Full name \u001d Edit \u001e \n \u001dRequired\u001e",
@@ -441,8 +442,8 @@
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794193943642,
-     "t_end_ms": 1794193944646,
+     "t_start_ms": 1794221784114,
+     "t_end_ms": 1794221785118,
      "action": {
       "type": "key",
       "command": "Up"
@@ -451,7 +452,7 @@
       "Up"
      ],
      "key_times": [
-      1794193943642
+      1794221784114
      ],
      "observation": {
       "speech_raw": "Full name",
@@ -461,8 +462,8 @@
     },
     {
      "step_id": "s23",
-     "t_start_ms": 1794193944646,
-     "t_end_ms": 1794193945650,
+     "t_start_ms": 1794221785118,
+     "t_end_ms": 1794221786122,
      "action": {
       "type": "key",
       "command": "Up"
@@ -471,7 +472,7 @@
       "Up"
      ],
      "key_times": [
-      1794193944646
+      1794221785118
      ],
      "observation": {
       "speech_raw": "Fields marked required must be filled in.",
@@ -481,8 +482,8 @@
     },
     {
      "step_id": "s24",
-     "t_start_ms": 1794193945650,
-     "t_end_ms": 1794193946754,
+     "t_start_ms": 1794221786122,
+     "t_end_ms": 1794221787126,
      "action": {
       "type": "key",
       "command": "Up"
@@ -491,7 +492,7 @@
       "Up"
      ],
      "key_times": [
-      1794193945650
+      1794221786122
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e Create your account",
@@ -501,8 +502,8 @@
     },
     {
      "step_id": "s25",
-     "t_start_ms": 1794193946754,
-     "t_end_ms": 1794193947759,
+     "t_start_ms": 1794221787126,
+     "t_end_ms": 1794221788129,
      "action": {
       "type": "key",
       "command": "Up"
@@ -511,7 +512,7 @@
       "Up"
      ],
      "key_times": [
-      1794193946754
+      1794221787126
      ],
      "observation": {
       "speech_raw": "main region",
@@ -521,8 +522,8 @@
     },
     {
      "step_id": "s26",
-     "t_start_ms": 1794193947759,
-     "t_end_ms": 1794193948764,
+     "t_start_ms": 1794221788129,
+     "t_end_ms": 1794221789133,
      "action": {
       "type": "key",
       "command": "Up"
@@ -531,7 +532,7 @@
       "Up"
      ],
      "key_times": [
-      1794193947759
+      1794221788129
      ],
      "observation": {
       "speech_raw": "Create Your Account - Riverside Library",
@@ -541,8 +542,8 @@
     },
     {
      "step_id": "s27",
-     "t_start_ms": 1794193948764,
-     "t_end_ms": 1794193949769,
+     "t_start_ms": 1794221789133,
+     "t_end_ms": 1794221790137,
      "action": {
       "type": "key",
       "command": "Up"
@@ -551,7 +552,7 @@
       "Up"
      ],
      "key_times": [
-      1794193948764
+      1794221789133
      ],
      "observation": {
       "speech_raw": "Create Your Account - Riverside Library",
@@ -561,8 +562,8 @@
     },
     {
      "step_id": "s28",
-     "t_start_ms": 1794193949769,
-     "t_end_ms": 1794193950772,
+     "t_start_ms": 1794221790137,
+     "t_end_ms": 1794221791141,
      "action": {
       "type": "key",
       "command": "Up"
@@ -571,7 +572,7 @@
       "Up"
      ],
      "key_times": [
-      1794193949769
+      1794221790137
      ],
      "observation": {
       "speech_raw": "Create Your Account - Riverside Library",

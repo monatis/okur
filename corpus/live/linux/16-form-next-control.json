@@ -1,0 +1,66 @@
+{
+ "scenario_id": "16-form-next-control",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": null,
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794218444885
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794218446249,
+     "t_end_ms": 1794218447253,
+     "action": {
+      "type": "jaws_script",
+      "command": "FocusToNextField"
+     },
+     "keys": [
+      "F"
+     ],
+     "key_times": [
+      1794218446249
+     ],
+     "observation": {
+      "speech_raw": "Full Name: \u001d Edit \u001e \nJane Doe",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794218447253,
+     "t_end_ms": 1794218448257,
+     "action": {
+      "type": "jaws_script",
+      "command": "FocusToNextField"
+     },
+     "keys": [
+      "F"
+     ],
+     "key_times": [
+      1794218447253
+     ],
+     "observation": {
+      "speech_raw": "Email Address: \u001d Edit \u001e \njane@example.com",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

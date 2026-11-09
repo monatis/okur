@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794193589180
+     "t_ms": 1794221429233
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794193590539,
-     "t_end_ms": 1794193591543,
+     "t_start_ms": 1794221430595,
+     "t_end_ms": 1794221431598,
      "action": {
       "type": "key",
       "command": "C"
@@ -31,7 +32,7 @@
       "C"
      ],
      "key_times": [
-      1794193590539
+      1794221430595
      ],
      "observation": {
       "speech_raw": "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794193591543,
-     "t_end_ms": 1794193592646,
+     "t_start_ms": 1794221431598,
+     "t_end_ms": 1794221432802,
      "action": {
       "type": "key",
       "command": "Space"
@@ -51,7 +52,7 @@
       "Space"
      ],
      "key_times": [
-      1794193591543
+      1794221431598
      ],
      "observation": {
       "speech_raw": "Create Your Account - Riverside Library\n \u001d MainRegion \u001e \n \u001d FormRegion \u001e\n  \u001d list \u001e \nwith 3 items\nNorthside\nTo move to an item press the Arrow keys.",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794193592646,
-     "t_end_ms": 1794193593750,
+     "t_start_ms": 1794221432802,
+     "t_end_ms": 1794221433906,
      "action": {
       "type": "key",
       "command": "Down"
@@ -71,7 +72,7 @@
       "Down"
      ],
      "key_times": [
-      1794193592646
+      1794221432802
      ],
      "observation": {
       "speech_raw": "Eastgate\nTo move to an item press the Arrow keys.",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794193593750,
-     "t_end_ms": 1794193594754,
+     "t_start_ms": 1794221433906,
+     "t_end_ms": 1794221434910,
      "action": {
       "type": "key",
       "command": "Down"
@@ -91,7 +92,7 @@
       "Down"
      ],
      "key_times": [
-      1794193593750
+      1794221433906
      ],
      "observation": {
       "speech_raw": "",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794193594754,
-     "t_end_ms": 1794193595858,
+     "t_start_ms": 1794221434910,
+     "t_end_ms": 1794221436014,
      "action": {
       "type": "key",
       "command": "Up"
@@ -111,7 +112,7 @@
       "Up"
      ],
      "key_times": [
-      1794193594754
+      1794221434910
      ],
      "observation": {
       "speech_raw": "Northside\nTo move to an item press the Arrow keys.",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794193595858,
-     "t_end_ms": 1794193596962,
+     "t_start_ms": 1794221436014,
+     "t_end_ms": 1794221437119,
      "action": {
       "type": "key",
       "command": "Enter"
@@ -131,7 +132,7 @@
       "Enter"
      ],
      "key_times": [
-      1794193595858
+      1794221436014
      ],
      "observation": {
       "speech_raw": "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside\nTo change the selection use the Arrow keys.",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794193596962,
-     "t_end_ms": 1794193598067,
+     "t_start_ms": 1794221437119,
+     "t_end_ms": 1794221438223,
      "action": {
       "type": "key",
       "command": "Space"
@@ -151,7 +152,7 @@
       "Space"
      ],
      "key_times": [
-      1794193596962
+      1794221437119
      ],
      "observation": {
       "speech_raw": " \u001dexpanded\u001e \n  \u001d list \u001e \nwith 3 items\nNorthside\nTo move to an item press the Arrow keys.",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794193598067,
-     "t_end_ms": 1794193599072,
+     "t_start_ms": 1794221438223,
+     "t_end_ms": 1794221439228,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -171,7 +172,7 @@
       "Escape"
      ],
      "key_times": [
-      1794193598067
+      1794221438223
      ],
      "observation": {
       "speech_raw": "virtual PC Cursor",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794193599072,
-     "t_end_ms": 1794193600077,
+     "t_start_ms": 1794221439228,
+     "t_end_ms": 1794221440232,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -191,7 +192,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794193599072
+      1794221439228
      ],
      "observation": {
       "speech_raw": "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside",

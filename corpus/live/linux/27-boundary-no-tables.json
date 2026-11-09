@@ -1,0 +1,46 @@
+{
+ "scenario_id": "27-boundary-no-tables",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": null,
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794221227032
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794221228400,
+     "t_end_ms": 1794221229404,
+     "action": {
+      "type": "jaws_script",
+      "command": "MoveToNextTable"
+     },
+     "keys": [
+      "T"
+     ],
+     "key_times": [
+      1794221228400
+     ],
+     "observation": {
+      "speech_raw": "There are no tables on this page.",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

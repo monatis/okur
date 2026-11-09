@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": null,
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794190259548
+     "t_ms": 1794216337890
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794190260911,
-     "t_end_ms": 1794190261915,
+     "t_start_ms": 1794216339260,
+     "t_end_ms": 1794216340264,
      "action": {
       "type": "jaws_script",
       "command": "MoveToNextHeading"
@@ -31,7 +32,7 @@
       "H"
      ],
      "key_times": [
-      1794190260911
+      1794216339260
      ],
      "observation": {
       "speech_raw": "System Documentation\n \u001d heading level 1 \u001e",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794190261915,
-     "t_end_ms": 1794190262917,
+     "t_start_ms": 1794216340264,
+     "t_end_ms": 1794216341268,
      "action": {
       "type": "jaws_script",
       "command": "MoveToNextHeading"
@@ -51,7 +52,7 @@
       "H"
      ],
      "key_times": [
-      1794190261915
+      1794216340264
      ],
      "observation": {
       "speech_raw": "Section Overview\n \u001d heading level 2 \u001e",

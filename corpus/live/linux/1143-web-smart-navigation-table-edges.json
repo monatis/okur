@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794190608769
+     "t_ms": 1794216827718
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794190610129,
-     "t_end_ms": 1794190611133,
+     "t_start_ms": 1794216829085,
+     "t_end_ms": 1794216830089,
      "action": {
       "type": "key",
       "command": "T"
@@ -31,7 +32,7 @@
       "T"
      ],
      "key_times": [
-      1794190610129
+      1794216829085
      ],
      "observation": {
       "speech_raw": "table with 3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch\nColumn 1, Row 1",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794190611133,
-     "t_end_ms": 1794190612137,
+     "t_start_ms": 1794216830089,
+     "t_end_ms": 1794216831094,
      "action": {
       "type": "key",
       "command": "Up"
@@ -51,7 +52,7 @@
       "Up"
      ],
      "key_times": [
-      1794190611133
+      1794216830089
      ],
      "observation": {
       "speech_raw": "table with 3 columns and 3 rows",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794190612137,
-     "t_end_ms": 1794190613141,
+     "t_start_ms": 1794216831094,
+     "t_end_ms": 1794216832098,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -71,7 +72,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794190612137
+      1794216831094
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794190613141,
-     "t_end_ms": 1794190614145,
+     "t_start_ms": 1794216832098,
+     "t_end_ms": 1794216833102,
      "action": {
       "type": "key",
       "command": "T"
@@ -91,7 +92,7 @@
       "T"
      ],
      "key_times": [
-      1794190613141
+      1794216832098
      ],
      "observation": {
       "speech_raw": "table with 3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch\nColumn 1, Row 1",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794190614145,
-     "t_end_ms": 1794190615149,
+     "t_start_ms": 1794216833102,
+     "t_end_ms": 1794216834107,
      "action": {
       "type": "key",
       "command": "Left"
@@ -111,7 +112,7 @@
       "Left"
      ],
      "key_times": [
-      1794190614145
+      1794216833102
      ],
      "observation": {
       "speech_raw": "\n",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794190615149,
-     "t_end_ms": 1794190616154,
+     "t_start_ms": 1794216834107,
+     "t_end_ms": 1794216835112,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -131,7 +132,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794190615149
+      1794216834107
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794190616154,
-     "t_end_ms": 1794190617159,
+     "t_start_ms": 1794216835112,
+     "t_end_ms": 1794216836116,
      "action": {
       "type": "key",
       "command": "T"
@@ -151,7 +152,7 @@
       "T"
      ],
      "key_times": [
-      1794190616154
+      1794216835112
      ],
      "observation": {
       "speech_raw": "table with 3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch\nColumn 1, Row 1",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794190617159,
-     "t_end_ms": 1794190618163,
+     "t_start_ms": 1794216836116,
+     "t_end_ms": 1794216837121,
      "action": {
       "type": "key",
       "command": "Right"
@@ -171,7 +172,7 @@
       "Right"
      ],
      "key_times": [
-      1794190617159
+      1794216836116
      ],
      "observation": {
       "speech_raw": "Weekdays\nColumn 2 of 3",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794190618163,
-     "t_end_ms": 1794190619168,
+     "t_start_ms": 1794216837121,
+     "t_end_ms": 1794216838125,
      "action": {
       "type": "key",
       "command": "Right"
@@ -191,7 +192,7 @@
       "Right"
      ],
      "key_times": [
-      1794190618163
+      1794216837121
      ],
      "observation": {
       "speech_raw": "Details\nColumn 3 of 3",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794190619168,
-     "t_end_ms": 1794190620173,
+     "t_start_ms": 1794216838125,
+     "t_end_ms": 1794216839130,
      "action": {
       "type": "key",
       "command": "Right"
@@ -211,7 +212,7 @@
       "Right"
      ],
      "key_times": [
-      1794190619168
+      1794216838125
      ],
      "observation": {
       "speech_raw": "Row 2\nBranch \nCentral\nColumn 1 of 3",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794190620173,
-     "t_end_ms": 1794190621178,
+     "t_start_ms": 1794216839130,
+     "t_end_ms": 1794216840135,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -231,7 +232,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794190620173
+      1794216839130
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",
@@ -241,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794190621178,
-     "t_end_ms": 1794190622183,
+     "t_start_ms": 1794216840135,
+     "t_end_ms": 1794216841139,
      "action": {
       "type": "key",
       "command": "T"
@@ -251,7 +252,7 @@
       "T"
      ],
      "key_times": [
-      1794190621178
+      1794216840135
      ],
      "observation": {
       "speech_raw": "table with 3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch\nColumn 1, Row 1",
@@ -261,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794190622183,
-     "t_end_ms": 1794190623187,
+     "t_start_ms": 1794216841139,
+     "t_end_ms": 1794216842143,
      "action": {
       "type": "key",
       "command": "Down"
@@ -271,7 +272,7 @@
       "Down"
      ],
      "key_times": [
-      1794190622183
+      1794216841139
      ],
      "observation": {
       "speech_raw": "Central\nRow 2 of 3",
@@ -281,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794190623187,
-     "t_end_ms": 1794190624191,
+     "t_start_ms": 1794216842143,
+     "t_end_ms": 1794216843147,
      "action": {
       "type": "key",
       "command": "Right"
@@ -291,7 +292,7 @@
       "Right"
      ],
      "key_times": [
-      1794190623187
+      1794216842143
      ],
      "observation": {
       "speech_raw": "Weekdays \n9 a.m. to 9 p.m.\nColumn 2 of 3",
@@ -301,8 +302,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794190624191,
-     "t_end_ms": 1794190625196,
+     "t_start_ms": 1794216843147,
+     "t_end_ms": 1794216844152,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -311,7 +312,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794190624191
+      1794216843147
      ],
      "observation": {
       "speech_raw": "9 a.m. to 9 p.m.",
@@ -321,8 +322,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794190625196,
-     "t_end_ms": 1794190626200,
+     "t_start_ms": 1794216844152,
+     "t_end_ms": 1794216845157,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -331,7 +332,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794190625196
+      1794216844152
      ],
      "observation": {
       "speech_raw": "9 a.m. to 9 p.m.",
@@ -341,8 +342,8 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794190626200,
-     "t_end_ms": 1794190627206,
+     "t_start_ms": 1794216845157,
+     "t_end_ms": 1794216846161,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -351,7 +352,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794190626200
+      1794216845157
      ],
      "observation": {
       "speech_raw": "9 a.m. to 9 p.m.",
@@ -361,8 +362,8 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794190627206,
-     "t_end_ms": 1794190628211,
+     "t_start_ms": 1794216846161,
+     "t_end_ms": 1794216847166,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -371,7 +372,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794190627206
+      1794216846161
      ],
      "observation": {
       "speech_raw": "9 a.m. to 9 p.m.",
@@ -381,8 +382,8 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794190628211,
-     "t_end_ms": 1794190629216,
+     "t_start_ms": 1794216847166,
+     "t_end_ms": 1794216848171,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -391,7 +392,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794190628211
+      1794216847166
      ],
      "observation": {
       "speech_raw": "9 a.m. to 9 p.m.",
@@ -401,8 +402,8 @@
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794190629216,
-     "t_end_ms": 1794190630322,
+     "t_start_ms": 1794216848171,
+     "t_end_ms": 1794216849176,
      "action": {
       "type": "key",
       "command": "Ctrl+Left"
@@ -411,7 +412,7 @@
       "Ctrl+Left"
      ],
      "key_times": [
-      1794190629216
+      1794216848171
      ],
      "observation": {
       "speech_raw": "9 a.m. to 9 p.m.",
@@ -421,8 +422,8 @@
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794190630322,
-     "t_end_ms": 1794190631326,
+     "t_start_ms": 1794216849176,
+     "t_end_ms": 1794216850181,
      "action": {
       "type": "key",
       "command": "Ctrl+Left"
@@ -431,7 +432,7 @@
       "Ctrl+Left"
      ],
      "key_times": [
-      1794190630322
+      1794216849176
      ],
      "observation": {
       "speech_raw": "9 a.m. to 9 p.m.",
@@ -441,8 +442,8 @@
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794190631327,
-     "t_end_ms": 1794190632331,
+     "t_start_ms": 1794216850181,
+     "t_end_ms": 1794216851185,
      "action": {
       "type": "key",
       "command": "Right"
@@ -451,7 +452,7 @@
       "Right"
      ],
      "key_times": [
-      1794190631327
+      1794216850181
      ],
      "observation": {
       "speech_raw": "Details \n \u001d same page link \u001e Directions\nColumn 3 of 3",
@@ -461,8 +462,8 @@
     },
     {
      "step_id": "s23",
-     "t_start_ms": 1794190632331,
-     "t_end_ms": 1794190633336,
+     "t_start_ms": 1794216851185,
+     "t_end_ms": 1794216852189,
      "action": {
       "type": "key",
       "command": "Down"
@@ -471,7 +472,7 @@
       "Down"
      ],
      "key_times": [
-      1794190632331
+      1794216851185
      ],
      "observation": {
       "speech_raw": "Northside\n \u001d same page link \u001e Directions\nRow 3 of 3",
@@ -481,8 +482,8 @@
     },
     {
      "step_id": "s24",
-     "t_start_ms": 1794190633336,
-     "t_end_ms": 1794190634340,
+     "t_start_ms": 1794216852189,
+     "t_end_ms": 1794216853194,
      "action": {
       "type": "key",
       "command": "Down"
@@ -491,7 +492,7 @@
       "Down"
      ],
      "key_times": [
-      1794190633336
+      1794216852189
      ],
      "observation": {
       "speech_raw": "table end",
@@ -501,8 +502,8 @@
     },
     {
      "step_id": "s25",
-     "t_start_ms": 1794190634340,
-     "t_end_ms": 1794190635345,
+     "t_start_ms": 1794216853194,
+     "t_end_ms": 1794216854198,
      "action": {
       "type": "key",
       "command": "Down"
@@ -511,7 +512,7 @@
       "Down"
      ],
      "key_times": [
-      1794190634340
+      1794216853194
      ],
      "observation": {
       "speech_raw": " \u001d heading level 3 \u001e What readers said",
@@ -521,8 +522,8 @@
     },
     {
      "step_id": "s26",
-     "t_start_ms": 1794190635345,
-     "t_end_ms": 1794190636349,
+     "t_start_ms": 1794216854198,
+     "t_end_ms": 1794216855202,
      "action": {
       "type": "key",
       "command": "Up"
@@ -531,7 +532,7 @@
       "Up"
      ],
      "key_times": [
-      1794190635345
+      1794216854198
      ],
      "observation": {
       "speech_raw": "table end",
@@ -541,8 +542,8 @@
     },
     {
      "step_id": "s27",
-     "t_start_ms": 1794190636349,
-     "t_end_ms": 1794190637353,
+     "t_start_ms": 1794216855202,
+     "t_end_ms": 1794216856206,
      "action": {
       "type": "key",
       "command": "Up"
@@ -551,7 +552,7 @@
       "Up"
      ],
      "key_times": [
-      1794190636349
+      1794216855202
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Directions\nColumn 3, Row 3",
@@ -561,8 +562,8 @@
     },
     {
      "step_id": "s28",
-     "t_start_ms": 1794190637353,
-     "t_end_ms": 1794190638359,
+     "t_start_ms": 1794216856206,
+     "t_end_ms": 1794216857212,
      "action": {
       "type": "key",
       "command": "Shift+T"
@@ -571,7 +572,7 @@
       "Shift+T"
      ],
      "key_times": [
-      1794190637353
+      1794216856206
      ],
      "observation": {
       "speech_raw": "table with 3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch",

@@ -1,0 +1,66 @@
+{
+ "scenario_id": "22-table-cell-right",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": null,
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794219498737
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794219500110,
+     "t_end_ms": 1794219501114,
+     "action": {
+      "type": "jaws_script",
+      "command": "MoveToNextTable"
+     },
+     "keys": [
+      "T"
+     ],
+     "key_times": [
+      1794219500110
+     ],
+     "observation": {
+      "speech_raw": "table with 4 columns and 4 rows\nQ3 Financial Summary Table\nColumn 1, Row 1\nQuarter",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794219501114,
+     "t_end_ms": 1794219502119,
+     "action": {
+      "type": "keyboard",
+      "command": "^%{RIGHT}"
+     },
+     "keys": [
+      "Ctrl+Alt+Right"
+     ],
+     "key_times": [
+      1794219501114
+     ],
+     "observation": {
+      "speech_raw": "Revenue\nColumn 2 of 4",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

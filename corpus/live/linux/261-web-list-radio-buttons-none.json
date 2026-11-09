@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794193205056
+     "t_ms": 1794220989604
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794193205418
+     "t_ms": 1794220989966
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794193206722,
-     "t_end_ms": 1794193207727,
+     "t_start_ms": 1794220991272,
+     "t_end_ms": 1794220992277,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+A"
@@ -35,7 +36,7 @@
       "Ctrl+Insert+A"
      ],
      "key_times": [
-      1794193206723
+      1794220991272
      ],
      "observation": {
       "speech_raw": "no radio buttons were found",
@@ -45,8 +46,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794193207727,
-     "t_end_ms": 1794193208731,
+     "t_start_ms": 1794220992277,
+     "t_end_ms": 1794220993280,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -55,7 +56,7 @@
       "Escape"
      ],
      "key_times": [
-      1794193207727
+      1794220992277
      ],
      "observation": {
       "speech_raw": "",

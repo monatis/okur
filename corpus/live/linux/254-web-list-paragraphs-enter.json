@@ -1,0 +1,130 @@
+{
+ "scenario_id": "254-web-list-paragraphs-enter",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Escape",
+     "t_ms": 1794220754338
+    },
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794220754696
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794220756001,
+     "t_end_ms": 1794220757306,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+P"
+     },
+     "keys": [
+      "Ctrl+Insert+P"
+     ],
+     "key_times": [
+      1794220756001
+     ],
+     "observation": {
+      "speech_raw": "Select a Paragraph \u001d dialog \u001e \nList1 \u001d List view \u001e \nBy Maria Lopez, published March 14, 2026\n1 of 6\nTo move to items use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794220757307,
+     "t_end_ms": 1794220758511,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794220757307
+     ],
+     "observation": {
+      "speech_raw": "The Riverside City Library will stay open until 9 p.m. on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which most respondents asked for later hours.\n2 of 6",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794220758511,
+     "t_end_ms": 1794220759615,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794220758511
+     ],
+     "observation": {
+      "speech_raw": "The Riverside City Library will stay open until 9 p.m. on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794220759615,
+     "t_end_ms": 1794220760620,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794220759615
+     ],
+     "observation": {
+      "speech_raw": "The Riverside City Library will stay open until 9 p.m. on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794220760620,
+     "t_end_ms": 1794220761624,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794220760620
+     ],
+     "observation": {
+      "speech_raw": "most respondents asked for later hours.",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

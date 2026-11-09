@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794190188341
+     "t_ms": 1794216266791
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794190189706,
-     "t_end_ms": 1794190190709,
+     "t_start_ms": 1794216268159,
+     "t_end_ms": 1794216269162,
      "action": {
       "type": "key",
       "command": "L"
@@ -31,7 +32,7 @@
       "L"
      ],
      "key_times": [
-      1794190189706
+      1794216268159
      ],
      "observation": {
       "speech_raw": "list of 4 items",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794190190709,
-     "t_end_ms": 1794190191713,
+     "t_start_ms": 1794216269162,
+     "t_end_ms": 1794216270166,
      "action": {
       "type": "key",
       "command": "L"
@@ -51,7 +52,7 @@
       "L"
      ],
      "key_times": [
-      1794190190709
+      1794216269162
      ],
      "observation": {
       "speech_raw": "list of 3 items",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794190191713,
-     "t_end_ms": 1794190192717,
+     "t_start_ms": 1794216270166,
+     "t_end_ms": 1794216271169,
      "action": {
       "type": "key",
       "command": "L"
@@ -71,7 +72,7 @@
       "L"
      ],
      "key_times": [
-      1794190191713
+      1794216270166
      ],
      "observation": {
       "speech_raw": "list of 2 items nesting level 1",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794190192717,
-     "t_end_ms": 1794190193721,
+     "t_start_ms": 1794216271169,
+     "t_end_ms": 1794216272174,
      "action": {
       "type": "key",
       "command": "L"
@@ -91,7 +92,7 @@
       "L"
      ],
      "key_times": [
-      1794190192717
+      1794216271169
      ],
      "observation": {
       "speech_raw": "list of 3 items",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794190193721,
-     "t_end_ms": 1794190194725,
+     "t_start_ms": 1794216272174,
+     "t_end_ms": 1794216273178,
      "action": {
       "type": "key",
       "command": "L"
@@ -111,7 +112,7 @@
       "L"
      ],
      "key_times": [
-      1794190193721
+      1794216272174
      ],
      "observation": {
       "speech_raw": "list of 2 items",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794190194725,
-     "t_end_ms": 1794190195730,
+     "t_start_ms": 1794216273178,
+     "t_end_ms": 1794216274183,
      "action": {
       "type": "key",
       "command": "Shift+L"
@@ -131,7 +132,7 @@
       "Shift+L"
      ],
      "key_times": [
-      1794190194725
+      1794216273178
      ],
      "observation": {
       "speech_raw": "list of 3 items",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794190195730,
-     "t_end_ms": 1794190196735,
+     "t_start_ms": 1794216274183,
+     "t_end_ms": 1794216275188,
      "action": {
       "type": "key",
       "command": "Shift+L"
@@ -151,7 +152,7 @@
       "Shift+L"
      ],
      "key_times": [
-      1794190195730
+      1794216274183
      ],
      "observation": {
       "speech_raw": "list of 2 items nesting level 1",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794190196735,
-     "t_end_ms": 1794190197740,
+     "t_start_ms": 1794216275188,
+     "t_end_ms": 1794216276192,
      "action": {
       "type": "key",
       "command": "I"
@@ -171,7 +172,7 @@
       "I"
      ],
      "key_times": [
-      1794190196735
+      1794216275188
      ],
      "observation": {
       "speech_raw": "\u2022 New ",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794190197740,
-     "t_end_ms": 1794190198745,
+     "t_start_ms": 1794216276192,
+     "t_end_ms": 1794216277196,
      "action": {
       "type": "key",
       "command": "I"
@@ -191,7 +192,7 @@
       "I"
      ],
      "key_times": [
-      1794190197740
+      1794216276192
      ],
      "observation": {
       "speech_raw": "1. Board vote in March",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794190198745,
-     "t_end_ms": 1794190199749,
+     "t_start_ms": 1794216277196,
+     "t_end_ms": 1794216278200,
      "action": {
       "type": "key",
       "command": "I"
@@ -211,7 +212,7 @@
       "I"
      ],
      "key_times": [
-      1794190198745
+      1794216277196
      ],
      "observation": {
       "speech_raw": "2. Hiring in April",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794190199749,
-     "t_end_ms": 1794190200753,
+     "t_start_ms": 1794216278200,
+     "t_end_ms": 1794216279205,
      "action": {
       "type": "key",
       "command": "I"
@@ -231,7 +232,7 @@
       "I"
      ],
      "key_times": [
-      1794190199749
+      1794216278200
      ],
      "observation": {
       "speech_raw": "3. Review in October",
@@ -241,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794190200753,
-     "t_end_ms": 1794190201758,
+     "t_start_ms": 1794216279205,
+     "t_end_ms": 1794216280210,
      "action": {
       "type": "key",
       "command": "I"
@@ -251,7 +252,7 @@
       "I"
      ],
      "key_times": [
-      1794190200753
+      1794216279205
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Council approves library budget",
@@ -261,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794190201758,
-     "t_end_ms": 1794190202762,
+     "t_start_ms": 1794216280210,
+     "t_end_ms": 1794216281214,
      "action": {
       "type": "key",
       "command": "I"
@@ -271,7 +272,7 @@
       "I"
      ],
      "key_times": [
-      1794190201758
+      1794216280210
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Spring book fair returns",

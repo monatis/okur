@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": null,
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794192712193
+     "t_ms": 1794219083630
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794192713553,
-     "t_end_ms": 1794192714556,
+     "t_start_ms": 1794219085000,
+     "t_end_ms": 1794219086004,
      "action": {
       "type": "jaws_script",
       "command": "MoveToNextTable"
@@ -31,7 +32,7 @@
       "T"
      ],
      "key_times": [
-      1794192713553
+      1794219085000
      ],
      "observation": {
       "speech_raw": "table with 4 columns and 4 rows\nQ3 Financial Summary Table\nColumn 1, Row 1\nQuarter",

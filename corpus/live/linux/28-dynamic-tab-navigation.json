@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": null,
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794193794625
+     "t_ms": 1794221635084
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794193795994,
-     "t_end_ms": 1794193797098,
+     "t_start_ms": 1794221636452,
+     "t_end_ms": 1794221637556,
      "action": {
       "type": "keyboard",
       "command": "{TAB}"
@@ -31,7 +32,7 @@
       "Tab"
      ],
      "key_times": [
-      1794193795994
+      1794221636452
      ],
      "observation": {
       "speech_raw": "Boundaries and Dynamic Updates Fixture\nSystem Details  \u001d Button \u001e  \u001dcollapsed\u001e \nTo activate press Enter.",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794193797098,
-     "t_end_ms": 1794193798202,
+     "t_start_ms": 1794221637556,
+     "t_end_ms": 1794221638660,
      "action": {
       "type": "keyboard",
       "command": "{TAB}"
@@ -51,7 +52,7 @@
       "Tab"
      ],
      "key_times": [
-      1794193797098
+      1794221637556
      ],
      "observation": {
       "speech_raw": "Settings \u001d group \u001e \n\nGeneral  \u001d Tab \u001e \n1 of 2\n \u001dselected\u001e",

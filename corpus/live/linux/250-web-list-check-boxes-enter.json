@@ -1,0 +1,130 @@
+{
+ "scenario_id": "250-web-list-check-boxes-enter",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Escape",
+     "t_ms": 1794220635905
+    },
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794220636265
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794220637571,
+     "t_end_ms": 1794220638576,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+X"
+     },
+     "keys": [
+      "Ctrl+Insert+X"
+     ],
+     "key_times": [
+      1794220637571
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794220638576,
+     "t_end_ms": 1794220639679,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794220638576
+     ],
+     "observation": {
+      "speech_raw": "Select a Check Box \u001d dialog \u001e \nList1 \u001d List view \u001e \nI agree to the terms of use check box not checked\n2 of 2\nTo move to items use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794220639679,
+     "t_end_ms": 1794220640884,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794220639679
+     ],
+     "observation": {
+      "speech_raw": "Create Your Account - Riverside Library\nI agree to the terms of use  \u001d check box \u001e   \u001dnot checked\u001e \nTo check press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794220640884,
+     "t_end_ms": 1794220641889,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794220640884
+     ],
+     "observation": {
+      "speech_raw": "I agree to the terms of use \u001d check box \u001e  \u001dnot checked\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794220641889,
+     "t_end_ms": 1794220642893,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794220641889
+     ],
+     "observation": {
+      "speech_raw": "I agree to the ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

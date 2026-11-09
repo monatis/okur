@@ -1,0 +1,66 @@
+{
+ "scenario_id": "17-form-next-button",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": null,
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794218471279
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794218472648,
+     "t_end_ms": 1794218473652,
+     "action": {
+      "type": "jaws_script",
+      "command": "MoveToNextButton"
+     },
+     "keys": [
+      "B"
+     ],
+     "key_times": [
+      1794218472648
+     ],
+     "observation": {
+      "speech_raw": "Save Preferences  \u001d Button \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794218473652,
+     "t_end_ms": 1794218474656,
+     "action": {
+      "type": "jaws_script",
+      "command": "MoveToNextButton"
+     },
+     "keys": [
+      "B"
+     ],
+     "key_times": [
+      1794218473652
+     ],
+     "observation": {
+      "speech_raw": "Submit Application  \u001d Button \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

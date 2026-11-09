@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": null,
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794189635757
+     "t_ms": 1794215662915
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794189637118,
-     "t_end_ms": 1794189638122,
+     "t_start_ms": 1794215664282,
+     "t_end_ms": 1794215665286,
      "action": {
       "type": "keyboard",
       "command": "^{RIGHT}"
@@ -31,7 +32,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794189637118
+      1794215664282
      ],
      "observation": {
       "speech_raw": "Reading",

@@ -1,0 +1,130 @@
+{
+ "scenario_id": "257-web-list-tables-enter",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Escape",
+     "t_ms": 1794220843864
+    },
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794220844231
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794220845537,
+     "t_end_ms": 1794220846543,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+T"
+     },
+     "keys": [
+      "Ctrl+Insert+T"
+     ],
+     "key_times": [
+      1794220845537
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794220846543,
+     "t_end_ms": 1794220847548,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794220846543
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794220847548,
+     "t_end_ms": 1794220848652,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794220847548
+     ],
+     "observation": {
+      "speech_raw": "table with 3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794220848652,
+     "t_end_ms": 1794220849656,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794220848652
+     ],
+     "observation": {
+      "speech_raw": "Branch",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794220849656,
+     "t_end_ms": 1794220850660,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794220849656
+     ],
+     "observation": {
+      "speech_raw": "Weekdays",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

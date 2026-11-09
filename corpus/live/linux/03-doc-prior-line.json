@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": null,
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794189609075
+     "t_ms": 1794215636872
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794189610439,
-     "t_end_ms": 1794189611443,
+     "t_start_ms": 1794215638236,
+     "t_end_ms": 1794215639240,
      "action": {
       "type": "keyboard",
       "command": "{DOWN}"
@@ -31,7 +32,7 @@
       "Down"
      ],
      "key_times": [
-      1794189610439
+      1794215638236
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e The Accessibility Engine Specification",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794189611443,
-     "t_end_ms": 1794189612446,
+     "t_start_ms": 1794215639240,
+     "t_end_ms": 1794215640244,
      "action": {
       "type": "keyboard",
       "command": "{UP}"
@@ -51,7 +52,7 @@
       "Up"
      ],
      "key_times": [
-      1794189611443
+      1794215639240
      ],
      "observation": {
       "speech_raw": "Document Reading Reference Fixture",

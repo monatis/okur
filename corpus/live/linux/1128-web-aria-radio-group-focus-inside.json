@@ -1,0 +1,326 @@
+{
+ "scenario_id": "1128-web-aria-radio-group-focus-inside",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794216565684
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794216567047,
+     "t_end_ms": 1794216568051,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216567047
+     ],
+     "observation": {
+      "speech_raw": "Hotel \u001d group \u001e \nHotel one  \u001d radio button \u001e   \u001dnot checked\u001e \n1 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794216568051,
+     "t_end_ms": 1794216569055,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216568051
+     ],
+     "observation": {
+      "speech_raw": "Hotel two  \u001d radio button \u001e   \u001dchecked\u001e \n2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794216569055,
+     "t_end_ms": 1794216570059,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216569055
+     ],
+     "observation": {
+      "speech_raw": "Hotel three  \u001d radio button \u001e   \u001dnot checked\u001e \n3 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794216570059,
+     "t_end_ms": 1794216571063,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216570059
+     ],
+     "observation": {
+      "speech_raw": "India \u001d group \u001e \nIndia one  \u001d radio button \u001e   \u001dnot checked\u001e \n1 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794216571063,
+     "t_end_ms": 1794216572066,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216571063
+     ],
+     "observation": {
+      "speech_raw": "India two  \u001d radio button \u001e   \u001dchecked\u001e \n2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794216572066,
+     "t_end_ms": 1794216573069,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216572066
+     ],
+     "observation": {
+      "speech_raw": "India three  \u001d radio button \u001e   \u001dnot checked\u001e \n3 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794216573069,
+     "t_end_ms": 1794216574074,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216573069
+     ],
+     "observation": {
+      "speech_raw": "Juliett \u001d group \u001e \nJuliett one  \u001d radio button \u001e   \u001dnot checked\u001e \n1 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794216574074,
+     "t_end_ms": 1794216575078,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216574074
+     ],
+     "observation": {
+      "speech_raw": "Juliett two  \u001d radio button \u001e   \u001dchecked\u001e \n2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794216575078,
+     "t_end_ms": 1794216576082,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216575078
+     ],
+     "observation": {
+      "speech_raw": "Juliett three  \u001d radio button \u001e   \u001dnot checked\u001e \n3 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794216576082,
+     "t_end_ms": 1794216577086,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216576082
+     ],
+     "observation": {
+      "speech_raw": "Kilo \u001d group \u001e \nKilo one  \u001d radio button \u001e   \u001dnot checked\u001e \n1 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794216577086,
+     "t_end_ms": 1794216578091,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216577086
+     ],
+     "observation": {
+      "speech_raw": "Kilo two  \u001d radio button \u001e   \u001dchecked\u001e \n2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794216578091,
+     "t_end_ms": 1794216579095,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216578091
+     ],
+     "observation": {
+      "speech_raw": "Kilo three  \u001d radio button \u001e   \u001dnot checked\u001e \n3 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794216579095,
+     "t_end_ms": 1794216580099,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216579095
+     ],
+     "observation": {
+      "speech_raw": "Lima \u001d group \u001e \nLima one  \u001d radio button \u001e   \u001dnot checked\u001e \n1 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794216580099,
+     "t_end_ms": 1794216581103,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216580099
+     ],
+     "observation": {
+      "speech_raw": "Lima two  \u001d radio button \u001e   \u001dchecked\u001e \n2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794216581103,
+     "t_end_ms": 1794216582106,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216581103
+     ],
+     "observation": {
+      "speech_raw": "Lima three  \u001d radio button \u001e   \u001dnot checked\u001e \n3 of 3",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "0",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794192002992
+     "t_ms": 1794218296034
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794192004356,
-     "t_end_ms": 1794192005360,
+     "t_start_ms": 1794218297394,
+     "t_end_ms": 1794218298397,
      "action": {
       "type": "key",
       "command": "Down"
@@ -31,7 +32,7 @@
       "Down"
      ],
      "key_times": [
-      1794192004356
+      1794218297394
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e Structures Fixture Three",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794192005360,
-     "t_end_ms": 1794192006364,
+     "t_start_ms": 1794218298397,
+     "t_end_ms": 1794218299401,
      "action": {
       "type": "key",
       "command": "Down"
@@ -51,7 +52,7 @@
       "Down"
      ],
      "key_times": [
-      1794192005360
+      1794218298397
      ],
      "observation": {
       "speech_raw": "Before the titled frame.",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794192006364,
-     "t_end_ms": 1794192007367,
+     "t_start_ms": 1794218299401,
+     "t_end_ms": 1794218300408,
      "action": {
       "type": "key",
       "command": "Down"
@@ -71,7 +72,7 @@
       "Down"
      ],
      "key_times": [
-      1794192006364
+      1794218299401
      ],
      "observation": {
       "speech_raw": "First frame line",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794192007367,
-     "t_end_ms": 1794192008371,
+     "t_start_ms": 1794218300408,
+     "t_end_ms": 1794218301413,
      "action": {
       "type": "key",
       "command": "Down"
@@ -91,7 +92,7 @@
       "Down"
      ],
      "key_times": [
-      1794192007367
+      1794218300408
      ],
      "observation": {
       "speech_raw": "Second frame line",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794192008371,
-     "t_end_ms": 1794192009376,
+     "t_start_ms": 1794218301413,
+     "t_end_ms": 1794218302416,
      "action": {
       "type": "key",
       "command": "Down"
@@ -111,7 +112,7 @@
       "Down"
      ],
      "key_times": [
-      1794192008371
+      1794218301413
      ],
      "observation": {
       "speech_raw": "Between the frames.",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794192009376,
-     "t_end_ms": 1794192010380,
+     "t_start_ms": 1794218302416,
+     "t_end_ms": 1794218303421,
      "action": {
       "type": "key",
       "command": "Down"
@@ -131,7 +132,7 @@
       "Down"
      ],
      "key_times": [
-      1794192009376
+      1794218302416
      ],
      "observation": {
       "speech_raw": "Untitled frame text",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794192010380,
-     "t_end_ms": 1794192011384,
+     "t_start_ms": 1794218303421,
+     "t_end_ms": 1794218304425,
      "action": {
       "type": "key",
       "command": "Down"
@@ -151,7 +152,7 @@
       "Down"
      ],
      "key_times": [
-      1794192010380
+      1794218303421
      ],
      "observation": {
       "speech_raw": "Before the titled text.",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794192011384,
-     "t_end_ms": 1794192012389,
+     "t_start_ms": 1794218304425,
+     "t_end_ms": 1794218305430,
      "action": {
       "type": "key",
       "command": "Down"
@@ -171,7 +172,7 @@
       "Down"
      ],
      "key_times": [
-      1794192011384
+      1794218304425
      ],
      "observation": {
       "speech_raw": "Titled text",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794192012389,
-     "t_end_ms": 1794192013393,
+     "t_start_ms": 1794218305430,
+     "t_end_ms": 1794218306435,
      "action": {
       "type": "key",
       "command": "Down"
@@ -191,7 +192,7 @@
       "Down"
      ],
      "key_times": [
-      1794192012389
+      1794218305430
      ],
      "observation": {
       "speech_raw": "The end of the structures.",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794192013393,
-     "t_end_ms": 1794192014397,
+     "t_start_ms": 1794218306435,
+     "t_end_ms": 1794218307438,
      "action": {
       "type": "key",
       "command": "Down"
@@ -211,7 +212,7 @@
       "Down"
      ],
      "key_times": [
-      1794192013393
+      1794218306435
      ],
      "observation": {
       "speech_raw": "The end of the structures.",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794192014397,
-     "t_end_ms": 1794192015402,
+     "t_start_ms": 1794218307438,
+     "t_end_ms": 1794218308443,
      "action": {
       "type": "key",
       "command": "Down"
@@ -231,7 +232,7 @@
       "Down"
      ],
      "key_times": [
-      1794192014397
+      1794218307438
      ],
      "observation": {
       "speech_raw": "The end of the structures.",
@@ -241,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794192015402,
-     "t_end_ms": 1794192016406,
+     "t_start_ms": 1794218308443,
+     "t_end_ms": 1794218309447,
      "action": {
       "type": "key",
       "command": "Down"
@@ -251,7 +252,7 @@
       "Down"
      ],
      "key_times": [
-      1794192015402
+      1794218308443
      ],
      "observation": {
       "speech_raw": "The end of the structures.",
@@ -261,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794192016406,
-     "t_end_ms": 1794192017410,
+     "t_start_ms": 1794218309447,
+     "t_end_ms": 1794218310451,
      "action": {
       "type": "key",
       "command": "Down"
@@ -271,7 +272,7 @@
       "Down"
      ],
      "key_times": [
-      1794192016406
+      1794218309447
      ],
      "observation": {
       "speech_raw": "The end of the structures.",
@@ -281,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794192017410,
-     "t_end_ms": 1794192018415,
+     "t_start_ms": 1794218310451,
+     "t_end_ms": 1794218311456,
      "action": {
       "type": "key",
       "command": "Down"
@@ -291,7 +292,7 @@
       "Down"
      ],
      "key_times": [
-      1794192017410
+      1794218310451
      ],
      "observation": {
       "speech_raw": "The end of the structures.",
@@ -301,8 +302,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794192018415,
-     "t_end_ms": 1794192019419,
+     "t_start_ms": 1794218311456,
+     "t_end_ms": 1794218312460,
      "action": {
       "type": "key",
       "command": "Down"
@@ -311,7 +312,7 @@
       "Down"
      ],
      "key_times": [
-      1794192018415
+      1794218311456
      ],
      "observation": {
       "speech_raw": "The end of the structures.",
@@ -321,8 +322,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794192019419,
-     "t_end_ms": 1794192020424,
+     "t_start_ms": 1794218312460,
+     "t_end_ms": 1794218313465,
      "action": {
       "type": "key",
       "command": "Down"
@@ -331,7 +332,7 @@
       "Down"
      ],
      "key_times": [
-      1794192019419
+      1794218312460
      ],
      "observation": {
       "speech_raw": "The end of the structures.",
@@ -341,8 +342,8 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794192020424,
-     "t_end_ms": 1794192021429,
+     "t_start_ms": 1794218313465,
+     "t_end_ms": 1794218314469,
      "action": {
       "type": "key",
       "command": "Down"
@@ -351,7 +352,7 @@
       "Down"
      ],
      "key_times": [
-      1794192020424
+      1794218313465
      ],
      "observation": {
       "speech_raw": "The end of the structures.",
@@ -361,8 +362,8 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794192021429,
-     "t_end_ms": 1794192022433,
+     "t_start_ms": 1794218314469,
+     "t_end_ms": 1794218315474,
      "action": {
       "type": "key",
       "command": "Down"
@@ -371,7 +372,7 @@
       "Down"
      ],
      "key_times": [
-      1794192021429
+      1794218314469
      ],
      "observation": {
       "speech_raw": "The end of the structures.",
@@ -381,8 +382,8 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794192022433,
-     "t_end_ms": 1794192023438,
+     "t_start_ms": 1794218315474,
+     "t_end_ms": 1794218316478,
      "action": {
       "type": "key",
       "command": "Down"
@@ -391,7 +392,7 @@
       "Down"
      ],
      "key_times": [
-      1794192022433
+      1794218315474
      ],
      "observation": {
       "speech_raw": "The end of the structures.",
@@ -401,8 +402,8 @@
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794192023438,
-     "t_end_ms": 1794192024442,
+     "t_start_ms": 1794218316478,
+     "t_end_ms": 1794218317482,
      "action": {
       "type": "key",
       "command": "Down"
@@ -411,7 +412,7 @@
       "Down"
      ],
      "key_times": [
-      1794192023438
+      1794218316478
      ],
      "observation": {
       "speech_raw": "The end of the structures.",

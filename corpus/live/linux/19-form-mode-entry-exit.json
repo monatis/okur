@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794192152117
+     "t_ms": 1794218523600
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794192153481,
-     "t_end_ms": 1794192154485,
+     "t_start_ms": 1794218524964,
+     "t_end_ms": 1794218525969,
      "action": {
       "type": "key",
       "command": "E"
@@ -31,7 +32,7 @@
       "E"
      ],
      "key_times": [
-      1794192153482
+      1794218524964
      ],
      "observation": {
       "speech_raw": "Full Name: \u001d Edit \u001e \nJane Doe",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794192154485,
-     "t_end_ms": 1794192155589,
+     "t_start_ms": 1794218525969,
+     "t_end_ms": 1794218527072,
      "action": {
       "type": "key",
       "command": "Enter"
@@ -51,7 +52,7 @@
       "Enter"
      ],
      "key_times": [
-      1794192154485
+      1794218525969
      ],
      "observation": {
       "speech_raw": "Forms and Interaction Reference Fixture\n \u001d FormRegion \u001e \nFull Name: \u001d Edit \u001e \nJane Doe\nType in text.",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794192155589,
-     "t_end_ms": 1794192156593,
+     "t_start_ms": 1794218527072,
+     "t_end_ms": 1794218528076,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -71,7 +72,7 @@
       "Escape"
      ],
      "key_times": [
-      1794192155589
+      1794218527072
      ],
      "observation": {
       "speech_raw": "virtual PC Cursor",

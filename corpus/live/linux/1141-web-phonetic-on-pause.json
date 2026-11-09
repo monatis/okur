@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ebcc22e6"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -16,70 +16,70 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794211741802
+     "t_ms": 1794216785551
     },
     {
      "key": "Down",
-     "t_ms": 1794211742163
+     "t_ms": 1794216785917
     },
     {
      "key": "Down",
-     "t_ms": 1794211742464
+     "t_ms": 1794216786218
     },
     {
      "key": "Down",
-     "t_ms": 1794211742766
+     "t_ms": 1794216786520
     },
     {
      "key": "Down",
-     "t_ms": 1794211743067
+     "t_ms": 1794216786822
     },
     {
      "key": "Down",
-     "t_ms": 1794211743368
+     "t_ms": 1794216787123
     },
     {
      "key": "Down",
-     "t_ms": 1794211743670
+     "t_ms": 1794216787425
     },
     {
      "key": "Down",
-     "t_ms": 1794211743972
+     "t_ms": 1794216787726
     },
     {
      "key": "Down",
-     "t_ms": 1794211744273
+     "t_ms": 1794216788027
     },
     {
      "key": "Down",
-     "t_ms": 1794211744574
+     "t_ms": 1794216788329
     },
     {
      "key": "Down",
-     "t_ms": 1794211744876
+     "t_ms": 1794216788630
     },
     {
      "key": "Down",
-     "t_ms": 1794211745177
+     "t_ms": 1794216788931
     },
     {
      "key": "Down",
-     "t_ms": 1794211745479
+     "t_ms": 1794216789234
     },
     {
      "key": "Down",
-     "t_ms": 1794211745780
+     "t_ms": 1794216789535
     },
     {
      "key": "Down",
-     "t_ms": 1794211746082
+     "t_ms": 1794216789837
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794211747386,
-     "t_end_ms": 1794211752001,
+     "t_start_ms": 1794216791141,
+     "t_end_ms": 1794216795755,
      "action": {
       "type": "key",
       "command": "Right"
@@ -88,7 +88,7 @@
       "Right"
      ],
      "key_times": [
-      1794211747386
+      1794216791141
      ],
      "observation": {
       "speech_raw": "d\nd",
@@ -98,8 +98,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794211752001,
-     "t_end_ms": 1794211756616,
+     "t_start_ms": 1794216795756,
+     "t_end_ms": 1794216800371,
      "action": {
       "type": "key",
       "command": "Right"
@@ -108,7 +108,7 @@
       "Right"
      ],
      "key_times": [
-      1794211752001
+      1794216795756
      ],
      "observation": {
       "speech_raw": "a\na",
@@ -118,8 +118,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794211756616,
-     "t_end_ms": 1794211761231,
+     "t_start_ms": 1794216800371,
+     "t_end_ms": 1794216804986,
      "action": {
       "type": "key",
       "command": "Left"
@@ -128,7 +128,7 @@
       "Left"
      ],
      "key_times": [
-      1794211756616
+      1794216800371
      ],
      "observation": {
       "speech_raw": "d\nd",

@@ -1,0 +1,446 @@
+{
+ "scenario_id": "1126-web-aria-radio-group-variants",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794216474898
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794216476258,
+     "t_end_ms": 1794216477263,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216476258
+     ],
+     "observation": {
+      "speech_raw": "Alpha \u001d group \u001e \nAlpha one  \u001d radio button \u001e   \u001dnot checked\u001e \n1 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794216477263,
+     "t_end_ms": 1794216478266,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216477263
+     ],
+     "observation": {
+      "speech_raw": "Alpha two  \u001d radio button \u001e   \u001dchecked\u001e \n2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794216478266,
+     "t_end_ms": 1794216479270,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216478266
+     ],
+     "observation": {
+      "speech_raw": "Alpha three  \u001d radio button \u001e   \u001dnot checked\u001e \n3 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794216479270,
+     "t_end_ms": 1794216480274,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216479270
+     ],
+     "observation": {
+      "speech_raw": "Bravo \u001d group \u001e \nBravo one  \u001d radio button \u001e   \u001dnot checked\u001e \n1 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794216480274,
+     "t_end_ms": 1794216481278,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216480274
+     ],
+     "observation": {
+      "speech_raw": "Bravo two  \u001d radio button \u001e   \u001dchecked\u001e \n2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794216481278,
+     "t_end_ms": 1794216482283,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216481278
+     ],
+     "observation": {
+      "speech_raw": "Bravo three  \u001d radio button \u001e   \u001dnot checked\u001e \n3 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794216482283,
+     "t_end_ms": 1794216483287,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216482283
+     ],
+     "observation": {
+      "speech_raw": "Charlie \u001d group \u001e \nCharlie one  \u001d radio button \u001e   \u001dnot checked\u001e \n1 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794216483287,
+     "t_end_ms": 1794216484291,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216483287
+     ],
+     "observation": {
+      "speech_raw": "Charlie two  \u001d radio button \u001e   \u001dchecked\u001e \n2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794216484291,
+     "t_end_ms": 1794216485296,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216484291
+     ],
+     "observation": {
+      "speech_raw": "Charlie three  \u001d radio button \u001e   \u001dnot checked\u001e \n3 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794216485296,
+     "t_end_ms": 1794216486300,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216485296
+     ],
+     "observation": {
+      "speech_raw": "Delta \u001d group \u001e \nDelta one  \u001d radio button \u001e   \u001dnot checked\u001e \n1 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794216486300,
+     "t_end_ms": 1794216487305,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216486300
+     ],
+     "observation": {
+      "speech_raw": "Delta two  \u001d radio button \u001e   \u001dchecked\u001e \n2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794216487305,
+     "t_end_ms": 1794216488310,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216487305
+     ],
+     "observation": {
+      "speech_raw": "Delta three  \u001d radio button \u001e   \u001dnot checked\u001e \n3 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794216488310,
+     "t_end_ms": 1794216489314,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216488310
+     ],
+     "observation": {
+      "speech_raw": "Echo \u001d group \u001e \nEcho one  \u001d radio button \u001e   \u001dnot checked\u001e \n1 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794216489314,
+     "t_end_ms": 1794216490318,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216489314
+     ],
+     "observation": {
+      "speech_raw": "Echo two  \u001d radio button \u001e   \u001dchecked\u001e \n2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794216490318,
+     "t_end_ms": 1794216491323,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216490318
+     ],
+     "observation": {
+      "speech_raw": "Echo three  \u001d radio button \u001e   \u001dnot checked\u001e \n3 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794216491323,
+     "t_end_ms": 1794216492327,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216491323
+     ],
+     "observation": {
+      "speech_raw": "Foxtrot \u001d group \u001e \nFoxtrot one  \u001d radio button \u001e   \u001dnot checked\u001e \n1 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s17",
+     "t_start_ms": 1794216492327,
+     "t_end_ms": 1794216493331,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216492327
+     ],
+     "observation": {
+      "speech_raw": "Foxtrot two  \u001d radio button \u001e   \u001dchecked\u001e \n2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s18",
+     "t_start_ms": 1794216493331,
+     "t_end_ms": 1794216494335,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216493331
+     ],
+     "observation": {
+      "speech_raw": "Foxtrot three  \u001d radio button \u001e   \u001dnot checked\u001e \n3 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s19",
+     "t_start_ms": 1794216494335,
+     "t_end_ms": 1794216495340,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216494335
+     ],
+     "observation": {
+      "speech_raw": "Golf \u001d group \u001e \nGolf one  \u001d radio button \u001e   \u001dnot checked\u001e \n1 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s20",
+     "t_start_ms": 1794216495340,
+     "t_end_ms": 1794216496344,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216495340
+     ],
+     "observation": {
+      "speech_raw": "Golf two  \u001d radio button \u001e   \u001dchecked\u001e \n2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s21",
+     "t_start_ms": 1794216496344,
+     "t_end_ms": 1794216497349,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794216496344
+     ],
+     "observation": {
+      "speech_raw": "Golf three  \u001d radio button \u001e   \u001dnot checked\u001e \n3 of 3",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

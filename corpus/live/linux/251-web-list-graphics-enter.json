@@ -1,0 +1,130 @@
+{
+ "scenario_id": "251-web-list-graphics-enter",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Escape",
+     "t_ms": 1794220665394
+    },
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794220665761
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794220667066,
+     "t_end_ms": 1794220668072,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Insert+G"
+     },
+     "keys": [
+      "Ctrl+Insert+G"
+     ],
+     "key_times": [
+      1794220667066
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794220668072,
+     "t_end_ms": 1794220669075,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794220668072
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794220669075,
+     "t_end_ms": 1794220670180,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794220669075
+     ],
+     "observation": {
+      "speech_raw": "Front entrance of the Riverside City Library at dusk\n \u001d Graphic \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794220670180,
+     "t_end_ms": 1794220671185,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794220670180
+     ],
+     "observation": {
+      "speech_raw": "Front entrance of the Riverside City Library at dusk\n \u001d Graphic \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794220671185,
+     "t_end_ms": 1794220672188,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794220671185
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e What changes",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

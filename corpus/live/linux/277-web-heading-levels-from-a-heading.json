@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794193622666
+     "t_ms": 1794221462948
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794193624029,
-     "t_end_ms": 1794193625034,
+     "t_start_ms": 1794221464312,
+     "t_end_ms": 1794221465316,
      "action": {
       "type": "key",
       "command": "1"
@@ -31,7 +32,7 @@
       "1"
      ],
      "key_times": [
-      1794193624029
+      1794221464312
      ],
      "observation": {
       "speech_raw": "User guide\n \u001d heading level 1 \u001e",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794193625034,
-     "t_end_ms": 1794193626038,
+     "t_start_ms": 1794221465316,
+     "t_end_ms": 1794221466319,
      "action": {
       "type": "key",
       "command": "2"
@@ -51,7 +52,7 @@
       "2"
      ],
      "key_times": [
-      1794193625034
+      1794221465316
      ],
      "observation": {
       "speech_raw": "Install\n \u001d heading level 2 \u001e",
@@ -61,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794193626038,
-     "t_end_ms": 1794193627042,
+     "t_start_ms": 1794221466319,
+     "t_end_ms": 1794221467323,
      "action": {
       "type": "key",
       "command": "1"
@@ -71,7 +72,7 @@
       "1"
      ],
      "key_times": [
-      1794193626038
+      1794221466319
      ],
      "observation": {
       "speech_raw": "Reference\n \u001d heading level 1 \u001e",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794193627042,
-     "t_end_ms": 1794193628046,
+     "t_start_ms": 1794221467323,
+     "t_end_ms": 1794221468328,
      "action": {
       "type": "key",
       "command": "Shift+2"
@@ -91,7 +92,7 @@
       "Shift+2"
      ],
      "key_times": [
-      1794193627042
+      1794221467323
      ],
      "observation": {
       "speech_raw": "Reference \u001d heading level 1 \u001e \nConfigure\n \u001d heading level 2 \u001e",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794193628046,
-     "t_end_ms": 1794193629051,
+     "t_start_ms": 1794221468328,
+     "t_end_ms": 1794221469333,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -111,7 +112,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794193628046
+      1794221468328
      ],
      "observation": {
       "speech_raw": "Headings in Sections - Headings Fixture",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794193629051,
-     "t_end_ms": 1794193630055,
+     "t_start_ms": 1794221469333,
+     "t_end_ms": 1794221470338,
      "action": {
       "type": "key",
       "command": "Down"
@@ -131,7 +132,7 @@
       "Down"
      ],
      "key_times": [
-      1794193629051
+      1794221469333
      ],
      "observation": {
       "speech_raw": "main region",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794193630055,
-     "t_end_ms": 1794193631059,
+     "t_start_ms": 1794221470338,
+     "t_end_ms": 1794221471342,
      "action": {
       "type": "key",
       "command": "Down"
@@ -151,7 +152,7 @@
       "Down"
      ],
      "key_times": [
-      1794193630055
+      1794221470338
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e User guide",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794193631059,
-     "t_end_ms": 1794193632063,
+     "t_start_ms": 1794221471342,
+     "t_end_ms": 1794221472346,
      "action": {
       "type": "key",
       "command": "2"
@@ -171,7 +172,7 @@
       "2"
      ],
      "key_times": [
-      1794193631059
+      1794221471342
      ],
      "observation": {
       "speech_raw": "Install\n \u001d heading level 2 \u001e",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794193632063,
-     "t_end_ms": 1794193633068,
+     "t_start_ms": 1794221472346,
+     "t_end_ms": 1794221473352,
      "action": {
       "type": "key",
       "command": "Ctrl+End"
@@ -191,7 +192,7 @@
       "Ctrl+End"
      ],
      "key_times": [
-      1794193632063
+      1794221472346
      ],
      "observation": {
       "speech_raw": "main region end",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794193633068,
-     "t_end_ms": 1794193634074,
+     "t_start_ms": 1794221473352,
+     "t_end_ms": 1794221474356,
      "action": {
       "type": "key",
       "command": "Shift+2"
@@ -211,7 +212,7 @@
       "Shift+2"
      ],
      "key_times": [
-      1794193633068
+      1794221473352
      ],
      "observation": {
       "speech_raw": "Settings\n \u001d heading level 2 \u001e",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794193634074,
-     "t_end_ms": 1794193635079,
+     "t_start_ms": 1794221474356,
+     "t_end_ms": 1794221475361,
      "action": {
       "type": "key",
       "command": "Shift+3"
@@ -231,7 +232,7 @@
       "Shift+3"
      ],
      "key_times": [
-      1794193634074
+      1794221474356
      ],
      "observation": {
       "speech_raw": "Settings \u001d heading level 2 \u001e \nReading\n \u001d heading level 3 \u001e",

@@ -1,0 +1,86 @@
+{
+ "scenario_id": "25-table-row-up",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": null,
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "240fb118"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794220608931
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794220610296,
+     "t_end_ms": 1794220611300,
+     "action": {
+      "type": "jaws_script",
+      "command": "MoveToNextTable"
+     },
+     "keys": [
+      "T"
+     ],
+     "key_times": [
+      1794220610296
+     ],
+     "observation": {
+      "speech_raw": "table with 4 columns and 4 rows\nQ3 Financial Summary Table\nColumn 1, Row 1\nQuarter",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794220611300,
+     "t_end_ms": 1794220612305,
+     "action": {
+      "type": "keyboard",
+      "command": "^%{DOWN}"
+     },
+     "keys": [
+      "Ctrl+Alt+Down"
+     ],
+     "key_times": [
+      1794220611300
+     ],
+     "observation": {
+      "speech_raw": "Q1\nRow 2 of 4",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794220612305,
+     "t_end_ms": 1794220613310,
+     "action": {
+      "type": "keyboard",
+      "command": "^%{UP}"
+     },
+     "keys": [
+      "Ctrl+Alt+Up"
+     ],
+     "key_times": [
+      1794220612305
+     ],
+     "observation": {
+      "speech_raw": "Quarter\nRow 1 of 4",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

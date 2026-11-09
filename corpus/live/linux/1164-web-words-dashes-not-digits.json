@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": "2",
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,54 +16,54 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794191147096
+     "t_ms": 1794217440138
     },
     {
      "key": "Down",
-     "t_ms": 1794191147455
+     "t_ms": 1794217440497
     },
     {
      "key": "Down",
-     "t_ms": 1794191147757
+     "t_ms": 1794217440799
     },
     {
      "key": "Down",
-     "t_ms": 1794191148058
+     "t_ms": 1794217441100
     },
     {
      "key": "Down",
-     "t_ms": 1794191148360
+     "t_ms": 1794217441402
     },
     {
      "key": "Down",
-     "t_ms": 1794191148661
+     "t_ms": 1794217441703
     },
     {
      "key": "Down",
-     "t_ms": 1794191148963
+     "t_ms": 1794217442005
     },
     {
      "key": "Down",
-     "t_ms": 1794191149264
+     "t_ms": 1794217442307
     },
     {
      "key": "Down",
-     "t_ms": 1794191149565
+     "t_ms": 1794217442608
     },
     {
      "key": "Down",
-     "t_ms": 1794191149866
+     "t_ms": 1794217442909
     },
     {
      "key": "Down",
-     "t_ms": 1794191150168
+     "t_ms": 1794217443211
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794191151473,
-     "t_end_ms": 1794191152477,
+     "t_start_ms": 1794217444516,
+     "t_end_ms": 1794217445521,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -71,7 +72,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794191151473
+      1794217444516
      ],
      "observation": {
       "speech_raw": "MenuBar getElementById XMLHttpRequest iPhone McDonald PowerShell",
@@ -81,8 +82,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794191152477,
-     "t_end_ms": 1794191153482,
+     "t_start_ms": 1794217445521,
+     "t_end_ms": 1794217446525,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -91,7 +92,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794191152477
+      1794217445521
      ],
      "observation": {
       "speech_raw": "getElementById",
@@ -101,8 +102,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794191153482,
-     "t_end_ms": 1794191154487,
+     "t_start_ms": 1794217446525,
+     "t_end_ms": 1794217447531,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -111,7 +112,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794191153482
+      1794217446525
      ],
      "observation": {
       "speech_raw": "XMLHttpRequest",
@@ -121,8 +122,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794191154487,
-     "t_end_ms": 1794191155492,
+     "t_start_ms": 1794217447531,
+     "t_end_ms": 1794217448536,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -131,7 +132,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794191154487
+      1794217447531
      ],
      "observation": {
       "speech_raw": "iPhone",
@@ -141,8 +142,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794191155492,
-     "t_end_ms": 1794191156497,
+     "t_start_ms": 1794217448536,
+     "t_end_ms": 1794217449541,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -151,7 +152,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794191155492
+      1794217448536
      ],
      "observation": {
       "speech_raw": "McDonald",
@@ -161,8 +162,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794191156497,
-     "t_end_ms": 1794191157502,
+     "t_start_ms": 1794217449541,
+     "t_end_ms": 1794217450546,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -171,7 +172,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794191156497
+      1794217449541
      ],
      "observation": {
       "speech_raw": "PowerShell",
@@ -181,8 +182,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794191157502,
-     "t_end_ms": 1794191158506,
+     "t_start_ms": 1794217450546,
+     "t_end_ms": 1794217451550,
      "action": {
       "type": "key",
       "command": "Down"
@@ -191,7 +192,7 @@
       "Down"
      ],
      "key_times": [
-      1794191157502
+      1794217450546
      ],
      "observation": {
       "speech_raw": "System32 x86_64 COVID19 123RON 1st 2nd 3rd",
@@ -201,8 +202,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794191158506,
-     "t_end_ms": 1794191159511,
+     "t_start_ms": 1794217451550,
+     "t_end_ms": 1794217452555,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -211,7 +212,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794191158506
+      1794217451550
      ],
      "observation": {
       "speech_raw": "x86_64",
@@ -221,8 +222,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794191159511,
-     "t_end_ms": 1794191160517,
+     "t_start_ms": 1794217452555,
+     "t_end_ms": 1794217453560,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -231,7 +232,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794191159511
+      1794217452555
      ],
      "observation": {
       "speech_raw": "COVID19",
@@ -241,8 +242,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794191160517,
-     "t_end_ms": 1794191161522,
+     "t_start_ms": 1794217453560,
+     "t_end_ms": 1794217454565,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -251,7 +252,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794191160517
+      1794217453560
      ],
      "observation": {
       "speech_raw": "123RON",
@@ -261,8 +262,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794191161522,
-     "t_end_ms": 1794191162527,
+     "t_start_ms": 1794217454565,
+     "t_end_ms": 1794217455571,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -271,7 +272,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794191161522
+      1794217454565
      ],
      "observation": {
       "speech_raw": "1st",
@@ -281,8 +282,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794191162527,
-     "t_end_ms": 1794191163532,
+     "t_start_ms": 1794217455571,
+     "t_end_ms": 1794217456576,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -291,7 +292,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794191162527
+      1794217455571
      ],
      "observation": {
       "speech_raw": "2nd",
@@ -301,8 +302,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794191163532,
-     "t_end_ms": 1794191164537,
+     "t_start_ms": 1794217456576,
+     "t_end_ms": 1794217457580,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -311,7 +312,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794191163532
+      1794217456576
      ],
      "observation": {
       "speech_raw": "3rd",
@@ -321,8 +322,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794191164537,
-     "t_end_ms": 1794191165541,
+     "t_start_ms": 1794217457580,
+     "t_end_ms": 1794217458583,
      "action": {
       "type": "key",
       "command": "Down"
@@ -331,7 +332,7 @@
       "Down"
      ],
      "key_times": [
-      1794191164537
+      1794217457580
      ],
      "observation": {
       "speech_raw": "7 42 1234 54321 123456 1-800-444-4443 2.5 1,000,000 10:30",
@@ -341,8 +342,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794191165541,
-     "t_end_ms": 1794191166546,
+     "t_start_ms": 1794217458583,
+     "t_end_ms": 1794217459587,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -351,7 +352,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794191165541
+      1794217458583
      ],
      "observation": {
       "speech_raw": "42",
@@ -361,8 +362,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794191166546,
-     "t_end_ms": 1794191167551,
+     "t_start_ms": 1794217459587,
+     "t_end_ms": 1794217460592,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -371,7 +372,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794191166546
+      1794217459587
      ],
      "observation": {
       "speech_raw": "1234",
@@ -381,8 +382,8 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794191167551,
-     "t_end_ms": 1794191168556,
+     "t_start_ms": 1794217460592,
+     "t_end_ms": 1794217461597,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -391,7 +392,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794191167551
+      1794217460592
      ],
      "observation": {
       "speech_raw": "54321",
@@ -401,8 +402,8 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794191168556,
-     "t_end_ms": 1794191169561,
+     "t_start_ms": 1794217461597,
+     "t_end_ms": 1794217462602,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -411,7 +412,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794191168556
+      1794217461597
      ],
      "observation": {
       "speech_raw": "123456",
@@ -421,8 +422,8 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794191169561,
-     "t_end_ms": 1794191170566,
+     "t_start_ms": 1794217462602,
+     "t_end_ms": 1794217463607,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -431,7 +432,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794191169561
+      1794217462602
      ],
      "observation": {
       "speech_raw": "1-800-444-4443",
@@ -441,8 +442,8 @@
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794191170566,
-     "t_end_ms": 1794191171571,
+     "t_start_ms": 1794217463607,
+     "t_end_ms": 1794217464612,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -451,7 +452,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794191170566
+      1794217463607
      ],
      "observation": {
       "speech_raw": "2.5",
@@ -461,8 +462,8 @@
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794191171571,
-     "t_end_ms": 1794191172576,
+     "t_start_ms": 1794217464612,
+     "t_end_ms": 1794217465617,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -471,7 +472,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794191171571
+      1794217464612
      ],
      "observation": {
       "speech_raw": "1,000,000",
@@ -481,8 +482,8 @@
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794191172576,
-     "t_end_ms": 1794191173582,
+     "t_start_ms": 1794217465617,
+     "t_end_ms": 1794217466622,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -491,7 +492,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794191172576
+      1794217465617
      ],
      "observation": {
       "speech_raw": "10:30",
@@ -501,8 +502,8 @@
     },
     {
      "step_id": "s23",
-     "t_start_ms": 1794191173582,
-     "t_end_ms": 1794191174586,
+     "t_start_ms": 1794217466622,
+     "t_end_ms": 1794217467626,
      "action": {
       "type": "key",
       "command": "Down"
@@ -511,7 +512,7 @@
       "Down"
      ],
      "key_times": [
-      1794191173582
+      1794217466622
      ],
      "observation": {
       "speech_raw": "03-16-00 3/2/2002 1/3 $0.02 $1,250.50",
@@ -521,8 +522,8 @@
     },
     {
      "step_id": "s24",
-     "t_start_ms": 1794191174586,
-     "t_end_ms": 1794191175592,
+     "t_start_ms": 1794217467626,
+     "t_end_ms": 1794217468632,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -531,7 +532,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794191174586
+      1794217467626
      ],
      "observation": {
       "speech_raw": "3/2/2002",
@@ -541,8 +542,8 @@
     },
     {
      "step_id": "s25",
-     "t_start_ms": 1794191175592,
-     "t_end_ms": 1794191176597,
+     "t_start_ms": 1794217468632,
+     "t_end_ms": 1794217469637,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -551,7 +552,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794191175592
+      1794217468632
      ],
      "observation": {
       "speech_raw": "1/3",
@@ -561,8 +562,8 @@
     },
     {
      "step_id": "s26",
-     "t_start_ms": 1794191176597,
-     "t_end_ms": 1794191177602,
+     "t_start_ms": 1794217469637,
+     "t_end_ms": 1794217470643,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -571,7 +572,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794191176597
+      1794217469637
      ],
      "observation": {
       "speech_raw": "$0.02",
@@ -581,8 +582,8 @@
     },
     {
      "step_id": "s27",
-     "t_start_ms": 1794191177602,
-     "t_end_ms": 1794191178607,
+     "t_start_ms": 1794217470643,
+     "t_end_ms": 1794217471648,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -591,7 +592,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794191177602
+      1794217470643
      ],
      "observation": {
       "speech_raw": "$1,250.50",
@@ -601,8 +602,8 @@
     },
     {
      "step_id": "s28",
-     "t_start_ms": 1794191178607,
-     "t_end_ms": 1794191179612,
+     "t_start_ms": 1794217471649,
+     "t_end_ms": 1794217472653,
      "action": {
       "type": "key",
       "command": "Down"
@@ -611,7 +612,7 @@
       "Down"
      ],
      "key_times": [
-      1794191178607
+      1794217471649
      ],
      "observation": {
       "speech_raw": "Ada READ me B x",
@@ -621,8 +622,8 @@
     },
     {
      "step_id": "s29",
-     "t_start_ms": 1794191179612,
-     "t_end_ms": 1794191180616,
+     "t_start_ms": 1794217472653,
+     "t_end_ms": 1794217473657,
      "action": {
       "type": "key",
       "command": "Down"
@@ -631,7 +632,7 @@
       "Down"
      ],
      "key_times": [
-      1794191179612
+      1794217472653
      ],
      "observation": {
       "speech_raw": "JAWS sister-in-law 2:00 P.M. aB9 \u00e9 \u20ac",

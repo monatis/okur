@@ -5,8 +5,9 @@
   "platform": "linux",
   "web_verbosity": null,
   "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "240fb118"
  },
  "trials": [
   {
@@ -15,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794192126025
+     "t_ms": 1794218418802
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794192127388,
-     "t_end_ms": 1794192128392,
+     "t_start_ms": 1794218420169,
+     "t_end_ms": 1794218421173,
      "action": {
       "type": "jaws_script",
       "command": "MoveToNextRegion"
@@ -31,7 +32,7 @@
       "R"
      ],
      "key_times": [
-      1794192127388
+      1794218420169
      ],
      "observation": {
       "speech_raw": "banner",
@@ -41,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794192128392,
-     "t_end_ms": 1794192129396,
+     "t_start_ms": 1794218421173,
+     "t_end_ms": 1794218422177,
      "action": {
       "type": "jaws_script",
       "command": "MoveToNextRegion"
@@ -51,7 +52,7 @@
       "R"
      ],
      "key_times": [
-      1794192128392
+      1794218421173
      ],
      "observation": {
       "speech_raw": "Main Navigation navigation region",
