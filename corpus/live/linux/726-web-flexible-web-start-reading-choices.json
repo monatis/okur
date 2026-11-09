@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "ad9029d7"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794229820899
+     "t_ms": 1794240925635
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794229822259,
-     "t_end_ms": 1794229823263,
+     "t_start_ms": 1794240927000,
+     "t_end_ms": 1794240928004,
      "action": {
       "type": "key",
       "command": "H"
@@ -32,7 +32,7 @@
       "H"
      ],
      "key_times": [
-      1794229822259
+      1794240927000
      ],
      "observation": {
       "speech_raw": "Weekend events\n \u001d heading level 1 \u001e",
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794229823263,
-     "t_end_ms": 1794229824268,
+     "t_start_ms": 1794240928004,
+     "t_end_ms": 1794240929008,
      "action": {
       "type": "key",
       "command": "Insert+Space"
@@ -52,7 +52,7 @@
       "Insert+Space"
      ],
      "key_times": [
-      1794229823263
+      1794240928004
      ],
      "observation": {
       "speech_raw": "",
@@ -62,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794229824268,
-     "t_end_ms": 1794229825272,
+     "t_start_ms": 1794240929008,
+     "t_end_ms": 1794240930212,
      "action": {
       "type": "key",
       "command": "X"
@@ -72,18 +72,18 @@
       "X"
      ],
      "key_times": [
-      1794229824268
+      1794240929008
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Flexible Web \u001d dialog \u001e \nCreate a new customization \u001d radio button \u001e  \u001dchecked\u001e \n1 of 5\nTo change the selection press Up or Down Arrow.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794229825272,
-     "t_end_ms": 1794229826277,
+     "t_start_ms": 1794240930212,
+     "t_end_ms": 1794240931618,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+N\")"
@@ -92,18 +92,18 @@
       "Alt+N"
      ],
      "key_times": [
-      1794229825272
+      1794240930212
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Choose an Action \u001d dialog \u001e \nHide an element \u001d radio button \u001e  \u001dchecked\u001e \n1 of 2\nTo change the selection press Up or Down Arrow.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794229826277,
-     "t_end_ms": 1794229827281,
+     "t_start_ms": 1794240931618,
+     "t_end_ms": 1794240932722,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -112,18 +112,18 @@
       "DownArrow"
      ],
      "key_times": [
-      1794229826277
+      1794240931618
      ],
      "observation": {
-      "speech_raw": "Three events open to everyone this weekend.",
+      "speech_raw": "Start reading at an element \u001d radio button \u001e  \u001dchecked\u001e \n2 of 2\nTo change the selection press Up or Down Arrow.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794229827281,
-     "t_end_ms": 1794229828287,
+     "t_start_ms": 1794240932722,
+     "t_end_ms": 1794240934129,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+N\")"
@@ -132,18 +132,18 @@
       "Alt+N"
      ],
      "key_times": [
-      1794229827281
+      1794240932722
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "_Start reading at an element \u001d radio button \u001e  \u001dnot checked\u001e \nTo change the selection press Up or Down Arrow.\nChoose an element \u001d dialog \u001e \nWhich of the following elements would you like to customize? \u001d List box \u001e \nheading level 1 Weekend events\n1 of 2\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794229828287,
-     "t_end_ms": 1794229829291,
+     "t_start_ms": 1794240934129,
+     "t_end_ms": 1794240935233,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -152,18 +152,18 @@
       "DownArrow"
      ],
      "key_times": [
-      1794229828287
+      1794240934129
      ],
      "observation": {
-      "speech_raw": " \u001d heading level 2 \u001e Saturday market",
+      "speech_raw": "MainRegion\n2 of 2",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794229829291,
-     "t_end_ms": 1794229830295,
+     "t_start_ms": 1794240935233,
+     "t_end_ms": 1794240936338,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"UpArrow\")"
@@ -172,18 +172,18 @@
       "UpArrow"
      ],
      "key_times": [
-      1794229829291
+      1794240935233
      ],
      "observation": {
-      "speech_raw": "Three events open to everyone this weekend.",
+      "speech_raw": "heading level 1 Weekend events\n1 of 2",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794229830295,
-     "t_end_ms": 1794229831300,
+     "t_start_ms": 1794240936338,
+     "t_end_ms": 1794240937744,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+N\")"
@@ -192,18 +192,18 @@
       "Alt+N"
      ],
      "key_times": [
-      1794229830295
+      1794240936338
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "To move to an item press the Arrow keys.\nChoose a customization \u001d dialog \u001e \nSelect a customization \u001d List box \u001e \nStart at heading level 1 1 from the top with text: \"Weekend events\", and with id = \"events\"\n1 of 6\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794229831300,
-     "t_end_ms": 1794229832305,
+     "t_start_ms": 1794240937744,
+     "t_end_ms": 1794240938848,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -212,18 +212,18 @@
       "DownArrow"
      ],
      "key_times": [
-      1794229831300
+      1794240937744
      ],
      "observation": {
-      "speech_raw": " \u001d heading level 2 \u001e Saturday market",
+      "speech_raw": "Start at any heading level 1 with text: \"Weekend events\"\n2 of 6",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794229832305,
-     "t_end_ms": 1794229833309,
+     "t_start_ms": 1794240938848,
+     "t_end_ms": 1794240939953,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -232,18 +232,18 @@
       "DownArrow"
      ],
      "key_times": [
-      1794229832305
+      1794240938848
      ],
      "observation": {
-      "speech_raw": "The farmers' market opens at eight in Mill Square.",
+      "speech_raw": "Start at any heading level 1 with id = \"events\"\n3 of 6",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794229833309,
-     "t_end_ms": 1794229834314,
+     "t_start_ms": 1794240939953,
+     "t_end_ms": 1794240940957,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Escape\")"
@@ -252,7 +252,7 @@
       "Escape"
      ],
      "key_times": [
-      1794229833309
+      1794240939953
      ],
      "observation": {
       "speech_raw": "",
@@ -262,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794229834314,
-     "t_end_ms": 1794229835318,
+     "t_start_ms": 1794240940957,
+     "t_end_ms": 1794240941961,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Escape\")"
@@ -272,7 +272,7 @@
       "Escape"
      ],
      "key_times": [
-      1794229834314
+      1794240940957
      ],
      "observation": {
       "speech_raw": "",
@@ -282,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794229835318,
-     "t_end_ms": 1794229836324,
+     "t_start_ms": 1794240941961,
+     "t_end_ms": 1794240942966,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -292,10 +292,10 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794229835318
+      1794240941961
      ],
      "observation": {
-      "speech_raw": "The farmers' market opens at eight in Mill Square.",
+      "speech_raw": " \u001d heading level 1 \u001e Weekend events",
       "settled": true
      },
      "step_success": true

@@ -7,23 +7,23 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "ad9029d7"
  },
  "trials": [
   {
    "trial_index": 1,
-   "trial_success": false,
+   "trial_success": true,
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794227403660
+     "t_ms": 1794241606479
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794227405023,
-     "t_end_ms": 1794227406127,
+     "t_start_ms": 1794241607860,
+     "t_end_ms": 1794241608965,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -32,7 +32,7 @@
       "Tab"
      ],
      "key_times": [
-      1794227405023
+      1794241607860
      ],
      "observation": {
       "speech_raw": "Create Your Account - Riverside Library\n \u001d MainRegion \u001e \n \u001d FormRegion \u001e \nFull name \u001d Edit \u001e \n \u001dRequired\u001e \nblank\nType in text.",
@@ -42,20 +42,32 @@
     },
     {
      "step_id": "s2",
+     "t_start_ms": 1794241608965,
+     "t_end_ms": 1794241609970,
      "action": {
       "type": "text",
       "command": "abc"
      },
+     "keys": [
+      "a",
+      "b",
+      "c"
+     ],
+     "key_times": [
+      1794241608965,
+      1794241608966,
+      1794241608967
+     ],
      "observation": {
       "speech_raw": "",
-      "skipped": true
+      "settled": true
      },
-     "step_success": false
+     "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794227406127,
-     "t_end_ms": 1794227407131,
+     "t_start_ms": 1794241609970,
+     "t_end_ms": 1794241611073,
      "action": {
       "type": "key",
       "command": "Up"
@@ -64,18 +76,18 @@
       "Up"
      ],
      "key_times": [
-      1794227406127
+      1794241609970
      ],
      "observation": {
-      "speech_raw": "Full name",
+      "speech_raw": "abc",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794227407131,
-     "t_end_ms": 1794227408134,
+     "t_start_ms": 1794241611073,
+     "t_end_ms": 1794241612077,
      "action": {
       "type": "key",
       "command": "Up"
@@ -84,67 +96,7 @@
       "Up"
      ],
      "key_times": [
-      1794227407131
-     ],
-     "observation": {
-      "speech_raw": "Fields marked required must be filled in.",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
-     "step_id": "s5",
-     "t_start_ms": 1794227408134,
-     "t_end_ms": 1794227409138,
-     "action": {
-      "type": "key",
-      "command": "Up"
-     },
-     "keys": [
-      "Up"
-     ],
-     "key_times": [
-      1794227408134
-     ],
-     "observation": {
-      "speech_raw": " \u001d heading level 1 \u001e Create your account",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
-     "step_id": "s6",
-     "t_start_ms": 1794227409138,
-     "t_end_ms": 1794227410141,
-     "action": {
-      "type": "key",
-      "command": "Down"
-     },
-     "keys": [
-      "Down"
-     ],
-     "key_times": [
-      1794227409138
-     ],
-     "observation": {
-      "speech_raw": "Fields marked required must be filled in.",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
-     "step_id": "s7",
-     "t_start_ms": 1794227410141,
-     "t_end_ms": 1794227411146,
-     "action": {
-      "type": "key",
-      "command": "Down"
-     },
-     "keys": [
-      "Down"
-     ],
-     "key_times": [
-      1794227410141
+      1794241611073
      ],
      "observation": {
       "speech_raw": "Full name",
@@ -153,9 +105,29 @@
      "step_success": true
     },
     {
-     "step_id": "s8",
-     "t_start_ms": 1794227411146,
-     "t_end_ms": 1794227412150,
+     "step_id": "s5",
+     "t_start_ms": 1794241612077,
+     "t_end_ms": 1794241613081,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794241612077
+     ],
+     "observation": {
+      "speech_raw": "Fields marked required must be filled in.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794241613081,
+     "t_end_ms": 1794241614085,
      "action": {
       "type": "key",
       "command": "Down"
@@ -164,7 +136,27 @@
       "Down"
      ],
      "key_times": [
-      1794227411146
+      1794241613081
+     ],
+     "observation": {
+      "speech_raw": "Full name",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794241614085,
+     "t_end_ms": 1794241615089,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794241614085
      ],
      "observation": {
       "speech_raw": "",
@@ -173,9 +165,9 @@
      "step_success": true
     },
     {
-     "step_id": "s9",
-     "t_start_ms": 1794227412150,
-     "t_end_ms": 1794227413155,
+     "step_id": "s8",
+     "t_start_ms": 1794241615089,
+     "t_end_ms": 1794241616193,
      "action": {
       "type": "key",
       "command": "Down"
@@ -184,7 +176,27 @@
       "Down"
      ],
      "key_times": [
-      1794227412150
+      1794241615089
+     ],
+     "observation": {
+      "speech_raw": "abc",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794241616193,
+     "t_end_ms": 1794241617197,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794241616193
      ],
      "observation": {
       "speech_raw": "Email address",
@@ -194,8 +206,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794227413155,
-     "t_end_ms": 1794227414159,
+     "t_start_ms": 1794241617197,
+     "t_end_ms": 1794241618201,
      "action": {
       "type": "key",
       "command": "Down"
@@ -204,7 +216,7 @@
       "Down"
      ],
      "key_times": [
-      1794227413155
+      1794241617197
      ],
      "observation": {
       "speech_raw": "Email address \u001d Edit \u001e \nsam@example.com",
@@ -214,8 +226,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794227414159,
-     "t_end_ms": 1794227415163,
+     "t_start_ms": 1794241618201,
+     "t_end_ms": 1794241619206,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -224,7 +236,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794227414159
+      1794241618201
      ],
      "observation": {
       "speech_raw": "Email address  \u001d Edit \u001e \nsam@example.com",

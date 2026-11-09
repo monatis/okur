@@ -7,23 +7,23 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "ad9029d7"
  },
  "trials": [
   {
    "trial_index": 1,
-   "trial_success": false,
+   "trial_success": true,
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794228004031
+     "t_ms": 1794241641704
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794228005395,
-     "t_end_ms": 1794228006398,
+     "t_start_ms": 1794241643077,
+     "t_end_ms": 1794241644080,
      "action": {
       "type": "key",
       "command": "E"
@@ -32,7 +32,7 @@
       "E"
      ],
      "key_times": [
-      1794228005395
+      1794241643077
      ],
      "observation": {
       "speech_raw": "Full name \u001d Edit \u001e \n \u001dRequired\u001e \nblank",
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794228006398,
-     "t_end_ms": 1794228007403,
+     "t_start_ms": 1794241644080,
+     "t_end_ms": 1794241645085,
      "action": {
       "type": "key",
       "command": "Insert+5"
@@ -52,7 +52,7 @@
       "Insert+5"
      ],
      "key_times": [
-      1794228006398
+      1794241644080
      ],
      "observation": {
       "speech_raw": "default on default",
@@ -62,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794228007403,
-     "t_end_ms": 1794228008507,
+     "t_start_ms": 1794241645085,
+     "t_end_ms": 1794241646189,
      "action": {
       "type": "key",
       "command": "Enter"
@@ -72,7 +72,7 @@
       "Enter"
      ],
      "key_times": [
-      1794228007403
+      1794241645085
      ],
      "observation": {
       "speech_raw": "Create Your Account - Riverside Library\n \u001d MainRegion \u001e \n \u001d FormRegion \u001e \nFull name \u001d Edit \u001e \n \u001dRequired\u001e \nblank\nType in text.",
@@ -82,20 +82,30 @@
     },
     {
      "step_id": "s4",
+     "t_start_ms": 1794241646189,
+     "t_end_ms": 1794241647194,
      "action": {
       "type": "text",
       "command": "ab"
      },
+     "keys": [
+      "a",
+      "b"
+     ],
+     "key_times": [
+      1794241646189,
+      1794241646190
+     ],
      "observation": {
       "speech_raw": "",
-      "skipped": true
+      "settled": true
      },
-     "step_success": false
+     "step_success": true
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794228008507,
-     "t_end_ms": 1794228009511,
+     "t_start_ms": 1794241647194,
+     "t_end_ms": 1794241648199,
      "action": {
       "type": "key",
       "command": "Insert+5"
@@ -104,7 +114,7 @@
       "Insert+5"
      ],
      "key_times": [
-      1794228008507
+      1794241647194
      ],
      "observation": {
       "speech_raw": "black on white",
@@ -114,8 +124,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794228009511,
-     "t_end_ms": 1794228010515,
+     "t_start_ms": 1794241648199,
+     "t_end_ms": 1794241649204,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -124,7 +134,7 @@
       "Escape"
      ],
      "key_times": [
-      1794228009511
+      1794241648199
      ],
      "observation": {
       "speech_raw": "virtual PC Cursor",
@@ -134,8 +144,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794228010515,
-     "t_end_ms": 1794228011520,
+     "t_start_ms": 1794241649204,
+     "t_end_ms": 1794241650209,
      "action": {
       "type": "key",
       "command": "Insert+5"
@@ -144,10 +154,10 @@
       "Insert+5"
      ],
      "key_times": [
-      1794228010515
+      1794241649204
      ],
      "observation": {
-      "speech_raw": "default on default",
+      "speech_raw": "black on white",
       "settled": true
      },
      "step_success": true

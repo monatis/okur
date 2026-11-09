@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "ad9029d7"
  },
  "trials": [
   {
@@ -16,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794220814207
+     "t_ms": 1794240621488
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794220814572
+     "t_ms": 1794240621858
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794220815878,
-     "t_end_ms": 1794220817083,
+     "t_start_ms": 1794240623164,
+     "t_end_ms": 1794240624169,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+R"
@@ -36,27 +36,7 @@
       "Ctrl+Insert+R"
      ],
      "key_times": [
-      1794220815878
-     ],
-     "observation": {
-      "speech_raw": "Document Regions \u001d dialog \u001e \nMove To region start \u001d Button \u001e \nTo activate press spacebar.",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
-     "step_id": "s2",
-     "t_start_ms": 1794220817083,
-     "t_end_ms": 1794220818088,
-     "action": {
-      "type": "jaws_function",
-      "command": "TypeKey(\"DownArrow\")"
-     },
-     "keys": [
-      "DownArrow"
-     ],
-     "key_times": [
-      1794220817083
+      1794240623164
      ],
      "observation": {
       "speech_raw": "",
@@ -65,9 +45,29 @@
      "step_success": true
     },
     {
+     "step_id": "s2",
+     "t_start_ms": 1794240624169,
+     "t_end_ms": 1794240625373,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794240624169
+     ],
+     "observation": {
+      "speech_raw": "Document Regions \u001d dialog \u001e \nRegions \u001d Tree view \u001e \nPrimary Navigation\n2 of 5\nTo move through or expand items use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
      "step_id": "s3",
-     "t_start_ms": 1794220818088,
-     "t_end_ms": 1794220819091,
+     "t_start_ms": 1794240625373,
+     "t_end_ms": 1794240626377,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -76,7 +76,7 @@
       "Enter"
      ],
      "key_times": [
-      1794220818088
+      1794240625373
      ],
      "observation": {
       "speech_raw": "",
@@ -86,8 +86,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794220819091,
-     "t_end_ms": 1794220820095,
+     "t_start_ms": 1794240626377,
+     "t_end_ms": 1794240627381,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -96,18 +96,18 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794220819091
+      1794240626377
      ],
      "observation": {
-      "speech_raw": "banner",
+      "speech_raw": "Primary navigation region",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794220820095,
-     "t_end_ms": 1794220821099,
+     "t_start_ms": 1794240627381,
+     "t_end_ms": 1794240628385,
      "action": {
       "type": "key",
       "command": "Down"
@@ -116,10 +116,10 @@
       "Down"
      ],
      "key_times": [
-      1794220820095
+      1794240627381
      ],
      "observation": {
-      "speech_raw": " \u001d same page link \u001e Riverside Gazette",
+      "speech_raw": "list of 4 items",
       "settled": true
      },
      "step_success": true

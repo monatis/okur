@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "ad9029d7"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794229099236
+     "t_ms": 1794240734100
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794229100595,
-     "t_end_ms": 1794229101598,
+     "t_start_ms": 1794240735460,
+     "t_end_ms": 1794240736463,
      "action": {
       "type": "key",
       "command": "H"
@@ -32,7 +32,7 @@
       "H"
      ],
      "key_times": [
-      1794229100595
+      1794240735460
      ],
      "observation": {
       "speech_raw": "Weekend events\n \u001d heading level 1 \u001e",
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794229101598,
-     "t_end_ms": 1794229102602,
+     "t_start_ms": 1794240736463,
+     "t_end_ms": 1794240737468,
      "action": {
       "type": "key",
       "command": "Insert+Space"
@@ -52,7 +52,7 @@
       "Insert+Space"
      ],
      "key_times": [
-      1794229101598
+      1794240736463
      ],
      "observation": {
       "speech_raw": "",
@@ -62,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794229102602,
-     "t_end_ms": 1794229103606,
+     "t_start_ms": 1794240737468,
+     "t_end_ms": 1794240738672,
      "action": {
       "type": "key",
       "command": "X"
@@ -72,18 +72,18 @@
       "X"
      ],
      "key_times": [
-      1794229102602
+      1794240737468
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Flexible Web \u001d dialog \u001e \nCreate a new customization \u001d radio button \u001e  \u001dchecked\u001e \n1 of 5\nTo change the selection press Up or Down Arrow.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794229103607,
-     "t_end_ms": 1794229104610,
+     "t_start_ms": 1794240738672,
+     "t_end_ms": 1794240739776,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -92,18 +92,18 @@
       "DownArrow"
      ],
      "key_times": [
-      1794229103607
+      1794240738672
      ],
      "observation": {
-      "speech_raw": "Three events open to everyone this weekend.",
+      "speech_raw": "Enable Flexible Web \u001d check box \u001e  \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794229104610,
-     "t_end_ms": 1794229105614,
+     "t_start_ms": 1794240739776,
+     "t_end_ms": 1794240740880,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -112,18 +112,18 @@
       "DownArrow"
      ],
      "key_times": [
-      1794229104610
+      1794240739776
      ],
      "observation": {
-      "speech_raw": " \u001d heading level 2 \u001e Saturday market",
+      "speech_raw": "Next > \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794229105614,
-     "t_end_ms": 1794229106617,
+     "t_start_ms": 1794240740880,
+     "t_end_ms": 1794240741885,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -132,18 +132,18 @@
       "DownArrow"
      ],
      "key_times": [
-      1794229105614
+      1794240740880
      ],
      "observation": {
-      "speech_raw": "The farmers' market opens at eight in Mill Square.",
+      "speech_raw": "",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794229106617,
-     "t_end_ms": 1794229107621,
+     "t_start_ms": 1794240741885,
+     "t_end_ms": 1794240742890,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -152,18 +152,18 @@
       "DownArrow"
      ],
      "key_times": [
-      1794229106617
+      1794240741885
      ],
      "observation": {
-      "speech_raw": " \u001d heading level 2 \u001e River clean-up",
+      "speech_raw": "",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794229107621,
-     "t_end_ms": 1794229108625,
+     "t_start_ms": 1794240742890,
+     "t_end_ms": 1794240743994,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"UpArrow\")"
@@ -172,18 +172,18 @@
       "UpArrow"
      ],
      "key_times": [
-      1794229107621
+      1794240742890
      ],
      "observation": {
-      "speech_raw": "The farmers' market opens at eight in Mill Square.",
+      "speech_raw": "Enable Flexible Web \u001d check box \u001e  \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794229108625,
-     "t_end_ms": 1794229109630,
+     "t_start_ms": 1794240743994,
+     "t_end_ms": 1794240745098,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"UpArrow\")"
@@ -192,18 +192,18 @@
       "UpArrow"
      ],
      "key_times": [
-      1794229108625
+      1794240743994
      ],
      "observation": {
-      "speech_raw": " \u001d heading level 2 \u001e Saturday market",
+      "speech_raw": "Create a new customization \u001d radio button \u001e  \u001dchecked\u001e \n1 of 5\nTo change the selection press Up or Down Arrow.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794229109630,
-     "t_end_ms": 1794229110634,
+     "t_start_ms": 1794240745098,
+     "t_end_ms": 1794240746102,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"UpArrow\")"
@@ -212,18 +212,18 @@
       "UpArrow"
      ],
      "key_times": [
-      1794229109630
+      1794240745098
      ],
      "observation": {
-      "speech_raw": "Three events open to everyone this weekend.",
+      "speech_raw": "",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794229110634,
-     "t_end_ms": 1794229111639,
+     "t_start_ms": 1794240746102,
+     "t_end_ms": 1794240747106,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"UpArrow\")"
@@ -232,18 +232,18 @@
       "UpArrow"
      ],
      "key_times": [
-      1794229110634
+      1794240746102
      ],
      "observation": {
-      "speech_raw": " \u001d heading level 1 \u001e Weekend events",
+      "speech_raw": "",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794229111639,
-     "t_end_ms": 1794229112644,
+     "t_start_ms": 1794240747106,
+     "t_end_ms": 1794240748512,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+N\")"
@@ -252,18 +252,18 @@
       "Alt+N"
      ],
      "key_times": [
-      1794229111639
+      1794240747106
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Choose an Action \u001d dialog \u001e \nHide an element \u001d radio button \u001e  \u001dchecked\u001e \n1 of 2\nTo change the selection press Up or Down Arrow.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794229112644,
-     "t_end_ms": 1794229113649,
+     "t_start_ms": 1794240748512,
+     "t_end_ms": 1794240749918,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+N\")"
@@ -272,18 +272,18 @@
       "Alt+N"
      ],
      "key_times": [
-      1794229112644
+      1794240748512
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "_Hide an element \u001d radio button \u001e  \u001dnot checked\u001e \nTo change the selection press Up or Down Arrow.\nChoose an element \u001d dialog \u001e \nWhich of the following elements would you like to customize? \u001d List box \u001e \nheading level 1 Weekend events\n1 of 2\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794229113649,
-     "t_end_ms": 1794229114654,
+     "t_start_ms": 1794240749918,
+     "t_end_ms": 1794240751023,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -292,18 +292,18 @@
       "DownArrow"
      ],
      "key_times": [
-      1794229113649
+      1794240749918
      ],
      "observation": {
-      "speech_raw": "Three events open to everyone this weekend.",
+      "speech_raw": "MainRegion\n2 of 2",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794229114654,
-     "t_end_ms": 1794229115659,
+     "t_start_ms": 1794240751023,
+     "t_end_ms": 1794240752430,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+N\")"
@@ -312,18 +312,18 @@
       "Alt+N"
      ],
      "key_times": [
-      1794229114654
+      1794240751023
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "To move to an item press the Arrow keys.\nChoose a customization \u001d dialog \u001e \nSelect a customization \u001d List box \u001e \nHide MainRegion 1 from the top\n1 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794229115659,
-     "t_end_ms": 1794229116663,
+     "t_start_ms": 1794240752430,
+     "t_end_ms": 1794240753534,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -332,18 +332,18 @@
       "DownArrow"
      ],
      "key_times": [
-      1794229115659
+      1794240752430
      ],
      "observation": {
-      "speech_raw": " \u001d heading level 2 \u001e Saturday market",
+      "speech_raw": "Hide MainRegion 1 from the bottom\n2 of 3",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794229116663,
-     "t_end_ms": 1794229117667,
+     "t_start_ms": 1794240753534,
+     "t_end_ms": 1794240754639,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -352,18 +352,18 @@
       "DownArrow"
      ],
      "key_times": [
-      1794229116663
+      1794240753534
      ],
      "observation": {
-      "speech_raw": "The farmers' market opens at eight in Mill Square.",
+      "speech_raw": "Hide all MainRegions\n3 of 3",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794229117667,
-     "t_end_ms": 1794229118672,
+     "t_start_ms": 1794240754639,
+     "t_end_ms": 1794240755743,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"UpArrow\")"
@@ -372,18 +372,18 @@
       "UpArrow"
      ],
      "key_times": [
-      1794229117667
+      1794240754639
      ],
      "observation": {
-      "speech_raw": " \u001d heading level 2 \u001e Saturday market",
+      "speech_raw": "Hide MainRegion 1 from the bottom\n2 of 3",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794229118672,
-     "t_end_ms": 1794229119676,
+     "t_start_ms": 1794240755743,
+     "t_end_ms": 1794240756848,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"UpArrow\")"
@@ -392,18 +392,18 @@
       "UpArrow"
      ],
      "key_times": [
-      1794229118672
+      1794240755743
      ],
      "observation": {
-      "speech_raw": "Three events open to everyone this weekend.",
+      "speech_raw": "Hide MainRegion 1 from the top\n1 of 3",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794229119676,
-     "t_end_ms": 1794229120781,
+     "t_start_ms": 1794240756848,
+     "t_end_ms": 1794240757953,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -412,18 +412,18 @@
       "Tab"
      ],
      "key_times": [
-      1794229119676
+      1794240756848
      ],
      "observation": {
-      "speech_raw": "Weekend Events - Riverside Gazette\n\u2022 \u001d same page link \u001e News\nTo activate press Enter.",
+      "speech_raw": "< Back \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794229120781,
-     "t_end_ms": 1794229121885,
+     "t_start_ms": 1794240757953,
+     "t_end_ms": 1794240759058,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -432,18 +432,18 @@
       "Tab"
      ],
      "key_times": [
-      1794229120781
+      1794240757953
      ],
      "observation": {
-      "speech_raw": "Events  \u001d same page link \u001e \nTo activate press Enter.",
+      "speech_raw": "Finish \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794229121885,
-     "t_end_ms": 1794229122990,
+     "t_start_ms": 1794240759058,
+     "t_end_ms": 1794240760162,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -452,18 +452,18 @@
       "Tab"
      ],
      "key_times": [
-      1794229121885
+      1794240759058
      ],
      "observation": {
-      "speech_raw": "Sports  \u001d same page link \u001e \nTo activate press Enter.",
+      "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s23",
-     "t_start_ms": 1794229122990,
-     "t_end_ms": 1794229124094,
+     "t_start_ms": 1794240760162,
+     "t_end_ms": 1794240761267,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -472,18 +472,18 @@
       "Tab"
      ],
      "key_times": [
-      1794229122990
+      1794240760162
      ],
      "observation": {
-      "speech_raw": "Advertisement \u001d ComplementaryRegion \u001e \nSee the sale  \u001d same page link \u001e \nTo activate press Enter.",
+      "speech_raw": "Select a customization \u001d List box \u001e \nHide MainRegion 1 from the top\n1 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s24",
-     "t_start_ms": 1794229124094,
-     "t_end_ms": 1794229125198,
+     "t_start_ms": 1794240761267,
+     "t_end_ms": 1794240762372,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -492,18 +492,18 @@
       "Tab"
      ],
      "key_times": [
-      1794229124094
+      1794240761267
      ],
      "observation": {
-      "speech_raw": "Tab search \u001d button menu \u001e \nPress space to activate the menu, then navigate with arrow keys",
+      "speech_raw": "< Back \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s25",
-     "t_start_ms": 1794229125198,
-     "t_end_ms": 1794229126203,
+     "t_start_ms": 1794240762372,
+     "t_end_ms": 1794240763377,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+N\")"
@@ -512,7 +512,7 @@
       "Alt+N"
      ],
      "key_times": [
-      1794229125198
+      1794240762372
      ],
      "observation": {
       "speech_raw": "",
@@ -522,8 +522,8 @@
     },
     {
      "step_id": "s26",
-     "t_start_ms": 1794229126203,
-     "t_end_ms": 1794229127408,
+     "t_start_ms": 1794240763377,
+     "t_end_ms": 1794240764482,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -532,18 +532,18 @@
       "Tab"
      ],
      "key_times": [
-      1794229126203
+      1794240763377
      ],
      "observation": {
-      "speech_raw": "File \u001d button menu \u001e \nPress space to activate the menu, then navigate with arrow keys",
+      "speech_raw": "Finish \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s27",
-     "t_start_ms": 1794229127408,
-     "t_end_ms": 1794229128613,
+     "t_start_ms": 1794240764482,
+     "t_end_ms": 1794240765587,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -552,18 +552,18 @@
       "Tab"
      ],
      "key_times": [
-      1794229127408
+      1794240764482
      ],
      "observation": {
-      "speech_raw": "Address and search bar \u001d Edit \u001e \n/root/okur/corpus/fixtures/flexible-web.html\nType in text.",
+      "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s28",
-     "t_start_ms": 1794229128613,
-     "t_end_ms": 1794229129817,
+     "t_start_ms": 1794240765587,
+     "t_end_ms": 1794240766691,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -572,18 +572,18 @@
       "Tab"
      ],
      "key_times": [
-      1794229128613
+      1794240765587
      ],
      "observation": {
-      "speech_raw": "Bookmark this tab \u001d Button \u001e \nTo activate press spacebar.",
+      "speech_raw": "Select a customization \u001d List box \u001e \nHide MainRegion 1 from the top\n1 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s29",
-     "t_start_ms": 1794229129817,
-     "t_end_ms": 1794229130822,
+     "t_start_ms": 1794240766691,
+     "t_end_ms": 1794240767796,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -592,18 +592,18 @@
       "Tab"
      ],
      "key_times": [
-      1794229129817
+      1794240766691
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "< Back \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s30",
-     "t_start_ms": 1794229130822,
-     "t_end_ms": 1794229132027,
+     "t_start_ms": 1794240767796,
+     "t_end_ms": 1794240768900,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -612,18 +612,18 @@
       "Tab"
      ],
      "key_times": [
-      1794229130822
+      1794240767796
      ],
      "observation": {
-      "speech_raw": "Weekend Events - Riverside Gazette \u001d document \u001e \nWeekend Events - Riverside Gazette\n\u2022 \u001d same page link \u001e News\nTo activate press Enter.",
+      "speech_raw": "Finish \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s31",
-     "t_start_ms": 1794229132027,
-     "t_end_ms": 1794229133031,
+     "t_start_ms": 1794240768900,
+     "t_end_ms": 1794240769904,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Escape\")"
@@ -632,7 +632,7 @@
       "Escape"
      ],
      "key_times": [
-      1794229132027
+      1794240768900
      ],
      "observation": {
       "speech_raw": "",
@@ -642,8 +642,8 @@
     },
     {
      "step_id": "s32",
-     "t_start_ms": 1794229133031,
-     "t_end_ms": 1794229134035,
+     "t_start_ms": 1794240769904,
+     "t_end_ms": 1794240771008,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Escape\")"
@@ -652,7 +652,7 @@
       "Escape"
      ],
      "key_times": [
-      1794229133031
+      1794240769904
      ],
      "observation": {
       "speech_raw": "",
@@ -662,8 +662,8 @@
     },
     {
      "step_id": "s33",
-     "t_start_ms": 1794229134035,
-     "t_end_ms": 1794229135040,
+     "t_start_ms": 1794240771008,
+     "t_end_ms": 1794240772013,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -672,10 +672,10 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794229134035
+      1794240771008
      ],
      "observation": {
-      "speech_raw": "\u2022 \u001d same page link \u001e News",
+      "speech_raw": " \u001d heading level 1 \u001e Weekend events",
       "settled": true
      },
      "step_success": true

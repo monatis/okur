@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "240fb118"
+  "commit": "ad9029d7"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794230588594
+     "t_ms": 1794241308692
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794230589955,
-     "t_end_ms": 1794230590959,
+     "t_start_ms": 1794241310053,
+     "t_end_ms": 1794241311058,
      "action": {
       "type": "key",
       "command": "Insert+Space"
@@ -32,7 +32,7 @@
       "Insert+Space"
      ],
      "key_times": [
-      1794230589955
+      1794241310053
      ],
      "observation": {
       "speech_raw": "",
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794230590959,
-     "t_end_ms": 1794230591963,
+     "t_start_ms": 1794241311058,
+     "t_end_ms": 1794241312262,
      "action": {
       "type": "key",
       "command": "X"
@@ -52,18 +52,18 @@
       "X"
      ],
      "key_times": [
-      1794230590959
+      1794241311058
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Flexible Web \u001d dialog \u001e \nCreate a new customization \u001d radio button \u001e  \u001dchecked\u001e \n1 of 5\nTo change the selection press Up or Down Arrow.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794230591963,
-     "t_end_ms": 1794230592967,
+     "t_start_ms": 1794241312262,
+     "t_end_ms": 1794241313267,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+V\")"
@@ -72,7 +72,7 @@
       "Alt+V"
      ],
      "key_times": [
-      1794230591963
+      1794241312262
      ],
      "observation": {
       "speech_raw": "",
@@ -82,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794230592967,
-     "t_end_ms": 1794230594072,
+     "t_start_ms": 1794241313267,
+     "t_end_ms": 1794241314372,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -92,18 +92,18 @@
       "Tab"
      ],
      "key_times": [
-      1794230592967
+      1794241313267
      ],
      "observation": {
-      "speech_raw": "Weekend Events - Riverside Gazette\n\u2022 \u001d same page link \u001e News\nTo activate press Enter.",
+      "speech_raw": "Enable Flexible Web \u001d check box \u001e  \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794230594072,
-     "t_end_ms": 1794230595176,
+     "t_start_ms": 1794241314372,
+     "t_end_ms": 1794241315476,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -112,18 +112,18 @@
       "Tab"
      ],
      "key_times": [
-      1794230594072
+      1794241314372
      ],
      "observation": {
-      "speech_raw": "Events  \u001d same page link \u001e \nTo activate press Enter.",
+      "speech_raw": "Next > \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794230595176,
-     "t_end_ms": 1794230596280,
+     "t_start_ms": 1794241315476,
+     "t_end_ms": 1794241316581,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -132,18 +132,18 @@
       "Enter"
      ],
      "key_times": [
-      1794230595176
+      1794241315476
      ],
      "observation": {
-      "speech_raw": "Weekend Events - Riverside Gazette  \u001d document \u001e\nPage has 4Regions, 4headings and 4links\nWeekend Events - Riverside Gazette\nbanner\nRiverside Gazette\nSections navigation region\nlist of 3 items\n\u2022 \u001d same page link \u001e News\n\u2022 \u001d same page link \u001e Events\n\u2022 \u001d same page link \u001e Sports\nlist end\nSections navigation region end\nbanner end\nAdvertisement complementary information\nSpring sale at Main Street Shoes: two pairs for the price of one.\n \u001d same page link \u001e See the sale\nAdvertisement complementary information end\nmain region\n \u001d heading level 1 \u001e Weekend events\nThree events open to everyone this weekend.\n \u001d heading level 2 \u001e Saturday market\nThe farmers' market opens at eight in Mill Square.\n \u001d heading level 2 \u001e River clean-up\nVolunteers meet at the boat ramp at ten on Saturday.\n \u001d heading level 2 \u001e Sunday concert\nThe town band plays in the park at four.\nmain region end\nend",
+      "speech_raw": "No customizable elements were found at the current virtual PC cursor location. Please change the cursor's location and try again.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794230596280,
-     "t_end_ms": 1794230597384,
+     "t_start_ms": 1794241316581,
+     "t_end_ms": 1794241317685,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -152,18 +152,18 @@
       "Tab"
      ],
      "key_times": [
-      1794230596280
+      1794241316581
      ],
      "observation": {
-      "speech_raw": "Tab search \u001d button menu \u001e \nPress space to activate the menu, then navigate with arrow keys",
+      "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794230597384,
-     "t_end_ms": 1794230598490,
+     "t_start_ms": 1794241317685,
+     "t_end_ms": 1794241318791,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Shift+Tab\")"
@@ -172,18 +172,18 @@
       "Shift+Tab"
      ],
      "key_times": [
-      1794230597384
+      1794241317685
      ],
      "observation": {
-      "speech_raw": "Weekend Events - Riverside Gazette \u001d document \u001e \nWeekend Events - Riverside Gazette\n \u001d same page link \u001e See the sale\nTo activate press Enter.",
+      "speech_raw": "Next > \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794230598490,
-     "t_end_ms": 1794230599494,
+     "t_start_ms": 1794241318791,
+     "t_end_ms": 1794241319796,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -192,67 +192,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794230598490
-     ],
-     "observation": {
-      "speech_raw": "Advertisement complementary information end",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
-     "step_id": "s10",
-     "t_start_ms": 1794230599494,
-     "t_end_ms": 1794230600498,
-     "action": {
-      "type": "jaws_function",
-      "command": "TypeKey(\"RightArrow\")"
-     },
-     "keys": [
-      "RightArrow"
-     ],
-     "key_times": [
-      1794230599494
-     ],
-     "observation": {
-      "speech_raw": "d",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
-     "step_id": "s11",
-     "t_start_ms": 1794230600498,
-     "t_end_ms": 1794230601502,
-     "action": {
-      "type": "jaws_function",
-      "command": "TypeKey(\"DownArrow\")"
-     },
-     "keys": [
-      "DownArrow"
-     ],
-     "key_times": [
-      1794230600498
-     ],
-     "observation": {
-      "speech_raw": "main region",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
-     "step_id": "s12",
-     "t_start_ms": 1794230601502,
-     "t_end_ms": 1794230602506,
-     "action": {
-      "type": "jaws_function",
-      "command": "TypeKey(\"Tab\")"
-     },
-     "keys": [
-      "Tab"
-     ],
-     "key_times": [
-      1794230601502
+      1794241318791
      ],
      "observation": {
       "speech_raw": "",
@@ -261,9 +201,69 @@
      "step_success": true
     },
     {
+     "step_id": "s10",
+     "t_start_ms": 1794241319796,
+     "t_end_ms": 1794241320901,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"RightArrow\")"
+     },
+     "keys": [
+      "RightArrow"
+     ],
+     "key_times": [
+      1794241319796
+     ],
+     "observation": {
+      "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794241320901,
+     "t_end_ms": 1794241321904,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794241320901
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794241321904,
+     "t_end_ms": 1794241323008,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794241321904
+     ],
+     "observation": {
+      "speech_raw": "Create a new customization \u001d radio button \u001e  \u001dchecked\u001e \n1 of 5\nTo change the selection press Up or Down Arrow.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
      "step_id": "s13",
-     "t_start_ms": 1794230602506,
-     "t_end_ms": 1794230603611,
+     "t_start_ms": 1794241323008,
+     "t_end_ms": 1794241324113,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Shift+Tab\")"
@@ -272,18 +272,18 @@
       "Shift+Tab"
      ],
      "key_times": [
-      1794230602506
+      1794241323008
      ],
      "observation": {
-      "speech_raw": "Weekend Events - Riverside Gazette \u001d document \u001e \nWeekend Events - Riverside Gazette\n \u001d same page link \u001e See the sale\nTo activate press Enter.",
+      "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794230603611,
-     "t_end_ms": 1794230604615,
+     "t_start_ms": 1794241324114,
+     "t_end_ms": 1794241325218,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"UpArrow\")"
@@ -292,18 +292,18 @@
       "UpArrow"
      ],
      "key_times": [
-      1794230603611
+      1794241324114
      ],
      "observation": {
-      "speech_raw": "Spring sale at Main Street Shoes: two pairs for the price of one.",
+      "speech_raw": "Enable Flexible Web \u001d check box \u001e  \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794230604615,
-     "t_end_ms": 1794230605619,
+     "t_start_ms": 1794241325218,
+     "t_end_ms": 1794241326323,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -312,18 +312,18 @@
       "Tab"
      ],
      "key_times": [
-      1794230604615
+      1794241325218
      ],
      "observation": {
-      "speech_raw": "See the sale  \u001d same page link \u001e \nTo activate press Enter.",
+      "speech_raw": "Next > \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794230605619,
-     "t_end_ms": 1794230606725,
+     "t_start_ms": 1794241326323,
+     "t_end_ms": 1794241327429,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Shift+Tab\")"
@@ -332,18 +332,18 @@
       "Shift+Tab"
      ],
      "key_times": [
-      1794230605619
+      1794241326323
      ],
      "observation": {
-      "speech_raw": " \u001d BannerRegion \u001e \nSections \u001d NavigationRegion \u001e \n \u001d list \u001e \nwith 3 items\nSports  \u001d same page link \u001e \nTo activate press Enter.",
+      "speech_raw": "Enable Flexible Web \u001d check box \u001e  \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794230606725,
-     "t_end_ms": 1794230607830,
+     "t_start_ms": 1794241327429,
+     "t_end_ms": 1794241328535,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Shift+Tab\")"
@@ -352,18 +352,18 @@
       "Shift+Tab"
      ],
      "key_times": [
-      1794230606725
+      1794241327429
      ],
      "observation": {
-      "speech_raw": "Events  \u001d same page link \u001e \nTo activate press Enter.",
+      "speech_raw": "Create a new customization \u001d radio button \u001e  \u001dchecked\u001e \n1 of 5\nTo change the selection press Up or Down Arrow.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794230607830,
-     "t_end_ms": 1794230608935,
+     "t_start_ms": 1794241328535,
+     "t_end_ms": 1794241329640,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -372,18 +372,18 @@
       "Tab"
      ],
      "key_times": [
-      1794230607830
+      1794241328535
      ],
      "observation": {
-      "speech_raw": "Sports  \u001d same page link \u001e \nTo activate press Enter.",
+      "speech_raw": "Enable Flexible Web \u001d check box \u001e  \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794230608935,
-     "t_end_ms": 1794230610040,
+     "t_start_ms": 1794241329640,
+     "t_end_ms": 1794241330744,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -392,18 +392,18 @@
       "Tab"
      ],
      "key_times": [
-      1794230608935
+      1794241329640
      ],
      "observation": {
-      "speech_raw": "Advertisement \u001d ComplementaryRegion \u001e \nSee the sale  \u001d same page link \u001e \nTo activate press Enter.",
+      "speech_raw": "Next > \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794230610040,
-     "t_end_ms": 1794230611044,
+     "t_start_ms": 1794241330744,
+     "t_end_ms": 1794241331747,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Delete\")"
@@ -412,7 +412,7 @@
       "Delete"
      ],
      "key_times": [
-      1794230610040
+      1794241330744
      ],
      "observation": {
       "speech_raw": "",
@@ -422,8 +422,8 @@
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794230611044,
-     "t_end_ms": 1794230612049,
+     "t_start_ms": 1794241331747,
+     "t_end_ms": 1794241332753,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+Y\")"
@@ -432,7 +432,7 @@
       "Alt+Y"
      ],
      "key_times": [
-      1794230611044
+      1794241331747
      ],
      "observation": {
       "speech_raw": "",
@@ -442,8 +442,8 @@
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794230612049,
-     "t_end_ms": 1794230613053,
+     "t_start_ms": 1794241332753,
+     "t_end_ms": 1794241333857,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -452,18 +452,18 @@
       "Tab"
      ],
      "key_times": [
-      1794230612049
+      1794241332753
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s23",
-     "t_start_ms": 1794230613053,
-     "t_end_ms": 1794230614258,
+     "t_start_ms": 1794241333857,
+     "t_end_ms": 1794241334861,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -472,18 +472,18 @@
       "Enter"
      ],
      "key_times": [
-      1794230613053
+      1794241333857
      ],
      "observation": {
-      "speech_raw": "Weekend Events - Riverside Gazette\nSearch Tabs Ctrl+Shift+A  \u001d Combo box \u001e   \u001dcollapsed\u001e ",
+      "speech_raw": "",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s24",
-     "t_start_ms": 1794230614258,
-     "t_end_ms": 1794230615263,
+     "t_start_ms": 1794241334861,
+     "t_end_ms": 1794241335867,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -492,7 +492,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794230614258
+      1794241334861
      ],
      "observation": {
       "speech_raw": "Weekend Events - Riverside Gazette",
@@ -502,8 +502,8 @@
     },
     {
      "step_id": "s25",
-     "t_start_ms": 1794230615263,
-     "t_end_ms": 1794230616266,
+     "t_start_ms": 1794241335867,
+     "t_end_ms": 1794241336871,
      "action": {
       "type": "key",
       "command": "R"
@@ -512,7 +512,7 @@
       "R"
      ],
      "key_times": [
-      1794230615263
+      1794241335867
      ],
      "observation": {
       "speech_raw": "banner",
