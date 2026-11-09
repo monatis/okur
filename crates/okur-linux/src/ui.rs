@@ -93,10 +93,11 @@ mod tests {
     /// ending in CRLF, is written to the trace once; a line that is no message is not.
     #[test]
     fn okur_uis_lines_pass_whole_and_their_messages_are_traced() {
-        let text = "{\"type\":\"dialog_closed\",\"id\":3}
-noise
-{\"type\":\"dialog_closed\",\"id\":4}
-";
+        let text = concat!(
+            "{\"type\":\"dialog_closed\",\"id\":3}\r\n",
+            "noise\n",
+            "{\"type\":\"dialog_closed\",\"id\":4}\n",
+        );
         let path = std::env::temp_dir().join(format!("okur-ui-trace-{}.jsonl", std::process::id()));
         let file = std::fs::File::create(&path).ok();
         let trace: TraceOut = Arc::new(std::sync::Mutex::new(file.map(std::io::BufWriter::new)));
