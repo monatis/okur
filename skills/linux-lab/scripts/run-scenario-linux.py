@@ -94,7 +94,10 @@ def chord(name):
         # A key pressed without the modifier asked for is another key: the step fails.
         raise ValueError(f"no modifier {unknown} in {name}")
     mods = [MODIFIERS[m.strip().lower()] for m in parts[:-1]]
-    if re.fullmatch(r"[A-Za-z]", key):
+    if key.lower() in MODIFIERS:
+        # A modifier pressed alone (Shift, Ctrl: 1146's key echo) is its own key.
+        key = MODIFIERS[key.lower()]
+    elif re.fullmatch(r"[A-Za-z]", key):
         key = key.lower()
     elif re.fullmatch(r"[Ff]([1-9]|1[0-2])", key):
         key = key.upper()
