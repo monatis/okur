@@ -5526,6 +5526,36 @@ fn up_onto_a_text_area_puts_its_caret_at_the_end() {
     assert!(engine.forms_mode);
 }
 
+/// Down in an autocomplete whose list is open moves in the list, whose option says itself: the
+/// field's line is not read ("a" came before the option where the option's focus came late
+/// [211/s9 in the Linux lab's full5]). With the list closed, Down reads the line.
+#[test]
+fn down_in_an_open_combo_list_reads_no_line() {
+    let mut combo = AomNode::new(1, Role::ComboBox).with_name("Fruit");
+    combo.attributes.insert("editable".into(), "true".into());
+    combo.states.expanded = Some(true);
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Patterns")
+        .with_children(vec![combo]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(SharedSpeech::default()));
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    engine.handle_focus_event(&page_document());
+    engine.last_page_focus = Some(1);
+    engine.forms_mode = true;
+    engine.cursor.forms_mode_active = true;
+    let _ = actions.requests();
+    assert_eq!(
+        engine.handle_key_event(&key(Key::DownArrow)),
+        KeyAction::PassThrough
+    );
+    assert!(engine.pending_edit.is_none());
+    let _ = engine.change_page_node(1, |node| node.states.expanded = Some(false));
+    engine.handle_key_event(&key(Key::DownArrow));
+    assert!(engine.pending_edit.is_some());
+}
+
 /// Up onto a field of one line puts its caret at the start and asks the platform to put it
 /// there too: Chrome leaves it where it was (the end, after an earlier pass), and the field's
 /// read as it took the focus then kept Up in it a key longer [283/s16 in full5]. The next Up

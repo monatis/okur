@@ -365,11 +365,40 @@ impl Converter {
         *kind == EventKind::WindowActivated
     }
 
+    /// Whether the dialog box whose window has `key` (its bus name and path) is read and kept:
+    /// the driver reads a dialog's window whole only while it is not.
+    pub fn knows_dialog_box(&self, key: &str) -> bool {
+        self.dialog_box
+            .as_ref()
+            .is_some_and(|(kept, _)| kept == key)
+    }
+
     /// A control in a dialog box: the box's default button, buttons and text, from the read of
     /// its window kept for it. A dialog box with no default known is none to the engine, whose
     /// Insert+E would say nothing (the code review of 2026-11-09, fourth pass, 1), but where
     /// the focus is a button, which Insert+E says itself.
-    fn dialog_box_of(&mut self, read: Option<&NativeRead>, event: &mut Option<AccessibilityEvent>) {
+    fn dialog_box_of(&mut self, record: &AtspiRecord, event: &mut Option<AccessibilityEvent>) {
+        // Kept as it is read, whether this record says anything or not (a first focus in a
+        // window not yet active): the driver reads a window whole only while the converter has
+        // not kept it (the code review of 2026-11-09, fifth pass, 2).
+        let bus = record
+            .target
+            .as_ref()
+            .and_then(|t| t.raw.get("bus_name"))
+            .and_then(|b| b.as_str());
+        for read in [record.native.as_ref(), record.reread.as_ref()]
+            .into_iter()
+            .flatten()
+        {
+            let window = read
+                .ancestors
+                .iter()
+                .find(|a| crate::focus::is_window(&a.role) && !a.path.is_empty());
+            if let (Some(dialog), Some(window), Some(bus)) = (read.dialog.as_ref(), window, bus) {
+                let key = format!("{bus}{}", window.path);
+                self.dialog_box = Some((key, crate::focus::dialog_box(dialog)));
+            }
+        }
         let control = match event {
             Some(AccessibilityEvent::Focus(control))
             | Some(AccessibilityEvent::Change { control, .. }) => control,
@@ -378,9 +407,6 @@ impl Converter {
         let Some(window) = control.platform.window_id.clone() else {
             return;
         };
-        if let Some(dialog) = read.and_then(|r| r.dialog.as_ref()) {
-            self.dialog_box = Some((window.clone(), crate::focus::dialog_box(dialog)));
-        }
         let Some((key, dialog)) = &self.dialog_box else {
             return;
         };
@@ -777,7 +803,7 @@ impl Converter {
                 }
             });
         let mut native = native;
-        self.dialog_box_of(record.native.as_ref(), &mut native);
+        self.dialog_box_of(record, &mut native);
         if let Some(AccessibilityEvent::Focus(read)) = &native {
             if !self.track.native_focus(object.clone(), read) {
                 // The toolkit's repeat of the focus: nothing more to say.
@@ -1448,6 +1474,41 @@ mod tests {
                 "{name}: {events:?}"
             );
         }
+    }
+
+    /// A dialog box's read is kept though its record says nothing (its first focus in a window
+    /// not yet active), and the window is not read again: the next focus in it has the box.
+    #[test]
+    fn a_dialog_boxs_read_is_kept_though_its_focus_says_nothing() {
+        let mut converter = Converter::default();
+        let window = |active: bool| {
+            let states: &[u32] = if active { &[state::ACTIVE] } else { &[] };
+            let mut dialog = node("dialog", "Okur", states);
+            dialog.path = "/dialog".to_owned();
+            dialog
+        };
+        let mut whole = window(false);
+        whole.children = vec![node("push button", "OK", &[state::IS_DEFAULT])];
+        let focus = |active: bool, dialog: Option<AtspiNode>| {
+            record(
+                EventKind::FocusChanged,
+                element(ElementRole::Button, "Cancel", "/cancel", true),
+                Some(NativeRead {
+                    focus: node("push button", "Cancel", &[state::FOCUSED]),
+                    ancestors: vec![window(active)],
+                    read_ms: 0,
+                    dialog,
+                }),
+            )
+        };
+        assert!(converter
+            .convert_read(&focus(false, Some(whole)))
+            .is_empty());
+        assert!(converter.knows_dialog_box(":1.5/dialog"));
+        assert!(matches!(
+            converter.convert_read(&focus(true, None)).as_slice(),
+            [AccessibilityEvent::Focus(f)] if f.default_button.as_deref() == Some("OK")
+        ));
     }
 
     /// What okur-ui told the engine, kept in the trace, is given to the engine as it was told.

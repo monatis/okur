@@ -62,13 +62,13 @@ pub fn run() {
                         if messages.send(Some(message)).is_err() {
                             return;
                         }
-                        context.invoke(take_messages);
+                        context.invoke_with_priority(glib::Priority::DEFAULT, take_messages);
                     }
                     Err(e) => eprintln!("okur-ui: unreadable message {line:?}: {e}"),
                 }
             }
             let _ = messages.send(None);
-            context.invoke(take_messages);
+            context.invoke_with_priority(glib::Priority::DEFAULT, take_messages);
         });
     if reader.is_err() {
         eprintln!("okur-ui: no thread to read Okur's messages");
@@ -748,8 +748,13 @@ fn build(
             let entry = gtk::Entry::new();
             entry.set_text(text);
             // Enter in it presses the dialog's default button, as in Windows' dialog (Find,
-            // Jump To Line): GTK's entry does not by default.
-            entry.set_activates_default(true);
+            // Jump To Line), at once: GTK's own default activation clicks it only on a key's
+            // release, which goes to the entry, or 250 ms later (the code review of 2026-11-09,
+            // fifth pass, 5).
+            {
+                let window = window.downgrade();
+                entry.connect_activate(move |_| press_default(&window));
+            }
             let label = field_label(&control.label, &entry);
             // A search box's label is not shown: it names the field alone ("SearchBox Edit").
             let shown_label = !matches!(control.kind, ControlKind::SearchBox { .. });

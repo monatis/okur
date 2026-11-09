@@ -68,3 +68,56 @@ impl Read for TracedOutput {
         Ok(read)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::sync::Arc;
+
+    /// A reader giving its bytes a few at a time, as a pipe may.
+    struct Pieces(Vec<u8>, usize);
+
+    impl Read for Pieces {
+        fn read(&mut self, buf: &mut [u8]) -> std::io::Result<usize> {
+            let rest = self.0.get(self.1..).unwrap_or_default();
+            let n = rest.len().min(buf.len()).min(5);
+            if let (Some(to), Some(from)) = (buf.get_mut(..n), rest.get(..n)) {
+                to.copy_from_slice(from);
+            }
+            self.1 += n;
+            Ok(n)
+        }
+    }
+
+    /// okur-ui's lines are passed on whole, and each message line, split across reads or
+    /// ending in CRLF, is written to the trace once; a line that is no message is not.
+    #[test]
+    fn okur_uis_lines_pass_whole_and_their_messages_are_traced() {
+        let text = "{\"type\":\"dialog_closed\",\"id\":3}
+noise
+{\"type\":\"dialog_closed\",\"id\":4}
+";
+        let path = std::env::temp_dir().join(format!("okur-ui-trace-{}.jsonl", std::process::id()));
+        let file = std::fs::File::create(&path).ok();
+        let trace: TraceOut = Arc::new(std::sync::Mutex::new(file.map(std::io::BufWriter::new)));
+        let mut out = TracedOutput {
+            inner: Box::new(Pieces(text.as_bytes().to_vec(), 0)),
+            line: Vec::new(),
+            trace: Arc::clone(&trace),
+        };
+        let mut passed = String::new();
+        let _ = out.read_to_string(&mut passed);
+        assert_eq!(passed, text);
+        drop(out);
+        drop(trace);
+        let written = std::fs::read_to_string(&path).unwrap_or_default();
+        let _ = std::fs::remove_file(&path);
+        let ids: Vec<String> = written
+            .lines()
+            .filter_map(|line| serde_json::from_str::<AtspiRecord>(line).ok())
+            .filter_map(|record| record.ui)
+            .map(|message| format!("{message:?}"))
+            .collect();
+        assert_eq!(ids, ["DialogClosed { id: 3 }", "DialogClosed { id: 4 }"]);
+    }
+}

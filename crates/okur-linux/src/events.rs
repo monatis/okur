@@ -149,6 +149,19 @@ fn heard(live: &LiveObjects, kind: &EventKind, bus: &str, path: &str) -> bool {
     }
 }
 
+/// The page of `document`'s key heard again from its next change.
+fn rearm(live: &LiveObjects, document: &str) {
+    let pages = live
+        .read()
+        .unwrap_or_else(std::sync::PoisonError::into_inner);
+    for page in pages
+        .iter()
+        .filter(|page| format!("{}{}", page.bus, page.document) == document)
+    {
+        page.armed.store(true, std::sync::atomic::Ordering::SeqCst);
+    }
+}
+
 /// The document key of the read page holding the object at `bus` and `path`.
 fn page_of_object(live: &LiveObjects, bus: &str, path: &str) -> Option<String> {
     let pages = live
@@ -613,7 +626,7 @@ fn read_native(
     provider: &LinuxProvider,
     element: &ElementData,
     walked: Option<&[AtspiObject]>,
-    dialog_read: &mut Option<String>,
+    dialog_known: &dyn Fn(&str) -> bool,
 ) -> Option<NativeRead> {
     let Some(object) = AtspiObject::of(element) else {
         tracing::debug!("a native focus without its object's names");
@@ -652,10 +665,9 @@ fn read_native(
         .and(window_object)
         .and_then(|window| {
             let key = format!("{}{}", window.bus_name, window.path);
-            if dialog_read.as_deref() == Some(key.as_str()) {
+            if dialog_known(&key) {
                 return None;
             }
-            *dialog_read = Some(key);
             Some(snapshot(
                 provider.atspi_tree_parallel(&window, DIALOG_LIMIT),
             ))
@@ -1166,12 +1178,13 @@ impl EventSource for AtspiEventSource {
                 // Live regions heard changing, read once their signals pause, by their objects.
                 let mut dirty: std::collections::HashMap<AtspiObject, DirtyRegion> =
                     std::collections::HashMap::new();
+                // The read pages that changed while the focus was away from them, by document.
+                let mut changed_away: std::collections::HashSet<String> =
+                    std::collections::HashSet::new();
                 // Whether each application is Chromium's, by its bus name: its menus open in
                 // windows of their own, read as they come forward.
                 let mut chromium: std::collections::HashMap<String, bool> =
                     std::collections::HashMap::new();
-                // The dialog box read whole last, by its window's key: read once for its window.
-                let mut dialog_read: Option<String> = None;
                 while !stop.load(Ordering::SeqCst) {
                     // The pages the reader read, into their places; what waited for them, and
                     // for pages waited for too long, goes on.
@@ -1252,6 +1265,9 @@ impl EventSource for AtspiEventSource {
                         (wanted, focus_page.as_deref().and_then(object_of_key))
                     {
                         tracing::debug!(document = %key_of(&document), "the changed page read again");
+                        // Its next change heard from now, not from when the read comes: a
+                        // read dropped or cut short would have left it unheard.
+                        rearm(&live, &key_of(&document));
                         ask_page(
                             &document,
                             unix_ms(),
@@ -1340,20 +1356,28 @@ impl EventSource for AtspiEventSource {
                                 // captured again once its changes settle (it was not, and
                                 // what a page added later stayed unread until the focus
                                 // moved).
+                                // A page changed while the focus is away from it (in Okur's
+                                // dialog, the address bar, another program) is asked for as the
+                                // focus comes back to it (the code review of 2026-11-09, fifth
+                                // pass, 3: it was left unheard for good).
                                 if page.is_none() {
-                                    let in_front = target
-                                        .and_then(AtspiObject::of)
-                                        .and_then(|object| {
+                                    let changed =
+                                        target.and_then(AtspiObject::of).and_then(|object| {
                                             page_of_object(&live, &object.bus_name, &object.path)
-                                        })
-                                        .is_some_and(|document| {
-                                            focus_page.as_deref() == Some(document.as_str())
                                         });
-                                    if in_front {
-                                        let mut wanted = page_wanted
-                                            .lock()
-                                            .unwrap_or_else(std::sync::PoisonError::into_inner);
-                                        PageWanted::ask(&mut wanted, false);
+                                    match changed {
+                                        Some(document)
+                                            if focus_page.as_deref() == Some(document.as_str()) =>
+                                        {
+                                            let mut wanted = page_wanted
+                                                .lock()
+                                                .unwrap_or_else(std::sync::PoisonError::into_inner);
+                                            PageWanted::ask(&mut wanted, false);
+                                        }
+                                        Some(document) => {
+                                            changed_away.insert(document);
+                                        }
+                                        None => {}
                                     }
                                 }
                                 if let Some((document, region)) = page {
@@ -1387,6 +1411,16 @@ impl EventSource for AtspiEventSource {
                             };
                             if focus && target.is_some_and(|e| e.states.focused) {
                                 focus_page = document.as_ref().map(key_of);
+                                // Back on a page that changed meanwhile: captured again.
+                                if focus_page
+                                    .as_ref()
+                                    .is_some_and(|page| changed_away.remove(page))
+                                {
+                                    let mut wanted = page_wanted
+                                        .lock()
+                                        .unwrap_or_else(std::sync::PoisonError::into_inner);
+                                    PageWanted::ask(&mut wanted, false);
+                                }
                             }
                             if let (true, Some(element), Some(document)) =
                                 (focus, target, document.as_ref())
@@ -1465,11 +1499,19 @@ impl EventSource for AtspiEventSource {
                                     converter.wants_native(&event.kind, target, document.is_some())
                                         && (event.kind != EventKind::WindowActivated || menu_window)
                                 })
-                                .and_then(|e| read_native(&provider, e, walk, &mut dialog_read));
+                                .and_then(|e| {
+                                    read_native(&provider, e, walk, &|key| {
+                                        converter.knows_dialog_box(key)
+                                    })
+                                });
                             let reread = converter
                                 .wants_reread(&event.kind, target)
                                 .cloned()
-                                .and_then(|e| read_native(&provider, &e, None, &mut dialog_read));
+                                .and_then(|e| {
+                                    read_native(&provider, &e, None, &|key| {
+                                        converter.knows_dialog_box(key)
+                                    })
+                                });
                             let record = AtspiRecord {
                                 at_ms,
                                 kind: event.kind.clone(),
@@ -1576,6 +1618,9 @@ mod heard_tests {
             page_of_object(&live, ":1.5", "/section").as_deref(),
             Some(":1.5/doc")
         );
+        // Asked for again, it is heard again.
+        rearm(&live, ":1.5/doc");
+        assert!(heard(&live, &EventKind::StructureChanged, ":1.5", "/doc"));
     }
 }
 

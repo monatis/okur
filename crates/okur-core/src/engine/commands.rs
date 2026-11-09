@@ -945,8 +945,11 @@ impl ScreenReaderEngine {
             structure: None,
         };
         if let Some(actions) = &self.actions {
-            actions.focus(&node);
-            actions.move_caret(&context, caret);
+            // The caret put in the field the focus was given to: not given, the field focused
+            // before would have taken it (the code review of 2026-11-09, fifth pass, 9).
+            if actions.focus(&node) {
+                actions.move_caret(&context, caret);
+            }
         }
         self.remember_field_text();
         self.arrow_focus = Some(node.id);

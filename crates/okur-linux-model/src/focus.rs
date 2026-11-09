@@ -492,6 +492,48 @@ mod tests {
         assert!(event.dialog_text.is_none());
     }
 
+    /// A menu's item opening a submenu is one by its `haspopup` attribute (a page's ARIA menu)
+    /// or its HAS_POPUP state (Chrome's own); another is no submenu's.
+    #[test]
+    fn a_submenus_item_by_its_attribute_or_its_state() {
+        let mut menu = AtspiNode {
+            role: "menu".to_owned(),
+            ..AtspiNode::default()
+        };
+        let mut by_attribute = AtspiNode {
+            role: "menu item".to_owned(),
+            name: "More".to_owned(),
+            path: "/more".to_owned(),
+            ..AtspiNode::default()
+        };
+        by_attribute
+            .attributes
+            .insert("haspopup".to_owned(), "menu".to_owned());
+        let by_state = AtspiNode {
+            role: "menu item".to_owned(),
+            name: "History".to_owned(),
+            path: "/history".to_owned(),
+            states: 1 << crate::page::state::HAS_POPUP,
+            ..AtspiNode::default()
+        };
+        let plain = AtspiNode {
+            role: "menu item".to_owned(),
+            name: "New tab".to_owned(),
+            path: "/new".to_owned(),
+            ..AtspiNode::default()
+        };
+        menu.children = vec![by_attribute.clone(), by_state.clone(), plain.clone()];
+        assert_eq!(
+            menu_item_focus(&by_attribute, Some(&menu)).states.expanded,
+            Some(false)
+        );
+        assert_eq!(
+            menu_item_focus(&by_state, Some(&menu)).states.expanded,
+            Some(false)
+        );
+        assert_eq!(menu_item_focus(&plain, Some(&menu)).states.expanded, None);
+    }
+
     /// A dialog box's buttons in order, its default by GTK's state; a message box's text from its
     /// labels, none where it holds a field, nor from a field's own label.
     #[test]
