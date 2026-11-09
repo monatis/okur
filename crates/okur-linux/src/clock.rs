@@ -75,8 +75,18 @@ impl Clock for LinuxClock {
     }
 }
 
+extern "C" {
+    /// POSIX's tzset, which the libc crate leaves out: the time zone read from the environment
+    /// and /etc/localtime.
+    fn tzset();
+}
+
 /// The local time now, from the C library; none where it has none.
 fn local_now() -> Option<LocalDateTime> {
+    // The time zone read again (one stat of /etc/localtime): localtime_r alone keeps the zone
+    // the process started in (the code review of 2026-11-09, third pass, 7).
+    // SAFETY: tzset only reads the environment and the zone's file.
+    unsafe { tzset() };
     // SAFETY: time(NULL) only returns the time.
     let now = unsafe { libc::time(std::ptr::null_mut()) };
     // SAFETY: a zeroed tm is a valid value of the plain C struct, which localtime_r fills.
@@ -148,7 +158,12 @@ fn picture(posix: &str) -> Option<String> {
             }
             continue;
         }
-        out.push_str(match chars.next()? {
+        // An alternative form (%E, %O: the locale's era or digits) is the plain one.
+        let mut directive = chars.next()?;
+        if directive == 'E' || directive == 'O' {
+            directive = chars.next()?;
+        }
+        out.push_str(match directive {
             'H' => "HH",
             'k' => "H",
             'I' | 'l' => "h",
@@ -165,14 +180,18 @@ fn picture(posix: &str) -> Option<String> {
     (!out.is_empty()).then_some(out)
 }
 
-/// A time picture without its seconds: "h:mm:ss tt" is "h:mm tt".
+/// A time picture without its seconds: "h:mm:ss tt" is "h:mm tt". Seconds written with a word
+/// of their own (Japanese "HH時mm分ss秒") stay: which word goes with them is the locale's.
 fn without_seconds(picture: &str) -> String {
-    picture
-        .replace(":ss", "")
-        .replace(".ss", "")
-        .replace("ss", "")
-        .trim()
-        .to_owned()
+    if picture.contains(":ss") || picture.contains(".ss") {
+        picture
+            .replace(":ss", "")
+            .replace(".ss", "")
+            .trim()
+            .to_owned()
+    } else {
+        picture.to_owned()
+    }
 }
 
 #[cfg(test)]
@@ -189,7 +208,9 @@ mod tests {
         assert_eq!(picture("%T").as_deref(), Some("HH:mm:ss"));
         assert_eq!(picture("%H.%M.%S").as_deref(), Some("HH.mm.ss"));
         assert_eq!(picture("%H h %M").as_deref(), Some("HH 'h' mm"));
-        assert_eq!(picture("%E"), None);
+        assert_eq!(picture("%EH:%OM").as_deref(), Some("HH:mm"));
+        assert_eq!(picture("%Q"), None);
+        assert_eq!(without_seconds("HH'時'mm'分'ss'秒'"), "HH'時'mm'分'ss'秒'");
         assert_eq!(without_seconds("h:mm:ss tt"), "h:mm tt");
         assert_eq!(without_seconds("HH:mm:ss"), "HH:mm");
         assert_eq!(without_seconds("HH.mm.ss"), "HH.mm");

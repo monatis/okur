@@ -12,8 +12,7 @@ use serde::{Deserialize, Serialize};
 use xa11y_core::{ElementData, EventKind, Role};
 
 use crate::focus::{
-    focus_event, in_active_window, is_menu_item_role, is_window, menu_in, menu_item_focus,
-    native_focus,
+    focus_event, in_active_window, is_menu_item_role, menu_in, menu_item_focus, native_focus,
 };
 use crate::focus_track::{is_control_change, is_inside_change, FocusTrack, Reread};
 use crate::page::{to_aom_from, AtspiNode};
@@ -160,12 +159,21 @@ pub fn object_key(element: &ElementData) -> Option<String> {
 }
 
 /// A value as a number says it: whole without its fraction ("40"), else as it is ("86.0274").
-fn number(value: f64) -> String {
-    if value.fract() == 0.0 && value.abs() < 1e15 {
+/// Chromium keeps a range's values as single-precision floats, which AT-SPI widens: 86.0274 comes
+/// as 86.02739715576172, said as the float it was (the code review of 2026-11-09, third pass,
+/// finding 4). None for a value that is no number.
+fn number(value: f64) -> Option<String> {
+    if !value.is_finite() {
+        return None;
+    }
+    let value = value as f32;
+    // Not "-0".
+    let value = if value == 0.0 { 0.0 } else { value };
+    Some(if value.fract() == 0.0 && value.abs() < 1e7 {
         format!("{value:.0}")
     } else {
         value.to_string()
-    }
+    })
 }
 
 /// Whether the event is a window without a name coming forward: Chrome's own menu's window.
@@ -225,10 +233,19 @@ pub struct Converter {
     /// its window's object: Chrome on Linux opens each in a window of its own and highlights
     /// its items (AT-SPI's `selected`) without focusing them, where Windows' Chrome starts
     /// menu mode and focuses its items [obs, 220/s1-s5].
-    menus: Vec<String>,
+    menus: Vec<OpenMenu>,
     /// The last of those menus closed: menu mode ends as the focus or a window comes back,
     /// unless another menu's window opens first.
     menus_closing: bool,
+}
+
+/// An application's own menu open: its window's object, and the menu as it was read when the
+/// window came forward, whose items give each highlighted one its place without reading it
+/// again (the code review of 2026-11-09, third pass, finding 1: each arrow read the menu).
+#[derive(Debug, Clone)]
+struct OpenMenu {
+    window: String,
+    menu: AtspiNode,
 }
 
 /// What an application's own menu did, for one record: the engine's events, and whether the
@@ -290,8 +307,8 @@ impl Converter {
     /// In a page, a menu item focused, which may be a select's option: Chrome on Linux shows a
     /// select's open list as a menu in the combo box (276).
     /// Outside a page, a window coming forward without a name (Chrome's own menu's) is read
-    /// for the menu it may hold, and, while one is open, a menu's item highlighted with its
-    /// menu (a page's select highlights its hidden menu's items too: its value changing).
+    /// for the menu it may hold; its items highlighted later are not read (their places come
+    /// from that read).
     pub fn wants_native(
         &self,
         kind: &EventKind,
@@ -306,7 +323,6 @@ impl Converter {
                 focus
                     || is_control_change(kind, focused(target))
                     || is_unnamed_window(kind, element)
-                    || (!self.menus.is_empty() && is_menu_highlight(kind, element))
             }
         }
     }
@@ -326,6 +342,17 @@ impl Converter {
         if target.role != Role::ProgressBar {
             return None;
         }
+        // The page given last's object: another application's paths look alike (an Electron
+        // application's), its bus tells them apart.
+        let bus = target.raw.get("bus_name").and_then(|b| b.as_str())?;
+        let in_last_page = self
+            .last_page
+            .as_deref()
+            .and_then(|document| document.strip_prefix(bus))
+            .is_some_and(|rest| rest.starts_with('/'));
+        if !in_last_page {
+            return None;
+        }
         let path = target.raw.get("object_path").and_then(|p| p.as_str())?;
         let id = self.page_ids.get(path)?;
         let value = target
@@ -334,7 +361,7 @@ impl Converter {
             .map(str::trim)
             .filter(|v| !v.is_empty())
             .map(str::to_owned)
-            .or_else(|| target.numeric_value.map(number))?;
+            .or_else(|| target.numeric_value.and_then(number))?;
         let mut bar = FocusEvent::new(okur_core::aom::Role::ProgressBar);
         bar.name = target.name.clone().filter(|n| !n.trim().is_empty());
         bar.value = Some(value);
@@ -354,22 +381,32 @@ impl Converter {
     fn own_menu(&mut self, record: &AtspiRecord, object: Option<&str>, in_page: bool) -> MenuStep {
         let mut events = Vec::new();
         let mut alone = false;
-        let read = record.native.as_ref().filter(|r| !r.focus.role.is_empty());
-        let bus = record
-            .target
-            .as_ref()
-            .and_then(|t| t.raw.get("bus_name"))
-            .and_then(|b| b.as_str());
+        let app = Some(record.app.clone()).filter(|a| !a.is_empty());
+        let target = record.target.as_ref();
         let highlight = !in_page
             && !self.menus.is_empty()
-            && record
-                .target
-                .as_ref()
-                .is_some_and(|t| is_menu_highlight(&record.kind, t));
+            && target.is_some_and(|t| is_menu_highlight(&record.kind, t));
         match &record.kind {
             EventKind::WindowActivated => {
+                let read = record.native.as_ref().filter(|r| !r.focus.role.is_empty());
                 let menu = read.and_then(|r| menu_in(&r.focus));
+                let named = target
+                    .and_then(|t| t.name.as_deref())
+                    .is_some_and(|n| !n.trim().is_empty());
                 match (menu, object) {
+                    // A menu open already comes forward again (its submenu closed): the menus
+                    // opened from it are gone.
+                    (Some(_), Some(window)) if self.menus.iter().any(|m| m.window == window) => {
+                        let at = self
+                            .menus
+                            .iter()
+                            .position(|m| m.window == window)
+                            .map_or(self.menus.len(), |at| at + 1);
+                        for _ in at..self.menus.len() {
+                            events.push(AccessibilityEvent::Menu(MenuEvent::PopupEnd));
+                        }
+                        self.menus.truncate(at);
+                    }
                     (Some(menu), Some(window)) => {
                         if self.menus.is_empty() && !self.menus_closing {
                             events.push(AccessibilityEvent::Menu(MenuEvent::Start {
@@ -377,7 +414,10 @@ impl Converter {
                             }));
                         }
                         self.menus_closing = false;
-                        self.menus.push(window.to_owned());
+                        self.menus.push(OpenMenu {
+                            window: window.to_owned(),
+                            menu: menu.clone(),
+                        });
                         events.push(AccessibilityEvent::Menu(MenuEvent::PopupStart {
                             kind: PopupKind::Plain,
                         }));
@@ -386,52 +426,96 @@ impl Converter {
                             is_menu_item_role(&c.role) && c.has(crate::page::state::SELECTED)
                         }) {
                             let mut focus = menu_item_focus(item, Some(menu));
-                            focus.app = Some(record.app.clone()).filter(|a| !a.is_empty());
+                            focus.app = app;
                             focus.platform.window_id = Some(window.to_owned());
                             events.push(AccessibilityEvent::Focus(focus));
                         }
                     }
-                    _ => {
-                        if std::mem::take(&mut self.menus_closing) {
-                            events.push(AccessibilityEvent::Menu(MenuEvent::End));
-                        }
-                    }
+                    // Another window with a title comes forward: whatever menus were open have
+                    // closed, a deactivation missed (a click elsewhere, Alt+Tab) or not (the
+                    // code review of 2026-11-09, third pass, finding 2).
+                    _ if named => self.end_menus(&mut events),
+                    _ => {}
                 }
             }
             EventKind::WindowDeactivated => {
-                // It, and the submenus opened from it.
-                if let Some(at) = object.and_then(|o| self.menus.iter().position(|m| m == o)) {
-                    for _ in at..self.menus.len() {
-                        events.push(AccessibilityEvent::Menu(MenuEvent::PopupEnd));
-                    }
-                    self.menus.truncate(at);
+                // The innermost menu going. One under a submenu still open stays: Chrome may
+                // let its window go as the submenu's comes.
+                if object.is_some() && self.menus.last().map(|m| m.window.as_str()) == object {
+                    self.menus.pop();
+                    events.push(AccessibilityEvent::Menu(MenuEvent::PopupEnd));
                     self.menus_closing = self.menus.is_empty();
                 }
             }
-            EventKind::FocusChanged => {
-                if std::mem::take(&mut self.menus_closing) {
-                    events.push(AccessibilityEvent::Menu(MenuEvent::End));
-                }
-            }
+            // A focus ends the menus: Chrome focuses none of its menus' items.
+            EventKind::FocusChanged => self.end_menus(&mut events),
             _ if highlight => {
                 alone = true;
-                if let Some(read) = read.filter(|r| is_menu_item_role(&r.focus.role)) {
-                    let window = read
-                        .ancestors
-                        .iter()
-                        .find(|a| is_window(&a.role) && !a.path.is_empty())
-                        .zip(bus)
-                        .map(|(window, bus)| format!("{bus}{}", window.path));
-                    let menu = read.ancestors.first().filter(|m| m.role == "menu");
-                    let mut focus = menu_item_focus(&read.focus, menu);
-                    focus.app = Some(record.app.clone()).filter(|a| !a.is_empty());
-                    focus.platform.window_id = window;
-                    events.push(AccessibilityEvent::Focus(focus));
+                if let Some(target) = target {
+                    events.push(AccessibilityEvent::Focus(self.highlighted(target, app)));
                 }
             }
             _ => {}
         }
         MenuStep { events, alone }
+    }
+
+    /// A menu's item highlighted, as its focus: its place among the items of the open menu
+    /// that holds it, as read when the menu came forward; its name and state as its event's
+    /// own snapshot has them (Chrome names its items as its menu opens).
+    fn highlighted(&self, target: &ElementData, app: Option<String>) -> FocusEvent {
+        let path = target
+            .raw
+            .get("object_path")
+            .and_then(|p| p.as_str())
+            .filter(|p| !p.is_empty());
+        let found = path.and_then(|path| {
+            self.menus.iter().rev().find_map(|open| {
+                open.menu
+                    .children
+                    .iter()
+                    .find(|item| item.path == path)
+                    .map(|item| (open, item))
+            })
+        });
+        let mut focus = match found {
+            Some((open, item)) => {
+                let mut focus = menu_item_focus(item, Some(&open.menu));
+                focus.platform.window_id = Some(open.window.clone());
+                focus
+            }
+            // An item the read did not hold: as its snapshot alone has it.
+            None => {
+                let mut focus = FocusEvent::new(okur_core::aom::Role::MenuItem);
+                focus.platform.window_id = self.menus.last().map(|m| m.window.clone());
+                focus
+            }
+        };
+        if let Some(name) = target
+            .name
+            .as_deref()
+            .map(str::trim)
+            .filter(|n| !n.is_empty())
+        {
+            focus.name = Some(name.to_owned());
+        }
+        if let (Some(_), Some(checked)) = (focus.states.checked, target.states.checked) {
+            focus.states.checked = Some(checked == xa11y_core::Toggled::On);
+        }
+        focus.app = app;
+        focus
+    }
+
+    /// Every menu open ends: their popups, then menu mode.
+    fn end_menus(&mut self, events: &mut Vec<AccessibilityEvent>) {
+        for _ in &self.menus {
+            events.push(AccessibilityEvent::Menu(MenuEvent::PopupEnd));
+        }
+        let open = !self.menus.is_empty();
+        self.menus.clear();
+        if std::mem::take(&mut self.menus_closing) || open {
+            events.push(AccessibilityEvent::Menu(MenuEvent::End));
+        }
     }
 
     /// The focused control to read again, as something within it changed in its application.
@@ -1034,26 +1118,68 @@ mod tests {
         window
     }
 
-    /// Chrome's own menu on Linux: its window comes forward holding it (menu mode and its popup
-    /// start, its keys the menu's), each item highlighted is said as its focus with its place
-    /// among the items, a submenu's item as one, and the window going ends the popup, then menu
-    /// mode as the page's window comes back [obs, 220/s1-s5].
-    #[test]
-    fn chromes_own_menu_is_menu_mode_and_its_highlighted_items() {
-        let mut converter = Converter::default();
+    fn highlight(at: usize, name: &str) -> AtspiRecord {
+        let mut item = element(ElementRole::MenuItem, name, &format!("/item/{at}"), false);
+        item.raw.insert(
+            "atspi_role".to_owned(),
+            serde_json::Value::String("menu item".to_owned()),
+        );
+        chrome_record(
+            EventKind::StateChanged {
+                flag: StateFlag::Selected,
+                value: true,
+            },
+            item,
+            None,
+        )
+    }
+
+    fn menu_opened(path: &str) -> AtspiRecord {
         let mut frame = window();
         frame.children.push(chrome_menu(None));
-        let opened = chrome_record(
+        let mut opened = menu_window();
+        opened.raw.insert(
+            "object_path".to_owned(),
+            serde_json::Value::String(path.to_owned()),
+        );
+        chrome_record(
             EventKind::WindowActivated,
-            menu_window(),
+            opened,
             Some(NativeRead {
                 focus: frame,
                 ancestors: Vec::new(),
                 read_ms: 0,
             }),
+        )
+    }
+
+    fn window_gone(path: &str) -> AtspiRecord {
+        let mut gone = menu_window();
+        gone.role = ElementRole::Group;
+        gone.raw.insert(
+            "object_path".to_owned(),
+            serde_json::Value::String(path.to_owned()),
         );
+        chrome_record(EventKind::WindowDeactivated, gone, None)
+    }
+
+    fn page_window() -> AtspiRecord {
+        let window = element(ElementRole::Window, "News - Google Chrome", "/1", false);
+        chrome_record(EventKind::WindowActivated, window, None)
+    }
+
+    /// Chrome's own menu on Linux: its window comes forward holding it (menu mode and its popup
+    /// start, its keys the menu's), each item highlighted is said as its focus with its place
+    /// among the items read as the menu opened, a submenu's item as one, and the window going
+    /// ends the popup, then menu mode as the page's window comes back [obs, 220/s1-s5]. A
+    /// highlight is never read.
+    #[test]
+    fn chromes_own_menu_is_menu_mode_and_its_highlighted_items() {
+        let mut converter = Converter::default();
         assert!(matches!(
-            converter.convert_read(&opened).as_slice(),
+            converter
+                .convert_read(&menu_opened("/menu-window"))
+                .as_slice(),
             [
                 AccessibilityEvent::Menu(MenuEvent::Start { launcher: false }),
                 AccessibilityEvent::Menu(MenuEvent::PopupStart {
@@ -1061,60 +1187,95 @@ mod tests {
                 }),
             ]
         ));
-        let highlighted = |at: usize, name: &str| {
-            let mut item = element(ElementRole::MenuItem, name, &format!("/item/{at}"), false);
-            item.raw.insert(
-                "atspi_role".to_owned(),
-                serde_json::Value::String("menu item".to_owned()),
-            );
-            let mut menu = chrome_menu(Some(at));
-            let focus = menu
-                .children
-                .iter()
-                .find(|c| c.path == format!("/item/{at}"))
-                .cloned()
-                .unwrap_or_default();
-            menu.path = "/menu".to_owned();
-            let mut window = node("frame", "", &[state::ACTIVE]);
-            window.path = "/menu-window".to_owned();
-            chrome_record(
-                EventKind::StateChanged {
-                    flag: StateFlag::Selected,
-                    value: true,
-                },
-                item,
-                Some(NativeRead {
-                    focus,
-                    ancestors: vec![menu, window],
-                    read_ms: 0,
-                }),
-            )
-        };
-        let events = converter.convert_read(&highlighted(1, "New window Ctrl+N"));
+        let second = highlight(1, "New window Ctrl+N");
+        assert!(!converter.wants_native(&second.kind, second.target.as_ref(), false));
         assert!(matches!(
-            events.as_slice(),
+            converter.convert_read(&second).as_slice(),
             [AccessibilityEvent::Focus(f)] if f.role == OkurRole::MenuItem
                 && f.name.as_deref() == Some("New window Ctrl+N")
                 && (f.item_index, f.item_count) == (Some(2), Some(3))
                 && f.states.expanded.is_none()
+                && f.platform.window_id.as_deref() == Some(":1.5/menu-window")
         ));
-        let events = converter.convert_read(&highlighted(2, "Your Chrome Not signed in"));
         assert!(matches!(
-            events.as_slice(),
+            converter.convert_read(&highlight(2, "Your Chrome Not signed in")).as_slice(),
             [AccessibilityEvent::Focus(f)] if f.states.expanded == Some(false)
                 && (f.item_index, f.item_count) == (Some(3), Some(3))
         ));
-        let mut gone = menu_window();
-        gone.role = ElementRole::Group;
-        let closed = chrome_record(EventKind::WindowDeactivated, gone, None);
         assert!(matches!(
-            converter.convert_read(&closed).as_slice(),
+            converter
+                .convert_read(&window_gone("/menu-window"))
+                .as_slice(),
             [AccessibilityEvent::Menu(MenuEvent::PopupEnd)]
         ));
-        let page_window = element(ElementRole::Window, "News - Google Chrome", "/1", false);
-        let back = chrome_record(EventKind::WindowActivated, page_window, None);
         assert!(matches!(
-            converter.convert_read(&back).as_slice(),
+            converter.convert_read(&page_window()).as_slice(),
+            [AccessibilityEvent::Menu(MenuEvent::End)]
+        ));
+    }
+
+    /// Menus whose window's going was missed end as another window with a title, or a focus,
+    /// comes; a select's highlight after them is no menu's.
+    #[test]
+    fn menus_whose_end_was_missed_end_with_the_next_window_or_focus() {
+        let mut converter = Converter::default();
+        converter.convert_read(&menu_opened("/menu-window"));
+        assert!(matches!(
+            converter.convert_read(&page_window()).as_slice(),
+            [
+                AccessibilityEvent::Menu(MenuEvent::PopupEnd),
+                AccessibilityEvent::Menu(MenuEvent::End),
+            ]
+        ));
+        assert!(!converter
+            .convert_read(&highlight(0, "Northside"))
+            .iter()
+            .any(|e| matches!(
+                e,
+                AccessibilityEvent::Menu(_) | AccessibilityEvent::Focus(_)
+            )));
+        converter.convert_read(&menu_opened("/menu-window"));
+        let link = element(ElementRole::Link, "Home", "/link", true);
+        let focus = chrome_record(EventKind::FocusChanged, link, None);
+        let events = converter.convert_read(&focus);
+        assert!(matches!(
+            events.as_slice(),
+            [
+                AccessibilityEvent::Menu(MenuEvent::PopupEnd),
+                AccessibilityEvent::Menu(MenuEvent::End),
+                ..
+            ]
+        ));
+    }
+
+    /// A submenu opens over its menu, in either order of their windows' events: the menu's
+    /// window going under the open submenu ends nothing; the submenu going ends its popup; the
+    /// menu coming forward again ends what was above it; a window come forward twice is one
+    /// menu.
+    #[test]
+    fn a_submenu_over_its_menu_in_either_order() {
+        let mut converter = Converter::default();
+        converter.convert_read(&menu_opened("/menu"));
+        assert!(matches!(
+            converter.convert_read(&menu_opened("/submenu")).as_slice(),
+            [AccessibilityEvent::Menu(MenuEvent::PopupStart { .. })]
+        ));
+        assert!(converter.convert_read(&window_gone("/menu")).is_empty());
+        assert!(matches!(
+            converter.convert_read(&highlight(1, "New window Ctrl+N")).as_slice(),
+            [AccessibilityEvent::Focus(f)] if f.platform.window_id.as_deref() == Some(":1.5/submenu")
+        ));
+        assert!(matches!(
+            converter.convert_read(&menu_opened("/menu")).as_slice(),
+            [AccessibilityEvent::Menu(MenuEvent::PopupEnd)]
+        ));
+        assert!(converter.convert_read(&menu_opened("/menu")).is_empty());
+        assert!(matches!(
+            converter.convert_read(&window_gone("/menu")).as_slice(),
+            [AccessibilityEvent::Menu(MenuEvent::PopupEnd)]
+        ));
+        assert!(matches!(
+            converter.convert_read(&page_window()).as_slice(),
             [AccessibilityEvent::Menu(MenuEvent::End)]
         ));
     }
@@ -1125,6 +1286,7 @@ mod tests {
     fn a_page_progress_bars_value_change_is_its_progress() {
         let mut converter = Converter::default();
         converter.page_ids.insert("/bar".to_owned(), 41);
+        converter.last_page = Some(":1.5/doc".to_owned());
         let mut bar = element(ElementRole::ProgressBar, "Upload", "/bar", false);
         bar.numeric_value = Some(40.0);
         let changed = chrome_record(EventKind::ValueChanged, bar.clone(), None);
@@ -1135,12 +1297,24 @@ mod tests {
                     && bar.unique_id.as_deref() == Some("41")
                     && bar.name.as_deref() == Some("Upload")
         ));
-        bar.numeric_value = Some(86.0274);
+        // As Chromium's single-precision value comes, widened.
+        bar.numeric_value = Some(f64::from(86.0274_f32));
         let meter = chrome_record(EventKind::ValueChanged, bar.clone(), None);
         assert!(matches!(
             converter.convert_read(&meter).as_slice(),
             [AccessibilityEvent::ProgressChanged { bar, .. }] if bar.value.as_deref() == Some("86.0274")
         ));
+        bar.numeric_value = Some(f64::NAN);
+        let no_number = chrome_record(EventKind::ValueChanged, bar.clone(), None);
+        assert!(converter.convert_read(&no_number).is_empty());
+        // Another application's object of the same path.
+        bar.numeric_value = Some(50.0);
+        bar.raw.insert(
+            "bus_name".to_owned(),
+            serde_json::Value::String(":1.9".to_owned()),
+        );
+        let elsewhere_app = chrome_record(EventKind::ValueChanged, bar, None);
+        assert!(converter.convert_read(&elsewhere_app).is_empty());
         let other = element(ElementRole::ProgressBar, "Elsewhere", "/other", false);
         let elsewhere = chrome_record(EventKind::ValueChanged, other, None);
         assert!(converter.convert_read(&elsewhere).is_empty());

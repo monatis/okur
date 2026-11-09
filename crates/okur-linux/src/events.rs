@@ -46,6 +46,8 @@ struct LivePage {
     bus: String,
     document: String,
     paths: std::collections::HashMap<String, String>,
+    /// Its progress bars' objects, whose value changes are heard.
+    bars: std::collections::HashSet<String>,
 }
 
 /// A live region heard changing, read once its signals pause: the page's document and when.
@@ -107,6 +109,17 @@ const REFRESH_MAX_DELAY: Duration = Duration::from_secs(3);
 /// Whether `kind` on the object at `bus` and `path` is heard: what the converter takes, and a
 /// live region's children or text changing.
 fn heard(live: &LiveObjects, kind: &EventKind, bus: &str, path: &str) -> bool {
+    // A value changing is heard from a read page's progress bars alone: each heard event costs
+    // its object's read, and sliders and scroll bars change anywhere (the code review of
+    // 2026-11-09, third pass, 8).
+    if *kind == EventKind::ValueChanged {
+        let pages = live
+            .read()
+            .unwrap_or_else(std::sync::PoisonError::into_inner);
+        return pages
+            .iter()
+            .any(|page| page.bus == bus && page.bars.contains(path));
+    }
     if okur_linux_model::focus_track::is_heard(kind) {
         return true;
     }
@@ -250,24 +263,31 @@ fn note_live_pages(live: &LiveObjects, record: &AtspiRecord) {
     let found: Vec<_> = record
         .pages
         .iter()
-        .map(|page| (page, okur_linux_model::live::live_objects(&page.root)))
+        .map(|page| {
+            (
+                page,
+                okur_linux_model::live::live_objects(&page.root),
+                okur_linux_model::page::progress_bars(&page.root),
+            )
+        })
         .collect();
     let mut pages = live
         .write()
         .unwrap_or_else(std::sync::PoisonError::into_inner);
-    for (page, paths) in found {
+    for (page, paths, bars) in found {
         let Some(at) = page.document.find('/') else {
             continue;
         };
         let (bus, document) = page.document.split_at(at);
         pages.retain(|p| !(p.bus == bus && p.document == document));
-        if paths.is_empty() {
+        if paths.is_empty() && bars.is_empty() {
             continue;
         }
         pages.push(LivePage {
             bus: bus.to_owned(),
             document: document.to_owned(),
             paths,
+            bars,
         });
         if pages.len() > PAGES_KEPT {
             pages.remove(0);
@@ -1308,10 +1328,18 @@ impl EventSource for AtspiEventSource {
                                     .and_then(|e| e.raw.get("bus_name"))
                                     .and_then(|b| b.as_str())
                                     .is_some_and(|bus| {
-                                        *chromium.entry(bus.to_owned()).or_insert_with(|| {
-                                            provider.atspi_toolkit_name(bus).as_deref()
-                                                == Some("Chromium")
-                                        })
+                                        if let Some(&known) = chromium.get(bus) {
+                                            return known;
+                                        }
+                                        // A lookup that failed (the application starting)
+                                        // is asked again next time, not kept as no (the code
+                                        // review of 2026-11-09, third pass, 5).
+                                        let Some(toolkit) = provider.atspi_toolkit_name(bus) else {
+                                            return false;
+                                        };
+                                        let known = toolkit == "Chromium";
+                                        chromium.insert(bus.to_owned(), known);
+                                        known
                                     });
                             let native = target
                                 .filter(|_| {

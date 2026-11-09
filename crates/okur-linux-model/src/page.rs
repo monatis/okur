@@ -429,6 +429,20 @@ fn numbered(node: &AtspiNode, next: &mut i32, ids: &HashMap<&str, i32>) -> WebNo
     }
 }
 
+/// The objects of a page's progress bars and meters, by their paths: the driver hears their
+/// values change ([`crate::convert`]'s progress).
+pub fn progress_bars(root: &AtspiNode) -> std::collections::HashSet<String> {
+    let mut bars = std::collections::HashSet::new();
+    let mut stack = vec![root];
+    while let Some(node) = stack.pop() {
+        if node.role == "progress bar" && !node.path.is_empty() {
+            bars.insert(node.path.clone());
+        }
+        stack.extend(node.children.iter());
+    }
+    bars
+}
+
 /// A default action's name as MSAA's is on Windows ("click ancestor"): Chromium names it
 /// "clickAncestor" over AT-SPI.
 fn action_name(name: &str) -> String {
@@ -498,6 +512,13 @@ mod tests {
         );
         let bar = web.children.get(1);
         assert_eq!(bar.and_then(|b| b.value.as_deref()), Some("100"));
+        let mut bar = node("progress bar", "Upload", vec![]);
+        bar.path = "/bar".to_owned();
+        let page = node("document web", "Bars", vec![node("panel", "", vec![bar])]);
+        assert_eq!(
+            progress_bars(&page).into_iter().collect::<Vec<_>>(),
+            ["/bar"]
+        );
     }
 
     /// A list box's items have its name and their places, their own where Chrome gives them,

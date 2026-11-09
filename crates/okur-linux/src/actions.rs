@@ -78,6 +78,14 @@ fn focus_target(provider: &LinuxProvider, object: AtspiObject) -> (String, Strin
 /// How far up from an element its page's document is looked for.
 const PAGE_DEPTH: usize = 40;
 
+/// A text field's read as asked: what the engine knew of it before the key, whether it is a
+/// page's, and whether a key moved its caret (else it is read at once, as it took the focus).
+struct TextAsk {
+    before: Option<TextContext>,
+    in_page: bool,
+    after_key: bool,
+}
+
 /// How long after the focus was asked for an element a caret put is put in it.
 const FOCUS_ASKED_FRESH: Duration = Duration::from_millis(1000);
 
@@ -197,12 +205,31 @@ impl LinuxActions {
                             }) => {}
                         Request::Text(before, in_page) => {
                             let before = before.map(|b| *b);
-                            if !read_text(&provider, &shared, &sink, before, in_page, true) {
+                            let read = TextAsk {
+                                before,
+                                in_page,
+                                after_key: true,
+                            };
+                            if !read_text(&provider, &shared, &sink, read, &mut || false) {
                                 return;
                             }
                         }
+                        // A read asked as the field took the focus, given up where a key's
+                        // read came meanwhile: the engine takes the first read after a key as
+                        // the key's answer (the code review of 2026-11-09, third pass, 6).
                         Request::FieldFocused(in_page) => {
-                            if !read_text(&provider, &shared, &sink, None, in_page, false) {
+                            let read = TextAsk {
+                                before: None,
+                                in_page,
+                                after_key: false,
+                            };
+                            let mut superseded = || {
+                                pending.extend(received.try_iter());
+                                pending.iter().any(|r| {
+                                    matches!(r, Request::Text(..) | Request::FieldFocused(..))
+                                })
+                            };
+                            if !read_text(&provider, &shared, &sink, read, &mut superseded) {
                                 return;
                             }
                         }
@@ -338,10 +365,14 @@ fn read_text(
     provider: &LinuxProvider,
     reads: &DriverShared,
     sink: &EventSink,
-    before: Option<TextContext>,
-    in_page: bool,
-    after_key: bool,
+    ask: TextAsk,
+    superseded: &mut dyn FnMut() -> bool,
 ) -> bool {
+    let TextAsk {
+        before,
+        in_page,
+        after_key,
+    } = ask;
     let started = Instant::now();
     let focused = reads
         .focused
@@ -430,6 +461,10 @@ fn read_text(
     };
     // The focus moved on while the field was read (Tab during the wait): the read is the field
     // left, and the engine is not given it.
+    if superseded() {
+        tracing::debug!("caret read: a newer read asked; not given");
+        return true;
+    }
     let still_focused = reads
         .focused
         .lock()
