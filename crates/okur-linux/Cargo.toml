@@ -15,6 +15,8 @@ okur-linux-model = { workspace = true }
 [target.'cfg(target_os = "linux")'.dependencies]
 okur-core = { workspace = true }
 okur-runtime = { workspace = true }
+# The local time and the locale's time formats (localtime_r, nl_langinfo_l).
+libc = "0.2"
 serde = { workspace = true }
 serde_json = { workspace = true }
 tracing = { workspace = true }

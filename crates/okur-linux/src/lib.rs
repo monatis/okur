@@ -6,6 +6,7 @@
 #![cfg(target_os = "linux")]
 
 pub mod actions;
+pub mod clock;
 pub mod events;
 pub mod keyboard;
 pub mod speech;

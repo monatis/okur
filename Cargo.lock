@@ -1308,6 +1308,7 @@ dependencies = [
 name = "okur-linux"
 version = "0.1.0"
 dependencies = [
+ "libc",
  "okur-core",
  "okur-linux-model",
  "okur-model",

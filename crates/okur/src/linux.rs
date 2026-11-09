@@ -80,7 +80,8 @@ impl System {
                     objects, shared, sink,
                 )) as Box<dyn okur_core::actions::ApplicationActions>
             })),
-            clock: None,
+            // Say System Time and Date (Insert+F12): the local time in the user's locale.
+            clock: Some(Box::new(okur_linux::clock::LinuxClock)),
             sounds: None,
             start_options: None,
         }
