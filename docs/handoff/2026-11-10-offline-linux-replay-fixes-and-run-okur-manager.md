@@ -120,6 +120,16 @@ From the commands named, each after the commit given:
     each would say "Not Selected"); a lab probe with GtkNoSelection and multi-selection.
 - `okur-lab parity` after all of it: "12689/13284 steps match exactly; 388 accepted
   divergences not counted".
+- **The Window List's Delete** (fa56ef50, the everyday gaps' item 29): closes the window
+  chosen (its system menu's Close, as Alt+F4), and the list comes back once the window is gone
+  or its application's question is answered, from Sight and Sound's article on JAWS 2024.2403.
+  Pending 1209 records what JAWS says.
+- **The GTK desktop replica's radios one under another** (c45c97d5): GTK's arrows move by
+  layout, and Down left the row of radios (548/s6).
+- **Pending scenarios** for the lab: 1207 (Custom Label Delete), 1208 (a wrapped text area's
+  lines, with its fixture), 1209 (the Window List's Delete), 1210 (element information,
+  Insert+Shift+F1 and Insert+Ctrl+Shift+F1).
+- **Probes** for the lab: `probe-chrome-spelling.sh`, `probe-gtk-selection.sh`.
 
 ## Next
 
