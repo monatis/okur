@@ -6,7 +6,10 @@
 //! - a group box names no control in it: JAWS's "Use Rule Type: Read First Sentence of Every
 //!   Paragraph radio button checked" was "Read First Sentence..." alone (812/s2 in full5);
 //! - a drop-down gives no place: "Rules History: Combo box <New> 1 of 8" lost its "1 of 8"
-//!   (812/s5).
+//!   (812/s5);
+//! - a tree's row is its expander's button, with its place in the rows shown and a level that
+//!   is not its depth: JAWS's "level 1 | Primary Navigation | 1 of 1 | Banner" was "Primary
+//!   Navigation 2 of 5" (241/s2 in gtk7).
 //!
 //! A focus in one of Okur's windows whose title is a dialog it showed is in a dialog box, its
 //! default button the spec's default; its control, found in the spec by its label, has its
@@ -18,7 +21,7 @@ use super::held_keys::AskedDialog;
 use super::{ScreenReaderEngine, OKUR_WINDOWS};
 use crate::aom::Role;
 use crate::event::FocusEvent;
-use crate::ui::{Control, ControlKind, DialogSpec, ToUi, UiHost};
+use crate::ui::{Control, ControlKind, DialogSpec, FromUi, ToUi, TreeItem, UiHost, Value};
 
 /// The dialogs okur-ui shows, as the engine last told it of them.
 pub(super) type OpenDialogs = Arc<Mutex<Vec<DialogSpec>>>;
@@ -62,6 +65,30 @@ fn kept(open: &mut Vec<DialogSpec>, message: &ToUi) {
                 }
             }
         }
+        ToUi::DialogTree {
+            id,
+            control,
+            items,
+            selected,
+        } => {
+            if let Some((kept, chosen)) = tree_of(open, *id, control) {
+                kept.clone_from(items);
+                *chosen = *selected;
+            }
+        }
+        ToUi::DialogSet { id, control, value } => {
+            if let Some((items, chosen)) = tree_of(open, *id, control) {
+                match value {
+                    Value::Selected(i) => *chosen = *i,
+                    Value::TreeItem(i, item) => {
+                        if let Some(slot) = items.get_mut(*i) {
+                            *slot = item.clone();
+                        }
+                    }
+                    _ => {}
+                }
+            }
+        }
         ToUi::DialogLabel { id, control, label } => {
             let controls = open
                 .iter_mut()
@@ -73,6 +100,105 @@ fn kept(open: &mut Vec<DialogSpec>, message: &ToUi) {
         }
         _ => {}
     }
+}
+
+/// The items and the choice of dialog `id`'s tree `control`, as kept.
+fn tree_of<'a>(
+    open: &'a mut [DialogSpec],
+    id: u32,
+    control: &str,
+) -> Option<(&'a mut Vec<TreeItem>, &'a mut usize)> {
+    open.iter_mut()
+        .filter(|d| d.id == id)
+        .flat_map(|d| d.controls.iter_mut())
+        .find(|c| c.id == control)
+        .and_then(|c| match &mut c.kind {
+            ControlKind::Tree { items, selected } => {
+                // A tuple of the two fields' borrows.
+                Some((items, selected))
+            }
+            _ => None,
+        })
+}
+
+/// What the user did in one of Okur's trees, as okur-ui tells it, kept: the item chosen, an
+/// item opened or closed.
+fn heard(open: &mut [DialogSpec], message: &FromUi) {
+    let FromUi::DialogChanged { id, control, value } = message else {
+        return;
+    };
+    let Some((items, chosen)) = tree_of(open, *id, control) else {
+        return;
+    };
+    match value {
+        Value::Selected(i) => *chosen = *i,
+        Value::ItemOpened(i, opened) => {
+            if let Some(item) = items.get_mut(*i) {
+                item.open = *opened;
+            }
+        }
+        _ => {}
+    }
+}
+
+/// `focus` as an item of a tree of Okur's (`label` its tree's, `items` and `chosen` as kept):
+/// the item its name gives, or the chosen one for a row that gives none, with its depth, its
+/// place among its siblings, its parent, whether it is open and how many items it holds, as
+/// Windows' tree view gives them.
+fn as_tree_item(
+    focus: &FocusEvent,
+    label: &str,
+    items: &[TreeItem],
+    chosen: usize,
+) -> Option<FocusEvent> {
+    let name = focus.name.as_deref().map(str::trim).unwrap_or_default();
+    // The chosen item where the row names none or names it (two items of one text: the one
+    // chosen), else the first the name gives.
+    let names_chosen = items
+        .get(chosen)
+        .is_some_and(|item| item.text.trim() == name);
+    let at = if name.is_empty() || names_chosen {
+        chosen
+    } else {
+        items.iter().position(|item| item.text.trim() == name)?
+    };
+    let item = items.get(at)?;
+    let top = items.iter().map(|item| item.level).min().unwrap_or(0);
+    // Its parent: the nearest item before it one level up.
+    let parent = items
+        .get(..at)?
+        .iter()
+        .rposition(|before| before.level < item.level);
+    let first_sibling = parent.map_or(0, |p| p + 1);
+    // Its siblings: from after its parent up to the first item above their level.
+    let end = items
+        .iter()
+        .enumerate()
+        .skip(first_sibling)
+        .find(|(_, other)| other.level < item.level)
+        .map_or(items.len(), |(i, _)| i);
+    let siblings: Vec<usize> = (first_sibling..end)
+        .filter(|i| items.get(*i).is_some_and(|other| other.level == item.level))
+        .collect();
+    let children = items
+        .iter()
+        .skip(at + 1)
+        .take_while(|after| after.level > item.level)
+        .filter(|after| after.level == item.level + 1)
+        .count();
+    let mut told = focus.clone();
+    told.role = Role::TreeItem;
+    told.name = Some(item.text.clone());
+    told.tree_level = Some(item.level.saturating_sub(top));
+    told.item_index = siblings.iter().position(|i| *i == at).map(|i| i + 1);
+    told.item_count = Some(siblings.len());
+    told.item_parent = parent.and_then(|p| items.get(p)).map(|p| p.text.clone());
+    told.states.expanded = (children > 0).then_some(item.open);
+    told.child_count = (children > 0 && item.open).then_some(children);
+    told.states.checked = item.checked;
+    told.container_role = Some(Role::Tree);
+    told.container_name = Some(shown(label));
+    Some(told)
 }
 
 /// The control of `controls` the focus is on, by its index: the one its label names, of a kind
@@ -137,6 +263,14 @@ impl ScreenReaderEngine {
         }
     }
 
+    /// What the user did in one of Okur's dialogs, as okur-ui tells it: kept where the spec
+    /// follows it (a tree's choice and opened items).
+    pub(super) fn own_dialog_heard(&mut self, message: &FromUi) {
+        if let Ok(mut open) = self.open_dialogs.lock() {
+            heard(&mut open, message);
+        }
+    }
+
     /// `focus` in one of Okur's dialogs, told what its spec says and the platform did not: in
     /// a dialog box, its default button, its control's group box, a drop-down's place; none
     /// when nothing is to be told.
@@ -160,6 +294,22 @@ impl ScreenReaderEngine {
         told.in_dialog_box = true;
         if told.default_button.is_none() {
             told.default_button = default;
+        }
+        // A row of a tree of Okur's: its item as the spec has it.
+        let tree = dialog.controls.iter().find_map(|c| match &c.kind {
+            ControlKind::Tree { items, selected } => Some((c.label.as_str(), items, *selected)),
+            _ => None,
+        });
+        if let (Some((label, items, chosen)), None, false) = (
+            tree,
+            control_of(&dialog.controls, focus),
+            focus.dialog_box_read,
+        ) {
+            if matches!(focus.role, Role::Button | Role::ListItem | Role::TreeItem) {
+                if let Some(item) = as_tree_item(&told, label, items, chosen) {
+                    told = item;
+                }
+            }
         }
         if let Some(at) = control_of(&dialog.controls, focus) {
             if told.group_box.is_none() && !focus.dialog_box_read {
@@ -196,6 +346,71 @@ mod tests {
             enabled: true,
             hidden: false,
         }
+    }
+
+    /// A row of Okur's Regions tree as GTK gives it (its expander's button, or a row with no
+    /// name for the chosen item): its item with its depth, its place among its siblings, its
+    /// parent, and an open item's count [obs, 241/s1-s3: "Banner Opened | 1 item", "level 1 |
+    /// Primary Navigation | 1 of 1 | Banner", "level 0 | Main | 2 of 4"].
+    #[test]
+    fn a_trees_row_is_its_item_as_the_spec_has_it() {
+        let item = |text: &str, level: usize, open: bool| TreeItem {
+            text: text.to_owned(),
+            level,
+            open,
+            checked: None,
+        };
+        let items = vec![
+            item("Banner", 0, true),
+            item("Primary Navigation", 1, true),
+            item("Main", 0, true),
+            item("Complementary", 0, true),
+            item("Content Information", 0, true),
+        ];
+        let nested = FocusEvent::new(Role::Button).with_name("Primary Navigation");
+        let told = as_tree_item(&nested, "&Regions", &items, 1);
+        let place = told.as_ref().map(|f| {
+            (
+                f.role.clone(),
+                f.tree_level,
+                f.item_index,
+                f.item_count,
+                f.item_parent.clone(),
+                f.states.expanded,
+                f.container_name.clone(),
+            )
+        });
+        assert_eq!(
+            place,
+            Some((
+                Role::TreeItem,
+                Some(1),
+                Some(1),
+                Some(1),
+                Some("Banner".to_owned()),
+                None,
+                Some("Regions".to_owned())
+            ))
+        );
+        let main = as_tree_item(
+            &FocusEvent::new(Role::Button).with_name("Main"),
+            "Regions",
+            &items,
+            2,
+        );
+        assert_eq!(
+            main.as_ref()
+                .map(|f| (f.tree_level, f.item_index, f.item_count)),
+            Some((Some(0), Some(2), Some(4)))
+        );
+        // A row with no name: the chosen item, open with its count.
+        let banner = as_tree_item(&FocusEvent::new(Role::ListItem), "Regions", &items, 0);
+        assert_eq!(
+            banner
+                .as_ref()
+                .map(|f| (f.name.clone(), f.states.expanded, f.child_count)),
+            Some((Some("Banner".to_owned()), Some(true), Some(1)))
+        );
     }
 
     /// A control of Okur's own dialog, found by its label: its group box (the group before it,

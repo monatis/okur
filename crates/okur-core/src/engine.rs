@@ -2088,6 +2088,7 @@ impl ScreenReaderEngine {
             }
             // Only the keys held for it wait on it.
             AccessibilityEvent::Ui(crate::ui::FromUi::DialogShown { .. }) => return None,
+            AccessibilityEvent::Ui(message) => self.own_dialog_heard(message),
             _ => {}
         }
         // A focus in one of Okur's dialogs: in a dialog box, with its default button, where
