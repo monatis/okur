@@ -126,21 +126,38 @@ with no change to the `KeyboardHook` port:
    window's focus said as it comes forward, the drop-down's place and open list, the tree's
    depth; then a dialog, and Qt.
 
-**Status, 2026-11-09:**
-- **Live runs.** 230 scenarios (227 web, 3 desktop) on `okur run`, with the settings JAWS recorded each with, keep their traces: 3723/4265 steps match JAWS (`corpus/live/linux-baseline.json`; 147 of them run for the first time by `wide1`, stopped at 147 of 273 for the full run below).
-- **Replay.** `okur-lab live-replay linux` replays them off the lab; with the code at 80b28c82, 3811/4265 match JAWS. It is ratcheted (`corpus/live/linux-replay-baseline.json`), so gaps are found and fixed without the lab.
-- **Found by the replay and built (ed055c8c to fcd2601b):** a text field read at its caret (the engine's `read_at_caret`, polled as Windows' page fields are, in the trace); an option's list and place; an application region; a toggle button's pressed state; live regions (a page read again as a region changes); the runner's repeated keys and Caps Lock. The full run `full2` (all 356 scenarios at fcd2601b) shows them live.
-- **Known Linux gaps, not yet built:** Chrome's own menus (Alt+F opens a menu window with no focus event; a probe is next), Okur's own dialogs (no okur-ui on Linux), a check box's new state after Space (Chrome focuses before it toggles), Chrome's site information button's popup (204/s12), GTK's drop-down count and tree depth (301, 303, 304).
-- **From the code review of 2026-11-09:** finding 2 built: a live region's change reads the region alone and splices it into the page the engine has (PagePartsLoaded, its objects numbered after the page's); the page is captured again only where the region cannot be spliced, once its changes settle, as Windows does. To measure: probe-live-ticker.sh (2,000 objects, a region ticking every second). Open: a live region added to the page after its read is not heard until the page is read again (finding 7).
-- **Handoffs:** [`../handoff/2026-11-08-linux-event-model-and-one-okur.md`](../handoff/2026-11-08-linux-event-model-and-one-okur.md), [`../handoff/2026-11-09-linux-replay-exact-and-the-second-review.md`](../handoff/2026-11-09-linux-replay-exact-and-the-second-review.md).
+**Status, 2026-11-09 (evening):**
+- **Live runs.** 356 scenarios at fcd2601b (the full run `full2`), 40 of them again at ccb4c70a (`gtk1`): 5674/6004 steps match JAWS (`corpus/live/linux-baseline.json`, 53a1ba66).
+- **Replay.** `okur-lab live-replay linux` replays them off the lab with today's code: 5702/6004 match JAWS. It is ratcheted (`corpus/live/linux-replay-baseline.json`).
+- **Found by setting the replay beside Windows' parity** (the steps Windows matches and Linux does not, 119 at ccb4c70a) **and built:**
+  - Chrome's site information button is a menu button (a6b5b100).
+  - Chrome's own menus are menu mode, their highlighted items said with their places (69c99756, 3dc4cbca). Measured live in `gtk2`: "Context Menu | To navigate press Up or Down Arrow. | New tab Ctrl+T | 1 of 21", Escape "Leaving menus".
+  - Page progress bars say their values and changes; a table's click listeners are read (157e2b01).
+  - Say System Time and Date on Linux (adc94d7a).
+  - A text field read at its caret as its focus is delivered, as Windows' focus carries it (ac1304bd). Measured in `gtk2`: 676's colors "navy on yellow", "red on white", "black on white".
+  - The focus asked for what cannot take it goes to its page (0a81b747: Route PC to Virtual on a graphic).
+  - Live regions due together read in the order they changed (91f803a4).
+  - The runner: `during` keys, JAWS's TypeKey and TypeString, a step's `quiet_ms` and `settle_max_ms`, and the lab's fixture path compared as old-pc's.
+- **Okur's own dialogs on Linux:** the GTK 4 renderer (5d0cd15c) builds and passes clippy and its tests in the lab. In `gtk2` the element lists run, and the arrows read Okur's GTK list ("Settings 2 of 15"). Open:
+  - The dialog came 5.4 s after Insert+F7, its focus 7.7 s. okur-ui now uses GTK's cairo renderer (21546c2c); to measure.
+  - Keys pressed before the dialog's focus arrives go to the page (the first Down in 222).
+  - A GTK list item cost about 130 ms to read, up to three reads per arrow. The reads are now parallel (de428ec5); to measure.
+  - The renderer's second increment: trees, tables, check lists, menus, the wizard, the main window, the viewer.
+- **Known Linux gaps, not yet built:**
+  - Alt+F on Chrome highlights no item on Linux, so Okur says the menu only at the first Down (Windows' Chrome highlights the first item as it opens).
+  - A live region added after its page's read (finding 7 of the second review).
+  - GTK's drop-down count and tree depth (301, 303, 304).
+  - The regions entered on a check box's focus after Space (288/s2: "MainRegion FormRegion").
+  - The fonts the lab has (Liberation Serif for Times New Roman, 209), which are the environment's.
+- **Reviews:** the third pass's findings 1 to 8 built (3dc4cbca); 9 (one call per table part's default action) is kept.
+- **Handoffs:** [`../handoff/2026-11-09-linux-replay-exact-and-the-second-review.md`](../handoff/2026-11-09-linux-replay-exact-and-the-second-review.md), [`../handoff/2026-11-09-linux-text-fields-live-regions-and-wide1.md`](../handoff/2026-11-09-linux-text-fields-live-regions-and-wide1.md).
 
-### Okur's own dialogs on Linux (next, once the lab is free)
+### Okur's own dialogs on Linux (begun 2026-11-09)
 
 Okur's dialogs (the element lists, Find, PlaceMarkers, Skim Reading, Settings Center) are
 `okur-ui`'s, drawn from the generic `okur_ui_model::DialogSpec` (about ten control kinds, trees,
-menus, the main window, the wizard). Off Windows `okur-ui` reads and drops what Okur sends, so on
-Linux they are silent (687, 692, 530, 515's Insert+Shift+F1). The design, from
-`helper-ui-architecture.md` (GTK 4 on Linux):
+menus, the main window, the wizard). The design, from `helper-ui-architecture.md` (GTK 4 on
+Linux):
 - A GTK 4 renderer in `okur-ui` behind `cfg(target_os = "linux")`, through gtk4-rs, a
   Linux-target dependency. The dev box cannot build gtk4-sys for Linux (its build script finds
   GTK through pkg-config), so the dev box's Linux clippy keeps to the crates it names; the lab's
