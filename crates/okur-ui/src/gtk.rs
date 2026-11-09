@@ -455,7 +455,8 @@ impl Ui {
     fn show(ui: &Rc<Ui>, spec: DialogSpec) {
         if let Some(dialog) = ui.dialogs.borrow().get(&spec.id) {
             dialog.window.present();
-            tell_shown_when_active(&dialog.window, spec.id);
+            let id = spec.id;
+            once_active(&dialog.window, move || send(&FromUi::DialogShown { id }));
             return;
         }
         let id = spec.id;
@@ -484,8 +485,7 @@ impl Ui {
             },
         );
         window.present();
-        ui.focus_first(id, first);
-        tell_shown_when_active(&window, id);
+        focus_and_tell_shown(ui, &window, id, first);
     }
 
     /// Escape and the close box are the dialog's Cancel, or the wizard's: Okur is told it was
@@ -610,7 +610,8 @@ impl Ui {
         set_wizard_buttons(&shown, &window, spec.buttons);
         ui.wizards.borrow_mut().insert(id, shown);
         window.present();
-        ui.focus_first(id, first);
+        let ui = Rc::clone(ui);
+        once_active(&window, move || ui.focus_first(id, first));
     }
 
     /// Turns wizard `id` to `page`, with `buttons`, the focus on its first control: the page
@@ -730,44 +731,56 @@ fn kind(message: &ToUi) -> String {
         .unwrap_or_default()
 }
 
-/// Tells Okur that dialog `id` is shown with the keyboard in it, once its window is active (the
-/// window manager gives it the keyboard after `present`, in its own time) and a frame of it is
-/// laid out: GTK puts a list's focus on its row at the layout, and a letter Okur held, pressed
-/// before it, chose its row while the focus then went to the first (the lab's research run of
-/// 1205: "Settings" selected, "Current Page Overview" focused). The keys Okur held since it
-/// asked for the dialog go to it then, not to the window before it.
-fn tell_shown_when_active(window: &gtk::Window, id: u32) {
-    let told = Rc::new(Cell::new(false));
-    let tell = {
-        let told = Rc::clone(&told);
-        move |window: &gtk::Window| {
-            if told.replace(true) {
-                return;
+/// Runs `then` once `window` is active (the window manager gives it the keyboard after
+/// `present`, in its own time) and a frame of it is laid out (the next frame's tick, then an
+/// idle, which comes after the frame's layout and drawing). A dialog's first focus is placed
+/// then: GTK reports no focus for a widget focused before its window is active, and the list's
+/// first row went unsaid (gtk4's 223, 586 and 682 at 298f0c7c: the first focus event was the
+/// second row's, after Down). And it says the dialog is shown after it: GTK put a list's focus
+/// on its first row at the layout after a letter Okur held had chosen another (the lab's
+/// research run of 1205).
+fn once_active(window: &gtk::Window, then: impl FnOnce() + 'static) {
+    let then: Rc<Cell<Option<Box<dyn FnOnce()>>>> = Rc::new(Cell::new(Some(Box::new(then))));
+    let go = move |window: &gtk::Window| {
+        let Some(then) = then.take() else {
+            return;
+        };
+        let then = Cell::new(Some(then));
+        window.add_tick_callback(move |_, _| {
+            if let Some(then) = then.take() {
+                let _ = glib::idle_add_local_once(then);
             }
-            // The next frame's tick, then an idle: an idle at its priority comes after the
-            // frame's layout and drawing.
-            window.add_tick_callback(move |_, _| {
-                let _ = glib::idle_add_local_once(move || send(&FromUi::DialogShown { id }));
-                glib::ControlFlow::Break
-            });
-        }
+            glib::ControlFlow::Break
+        });
     };
     if window.is_active() {
-        tell(window);
+        go(window);
         return;
     }
-    // Told once: the handler goes with it, a dialog brought forward again adding its own.
+    // Once: the handler goes with it, a dialog brought forward again adding its own.
     let handler: Rc<RefCell<Option<glib::SignalHandlerId>>> = Rc::default();
     let id_kept = Rc::clone(&handler);
     let connected = window.connect_is_active_notify(move |window| {
         if window.is_active() {
-            tell(window);
+            go(window);
             if let Some(connected) = id_kept.borrow_mut().take() {
                 window.disconnect(connected);
             }
         }
     });
     *handler.borrow_mut() = Some(connected);
+}
+
+/// Dialog `id`'s first focus on `first`, then Okur told the dialog is shown with the keyboard
+/// in it, once its window is active and laid out ([`once_active`]): the keys Okur held since it
+/// asked for the dialog go to it then, not to the window before it.
+fn focus_and_tell_shown(ui: &Rc<Ui>, window: &gtk::Window, id: u32, first: Option<gtk::Widget>) {
+    let ui = Rc::clone(ui);
+    once_active(window, move || {
+        ui.focus_first(id, first);
+        // After the first focus, which a list places in an idle of its own.
+        let _ = glib::idle_add_local_once(move || send(&FromUi::DialogShown { id }));
+    });
 }
 
 /// Presses the dialog's default button, as Enter on a list's item does in Windows' dialog: where
