@@ -1094,11 +1094,16 @@ impl EventSource for AtspiEventSource {
                     // review, finding 8).
                     // The live regions whose signals paused, read; the page in front, captured
                     // again once its changes settled, as the engine asked.
-                    let due: Vec<AtspiObject> = dirty
+                    // In the order they changed: a chat's log, then the status saying the
+                    // message went, as the page changed them and JAWS says them [obs, 960/s3]
+                    // (a map's order had the status first in gtk1's run).
+                    let mut due: Vec<(std::time::Instant, AtspiObject)> = dirty
                         .iter()
                         .filter(|(_, d)| d.due <= std::time::Instant::now())
-                        .map(|(region, _)| region.clone())
+                        .map(|(region, d)| (d.due, region.clone()))
                         .collect();
+                    due.sort_by_key(|(at, _)| *at);
+                    let due = due.into_iter().map(|(_, region)| region);
                     for region in due {
                         if let (Some(d), Some(regions)) = (dirty.remove(&region), regions.as_ref())
                         {
