@@ -11571,3 +11571,55 @@ fn the_placemarker_lists_own_dialog_names_the_list_first() {
         "{said:?}"
     );
 }
+
+/// Insert+F2 opens Run Okur Manager wherever the focus is; OK on a manager Okur has closes
+/// it and opens that manager's dialog (the Dictionary Manager); on one Okur has not built
+/// yet, it closes and says so.
+#[test]
+fn run_manager_opens_the_chosen_manager() {
+    use crate::ui::{FromUi, ToUi, Value};
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document))),
+        Box::new(MockSpeechOutput::new()),
+    );
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let insert = Modifiers {
+        insert: true,
+        ..Modifiers::none()
+    };
+    let open = |engine: &mut ScreenReaderEngine| {
+        engine.handle_key_event(&KeyEvent::new(Key::F(2), insert, true));
+        ui.take().into_iter().find_map(|m| match m {
+            ToUi::DialogShow { dialog } => Some((dialog.id, dialog.title)),
+            _ => None,
+        })
+    };
+    let choose = |engine: &mut ScreenReaderEngine, id: u32, row: usize| {
+        engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+            id,
+            control: "managers".into(),
+            value: Value::Selected(row),
+        }));
+        engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+            id,
+            control: "ok".into(),
+        }))
+    };
+    let (id, title) = open(&mut engine).unwrap_or_default();
+    assert_eq!(title, "Run Okur Manager");
+    // The Dictionary Manager, seventh.
+    choose(&mut engine, id, 6);
+    let sent = ui.take();
+    assert!(
+        sent.iter().any(|m| matches!(m, ToUi::DialogShow { dialog }
+            if dialog.title.contains("Dictionary Manager"))),
+        "{sent:?}"
+    );
+    assert!(sent.contains(&ToUi::DialogClose { id }), "{sent:?}");
+    // The Keyboard Manager, eleventh, not built yet.
+    let (id, _) = open(&mut engine).unwrap_or_default();
+    let said = choose(&mut engine, id, 10);
+    assert_eq!(said.as_deref(), Some("Okur has no Keyboard Manager yet."));
+    assert_eq!(ui.take(), [ToUi::DialogClose { id }]);
+}

@@ -80,6 +80,7 @@ impl ScreenReaderEngine {
             Command::RoutePcToOkur => return self.route_pc_to_okur(),
             Command::RestrictOkurCursor => return self.restrict_okur_cursor(),
             Command::WindowList => return self.ask_window_list(),
+            Command::RunManager => return self.open_run_manager(),
             Command::SystemTrayList => return self.ask_tray_list(),
             Command::JumpToLine => return self.open_jump(),
             Command::DefineTempPlaceMarker => return self.define_temp_placemarker(),

@@ -463,6 +463,7 @@ command-restrict-okur-cursor = Restricts the Okur cursor to the next area: the a
 command-route-pc-to-okur = Moves the PC cursor, or the virtual cursor, to the Okur cursor.
 # WindowList (Insert+F10).
 command-window-list = Lists the open windows, to switch to one.
+command-run-manager = Lists Okur's managers, to run one.
 # ListTaskTrayIcons (Insert+F11).
 command-system-tray-list = Lists the icons of the notification area, to click one.
 # JumpToLine (J in a page).

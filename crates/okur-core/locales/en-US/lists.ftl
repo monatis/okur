@@ -93,6 +93,34 @@ html-feature-tabs = Tabs List
 # Okur's own words: the list chosen in Virtual HTML Features is not built yet.
 html-feature-not-yet = Okur has no { $list } yet.
 
+## Run Okur Manager (Insert+F2), JAWS's Run JAWS Manager: a list view "List1" of the managers in
+## JAWS's order, OK and Cancel [obs, 688/s1-s5; docs/references/jaws-dialogs-and-visual-features.md].
+run-manager-title = Run Okur Manager
+run-manager-list = List1
+run-manager-commands-search = Commands Search
+run-manager-custom-highlight-assign = Custom Highlight Assign
+run-manager-custom-label = Custom Label
+run-manager-custom-label-delete = Custom Label Delete
+run-manager-custom-label-delete-all = Custom Label Delete All
+run-manager-customize-list-view = Customize ListView
+run-manager-dictionary-manager = Dictionary Manager
+run-manager-flexible-web = Flexible Web
+run-manager-frame-viewer = Frame Viewer
+run-manager-graphics-labeler = Graphics Labeler
+run-manager-keyboard-manager = Keyboard Manager
+run-manager-mark-colors-in-braille = Mark Colors in Braille
+run-manager-message-center = Message Center
+run-manager-navigation-quick-keys = Navigation Quick Keys
+run-manager-notification-history = Notification History
+run-manager-quick-settings = Quick Settings
+run-manager-research-it = Research It
+run-manager-script-manager = Script Manager
+run-manager-settings-center = Settings Center
+run-manager-skim-reading-tool = Skim Reading Tool
+run-manager-window-class-reassign = Window Class Reassign
+# Okur's own words: the manager chosen in Run Okur Manager is not built yet.
+run-manager-not-yet = Okur has no { $manager } yet.
+
 ## JAWS's element lists (Insert+Ctrl and a letter), their titles as JAWS's [obs, 231-245].
 
 list-dialog-radio-buttons = Select a Radio Button

@@ -3556,6 +3556,7 @@ impl ScreenReaderEngine {
                 )
             }
             ListKind::Features => (Some(ListDialog::features(id)), String::new()),
+            ListKind::Managers => return self.open_run_manager(),
             ListKind::Words => {
                 let words = crate::word_list::words(&self.cursor.buffer);
                 (
@@ -3603,6 +3604,41 @@ impl ScreenReaderEngine {
             return Some(none);
         };
         self.show_list(dialog, AppMode::VirtualBuffer)
+    }
+
+    /// Run Okur Manager (Insert+F2), JAWS's Run JAWS Manager: Okur's managers in a list, the
+    /// first chosen, wherever the focus is; OK runs the chosen one from there [obs, 688/s1-s6].
+    pub(crate) fn open_run_manager(&mut self) -> Option<String> {
+        let dialog = crate::ui::lists::ListDialog::managers(self.dialog_count + 1);
+        let here = self.app_mode;
+        self.show_list(dialog, here)
+    }
+
+    /// A manager chosen in Run Okur Manager, run from where the dialog was opened; one Okur
+    /// has not built yet is said so.
+    fn run_manager(&mut self, manager: crate::ui::lists::Manager) -> Option<String> {
+        use crate::ui::lists::Manager;
+        match manager {
+            Manager::CommandsSearch => {
+                self.open_command_search();
+                None
+            }
+            Manager::CustomLabel => self.execute(crate::command::Command::AssignCustomLabel),
+            Manager::DictionaryManager => self.open_dictionary_manager(),
+            Manager::FlexibleWeb => self.open_flexible_web(),
+            Manager::NotificationHistory => {
+                self.open_notification_history();
+                None
+            }
+            Manager::QuickSettings => self.execute(crate::command::Command::QuickSettings),
+            Manager::SettingsCenter => self.execute(crate::command::Command::SettingsCenter),
+            Manager::SkimReadingTool => self.open_skim_dialog(),
+            other => {
+                let speech = msg::run_manager_not_yet(other.name().as_str()).to_string();
+                self.speech.speak(&speech, true);
+                Some(speech)
+            }
+        }
     }
 
     /// Shows a list dialog, which gives the keys back to `return_mode` when it closes.
@@ -4199,6 +4235,7 @@ impl ScreenReaderEngine {
                     | ListKind::NotesToView
                     | ListKind::SheetList(_)
                     | ListKind::Features
+                    | ListKind::Managers
                     | ListKind::Words
                     | ListKind::Elements(_) => self.cursor.current_line(),
                 };
@@ -4327,6 +4364,31 @@ impl ScreenReaderEngine {
                     self.returning_from_dialog();
                 }
                 opened
+            }
+            // Run Okur Manager goes and the chosen manager runs from where it was opened, as
+            // JAWS's runs it: "Delete all Custom Labels? dialog | This will remove ..." [obs,
+            // 688/s6]. A manager that opens a dialog is said as that dialog takes the focus; the
+            // return is quiet only when none opened.
+            Outcome::Run(manager) => {
+                let managers = self.list_dialog.take();
+                self.app_mode = self.list_return_mode;
+                let dialog_asked = std::sync::Arc::clone(&self.dialog_asked);
+                let asked = || {
+                    dialog_asked
+                        .lock()
+                        .ok()
+                        .and_then(|asked| asked.as_ref().map(|a| a.id))
+                };
+                let before = asked();
+                let said = self.run_manager(manager);
+                let opened = asked().is_some_and(|id| Some(id) != before);
+                if let (Some(managers), Some(ui)) = (managers, &self.ui) {
+                    ui.send(crate::ui::ToUi::DialogClose { id: managers.id });
+                }
+                if !opened {
+                    self.returning_from_dialog();
+                }
+                said
             }
             // Select a Form Field gives the page back named, or, with the virtual cursor on a
             // field, that field as E reads it ("lamp Edit blank"), else on a line of the page,

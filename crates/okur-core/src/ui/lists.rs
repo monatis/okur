@@ -85,6 +85,8 @@ pub enum ListKind {
     NotesToView,
     /// Virtual HTML Features: the lists themselves.
     Features,
+    /// Run Okur Manager (Insert+F2): Okur's managers, JAWS's Run JAWS Manager.
+    Managers,
     /// One of JAWS's element lists.
     Elements(ElementList),
     /// Document Regions: a tree.
@@ -199,6 +201,86 @@ impl HtmlFeature {
     }
 }
 
+/// The managers Run Okur Manager offers, JAWS's Run JAWS Manager's in its order [obs, 688/s1-s5;
+/// docs/references/jaws-dialogs-and-visual-features.md].
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Manager {
+    CommandsSearch,
+    CustomHighlightAssign,
+    CustomLabel,
+    CustomLabelDelete,
+    CustomLabelDeleteAll,
+    CustomizeListView,
+    DictionaryManager,
+    FlexibleWeb,
+    FrameViewer,
+    GraphicsLabeler,
+    KeyboardManager,
+    MarkColorsInBraille,
+    MessageCenter,
+    NavigationQuickKeys,
+    NotificationHistory,
+    QuickSettings,
+    ResearchIt,
+    ScriptManager,
+    SettingsCenter,
+    SkimReadingTool,
+    WindowClassReassign,
+}
+
+impl Manager {
+    pub const ALL: [Self; 21] = [
+        Self::CommandsSearch,
+        Self::CustomHighlightAssign,
+        Self::CustomLabel,
+        Self::CustomLabelDelete,
+        Self::CustomLabelDeleteAll,
+        Self::CustomizeListView,
+        Self::DictionaryManager,
+        Self::FlexibleWeb,
+        Self::FrameViewer,
+        Self::GraphicsLabeler,
+        Self::KeyboardManager,
+        Self::MarkColorsInBraille,
+        Self::MessageCenter,
+        Self::NavigationQuickKeys,
+        Self::NotificationHistory,
+        Self::QuickSettings,
+        Self::ResearchIt,
+        Self::ScriptManager,
+        Self::SettingsCenter,
+        Self::SkimReadingTool,
+        Self::WindowClassReassign,
+    ];
+
+    /// The manager's name, as the list shows it.
+    pub fn name(self) -> StaticMessage {
+        match self {
+            Self::CommandsSearch => msg::run_manager_commands_search(),
+            Self::CustomHighlightAssign => msg::run_manager_custom_highlight_assign(),
+            Self::CustomLabel => msg::run_manager_custom_label(),
+            Self::CustomLabelDelete => msg::run_manager_custom_label_delete(),
+            Self::CustomLabelDeleteAll => msg::run_manager_custom_label_delete_all(),
+            Self::CustomizeListView => msg::run_manager_customize_list_view(),
+            Self::DictionaryManager => msg::run_manager_dictionary_manager(),
+            Self::FlexibleWeb => msg::run_manager_flexible_web(),
+            Self::FrameViewer => msg::run_manager_frame_viewer(),
+            Self::GraphicsLabeler => msg::run_manager_graphics_labeler(),
+            Self::KeyboardManager => msg::run_manager_keyboard_manager(),
+            Self::MarkColorsInBraille => msg::run_manager_mark_colors_in_braille(),
+            Self::MessageCenter => msg::run_manager_message_center(),
+            Self::NavigationQuickKeys => msg::run_manager_navigation_quick_keys(),
+            Self::NotificationHistory => msg::run_manager_notification_history(),
+            Self::QuickSettings => msg::run_manager_quick_settings(),
+            Self::ResearchIt => msg::run_manager_research_it(),
+            Self::ScriptManager => msg::run_manager_script_manager(),
+            Self::SettingsCenter => msg::run_manager_settings_center(),
+            Self::SkimReadingTool => msg::run_manager_skim_reading_tool(),
+            Self::WindowClassReassign => msg::run_manager_window_class_reassign(),
+        }
+    }
+}
+
 /// One of the page's elements, as the list shows it and acts on it.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Entry {
@@ -220,6 +302,8 @@ pub struct Entry {
     pub offset: usize,
     /// In Virtual HTML Features, the list the entry opens.
     pub feature: Option<HtmlFeature>,
+    /// In Run Okur Manager, the manager the entry runs.
+    pub manager: Option<Manager>,
 }
 
 impl Entry {
@@ -239,6 +323,7 @@ impl Entry {
             node_id: link.node_id,
             offset: link.offset,
             feature: None,
+            manager: None,
         }
     }
 
@@ -254,6 +339,7 @@ impl Entry {
             node_id: heading.node_id,
             offset: heading.offset,
             feature: None,
+            manager: None,
         }
     }
 
@@ -270,6 +356,7 @@ impl Entry {
             node_id: field.node_id,
             offset: field.offset,
             feature: None,
+            manager: None,
         }
     }
 
@@ -286,6 +373,7 @@ impl Entry {
             node_id: index,
             offset: index,
             feature: None,
+            manager: None,
         }
     }
 
@@ -337,6 +425,7 @@ impl Entry {
             node_id: index,
             offset: index,
             feature: None,
+            manager: None,
         }
     }
 
@@ -352,6 +441,7 @@ impl Entry {
             node_id: index,
             offset: index,
             feature: None,
+            manager: None,
         }
     }
 
@@ -375,6 +465,7 @@ impl Entry {
             node_id: index,
             offset: index,
             feature: None,
+            manager: None,
         }
     }
 
@@ -390,6 +481,7 @@ impl Entry {
             node_id: item.node_id,
             offset: item.offset,
             feature: None,
+            manager: None,
         }
     }
 
@@ -405,6 +497,7 @@ impl Entry {
             node_id: item.node_id,
             offset: item.offset,
             feature: None,
+            manager: None,
         }
     }
 
@@ -420,6 +513,7 @@ impl Entry {
             node_id: 0,
             offset: word.offsets.first().copied().unwrap_or(0),
             feature: None,
+            manager: None,
         }
     }
 
@@ -436,6 +530,26 @@ impl Entry {
             node_id: 0,
             offset: 0,
             feature: Some(feature),
+            manager: None,
+        }
+    }
+}
+
+impl Entry {
+    /// One of Run Okur Manager's managers, by its name.
+    pub fn manager(manager: Manager) -> Self {
+        let name = manager.name().to_string();
+        Self {
+            sort_key: name.to_lowercase(),
+            text: name,
+            level: None,
+            address: None,
+            same_page: false,
+            visited: false,
+            node_id: 0,
+            offset: 0,
+            feature: None,
+            manager: Some(manager),
         }
     }
 }
@@ -455,6 +569,8 @@ pub enum Outcome {
     Focus(Entry),
     /// Open the chosen list in place of Virtual HTML Features (OK there).
     Open(HtmlFeature),
+    /// Close Run Okur Manager and run the chosen manager (OK there).
+    Run(Manager),
     /// Close the Word List and show the sentences holding the word (Summary).
     Summary(Entry),
     /// The dialog is gone; the cursor stays.
@@ -597,6 +713,15 @@ impl ListDialog {
         )
     }
 
+    /// Run Okur Manager: the managers, the first selected [obs, 688/s1].
+    pub fn managers(id: u32) -> Self {
+        Self::new(
+            id,
+            ListKind::Managers,
+            Manager::ALL.into_iter().map(Entry::manager).collect(),
+        )
+    }
+
     fn new(id: u32, kind: ListKind, entries: Vec<Entry>) -> Self {
         let mut dialog = Self {
             id,
@@ -665,6 +790,7 @@ impl ListDialog {
             ListKind::NotesToView => "items",
             ListKind::SheetList(_) => "cells",
             ListKind::Features => "lists",
+            ListKind::Managers => "managers",
             ListKind::Elements(_) => "elements",
             ListKind::Regions => "regions",
             ListKind::Words => "words",
@@ -687,6 +813,7 @@ impl ListDialog {
             | ListKind::NotesToView
             | ListKind::SheetList(_)
             | ListKind::Features
+            | ListKind::Managers
             | ListKind::Elements(_)
             | ListKind::Regions
             | ListKind::Words => Vec::new(),
@@ -710,6 +837,7 @@ impl ListDialog {
                 | ListKind::NotesToView
                 | ListKind::SheetList(_)
                 | ListKind::Features
+                | ListKind::Managers
                 | ListKind::Elements(_)
                 | ListKind::Regions
                 | ListKind::Words,
@@ -916,6 +1044,14 @@ impl ListDialog {
                     button("cancel", msg::features_cancel(), false),
                 ],
             ),
+            ListKind::Managers => (
+                msg::run_manager_title(),
+                vec![
+                    list(msg::run_manager_list()),
+                    button("ok", msg::features_ok(), true),
+                    button("cancel", msg::features_cancel(), false),
+                ],
+            ),
             ListKind::Elements(elements) => (
                 elements.title(),
                 vec![
@@ -985,6 +1121,7 @@ impl ListDialog {
             | ListKind::NotesToView
             | ListKind::SheetList(_)
             | ListKind::Features
+            | ListKind::Managers
             | ListKind::Elements(_)
             | ListKind::Regions
             | ListKind::Words => Vec::new(),
@@ -1053,6 +1190,9 @@ impl ListDialog {
                     }
                     ("ok", Some(entry), ListKind::Features) => {
                         entry.feature.map_or(Outcome::Nothing, Outcome::Open)
+                    }
+                    ("ok", Some(entry), ListKind::Managers) => {
+                        entry.manager.map_or(Outcome::Nothing, Outcome::Run)
                     }
                     ("summary", Some(entry), ListKind::Words) => Outcome::Summary(entry.clone()),
                     _ => Outcome::Nothing,
@@ -1326,6 +1466,39 @@ mod tests {
         assert_eq!(
             dialog.handle(&pressed("ok")),
             Outcome::Open(HtmlFeature::Headings)
+        );
+    }
+
+    /// Run Okur Manager lists JAWS's 21 managers in its order, the first chosen, with OK (the
+    /// default) and Cancel; OK runs the chosen one: "Run JAWS Manager dialog | List1 List view
+    /// | Commands Search | 1 of 21", Down four times to "Custom Label Delete All | 5 of 21"
+    /// [obs, 688/s1-s5].
+    #[test]
+    fn the_dialog_is_jaws_run_manager() {
+        let mut dialog = ListDialog::managers(2);
+        let spec = dialog.spec();
+        assert_eq!(spec.title, "Run Okur Manager");
+        let labels: Vec<&str> = spec.controls.iter().map(|c| c.label.as_str()).collect();
+        assert_eq!(labels, ["List1", "OK", "Cancel"]);
+        let texts = dialog.texts();
+        assert_eq!(texts.len(), 21);
+        assert_eq!(texts.first().map(String::as_str), Some("Commands Search"));
+        assert_eq!(
+            texts.get(4).map(String::as_str),
+            Some("Custom Label Delete All")
+        );
+        assert_eq!(
+            texts.last().map(String::as_str),
+            Some("Window Class Reassign")
+        );
+        assert!(texts.iter().all(|t| !t.contains("JAWS")));
+        assert_eq!(
+            dialog.handle(&changed("managers", Value::Selected(6))),
+            Outcome::Nothing
+        );
+        assert_eq!(
+            dialog.handle(&pressed("ok")),
+            Outcome::Run(Manager::DictionaryManager)
         );
     }
 }

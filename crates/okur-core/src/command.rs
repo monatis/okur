@@ -272,6 +272,8 @@ pub enum Command {
     RoutePcToOkur,
     /// Insert+F10: the Window List, the running applications' windows to switch to.
     WindowList,
+    /// Insert+F2 (RunJAWSManager): Run Okur Manager, Okur's managers in a list, to run one.
+    RunManager,
     /// Insert+F11 (ListTaskTrayIcons): the notification area's icons, to click one.
     SystemTrayList,
     /// J in a page (JumpToLine): Jump To Line, a line number to move to.
@@ -658,6 +660,7 @@ impl Command {
             "RightMouseButtonLock" => RightMouseButtonLock,
             "RoutePCCursorToJAWS" => RoutePcToOkur,
             "WindowList" | "Insert+F10" => WindowList,
+            "RunJAWSManager" | "Insert+F2" | "JAWSKey+F2" => RunManager,
             "ListTaskTrayIcons" | "Insert+F11" => SystemTrayList,
             "JumpToLine" => JumpToLine,
             "DefineATempPlaceMarker" => DefineTempPlaceMarker,
@@ -1155,6 +1158,8 @@ static BINDINGS: &[Binding] = &{
         bind(LeftArrow, ALT_SHIFT, MoveMouse(MouseStep::Left)),
         bind(RightArrow, ALT_SHIFT, MoveMouse(MouseStep::Right)),
         bind(Key::F(10), OKUR, WindowList),
+        // Default.JKM: JAWSKey+F2=RunJAWSManager [obs, 688/s1].
+        bind(Key::F(2), OKUR, RunManager),
         bind(Key::F(11), OKUR, SystemTrayList),
         // Default.JKM: JAWSKey+F4=ShutDownJAWS; "Shut Down JAWS: INSERT+F4" (keystrokes).
         bind(Key::F(4), OKUR, ShutDown),
