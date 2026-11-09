@@ -479,7 +479,8 @@ pub(crate) fn signal_to_kinds(
                         }]
                     }
                 }
-                "checked" => vec![EventKind::StateChanged {
+                // A toggle button's pressed state is its checked one (Chrome's aria-pressed).
+                "checked" | "pressed" => vec![EventKind::StateChanged {
                     flag: StateFlag::Checked,
                     value,
                 }],
@@ -894,6 +895,7 @@ fn states_from_bits(bits: u64, role: Role, state_read_ok: bool) -> StateSet {
     const ACTIVE: u64 = 1 << 1;
     const BUSY: u64 = 1 << 3;
     const CHECKED: u64 = 1 << 4;
+    const PRESSED: u64 = 1 << 20;
     const EDITABLE: u64 = 1 << 7;
     const ENABLED: u64 = 1 << 8;
     const EXPANDABLE: u64 = 1 << 9;
@@ -912,11 +914,17 @@ fn states_from_bits(bits: u64, role: Role, state_read_ok: bool) -> StateSet {
     let enabled = (bits & ENABLED) != 0 || (bits & SENSITIVE) != 0;
     let visible = (bits & VISIBLE) != 0 || (bits & SHOWING) != 0;
 
+    // A toggle button (the Switch role, by AT-SPI's "toggle button") is on when pressed:
+    // Chrome gives aria-pressed as PRESSED, GTK 4 its toggle button's state too.
+    let on = match role {
+        Role::Switch => CHECKED | PRESSED,
+        _ => CHECKED,
+    };
     let checked = match role {
         Role::CheckBox | Role::RadioButton | Role::MenuItem | Role::Switch => {
             if (bits & INDETERMINATE) != 0 {
                 Some(Toggled::Mixed)
-            } else if (bits & CHECKED) != 0 {
+            } else if (bits & on) != 0 {
                 Some(Toggled::On)
             } else {
                 Some(Toggled::Off)
@@ -1327,6 +1335,21 @@ mod tests {
         assert!(s.checked.is_none());
         let s = states_from_bits(CHECKED, Role::CheckBox, true);
         assert_eq!(s.checked, Some(Toggled::On));
+    }
+
+    /// A toggle button pressed (Chrome's aria-pressed="true") is on; a check box is not on by
+    /// being pressed.
+    #[test]
+    fn states_from_bits_a_pressed_toggle_button_is_on() {
+        const PRESSED: u64 = 1 << 20;
+        assert_eq!(
+            states_from_bits(PRESSED, Role::Switch, true).checked,
+            Some(Toggled::On)
+        );
+        assert_eq!(
+            states_from_bits(PRESSED, Role::CheckBox, true).checked,
+            Some(Toggled::Off)
+        );
     }
 
     #[test]

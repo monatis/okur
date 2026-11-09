@@ -81,7 +81,12 @@ NAMES = {
 }
 # The modifiers by the keysym of the key that holds each.
 MODIFIERS = {"ctrl": "Control_L", "control": "Control_L", "alt": "Alt_L", "shift": "Shift_L",
-             "win": "Super_L", "windows": "Super_L", "insert": "Insert"}
+             "win": "Super_L", "windows": "Super_L", "insert": "Insert",
+             "capslock": "Caps_Lock"}
+# Keys by their keycode where the keymap has no keysym for them while Okur runs: Okur takes Caps
+# Lock, the laptop layout's Okur key, by taking its keysym off keycode 66 (okur-linux's
+# keyboard.rs), so that X locks nothing as it is pressed.
+KEYCODES = {"Caps_Lock": 66}
 
 
 def chord(name):
@@ -138,7 +143,8 @@ def press(name):
         return False
     codes = []
     for keysym_name in names:
-        code = _DISPLAY.keysym_to_keycode(XK.string_to_keysym(keysym_name))
+        code = (_DISPLAY.keysym_to_keycode(XK.string_to_keysym(keysym_name))
+                or KEYCODES.get(keysym_name))
         if not code:
             print(f"no keycode for {keysym_name} in {name}", file=sys.stderr)
             return False
