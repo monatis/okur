@@ -127,9 +127,10 @@ with no change to the `KeyboardHook` port:
    depth; then a dialog, and Qt.
 
 **Status, 2026-11-09:**
-- **Live runs.** 83 scenarios (80 web, 3 desktop) on `okur run`, with the settings JAWS recorded each with, keep their traces: 796/829 steps match JAWS (`corpus/live/linux-baseline.json`).
-- **Replay.** `okur-lab live-replay linux` replays them off the lab and says what every run said. It is ratcheted (`corpus/live/linux-replay-baseline.json`), so gaps are found and fixed without the lab.
-- **Coverage.** 273 more recorded web scenarios are being run for the first time (the job `wide1`).
+- **Live runs.** 230 scenarios (227 web, 3 desktop) on `okur run`, with the settings JAWS recorded each with, keep their traces: 3723/4265 steps match JAWS (`corpus/live/linux-baseline.json`; 147 of them run for the first time by `wide1`, stopped at 147 of 273 for the full run below).
+- **Replay.** `okur-lab live-replay linux` replays them off the lab; with the code at 80b28c82, 3811/4265 match JAWS. It is ratcheted (`corpus/live/linux-replay-baseline.json`), so gaps are found and fixed without the lab.
+- **Found by the replay and built (ed055c8c to fcd2601b):** a text field read at its caret (the engine's `read_at_caret`, polled as Windows' page fields are, in the trace); an option's list and place; an application region; a toggle button's pressed state; live regions (a page read again as a region changes); the runner's repeated keys and Caps Lock. The full run `full2` (all 356 scenarios at fcd2601b) shows them live.
+- **Known Linux gaps, not yet built:** Chrome's own menus (Alt+F opens a menu window with no focus event; a probe is next), Okur's own dialogs (no okur-ui on Linux), a check box's new state after Space (Chrome focuses before it toggles), Chrome's site information button's popup (204/s12), GTK's drop-down count and tree depth (301, 303, 304).
 - **Handoffs:** [`../handoff/2026-11-08-linux-event-model-and-one-okur.md`](../handoff/2026-11-08-linux-event-model-and-one-okur.md), [`../handoff/2026-11-09-linux-replay-exact-and-the-second-review.md`](../handoff/2026-11-09-linux-replay-exact-and-the-second-review.md).
 
 ## 3. Meanwhile
