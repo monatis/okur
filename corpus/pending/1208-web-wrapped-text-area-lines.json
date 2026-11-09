@@ -1,0 +1,83 @@
+{
+  "id": "1208-web-wrapped-text-area-lines",
+  "name": "A text area whose first line wraps (a narrow text area of its own): Tab into Notes, Ctrl+Home, Say Line, Down, Say Line, Down twice, Up, End, Home, Ctrl+End, Up. Whether JAWS reads the lines as shown (\"The reading\", \"room opens at\") or as written (the whole first line): 1206 on Linux found Okur reading the whole written line where the caret had moved to the second shown line",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/wrapped-text-area.html",
+  "target_app": "chrome",
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "FormsMode": {
+        "AutoFormsMode": "1"
+      }
+    }
+  },
+  "reset": {
+    "keys": [
+      "Escape",
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Up"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "End"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Home"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Ctrl+End"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Up"
+    }
+  ]
+}
