@@ -67,7 +67,7 @@ Where to go from here:
 - **Yours to set.** Settings Center and Quick Settings with JAWS's groups, for all
   applications or for one application or web site; verbosity levels, the web verbosity
   levels, punctuation, typing echo, key labels and voice profiles; PlaceMarkers, custom labels
-  and Flexible Web.
+  and Flexible Web; Run Okur Manager (Insert+F2) to reach the managers.
 - **Okur speaks in its own name.** Where JAWS names itself, Okur says Okur: the Okur key
   (JAWS's JAWS key), the Okur cursor, Okur Find. The words around the name stay the ones you
   know.
