@@ -176,6 +176,14 @@ fn number(value: f64) -> Option<String> {
     })
 }
 
+/// Whether a page's address is Chrome's own WebUI of its toolbar (its ".top-chrome" hosts: the
+/// address bar's suggestions, tab search), drawn as a page but no tab's.
+fn is_browser_ui(uri: &str) -> bool {
+    uri.strip_prefix("chrome://")
+        .and_then(|rest| rest.split('/').next())
+        .is_some_and(|host| host.ends_with(".top-chrome"))
+}
+
 /// Whether the event is a window without a name coming forward: Chrome's own menu's window.
 fn is_unnamed_window(kind: &EventKind, element: &ElementData) -> bool {
     *kind == EventKind::WindowActivated && element.name.as_deref().is_none_or(str::is_empty)
@@ -598,6 +606,12 @@ impl Converter {
         }
         let mut events = Vec::new();
         for page in &record.pages {
+            // Chrome's own WebUI drawn as a page (the address bar's suggestions,
+            // "chrome://omnibox-popup.top-chrome/"): its toolbar's, not a page loaded; it was
+            // announced as one (220/s8 in gtk3's run).
+            if page.root.uri.as_deref().is_some_and(is_browser_ui) {
+                continue;
+            }
             self.last_page = Some(page.document.clone());
             self.page_ids = crate::page::page_ids(&page.root, page.base);
             self.page_places = crate::page::item_places(&page.root);
@@ -1361,6 +1375,16 @@ mod tests {
         assert!(!marked(converter.convert_read(&read("file:///a.html"))));
         assert!(marked(converter.convert_read(&read("file:///a.html"))));
         assert!(!marked(converter.convert_read(&read("file:///b.html"))));
+        // Chrome's own WebUI is no page loaded; a tab's chrome:// page is one.
+        let loads = |events: Vec<AccessibilityEvent>| {
+            events
+                .iter()
+                .any(|e| matches!(e, AccessibilityEvent::DocumentLoaded { .. }))
+        };
+        assert!(!loads(
+            converter.convert_read(&read("chrome://omnibox-popup.top-chrome/"))
+        ));
+        assert!(loads(converter.convert_read(&read("chrome://newtab/"))));
     }
 
     /// A window without a menu starts no menu mode, and an item highlighted with no menu open

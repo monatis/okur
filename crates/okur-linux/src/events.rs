@@ -439,6 +439,11 @@ pub struct PageIds {
 const PAGES_KEPT: usize = 4;
 
 impl PageIds {
+    /// The id the object at `bus` and `path` has, if it has one.
+    fn known_id(&self, bus: &str, path: &str) -> Option<i32> {
+        self.ids.get(&(bus.to_owned(), path.to_owned())).copied()
+    }
+
     /// The id of the object at `bus` and `path`: the one it has, else a new one.
     fn id_of(&mut self, bus: &str, path: &str) -> i32 {
         let key = (bus.to_owned(), path.to_owned());
@@ -1121,16 +1126,28 @@ impl EventSource for AtspiEventSource {
                     // review, finding 8).
                     // The live regions whose signals paused, read; the page in front, captured
                     // again once its changes settled, as the engine asked.
-                    // In the order they changed: a chat's log, then the status saying the
-                    // message went, as the page changed them and JAWS says them [obs, 960/s3]
-                    // (a map's order had the status first in gtk1's run).
-                    let mut due: Vec<(std::time::Instant, AtspiObject)> = dirty
-                        .iter()
-                        .filter(|(_, d)| d.due <= std::time::Instant::now())
-                        .map(|(region, d)| (d.due, region.clone()))
-                        .collect();
-                    due.sort_by_key(|(at, _)| *at);
-                    let due = due.into_iter().map(|(_, region)| region);
+                    // In the page's order: a chat's log, then the status below it saying the
+                    // message went, as JAWS says them [obs, 206/s3, 960/s3, 961/s3]. Chrome
+                    // signals the status's text first, though the page changed the log first
+                    // (gtk3's runs, ordered by their first signals): the regions' objects' ids
+                    // follow the page's order as it was read, then a region found later.
+                    let mut due: Vec<(i32, std::time::Instant, AtspiObject)> = {
+                        let ids = objects
+                            .lock()
+                            .unwrap_or_else(std::sync::PoisonError::into_inner);
+                        dirty
+                            .iter()
+                            .filter(|(_, d)| d.due <= std::time::Instant::now())
+                            .map(|(region, d)| {
+                                let id = ids
+                                    .known_id(&region.bus_name, &region.path)
+                                    .unwrap_or(i32::MAX);
+                                (id, d.due, region.clone())
+                            })
+                            .collect()
+                    };
+                    due.sort_by_key(|(id, at, _)| (*id, *at));
+                    let due = due.into_iter().map(|(_, _, region)| region);
                     for region in due {
                         if let (Some(d), Some(regions)) = (dirty.remove(&region), regions.as_ref())
                         {
@@ -1455,6 +1472,19 @@ mod page_id_tests {
         other_page.bus_name = ":1.9".to_owned();
         let other = page_read(&mut ids, ":1.9/doc", &other_page);
         assert!(other.iter().all(|id| !after.contains(id)));
+    }
+
+    /// A page's objects' ids follow its order as read, which orders its live regions read
+    /// together (the log before the status below it); an object never read has none.
+    #[test]
+    fn a_pages_ids_follow_its_order() {
+        let mut ids = PageIds::default();
+        let page = tree("/doc", vec![tree("/log", vec![]), tree("/status", vec![])]);
+        page_read(&mut ids, ":1.5/doc", &page);
+        let log = ids.known_id(":1.5", "/log");
+        let status = ids.known_id(":1.5", "/status");
+        assert!(log.is_some() && status.is_some() && log < status);
+        assert_eq!(ids.known_id(":1.5", "/never"), None);
     }
 
     /// The last few pages' objects are kept; an older page's go.

@@ -179,6 +179,37 @@ impl ShownList {
         self.items.splice(0, self.items.n_items(), &texts);
     }
 
+    /// A table's rows in place of those it had, each its cells joined ([`CELLS`]).
+    fn fill_rows(&self, rows: &[Vec<String>]) {
+        let joined: Vec<String> = rows.iter().map(|cells| cells.join(CELLS)).collect();
+        let texts: Vec<&str> = joined.iter().map(String::as_str).collect();
+        self.items.splice(0, self.items.n_items(), &texts);
+    }
+
+    /// The focus on its selected item, or on its first where none is selected (a table with
+    /// none chosen yet: "Not Selected", JAWS's PlaceMarker List [obs, 702/s18]).
+    fn take_focus(&self) {
+        let count = self.items.n_items();
+        if count == 0 {
+            return;
+        }
+        let selected = self.selection.selected();
+        let (at, flags) = if selected < count {
+            (
+                selected,
+                gtk::ListScrollFlags::FOCUS | gtk::ListScrollFlags::SELECT,
+            )
+        } else {
+            (0, gtk::ListScrollFlags::FOCUS)
+        };
+        match &self.view {
+            ListWidget::Columns(view) => {
+                view.scroll_to(at, None::<&gtk::ColumnViewColumn>, flags, None);
+            }
+            ListWidget::Rows(view) => view.scroll_to(at, flags, None),
+        }
+    }
+
     /// Item `i` selected, the focus on it where the list has the focus, or `focus`.
     fn select(&self, i: usize, focus: bool) {
         let Ok(at) = u32::try_from(i) else {
@@ -199,12 +230,10 @@ impl ShownList {
             }
         }
     }
-
-    /// The item selected.
-    fn selected(&self) -> usize {
-        usize::try_from(self.selection.selected()).unwrap_or(0)
-    }
 }
+
+/// Between a table row's cells in its model's string (a unit separator, in no cell's text).
+const CELLS: &str = "\u{1f}";
 
 /// A shown dialog: its window, its controls by their ids, the labels that name them, and
 /// whether Okur is setting a value (not the user, so not told back).
@@ -391,7 +420,7 @@ impl Ui {
                 for shown in dialog.controls.values() {
                     if let Shown::List(list) = shown {
                         if list.widget() == first {
-                            list.select(list.selected(), true);
+                            list.take_focus();
                         }
                     }
                 }
@@ -474,6 +503,12 @@ fn kind(message: &ToUi) -> String {
 
 /// A list of strings' rows: each a label of its item.
 fn text_rows() -> gtk::SignalListItemFactory {
+    text_cells(0)
+}
+
+/// A table's column `column`: each row's label of its cell there (a list's one column is its
+/// whole item).
+fn text_cells(column: usize) -> gtk::SignalListItemFactory {
     let factory = gtk::SignalListItemFactory::new();
     factory.connect_setup(|_, object| {
         let Some(item) = object.downcast_ref::<gtk::ListItem>() else {
@@ -493,7 +528,8 @@ fn text_rows() -> gtk::SignalListItemFactory {
         let Some(text) = item.item().and_downcast::<gtk::StringObject>() else {
             return;
         };
-        label.set_label(&text.string());
+        let row = text.string();
+        label.set_label(row.split(CELLS).nth(column).unwrap_or_default());
     });
     factory
 }
@@ -673,6 +709,62 @@ fn build(
             }
             place.append(&scrolled);
             (Shown::List(list), label)
+        }
+        // A table: a column view of its columns, none selected until the user picks a row.
+        ControlKind::Table {
+            columns,
+            rows,
+            selected,
+            ..
+        } => {
+            let model = gtk::StringList::new(&[]);
+            let selection = gtk::SingleSelection::new(Some(model.clone()));
+            selection.set_autoselect(false);
+            selection.set_can_unselect(true);
+            let view = gtk::ColumnView::new(Some(selection.clone()));
+            for (n, title) in columns.iter().enumerate() {
+                let column = gtk::ColumnViewColumn::new(Some(&plain(title)), Some(text_cells(n)));
+                column.set_expand(true);
+                view.append_column(&column);
+            }
+            view.set_tab_behavior(gtk::ListTabBehavior::Item);
+            let list = ShownList {
+                view: ListWidget::Columns(view),
+                items: model,
+                selection: selection.clone(),
+            };
+            list.fill_rows(rows);
+            match selected {
+                Some(i) => list.select(*i, false),
+                None => selection.set_selected(gtk::INVALID_LIST_POSITION),
+            }
+            let widget = list.widget();
+            widget.update_property(&[gtk::accessible::Property::Label(&plain(&control.label))]);
+            {
+                let setting = Rc::clone(setting);
+                selection.connect_selected_notify(move |selection| {
+                    let at = selection.selected();
+                    if at == gtk::INVALID_LIST_POSITION {
+                        return;
+                    }
+                    if let Ok(i) = usize::try_from(at) {
+                        changed(id, &name, &setting, Value::Selected(i));
+                    }
+                });
+            }
+            let window = window.clone();
+            if let ListWidget::Columns(view) = &list.view {
+                view.connect_activate(move |_, _| {
+                    if let Some(default) = window.default_widget() {
+                        default.activate();
+                    }
+                });
+            }
+            let scrolled = gtk::ScrolledWindow::new();
+            scrolled.set_min_content_height(200);
+            scrolled.set_child(Some(&widget));
+            place.append(&scrolled);
+            (Shown::List(list), None)
         }
         ControlKind::Radios { options, selected }
         | ControlKind::RadioButtons {
