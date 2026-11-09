@@ -27,6 +27,10 @@ pub struct NativeRead {
     /// How long the read took, in milliseconds: what a focus costs on the bus.
     #[serde(default)]
     pub read_ms: u64,
+    /// Its window read whole, where the window is a dialog box come forward: read once for the
+    /// window, its buttons and text kept for the focuses in it.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub dialog: Option<AtspiNode>,
 }
 
 /// A page read for the engine: its document's key, the base its objects are numbered from, its
@@ -260,6 +264,8 @@ pub struct Converter {
     /// The last of those menus closed: menu mode ends as the focus or a window comes back,
     /// unless another menu's window opens first.
     menus_closing: bool,
+    /// The dialog box in front, by its window's key, as its window read whole showed it.
+    dialog_box: Option<(String, crate::focus::DialogBox)>,
     /// The page given the engine last: its document and its address. Read again as the focus
     /// comes back to it, it is marked so ([`okur_core::aom::READ_AGAIN_ATTR`]).
     page_given: Option<(String, Option<String>)>,
@@ -357,6 +363,37 @@ impl Converter {
     /// forward.
     pub fn reads_alone(kind: &EventKind) -> bool {
         *kind == EventKind::WindowActivated
+    }
+
+    /// A control in a dialog box: the box's default button, buttons and text, from the read of
+    /// its window kept for it. A dialog box with no default known is none to the engine, whose
+    /// Insert+E would say nothing (the code review of 2026-11-09, fourth pass, 1), but where
+    /// the focus is a button, which Insert+E says itself.
+    fn dialog_box_of(&mut self, read: Option<&NativeRead>, event: &mut Option<AccessibilityEvent>) {
+        let control = match event {
+            Some(AccessibilityEvent::Focus(control))
+            | Some(AccessibilityEvent::Change { control, .. }) => control,
+            _ => return,
+        };
+        let Some(window) = control.platform.window_id.clone() else {
+            return;
+        };
+        if let Some(dialog) = read.and_then(|r| r.dialog.as_ref()) {
+            self.dialog_box = Some((window.clone(), crate::focus::dialog_box(dialog)));
+        }
+        let Some((key, dialog)) = &self.dialog_box else {
+            return;
+        };
+        if *key != window {
+            return;
+        }
+        control.in_dialog_box =
+            dialog.default_button.is_some() || control.role == okur_core::aom::Role::Button;
+        control.default_button.clone_from(&dialog.default_button);
+        control.dialog_buttons.clone_from(&dialog.buttons);
+        if let Some(text) = &dialog.text {
+            control.dialog_text = Some(text.clone());
+        }
     }
 
     /// A page's progress bar or meter changing: its new value, the bar found in the page by
@@ -739,6 +776,8 @@ impl Converter {
                     AccessibilityEvent::Focus(control)
                 }
             });
+        let mut native = native;
+        self.dialog_box_of(record.native.as_ref(), &mut native);
         if let Some(AccessibilityEvent::Focus(read)) = &native {
             if !self.track.native_focus(object.clone(), read) {
                 // The toolkit's repeat of the focus: nothing more to say.
@@ -1052,6 +1091,7 @@ mod tests {
             focus,
             ancestors: vec![window()],
             read_ms: 0,
+            dialog: None,
         }
     }
 
@@ -1196,6 +1236,7 @@ mod tests {
                 focus: frame,
                 ancestors: Vec::new(),
                 read_ms: 0,
+                dialog: None,
             }),
         )
     }
@@ -1367,6 +1408,48 @@ mod tests {
         assert!(converter.convert_read(&elsewhere).is_empty());
     }
 
+    /// A focus in a dialog box has its default button and buttons, from its window read whole
+    /// with the first focus in it; the next focus in it, its window not read again, keeps them.
+    #[test]
+    fn a_focus_in_a_dialog_box_has_its_default_button() {
+        let mut converter = Converter::default();
+        let mut dialog = node("dialog", "Links List", &[state::ACTIVE]);
+        dialog.path = "/dialog".to_owned();
+        let mut move_to = node("push button", "Move To Link", &[state::IS_DEFAULT]);
+        move_to.path = "/move".to_owned();
+        let mut whole = dialog.clone();
+        whole.children = vec![node("scroll pane", "", &[]), move_to];
+        let focus = |name: &str, path: &str, dialog_read: Option<AtspiNode>| {
+            record(
+                EventKind::FocusChanged,
+                element(ElementRole::ListItem, name, path, true),
+                Some(NativeRead {
+                    focus: node("list item", name, &[state::FOCUSED]),
+                    ancestors: vec![dialog.clone()],
+                    read_ms: 0,
+                    dialog: dialog_read,
+                }),
+            )
+        };
+        for (name, path, read) in [
+            ("Settings", "/a", Some(whole.clone())),
+            ("Rust", "/b", None),
+        ] {
+            let events = converter.convert_read(&focus(name, path, read));
+            assert!(
+                matches!(
+                    events.as_slice(),
+                    [AccessibilityEvent::Focus(f)] if f.in_dialog_box
+                        && f.default_button.as_deref() == Some("Move To Link")
+                        && f.dialog_buttons == ["Move To Link"]
+                        // Its heading alone: no message box's text.
+                        && f.dialog_text.as_deref() == Some("")
+                ),
+                "{name}: {events:?}"
+            );
+        }
+    }
+
     /// What okur-ui told the engine, kept in the trace, is given to the engine as it was told.
     #[test]
     fn okur_uis_message_is_given_as_it_came() {
@@ -1457,6 +1540,7 @@ mod tests {
                 focus: menu_item("New tab Ctrl+T", "/item/0", &[state::SELECTED]),
                 ancestors: vec![menu, window()],
                 read_ms: 0,
+                dialog: None,
             }),
         );
         assert!(!converter
@@ -1490,6 +1574,7 @@ mod tests {
                 focus,
                 ancestors: vec![menu, node("combo box", "Home branch", &[])],
                 read_ms: 0,
+                dialog: None,
             }),
         );
         opened.document = Some(":1.5/doc".to_owned());
@@ -1778,6 +1863,7 @@ mod tests {
             focus: node("push button", "OK", &[]),
             ancestors: vec![node("frame", "Chat", &[])],
             read_ms: 0,
+            dialog: None,
         };
         let events = converter.convert_read(&record(EventKind::FocusChanged, button, Some(behind)));
         assert!(events.is_empty());

@@ -580,6 +580,7 @@ fn read_native(
     provider: &LinuxProvider,
     element: &ElementData,
     walked: Option<&[AtspiObject]>,
+    dialog_read: &mut Option<String>,
 ) -> Option<NativeRead> {
     let Some(object) = AtspiObject::of(element) else {
         tracing::debug!("a native focus without its object's names");
@@ -595,6 +596,7 @@ fn read_native(
         None => walk_to_window(provider, &object),
     };
     let mut ancestors = Vec::new();
+    let mut window_object = None;
     for parent in walked {
         if ancestors.len() >= WINDOW_DEPTH {
             break;
@@ -605,9 +607,26 @@ fn read_native(
         ancestors.push(node);
         // The window is the last read: its own parent, the application, is not read.
         if window {
+            window_object = Some(parent);
             break;
         }
     }
+    // A dialog box come forward is read whole once, for its buttons and text: not again for
+    // each focus in it.
+    let dialog = ancestors
+        .last()
+        .filter(|window| matches!(window.role.as_str(), "dialog" | "alert"))
+        .and(window_object)
+        .and_then(|window| {
+            let key = format!("{}{}", window.bus_name, window.path);
+            if dialog_read.as_deref() == Some(key.as_str()) {
+                return None;
+            }
+            *dialog_read = Some(key);
+            Some(snapshot(
+                provider.atspi_tree_parallel(&window, DIALOG_LIMIT),
+            ))
+        });
     // What a focus costs, for the review's estimates (2026-11-08) to become numbers.
     let objects = count(&focus) + ancestors.iter().map(count).sum::<usize>();
     tracing::debug!(
@@ -626,8 +645,12 @@ fn read_native(
         focus,
         ancestors,
         read_ms,
+        dialog,
     })
 }
+
+/// The most objects a dialog box's window is read with, once, for its buttons and text.
+const DIALOG_LIMIT: usize = 300;
 
 /// The objects in `node`'s tree, itself included.
 fn count(node: &okur_linux_model::page::AtspiNode) -> usize {
@@ -1114,6 +1137,8 @@ impl EventSource for AtspiEventSource {
                 // windows of their own, read as they come forward.
                 let mut chromium: std::collections::HashMap<String, bool> =
                     std::collections::HashMap::new();
+                // The dialog box read whole last, by its window's key: read once for its window.
+                let mut dialog_read: Option<String> = None;
                 while !stop.load(Ordering::SeqCst) {
                     // The pages the reader read, into their places; what waited for them, and
                     // for pages waited for too long, goes on.
@@ -1387,11 +1412,11 @@ impl EventSource for AtspiEventSource {
                                     converter.wants_native(&event.kind, target, document.is_some())
                                         && (event.kind != EventKind::WindowActivated || menu_window)
                                 })
-                                .and_then(|e| read_native(&provider, e, walk));
+                                .and_then(|e| read_native(&provider, e, walk, &mut dialog_read));
                             let reread = converter
                                 .wants_reread(&event.kind, target)
                                 .cloned()
-                                .and_then(|e| read_native(&provider, &e, None));
+                                .and_then(|e| read_native(&provider, &e, None, &mut dialog_read));
                             let record = AtspiRecord {
                                 at_ms,
                                 kind: event.kind.clone(),

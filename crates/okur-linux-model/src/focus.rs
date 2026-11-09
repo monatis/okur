@@ -352,6 +352,70 @@ pub(crate) fn menu_item_focus(item: &AtspiNode, menu: Option<&AtspiNode>) -> Foc
     event
 }
 
+/// A dialog box as its window read whole shows it: its buttons in order, its default button (the
+/// one Enter presses, GTK's IS_DEFAULT state), and a message box's text (its labels, where it
+/// holds no field: the question of a quit or a "Save changes?" box). Insert+E says the default
+/// button, the Virtual Viewer the buttons [obs, 540/s2, 311/s14].
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub struct DialogBox {
+    pub default_button: Option<String>,
+    pub buttons: Vec<String>,
+    pub text: Option<String>,
+}
+
+/// AT-SPI's relation of a label to the field it names.
+const LABEL_FOR: u32 = 1;
+
+/// The dialog box `window` shows.
+pub fn dialog_box(window: &AtspiNode) -> DialogBox {
+    let mut dialog = DialogBox::default();
+    let mut labels = Vec::new();
+    let mut fields = false;
+    collect_dialog(window, &mut dialog, &mut labels, &mut fields);
+    if !fields && !labels.is_empty() {
+        dialog.text = Some(labels.join("\n"));
+    }
+    dialog
+}
+
+fn collect_dialog(
+    node: &AtspiNode,
+    dialog: &mut DialogBox,
+    labels: &mut Vec<String>,
+    fields: &mut bool,
+) {
+    use crate::page::state;
+    for child in &node.children {
+        match child.role.as_str() {
+            "push button" | "button" => {
+                let name = Some(child.name.trim().to_owned())
+                    .filter(|n| !n.is_empty())
+                    .or_else(|| first_label(child))
+                    .map(|n| without_mnemonic(&n));
+                if let Some(name) = name {
+                    if child.has(state::IS_DEFAULT) && dialog.default_button.is_none() {
+                        dialog.default_button = Some(name.clone());
+                    }
+                    dialog.buttons.push(name);
+                }
+            }
+            "label" | "static" => {
+                let names_a_field = child.relations.iter().any(|(kind, _)| *kind == LABEL_FOR);
+                let text = child.name.trim();
+                if !names_a_field && !text.is_empty() {
+                    labels.push(text.to_owned());
+                }
+            }
+            "panel" | "filler" | "frame" | "dialog" | "alert" => {
+                collect_dialog(child, dialog, labels, fields);
+            }
+            "separator" | "image" | "icon" => {}
+            // Any other control is a field: the box is no message box.
+            _ => *fields = true,
+        }
+    }
+}
+
 /// The first node within `node` (itself left out), depth first, that `wanted` takes.
 fn find<'a>(node: &'a AtspiNode, wanted: &dyn Fn(&AtspiNode) -> bool) -> Option<&'a AtspiNode> {
     node.children.iter().find_map(|child| {
@@ -423,6 +487,69 @@ mod tests {
         assert_eq!(event.window_title.as_deref(), Some("Links List"));
         let event = native_focus(FocusEvent::new(Role::Button), &button, &[window("frame")]);
         assert!(event.dialog_text.is_none());
+    }
+
+    /// A dialog box's buttons in order, its default by GTK's state; a message box's text from its
+    /// labels, none where it holds a field, nor from a field's own label.
+    #[test]
+    fn a_dialog_boxs_buttons_default_and_text() {
+        let button = |name: &str, default: bool| {
+            let mut button = AtspiNode {
+                role: "push button".to_owned(),
+                name: name.to_owned(),
+                ..AtspiNode::default()
+            };
+            if default {
+                button.states |= 1 << crate::page::state::IS_DEFAULT;
+            }
+            button
+        };
+        let label = |text: &str| AtspiNode {
+            role: "label".to_owned(),
+            name: text.to_owned(),
+            ..AtspiNode::default()
+        };
+        let panel = |children: Vec<AtspiNode>| AtspiNode {
+            role: "panel".to_owned(),
+            children,
+            ..AtspiNode::default()
+        };
+        let quit = AtspiNode {
+            role: "dialog".to_owned(),
+            name: "Okur".to_owned(),
+            children: vec![
+                label("Are you sure you want to quit?"),
+                panel(vec![button("_OK", true), button("Cancel", false)]),
+            ],
+            ..AtspiNode::default()
+        };
+        assert_eq!(
+            dialog_box(&quit),
+            DialogBox {
+                default_button: Some("OK".to_owned()),
+                buttons: vec!["OK".to_owned(), "Cancel".to_owned()],
+                text: Some("Are you sure you want to quit?".to_owned()),
+            }
+        );
+        let mut field_label = label("Find what:");
+        field_label
+            .relations
+            .push((LABEL_FOR, vec!["/entry".to_owned()]));
+        let find = AtspiNode {
+            role: "dialog".to_owned(),
+            children: vec![
+                field_label,
+                AtspiNode {
+                    role: "entry".to_owned(),
+                    ..AtspiNode::default()
+                },
+                button("Find Next", true),
+            ],
+            ..AtspiNode::default()
+        };
+        let read = dialog_box(&find);
+        assert_eq!(read.default_button.as_deref(), Some("Find Next"));
+        assert_eq!(read.text, None);
     }
 
     #[test]

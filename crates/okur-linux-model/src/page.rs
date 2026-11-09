@@ -37,6 +37,7 @@ pub mod state {
     pub const REQUIRED: u32 = 33;
     pub const INVALID_ENTRY: u32 = 36;
     pub const SUPPORTS_AUTOCOMPLETION: u32 = 37;
+    pub const IS_DEFAULT: u32 = 39;
     pub const VISITED: u32 = 40;
     pub const CHECKABLE: u32 = 41;
     pub const READ_ONLY: u32 = 43;
