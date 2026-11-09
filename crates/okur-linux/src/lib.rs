@@ -10,5 +10,6 @@ pub mod clock;
 pub mod events;
 pub mod keyboard;
 pub mod speech;
+pub mod ui;
 
 pub use okur_linux_model::ssip;

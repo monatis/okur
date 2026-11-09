@@ -91,6 +91,11 @@ pub struct AtspiRecord {
     /// A live region read again as it changed: a record of its own.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub live: Option<LiveRead>,
+    /// What one of Okur's own windows (okur-ui) told the engine: a choice in its dialog, its
+    /// button pressed, its close. A record of its own, so that a replay plays a dialog's choices
+    /// and its close as the live run had them.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub ui: Option<okur_core::ui::FromUi>,
     /// When the engine was given the record, in milliseconds since the Unix epoch, as the trace
     /// stamps it: a record held for a page, and a page, come later than their events, and a
     /// replay gives them to the engine in this order, the keys among them (the code review of
@@ -134,6 +139,14 @@ impl AtspiRecord {
         }
     }
 
+    /// What okur-ui told the engine, given to it as it came: a record of its own.
+    pub fn ui(at_ms: u64, message: okur_core::ui::FromUi) -> Self {
+        Self {
+            ui: Some(message),
+            ..Self::bare(at_ms, EventKind::Announcement, String::new(), None)
+        }
+    }
+
     /// A record of an event for which nothing was read.
     pub fn bare(at_ms: u64, kind: EventKind, app: String, target: Option<ElementData>) -> Self {
         Self {
@@ -147,6 +160,7 @@ impl AtspiRecord {
             reread: None,
             text: None,
             live: None,
+            ui: None,
             delivered_ms: None,
         }
     }
@@ -604,6 +618,10 @@ impl Converter {
         if let Some(read) = &record.live {
             return self.live_read(read);
         }
+        // What one of Okur's own windows told the engine, as it told it.
+        if let Some(message) = &record.ui {
+            return vec![AccessibilityEvent::Ui(message.clone())];
+        }
         let mut events = Vec::new();
         for page in &record.pages {
             // Chrome's own WebUI drawn as a page (the address bar's suggestions,
@@ -1023,6 +1041,7 @@ mod tests {
             reread: None,
             text: None,
             live: None,
+            ui: None,
             delivered_ms: None,
         }
     }
@@ -1345,6 +1364,25 @@ mod tests {
         let other = element(ElementRole::ProgressBar, "Elsewhere", "/other", false);
         let elsewhere = chrome_record(EventKind::ValueChanged, other, None);
         assert!(converter.convert_read(&elsewhere).is_empty());
+    }
+
+    /// What okur-ui told the engine, kept in the trace, is given to the engine as it was told.
+    #[test]
+    fn okur_uis_message_is_given_as_it_came() {
+        let mut converter = Converter::default();
+        let closed = AtspiRecord::ui(5, okur_core::ui::FromUi::DialogClosed { id: 3 });
+        assert!(matches!(
+            converter.convert_read(&closed).as_slice(),
+            [AccessibilityEvent::Ui(
+                okur_core::ui::FromUi::DialogClosed { id: 3 }
+            )]
+        ));
+        let line = serde_json::to_string(&closed).unwrap_or_default();
+        let back: Option<AtspiRecord> = serde_json::from_str(&line).ok();
+        assert_eq!(
+            back.and_then(|r| r.ui),
+            Some(okur_core::ui::FromUi::DialogClosed { id: 3 })
+        );
     }
 
     /// The page given last read again at the same address is marked as read again, for the

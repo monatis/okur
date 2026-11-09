@@ -397,6 +397,21 @@ impl DriverShared {
     }
 }
 
+/// Writes `record` to `trace`, where there is one, stamped as given now: what another part of
+/// Okur gives the engine itself (okur-ui's messages, which the UI host hands it).
+pub(crate) fn trace_only(trace: &TraceOut, mut record: AtspiRecord) {
+    let mut out = trace
+        .lock()
+        .unwrap_or_else(std::sync::PoisonError::into_inner);
+    if let Some(writer) = out.as_mut() {
+        record.delivered_ms = Some(unix_ms());
+        if let Err(e) = write_record(writer, &record) {
+            tracing::warn!("the trace not written, no longer kept: {e}");
+            *out = None;
+        }
+    }
+}
+
 /// Writes `record` to `trace`, where there is one, and gives the engine `said`, the trace held
 /// between the two, so that its records are in the order the engine took them: false once the
 /// engine has gone.
@@ -1380,6 +1395,7 @@ impl EventSource for AtspiEventSource {
                                 reread,
                                 text: None,
                                 live: None,
+                                ui: None,
                                 delivered_ms: None,
                             };
                             let cancelled = delivery.push(record, true);

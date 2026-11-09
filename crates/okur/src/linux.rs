@@ -72,7 +72,10 @@ impl System {
             keyboard_hook: Box::new(okur_linux::keyboard::X11KeyboardHook::new()),
             event_source: Box::new(event_source),
             synthesizers: synthesizers(),
-            ui_spawner: Box::new(okur_runtime::ui_host::PlainSpawner),
+            // okur-ui's messages kept in the trace beside the events, for a replay.
+            ui_spawner: Box::new(okur_linux::ui::TracedSpawner::new(std::sync::Arc::clone(
+                &shared.trace,
+            ))),
             // Enter and Space on a page's elements, the focus given to them, and a text
             // field read at its caret.
             actions: Some(Box::new(move |sink| {
