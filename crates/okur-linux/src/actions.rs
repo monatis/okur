@@ -48,6 +48,8 @@ const RUN_LIMIT: usize = 64;
 
 pub struct LinuxActions {
     objects: PageObjects,
+    /// Shared with the event source: the page in front wanted again after it changed.
+    shared: DriverShared,
     /// The worker's queue; none when its thread could not start.
     worker: Option<Sender<Request>>,
 }
@@ -58,6 +60,7 @@ impl LinuxActions {
     /// engine through `sink`.
     pub fn new(objects: PageObjects, shared: DriverShared, sink: EventSink) -> Self {
         let (requests, received) = channel::<Request>();
+        let kept = shared.clone();
         let worker = std::thread::Builder::new()
             .name("okur-linux-actions".to_owned())
             .spawn(move || {
@@ -118,7 +121,11 @@ impl LinuxActions {
             .map_err(|e| tracing::warn!("Linux actions: no worker thread: {e}"))
             .ok()
             .map(|_| requests);
-        Self { objects, worker }
+        Self {
+            objects,
+            shared: kept,
+            worker,
+        }
     }
 
     /// Asks the worker for `request` on `node`'s object: whether it was asked.
@@ -360,6 +367,18 @@ impl ApplicationActions for LinuxActions {
 
     fn activate(&self, node: &AomNode) -> bool {
         self.ask(node, Request::Activate)
+    }
+
+    /// The page in front changed outside its live regions, or a region's change was said: the
+    /// event source captures it again once its changes settle, or at once (`now`).
+    fn page_changed(&self, now: bool) -> bool {
+        let mut wanted = self
+            .shared
+            .page_wanted
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner);
+        crate::events::PageWanted::ask(&mut wanted, now);
+        true
     }
 
     fn read_at_caret(&self, before: Option<&TextContext>, in_page: bool) -> bool {

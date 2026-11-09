@@ -4247,7 +4247,7 @@ pub struct AtspiTextPosition {
 /// tree reads ([`LinuxProvider::atspi_tree`]) and the walks up start, without the reads an
 /// [`ElementData`] costs (for a top-level frame, the window manager's facts, read under an X
 /// server grab: the code review of 2026-11-08 found one with every focus outside a page).
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct AtspiObject {
     pub bus_name: String,
     pub path: String,

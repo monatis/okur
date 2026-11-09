@@ -2,11 +2,13 @@
 //! status, an alert), as Chrome gives them over AT-SPI: a region's root has its own `live`
 //! attribute, every object inside it `container-live`. Chrome tells a region's change by its
 //! objects' children and text changing, which the driver hears for the objects of known regions
-//! alone ([`live_paths`]) and answers by reading the page again; the converter compares each
-//! region's text in the two reads and says what changed before the page is refreshed, as
-//! Windows' live region event comes before the page read with it [obs, 206/s2-s10].
+//! alone ([`live_objects`]) and answers by reading the region again; the converter compares the
+//! region's text with its text before and says what changed, then tells the engine the page
+//! changed, which reads the page again once its changes settle, as Windows' live region event
+//! carries its region and its page is captured again later [obs, 206/s2-s10]. A page read again
+//! for any reason is compared the same way.
 
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 
 use okur_core::aom::{AomNode, UNIQUE_ID_ATTR};
 use okur_core::event::{LiveRegionEvent, Politeness};
@@ -62,26 +64,29 @@ fn collect_regions(node: &AtspiNode, regions: &mut Vec<Region>) {
     }
 }
 
-/// The paths of the objects in a page's live regions, the regions' own included: the objects
-/// whose children or text changing tells a region's change. A region whose politeness is off
-/// is not heard.
-pub fn live_paths(root: &AtspiNode) -> HashSet<String> {
-    let mut paths = HashSet::new();
-    collect_paths(root, &mut paths);
-    paths
+/// The objects of a page's live regions by their paths, each with its region's path (a region's
+/// own object is its own region): the objects whose children or text changing tells a region's
+/// change, and the region read again for it. A region whose politeness is off is not heard; a
+/// region inside another is its own.
+pub fn live_objects(root: &AtspiNode) -> HashMap<String, String> {
+    let mut objects = HashMap::new();
+    collect_objects(root, None, &mut objects);
+    objects
 }
 
-fn collect_paths(node: &AtspiNode, paths: &mut HashSet<String>) {
-    let live = |name: &str| {
-        node.attributes
-            .get(name)
-            .is_some_and(|value| !value.is_empty() && value != "off")
+fn collect_objects(node: &AtspiNode, region: Option<&str>, objects: &mut HashMap<String, String>) {
+    let attribute = |name: &str| node.attributes.get(name).map(String::as_str);
+    let own = attribute("live").filter(|live| !live.is_empty());
+    let region = match own {
+        Some("off") => None,
+        Some(_) if !node.path.is_empty() => Some(node.path.as_str()),
+        _ => region,
     };
-    if !node.path.is_empty() && (live("live") || live("container-live")) {
-        paths.insert(node.path.clone());
+    if let Some(region) = region.filter(|_| !node.path.is_empty()) {
+        objects.insert(node.path.clone(), region.to_owned());
     }
     for child in &node.children {
-        collect_paths(child, paths);
+        collect_objects(child, region, objects);
     }
 }
 
@@ -277,15 +282,17 @@ mod tests {
         assert!(changes(&regions_second, Some(&lines_second), &lines_second).is_empty());
     }
 
-    /// The objects heard for a region's change are those of live regions, off ones not.
+    /// The objects heard for a region's change are those of live regions, each with its
+    /// region; an off region's are not.
     #[test]
-    fn the_live_paths_are_the_regions_objects() {
+    fn the_live_objects_are_the_regions_objects() {
         let mut root = page(&["Ada: Good morning"]);
         root.children
             .push(node("panel", "Quiet", "/quiet", &[("live", "off")]));
-        let paths = live_paths(&root);
-        assert!(paths.contains("/log") && paths.contains("/message/0"));
-        assert!(paths.contains("/status"));
-        assert!(!paths.contains("/quiet") && !paths.contains("/doc"));
+        let objects = live_objects(&root);
+        assert_eq!(objects.get("/log").map(String::as_str), Some("/log"));
+        assert_eq!(objects.get("/message/0").map(String::as_str), Some("/log"));
+        assert_eq!(objects.get("/status").map(String::as_str), Some("/status"));
+        assert!(!objects.contains_key("/quiet") && !objects.contains_key("/doc"));
     }
 }

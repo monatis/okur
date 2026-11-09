@@ -49,6 +49,17 @@ pub struct TextRead {
     pub read_ms: u64,
 }
 
+/// A live region read again as it changed: its page's document, by its key, and the region's
+/// subtree.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct LiveRead {
+    pub document: String,
+    pub root: AtspiNode,
+    /// How long the read took, in milliseconds.
+    #[serde(default)]
+    pub read_ms: u64,
+}
+
 /// What the driver read for one AT-SPI event.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AtspiRecord {
@@ -70,6 +81,9 @@ pub struct AtspiRecord {
     /// A text field read at its caret, asked for by the engine: a record of its own.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub text: Option<TextRead>,
+    /// A live region read again as it changed: a record of its own.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub live: Option<LiveRead>,
     /// When the engine was given the record, in milliseconds since the Unix epoch, as the trace
     /// stamps it: a record held for a page, and a page, come later than their events, and a
     /// replay gives them to the engine in this order, the keys among them (the code review of
@@ -104,6 +118,15 @@ impl AtspiRecord {
         }
     }
 
+    /// A live region read again as it changed, given to the engine in its turn: a record of its
+    /// own.
+    pub fn live(at_ms: u64, read: LiveRead) -> Self {
+        Self {
+            live: Some(read),
+            ..Self::bare(at_ms, EventKind::StructureChanged, String::new(), None)
+        }
+    }
+
     /// A record of an event for which nothing was read.
     pub fn bare(at_ms: u64, kind: EventKind, app: String, target: Option<ElementData>) -> Self {
         Self {
@@ -116,6 +139,7 @@ impl AtspiRecord {
             native: None,
             reread: None,
             text: None,
+            live: None,
             delivered_ms: None,
         }
     }
@@ -234,12 +258,47 @@ impl Converter {
         self.native_element.as_ref().filter(|_| inside)
     }
 
+    /// What a live region read again changed, compared with its lines when the page or the
+    /// region was read before, and the page's change.
+    fn live_read(&mut self, read: &LiveRead) -> Vec<AccessibilityEvent> {
+        let regions = crate::live::regions(&read.root);
+        let ids = crate::page::page_ids(&read.root, 0);
+        let lines = crate::live::region_lines(&to_aom_from(&read.root, 0), &regions, &ids);
+        let at = self
+            .live_lines
+            .iter()
+            .position(|(document, _)| *document == read.document);
+        let before = at
+            .and_then(|i| self.live_lines.get(i))
+            .map(|(_, lines)| lines);
+        let mut events: Vec<AccessibilityEvent> = crate::live::changes(&regions, before, &lines)
+            .into_iter()
+            .map(AccessibilityEvent::LiveRegion)
+            .collect();
+        match at.and_then(|i| self.live_lines.get_mut(i)) {
+            Some((_, known)) => known.extend(lines),
+            None => {
+                self.live_lines.push((read.document.clone(), lines));
+                if self.live_lines.len() > LIVE_PAGES_KEPT {
+                    self.live_lines.remove(0);
+                }
+            }
+        }
+        events.push(AccessibilityEvent::PageChanged);
+        events
+    }
+
     /// The engine's events for what was read for one event, in order: the pages read, then the
     /// focus or the change.
     pub fn convert_read(&mut self, record: &AtspiRecord) -> Vec<AccessibilityEvent> {
         // A text field read at its caret: what the engine asked for, as read.
         if let Some(read) = &record.text {
             return vec![AccessibilityEvent::TextContext(read.context.clone())];
+        }
+        // A live region read again: what it changed, then the page changed, for the engine to
+        // capture it again once its changes settle.
+        if let Some(read) = &record.live {
+            return self.live_read(read);
         }
         let mut events = Vec::new();
         for page in &record.pages {
@@ -634,6 +693,7 @@ mod tests {
             native,
             reread: None,
             text: None,
+            live: None,
             delivered_ms: None,
         }
     }
@@ -874,6 +934,23 @@ mod tests {
         };
         let mut converter = Converter::default();
         let first = converter.convert_read(&read(&["Ada: Good morning"]));
+        // The log read alone as it changes: its change, then the page's.
+        let region = |messages: &[&str]| {
+            let page = read(messages);
+            let root = page
+                .pages
+                .first()
+                .and_then(|p| p.root.children.first().cloned())
+                .unwrap_or_default();
+            AtspiRecord::live(
+                0,
+                LiveRead {
+                    document: ":1.5/doc".to_owned(),
+                    root,
+                    read_ms: 0,
+                },
+            )
+        };
         assert!(matches!(
             first.as_slice(),
             [AccessibilityEvent::DocumentLoaded { .. }]
@@ -892,6 +969,29 @@ mod tests {
         let third = converter.convert_read(&read(&["Ada: Good morning", "You: Message 1"]));
         assert!(matches!(
             third.as_slice(),
+            [AccessibilityEvent::DocumentLoaded { .. }]
+        ));
+        let fourth = converter.convert_read(&region(&[
+            "Ada: Good morning",
+            "You: Message 1",
+            "You: Message 2",
+        ]));
+        assert!(
+            matches!(
+                fourth.as_slice(),
+                [AccessibilityEvent::LiveRegion(live), AccessibilityEvent::PageChanged]
+                    if live.text.ends_with("You: Message 2")
+            ),
+            "{fourth:?}"
+        );
+        // The page read again after it: nothing new to say of the log.
+        let fifth = converter.convert_read(&read(&[
+            "Ada: Good morning",
+            "You: Message 1",
+            "You: Message 2",
+        ]));
+        assert!(matches!(
+            fifth.as_slice(),
             [AccessibilityEvent::DocumentLoaded { .. }]
         ));
     }

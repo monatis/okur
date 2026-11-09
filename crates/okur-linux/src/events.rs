@@ -35,17 +35,74 @@ pub type TraceOut = Arc<Mutex<Option<std::io::BufWriter<std::fs::File>>>>;
 pub type FocusedObject = Arc<Mutex<Option<AtspiObject>>>;
 
 /// The objects of the live regions of the last pages read, by page: their children and text
-/// changing tells a region's change, which the page read again says (okur_linux_model::live).
+/// changing tells a region's change, which the region read again says (okur_linux_model::live).
 /// Written by the event thread as it gives the engine a page, read by the subscription's filter
 /// for every children or text signal.
 type LiveObjects = Arc<std::sync::RwLock<Vec<LivePage>>>;
 
-/// A page's live objects: its document's bus name and path, and their paths.
+/// A page's live objects: its document's bus name and path, and their paths, each with its
+/// region's.
 struct LivePage {
     bus: String,
     document: String,
-    paths: std::collections::HashSet<String>,
+    paths: std::collections::HashMap<String, String>,
 }
+
+/// A live region heard changing, read once its signals pause: the page's document and when.
+struct DirtyRegion {
+    document: AtspiObject,
+    due: std::time::Instant,
+}
+
+/// How long after a live region's first signal it is read: its change's signals (a message's
+/// children, then its text) come together, and the region is read once for them.
+const LIVE_SETTLE: Duration = Duration::from_millis(40);
+
+/// The most objects a live region is read with.
+const LIVE_LIMIT: usize = 2000;
+
+/// The page in front captured again after it changed, as the engine asks
+/// (`ApplicationActions::page_changed`): when first and last asked, and whether at once.
+#[derive(Debug, Clone, Copy)]
+pub struct PageWanted {
+    first: std::time::Instant,
+    last: std::time::Instant,
+    now: bool,
+}
+
+impl PageWanted {
+    /// Asked (again): at once, or once the changes settle.
+    pub fn ask(wanted: &mut Option<PageWanted>, now: bool) {
+        let at = std::time::Instant::now();
+        match wanted {
+            Some(w) => {
+                w.last = at;
+                w.now |= now;
+            }
+            None => {
+                *wanted = Some(PageWanted {
+                    first: at,
+                    last: at,
+                    now,
+                })
+            }
+        }
+    }
+
+    /// Due: asked at once, or quiet for [`REFRESH_QUIET`], or waiting [`REFRESH_MAX_DELAY`]
+    /// (Windows' times: a reply streamed for a minute still refreshes).
+    fn is_due(&self) -> bool {
+        self.now
+            || self.last.elapsed() >= REFRESH_QUIET
+            || self.first.elapsed() >= REFRESH_MAX_DELAY
+    }
+}
+
+/// How long a changed page must be quiet before it is captured again.
+const REFRESH_QUIET: Duration = Duration::from_millis(700);
+
+/// The longest a changed page waits for quiet.
+const REFRESH_MAX_DELAY: Duration = Duration::from_secs(3);
 
 /// Whether `kind` on the object at `bus` and `path` is heard: what the converter takes, and a
 /// live region's children or text changing.
@@ -57,19 +114,58 @@ fn heard(live: &LiveObjects, kind: &EventKind, bus: &str, path: &str) -> bool {
         && live_page_of(live, bus, path).is_some()
 }
 
-/// The document of the page whose live region holds the object at `bus` and `path`.
-fn live_page_of(live: &LiveObjects, bus: &str, path: &str) -> Option<AtspiObject> {
+/// The document of the page whose live region holds the object at `bus` and `path`, and that
+/// region's object.
+fn live_page_of(live: &LiveObjects, bus: &str, path: &str) -> Option<(AtspiObject, AtspiObject)> {
     let pages = live
         .read()
         .unwrap_or_else(std::sync::PoisonError::into_inner);
-    pages
-        .iter()
-        .find(|page| page.bus == bus && page.paths.contains(path))
-        .map(|page| AtspiObject {
-            bus_name: page.bus.clone(),
-            path: page.document.clone(),
-            role: "document web".to_owned(),
-        })
+    pages.iter().find_map(|page| {
+        let region = page.paths.get(path).filter(|_| page.bus == bus)?;
+        Some((
+            AtspiObject {
+                bus_name: page.bus.clone(),
+                path: page.document.clone(),
+                role: "document web".to_owned(),
+            },
+            AtspiObject {
+                bus_name: page.bus.clone(),
+                path: region.clone(),
+                role: String::new(),
+            },
+        ))
+    })
+}
+
+/// The object a document's key names (its bus name, then its path).
+fn object_of_key(key: &str) -> Option<AtspiObject> {
+    let at = key.find('/')?;
+    let (bus, path) = key.split_at(at);
+    Some(AtspiObject {
+        bus_name: bus.to_owned(),
+        path: path.to_owned(),
+        role: "document web".to_owned(),
+    })
+}
+
+/// A live region read again as it changed, as a record for the engine.
+fn read_region(
+    provider: &LinuxProvider,
+    document: &AtspiObject,
+    region: &AtspiObject,
+) -> AtspiRecord {
+    let started = std::time::Instant::now();
+    let root = snapshot(provider.atspi_tree(region, LIVE_LIMIT));
+    let read_ms = u64::try_from(started.elapsed().as_millis()).unwrap_or(u64::MAX);
+    tracing::debug!(region = %region.path, ms = read_ms, "a live region read again");
+    AtspiRecord::live(
+        unix_ms(),
+        okur_linux_model::convert::LiveRead {
+            document: key_of(document),
+            root,
+            read_ms,
+        },
+    )
 }
 
 /// The live objects of the pages `record` gives the engine, in place of those pages' before.
@@ -82,7 +178,7 @@ fn note_live_pages(live: &LiveObjects, record: &AtspiRecord) {
     let found: Vec<_> = record
         .pages
         .iter()
-        .map(|page| (page, okur_linux_model::live::live_paths(&page.root)))
+        .map(|page| (page, okur_linux_model::live::live_objects(&page.root)))
         .collect();
     let mut pages = live
         .write()
@@ -112,12 +208,13 @@ pub type Activated = Arc<Mutex<Option<(AtspiObject, std::time::Instant)>>>;
 
 /// What the event source and the actions share ([`crate::actions::LinuxActions`]): the focused
 /// object and the trace, for reading a text field at its caret; the element last activated, for
-/// its focus to wait for its state.
+/// its focus to wait for its state; the page in front wanted again after it changed.
 #[derive(Clone, Default)]
 pub struct DriverShared {
     pub trace: TraceOut,
     pub focused: FocusedObject,
     pub activated: Activated,
+    pub page_wanted: Arc<Mutex<Option<PageWanted>>>,
 }
 
 /// How long after Okur activated it a toggle's focus is taken as the activation's.
@@ -809,6 +906,7 @@ impl EventSource for AtspiEventSource {
         let trace = Arc::clone(&self.shared.trace);
         let focused = Arc::clone(&self.shared.focused);
         let activated = Arc::clone(&self.shared.activated);
+        let page_wanted = Arc::clone(&self.shared.page_wanted);
         let stop = Arc::new(AtomicBool::new(false));
         let thread = {
             let stop = Arc::clone(&stop);
@@ -828,6 +926,9 @@ impl EventSource for AtspiEventSource {
                 let mut delivery = Delivery::default();
                 // The page the focus is in, by its document's key: the live regions heard.
                 let mut focus_page: Option<String> = None;
+                // Live regions heard changing, read once their signals pause, by their objects.
+                let mut dirty: std::collections::HashMap<AtspiObject, DirtyRegion> =
+                    std::collections::HashMap::new();
                 while !stop.load(Ordering::SeqCst) {
                     // The pages the reader read, into their places; what waited for them, and
                     // for pages waited for too long, goes on.
@@ -853,7 +954,63 @@ impl EventSource for AtspiEventSource {
                     // Short while a page is awaited, so that it comes at once when the bus is
                     // quiet; else the thread wakes ten times a second, not fifty (the second
                     // review, finding 8).
-                    let wait = if delivery.is_holding() { 20 } else { 100 };
+                    // The live regions whose signals paused, read; the page in front, captured
+                    // again once its changes settled, as the engine asked.
+                    let due: Vec<AtspiObject> = dirty
+                        .iter()
+                        .filter(|(_, d)| d.due <= std::time::Instant::now())
+                        .map(|(region, _)| region.clone())
+                        .collect();
+                    for region in due {
+                        if let Some(d) = dirty.remove(&region) {
+                            let record = read_region(&provider, &d.document, &region);
+                            let cancelled = delivery.push(record, false);
+                            drop_pages(cancelled, &reader, &mut converter);
+                        }
+                    }
+                    let wanted = {
+                        let mut wanted = page_wanted
+                            .lock()
+                            .unwrap_or_else(std::sync::PoisonError::into_inner);
+                        match *wanted {
+                            Some(w) if w.is_due() => wanted.take(),
+                            _ => None,
+                        }
+                    };
+                    if let (Some(_), Some(document)) =
+                        (wanted, focus_page.as_deref().and_then(object_of_key))
+                    {
+                        tracing::debug!(document = %key_of(&document), "the changed page read again");
+                        ask_page(
+                            &document,
+                            unix_ms(),
+                            &mut reader,
+                            &mut delivery,
+                            &mut converter,
+                            &provider,
+                            &objects,
+                        );
+                    }
+                    if !deliver(
+                        &mut delivery,
+                        &mut converter,
+                        &trace,
+                        &live,
+                        &focused,
+                        &sink,
+                    ) {
+                        return;
+                    }
+                    let waiting = !dirty.is_empty()
+                        || page_wanted
+                            .lock()
+                            .unwrap_or_else(std::sync::PoisonError::into_inner)
+                            .is_some();
+                    let wait = if delivery.is_holding() || waiting {
+                        20
+                    } else {
+                        100
+                    };
                     match subscription.recv_status(Duration::from_millis(wait)) {
                         RecvStatus::Event(event) => {
                             tracing::trace!(
@@ -889,9 +1046,10 @@ impl EventSource for AtspiEventSource {
                                 }
                                 continue;
                             }
-                            // A live region's children or text changed: its page is read again,
-                            // and the converter says what the region changed (once per page
-                            // while a read is awaited).
+                            // A live region's children or text changed: the region is read
+                            // again once its signals pause, and the converter says what it
+                            // changed (the code review of 2026-11-09, finding 2: the whole page
+                            // was read for each change).
                             if matches!(
                                 event.kind,
                                 EventKind::StructureChanged | EventKind::TextChanged
@@ -904,23 +1062,14 @@ impl EventSource for AtspiEventSource {
                                     .and_then(|object| {
                                         live_page_of(&live, &object.bus_name, &object.path)
                                     })
-                                    .filter(|document| {
+                                    .filter(|(document, _)| {
                                         focus_page.as_deref() == Some(key_of(document).as_str())
                                     });
-                                if let Some(document) = page {
-                                    tracing::debug!(
-                                        document = %key_of(&document),
-                                        "a live region changed: its page read again"
-                                    );
-                                    ask_page(
-                                        &document,
-                                        at_ms,
-                                        &mut reader,
-                                        &mut delivery,
-                                        &mut converter,
-                                        &provider,
-                                        &objects,
-                                    );
+                                if let Some((document, region)) = page {
+                                    dirty.entry(region).or_insert_with(|| DirtyRegion {
+                                        document,
+                                        due: std::time::Instant::now() + LIVE_SETTLE,
+                                    });
                                 }
                                 continue;
                             }
@@ -1001,6 +1150,7 @@ impl EventSource for AtspiEventSource {
                                 native,
                                 reread,
                                 text: None,
+                                live: None,
                                 delivered_ms: None,
                             };
                             let cancelled = delivery.push(record, true);
