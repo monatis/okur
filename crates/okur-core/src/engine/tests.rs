@@ -5488,6 +5488,44 @@ fn auto_forms_mode_arrows_into_and_out_of_fields() {
     );
 }
 
+/// Up onto a text area puts its caret at the end, on its last line, and asks the platform to
+/// put it there: the next Up is the field's, which reads the line above [obs, 285/s1, s2]. Up
+/// onto a field of one line leaves its caret at the start [obs, 284/s6].
+#[test]
+fn up_onto_a_text_area_puts_its_caret_at_the_end() {
+    let mut area = AomNode::new(2, Role::Edit).with_name("Text");
+    area.attributes.insert("multiline".into(), "true".into());
+    area.value = Some("first line\nlast line".into());
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Reading Settings")
+        .with_children(vec![
+            AomNode::new(1, Role::Paragraph).with_text("Above"),
+            area,
+            AomNode::new(3, Role::Paragraph).with_text("Below"),
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    engine.handle_focus_event(&page_document());
+    engine.cursor.move_to_node_id(3);
+    speech.take();
+    engine.handle_key_event(&key(Key::UpArrow));
+    assert!(engine.forms_mode);
+    let length = "first line\nlast line".chars().count();
+    assert!(actions
+        .requests()
+        .contains(&("caret to".to_owned(), length)));
+    assert_eq!(engine.last_text.as_ref().map(|t| t.caret), Some(length));
+    // The next Up moves the field's caret: the page's, not the virtual cursor's.
+    assert_eq!(
+        engine.handle_key_event(&key(Key::UpArrow)),
+        KeyAction::PassThrough
+    );
+    assert!(engine.forms_mode);
+}
+
 /// Auto Forms Mode on a platform whose page focus gives no text (Linux): the field an arrow
 /// focused keeps its text as the arrow left it, its caret at the start, and Down in the empty
 /// field leaves it for the next line [obs, 280/s6].

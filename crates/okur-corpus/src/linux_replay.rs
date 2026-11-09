@@ -96,9 +96,10 @@ impl ReplayReport {
 
 /// A trace's records, one JSON line each, in the order the engine was given them: a record
 /// stamped earlier than the one before it is an error, which a replay placing keys among them
-/// by their times would hide (the code review of 2026-11-09, finding 6).
+/// by their times would hide (the code review of 2026-11-09, finding 6). A trace from before the
+/// stamps is taken in its order.
 pub fn read_trace(text: &str) -> Result<Vec<AtspiRecord>, String> {
-    let records: Vec<AtspiRecord> = text
+    let mut records: Vec<AtspiRecord> = text
         .lines()
         .enumerate()
         .filter(|(_, line)| !line.trim().is_empty())
@@ -106,6 +107,16 @@ pub fn read_trace(text: &str) -> Result<Vec<AtspiRecord>, String> {
             serde_json::from_str(line).map_err(|e| format!("trace line {}: {e}", index + 1))
         })
         .collect::<Result<_, _>>()?;
+    // A trace before the stamps is in the order the engine took its records, their events'
+    // times not: a page record has the time it was asked for, a caret read the time it was
+    // read. Each is given to the engine no earlier than the one before it.
+    if records.iter().all(|r| r.delivered_ms.is_none()) {
+        let mut last = 0;
+        for record in &mut records {
+            last = last.max(record.at_ms);
+            record.delivered_ms = Some(last);
+        }
+    }
     if let Some(at) = records
         .windows(2)
         .position(|pair| matches!(pair, [a, b] if b.handed_ms() < a.handed_ms()))
@@ -143,6 +154,11 @@ impl okur_core::actions::ApplicationActions for LinuxDriverActions {
         _before: Option<&okur_core::event::TextContext>,
         _in_page: bool,
     ) -> bool {
+        self.reads_carets
+    }
+
+    /// A field's caret put, as the driver puts it where it reads carets.
+    fn move_caret(&self, _context: &okur_core::event::TextContext, _offset: usize) -> bool {
         self.reads_carets
     }
 }

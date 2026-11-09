@@ -523,6 +523,10 @@ enum Commands {
         /// which may only grow
         #[arg(long, conflicts_with_all = ["only", "pages_after_focus", "recorded_settings"])]
         write: bool,
+        /// With --write: let steps that matched go (a regression, said so in the commit: a run
+        /// made again with a driver that reads more)
+        #[arg(long, requires = "write")]
+        allow_regression: bool,
         /// Print the replayed steps that do not match JAWS, with JAWS's transcripts, in place
         /// of those the replay says otherwise than the run
         #[arg(long)]
@@ -1394,6 +1398,7 @@ async fn main() {
             only,
             recorded_settings,
             write,
+            allow_regression,
             jaws,
         }) => {
             if platform != "linux" {
@@ -1459,7 +1464,7 @@ async fn main() {
                 let baseline = okur_corpus::linux_replay::BASELINE;
                 let against = report.against_jaws_report();
                 let result = if write {
-                    okur_corpus::live::write_baseline(dir, baseline, &against, false)
+                    okur_corpus::live::write_baseline(dir, baseline, &against, allow_regression)
                         .map(|()| println!("Wrote corpus/live/{baseline}-baseline.json"))
                 } else {
                     okur_corpus::live::check_baseline(dir, baseline, &against)

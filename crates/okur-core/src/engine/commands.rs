@@ -917,24 +917,42 @@ impl ScreenReaderEngine {
             (Some(field), Some(text)) if !text.trim().is_empty() => format!("{field}{text}"),
             _ => said,
         };
-        if let Some(actions) = &self.actions {
-            actions.focus(&node);
-        }
         // The field is the page's focus now, with its caret at the start where focusing puts
-        // it [obs, 280/s7, 284/s6], until the focus event and a read of the field say more.
-        self.remember_field_text();
-        self.arrow_focus = Some(node.id);
-        self.last_page_focus = Some(node.id);
-        self.page_focus_is_field = true;
-        self.last_text = Some(crate::event::TextContext {
-            text: node.value.clone().unwrap_or_default(),
-            caret: 0,
+        // it [obs, 280/s7, 284/s6], until the focus event and a read of the field say more. Up
+        // onto a text area puts it at the end, on the last line, where the next Up reads the
+        // line above it: "teh quick brown fxo" is the text area's last line, and Up then reads
+        // "Say All reads this. ..." [obs, 285/s1, s2]. Windows' recorded caret came from JAWS's
+        // own placing; Okur places it.
+        let text = node.value.clone().unwrap_or_default();
+        let multiline = node
+            .attributes
+            .get("multiline")
+            .is_some_and(|m| m == "true");
+        let caret = if down || !multiline {
+            0
+        } else {
+            text.chars().count()
+        };
+        let context = crate::event::TextContext {
+            text,
+            caret,
             selection: None,
             font: None,
             word: None,
             misspelled: Vec::new(),
             structure: None,
-        });
+        };
+        if let Some(actions) = &self.actions {
+            actions.focus(&node);
+            if caret > 0 {
+                actions.move_caret(&context, caret);
+            }
+        }
+        self.remember_field_text();
+        self.arrow_focus = Some(node.id);
+        self.last_page_focus = Some(node.id);
+        self.page_focus_is_field = true;
+        self.last_text = Some(context);
         self.forms_mode = true;
         self.cursor.forms_mode_active = true;
         Some(said)

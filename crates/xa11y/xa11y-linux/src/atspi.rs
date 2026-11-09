@@ -4568,6 +4568,22 @@ impl LinuxProvider {
         }
     }
 
+    /// Puts the caret of the object at `bus_name` and `path` at character `offset`: its Text
+    /// interface's SetCaretOffset. Whether it was put there.
+    pub fn atspi_set_caret(&self, bus_name: &str, path: &str, offset: i32) -> Result<bool> {
+        let proxy = self.make_proxy(bus_name, path, "org.a11y.atspi.Text")?;
+        let reply = proxy
+            .call_method("SetCaretOffset", &(offset,))
+            .map_err(|e| Error::Platform {
+                code: -1,
+                message: format!("Text.SetCaretOffset failed: {e}"),
+            })?;
+        reply.body().deserialize().map_err(|e| Error::Platform {
+            code: -1,
+            message: format!("Text.SetCaretOffset reply decode failed: {e}"),
+        })
+    }
+
     /// The whole text of the object at `bus_name` and `path`: its Text interface's GetText to
     /// the end.
     pub fn atspi_text(&self, bus_name: &str, path: &str) -> Result<String> {

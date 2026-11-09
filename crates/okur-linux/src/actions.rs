@@ -32,6 +32,8 @@ enum Request {
     /// The focused text field read at its caret, after the key the engine asked it for: what
     /// the engine knew of the field before the key, and whether the field is a page's.
     Text(Option<Box<TextContext>>, bool),
+    /// The focused text field's caret put at a character.
+    Caret(usize),
 }
 
 /// How long a caret read waits for the key to move the caret, or change the text or the
@@ -41,6 +43,9 @@ const SETTLE: Duration = Duration::from_millis(250);
 /// How often the caret is read while it is waited for: a round trip on the bus is under a
 /// millisecond.
 const POLL: Duration = Duration::from_millis(3);
+
+/// How long after the focus was asked for an element a caret put is put in it.
+const FOCUS_ASKED_FRESH: Duration = Duration::from_millis(1000);
 
 /// The most attribute runs read for the misspelled words of the caret's line: each is a call
 /// on the bus.
@@ -72,6 +77,9 @@ impl LinuxActions {
                     }
                 };
                 let mut pending = VecDeque::new();
+                // The element last asked to take the focus, and when: a caret put right after
+                // it is put in it, its focus event not yet come (Up onto a text area).
+                let mut focus_asked: Option<(AtspiObject, Instant)> = None;
                 loop {
                     let request = match pending.pop_front() {
                         Some(request) => request,
@@ -87,6 +95,35 @@ impl LinuxActions {
                         Request::Focus(bus, path) => {
                             if let Err(e) = provider.atspi_grab_focus(&bus, &path) {
                                 tracing::debug!("focus not given: {e}");
+                            }
+                            focus_asked = Some((
+                                AtspiObject {
+                                    bus_name: bus,
+                                    path,
+                                    role: String::new(),
+                                },
+                                Instant::now(),
+                            ));
+                        }
+                        Request::Caret(offset) => {
+                            let asked = focus_asked
+                                .as_ref()
+                                .filter(|(_, at)| at.elapsed() < FOCUS_ASKED_FRESH)
+                                .map(|(object, _)| object.clone());
+                            let object = asked.or_else(|| {
+                                shared
+                                    .focused
+                                    .lock()
+                                    .unwrap_or_else(std::sync::PoisonError::into_inner)
+                                    .clone()
+                            });
+                            let (Some(object), Ok(offset)) = (object, i32::try_from(offset)) else {
+                                continue;
+                            };
+                            match provider.atspi_set_caret(&object.bus_name, &object.path, offset) {
+                                Ok(true) => {}
+                                Ok(false) => tracing::debug!(offset, "caret not put"),
+                                Err(e) => tracing::debug!("caret not put: {e}"),
                             }
                         }
                         Request::Activate(bus, path) => {
@@ -375,6 +412,12 @@ impl ApplicationActions for LinuxActions {
             .unwrap_or_else(std::sync::PoisonError::into_inner);
         crate::events::PageWanted::ask(&mut wanted, now);
         true
+    }
+
+    fn move_caret(&self, _context: &TextContext, offset: usize) -> bool {
+        self.worker
+            .as_ref()
+            .is_some_and(|worker| worker.send(Request::Caret(offset)).is_ok())
     }
 
     fn read_at_caret(&self, before: Option<&TextContext>, in_page: bool) -> bool {
