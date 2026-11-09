@@ -4487,6 +4487,34 @@ impl LinuxProvider {
         None
     }
 
+    /// `object` as an event's element: the snapshot an event of it would carry.
+    pub fn atspi_element(&self, object: &AtspiObject) -> Option<ElementData> {
+        crate::events::build_event_snapshot(&self.a11y_bus, &object.reference(), None)
+    }
+
+    /// The object with the focus within `window`, among its first `limit` objects, the window
+    /// left out. GTK reports no focus for the control focused as its window comes forward (the
+    /// desktop fixtures' first focus, and Okur's own dialogs').
+    pub fn atspi_focused_within(&self, window: &AtspiObject, limit: usize) -> Option<AtspiObject> {
+        /// AT-SPI's FOCUSED state's bit.
+        const FOCUSED: u64 = 1 << 12;
+        fn find(node: &AtspiTree) -> Option<&AtspiTree> {
+            node.children.iter().find_map(|child| {
+                if child.states & FOCUSED != 0 {
+                    Some(child)
+                } else {
+                    find(child)
+                }
+            })
+        }
+        let tree = self.atspi_tree_parallel(window, limit);
+        find(&tree).map(|node| AtspiObject {
+            bus_name: node.bus_name.clone(),
+            path: node.path.clone(),
+            role: node.role.clone(),
+        })
+    }
+
     /// `object`'s AT-SPI parent: its Parent property and its role's name, two calls on the bus.
     pub fn atspi_parent(&self, object: &AtspiObject) -> Option<AtspiObject> {
         let parent = self.get_atspi_parent(&object.reference()).ok().flatten()?;

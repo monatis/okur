@@ -648,7 +648,7 @@ pub(crate) fn signal_to_kinds(
 /// Returns `None` only on a catastrophic D-Bus failure — role/name/value
 /// fetches are individually fallible and the snapshot survives their
 /// absence (the element may have been destroyed just before we queried it).
-fn build_event_snapshot(
+pub(crate) fn build_event_snapshot(
     conn: &Connection,
     aref: &AccessibleRef,
     pid: Option<u32>,

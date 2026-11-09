@@ -723,6 +723,44 @@ fn read_native(
     })
 }
 
+/// How long after a window comes forward its focus is looked for: GTK places a window's first
+/// focus at its first layout (Okur's own dialogs, 1205's research runs).
+const WINDOW_FOCUS_WAIT: Duration = Duration::from_millis(150);
+
+/// The most objects of a window looked through for its focus.
+const WINDOW_FOCUS_LIMIT: usize = 400;
+
+/// A window come forward whose focus is to be looked for, and when.
+struct WindowFocus {
+    window: AtspiObject,
+    app: String,
+    pid: u32,
+    due: std::time::Instant,
+}
+
+/// The focus within a window come forward, as the focus event GTK did not send: the desktop
+/// fixtures' first control, Okur's own dialogs' (the plan's open item: a window's focus said as
+/// it comes forward; 548/s1 in full5, Insert+Tab silent there).
+fn focus_within(provider: &LinuxProvider, wanted: WindowFocus) -> Option<xa11y_core::Event> {
+    let object = provider.atspi_focused_within(&wanted.window, WINDOW_FOCUS_LIMIT)?;
+    let element = provider.atspi_element(&object)?;
+    tracing::debug!(
+        window = %wanted.window.path,
+        focus = ?element.name,
+        "a window's focus found as it came forward"
+    );
+    Some(
+        xa11y_core::EventParts {
+            kind: EventKind::FocusChanged,
+            target: Some(element),
+            app_name: wanted.app,
+            app_pid: wanted.pid,
+            timestamp: std::time::Instant::now(),
+        }
+        .into(),
+    )
+}
+
 /// The most objects a dialog box's window is read with, once, for its buttons and text.
 const DIALOG_LIMIT: usize = 300;
 
@@ -1213,6 +1251,11 @@ impl EventSource for AtspiEventSource {
                     std::collections::HashSet::new();
                 // Whether each application is Chromium's, by its bus name: its menus open in
                 // windows of their own, read as they come forward.
+                // A window come forward whose focus GTK did not report: looked for in it once
+                // its first layout is done, unless a focus came meanwhile.
+                let mut window_focus: Option<WindowFocus> = None;
+                // A focus found so, handled as the event GTK did not send.
+                let mut found_focus: Option<Box<xa11y_core::Event>> = None;
                 let mut chromium: std::collections::HashMap<String, bool> =
                     std::collections::HashMap::new();
                 while !stop.load(Ordering::SeqCst) {
@@ -1323,13 +1366,31 @@ impl EventSource for AtspiEventSource {
                             .lock()
                             .unwrap_or_else(std::sync::PoisonError::into_inner)
                             .is_some();
-                    let wait = if delivery.is_holding() || waiting {
+                    let wait = if delivery.is_holding() || waiting || window_focus.is_some() {
                         20
                     } else {
                         100
                     };
-                    match subscription.recv_status(Duration::from_millis(wait)) {
+                    // A window's focus looked for, once due.
+                    if window_focus
+                        .as_ref()
+                        .is_some_and(|w| w.due <= std::time::Instant::now())
+                    {
+                        found_focus = window_focus
+                            .take()
+                            .and_then(|w| focus_within(&provider, w))
+                            .map(Box::new);
+                    }
+                    let status = match found_focus.take() {
+                        Some(event) => RecvStatus::Event(event),
+                        None => subscription.recv_status(Duration::from_millis(wait)),
+                    };
+                    match status {
                         RecvStatus::Event(event) => {
+                            // A focus come: no window's focus is looked for.
+                            if event.kind == EventKind::FocusChanged {
+                                window_focus = None;
+                            }
                             tracing::trace!(
                                 kind = ?event.kind,
                                 role = ?event.target.as_ref().map(|e| e.role),
@@ -1543,6 +1604,24 @@ impl EventSource for AtspiEventSource {
                                         chromium.insert(bus.to_owned(), known);
                                         known
                                     });
+                            // A named window come forward, not Chromium's (its focus comes as an
+                            // event): its focus is looked for in it after its first layout.
+                            // Okur's own windows place and report their first focus once laid
+                            // out (okur-ui's once_active): not looked for twice.
+                            if event.kind == EventKind::WindowActivated
+                                && !menu_window
+                                && event.app_name != "okur-ui"
+                            {
+                                window_focus = target
+                                    .filter(|e| e.name.as_deref().is_some_and(|n| !n.is_empty()))
+                                    .and_then(AtspiObject::of)
+                                    .map(|window| WindowFocus {
+                                        window,
+                                        app: event.app_name.clone(),
+                                        pid: event.app_pid,
+                                        due: std::time::Instant::now() + WINDOW_FOCUS_WAIT,
+                                    });
+                            }
                             let native = target
                                 .filter(|_| {
                                     converter.wants_native(&event.kind, target, document.is_some())
