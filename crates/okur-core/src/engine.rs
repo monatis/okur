@@ -329,7 +329,7 @@ pub struct ScreenReaderEngine {
     ui: Option<Box<dyn crate::ui::UiHost>>,
     /// Set as a dialog is asked to show, until a key or the focus coming to Okur's windows
     /// takes it ([`held_keys`]).
-    dialog_asked: std::sync::Arc<std::sync::atomic::AtomicBool>,
+    dialog_asked: std::sync::Arc<std::sync::Mutex<Option<held_keys::AskedDialog>>>,
     /// The keys pressed while a dialog asked for has not yet taken the focus.
     held_for_dialog: Option<held_keys::HeldForDialog>,
     /// Okur's dialogs okur-ui shows, as the engine told it of them ([`own_dialogs`]).

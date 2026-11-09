@@ -505,7 +505,16 @@ impl ApplicationActions for LinuxActions {
     }
 
     fn presses_keys(&self) -> bool {
-        self.keys.is_some()
+        self.keys
+            .as_ref()
+            .is_some_and(crate::keyboard::X11KeySender::can_press)
+    }
+
+    /// The keys held for one of Okur's dialogs, by their keycodes as they came.
+    fn press_again(&self, events: &[okur_core::input::KeyEvent]) -> bool {
+        self.keys
+            .as_ref()
+            .is_some_and(|keys| keys.press_again(events))
     }
 
     /// A reading command's key (CapsLock+O's Down in a text field), or a key held for one of

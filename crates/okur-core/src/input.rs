@@ -101,6 +101,11 @@ pub struct KeyEvent {
     pub time_ms: u64,
     /// Whether Caps Lock was toggled on when the key was pressed, when the platform knows.
     pub caps_lock_on: Option<bool>,
+    /// The platform's own code for the key, to press it again exactly as it came (Windows: the
+    /// virtual key, the scan code from bit 16, the extended flag at bit 31; X11: the keycode);
+    /// 0 when unknown. A key held for one of Okur's dialogs is pressed again by it, in the
+    /// layout the application has, whatever the key's place.
+    pub native: u32,
 }
 
 impl KeyEvent {
@@ -146,7 +151,23 @@ impl KeyEvent {
             text: None,
             time_ms: 0,
             caps_lock_on: None,
+            native: 0,
         }
+    }
+
+    /// The keys pressed for this event: its Ctrl, Alt, Shift and Windows keys, then the key.
+    pub fn chord_keys(&self) -> Vec<Key> {
+        let m = &self.modifiers;
+        [
+            (m.ctrl, Key::Control),
+            (m.alt, Key::Alt),
+            (m.shift, Key::Shift),
+            (m.win, Key::Windows),
+        ]
+        .into_iter()
+        .filter_map(|(held, key)| held.then_some(key))
+        .chain(std::iter::once(self.key))
+        .collect()
     }
 }
 

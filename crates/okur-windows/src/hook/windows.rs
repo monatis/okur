@@ -371,6 +371,10 @@ unsafe extern "system" fn low_level_keyboard_proc(
     let key = translate_vk_code(vk_code, kbd.scanCode, kbd.flags.0 & LLKHF_EXTENDED != 0);
     let mut event = KeyEvent::new(key, modifiers, is_down);
     event.time_ms = u64::from(kbd.time);
+    // The key as it came, to press it again as typed (a key held for one of Okur's dialogs).
+    event.native = (vk_code & 0xFFFF)
+        | ((kbd.scanCode & 0x7FFF) << 16)
+        | (u32::from(kbd.flags.0 & LLKHF_EXTENDED != 0) << 31);
     event.is_repeat = is_repeat;
     event.caps_lock_on = Some(GetKeyState(i32::from(VK_CAPITAL.0)) & 1 != 0);
     // Ctrl with Alt is AltGr (right Alt, which Windows reports with a left Ctrl): it types a

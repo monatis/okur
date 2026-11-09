@@ -5,9 +5,9 @@
 //! windows whose title is a dialog it showed is in a dialog box, and its default button is the
 //! one the dialog's spec makes the default, where the platform names none.
 
-use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex};
 
+use super::held_keys::AskedDialog;
 use super::{ScreenReaderEngine, OKUR_WINDOWS};
 use crate::event::FocusEvent;
 use crate::ui::{ControlKind, DialogSpec, ToUi, UiHost};
@@ -19,14 +19,19 @@ pub(super) type OpenDialogs = Arc<Mutex<Vec<DialogSpec>>>;
 /// keys held for it ([`super::held_keys`]), and the dialogs kept as they are shown.
 pub(super) struct DialogWatch {
     pub(super) inner: Box<dyn UiHost>,
-    pub(super) asked: Arc<AtomicBool>,
+    pub(super) asked: Arc<Mutex<Option<AskedDialog>>>,
     pub(super) open: OpenDialogs,
 }
 
 impl UiHost for DialogWatch {
     fn send(&self, message: ToUi) {
-        if matches!(message, ToUi::DialogShow { .. }) {
-            self.asked.store(true, Ordering::SeqCst);
+        if let ToUi::DialogShow { dialog } = &message {
+            if let Ok(mut asked) = self.asked.lock() {
+                *asked = Some(AskedDialog {
+                    id: dialog.id,
+                    title: dialog.title.clone(),
+                });
+            }
         }
         if let Ok(mut open) = self.open.lock() {
             kept(&mut open, &message);

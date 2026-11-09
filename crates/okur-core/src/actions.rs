@@ -508,10 +508,25 @@ pub trait ApplicationActions: Send {
         false
     }
 
-    /// Whether [`Self::press`] can press any key the keyboard hook reports: the keys held for
-    /// one of Okur's dialogs are pressed again as its focus comes.
+    /// Whether [`Self::press_again`] can press any key the keyboard hook reports: the keys
+    /// held for one of Okur's dialogs are pressed again as its focus comes.
     fn presses_keys(&self) -> bool {
         false
+    }
+
+    /// Presses `events` again, in order, each as it was pressed: its own key, by its native
+    /// code where the platform gave one, with the Ctrl, Alt, Shift and Windows keys it was
+    /// pressed with, those held otherwise now put back as they are after it. The keys come
+    /// back through the keyboard hook as the screen reader's own, plain keys. False when one
+    /// could not be pressed.
+    fn press_again(&self, events: &[crate::input::KeyEvent]) -> bool {
+        events
+            .iter()
+            // Every key tried, whether one before it could be pressed or not.
+            .map(|event| self.press(&event.chord_keys()))
+            .filter(|pressed| !pressed)
+            .count()
+            == 0
     }
 
     /// Captures the page in front again and delivers it as

@@ -18,7 +18,23 @@ pub fn is_extended(vk: u16) -> bool {
     )
 }
 
-pub use windows_input::{send_chord, send_key};
+pub use windows_input::{send_chord, send_key, send_strokes};
+
+/// One key event to send as a key came: its virtual key, and its scan code and extended flag
+/// where it came with them (else they are looked up), down or up; a VK_PACKET's character
+/// (an on-screen keyboard's, voice typing's) as the UTF-16 unit it carried.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Stroke {
+    Key {
+        vk: u16,
+        scan: Option<(u16, bool)>,
+        up: bool,
+    },
+    Unicode {
+        unit: u16,
+        up: bool,
+    },
+}
 
 mod windows_input {
     use super::is_extended;
@@ -42,6 +58,63 @@ mod windows_input {
     /// Sends one key event, scan-coded, with `extra` as its `dwExtraInfo`.
     pub fn send_key(vk: u16, up: bool, extra: usize) {
         send_inputs(&[key_input(vk, up, extra)]);
+    }
+
+    /// Sends `strokes` in one `SendInput` call, with `extra` as their `dwExtraInfo`: no key
+    /// typed meanwhile comes between them. False when Windows did not take them all (another
+    /// program's input blocked, or a window of higher integrity in front).
+    pub fn send_strokes(strokes: &[super::Stroke], extra: usize) -> bool {
+        use super::Stroke;
+        use windows::Win32::UI::Input::KeyboardAndMouse::KEYEVENTF_UNICODE;
+        let inputs: Vec<INPUT> = strokes
+            .iter()
+            .map(|stroke| match *stroke {
+                Stroke::Key { vk, scan: None, up } => key_input(vk, up, extra),
+                Stroke::Key {
+                    vk,
+                    scan: Some((scan, extended)),
+                    up,
+                } => {
+                    let mut flags = KEYBD_EVENT_FLAGS(0);
+                    if extended {
+                        flags |= KEYEVENTF_EXTENDEDKEY;
+                    }
+                    if up {
+                        flags |= KEYEVENTF_KEYUP;
+                    }
+                    keyboard(vk, scan, flags, extra)
+                }
+                Stroke::Unicode { unit, up } => {
+                    let mut flags = KEYEVENTF_UNICODE;
+                    if up {
+                        flags |= KEYEVENTF_KEYUP;
+                    }
+                    keyboard(0, unit, flags, extra)
+                }
+            })
+            .collect();
+        if inputs.is_empty() {
+            return true;
+        }
+        let size = i32::try_from(std::mem::size_of::<INPUT>()).unwrap_or(0);
+        // SAFETY: well-formed keyboard inputs.
+        let sent = unsafe { SendInput(&inputs, size) };
+        usize::try_from(sent).is_ok_and(|sent| sent == inputs.len())
+    }
+
+    fn keyboard(vk: u16, scan: u16, flags: KEYBD_EVENT_FLAGS, extra: usize) -> INPUT {
+        INPUT {
+            r#type: INPUT_KEYBOARD,
+            Anonymous: INPUT_0 {
+                ki: KEYBDINPUT {
+                    wVk: VIRTUAL_KEY(vk),
+                    wScan: scan,
+                    dwFlags: flags,
+                    time: 0,
+                    dwExtraInfo: extra,
+                },
+            },
+        }
     }
 
     fn key_input(key: u16, up: bool, extra: usize) -> INPUT {

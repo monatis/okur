@@ -20,6 +20,7 @@ fn same_place(a: &Option<okur_core::TextContext>, b: &Option<okur_core::TextCont
 pub use windows_actions::WindowsActions;
 
 mod windows_actions {
+    use crate::key_input::Stroke;
     use crate::text_context::{
         focus_has_taken_its_keys, read_focused, read_focused_outside_page, read_place_outside_page,
     };
@@ -338,6 +339,90 @@ mod windows_actions {
             Key::Windows => 0x5B,
             Key::Other(vk) => u16::try_from(*vk).ok()?,
         })
+    }
+
+    /// The key strokes that press `event` again as it was pressed, pushed onto `strokes`: the
+    /// Ctrl, Alt, Shift and Windows keys it was pressed with that are not down now pressed
+    /// around it, those down now that it was pressed without let go around it, then the key
+    /// by its virtual key, scan code and extended flag as it came. False for a key that cannot
+    /// be pressed again (an input method's VK_PROCESSKEY).
+    fn strokes_again(event: &okur_core::input::KeyEvent, strokes: &mut Vec<Stroke>) -> bool {
+        use windows::Win32::UI::Input::KeyboardAndMouse::GetAsyncKeyState;
+        // SAFETY: a plain query of the keyboard's state.
+        let down = |vk: i32| unsafe { GetAsyncKeyState(vk) } as u16 & 0x8000 != 0;
+        let m = &event.modifiers;
+        let around: Vec<(u16, bool)> = [
+            (0x11, m.ctrl, down(0x11)),
+            (0x12, m.alt, down(0x12)),
+            (0x10, m.shift, down(0x10)),
+            (0x5B, m.win, down(0x5B) || down(0x5C)),
+        ]
+        .into_iter()
+        .filter(|(_, wanted, now)| wanted != now)
+        .map(|(vk, wanted, _)| (vk, wanted))
+        .collect();
+        let vk = u16::try_from(event.native & 0xFFFF).unwrap_or(0);
+        let key: Vec<Stroke> = match vk {
+            // An input method's key: its composition is gone with it.
+            0xE5 => return false,
+            0xE7 => event
+                .text
+                .map(|c| {
+                    let mut units = [0u16; 2];
+                    c.encode_utf16(&mut units)
+                        .iter()
+                        .flat_map(|&unit| {
+                            [
+                                Stroke::Unicode { unit, up: false },
+                                Stroke::Unicode { unit, up: true },
+                            ]
+                        })
+                        .collect()
+                })
+                .unwrap_or_default(),
+            0 => match virtual_key(&event.key) {
+                Some(vk) => vec![
+                    Stroke::Key {
+                        vk,
+                        scan: None,
+                        up: false,
+                    },
+                    Stroke::Key {
+                        vk,
+                        scan: None,
+                        up: true,
+                    },
+                ],
+                None => return false,
+            },
+            vk => {
+                let scan = u16::try_from((event.native >> 16) & 0x7FFF).unwrap_or(0);
+                let extended = event.native >> 31 != 0;
+                [false, true]
+                    .into_iter()
+                    .map(|up| Stroke::Key {
+                        vk,
+                        scan: Some((scan, extended)),
+                        up,
+                    })
+                    .collect()
+            }
+        };
+        if key.is_empty() {
+            return false;
+        }
+        strokes.extend(around.iter().map(|&(vk, wanted)| Stroke::Key {
+            vk,
+            scan: None,
+            up: !wanted,
+        }));
+        strokes.extend(key);
+        strokes.extend(around.iter().rev().map(|&(vk, wanted)| Stroke::Key {
+            vk,
+            scan: None,
+            up: wanted,
+        }));
+        true
     }
 
     /// Acts on the foreground application from a COM worker thread: page objects by IA2
@@ -1429,6 +1514,18 @@ mod windows_actions {
 
         fn presses_keys(&self) -> bool {
             true
+        }
+
+        /// The keys held for one of Okur's dialogs, in one `SendInput` call, marked as the
+        /// screen reader's own.
+        fn press_again(&self, events: &[okur_core::input::KeyEvent]) -> bool {
+            let mut strokes = Vec::new();
+            let unpressable = events
+                .iter()
+                .filter(|event| !strokes_again(event, &mut strokes))
+                .count();
+            crate::key_input::send_strokes(&strokes, crate::hook::windows::INJECTED_MARK)
+                && unpressable == 0
         }
 
         fn press(&self, chord: &[okur_core::Key]) -> bool {

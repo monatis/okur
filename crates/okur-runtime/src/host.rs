@@ -950,6 +950,7 @@ mod tests {
             text: None,
             time_ms: 0,
             caps_lock_on: None,
+            native: 0,
         };
         let insert = Modifiers {
             insert: true,
