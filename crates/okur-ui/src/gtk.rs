@@ -13,7 +13,6 @@ use std::cell::{Cell, RefCell};
 use std::collections::HashMap;
 use std::io::{BufRead, Write};
 use std::rc::Rc;
-use std::time::Duration;
 
 use gtk::glib;
 use gtk::prelude::*;
@@ -40,6 +39,16 @@ pub fn run() {
         return;
     }
     let (messages, received) = std::sync::mpsc::channel::<Option<ToUi>>();
+    let main_loop = glib::MainLoop::new(None, false);
+    // GTK's side, before the reader can wake it for a message.
+    GTK_SIDE.with(|side| {
+        *side.borrow_mut() = Some(GtkSide {
+            ui: Rc::new(Ui::default()),
+            received,
+            main_loop: main_loop.clone(),
+        });
+    });
+    let context = glib::MainContext::default();
     let reader = std::thread::Builder::new()
         .name("okur-ui-input".to_owned())
         .spawn(move || {
@@ -53,33 +62,48 @@ pub fn run() {
                         if messages.send(Some(message)).is_err() {
                             return;
                         }
+                        context.invoke(take_messages);
                     }
                     Err(e) => eprintln!("okur-ui: unreadable message {line:?}: {e}"),
                 }
             }
             let _ = messages.send(None);
+            context.invoke(take_messages);
         });
     if reader.is_err() {
         eprintln!("okur-ui: no thread to read Okur's messages");
         return;
     }
-    let main_loop = glib::MainLoop::new(None, false);
-    let ui = Rc::new(Ui::default());
-    let quit = main_loop.clone();
-    // Okur's messages, taken on GTK's thread.
-    glib::timeout_add_local(Duration::from_millis(10), move || {
-        for message in received.try_iter() {
+    main_loop.run();
+}
+
+/// What GTK's thread keeps for the messages the reader wakes it for: the windows, the messages,
+/// and the loop to end when Okur's input ends.
+struct GtkSide {
+    ui: Rc<Ui>,
+    received: std::sync::mpsc::Receiver<Option<ToUi>>,
+    main_loop: glib::MainLoop,
+}
+
+thread_local! {
+    static GTK_SIDE: RefCell<Option<GtkSide>> = const { RefCell::new(None) };
+}
+
+/// Okur's messages, taken on GTK's thread as the reader wakes it (no polling: okur-ui woke a
+/// hundred times a second for them, the code review of 2026-11-09, fourth pass, 10).
+fn take_messages() {
+    GTK_SIDE.with(|side| {
+        let side = side.borrow();
+        let Some(side) = side.as_ref() else {
+            return;
+        };
+        for message in side.received.try_iter() {
             match message {
-                Some(message) => Ui::handle(&ui, message),
-                None => {
-                    quit.quit();
-                    return glib::ControlFlow::Break;
-                }
+                Some(message) => Ui::handle(&side.ui, message),
+                None => side.main_loop.quit(),
             }
         }
-        glib::ControlFlow::Continue
     });
-    main_loop.run();
 }
 
 /// Tells Okur what the user did, one line of JSON.
