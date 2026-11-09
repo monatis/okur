@@ -194,6 +194,7 @@ fn number(value: f64) -> Option<String> {
 /// address bar's suggestions, tab search), drawn as a page but no tab's.
 fn is_browser_ui(uri: &str) -> bool {
     uri.strip_prefix("chrome://")
+        .or_else(|| uri.strip_prefix("chrome-untrusted://"))
         .and_then(|rest| rest.split('/').next())
         .is_some_and(|host| host.ends_with(".top-chrome"))
 }
@@ -1422,6 +1423,9 @@ mod tests {
         assert!(!loads(
             converter.convert_read(&read("chrome://omnibox-popup.top-chrome/"))
         ));
+        assert!(!loads(converter.convert_read(&read(
+            "chrome-untrusted://read-anything-side-panel.top-chrome/"
+        ))));
         assert!(loads(converter.convert_read(&read("chrome://newtab/"))));
     }
 

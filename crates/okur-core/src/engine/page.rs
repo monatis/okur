@@ -70,6 +70,14 @@ impl ScreenReaderEngine {
         self.app_mode == AppMode::VirtualBuffer && self.is_page_held(title, url)
     }
 
+    /// Whether a page captured with `title` and address `url` is a refresh of the one held, not a
+    /// load: the page in front, or one the platform read again (`read_again`,
+    /// [`crate::aom::READ_AGAIN_ATTR`]) that the buffer holds wherever the focus is. A reload
+    /// asked for makes either a load; the caller checks it.
+    pub fn is_refresh(&self, title: &str, url: Option<&str>, read_again: bool) -> bool {
+        self.is_page_in_front(title, url) || (read_again && self.is_page_held(title, url))
+    }
+
     /// Whether a page captured with `title` and address `url` is the one the buffer holds,
     /// wherever the focus is: a page the platform read again as the focus came back to it is
     /// its refresh (Escape from Okur's Skim Reading dialog, Alt+Tab back on Linux: 530/s11 in
@@ -88,8 +96,7 @@ impl ScreenReaderEngine {
     pub fn handle_page_refreshed(&mut self, title: &str, buffer: VirtualBuffer) {
         // After Ctrl+R or F5 the page comes back as a refresh: it is a new load, announced
         // and read [obs, 507/s1; live9, where the reload came as "page refreshed"].
-        let held = self.is_page_in_front(title, buffer.document_url())
-            || (buffer.read_again() && self.is_page_held(title, buffer.document_url()));
+        let held = self.is_refresh(title, buffer.document_url(), buffer.read_again());
         if self.reload_pending() && held {
             let _ = self.handle_document_loaded(title, buffer);
             return;
@@ -124,8 +131,7 @@ impl ScreenReaderEngine {
         // After Ctrl+R or F5 the same page is loaded anew, and announced [obs, 507/s1].
         let reloaded = self.reload_pending();
         self.reload_asked = None;
-        let read_again = buffer.read_again() && self.is_page_held(title, buffer.document_url());
-        if (self.is_page_in_front(title, buffer.document_url()) || read_again) && !reloaded {
+        if self.is_refresh(title, buffer.document_url(), buffer.read_again()) && !reloaded {
             // Applied once the events of this change are handled: several live regions can
             // change at once, and each is compared with the page before the change
             // [obs, 206/s2].

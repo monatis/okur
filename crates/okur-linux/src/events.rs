@@ -1279,10 +1279,19 @@ impl EventSource for AtspiEventSource {
                                         focus_page.as_deref() == Some(key_of(document).as_str())
                                     });
                                 if let Some((document, region)) = page {
-                                    dirty.entry(region).or_insert_with(|| DirtyRegion {
-                                        document,
-                                        due: std::time::Instant::now() + LIVE_SETTLE,
-                                    });
+                                    // One time for the page's regions changing together, so
+                                    // they are read together in the page's order, however far
+                                    // apart their first signals came (the code review of
+                                    // 2026-11-09, fourth pass, 6).
+                                    let due = dirty
+                                        .values()
+                                        .filter(|d| d.document == document)
+                                        .map(|d| d.due)
+                                        .min()
+                                        .unwrap_or_else(|| std::time::Instant::now() + LIVE_SETTLE);
+                                    dirty
+                                        .entry(region)
+                                        .or_insert_with(|| DirtyRegion { document, due });
                                 }
                                 continue;
                             }

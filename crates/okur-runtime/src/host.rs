@@ -648,8 +648,7 @@ pub async fn run(
                             let eng = lock_engine(&engine_events);
                             unless_it_panics("page loaded", || {
                                 (
-                                    eng.is_page_in_front(title, url.as_deref())
-                                        || (read_again && eng.is_page_held(title, url.as_deref())),
+                                    eng.is_refresh(title, url.as_deref(), read_again),
                                     eng.reading_marks(),
                                 )
                             })

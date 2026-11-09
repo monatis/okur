@@ -255,10 +255,19 @@ impl Ui {
         match message {
             ToUi::DialogShow { dialog } => Ui::show(ui, dialog),
             ToUi::DialogClose { id } => {
-                if let Some(dialog) = ui.dialogs.borrow_mut().remove(&id) {
+                // Out of the map before its window goes: destroying it may call back into it.
+                let dialog = ui.dialogs.borrow_mut().remove(&id);
+                if let Some(dialog) = dialog {
                     dialog.window.destroy();
                 }
             }
+            ToUi::DialogRows {
+                id,
+                control,
+                rows,
+                selected,
+                ..
+            } => ui.rows(id, &control, &rows, selected),
             ToUi::DialogSet { id, control, value } => ui.set(id, &control, &value),
             ToUi::DialogItems {
                 id,
@@ -467,6 +476,20 @@ impl Ui {
         dialog.setting.set(false);
     }
 
+    /// Replaces a table's rows and selects one (Manage Key Labels after a label changed).
+    fn rows(&self, id: u32, control: &str, rows: &[Vec<String>], selected: usize) {
+        let dialogs = self.dialogs.borrow();
+        let Some(dialog) = dialogs.get(&id) else {
+            return;
+        };
+        dialog.setting.set(true);
+        if let Some(Shown::List(list)) = dialog.controls.get(control) {
+            list.fill_rows(rows);
+            list.select(selected, false);
+        }
+        dialog.setting.set(false);
+    }
+
     /// Replaces a list's items, or a drop-down's choices, and selects one.
     fn items(&self, id: u32, control: &str, items: &[String], selected: usize) {
         let dialogs = self.dialogs.borrow();
@@ -499,6 +522,21 @@ fn kind(message: &ToUi) -> String {
             value.get("type")?.as_str().map(str::to_owned)
         })
         .unwrap_or_default()
+}
+
+/// Presses the dialog's default button, as Enter on a list's item does in Windows' dialog: where
+/// the button is available, at once (a button's activate waits for its key to be let go). The
+/// window is held weakly: the list's handler holding it kept every closed dialog alive.
+fn press_default(window: &glib::WeakRef<gtk::Window>) {
+    let Some(window) = window.upgrade() else {
+        return;
+    };
+    let Some(button) = window.default_widget().and_downcast::<gtk::Button>() else {
+        return;
+    };
+    if button.is_sensitive() {
+        button.emit_clicked();
+    }
 }
 
 /// A list of strings' rows: each a label of its item.
@@ -593,6 +631,9 @@ fn build(
         | ControlKind::SearchBox { text } => {
             let entry = gtk::Entry::new();
             entry.set_text(text);
+            // Enter in it presses the dialog's default button, as in Windows' dialog (Find,
+            // Jump To Line): GTK's entry does not by default.
+            entry.set_activates_default(true);
             let label = field_label(&control.label, &entry);
             // A search box's label is not shown: it names the field alone ("SearchBox Edit").
             let shown_label = !matches!(control.kind, ControlKind::SearchBox { .. });
@@ -687,18 +728,13 @@ fn build(
                 });
             }
             // Enter on an item presses the dialog's default button.
-            let window = window.clone();
-            let press_default = move || {
-                if let Some(default) = window.default_widget() {
-                    default.activate();
-                }
-            };
+            let window = window.downgrade();
             match &list.view {
                 ListWidget::Columns(view) => {
-                    view.connect_activate(move |_, _| press_default());
+                    view.connect_activate(move |_, _| press_default(&window));
                 }
                 ListWidget::Rows(view) => {
-                    view.connect_activate(move |_, _| press_default());
+                    view.connect_activate(move |_, _| press_default(&window));
                 }
             }
             let scrolled = gtk::ScrolledWindow::new();
@@ -752,13 +788,9 @@ fn build(
                     }
                 });
             }
-            let window = window.clone();
+            let window = window.downgrade();
             if let ListWidget::Columns(view) = &list.view {
-                view.connect_activate(move |_, _| {
-                    if let Some(default) = window.default_widget() {
-                        default.activate();
-                    }
-                });
+                view.connect_activate(move |_, _| press_default(&window));
             }
             let scrolled = gtk::ScrolledWindow::new();
             scrolled.set_min_content_height(200);
