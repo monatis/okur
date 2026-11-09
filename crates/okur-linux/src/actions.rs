@@ -48,6 +48,36 @@ const SETTLE: Duration = Duration::from_millis(250);
 /// millisecond.
 const POLL: Duration = Duration::from_millis(3);
 
+/// Where the focus asked for `object` goes: to it, or, where it cannot take the focus (a
+/// graphic, a list), to its page's document, as Windows' Chrome gives it there: Route PC to
+/// Virtual on a graphic focuses the page, and the virtual cursor's line is read [obs, 569/s8;
+/// Windows' trace: the document's focus 83 ms after the key]. Chrome on Linux leaves the focus
+/// where it was, and nothing was said (gtk1's 569).
+fn focus_target(provider: &LinuxProvider, object: AtspiObject) -> (String, String) {
+    use okur_linux_model::page::state;
+    let focusable = provider
+        .atspi_state_bits(&object.bus_name, &object.path)
+        .is_ok_and(|bits| {
+            1u64.checked_shl(state::FOCUSABLE)
+                .is_some_and(|b| bits & b != 0)
+        });
+    if focusable {
+        return (object.bus_name, object.path);
+    }
+    let mut next = provider.atspi_parent(&object);
+    for _ in 0..PAGE_DEPTH {
+        let Some(parent) = next else { break };
+        if parent.role == "document web" {
+            return (parent.bus_name, parent.path);
+        }
+        next = provider.atspi_parent(&parent);
+    }
+    (object.bus_name, object.path)
+}
+
+/// How far up from an element its page's document is looked for.
+const PAGE_DEPTH: usize = 40;
+
 /// How long after the focus was asked for an element a caret put is put in it.
 const FOCUS_ASKED_FRESH: Duration = Duration::from_millis(1000);
 
@@ -102,6 +132,12 @@ impl LinuxActions {
                     pending.extend(received.try_iter());
                     match request {
                         Request::Focus(bus, path) => {
+                            let object = AtspiObject {
+                                bus_name: bus,
+                                path,
+                                role: String::new(),
+                            };
+                            let (bus, path) = focus_target(&provider, object);
                             if let Err(e) = provider.atspi_grab_focus(&bus, &path) {
                                 tracing::debug!("focus not given: {e}");
                             }
