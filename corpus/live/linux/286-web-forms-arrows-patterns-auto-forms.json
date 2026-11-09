@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "aac6f125"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794183545834
+     "t_ms": 1794194102527
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794183547195,
-     "t_end_ms": 1794183548198,
+     "t_start_ms": 1794194103889,
+     "t_end_ms": 1794194104893,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794194103889
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e Web App Patterns",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794183548198,
-     "t_end_ms": 1794183549203,
+     "t_start_ms": 1794194104893,
+     "t_end_ms": 1794194105896,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794194104893
      ],
      "observation": {
       "speech_raw": " \u001d heading level 2 \u001e Current links",
@@ -55,14 +61,17 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794183549203,
-     "t_end_ms": 1794183550207,
+     "t_start_ms": 1794194105896,
+     "t_end_ms": 1794194106899,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794194105896
      ],
      "observation": {
       "speech_raw": "list of 3 items",
@@ -72,14 +81,17 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794183550207,
-     "t_end_ms": 1794183551210,
+     "t_start_ms": 1794194106899,
+     "t_end_ms": 1794194107903,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794194106899
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e  \u001dCurrent Page\u001e Overview",
@@ -89,14 +101,17 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794183551210,
-     "t_end_ms": 1794183552214,
+     "t_start_ms": 1794194107903,
+     "t_end_ms": 1794194108907,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794194107903
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d Link \u001e Settings",
@@ -106,14 +121,17 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794183552214,
-     "t_end_ms": 1794183553218,
+     "t_start_ms": 1794194108907,
+     "t_end_ms": 1794194109912,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794194108907
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e  \u001dCurrent Step\u001e Step two",
@@ -123,14 +141,17 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794183553218,
-     "t_end_ms": 1794183554222,
+     "t_start_ms": 1794194109912,
+     "t_end_ms": 1794194110916,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794194109912
      ],
      "observation": {
       "speech_raw": "list end",
@@ -140,14 +161,17 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794183554222,
-     "t_end_ms": 1794183555226,
+     "t_start_ms": 1794194110916,
+     "t_end_ms": 1794194111921,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794194110916
      ],
      "observation": {
       "speech_raw": " \u001d heading level 2 \u001e Described controls",
@@ -157,14 +181,17 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794183555227,
-     "t_end_ms": 1794183556231,
+     "t_start_ms": 1794194111921,
+     "t_end_ms": 1794194112926,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794194111921
      ],
      "observation": {
       "speech_raw": "Next slide \u001d slide control \u001e ",
@@ -174,14 +201,17 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794183556231,
-     "t_end_ms": 1794183557235,
+     "t_start_ms": 1794194112926,
+     "t_end_ms": 1794194113930,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794194112926
      ],
      "observation": {
       "speech_raw": " \u001d chip \u001e Rust",
@@ -191,14 +221,17 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794183557235,
-     "t_end_ms": 1794183558239,
+     "t_start_ms": 1794194113930,
+     "t_end_ms": 1794194114935,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794194113930
      ],
      "observation": {
       "speech_raw": "Wrap \u001d toggle \u001e  \u001dnot checked\u001e ",
@@ -208,14 +241,17 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794183558239,
-     "t_end_ms": 1794183559243,
+     "t_start_ms": 1794194114935,
+     "t_end_ms": 1794194115938,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794194114935
      ],
      "observation": {
       "speech_raw": " \u001d heading level 2 \u001e Popup buttons",
@@ -225,14 +261,17 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794183559243,
-     "t_end_ms": 1794183560248,
+     "t_start_ms": 1794194115938,
+     "t_end_ms": 1794194116943,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794194115938
      ],
      "observation": {
       "speech_raw": "Outline \u001d button menu \u001e ",
@@ -242,14 +281,17 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794183560248,
-     "t_end_ms": 1794183561252,
+     "t_start_ms": 1794194116943,
+     "t_end_ms": 1794194117948,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794194116943
      ],
      "observation": {
       "speech_raw": "Actions \u001d button menu \u001e  \u001dcollapsed\u001e ",
@@ -259,14 +301,17 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794183561252,
-     "t_end_ms": 1794183562257,
+     "t_start_ms": 1794194117948,
+     "t_end_ms": 1794194118951,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794194117948
      ],
      "observation": {
       "speech_raw": "Pick one \u001d Button \u001e  \u001dHas Popup\u001e  listbox",
@@ -276,14 +321,17 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794183562257,
-     "t_end_ms": 1794183563261,
+     "t_start_ms": 1794194118951,
+     "t_end_ms": 1794194119956,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794194118951
      ],
      "observation": {
       "speech_raw": " \u001d heading level 2 \u001e Fruit search",
@@ -293,14 +341,17 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794183563261,
-     "t_end_ms": 1794183564264,
+     "t_start_ms": 1794194119956,
+     "t_end_ms": 1794194120960,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794194119956
      ],
      "observation": {
       "speech_raw": "Fruit",
@@ -310,14 +361,17 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794183564264,
-     "t_end_ms": 1794183565269,
+     "t_start_ms": 1794194120960,
+     "t_end_ms": 1794194121965,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794194120960
      ],
      "observation": {
       "speech_raw": "Fruit  \u001d edit combo \u001e   \u001dcollapsed\u001e",
@@ -327,8 +381,8 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794183565269,
-     "t_end_ms": 1794183566474,
+     "t_start_ms": 1794194121965,
+     "t_end_ms": 1794194123169,
      "action": {
       "type": "key",
       "command": "Down"
@@ -336,16 +390,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194121965
+     ],
      "observation": {
-      "speech_raw": "Apple\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Fruits  \u001d list \u001e \nwith 3 items\nApple\n1 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794183566474,
-     "t_end_ms": 1794183567578,
+     "t_start_ms": 1794194123169,
+     "t_end_ms": 1794194124274,
      "action": {
       "type": "key",
       "command": "Down"
@@ -353,16 +410,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194123169
+     ],
      "observation": {
-      "speech_raw": "Apricot\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apricot\n2 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794183567578,
-     "t_end_ms": 1794183568682,
+     "t_start_ms": 1794194124274,
+     "t_end_ms": 1794194125378,
      "action": {
       "type": "key",
       "command": "Down"
@@ -370,16 +430,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194124274
+     ],
      "observation": {
-      "speech_raw": "Avocado\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Avocado\n3 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794183568682,
-     "t_end_ms": 1794183569787,
+     "t_start_ms": 1794194125378,
+     "t_end_ms": 1794194126483,
      "action": {
       "type": "key",
       "command": "Down"
@@ -387,16 +450,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194125378
+     ],
      "observation": {
-      "speech_raw": "Apple\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apple\n1 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s23",
-     "t_start_ms": 1794183569787,
-     "t_end_ms": 1794183570892,
+     "t_start_ms": 1794194126483,
+     "t_end_ms": 1794194127588,
      "action": {
       "type": "key",
       "command": "Down"
@@ -404,16 +470,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194126483
+     ],
      "observation": {
-      "speech_raw": "Apricot\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apricot\n2 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s24",
-     "t_start_ms": 1794183570892,
-     "t_end_ms": 1794183571997,
+     "t_start_ms": 1794194127588,
+     "t_end_ms": 1794194128692,
      "action": {
       "type": "key",
       "command": "Down"
@@ -421,16 +490,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194127588
+     ],
      "observation": {
-      "speech_raw": "Avocado\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Avocado\n3 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s25",
-     "t_start_ms": 1794183571997,
-     "t_end_ms": 1794183573101,
+     "t_start_ms": 1794194128692,
+     "t_end_ms": 1794194129797,
      "action": {
       "type": "key",
       "command": "Down"
@@ -438,16 +510,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194128692
+     ],
      "observation": {
-      "speech_raw": "Apple\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apple\n1 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s26",
-     "t_start_ms": 1794183573101,
-     "t_end_ms": 1794183574206,
+     "t_start_ms": 1794194129797,
+     "t_end_ms": 1794194130901,
      "action": {
       "type": "key",
       "command": "Down"
@@ -455,16 +530,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194129797
+     ],
      "observation": {
-      "speech_raw": "Apricot\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apricot\n2 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s27",
-     "t_start_ms": 1794183574206,
-     "t_end_ms": 1794183575310,
+     "t_start_ms": 1794194130901,
+     "t_end_ms": 1794194132006,
      "action": {
       "type": "key",
       "command": "Down"
@@ -472,16 +550,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194130901
+     ],
      "observation": {
-      "speech_raw": "Avocado\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Avocado\n3 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s28",
-     "t_start_ms": 1794183575310,
-     "t_end_ms": 1794183576415,
+     "t_start_ms": 1794194132006,
+     "t_end_ms": 1794194133111,
      "action": {
       "type": "key",
       "command": "Down"
@@ -489,16 +570,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194132006
+     ],
      "observation": {
-      "speech_raw": "Apple\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apple\n1 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s29",
-     "t_start_ms": 1794183576415,
-     "t_end_ms": 1794183577519,
+     "t_start_ms": 1794194133111,
+     "t_end_ms": 1794194134216,
      "action": {
       "type": "key",
       "command": "Down"
@@ -506,16 +590,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194133111
+     ],
      "observation": {
-      "speech_raw": "Apricot\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apricot\n2 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s30",
-     "t_start_ms": 1794183577519,
-     "t_end_ms": 1794183578624,
+     "t_start_ms": 1794194134216,
+     "t_end_ms": 1794194135320,
      "action": {
       "type": "key",
       "command": "Down"
@@ -523,16 +610,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194134216
+     ],
      "observation": {
-      "speech_raw": "Avocado\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Avocado\n3 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s31",
-     "t_start_ms": 1794183578624,
-     "t_end_ms": 1794183579729,
+     "t_start_ms": 1794194135320,
+     "t_end_ms": 1794194136424,
      "action": {
       "type": "key",
       "command": "Down"
@@ -540,16 +630,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194135320
+     ],
      "observation": {
-      "speech_raw": "Apple\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apple\n1 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s32",
-     "t_start_ms": 1794183579729,
-     "t_end_ms": 1794183580833,
+     "t_start_ms": 1794194136424,
+     "t_end_ms": 1794194137529,
      "action": {
       "type": "key",
       "command": "Down"
@@ -557,16 +650,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194136424
+     ],
      "observation": {
-      "speech_raw": "Apricot\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apricot\n2 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s33",
-     "t_start_ms": 1794183580833,
-     "t_end_ms": 1794183581938,
+     "t_start_ms": 1794194137529,
+     "t_end_ms": 1794194138633,
      "action": {
       "type": "key",
       "command": "Down"
@@ -574,16 +670,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194137529
+     ],
      "observation": {
-      "speech_raw": "Avocado\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Avocado\n3 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s34",
-     "t_start_ms": 1794183581938,
-     "t_end_ms": 1794183583042,
+     "t_start_ms": 1794194138633,
+     "t_end_ms": 1794194139738,
      "action": {
       "type": "key",
       "command": "Down"
@@ -591,16 +690,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194138633
+     ],
      "observation": {
-      "speech_raw": "Apple\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apple\n1 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s35",
-     "t_start_ms": 1794183583042,
-     "t_end_ms": 1794183584147,
+     "t_start_ms": 1794194139738,
+     "t_end_ms": 1794194140843,
      "action": {
       "type": "key",
       "command": "Down"
@@ -608,16 +710,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194139738
+     ],
      "observation": {
-      "speech_raw": "Apricot\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apricot\n2 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s36",
-     "t_start_ms": 1794183584147,
-     "t_end_ms": 1794183585251,
+     "t_start_ms": 1794194140843,
+     "t_end_ms": 1794194141948,
      "action": {
       "type": "key",
       "command": "Down"
@@ -625,16 +730,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194140843
+     ],
      "observation": {
-      "speech_raw": "Avocado\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Avocado\n3 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s37",
-     "t_start_ms": 1794183585251,
-     "t_end_ms": 1794183586355,
+     "t_start_ms": 1794194141948,
+     "t_end_ms": 1794194143052,
      "action": {
       "type": "key",
       "command": "Down"
@@ -642,16 +750,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194141948
+     ],
      "observation": {
-      "speech_raw": "Apple\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apple\n1 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s38",
-     "t_start_ms": 1794183586355,
-     "t_end_ms": 1794183587459,
+     "t_start_ms": 1794194143052,
+     "t_end_ms": 1794194144157,
      "action": {
       "type": "key",
       "command": "Down"
@@ -659,16 +770,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194143052
+     ],
      "observation": {
-      "speech_raw": "Apricot\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apricot\n2 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s39",
-     "t_start_ms": 1794183587459,
-     "t_end_ms": 1794183588564,
+     "t_start_ms": 1794194144157,
+     "t_end_ms": 1794194145262,
      "action": {
       "type": "key",
       "command": "Down"
@@ -676,16 +790,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194144157
+     ],
      "observation": {
-      "speech_raw": "Avocado\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Avocado\n3 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s40",
-     "t_start_ms": 1794183588564,
-     "t_end_ms": 1794183589669,
+     "t_start_ms": 1794194145262,
+     "t_end_ms": 1794194146366,
      "action": {
       "type": "key",
       "command": "Down"
@@ -693,16 +810,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194145262
+     ],
      "observation": {
-      "speech_raw": "Apple\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apple\n1 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s41",
-     "t_start_ms": 1794183589669,
-     "t_end_ms": 1794183590772,
+     "t_start_ms": 1794194146366,
+     "t_end_ms": 1794194147469,
      "action": {
       "type": "key",
       "command": "Down"
@@ -710,16 +830,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194146366
+     ],
      "observation": {
-      "speech_raw": "Apricot\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apricot\n2 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s42",
-     "t_start_ms": 1794183590772,
-     "t_end_ms": 1794183591877,
+     "t_start_ms": 1794194147469,
+     "t_end_ms": 1794194148573,
      "action": {
       "type": "key",
       "command": "Down"
@@ -727,16 +850,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194147469
+     ],
      "observation": {
-      "speech_raw": "Avocado\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Avocado\n3 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s43",
-     "t_start_ms": 1794183591877,
-     "t_end_ms": 1794183592982,
+     "t_start_ms": 1794194148573,
+     "t_end_ms": 1794194149677,
      "action": {
       "type": "key",
       "command": "Down"
@@ -744,16 +870,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194148573
+     ],
      "observation": {
-      "speech_raw": "Apple\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apple\n1 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s44",
-     "t_start_ms": 1794183592982,
-     "t_end_ms": 1794183594086,
+     "t_start_ms": 1794194149677,
+     "t_end_ms": 1794194150781,
      "action": {
       "type": "key",
       "command": "Down"
@@ -761,16 +890,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194149677
+     ],
      "observation": {
-      "speech_raw": "Apricot\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apricot\n2 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s45",
-     "t_start_ms": 1794183594086,
-     "t_end_ms": 1794183595190,
+     "t_start_ms": 1794194150781,
+     "t_end_ms": 1794194151885,
      "action": {
       "type": "key",
       "command": "Down"
@@ -778,16 +910,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194150781
+     ],
      "observation": {
-      "speech_raw": "Avocado\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Avocado\n3 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s46",
-     "t_start_ms": 1794183595190,
-     "t_end_ms": 1794183596294,
+     "t_start_ms": 1794194151885,
+     "t_end_ms": 1794194152990,
      "action": {
       "type": "key",
       "command": "Down"
@@ -795,16 +930,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194151885
+     ],
      "observation": {
-      "speech_raw": "Apple\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apple\n1 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s47",
-     "t_start_ms": 1794183596294,
-     "t_end_ms": 1794183597398,
+     "t_start_ms": 1794194152990,
+     "t_end_ms": 1794194154095,
      "action": {
       "type": "key",
       "command": "Down"
@@ -812,16 +950,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194152990
+     ],
      "observation": {
-      "speech_raw": "Apricot\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apricot\n2 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s48",
-     "t_start_ms": 1794183597398,
-     "t_end_ms": 1794183598502,
+     "t_start_ms": 1794194154095,
+     "t_end_ms": 1794194155199,
      "action": {
       "type": "key",
       "command": "Down"
@@ -829,16 +970,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194154095
+     ],
      "observation": {
-      "speech_raw": "Avocado\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Avocado\n3 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s49",
-     "t_start_ms": 1794183598502,
-     "t_end_ms": 1794183599607,
+     "t_start_ms": 1794194155199,
+     "t_end_ms": 1794194156304,
      "action": {
       "type": "key",
       "command": "Down"
@@ -846,16 +990,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194155199
+     ],
      "observation": {
-      "speech_raw": "Apple\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apple\n1 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s50",
-     "t_start_ms": 1794183599607,
-     "t_end_ms": 1794183600711,
+     "t_start_ms": 1794194156304,
+     "t_end_ms": 1794194157408,
      "action": {
       "type": "key",
       "command": "Down"
@@ -863,16 +1010,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194156304
+     ],
      "observation": {
-      "speech_raw": "Apricot\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apricot\n2 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s51",
-     "t_start_ms": 1794183600711,
-     "t_end_ms": 1794183601816,
+     "t_start_ms": 1794194157408,
+     "t_end_ms": 1794194158513,
      "action": {
       "type": "key",
       "command": "Down"
@@ -880,16 +1030,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194157408
+     ],
      "observation": {
-      "speech_raw": "Avocado\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Avocado\n3 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s52",
-     "t_start_ms": 1794183601816,
-     "t_end_ms": 1794183602920,
+     "t_start_ms": 1794194158513,
+     "t_end_ms": 1794194159618,
      "action": {
       "type": "key",
       "command": "Down"
@@ -897,16 +1050,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194158513
+     ],
      "observation": {
-      "speech_raw": "Apple\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apple\n1 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s53",
-     "t_start_ms": 1794183602920,
-     "t_end_ms": 1794183604024,
+     "t_start_ms": 1794194159618,
+     "t_end_ms": 1794194160723,
      "action": {
       "type": "key",
       "command": "Down"
@@ -914,16 +1070,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194159618
+     ],
      "observation": {
-      "speech_raw": "Apricot\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apricot\n2 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s54",
-     "t_start_ms": 1794183604024,
-     "t_end_ms": 1794183605129,
+     "t_start_ms": 1794194160723,
+     "t_end_ms": 1794194161828,
      "action": {
       "type": "key",
       "command": "Down"
@@ -931,16 +1090,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194160723
+     ],
      "observation": {
-      "speech_raw": "Avocado\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Avocado\n3 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s55",
-     "t_start_ms": 1794183605129,
-     "t_end_ms": 1794183606234,
+     "t_start_ms": 1794194161828,
+     "t_end_ms": 1794194162933,
      "action": {
       "type": "key",
       "command": "Down"
@@ -948,16 +1110,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194161828
+     ],
      "observation": {
-      "speech_raw": "Apple\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apple\n1 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s56",
-     "t_start_ms": 1794183606234,
-     "t_end_ms": 1794183607338,
+     "t_start_ms": 1794194162933,
+     "t_end_ms": 1794194164037,
      "action": {
       "type": "key",
       "command": "Down"
@@ -965,16 +1130,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194162933
+     ],
      "observation": {
-      "speech_raw": "Apricot\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apricot\n2 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s57",
-     "t_start_ms": 1794183607338,
-     "t_end_ms": 1794183608442,
+     "t_start_ms": 1794194164037,
+     "t_end_ms": 1794194165141,
      "action": {
       "type": "key",
       "command": "Down"
@@ -982,16 +1150,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194164037
+     ],
      "observation": {
-      "speech_raw": "Avocado\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Avocado\n3 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s58",
-     "t_start_ms": 1794183608442,
-     "t_end_ms": 1794183609545,
+     "t_start_ms": 1794194165141,
+     "t_end_ms": 1794194166245,
      "action": {
       "type": "key",
       "command": "Down"
@@ -999,16 +1170,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194165141
+     ],
      "observation": {
-      "speech_raw": "Apple\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apple\n1 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s59",
-     "t_start_ms": 1794183609545,
-     "t_end_ms": 1794183610647,
+     "t_start_ms": 1794194166245,
+     "t_end_ms": 1794194167349,
      "action": {
       "type": "key",
       "command": "Down"
@@ -1016,16 +1190,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194166245
+     ],
      "observation": {
-      "speech_raw": "Apricot\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apricot\n2 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s60",
-     "t_start_ms": 1794183610647,
-     "t_end_ms": 1794183611751,
+     "t_start_ms": 1794194167349,
+     "t_end_ms": 1794194168454,
      "action": {
       "type": "key",
       "command": "Down"
@@ -1033,16 +1210,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194167349
+     ],
      "observation": {
-      "speech_raw": "Avocado\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Avocado\n3 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s61",
-     "t_start_ms": 1794183611751,
-     "t_end_ms": 1794183612854,
+     "t_start_ms": 1794194168454,
+     "t_end_ms": 1794194169558,
      "action": {
       "type": "key",
       "command": "Down"
@@ -1050,16 +1230,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194168454
+     ],
      "observation": {
-      "speech_raw": "Apple\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apple\n1 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s62",
-     "t_start_ms": 1794183612854,
-     "t_end_ms": 1794183613957,
+     "t_start_ms": 1794194169558,
+     "t_end_ms": 1794194170662,
      "action": {
       "type": "key",
       "command": "Down"
@@ -1067,16 +1250,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194169558
+     ],
      "observation": {
-      "speech_raw": "Apricot\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apricot\n2 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s63",
-     "t_start_ms": 1794183613957,
-     "t_end_ms": 1794183615062,
+     "t_start_ms": 1794194170662,
+     "t_end_ms": 1794194171767,
      "action": {
       "type": "key",
       "command": "Down"
@@ -1084,16 +1270,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194170662
+     ],
      "observation": {
-      "speech_raw": "Avocado\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Avocado\n3 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s64",
-     "t_start_ms": 1794183615062,
-     "t_end_ms": 1794183616167,
+     "t_start_ms": 1794194171767,
+     "t_end_ms": 1794194172872,
      "action": {
       "type": "key",
       "command": "Down"
@@ -1101,16 +1290,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794194171767
+     ],
      "observation": {
-      "speech_raw": "Apple\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apple\n1 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s65",
-     "t_start_ms": 1794183616167,
-     "t_end_ms": 1794183617271,
+     "t_start_ms": 1794194172872,
+     "t_end_ms": 1794194173976,
      "action": {
       "type": "key",
       "command": "Up"
@@ -1118,16 +1310,19 @@
      "keys": [
       "Up"
      ],
+     "key_times": [
+      1794194172872
+     ],
      "observation": {
-      "speech_raw": "Avocado\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Avocado\n3 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s66",
-     "t_start_ms": 1794183617271,
-     "t_end_ms": 1794183618376,
+     "t_start_ms": 1794194173976,
+     "t_end_ms": 1794194175081,
      "action": {
       "type": "key",
       "command": "Up"
@@ -1135,16 +1330,19 @@
      "keys": [
       "Up"
      ],
+     "key_times": [
+      1794194173976
+     ],
      "observation": {
-      "speech_raw": "Apricot\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apricot\n2 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s67",
-     "t_start_ms": 1794183618376,
-     "t_end_ms": 1794183619480,
+     "t_start_ms": 1794194175081,
+     "t_end_ms": 1794194176185,
      "action": {
       "type": "key",
       "command": "Up"
@@ -1152,16 +1350,19 @@
      "keys": [
       "Up"
      ],
+     "key_times": [
+      1794194175081
+     ],
      "observation": {
-      "speech_raw": "Apple\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apple\n1 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s68",
-     "t_start_ms": 1794183619480,
-     "t_end_ms": 1794183620585,
+     "t_start_ms": 1794194176185,
+     "t_end_ms": 1794194177290,
      "action": {
       "type": "key",
       "command": "Up"
@@ -1169,16 +1370,19 @@
      "keys": [
       "Up"
      ],
+     "key_times": [
+      1794194176185
+     ],
      "observation": {
-      "speech_raw": "Avocado\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Avocado\n3 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s69",
-     "t_start_ms": 1794183620585,
-     "t_end_ms": 1794183621689,
+     "t_start_ms": 1794194177290,
+     "t_end_ms": 1794194178395,
      "action": {
       "type": "key",
       "command": "Up"
@@ -1186,8 +1390,11 @@
      "keys": [
       "Up"
      ],
+     "key_times": [
+      1794194177290
+     ],
      "observation": {
-      "speech_raw": "Apricot\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Apricot\n2 of 3\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true

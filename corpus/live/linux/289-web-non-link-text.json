@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "12447157"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794179371749
+     "t_ms": 1794194275762
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794179373113,
-     "t_end_ms": 1794179374117,
+     "t_start_ms": 1794194277126,
+     "t_end_ms": 1794194278129,
      "action": {
       "type": "key",
       "command": "N"
      },
      "keys": [
       "N"
+     ],
+     "key_times": [
+      1794194277126
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e Virtual cursor keys",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794179374117,
-     "t_end_ms": 1794179375120,
+     "t_start_ms": 1794194278129,
+     "t_end_ms": 1794194279133,
      "action": {
       "type": "key",
       "command": "N"
      },
      "keys": [
       "N"
+     ],
+     "key_times": [
+      1794194278129
      ],
      "observation": {
       "speech_raw": " and more text after it.",
@@ -55,14 +61,17 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794179375120,
-     "t_end_ms": 1794179376124,
+     "t_start_ms": 1794194279133,
+     "t_end_ms": 1794194280137,
      "action": {
       "type": "key",
       "command": "N"
      },
      "keys": [
       "N"
+     ],
+     "key_times": [
+      1794194279133
      ],
      "observation": {
       "speech_raw": " or call.",
@@ -72,14 +81,17 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794179376124,
-     "t_end_ms": 1794179377127,
+     "t_start_ms": 1794194280137,
+     "t_end_ms": 1794194281142,
      "action": {
       "type": "key",
       "command": "N"
      },
      "keys": [
       "N"
+     ],
+     "key_times": [
+      1794194280137
      ],
      "observation": {
       "speech_raw": " or call.",
@@ -89,14 +101,17 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794179377127,
-     "t_end_ms": 1794179378132,
+     "t_start_ms": 1794194281142,
+     "t_end_ms": 1794194282146,
      "action": {
       "type": "key",
       "command": "N"
      },
      "keys": [
       "N"
+     ],
+     "key_times": [
+      1794194281142
      ],
      "observation": {
       "speech_raw": " or call.",
@@ -106,14 +121,17 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794179378132,
-     "t_end_ms": 1794179379136,
+     "t_start_ms": 1794194282146,
+     "t_end_ms": 1794194283150,
      "action": {
       "type": "key",
       "command": "N"
      },
      "keys": [
       "N"
+     ],
+     "key_times": [
+      1794194282146
      ],
      "observation": {
       "speech_raw": " or call.",
@@ -123,14 +141,17 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794179379136,
-     "t_end_ms": 1794179380142,
+     "t_start_ms": 1794194283150,
+     "t_end_ms": 1794194284155,
      "action": {
       "type": "key",
       "command": "Shift+N"
      },
      "keys": [
       "Shift+N"
+     ],
+     "key_times": [
+      1794194283150
      ],
      "observation": {
       "speech_raw": " and more text after it.",
@@ -140,14 +161,17 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794179380142,
-     "t_end_ms": 1794179381147,
+     "t_start_ms": 1794194284155,
+     "t_end_ms": 1794194285160,
      "action": {
       "type": "key",
       "command": "Shift+N"
      },
      "keys": [
       "Shift+N"
+     ],
+     "key_times": [
+      1794194284155
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e Virtual cursor keys",
@@ -157,14 +181,17 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794179381147,
-     "t_end_ms": 1794179382152,
+     "t_start_ms": 1794194285160,
+     "t_end_ms": 1794194286164,
      "action": {
       "type": "key",
       "command": "Shift+N"
      },
      "keys": [
       "Shift+N"
+     ],
+     "key_times": [
+      1794194285160
      ],
      "observation": {
       "speech_raw": "Virtual Cursor Keys - Keys Fixture",
@@ -174,14 +201,17 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794179382152,
-     "t_end_ms": 1794179383157,
+     "t_start_ms": 1794194286164,
+     "t_end_ms": 1794194287169,
      "action": {
       "type": "key",
       "command": "Insert+Enter"
      },
      "keys": [
       "Insert+Enter"
+     ],
+     "key_times": [
+      1794194286164
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e Virtual cursor keys",
@@ -191,14 +221,17 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794179383157,
-     "t_end_ms": 1794179384162,
+     "t_start_ms": 1794194287169,
+     "t_end_ms": 1794194288174,
      "action": {
       "type": "key",
       "command": "Insert+Enter"
      },
      "keys": [
       "Insert+Enter"
+     ],
+     "key_times": [
+      1794194287169
      ],
      "observation": {
       "speech_raw": " and more text after it.",
@@ -208,14 +241,17 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794179384162,
-     "t_end_ms": 1794179385168,
+     "t_start_ms": 1794194288174,
+     "t_end_ms": 1794194289179,
      "action": {
       "type": "key",
       "command": "Insert+Shift+Enter"
      },
      "keys": [
       "Insert+Shift+Enter"
+     ],
+     "key_times": [
+      1794194288174
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e Virtual cursor keys",

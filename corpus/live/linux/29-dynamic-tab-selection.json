@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "12447157"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794179407705
+     "t_ms": 1794194311909
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794179409066,
-     "t_end_ms": 1794179410171,
+     "t_start_ms": 1794194313270,
+     "t_end_ms": 1794194314374,
      "action": {
       "type": "key",
       "command": "Tab"
      },
      "keys": [
       "Tab"
+     ],
+     "key_times": [
+      1794194313270
      ],
      "observation": {
       "speech_raw": "Boundaries and Dynamic Updates Fixture\nSystem Details  \u001d Button \u001e  \u001dcollapsed\u001e \nTo activate press Enter.",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794179410171,
-     "t_end_ms": 1794179411275,
+     "t_start_ms": 1794194314374,
+     "t_end_ms": 1794194315477,
      "action": {
       "type": "key",
       "command": "Tab"
      },
      "keys": [
       "Tab"
+     ],
+     "key_times": [
+      1794194314374
      ],
      "observation": {
       "speech_raw": "Settings \u001d group \u001e \n\nGeneral  \u001d Tab \u001e \n1 of 2\n \u001dselected\u001e",
@@ -55,14 +61,17 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794179411275,
-     "t_end_ms": 1794179412379,
+     "t_start_ms": 1794194315477,
+     "t_end_ms": 1794194316582,
      "action": {
       "type": "key",
       "command": "Tab"
      },
      "keys": [
       "Tab"
+     ],
+     "key_times": [
+      1794194315477
      ],
      "observation": {
       "speech_raw": "Advanced  \u001d Tab \u001e \n2 of 2",
@@ -72,14 +81,17 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794179412379,
-     "t_end_ms": 1794179413483,
+     "t_start_ms": 1794194316582,
+     "t_end_ms": 1794194317686,
      "action": {
       "type": "key",
       "command": "Space"
      },
      "keys": [
       "Space"
+     ],
+     "key_times": [
+      1794194316582
      ],
      "observation": {
       "speech_raw": " \u001dselected\u001e ",

@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "12447157"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,24 +15,27 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794178927971
+     "t_ms": 1794193205056
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794178928331
+     "t_ms": 1794193205418
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794178929636,
-     "t_end_ms": 1794178930641,
+     "t_start_ms": 1794193206722,
+     "t_end_ms": 1794193207727,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+A"
      },
      "keys": [
       "Ctrl+Insert+A"
+     ],
+     "key_times": [
+      1794193206723
      ],
      "observation": {
       "speech_raw": "no radio buttons were found",
@@ -42,14 +45,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794178930641,
-     "t_end_ms": 1794178931645,
+     "t_start_ms": 1794193207727,
+     "t_end_ms": 1794193208731,
      "action": {
       "type": "key",
       "command": "Escape"
      },
      "keys": [
       "Escape"
+     ],
+     "key_times": [
+      1794193207727
      ],
      "observation": {
       "speech_raw": "",

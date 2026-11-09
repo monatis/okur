@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "aac6f125"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794180784248
+     "t_ms": 1794190396925
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794180785613,
-     "t_end_ms": 1794180786616,
+     "t_start_ms": 1794190398358,
+     "t_end_ms": 1794190399363,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794190398358
      ],
      "observation": {
       "speech_raw": "main region",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794180786616,
-     "t_end_ms": 1794180787620,
+     "t_start_ms": 1794190399363,
+     "t_end_ms": 1794190400424,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794190399363
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e Described elements",
@@ -55,14 +61,17 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794180787620,
-     "t_end_ms": 1794180788624,
+     "t_start_ms": 1794190400424,
+     "t_end_ms": 1794190401428,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794190400424
      ],
      "observation": {
       "speech_raw": "A plain line before them.",
@@ -72,14 +81,17 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794180788624,
-     "t_end_ms": 1794180789629,
+     "t_start_ms": 1794190401428,
+     "t_end_ms": 1794190402433,
      "action": {
       "type": "key",
       "command": "Insert+Alt+R"
      },
      "keys": [
       "Insert+Alt+R"
+     ],
+     "key_times": [
+      1794190401428
      ],
      "observation": {
       "speech_raw": "",
@@ -89,14 +101,17 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794180789629,
-     "t_end_ms": 1794180790633,
+     "t_start_ms": 1794190402433,
+     "t_end_ms": 1794190403438,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794190402433
      ],
      "observation": {
       "speech_raw": " \u001d heading level 2 \u001e Shipping options Orders over fifty dollars ship free.",
@@ -106,14 +121,17 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794180790633,
-     "t_end_ms": 1794180791638,
+     "t_start_ms": 1794190403438,
+     "t_end_ms": 1794190404443,
      "action": {
       "type": "key",
       "command": "Insert+Alt+R"
      },
      "keys": [
       "Insert+Alt+R"
+     ],
+     "key_times": [
+      1794190403438
      ],
      "observation": {
       "speech_raw": "",
@@ -123,14 +141,17 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794180791638,
-     "t_end_ms": 1794180792643,
+     "t_start_ms": 1794190404443,
+     "t_end_ms": 1794190405447,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794190404443
      ],
      "observation": {
       "speech_raw": "Delete account \u001d Button \u001e \nThis cannot be undone.",
@@ -140,14 +161,17 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794180792643,
-     "t_end_ms": 1794180793646,
+     "t_start_ms": 1794190405447,
+     "t_end_ms": 1794190406490,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794190405447
      ],
      "observation": {
       "speech_raw": "This cannot be undone.",
@@ -157,14 +181,17 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794180793646,
-     "t_end_ms": 1794180794652,
+     "t_start_ms": 1794190406490,
+     "t_end_ms": 1794190407495,
      "action": {
       "type": "key",
       "command": "Insert+Alt+R"
      },
      "keys": [
       "Insert+Alt+R"
+     ],
+     "key_times": [
+      1794190406490
      ],
      "observation": {
       "speech_raw": "",
@@ -174,14 +201,17 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794180794652,
-     "t_end_ms": 1794180795757,
+     "t_start_ms": 1794190407495,
+     "t_end_ms": 1794190408499,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794190407495
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Skip ahead Jumps to the end of the page",
@@ -191,14 +221,17 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794180795757,
-     "t_end_ms": 1794180796761,
+     "t_start_ms": 1794190408499,
+     "t_end_ms": 1794190409503,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794190408499
      ],
      "observation": {
       "speech_raw": "Address Added dialog",
@@ -208,14 +241,17 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794180796761,
-     "t_end_ms": 1794180797767,
+     "t_start_ms": 1794190409503,
+     "t_end_ms": 1794190410509,
      "action": {
       "type": "key",
       "command": "Insert+Alt+R"
      },
      "keys": [
       "Insert+Alt+R"
+     ],
+     "key_times": [
+      1794190409503
      ],
      "observation": {
       "speech_raw": "",
@@ -225,14 +261,17 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794180797767,
-     "t_end_ms": 1794180799021,
+     "t_start_ms": 1794190410509,
+     "t_end_ms": 1794190411613,
      "action": {
       "type": "key",
       "command": "Tab"
      },
      "keys": [
       "Tab"
+     ],
+     "key_times": [
+      1794190410509
      ],
      "observation": {
       "speech_raw": "Address Added \u001d dialog \u001e \nThe address you provided has been added.\nOK  \u001d Button \u001e \nTo activate press Enter.",
@@ -242,14 +281,17 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794180799021,
-     "t_end_ms": 1794180800027,
+     "t_start_ms": 1794190411613,
+     "t_end_ms": 1794190412619,
      "action": {
       "type": "key",
       "command": "Insert+Alt+R"
      },
      "keys": [
       "Insert+Alt+R"
+     ],
+     "key_times": [
+      1794190411613
      ],
      "observation": {
       "speech_raw": "",
@@ -259,14 +301,17 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794180800027,
-     "t_end_ms": 1794180801033,
+     "t_start_ms": 1794190412619,
+     "t_end_ms": 1794190413624,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
      },
      "keys": [
       "Ctrl+Home"
+     ],
+     "key_times": [
+      1794190412619
      ],
      "observation": {
       "speech_raw": " \u001d heading level 2 \u001e Address Added",
@@ -276,14 +321,17 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794180801033,
-     "t_end_ms": 1794180802038,
+     "t_start_ms": 1794190413624,
+     "t_end_ms": 1794190414630,
      "action": {
       "type": "key",
       "command": "Insert+Alt+R"
      },
      "keys": [
       "Insert+Alt+R"
+     ],
+     "key_times": [
+      1794190413624
      ],
      "observation": {
       "speech_raw": "",

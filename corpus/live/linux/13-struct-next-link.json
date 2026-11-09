@@ -6,7 +6,7 @@
   "web_verbosity": null,
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "12447157"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794178536287
+     "t_ms": 1794192073201
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794178537654,
-     "t_end_ms": 1794178538658,
+     "t_start_ms": 1794192074570,
+     "t_end_ms": 1794192075573,
      "action": {
       "type": "jaws_script",
       "command": "MoveToNextUnvisitedLink"
      },
      "keys": [
       "U"
+     ],
+     "key_times": [
+      1794192074570
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Overview Link",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794178538658,
-     "t_end_ms": 1794178539662,
+     "t_start_ms": 1794192075573,
+     "t_end_ms": 1794192076577,
      "action": {
       "type": "jaws_script",
       "command": "MoveToNextUnvisitedLink"
      },
      "keys": [
       "U"
+     ],
+     "key_times": [
+      1794192075573
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Architecture Link",

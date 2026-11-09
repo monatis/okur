@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "12447157"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,24 +15,27 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794179166223
+     "t_ms": 1794193444365
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794179166587
+     "t_ms": 1794193444726
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794179167892,
-     "t_end_ms": 1794179168897,
+     "t_start_ms": 1794193446031,
+     "t_end_ms": 1794193447036,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+Q"
      },
      "keys": [
       "Ctrl+Insert+Q"
+     ],
+     "key_times": [
+      1794193446031
      ],
      "observation": {
       "speech_raw": "no block quotes were found",
@@ -42,14 +45,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794179168897,
-     "t_end_ms": 1794179169901,
+     "t_start_ms": 1794193447037,
+     "t_end_ms": 1794193448041,
      "action": {
       "type": "key",
       "command": "Escape"
      },
      "keys": [
       "Escape"
+     ],
+     "key_times": [
+      1794193447037
      ],
      "observation": {
       "speech_raw": "",

@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "12447157"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794178069400
+     "t_ms": 1794190024559
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794178070762,
-     "t_end_ms": 1794178071766,
+     "t_start_ms": 1794190025921,
+     "t_end_ms": 1794190026924,
      "action": {
       "type": "key",
       "command": "U"
      },
      "keys": [
       "U"
+     ],
+     "key_times": [
+      1794190025921
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Riverside Gazette",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794178071766,
-     "t_end_ms": 1794178072770,
+     "t_start_ms": 1794190026925,
+     "t_end_ms": 1794190027929,
      "action": {
       "type": "key",
       "command": "U"
      },
      "keys": [
       "U"
+     ],
+     "key_times": [
+      1794190026925
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e News",
@@ -55,14 +61,17 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794178072770,
-     "t_end_ms": 1794178073773,
+     "t_start_ms": 1794190027929,
+     "t_end_ms": 1794190028933,
      "action": {
       "type": "key",
       "command": "U"
      },
      "keys": [
       "U"
+     ],
+     "key_times": [
+      1794190027929
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Sports",
@@ -72,14 +81,17 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794178073773,
-     "t_end_ms": 1794178074777,
+     "t_start_ms": 1794190028933,
+     "t_end_ms": 1794190029936,
      "action": {
       "type": "key",
       "command": "U"
      },
      "keys": [
       "U"
+     ],
+     "key_times": [
+      1794190028933
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Culture",
@@ -89,14 +101,17 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794178074777,
-     "t_end_ms": 1794178075782,
+     "t_start_ms": 1794190029936,
+     "t_end_ms": 1794190030941,
      "action": {
       "type": "key",
       "command": "U"
      },
      "keys": [
       "U"
+     ],
+     "key_times": [
+      1794190029936
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Opinion",
@@ -106,14 +121,17 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794178075782,
-     "t_end_ms": 1794178076786,
+     "t_start_ms": 1794190030941,
+     "t_end_ms": 1794190031945,
      "action": {
       "type": "key",
       "command": "U"
      },
      "keys": [
       "U"
+     ],
+     "key_times": [
+      1794190030941
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Maria Lopez,",
@@ -123,14 +141,17 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794178076786,
-     "t_end_ms": 1794178077790,
+     "t_start_ms": 1794190031945,
+     "t_end_ms": 1794190032949,
      "action": {
       "type": "key",
       "command": "U"
      },
      "keys": [
       "U"
+     ],
+     "key_times": [
+      1794190031945
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e study rooms",
@@ -140,14 +161,17 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794178077790,
-     "t_end_ms": 1794178078795,
+     "t_start_ms": 1794190032949,
+     "t_end_ms": 1794190033954,
      "action": {
       "type": "key",
       "command": "U"
      },
      "keys": [
       "U"
+     ],
+     "key_times": [
+      1794190032949
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Directions",
@@ -157,14 +181,17 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794178078795,
-     "t_end_ms": 1794178079900,
+     "t_start_ms": 1794190033954,
+     "t_end_ms": 1794190034959,
      "action": {
       "type": "key",
       "command": "U"
      },
      "keys": [
       "U"
+     ],
+     "key_times": [
+      1794190033954
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Directions",
@@ -174,14 +201,17 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794178079900,
-     "t_end_ms": 1794178080904,
+     "t_start_ms": 1794190034959,
+     "t_end_ms": 1794190035964,
      "action": {
       "type": "key",
       "command": "U"
      },
      "keys": [
       "U"
+     ],
+     "key_times": [
+      1794190034959
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Council approves library budget",
@@ -191,14 +221,17 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794178080904,
-     "t_end_ms": 1794178081908,
+     "t_start_ms": 1794190035964,
+     "t_end_ms": 1794190036969,
      "action": {
       "type": "key",
       "command": "U"
      },
      "keys": [
       "U"
+     ],
+     "key_times": [
+      1794190035964
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Spring book fair returns",
@@ -208,14 +241,17 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794178081908,
-     "t_end_ms": 1794178082913,
+     "t_start_ms": 1794190036969,
+     "t_end_ms": 1794190037974,
      "action": {
       "type": "key",
       "command": "Shift+U"
      },
      "keys": [
       "Shift+U"
+     ],
+     "key_times": [
+      1794190036969
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Council approves library budget",
@@ -225,14 +261,17 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794178082913,
-     "t_end_ms": 1794178083918,
+     "t_start_ms": 1794190037974,
+     "t_end_ms": 1794190038978,
      "action": {
       "type": "key",
       "command": "Shift+U"
      },
      "keys": [
       "Shift+U"
+     ],
+     "key_times": [
+      1794190037974
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Directions",

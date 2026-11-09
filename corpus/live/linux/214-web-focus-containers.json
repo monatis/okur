@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "aac6f125"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,24 +15,27 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794182817740
+     "t_ms": 1794192899921
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794182818099
+     "t_ms": 1794192900275
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794182819405,
-     "t_end_ms": 1794182820408,
+     "t_start_ms": 1794192901581,
+     "t_end_ms": 1794192902584,
      "action": {
       "type": "key",
       "command": "H"
      },
      "keys": [
       "H"
+     ],
+     "key_times": [
+      1794192901581
      ],
      "observation": {
       "speech_raw": "Web App Patterns\n \u001d heading level 1 \u001e",
@@ -42,14 +45,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794182820408,
-     "t_end_ms": 1794182821412,
+     "t_start_ms": 1794192902584,
+     "t_end_ms": 1794192903588,
      "action": {
       "type": "key",
       "command": "H"
      },
      "keys": [
       "H"
+     ],
+     "key_times": [
+      1794192902584
      ],
      "observation": {
       "speech_raw": "Current links\n \u001d heading level 2 \u001e",
@@ -59,14 +65,17 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794182821412,
-     "t_end_ms": 1794182822415,
+     "t_start_ms": 1794192903588,
+     "t_end_ms": 1794192904591,
      "action": {
       "type": "key",
       "command": "H"
      },
      "keys": [
       "H"
+     ],
+     "key_times": [
+      1794192903588
      ],
      "observation": {
       "speech_raw": "Described controls\n \u001d heading level 2 \u001e",
@@ -76,14 +85,17 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794182822415,
-     "t_end_ms": 1794182823420,
+     "t_start_ms": 1794192904591,
+     "t_end_ms": 1794192905595,
      "action": {
       "type": "key",
       "command": "H"
      },
      "keys": [
       "H"
+     ],
+     "key_times": [
+      1794192904591
      ],
      "observation": {
       "speech_raw": "Popup buttons\n \u001d heading level 2 \u001e",
@@ -93,14 +105,17 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794182823420,
-     "t_end_ms": 1794182824424,
+     "t_start_ms": 1794192905595,
+     "t_end_ms": 1794192906599,
      "action": {
       "type": "key",
       "command": "H"
      },
      "keys": [
       "H"
+     ],
+     "key_times": [
+      1794192905595
      ],
      "observation": {
       "speech_raw": "Fruit search\n \u001d heading level 2 \u001e",
@@ -110,14 +125,17 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794182824424,
-     "t_end_ms": 1794182825428,
+     "t_start_ms": 1794192906599,
+     "t_end_ms": 1794192907604,
      "action": {
       "type": "key",
       "command": "H"
      },
      "keys": [
       "H"
+     ],
+     "key_times": [
+      1794192906599
      ],
      "observation": {
       "speech_raw": "Tab from here\n \u001d heading level 2 \u001e",
@@ -127,14 +145,17 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794182825428,
-     "t_end_ms": 1794182826433,
+     "t_start_ms": 1794192907604,
+     "t_end_ms": 1794192908608,
      "action": {
       "type": "key",
       "command": "H"
      },
      "keys": [
       "H"
+     ],
+     "key_times": [
+      1794192907604
      ],
      "observation": {
       "speech_raw": "Repository files\n \u001d heading level 2 \u001e",
@@ -144,14 +165,17 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794182826433,
-     "t_end_ms": 1794182827538,
+     "t_start_ms": 1794192908608,
+     "t_end_ms": 1794192909713,
      "action": {
       "type": "key",
       "command": "Tab"
      },
      "keys": [
       "Tab"
+     ],
+     "key_times": [
+      1794192908608
      ],
      "observation": {
       "speech_raw": "Web App Patterns\n\u2022 \u001d same page link \u001e  \u001dCurrent Page\u001e README\nTo activate press Enter.",

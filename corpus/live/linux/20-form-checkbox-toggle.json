@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "12447157"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794178641979
+     "t_ms": 1794192179141
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794178643344,
-     "t_end_ms": 1794178644348,
+     "t_start_ms": 1794192180504,
+     "t_end_ms": 1794192181508,
      "action": {
       "type": "key",
       "command": "X"
      },
      "keys": [
       "X"
+     ],
+     "key_times": [
+      1794192180504
      ],
      "observation": {
       "speech_raw": "I accept terms and conditions  \u001d check box \u001e   \u001dnot checked\u001e ",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794178644348,
-     "t_end_ms": 1794178645453,
+     "t_start_ms": 1794192181508,
+     "t_end_ms": 1794192182612,
      "action": {
       "type": "key",
       "command": "Space"
      },
      "keys": [
       "Space"
+     ],
+     "key_times": [
+      1794192181508
      ],
      "observation": {
       "speech_raw": "Forms and Interaction Reference Fixture\nI accept terms and conditions  \u001d check box \u001e   \u001dnot checked\u001e \nTo check press Spacebar.\n \u001dchecked\u001e ",

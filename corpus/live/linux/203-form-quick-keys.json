@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "12447157"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794178757853
+     "t_ms": 1794192294710
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794178759211,
-     "t_end_ms": 1794178760214,
+     "t_start_ms": 1794192296070,
+     "t_end_ms": 1794192297074,
      "action": {
       "type": "key",
       "command": "E"
      },
      "keys": [
       "E"
+     ],
+     "key_times": [
+      1794192296070
      ],
      "observation": {
       "speech_raw": "Full name \u001d Edit \u001e \n \u001dRequired\u001e \nblank",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794178760214,
-     "t_end_ms": 1794178761218,
+     "t_start_ms": 1794192297074,
+     "t_end_ms": 1794192298077,
      "action": {
       "type": "key",
       "command": "E"
      },
      "keys": [
       "E"
+     ],
+     "key_times": [
+      1794192297074
      ],
      "observation": {
       "speech_raw": "Email address \u001d Edit \u001e \nsam@example.com\nWe never share your email.",
@@ -55,14 +61,17 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794178761218,
-     "t_end_ms": 1794178762221,
+     "t_start_ms": 1794192298077,
+     "t_end_ms": 1794192299081,
      "action": {
       "type": "key",
       "command": "E"
      },
      "keys": [
       "E"
+     ],
+     "key_times": [
+      1794192298077
      ],
      "observation": {
       "speech_raw": "Password \u001d password edit \u001e \n \u001dRequired\u001e ",
@@ -72,14 +81,17 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794178762221,
-     "t_end_ms": 1794178763225,
+     "t_start_ms": 1794192299081,
+     "t_end_ms": 1794192300085,
      "action": {
       "type": "key",
       "command": "E"
      },
      "keys": [
       "E"
+     ],
+     "key_times": [
+      1794192299081
      ],
      "observation": {
       "speech_raw": "Accessibility needs \u001d edit \u001e \nblank",
@@ -89,14 +101,17 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794178763225,
-     "t_end_ms": 1794178764230,
+     "t_start_ms": 1794192300085,
+     "t_end_ms": 1794192301089,
      "action": {
       "type": "key",
       "command": "E"
      },
      "keys": [
       "E"
+     ],
+     "key_times": [
+      1794192300085
      ],
      "observation": {
       "speech_raw": "wrapping to top\nFull name \u001d Edit \u001e \n \u001dRequired\u001e \nblank",
@@ -106,14 +121,17 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794178764230,
-     "t_end_ms": 1794178765234,
+     "t_start_ms": 1794192301089,
+     "t_end_ms": 1794192302094,
      "action": {
       "type": "key",
       "command": "X"
      },
      "keys": [
       "X"
+     ],
+     "key_times": [
+      1794192301089
      ],
      "observation": {
       "speech_raw": "Send me the monthly newsletter  \u001d check box \u001e   \u001dchecked\u001e ",
@@ -123,14 +141,17 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794178765234,
-     "t_end_ms": 1794178766238,
+     "t_start_ms": 1794192302094,
+     "t_end_ms": 1794192303098,
      "action": {
       "type": "key",
       "command": "X"
      },
      "keys": [
       "X"
+     ],
+     "key_times": [
+      1794192302094
      ],
      "observation": {
       "speech_raw": "I agree to the terms of use  \u001d check box \u001e   \u001dnot checked\u001e ",
@@ -140,14 +161,17 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794178766238,
-     "t_end_ms": 1794178767242,
+     "t_start_ms": 1794192303098,
+     "t_end_ms": 1794192304102,
      "action": {
       "type": "key",
       "command": "X"
      },
      "keys": [
       "X"
+     ],
+     "key_times": [
+      1794192303098
      ],
      "observation": {
       "speech_raw": "wrapping to top\nSend me the monthly newsletter  \u001d check box \u001e   \u001dchecked\u001e ",
@@ -157,14 +181,17 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794178767242,
-     "t_end_ms": 1794178768246,
+     "t_start_ms": 1794192304102,
+     "t_end_ms": 1794192305107,
      "action": {
       "type": "key",
       "command": "A"
      },
      "keys": [
       "A"
+     ],
+     "key_times": [
+      1794192304102
      ],
      "observation": {
       "speech_raw": "wrapping to top\nMembership type \u001d group \u001e \nAdult  \u001d radio button \u001e   \u001dchecked\u001e \n1 of 3",
@@ -174,14 +201,17 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794178768246,
-     "t_end_ms": 1794178769250,
+     "t_start_ms": 1794192305107,
+     "t_end_ms": 1794192306111,
      "action": {
       "type": "key",
       "command": "A"
      },
      "keys": [
       "A"
+     ],
+     "key_times": [
+      1794192305107
      ],
      "observation": {
       "speech_raw": "Student  \u001d radio button \u001e   \u001dnot checked\u001e \n2 of 3",
@@ -191,14 +221,17 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794178769250,
-     "t_end_ms": 1794178770255,
+     "t_start_ms": 1794192306111,
+     "t_end_ms": 1794192307115,
      "action": {
       "type": "key",
       "command": "A"
      },
      "keys": [
       "A"
+     ],
+     "key_times": [
+      1794192306111
      ],
      "observation": {
       "speech_raw": "Senior  \u001d radio button \u001e   \u001dnot checked\u001e \n3 of 3",
@@ -208,14 +241,17 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794178770255,
-     "t_end_ms": 1794178771259,
+     "t_start_ms": 1794192307115,
+     "t_end_ms": 1794192308120,
      "action": {
       "type": "key",
       "command": "A"
      },
      "keys": [
       "A"
+     ],
+     "key_times": [
+      1794192307115
      ],
      "observation": {
       "speech_raw": "wrapping to top\nAdult  \u001d radio button \u001e   \u001dchecked\u001e \n1 of 3",
@@ -225,14 +261,17 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794178771259,
-     "t_end_ms": 1794178772264,
+     "t_start_ms": 1794192308120,
+     "t_end_ms": 1794192309124,
      "action": {
       "type": "key",
       "command": "C"
      },
      "keys": [
       "C"
+     ],
+     "key_times": [
+      1794192308120
      ],
      "observation": {
       "speech_raw": "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside",
@@ -242,14 +281,17 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794178772264,
-     "t_end_ms": 1794178773268,
+     "t_start_ms": 1794192309124,
+     "t_end_ms": 1794192310128,
      "action": {
       "type": "key",
       "command": "C"
      },
      "keys": [
       "C"
+     ],
+     "key_times": [
+      1794192309124
      ],
      "observation": {
       "speech_raw": "wrapping to top\nHome branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside",
@@ -259,14 +301,17 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794178773268,
-     "t_end_ms": 1794178774272,
+     "t_start_ms": 1794192310128,
+     "t_end_ms": 1794192311133,
      "action": {
       "type": "key",
       "command": "B"
      },
      "keys": [
       "B"
+     ],
+     "key_times": [
+      1794192310128
      ],
      "observation": {
       "speech_raw": "Create account  \u001d Button \u001e ",
@@ -276,14 +321,17 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794178774272,
-     "t_end_ms": 1794178775276,
+     "t_start_ms": 1794192311133,
+     "t_end_ms": 1794192312137,
      "action": {
       "type": "key",
       "command": "B"
      },
      "keys": [
       "B"
+     ],
+     "key_times": [
+      1794192311133
      ],
      "observation": {
       "speech_raw": "wrapping to top\nCreate account  \u001d Button \u001e ",
@@ -293,14 +341,17 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794178775276,
-     "t_end_ms": 1794178776281,
+     "t_start_ms": 1794192312137,
+     "t_end_ms": 1794192313141,
      "action": {
       "type": "key",
       "command": "B"
      },
      "keys": [
       "B"
+     ],
+     "key_times": [
+      1794192312137
      ],
      "observation": {
       "speech_raw": "wrapping to top\nCreate account  \u001d Button \u001e ",

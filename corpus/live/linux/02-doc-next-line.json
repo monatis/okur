@@ -6,7 +6,7 @@
   "web_verbosity": null,
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "12447157"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794177629871
+     "t_ms": 1794189583964
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794177631234,
-     "t_end_ms": 1794177632237,
+     "t_start_ms": 1794189585329,
+     "t_end_ms": 1794189586333,
      "action": {
       "type": "keyboard",
       "command": "{DOWN}"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189585329
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e The Accessibility Engine Specification",

@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "aac6f125"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794183265184
+     "t_ms": 1794193821199
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794183266546,
-     "t_end_ms": 1794183267550,
+     "t_start_ms": 1794193822561,
+     "t_end_ms": 1794193823565,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794193822561
      ],
      "observation": {
       "speech_raw": "main region",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794183267550,
-     "t_end_ms": 1794183268554,
+     "t_start_ms": 1794193823565,
+     "t_end_ms": 1794193824568,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794193823565
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e Create your account",
@@ -55,14 +61,17 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794183268554,
-     "t_end_ms": 1794183269557,
+     "t_start_ms": 1794193824568,
+     "t_end_ms": 1794193825573,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794193824568
      ],
      "observation": {
       "speech_raw": "Fields marked required must be filled in.",
@@ -72,14 +81,17 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794183269557,
-     "t_end_ms": 1794183270561,
+     "t_start_ms": 1794193825573,
+     "t_end_ms": 1794193826577,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794193825573
      ],
      "observation": {
       "speech_raw": "Full name",
@@ -89,14 +101,17 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794183270561,
-     "t_end_ms": 1794183271565,
+     "t_start_ms": 1794193826577,
+     "t_end_ms": 1794193827582,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794193826577
      ],
      "observation": {
       "speech_raw": "Full name \u001d Edit \u001e \n \u001dRequired\u001e",
@@ -106,8 +121,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794183271565,
-     "t_end_ms": 1794183272569,
+     "t_start_ms": 1794193827582,
+     "t_end_ms": 1794193828586,
      "action": {
       "type": "key",
       "command": "Down"
@@ -115,16 +130,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794193827582
+     ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Email address",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794183272569,
-     "t_end_ms": 1794183273573,
+     "t_start_ms": 1794193828586,
+     "t_end_ms": 1794193829591,
      "action": {
       "type": "key",
       "command": "Down"
@@ -132,16 +150,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794193828586
+     ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Email address \u001d Edit \u001e \nsam@example.com",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794183273573,
-     "t_end_ms": 1794183274578,
+     "t_start_ms": 1794193829591,
+     "t_end_ms": 1794193830695,
      "action": {
       "type": "key",
       "command": "Down"
@@ -149,16 +170,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794193829591
+     ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "sam@example.com",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794183274578,
-     "t_end_ms": 1794183275583,
+     "t_start_ms": 1794193830695,
+     "t_end_ms": 1794193831699,
      "action": {
       "type": "key",
       "command": "Down"
@@ -166,16 +190,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794193830695
+     ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "We never share your email.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794183275583,
-     "t_end_ms": 1794183276587,
+     "t_start_ms": 1794193831699,
+     "t_end_ms": 1794193832704,
      "action": {
       "type": "key",
       "command": "Down"
@@ -183,16 +210,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794193831699
+     ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Password",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794183276587,
-     "t_end_ms": 1794183277591,
+     "t_start_ms": 1794193832704,
+     "t_end_ms": 1794193833708,
      "action": {
       "type": "key",
       "command": "Down"
@@ -200,16 +230,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794193832704
+     ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Password \u001d password edit \u001e \n \u001dRequired\u001e ",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794183277591,
-     "t_end_ms": 1794183278594,
+     "t_start_ms": 1794193833708,
+     "t_end_ms": 1794193834713,
      "action": {
       "type": "key",
       "command": "Down"
@@ -217,16 +250,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794193833708
+     ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "group start Membership type",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794183278594,
-     "t_end_ms": 1794183279598,
+     "t_start_ms": 1794193834713,
+     "t_end_ms": 1794193835717,
      "action": {
       "type": "key",
       "command": "Down"
@@ -234,16 +270,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794193834713
+     ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Adult \u001d radio button \u001e  \u001dchecked\u001e \n1 of 3",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794183279598,
-     "t_end_ms": 1794183280603,
+     "t_start_ms": 1794193835717,
+     "t_end_ms": 1794193836722,
      "action": {
       "type": "key",
       "command": "Down"
@@ -251,16 +290,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794193835717
+     ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Student \u001d radio button \u001e  \u001dnot checked\u001e \n2 of 3",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794183280603,
-     "t_end_ms": 1794183281607,
+     "t_start_ms": 1794193836722,
+     "t_end_ms": 1794193837727,
      "action": {
       "type": "key",
       "command": "Down"
@@ -268,16 +310,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794193836722
+     ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Senior \u001d radio button \u001e  \u001dnot checked\u001e \n3 of 3",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794183281607,
-     "t_end_ms": 1794183282611,
+     "t_start_ms": 1794193837727,
+     "t_end_ms": 1794193838731,
      "action": {
       "type": "key",
       "command": "Down"
@@ -285,16 +330,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794193837727
+     ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "group end Membership type",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794183282611,
-     "t_end_ms": 1794183283615,
+     "t_start_ms": 1794193838731,
+     "t_end_ms": 1794193839735,
      "action": {
       "type": "key",
       "command": "Down"
@@ -302,16 +350,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794193838731
+     ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Home branch",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794183283615,
-     "t_end_ms": 1794183284620,
+     "t_start_ms": 1794193839735,
+     "t_end_ms": 1794193840739,
      "action": {
       "type": "key",
       "command": "Down"
@@ -319,16 +370,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794193839735
+     ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": " \u001d Combo box \u001e  \u001dcollapsed\u001e Northside",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794183284620,
-     "t_end_ms": 1794183285624,
+     "t_start_ms": 1794193840739,
+     "t_end_ms": 1794193841744,
      "action": {
       "type": "key",
       "command": "Down"
@@ -336,16 +390,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794193840739
+     ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Accessibility needs",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794183285624,
-     "t_end_ms": 1794183286629,
+     "t_start_ms": 1794193841744,
+     "t_end_ms": 1794193842748,
      "action": {
       "type": "key",
       "command": "Down"
@@ -353,16 +410,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794193841744
+     ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Accessibility needs \u001d edit \u001e",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794183286629,
-     "t_end_ms": 1794183287633,
+     "t_start_ms": 1794193842748,
+     "t_end_ms": 1794193843752,
      "action": {
       "type": "key",
       "command": "Down"
@@ -370,16 +430,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794193842748
+     ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Send me the monthly newsletter \u001d check box \u001e  \u001dchecked\u001e ",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794183287633,
-     "t_end_ms": 1794183288637,
+     "t_start_ms": 1794193843752,
+     "t_end_ms": 1794193844756,
      "action": {
       "type": "key",
       "command": "Down"
@@ -387,16 +450,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794193843752
+     ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "I agree to the terms of use \u001d check box \u001e  \u001dnot checked\u001e ",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s23",
-     "t_start_ms": 1794183288637,
-     "t_end_ms": 1794183289641,
+     "t_start_ms": 1794193844756,
+     "t_end_ms": 1794193845760,
      "action": {
       "type": "key",
       "command": "Down"
@@ -404,16 +470,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794193844756
+     ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "I agree to the ",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s24",
-     "t_start_ms": 1794183289641,
-     "t_end_ms": 1794183290745,
+     "t_start_ms": 1794193845760,
+     "t_end_ms": 1794193846864,
      "action": {
       "type": "key",
       "command": "Down"
@@ -421,16 +490,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794193845760
+     ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": " \u001d same page link \u001e terms of use",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s25",
-     "t_start_ms": 1794183290745,
-     "t_end_ms": 1794183291749,
+     "t_start_ms": 1794193846864,
+     "t_end_ms": 1794193847868,
      "action": {
       "type": "key",
       "command": "Down"
@@ -438,16 +510,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794193846864
+     ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Save draft \u001d Button \u001e  \u001dUnavailable\u001e ",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s26",
-     "t_start_ms": 1794183291749,
-     "t_end_ms": 1794183292753,
+     "t_start_ms": 1794193847868,
+     "t_end_ms": 1794193848872,
      "action": {
       "type": "key",
       "command": "Down"
@@ -455,16 +530,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794193847868
+     ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Create account \u001d Button \u001e ",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s27",
-     "t_start_ms": 1794183292753,
-     "t_end_ms": 1794183293757,
+     "t_start_ms": 1794193848872,
+     "t_end_ms": 1794193849877,
      "action": {
       "type": "key",
       "command": "Down"
@@ -472,16 +550,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794193848872
+     ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "main region end",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s28",
-     "t_start_ms": 1794183293757,
-     "t_end_ms": 1794183294761,
+     "t_start_ms": 1794193849877,
+     "t_end_ms": 1794193850881,
      "action": {
       "type": "key",
       "command": "Down"
@@ -489,16 +570,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794193849877
+     ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "main region end",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s29",
-     "t_start_ms": 1794183294761,
-     "t_end_ms": 1794183295766,
+     "t_start_ms": 1794193850881,
+     "t_end_ms": 1794193851886,
      "action": {
       "type": "key",
       "command": "Up"
@@ -506,16 +590,19 @@
      "keys": [
       "Up"
      ],
+     "key_times": [
+      1794193850881
+     ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Create account \u001d Button \u001e ",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s30",
-     "t_start_ms": 1794183295766,
-     "t_end_ms": 1794183296769,
+     "t_start_ms": 1794193851886,
+     "t_end_ms": 1794193852890,
      "action": {
       "type": "key",
       "command": "Up"
@@ -523,16 +610,19 @@
      "keys": [
       "Up"
      ],
+     "key_times": [
+      1794193851886
+     ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Save draft \u001d Button \u001e  \u001dUnavailable\u001e ",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s31",
-     "t_start_ms": 1794183296769,
-     "t_end_ms": 1794183297774,
+     "t_start_ms": 1794193852890,
+     "t_end_ms": 1794193853894,
      "action": {
       "type": "key",
       "command": "Up"
@@ -540,16 +630,19 @@
      "keys": [
       "Up"
      ],
+     "key_times": [
+      1794193852890
+     ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": " \u001d same page link \u001e terms of use",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s32",
-     "t_start_ms": 1794183297774,
-     "t_end_ms": 1794183298778,
+     "t_start_ms": 1794193853894,
+     "t_end_ms": 1794193854898,
      "action": {
       "type": "key",
       "command": "Up"
@@ -557,16 +650,19 @@
      "keys": [
       "Up"
      ],
+     "key_times": [
+      1794193853894
+     ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "I agree to the ",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s33",
-     "t_start_ms": 1794183298778,
-     "t_end_ms": 1794183299783,
+     "t_start_ms": 1794193854898,
+     "t_end_ms": 1794193855902,
      "action": {
       "type": "key",
       "command": "Up"
@@ -574,8 +670,11 @@
      "keys": [
       "Up"
      ],
+     "key_times": [
+      1794193854898
+     ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "I agree to the terms of use \u001d check box \u001e  \u001dnot checked\u001e ",
       "settled": true
      },
      "step_success": true

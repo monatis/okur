@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "12447157"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794177808033
+     "t_ms": 1794189763183
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794177809393,
-     "t_end_ms": 1794177810396,
+     "t_start_ms": 1794189764546,
+     "t_end_ms": 1794189765549,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189764546
      ],
      "observation": {
       "speech_raw": "banner",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794177810397,
-     "t_end_ms": 1794177811400,
+     "t_start_ms": 1794189765549,
+     "t_end_ms": 1794189766553,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189765549
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Riverside Gazette",
@@ -55,14 +61,17 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794177811400,
-     "t_end_ms": 1794177812404,
+     "t_start_ms": 1794189766553,
+     "t_end_ms": 1794189767557,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189766553
      ],
      "observation": {
       "speech_raw": "Primary navigation region",
@@ -72,14 +81,17 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794177812404,
-     "t_end_ms": 1794177813408,
+     "t_start_ms": 1794189767557,
+     "t_end_ms": 1794189768561,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189767558
      ],
      "observation": {
       "speech_raw": "list of 4 items",
@@ -89,14 +101,17 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794177813408,
-     "t_end_ms": 1794177814413,
+     "t_start_ms": 1794189768561,
+     "t_end_ms": 1794189769566,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189768561
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e News",
@@ -106,14 +121,17 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794177814413,
-     "t_end_ms": 1794177815417,
+     "t_start_ms": 1794189769566,
+     "t_end_ms": 1794189770570,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189769566
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Sports",
@@ -123,14 +141,17 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794177815417,
-     "t_end_ms": 1794177816421,
+     "t_start_ms": 1794189770570,
+     "t_end_ms": 1794189771574,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189770570
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Culture",
@@ -140,14 +161,17 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794177816421,
-     "t_end_ms": 1794177817425,
+     "t_start_ms": 1794189771574,
+     "t_end_ms": 1794189772579,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189771574
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Opinion",
@@ -157,14 +181,17 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794177817425,
-     "t_end_ms": 1794177818430,
+     "t_start_ms": 1794189772579,
+     "t_end_ms": 1794189773583,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189772579
      ],
      "observation": {
       "speech_raw": "list end",
@@ -174,14 +201,17 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794177818430,
-     "t_end_ms": 1794177819434,
+     "t_start_ms": 1794189773583,
+     "t_end_ms": 1794189774588,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189773583
      ],
      "observation": {
       "speech_raw": "Primary navigation region end",
@@ -191,14 +221,17 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794177819434,
-     "t_end_ms": 1794177820438,
+     "t_start_ms": 1794189774588,
+     "t_end_ms": 1794189775593,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189774588
      ],
      "observation": {
       "speech_raw": "banner end",
@@ -208,14 +241,17 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794177820438,
-     "t_end_ms": 1794177821442,
+     "t_start_ms": 1794189775593,
+     "t_end_ms": 1794189776597,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189775593
      ],
      "observation": {
       "speech_raw": "main region",
@@ -225,14 +261,17 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794177821442,
-     "t_end_ms": 1794177822446,
+     "t_start_ms": 1794189776597,
+     "t_end_ms": 1794189777601,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189776597
      ],
      "observation": {
       "speech_raw": "article",
@@ -242,14 +281,17 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794177822446,
-     "t_end_ms": 1794177823449,
+     "t_start_ms": 1794189777601,
+     "t_end_ms": 1794189778606,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189777601
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e City Library Expands Evening Hours",
@@ -259,14 +301,17 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794177823449,
-     "t_end_ms": 1794177824454,
+     "t_start_ms": 1794189778606,
+     "t_end_ms": 1794189779610,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189778606
      ],
      "observation": {
       "speech_raw": "By ",
@@ -276,14 +321,17 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794177824454,
-     "t_end_ms": 1794177825458,
+     "t_start_ms": 1794189779610,
+     "t_end_ms": 1794189780614,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189779610
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Maria Lopez,",
@@ -293,14 +341,17 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794177825458,
-     "t_end_ms": 1794177826462,
+     "t_start_ms": 1794189780614,
+     "t_end_ms": 1794189781619,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189780614
      ],
      "observation": {
       "speech_raw": "published March 14, 2026",
@@ -310,14 +361,17 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794177826462,
-     "t_end_ms": 1794177827467,
+     "t_start_ms": 1794189781619,
+     "t_end_ms": 1794189782623,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189781619
      ],
      "observation": {
       "speech_raw": "The Riverside City Library will stay open until 9 p.m. on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which",
@@ -327,14 +381,17 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794177827467,
-     "t_end_ms": 1794177828472,
+     "t_start_ms": 1794189782623,
+     "t_end_ms": 1794189783627,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189782623
      ],
      "observation": {
       "speech_raw": "most respondents asked for later hours.",
@@ -344,14 +401,17 @@
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794177828472,
-     "t_end_ms": 1794177829476,
+     "t_start_ms": 1794189783627,
+     "t_end_ms": 1794189784632,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189783627
      ],
      "observation": {
       "speech_raw": "Front entrance of the Riverside City Library at dusk\n \u001d Graphic \u001e ",
@@ -361,14 +421,17 @@
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794177829476,
-     "t_end_ms": 1794177830480,
+     "t_start_ms": 1794189784632,
+     "t_end_ms": 1794189785637,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189784632
      ],
      "observation": {
       "speech_raw": " \u001d heading level 2 \u001e What changes",
@@ -378,14 +441,17 @@
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794177830480,
-     "t_end_ms": 1794177831485,
+     "t_start_ms": 1794189785637,
+     "t_end_ms": 1794189786641,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189785637
      ],
      "observation": {
       "speech_raw": "Membership costs $5.99 a month, e.g. for adults; children join free. Questions go to help@riverside-library.org \u2014 or call 555-0142. Attendance rose 3.5%",
@@ -395,14 +461,17 @@
     },
     {
      "step_id": "s23",
-     "t_start_ms": 1794177831485,
-     "t_end_ms": 1794177832489,
+     "t_start_ms": 1794189786641,
+     "t_end_ms": 1794189787645,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189786641
      ],
      "observation": {
       "speech_raw": "last year, and staff say they can't wait.",
@@ -412,14 +481,17 @@
     },
     {
      "step_id": "s24",
-     "t_start_ms": 1794177832489,
-     "t_end_ms": 1794177833494,
+     "t_start_ms": 1794189787645,
+     "t_end_ms": 1794189788749,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189787645
      ],
      "observation": {
       "speech_raw": "list of 3 items",
@@ -429,14 +501,17 @@
     },
     {
      "step_id": "s25",
-     "t_start_ms": 1794177833494,
-     "t_end_ms": 1794177834497,
+     "t_start_ms": 1794189788749,
+     "t_end_ms": 1794189789753,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189788749
      ],
      "observation": {
       "speech_raw": "\u2022 Weekday hours: 9 a.m. to 9 p.m.",
@@ -446,14 +521,17 @@
     },
     {
      "step_id": "s26",
-     "t_start_ms": 1794177834497,
-     "t_end_ms": 1794177835502,
+     "t_start_ms": 1794189789753,
+     "t_end_ms": 1794189790758,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189789753
      ],
      "observation": {
       "speech_raw": "\u2022 Weekend hours, which do not change:",
@@ -463,14 +541,17 @@
     },
     {
      "step_id": "s27",
-     "t_start_ms": 1794177835502,
-     "t_end_ms": 1794177836506,
+     "t_start_ms": 1794189790758,
+     "t_end_ms": 1794189791762,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189790758
      ],
      "observation": {
       "speech_raw": "list of 2 items nesting level 1",
@@ -480,14 +561,17 @@
     },
     {
      "step_id": "s28",
-     "t_start_ms": 1794177836506,
-     "t_end_ms": 1794177837509,
+     "t_start_ms": 1794189791762,
+     "t_end_ms": 1794189792766,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189791762
      ],
      "observation": {
       "speech_raw": "\u25e6 Saturday: 10 a.m. to 6 p.m.",
@@ -497,14 +581,17 @@
     },
     {
      "step_id": "s29",
-     "t_start_ms": 1794177837509,
-     "t_end_ms": 1794177838514,
+     "t_start_ms": 1794189792766,
+     "t_end_ms": 1794189793770,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189792766
      ],
      "observation": {
       "speech_raw": "\u25e6 Sunday: noon to 5 p.m.",
@@ -514,14 +601,17 @@
     },
     {
      "step_id": "s30",
-     "t_start_ms": 1794177838514,
-     "t_end_ms": 1794177839519,
+     "t_start_ms": 1794189793770,
+     "t_end_ms": 1794189794774,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189793770
      ],
      "observation": {
       "speech_raw": "list end nesting level 1",
@@ -531,14 +621,17 @@
     },
     {
      "step_id": "s31",
-     "t_start_ms": 1794177839519,
-     "t_end_ms": 1794177840523,
+     "t_start_ms": 1794189794774,
+     "t_end_ms": 1794189795779,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189794774
      ],
      "observation": {
       "speech_raw": "\u2022 New ",
@@ -548,14 +641,17 @@
     },
     {
      "step_id": "s32",
-     "t_start_ms": 1794177840523,
-     "t_end_ms": 1794177841527,
+     "t_start_ms": 1794189795779,
+     "t_end_ms": 1794189796784,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189795779
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e study rooms",
@@ -565,14 +661,17 @@
     },
     {
      "step_id": "s33",
-     "t_start_ms": 1794177841527,
-     "t_end_ms": 1794177842532,
+     "t_start_ms": 1794189796784,
+     "t_end_ms": 1794189797788,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189796784
      ],
      "observation": {
       "speech_raw": " open in May.",
@@ -582,14 +681,17 @@
     },
     {
      "step_id": "s34",
-     "t_start_ms": 1794177842532,
-     "t_end_ms": 1794177843536,
+     "t_start_ms": 1794189797788,
+     "t_end_ms": 1794189798793,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189797788
      ],
      "observation": {
       "speech_raw": "list end",
@@ -599,14 +701,17 @@
     },
     {
      "step_id": "s35",
-     "t_start_ms": 1794177843536,
-     "t_end_ms": 1794177844539,
+     "t_start_ms": 1794189798793,
+     "t_end_ms": 1794189799797,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189798793
      ],
      "observation": {
       "speech_raw": " \u001d heading level 2 \u001e Opening schedule",
@@ -616,14 +721,17 @@
     },
     {
      "step_id": "s36",
-     "t_start_ms": 1794177844539,
-     "t_end_ms": 1794177845544,
+     "t_start_ms": 1794189799797,
+     "t_end_ms": 1794189800801,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189799797
      ],
      "observation": {
       "speech_raw": "table with 3 columns and 3 rows",
@@ -633,14 +741,17 @@
     },
     {
      "step_id": "s37",
-     "t_start_ms": 1794177845544,
-     "t_end_ms": 1794177846549,
+     "t_start_ms": 1794189800802,
+     "t_end_ms": 1794189801806,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189800802
      ],
      "observation": {
       "speech_raw": "Branch hours after the change",
@@ -650,14 +761,17 @@
     },
     {
      "step_id": "s38",
-     "t_start_ms": 1794177846549,
-     "t_end_ms": 1794177847553,
+     "t_start_ms": 1794189801806,
+     "t_end_ms": 1794189802810,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189801806
      ],
      "observation": {
       "speech_raw": "Branch",
@@ -667,14 +781,17 @@
     },
     {
      "step_id": "s39",
-     "t_start_ms": 1794177847553,
-     "t_end_ms": 1794177848558,
+     "t_start_ms": 1794189802810,
+     "t_end_ms": 1794189803814,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189802810
      ],
      "observation": {
       "speech_raw": "Weekdays",
@@ -684,14 +801,17 @@
     },
     {
      "step_id": "s40",
-     "t_start_ms": 1794177848558,
-     "t_end_ms": 1794177849562,
+     "t_start_ms": 1794189803814,
+     "t_end_ms": 1794189804819,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189803814
      ],
      "observation": {
       "speech_raw": "Details",
@@ -701,14 +821,17 @@
     },
     {
      "step_id": "s41",
-     "t_start_ms": 1794177849562,
-     "t_end_ms": 1794177850566,
+     "t_start_ms": 1794189804819,
+     "t_end_ms": 1794189805824,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189804819
      ],
      "observation": {
       "speech_raw": "Central",
@@ -718,14 +841,17 @@
     },
     {
      "step_id": "s42",
-     "t_start_ms": 1794177850566,
-     "t_end_ms": 1794177851571,
+     "t_start_ms": 1794189805824,
+     "t_end_ms": 1794189806828,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189805824
      ],
      "observation": {
       "speech_raw": "9 a.m. to 9 p.m.",
@@ -735,14 +861,17 @@
     },
     {
      "step_id": "s43",
-     "t_start_ms": 1794177851571,
-     "t_end_ms": 1794177852575,
+     "t_start_ms": 1794189806828,
+     "t_end_ms": 1794189807832,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189806828
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Directions",
@@ -752,14 +881,17 @@
     },
     {
      "step_id": "s44",
-     "t_start_ms": 1794177852575,
-     "t_end_ms": 1794177853579,
+     "t_start_ms": 1794189807832,
+     "t_end_ms": 1794189808835,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189807832
      ],
      "observation": {
       "speech_raw": "Northside",
@@ -769,14 +901,17 @@
     },
     {
      "step_id": "s45",
-     "t_start_ms": 1794177853579,
-     "t_end_ms": 1794177854584,
+     "t_start_ms": 1794189808835,
+     "t_end_ms": 1794189809839,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189808835
      ],
      "observation": {
       "speech_raw": "10 a.m. to 8 p.m.",
@@ -786,14 +921,17 @@
     },
     {
      "step_id": "s46",
-     "t_start_ms": 1794177854584,
-     "t_end_ms": 1794177855587,
+     "t_start_ms": 1794189809839,
+     "t_end_ms": 1794189810844,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189809839
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Directions",
@@ -803,14 +941,17 @@
     },
     {
      "step_id": "s47",
-     "t_start_ms": 1794177855587,
-     "t_end_ms": 1794177856591,
+     "t_start_ms": 1794189810844,
+     "t_end_ms": 1794189811847,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189810844
      ],
      "observation": {
       "speech_raw": "table end",
@@ -820,14 +961,17 @@
     },
     {
      "step_id": "s48",
-     "t_start_ms": 1794177856591,
-     "t_end_ms": 1794177857697,
+     "t_start_ms": 1794189811847,
+     "t_end_ms": 1794189812852,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189811847
      ],
      "observation": {
       "speech_raw": " \u001d heading level 3 \u001e What readers said",
@@ -837,14 +981,17 @@
     },
     {
      "step_id": "s49",
-     "t_start_ms": 1794177857697,
-     "t_end_ms": 1794177858701,
+     "t_start_ms": 1794189812852,
+     "t_end_ms": 1794189813856,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189812852
      ],
      "observation": {
       "speech_raw": "block quote",
@@ -854,14 +1001,17 @@
     },
     {
      "step_id": "s50",
-     "t_start_ms": 1794177858701,
-     "t_end_ms": 1794177859705,
+     "t_start_ms": 1794189813856,
+     "t_end_ms": 1794189814860,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189813856
      ],
      "observation": {
       "speech_raw": "Finally, I can study after work.",
@@ -871,14 +1021,17 @@
     },
     {
      "step_id": "s51",
-     "t_start_ms": 1794177859705,
-     "t_end_ms": 1794177860710,
+     "t_start_ms": 1794189814860,
+     "t_end_ms": 1794189815864,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189814860
      ],
      "observation": {
       "speech_raw": "block quote end",
@@ -888,14 +1041,17 @@
     },
     {
      "step_id": "s52",
-     "t_start_ms": 1794177860710,
-     "t_end_ms": 1794177861714,
+     "t_start_ms": 1794189815864,
+     "t_end_ms": 1794189816867,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189815864
      ],
      "observation": {
       "speech_raw": "The library board will review attendance in the fall. A long-standing complaint among students and working parents was that the reading rooms closed before",
@@ -905,14 +1061,17 @@
     },
     {
      "step_id": "s53",
-     "t_start_ms": 1794177861714,
-     "t_end_ms": 1794177862718,
+     "t_start_ms": 1794189816867,
+     "t_end_ms": 1794189817871,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189816867
      ],
      "observation": {
       "speech_raw": "most people finished their day, so the extended schedule is intended to make the collections, the public computers, and the quiet study spaces available",
@@ -922,14 +1081,17 @@
     },
     {
      "step_id": "s54",
-     "t_start_ms": 1794177862718,
-     "t_end_ms": 1794177863722,
+     "t_start_ms": 1794189817871,
+     "t_end_ms": 1794189818875,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189817871
      ],
      "observation": {
       "speech_raw": "at the times when the community actually needs them, according to the library director.",
@@ -939,14 +1101,17 @@
     },
     {
      "step_id": "s55",
-     "t_start_ms": 1794177863722,
-     "t_end_ms": 1794177864726,
+     "t_start_ms": 1794189818875,
+     "t_end_ms": 1794189819880,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189818875
      ],
      "observation": {
       "speech_raw": "list of 3 items",
@@ -956,14 +1121,17 @@
     },
     {
      "step_id": "s56",
-     "t_start_ms": 1794177864726,
-     "t_end_ms": 1794177865730,
+     "t_start_ms": 1794189819880,
+     "t_end_ms": 1794189820885,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189819880
      ],
      "observation": {
       "speech_raw": "1. Board vote in March",
@@ -973,14 +1141,17 @@
     },
     {
      "step_id": "s57",
-     "t_start_ms": 1794177865730,
-     "t_end_ms": 1794177866734,
+     "t_start_ms": 1794189820885,
+     "t_end_ms": 1794189821888,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189820885
      ],
      "observation": {
       "speech_raw": "2. Hiring in April",
@@ -990,14 +1161,17 @@
     },
     {
      "step_id": "s58",
-     "t_start_ms": 1794177866734,
-     "t_end_ms": 1794177867738,
+     "t_start_ms": 1794189821888,
+     "t_end_ms": 1794189822892,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189821888
      ],
      "observation": {
       "speech_raw": "3. Review in October",
@@ -1007,14 +1181,17 @@
     },
     {
      "step_id": "s59",
-     "t_start_ms": 1794177867738,
-     "t_end_ms": 1794177868742,
+     "t_start_ms": 1794189822892,
+     "t_end_ms": 1794189823896,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189822892
      ],
      "observation": {
       "speech_raw": "list end",
@@ -1024,14 +1201,17 @@
     },
     {
      "step_id": "s60",
-     "t_start_ms": 1794177868742,
-     "t_end_ms": 1794177869746,
+     "t_start_ms": 1794189823896,
+     "t_end_ms": 1794189824901,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189823896
      ],
      "observation": {
       "speech_raw": "article end",
@@ -1041,14 +1221,17 @@
     },
     {
      "step_id": "s61",
-     "t_start_ms": 1794177869746,
-     "t_end_ms": 1794177870751,
+     "t_start_ms": 1794189824901,
+     "t_end_ms": 1794189825905,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189824901
      ],
      "observation": {
       "speech_raw": "main region end",
@@ -1058,14 +1241,17 @@
     },
     {
      "step_id": "s62",
-     "t_start_ms": 1794177870751,
-     "t_end_ms": 1794177871755,
+     "t_start_ms": 1794189825905,
+     "t_end_ms": 1794189826909,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189825905
      ],
      "observation": {
       "speech_raw": "Related stories complementary information",
@@ -1075,14 +1261,17 @@
     },
     {
      "step_id": "s63",
-     "t_start_ms": 1794177871755,
-     "t_end_ms": 1794177872760,
+     "t_start_ms": 1794189826909,
+     "t_end_ms": 1794189827913,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189826909
      ],
      "observation": {
       "speech_raw": " \u001d heading level 2 \u001e Related stories",
@@ -1092,14 +1281,17 @@
     },
     {
      "step_id": "s64",
-     "t_start_ms": 1794177872760,
-     "t_end_ms": 1794177873764,
+     "t_start_ms": 1794189827913,
+     "t_end_ms": 1794189828918,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189827913
      ],
      "observation": {
       "speech_raw": "list of 2 items",
@@ -1109,14 +1301,17 @@
     },
     {
      "step_id": "s65",
-     "t_start_ms": 1794177873764,
-     "t_end_ms": 1794177874768,
+     "t_start_ms": 1794189828918,
+     "t_end_ms": 1794189829922,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189828918
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Council approves library budget",
@@ -1126,14 +1321,17 @@
     },
     {
      "step_id": "s66",
-     "t_start_ms": 1794177874768,
-     "t_end_ms": 1794177875773,
+     "t_start_ms": 1794189829923,
+     "t_end_ms": 1794189830926,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189829923
      ],
      "observation": {
       "speech_raw": "\u2022 \u001d same page link \u001e Spring book fair returns",
@@ -1143,14 +1341,17 @@
     },
     {
      "step_id": "s67",
-     "t_start_ms": 1794177875773,
-     "t_end_ms": 1794177876778,
+     "t_start_ms": 1794189830926,
+     "t_end_ms": 1794189831930,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189830926
      ],
      "observation": {
       "speech_raw": "list end",
@@ -1160,14 +1361,17 @@
     },
     {
      "step_id": "s68",
-     "t_start_ms": 1794177876778,
-     "t_end_ms": 1794177877782,
+     "t_start_ms": 1794189831930,
+     "t_end_ms": 1794189832935,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189831930
      ],
      "observation": {
       "speech_raw": "Related stories complementary information end",
@@ -1177,14 +1381,17 @@
     },
     {
      "step_id": "s69",
-     "t_start_ms": 1794177877782,
-     "t_end_ms": 1794177878785,
+     "t_start_ms": 1794189832935,
+     "t_end_ms": 1794189833939,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189832935
      ],
      "observation": {
       "speech_raw": "content information",
@@ -1194,14 +1401,17 @@
     },
     {
      "step_id": "s70",
-     "t_start_ms": 1794177878785,
-     "t_end_ms": 1794177879790,
+     "t_start_ms": 1794189833939,
+     "t_end_ms": 1794189834944,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189833939
      ],
      "observation": {
       "speech_raw": "\u00a9 2026 Riverside Gazette. ",
@@ -1211,14 +1421,17 @@
     },
     {
      "step_id": "s71",
-     "t_start_ms": 1794177879790,
-     "t_end_ms": 1794177880794,
+     "t_start_ms": 1794189834944,
+     "t_end_ms": 1794189835947,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189834944
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Contact us",
@@ -1228,14 +1441,17 @@
     },
     {
      "step_id": "s72",
-     "t_start_ms": 1794177880794,
-     "t_end_ms": 1794177881798,
+     "t_start_ms": 1794189835947,
+     "t_end_ms": 1794189836951,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189835947
      ],
      "observation": {
       "speech_raw": "content information end",
@@ -1245,14 +1461,17 @@
     },
     {
      "step_id": "s73",
-     "t_start_ms": 1794177881798,
-     "t_end_ms": 1794177882803,
+     "t_start_ms": 1794189836951,
+     "t_end_ms": 1794189837956,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189836951
      ],
      "observation": {
       "speech_raw": "content information end",
@@ -1262,14 +1481,17 @@
     },
     {
      "step_id": "s74",
-     "t_start_ms": 1794177882803,
-     "t_end_ms": 1794177883807,
+     "t_start_ms": 1794189837956,
+     "t_end_ms": 1794189839061,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794189837956
      ],
      "observation": {
       "speech_raw": "content information end",

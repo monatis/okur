@@ -6,7 +6,7 @@
   "web_verbosity": null,
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "12447157"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794177604116
+     "t_ms": 1794189555547
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794177605745,
-     "t_end_ms": 1794177606749,
+     "t_start_ms": 1794189558262,
+     "t_end_ms": 1794189559266,
      "action": {
       "type": "jaws_script",
       "command": "SayAll"
      },
      "keys": [
       "Insert+Down"
+     ],
+     "key_times": [
+      1794189558262
      ],
      "observation": {
       "speech_raw": "Document Reading Reference Fixture\n \u001d heading level 1 \u001e The Accessibility Engine Specification\nThe screen reader engine parses the document object model into a clean virtual buffer.\nEngine components operate deterministically across synthetic speech pipelines. Speed and accuracy remain paramount.\nRust provides memory safety without garbage collection latency. This ensures predictable audio delivery.\ndelivery",

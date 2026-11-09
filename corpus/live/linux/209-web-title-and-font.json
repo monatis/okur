@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "aac6f125"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794182618957
+     "t_ms": 1794192676020
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794182620322,
-     "t_end_ms": 1794182621326,
+     "t_start_ms": 1794192677378,
+     "t_end_ms": 1794192678382,
      "action": {
       "type": "key",
       "command": "Insert+T"
      },
      "keys": [
       "Insert+T"
+     ],
+     "key_times": [
+      1794192677378
      ],
      "observation": {
       "speech_raw": "Title is\nCity Library Expands Evening Hours - Riverside Gazette - Google Chrome",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794182621326,
-     "t_end_ms": 1794182622329,
+     "t_start_ms": 1794192678383,
+     "t_end_ms": 1794192679387,
      "action": {
       "type": "key",
       "command": "H"
      },
      "keys": [
       "H"
+     ],
+     "key_times": [
+      1794192678383
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours\n \u001d heading level 1 \u001e",
@@ -55,14 +61,17 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794182622329,
-     "t_end_ms": 1794182623334,
+     "t_start_ms": 1794192679387,
+     "t_end_ms": 1794192680391,
      "action": {
       "type": "key",
       "command": "Insert+F"
      },
      "keys": [
       "Insert+F"
+     ],
+     "key_times": [
+      1794192679387
      ],
      "observation": {
       "speech_raw": "Font is bold  Liberation Serif 24 point",
@@ -72,14 +81,17 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794182623334,
-     "t_end_ms": 1794182624339,
+     "t_start_ms": 1794192680391,
+     "t_end_ms": 1794192681395,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794192680391
      ],
      "observation": {
       "speech_raw": "By ",
@@ -89,14 +101,17 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794182624339,
-     "t_end_ms": 1794182625343,
+     "t_start_ms": 1794192681395,
+     "t_end_ms": 1794192682400,
      "action": {
       "type": "key",
       "command": "Insert+F"
      },
      "keys": [
       "Insert+F"
+     ],
+     "key_times": [
+      1794192681395
      ],
      "observation": {
       "speech_raw": "Font is Liberation Serif 12 point",
@@ -106,14 +121,17 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794182625343,
-     "t_end_ms": 1794182626348,
+     "t_start_ms": 1794192682400,
+     "t_end_ms": 1794192683405,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794192682400
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Maria Lopez,",
@@ -123,25 +141,30 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794182626348,
-     "t_end_ms": 1794182627353,
+     "t_start_ms": 1794192683405,
+     "t_end_ms": 1794192684533,
      "action": {
       "type": "key",
       "command": "Insert+F"
      },
      "keys": [
+      "Insert+F",
       "Insert+F"
      ],
+     "key_times": [
+      1794192683405,
+      1794192683527
+     ],
      "observation": {
-      "speech_raw": "Font is underline  Liberation Serif 12 point",
+      "speech_raw": "Font is underline  Liberation Serif 12 point\nFont information:\nunderline  Liberation Serif 12 point\n\u001d Link \u001e List Okur Hot Keys\nPress ESCAPE to close this message.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794182627353,
-     "t_end_ms": 1794182628358,
+     "t_start_ms": 1794192684533,
+     "t_end_ms": 1794192685537,
      "action": {
       "type": "key",
       "command": "Down"
@@ -149,16 +172,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794192684533
+     ],
      "observation": {
-      "speech_raw": "published March 14, 2026",
+      "speech_raw": "Press ESCAPE to close this message.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794182628358,
-     "t_end_ms": 1794182629462,
+     "t_start_ms": 1794192685537,
+     "t_end_ms": 1794192686541,
      "action": {
       "type": "key",
       "command": "Down"
@@ -166,16 +192,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794192685537
+     ],
      "observation": {
-      "speech_raw": "The Riverside City Library will stay open until 9 p.m. on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which",
+      "speech_raw": "Press ESCAPE to close this message.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794182629462,
-     "t_end_ms": 1794182630466,
+     "t_start_ms": 1794192686541,
+     "t_end_ms": 1794192687545,
      "action": {
       "type": "key",
       "command": "Down"
@@ -183,16 +212,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794192686541
+     ],
      "observation": {
-      "speech_raw": "most respondents asked for later hours.",
+      "speech_raw": "Press ESCAPE to close this message.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794182630466,
-     "t_end_ms": 1794182631471,
+     "t_start_ms": 1794192687545,
+     "t_end_ms": 1794192688549,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -200,22 +232,28 @@
      "keys": [
       "Escape"
      ],
+     "key_times": [
+      1794192687545
+     ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": " \u001d same page link \u001e Maria Lopez,",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794182631471,
-     "t_end_ms": 1794182632476,
+     "t_start_ms": 1794192688549,
+     "t_end_ms": 1794192689554,
      "action": {
       "type": "key",
       "command": "Insert+F12"
      },
      "keys": [
       "Insert+F12"
+     ],
+     "key_times": [
+      1794192688549
      ],
      "observation": {
       "speech_raw": "",

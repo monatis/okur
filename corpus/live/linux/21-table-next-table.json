@@ -6,7 +6,7 @@
   "web_verbosity": null,
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "12447157"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794178873663
+     "t_ms": 1794192712193
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794178875027,
-     "t_end_ms": 1794178876031,
+     "t_start_ms": 1794192713553,
+     "t_end_ms": 1794192714556,
      "action": {
       "type": "jaws_script",
       "command": "MoveToNextTable"
      },
      "keys": [
       "T"
+     ],
+     "key_times": [
+      1794192713553
      ],
      "observation": {
       "speech_raw": "table with 4 columns and 4 rows\nQ3 Financial Summary Table\nColumn 1, Row 1\nQuarter",

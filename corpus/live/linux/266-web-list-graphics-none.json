@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "12447157"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,24 +15,27 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794179060188
+     "t_ms": 1794193338465
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794179060548
+     "t_ms": 1794193338826
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794179061852,
-     "t_end_ms": 1794179062858,
+     "t_start_ms": 1794193340131,
+     "t_end_ms": 1794193341137,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+G"
      },
      "keys": [
       "Ctrl+Insert+G"
+     ],
+     "key_times": [
+      1794193340131
      ],
      "observation": {
       "speech_raw": "no graphics were found",
@@ -42,14 +45,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794179062858,
-     "t_end_ms": 1794179063863,
+     "t_start_ms": 1794193341137,
+     "t_end_ms": 1794193342141,
      "action": {
       "type": "key",
       "command": "Escape"
      },
      "keys": [
       "Escape"
+     ],
+     "key_times": [
+      1794193341137
      ],
      "observation": {
       "speech_raw": "",

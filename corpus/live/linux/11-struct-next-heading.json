@@ -6,7 +6,7 @@
   "web_verbosity": null,
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "12447157"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794178303561
+     "t_ms": 1794190259548
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794178304926,
-     "t_end_ms": 1794178305929,
+     "t_start_ms": 1794190260911,
+     "t_end_ms": 1794190261915,
      "action": {
       "type": "jaws_script",
       "command": "MoveToNextHeading"
      },
      "keys": [
       "H"
+     ],
+     "key_times": [
+      1794190260911
      ],
      "observation": {
       "speech_raw": "System Documentation\n \u001d heading level 1 \u001e",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794178305929,
-     "t_end_ms": 1794178306934,
+     "t_start_ms": 1794190261915,
+     "t_end_ms": 1794190262917,
      "action": {
       "type": "jaws_script",
       "command": "MoveToNextHeading"
      },
      "keys": [
       "H"
+     ],
+     "key_times": [
+      1794190261915
      ],
      "observation": {
       "speech_raw": "Section Overview\n \u001d heading level 2 \u001e",

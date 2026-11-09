@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "aac6f125"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794180824674
+     "t_ms": 1794190464325
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794180826036,
-     "t_end_ms": 1794180827139,
+     "t_start_ms": 1794190465691,
+     "t_end_ms": 1794190466796,
      "action": {
       "type": "key",
       "command": "Tab"
      },
      "keys": [
       "Tab"
+     ],
+     "key_times": [
+      1794190465691
      ],
      "observation": {
       "speech_raw": "Non-modal Dialog\nOpen settings  \u001d Button \u001e \nTo activate press Enter.",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794180827139,
-     "t_end_ms": 1794180828244,
+     "t_start_ms": 1794190466796,
+     "t_end_ms": 1794190467899,
      "action": {
       "type": "key",
       "command": "Tab"
      },
      "keys": [
       "Tab"
+     ],
+     "key_times": [
+      1794190466796
      ],
      "observation": {
       "speech_raw": "Settings \u001d dialog \u001e \nChoose your options.\nSave  \u001d Button \u001e \nTo activate press Enter.",
@@ -55,14 +61,17 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794180828244,
-     "t_end_ms": 1794180829248,
+     "t_start_ms": 1794190467899,
+     "t_end_ms": 1794190468905,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
      },
      "keys": [
       "Ctrl+Home"
+     ],
+     "key_times": [
+      1794190467899
      ],
      "observation": {
       "speech_raw": " \u001d heading level 2 \u001e Settings",
@@ -72,14 +81,17 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794180829248,
-     "t_end_ms": 1794180830252,
+     "t_start_ms": 1794190468905,
+     "t_end_ms": 1794190469908,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794190468905
      ],
      "observation": {
       "speech_raw": "Choose your options.",
@@ -89,14 +101,17 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794180830252,
-     "t_end_ms": 1794180831256,
+     "t_start_ms": 1794190469908,
+     "t_end_ms": 1794190470913,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794190469908
      ],
      "observation": {
       "speech_raw": "Save \u001d Button \u001e ",
@@ -106,14 +121,17 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794180831256,
-     "t_end_ms": 1794180832261,
+     "t_start_ms": 1794190470913,
+     "t_end_ms": 1794190471919,
      "action": {
       "type": "key",
       "command": "Ctrl+End"
      },
      "keys": [
       "Ctrl+End"
+     ],
+     "key_times": [
+      1794190470913
      ],
      "observation": {
       "speech_raw": "Close \u001d Button \u001e ",
@@ -123,14 +141,17 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794180832261,
-     "t_end_ms": 1794180833266,
+     "t_start_ms": 1794190471919,
+     "t_end_ms": 1794190472924,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794190471919
      ],
      "observation": {
       "speech_raw": "Close \u001d Button \u001e ",
@@ -140,14 +161,17 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794180833266,
-     "t_end_ms": 1794180834270,
+     "t_start_ms": 1794190472924,
+     "t_end_ms": 1794190473928,
      "action": {
       "type": "key",
       "command": "Up"
      },
      "keys": [
       "Up"
+     ],
+     "key_times": [
+      1794190472924
      ],
      "observation": {
       "speech_raw": "Save \u001d Button \u001e ",
@@ -157,14 +181,17 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794180834270,
-     "t_end_ms": 1794180835275,
+     "t_start_ms": 1794190473928,
+     "t_end_ms": 1794190474932,
      "action": {
       "type": "key",
       "command": "H"
      },
      "keys": [
       "H"
+     ],
+     "key_times": [
+      1794190473928
      ],
      "observation": {
       "speech_raw": "wrapping to top\nSettings\n \u001d heading level 2 \u001e",
@@ -174,14 +201,17 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794180835275,
-     "t_end_ms": 1794180836281,
+     "t_start_ms": 1794190474932,
+     "t_end_ms": 1794190475937,
      "action": {
       "type": "key",
       "command": "Shift+H"
      },
      "keys": [
       "Shift+H"
+     ],
+     "key_times": [
+      1794190474932
      ],
      "observation": {
       "speech_raw": "wrapping to bottom\nSettings\n \u001d heading level 2 \u001e",
@@ -191,14 +221,17 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794180836281,
-     "t_end_ms": 1794180837386,
+     "t_start_ms": 1794190475937,
+     "t_end_ms": 1794190477042,
      "action": {
       "type": "key",
       "command": "Shift+Tab"
      },
      "keys": [
       "Shift+Tab"
+     ],
+     "key_times": [
+      1794190475937
      ],
      "observation": {
       "speech_raw": "Open settings  \u001d Button \u001e \nTo activate press Enter.",
@@ -208,14 +241,17 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794180837386,
-     "t_end_ms": 1794180838392,
+     "t_start_ms": 1794190477042,
+     "t_end_ms": 1794190478046,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
      },
      "keys": [
       "Ctrl+Home"
+     ],
+     "key_times": [
+      1794190477042
      ],
      "observation": {
       "speech_raw": "Non-modal Dialog",
@@ -225,14 +261,17 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794180838392,
-     "t_end_ms": 1794180839397,
+     "t_start_ms": 1794190478047,
+     "t_end_ms": 1794190479051,
      "action": {
       "type": "key",
       "command": "Ctrl+End"
      },
      "keys": [
       "Ctrl+End"
+     ],
+     "key_times": [
+      1794190478047
      ],
      "observation": {
       "speech_raw": "main region end",

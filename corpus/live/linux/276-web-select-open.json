@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "12447157"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794179310693
+     "t_ms": 1794193589180
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794179312057,
-     "t_end_ms": 1794179313060,
+     "t_start_ms": 1794193590539,
+     "t_end_ms": 1794193591543,
      "action": {
       "type": "key",
       "command": "C"
      },
      "keys": [
       "C"
+     ],
+     "key_times": [
+      1794193590539
      ],
      "observation": {
       "speech_raw": "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside",
@@ -38,8 +41,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794179313060,
-     "t_end_ms": 1794179314365,
+     "t_start_ms": 1794193591543,
+     "t_end_ms": 1794193592646,
      "action": {
       "type": "key",
       "command": "Space"
@@ -47,22 +50,28 @@
      "keys": [
       "Space"
      ],
+     "key_times": [
+      1794193591543
+     ],
      "observation": {
-      "speech_raw": "Create Your Account - Riverside Library\nHome branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside\nTo change the selection use the Arrow keys.\n  \u001d list \u001e \nwith 3 items\nNorthside\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Create Your Account - Riverside Library\n \u001d MainRegion \u001e \n \u001d FormRegion \u001e\n  \u001d list \u001e \nwith 3 items\nNorthside\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794179314365,
-     "t_end_ms": 1794179315468,
+     "t_start_ms": 1794193592646,
+     "t_end_ms": 1794193593750,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794193592646
      ],
      "observation": {
       "speech_raw": "Eastgate\nTo move to an item press the Arrow keys.",
@@ -72,14 +81,17 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794179315468,
-     "t_end_ms": 1794179316474,
+     "t_start_ms": 1794193593750,
+     "t_end_ms": 1794193594754,
      "action": {
       "type": "key",
       "command": "Down"
      },
      "keys": [
       "Down"
+     ],
+     "key_times": [
+      1794193593750
      ],
      "observation": {
       "speech_raw": "",
@@ -89,14 +101,17 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794179316474,
-     "t_end_ms": 1794179317578,
+     "t_start_ms": 1794193594754,
+     "t_end_ms": 1794193595858,
      "action": {
       "type": "key",
       "command": "Up"
      },
      "keys": [
       "Up"
+     ],
+     "key_times": [
+      1794193594754
      ],
      "observation": {
       "speech_raw": "Northside\nTo move to an item press the Arrow keys.",
@@ -106,14 +121,17 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794179317578,
-     "t_end_ms": 1794179318783,
+     "t_start_ms": 1794193595858,
+     "t_end_ms": 1794193596962,
      "action": {
       "type": "key",
       "command": "Enter"
      },
      "keys": [
       "Enter"
+     ],
+     "key_times": [
+      1794193595858
      ],
      "observation": {
       "speech_raw": "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside\nTo change the selection use the Arrow keys.",
@@ -123,8 +141,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794179318783,
-     "t_end_ms": 1794179319888,
+     "t_start_ms": 1794193596962,
+     "t_end_ms": 1794193598067,
      "action": {
       "type": "key",
       "command": "Space"
@@ -132,22 +150,28 @@
      "keys": [
       "Space"
      ],
+     "key_times": [
+      1794193596962
+     ],
      "observation": {
-      "speech_raw": "  \u001d list \u001e \nwith 3 items\nNorthside\nTo move to an item press the Arrow keys.",
+      "speech_raw": " \u001dexpanded\u001e \n  \u001d list \u001e \nwith 3 items\nNorthside\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794179319888,
-     "t_end_ms": 1794179320892,
+     "t_start_ms": 1794193598067,
+     "t_end_ms": 1794193599072,
      "action": {
       "type": "key",
       "command": "Escape"
      },
      "keys": [
       "Escape"
+     ],
+     "key_times": [
+      1794193598067
      ],
      "observation": {
       "speech_raw": "virtual PC Cursor",
@@ -157,14 +181,17 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794179320892,
-     "t_end_ms": 1794179321897,
+     "t_start_ms": 1794193599072,
+     "t_end_ms": 1794193600077,
      "action": {
       "type": "key",
       "command": "Insert+Up"
      },
      "keys": [
       "Insert+Up"
+     ],
+     "key_times": [
+      1794193599072
      ],
      "observation": {
       "speech_raw": "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside",

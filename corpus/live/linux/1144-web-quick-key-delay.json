@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "aac6f125"
+  "commit": "fcd2601b"
  },
  "trials": [
   {
@@ -15,20 +15,23 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794180978348
+     "t_ms": 1794190660966
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794180979710,
-     "t_end_ms": 1794180980715,
+     "t_start_ms": 1794190662334,
+     "t_end_ms": 1794190663338,
      "action": {
       "type": "key",
       "command": "E"
      },
      "keys": [
       "E"
+     ],
+     "key_times": [
+      1794190662334
      ],
      "observation": {
       "speech_raw": "City \u001d Edit \u001e \nIzmir",
@@ -38,14 +41,17 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794180980715,
-     "t_end_ms": 1794180981718,
+     "t_start_ms": 1794190663338,
+     "t_end_ms": 1794190664341,
      "action": {
       "type": "key",
       "command": "X"
      },
      "keys": [
       "X"
+     ],
+     "key_times": [
+      1794190663338
      ],
      "observation": {
       "speech_raw": "wrapping to top\nSubscribe  \u001d check box \u001e   \u001dnot checked\u001e ",
@@ -55,14 +61,17 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794180981718,
-     "t_end_ms": 1794180982722,
+     "t_start_ms": 1794190664341,
+     "t_end_ms": 1794190665345,
      "action": {
       "type": "key",
       "command": "Escape"
      },
      "keys": [
       "Escape"
+     ],
+     "key_times": [
+      1794190664341
      ],
      "observation": {
       "speech_raw": "",
@@ -72,14 +81,17 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794180982722,
-     "t_end_ms": 1794180983727,
+     "t_start_ms": 1794190665345,
+     "t_end_ms": 1794190666349,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
      },
      "keys": [
       "Ctrl+Home"
+     ],
+     "key_times": [
+      1794190665345
      ],
      "observation": {
       "speech_raw": "Activation Fixture",
@@ -89,14 +101,17 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794180983727,
-     "t_end_ms": 1794180984732,
+     "t_start_ms": 1794190666349,
+     "t_end_ms": 1794190667353,
      "action": {
       "type": "key",
       "command": "E"
      },
      "keys": [
       "E"
+     ],
+     "key_times": [
+      1794190666349
      ],
      "observation": {
       "speech_raw": "City \u001d Edit \u001e \nIzmir",
@@ -106,8 +121,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794180984732,
-     "t_end_ms": 1794180985838,
+     "t_start_ms": 1794190667353,
+     "t_end_ms": 1794190668359,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -115,16 +130,19 @@
      "keys": [
       "Ctrl+Home"
      ],
+     "key_times": [
+      1794190667353
+     ],
      "observation": {
-      "speech_raw": "City \u001d Edit \u001e \nIzmir",
+      "speech_raw": "Activation Fixture",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794180985838,
-     "t_end_ms": 1794180986842,
+     "t_start_ms": 1794190668359,
+     "t_end_ms": 1794190669363,
      "action": {
       "type": "key",
       "command": "C"
@@ -132,16 +150,19 @@
      "keys": [
       "C"
      ],
+     "key_times": [
+      1794190668359
+     ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Color  \u001d Combo box \u001e   \u001dcollapsed\u001e \nRed",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794180986842,
-     "t_end_ms": 1794180987846,
+     "t_start_ms": 1794190669363,
+     "t_end_ms": 1794190670368,
      "action": {
       "type": "key",
       "command": "Down"
@@ -149,16 +170,19 @@
      "keys": [
       "Down"
      ],
+     "key_times": [
+      1794190669363
+     ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": " \u001d same page link \u001e Show status",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794180987846,
-     "t_end_ms": 1794180988850,
+     "t_start_ms": 1794190670368,
+     "t_end_ms": 1794190671372,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -166,22 +190,28 @@
      "keys": [
       "Escape"
      ],
+     "key_times": [
+      1794190670368
+     ],
      "observation": {
-      "speech_raw": "virtual PC Cursor",
+      "speech_raw": "",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794180988850,
-     "t_end_ms": 1794180989855,
+     "t_start_ms": 1794190671372,
+     "t_end_ms": 1794190672377,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
      },
      "keys": [
       "Ctrl+Home"
+     ],
+     "key_times": [
+      1794190671372
      ],
      "observation": {
       "speech_raw": "Activation Fixture",
@@ -191,14 +221,17 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794180989855,
-     "t_end_ms": 1794180990859,
+     "t_start_ms": 1794190672377,
+     "t_end_ms": 1794190673382,
      "action": {
       "type": "key",
       "command": "X"
      },
      "keys": [
       "X"
+     ],
+     "key_times": [
+      1794190672377
      ],
      "observation": {
       "speech_raw": "Subscribe  \u001d check box \u001e   \u001dnot checked\u001e ",
@@ -208,14 +241,17 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794180990859,
-     "t_end_ms": 1794180991863,
+     "t_start_ms": 1794190673382,
+     "t_end_ms": 1794190674386,
      "action": {
       "type": "key",
       "command": "X"
      },
      "keys": [
       "X"
+     ],
+     "key_times": [
+      1794190673382
      ],
      "observation": {
       "speech_raw": "Notify me  \u001d check box \u001e   \u001dnot checked\u001e ",
