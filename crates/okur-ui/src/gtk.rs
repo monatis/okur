@@ -424,6 +424,7 @@ impl Ui {
     fn show(ui: &Rc<Ui>, spec: DialogSpec) {
         if let Some(dialog) = ui.dialogs.borrow().get(&spec.id) {
             dialog.window.present();
+            tell_shown_when_active(&dialog.window, spec.id);
             return;
         }
         let id = spec.id;
@@ -551,6 +552,7 @@ impl Ui {
                 }
             }
         }
+        tell_shown_when_active(&window, id);
     }
 
     /// The dialog cancelled by the user: Okur told, the window gone.
@@ -643,6 +645,38 @@ fn kind(message: &ToUi) -> String {
 /// Presses the dialog's default button, as Enter on a list's item does in Windows' dialog: where
 /// the button is available, at once (a button's activate waits for its key to be let go). The
 /// window is held weakly: the list's handler holding it kept every closed dialog alive.
+/// Tells Okur that dialog `id` is shown with the keyboard in it, once its window is active (the
+/// window manager gives it the keyboard after `present`, in its own time) and its first focus
+/// placed (an idle after it, as the list's is): the keys Okur held since it asked for the dialog
+/// go to it then, not to the window before it.
+fn tell_shown_when_active(window: &gtk::Window, id: u32) {
+    let told = Rc::new(Cell::new(false));
+    let tell = {
+        let told = Rc::clone(&told);
+        move || {
+            if !told.replace(true) {
+                let _ = glib::idle_add_local_once(move || send(&FromUi::DialogShown { id }));
+            }
+        }
+    };
+    if window.is_active() {
+        tell();
+        return;
+    }
+    // Told once: the handler goes with it, a dialog brought forward again adding its own.
+    let handler: Rc<RefCell<Option<glib::SignalHandlerId>>> = Rc::default();
+    let id_kept = Rc::clone(&handler);
+    let connected = window.connect_is_active_notify(move |window| {
+        if window.is_active() {
+            tell();
+            if let Some(connected) = id_kept.borrow_mut().take() {
+                window.disconnect(connected);
+            }
+        }
+    });
+    *handler.borrow_mut() = Some(connected);
+}
+
 fn press_default(window: &glib::WeakRef<gtk::Window>) {
     let Some(window) = window.upgrade() else {
         return;

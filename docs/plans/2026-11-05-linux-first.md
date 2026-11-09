@@ -140,15 +140,18 @@ with no change to the `KeyboardHook` port:
   - The runner: `during` keys, JAWS's TypeKey and TypeString, a step's `quiet_ms` and `settle_max_ms`, and the lab's fixture path compared as old-pc's.
 - **Okur's own dialogs on Linux:** the GTK 4 renderer (5d0cd15c) builds and passes clippy and its tests in the lab. In `gtk2` the element lists run, and the arrows read Okur's GTK list ("Settings 2 of 15"). Open:
   - The dialog came 5.4 s after Insert+F7, its focus 7.7 s. okur-ui now uses GTK's cairo renderer (21546c2c); to measure.
-  - Keys pressed before the dialog's focus arrives go to the page (the first Down in 222).
+  - Keys pressed before the dialog's focus arrives went to the page (the first Down in 222). **Built (e78db0b3, 51547c3b):** a key pressed after a dialog is asked for and before its focus comes is held and pressed again in it, by its native code, in order; past 2 s it goes where the focus is. Its lab check is the research scenario `corpus/pending/1205` (S 30 ms after Insert+F7), run apart and never imported.
   - A GTK list item cost about 130 ms to read, up to three reads per arrow. The reads are now parallel (de428ec5); to measure.
   - The renderer's second increment: trees, tables, check lists, menus, the wizard, the main window, the viewer.
+- **Built since (2026-11-09, late):**
+  - Okur presses keys itself on Linux (XTest, f31824ee, 51547c3b): the laptop layout's reading commands in a text field (CapsLock+O's Down) and the keys held for a dialog. They wait for the release of a key the engine kept, whose grab sends X's every key to Okur; the grab reads them back as plain keys by XTEST's device. To check in the lab: CapsLock held, O down 300 ms, in a text field.
+  - Okur's own GTK dialogs are dialog boxes with their spec's default button (f4fd1c14): GTK 4 marks no button IS_DEFAULT; Insert+E said "Not in a dialog box".
+  - An alert inside a window (GTK's info bar) is part of it, not a window (b375bbfa).
+  - A dialog box's window is read within its containers and buttons, not its lists' items (a50440db).
 - **Known Linux gaps, not yet built:**
   - Alt+F on Chrome highlights no item on Linux, so Okur says the menu only at the first Down (Windows' Chrome highlights the first item as it opens).
   - A live region added after its page's read (finding 7 of the second review): since 90d63662 a page changing outside its regions is captured again, which finds a new region at its next capture; its first change before that is not said.
-  - Keys pressed between Okur's dialog asked for and its focus come go to the page (Insert+F7 then a letter at once is the page's quick key). The engine could hold them for the dialog.
   - A dialog box's box is read once per window (79a1208e): a box whose buttons or text change after (a wizard's page) keeps the first read.
-  - An alert inside a frame (GTK's info bar) is taken as the window, and its focus as one in a window behind (the fourth review, 9).
   - A GTK list's arrow costs up to three reads (its focus, the selection going, coming), about 70 ms each.
   - Chrome's tabs and address bar: after Escape in the address bar Linux's Chrome keeps its focus there, and Down reads the address (220/s9); after Ctrl+W, the closed tab's late load is announced as a page with no headings (220/s12). Both matched by saying nothing before.
   - After the Form Fields List moved into a text area, Escape went to Chrome live (228/s11) though the replay, with okur-ui's records, leaves forms mode as JAWS does: a debug line (f5c9f29d) names the application region if that is the cause.

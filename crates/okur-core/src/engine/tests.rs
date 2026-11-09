@@ -11247,10 +11247,27 @@ fn okur_ui_focus() -> FocusEvent {
     item
 }
 
-/// Insert+F7, then keys before the Links List has the focus: they are the list's, not the
-/// page's (L would have moved the virtual cursor to the page's list), pressed again in order,
-/// each with its modifiers, as the dialog's focus comes; the modifiers and the Okur key go on
-/// as ever.
+/// The id of the dialog `ui` was last asked to show.
+fn shown_dialog(ui: &crate::ui::RecordingUiHost) -> u32 {
+    ui.take()
+        .iter()
+        .rev()
+        .find_map(|m| match m {
+            crate::ui::ToUi::DialogShow { dialog } => Some(dialog.id),
+            _ => None,
+        })
+        .unwrap_or_default()
+}
+
+/// okur-ui's word that dialog `id` is shown with the keyboard in it.
+fn dialog_shown(id: u32) -> AccessibilityEvent {
+    AccessibilityEvent::Ui(crate::ui::FromUi::DialogShown { id })
+}
+
+/// Insert+F7, then keys before the Links List is up: they are the list's, not the page's (L
+/// would have moved the virtual cursor to the page's list), pressed again in order, each with
+/// its modifiers, as okur-ui says the dialog is shown; a focus in Okur's windows lets none go;
+/// the modifiers and the Okur key go on as ever.
 #[test]
 fn keys_pressed_before_a_dialogs_focus_are_held_for_it() {
     let (mut engine, ui, actions) = links_page_engine();
@@ -11266,9 +11283,8 @@ fn keys_pressed_before_a_dialogs_focus_are_held_for_it() {
         engine.handle_key_event(&key_at(Key::F(7), insert, 1_000)),
         KeyAction::Consume
     );
-    assert!(ui.take().iter().any(
-        |m| matches!(m, crate::ui::ToUi::DialogShow { dialog } if dialog.title == "Links List")
-    ));
+    let links = shown_dialog(&ui);
+    assert!(links > 0);
     let offset = engine.cursor.offset;
     // A modifier pressed alone goes on.
     assert_eq!(
@@ -11288,7 +11304,13 @@ fn keys_pressed_before_a_dialogs_focus_are_held_for_it() {
     }
     assert_eq!(engine.cursor.offset, offset);
     assert!(actions.take_pressed().is_empty());
+    // A focus in Okur's windows by the title may be the dialog's just closed: not its word.
     engine.handle_accessibility_event(&AccessibilityEvent::Focus(okur_ui_focus()));
+    assert!(actions.take_pressed().is_empty());
+    assert_eq!(
+        engine.handle_accessibility_event(&dialog_shown(links)),
+        None
+    );
     assert_eq!(
         actions.take_pressed(),
         [
@@ -11338,8 +11360,8 @@ fn keys_held_for_a_dialog_that_does_not_come_go_on() {
 }
 
 /// A second dialog asked for over the first keeps the keys held for the first; the first
-/// dialog's close and a late focus in another of Okur's windows let none go; the second
-/// dialog's focus lets them all go, in order.
+/// dialog's close and its word that it is shown let none go; the second dialog's lets them all
+/// go, in order, whether a key came after it was asked for or not.
 #[test]
 fn keys_held_wait_for_the_dialog_asked_for_last() {
     let (mut engine, ui, actions) = links_page_engine();
@@ -11348,39 +11370,33 @@ fn keys_held_wait_for_the_dialog_asked_for_last() {
         ..Modifiers::none()
     };
     engine.handle_key_event(&key_at(Key::F(7), insert, 1_000));
-    let first = ui
-        .take()
-        .iter()
-        .find_map(|m| match m {
-            crate::ui::ToUi::DialogShow { dialog } => Some(dialog.id),
-            _ => None,
-        })
-        .unwrap_or_default();
+    let first = shown_dialog(&ui);
     engine.handle_key_event(&key_at(Key::Alpha('A'), Modifiers::none(), 1_050));
     // Insert+F6, the Heading List, before the Links List is up.
     engine.handle_key_event(&key_at(Key::F(6), insert, 1_100));
-    let second = ui
-        .take()
-        .iter()
-        .find_map(|m| match m {
-            crate::ui::ToUi::DialogShow { dialog } => Some(dialog.title.clone()),
-            _ => None,
-        })
-        .unwrap_or_default();
-    assert_eq!(second, "Heading List");
+    let second = shown_dialog(&ui);
+    assert!(second > 0 && second != first);
     engine.handle_key_event(&key_at(Key::Alpha('B'), Modifiers::none(), 1_150));
     engine.handle_accessibility_event(&AccessibilityEvent::Ui(crate::ui::FromUi::DialogClosed {
         id: first,
     }));
-    engine.handle_accessibility_event(&AccessibilityEvent::Focus(okur_ui_focus()));
+    engine.handle_accessibility_event(&dialog_shown(first));
     assert!(actions.take_pressed().is_empty());
-    let mut heading = okur_ui_focus();
-    heading.window_title = Some("Heading List".into());
-    engine.handle_accessibility_event(&AccessibilityEvent::Focus(heading));
+    engine.handle_accessibility_event(&dialog_shown(second));
     assert_eq!(
         actions.take_pressed(),
         [vec![Key::Alpha('A')], vec![Key::Alpha('B')]]
     );
+    // No key after the second dialog was asked for: its word lets the keys held go too.
+    engine.handle_key_event(&key_at(Key::F(7), insert, 3_000));
+    let links = shown_dialog(&ui);
+    engine.handle_key_event(&key_at(Key::Alpha('C'), Modifiers::none(), 3_050));
+    engine.handle_key_event(&key_at(Key::F(6), insert, 3_100));
+    let headings = shown_dialog(&ui);
+    engine.handle_accessibility_event(&dialog_shown(links));
+    assert!(actions.take_pressed().is_empty());
+    engine.handle_accessibility_event(&dialog_shown(headings));
+    assert_eq!(actions.take_pressed(), [vec![Key::Alpha('C')]]);
 }
 
 /// A dialog asked for from one of Okur's own windows holds no key: the focus is already

@@ -4,10 +4,11 @@
 //! was the page's quick key, and the dialog's first Down moved the virtual cursor (the Linux
 //! lab's 222, the first Down). JAWS's lists, in its own process, are up before the next key.
 //!
-//! So a key pressed after a dialog was asked for, and before the focus came to it, is held,
-//! and pressed again, in order, as the dialog's focus comes (or the dialog tells what the user
-//! did in it): the platform sends it as the screen reader's own key, by its native code, and
-//! it reaches the dialog as typed. A dialog whose focus does not come within [`HOLD_MS`] lets
+//! So a key pressed after a dialog was asked for, and before the dialog was up, is held, and
+//! pressed again, in order, as okur-ui tells that the dialog is shown with the keyboard in it
+//! (`FromUi::DialogShown`, by the dialog's id: a focus by its title could be the one of the
+//! same dialog just closed), or tells what the user did in it: the platform sends it as the
+//! screen reader's own key, by its native code, and it reaches the dialog as typed. A dialog whose focus does not come within [`HOLD_MS`] lets
 //! the keys go where the focus is, the key that found the wait over after them: no key is lost
 //! or put out of order.
 
@@ -18,11 +19,10 @@ use crate::input::{Key, KeyAction, KeyEvent};
 /// is. Okur's dialogs take the focus within half a second on both platforms.
 const HOLD_MS: u64 = 2000;
 
-/// A dialog asked to show: its id and its title, as its window has it.
+/// A dialog asked to show, by its id.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub(super) struct AskedDialog {
     pub(super) id: u32,
-    pub(super) title: String,
 }
 
 /// The keys pressed while a dialog's focus is awaited, and until when they wait.
@@ -92,32 +92,35 @@ impl ScreenReaderEngine {
         Some(KeyAction::Consume)
     }
 
-    /// The dialog asked for is up: its window has the focus, or it told what the user did in
-    /// it. The keys held for it are pressed in it. Another of Okur's windows (the dialog just
-    /// closed, its late focus or its close) is not it.
+    /// okur-ui told that a dialog is up (shown, or the user did something in it): the keys
+    /// held for it, or for the dialog asked for last, are pressed in it. A dialog's close is
+    /// not it coming: the dialog just closed is not the one asked for again.
     pub(super) fn dialog_came(&mut self, event: &crate::AccessibilityEvent) {
-        let is = |dialog: &AskedDialog| match event {
-            crate::AccessibilityEvent::Focus(focus) => {
-                focus
-                    .app
-                    .as_deref()
-                    .map(crate::settings_layers::application_id)
-                    .is_some_and(|app| app == OKUR_WINDOWS)
-                    && focus.window_title.as_deref() == Some(dialog.title.as_str())
+        let id = match event {
+            crate::AccessibilityEvent::Ui(message)
+                if !matches!(message, crate::ui::FromUi::DialogClosed { .. }) =>
+            {
+                super::dialog_of(message)
             }
-            crate::AccessibilityEvent::Ui(message) => {
-                !matches!(message, crate::ui::FromUi::DialogClosed { .. })
-                    && super::dialog_of(message) == Some(dialog.id)
-            }
-            _ => false,
+            _ => None,
         };
-        if let Ok(mut asked) = self.dialog_asked.lock() {
-            if asked.as_ref().is_some_and(is) {
+        let Some(id) = id else {
+            return;
+        };
+        // A dialog asked for since the keys were held, with no key after it to take it: the
+        // keys wait for it, the dialog asked for last.
+        let asked = self.dialog_asked.lock().ok().and_then(|mut asked| {
+            let newest = asked.as_ref().map(|dialog| dialog.id);
+            if newest == Some(id) {
                 *asked = None;
             }
-        }
-        if self.held_for_dialog.as_ref().is_some_and(|h| is(&h.dialog)) {
-            self.let_held_keys_go("the dialog's focus came");
+            newest
+        });
+        let Some(held) = &self.held_for_dialog else {
+            return;
+        };
+        if asked.unwrap_or(held.dialog.id) == id {
+            self.let_held_keys_go("the dialog came");
         }
     }
 

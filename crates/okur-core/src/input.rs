@@ -102,7 +102,8 @@ pub struct KeyEvent {
     /// Whether Caps Lock was toggled on when the key was pressed, when the platform knows.
     pub caps_lock_on: Option<bool>,
     /// The platform's own code for the key, to press it again exactly as it came (Windows: the
-    /// virtual key, the scan code from bit 16, the extended flag at bit 31; X11: the keycode);
+    /// virtual key in its low byte, the scan code from bit 8, which a VK_PACKET's character
+    /// is, the extended flag at bit 31; X11: the keycode);
     /// 0 when unknown. A key held for one of Okur's dialogs is pressed again by it, in the
     /// layout the application has, whatever the key's place.
     pub native: u32,

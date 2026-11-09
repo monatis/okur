@@ -2082,8 +2082,13 @@ impl ScreenReaderEngine {
     pub fn handle_accessibility_event(&mut self, event: &AccessibilityEvent) -> Option<String> {
         self.sync_speech_mode();
         self.dialog_came(event);
-        if let AccessibilityEvent::Ui(crate::ui::FromUi::DialogClosed { id }) = event {
-            self.own_dialog_closed(*id);
+        match event {
+            AccessibilityEvent::Ui(crate::ui::FromUi::DialogClosed { id }) => {
+                self.own_dialog_closed(*id);
+            }
+            // Only the keys held for it wait on it.
+            AccessibilityEvent::Ui(crate::ui::FromUi::DialogShown { .. }) => return None,
+            _ => {}
         }
         // A focus in one of Okur's dialogs: in a dialog box, with its default button, where
         // the platform does not say so.
@@ -4431,7 +4436,8 @@ fn dialog_of(message: &crate::ui::FromUi) -> Option<u32> {
         | FromUi::DialogPressed { id, .. }
         | FromUi::DialogKey { id, .. }
         | FromUi::DialogMenuChosen { id, .. }
-        | FromUi::DialogClosed { id } => Some(*id),
+        | FromUi::DialogClosed { id }
+        | FromUi::DialogShown { id } => Some(*id),
         FromUi::ViewerDismissed | FromUi::MainMenuCommand { .. } => None,
     }
 }

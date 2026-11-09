@@ -388,6 +388,9 @@ pub enum FromUi {
     DialogPressed { id: u32, control: String },
     /// The dialog was cancelled (its Cancel button, Escape, its close box) and is gone.
     DialogClosed { id: u32 },
+    /// The dialog asked for is shown, its window in front with the keyboard in it: the keys
+    /// Okur held for it since it asked can be pressed in it.
+    DialogShown { id: u32 },
     /// One of the main window's menu items chosen, by its id; its closing, "exit".
     MainMenuCommand { id: String },
     /// A context menu's item chosen, by its index; none when it was closed without a choice.

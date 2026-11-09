@@ -339,6 +339,8 @@ impl DialogMirror {
         if self.file_open.is_some() {
             return Vec::new();
         }
+        // The dialog's first focus: okur-ui's word that it is shown, the keyboard in it.
+        let first = self.dialog.is_some() && !self.focus_traced;
         if self.dialog.is_some() {
             self.focus_traced = true;
         }
@@ -347,6 +349,9 @@ impl DialogMirror {
         };
         let name = focus.name.as_deref().map(plain).unwrap_or_default();
         let mut reports = Vec::new();
+        if first {
+            reports.push(FromUi::DialogShown { id: dialog.id });
+        }
         let focused = self.focused;
         for (index, control) in dialog.controls.iter_mut().enumerate() {
             // An unnamed field's change is the focused field's: a WPF edit is named only

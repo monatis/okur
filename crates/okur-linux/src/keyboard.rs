@@ -211,11 +211,19 @@ struct Pending {
     since: Instant,
 }
 
-/// How long a key Okur pressed is awaited back through the grab.
-const OWN_KEY_WAIT: Duration = Duration::from_millis(500);
+/// How long a key Okur pressed is awaited back through the grab, on Okur's clock as the hook
+/// reads the key: a hook kept waiting by the engine reads it late.
+const OWN_KEY_WAIT: Duration = Duration::from_secs(2);
 
 /// A key event Okur sends through XTest: a keycode, pressed (true) or released.
 type Stroke = (u8, bool);
+
+/// What waits for a kept key's release: a chord's key events, or keys held for a dialog,
+/// their modifiers taken as they are when they are sent.
+enum Waiting {
+    Strokes(Vec<Stroke>),
+    Again(Vec<KeyEvent>),
+}
 
 /// What the hook and the key sender share: the connection and keymap to press keys with, the
 /// keys Okur pressed awaited back, and the keys waiting for a kept key's release.
@@ -233,8 +241,11 @@ struct Keys {
     own: Vec<(u8, Instant)>,
     /// The grabbed key the engine kept, while its grab lasts: until its release.
     grab: Option<u8>,
-    /// The key events waiting for that release.
-    deferred: Vec<Stroke>,
+    /// What waits for that release.
+    deferred: Vec<Waiting>,
+    /// The keys down, by keycode, from the hook's raw events: a grab whose key is not down is
+    /// over, its release missed.
+    down: Vec<u8>,
 }
 
 type SharedKeys = Arc<Mutex<Keys>>;
@@ -245,16 +256,49 @@ fn lock(keys: &SharedKeys) -> std::sync::MutexGuard<'_, Keys> {
 }
 
 impl Keys {
-    /// Sends `strokes` now, or after the release of the key whose grab lasts.
-    fn send(&mut self, strokes: Vec<Stroke>) -> bool {
+    /// Sends `waiting` now, or after the release of the key whose grab lasts.
+    fn send(&mut self, waiting: Waiting) -> bool {
         if self.conn.is_none() {
             return false;
         }
+        if self.grab.is_some_and(|code| !self.down.contains(&code)) {
+            tracing::debug!("keyboard: a kept key's release missed: its grab taken as over");
+            self.grab_over();
+        }
         if self.grab.is_some() {
-            self.deferred.extend(strokes);
+            self.deferred.push(waiting);
             return true;
         }
-        self.send_now(&strokes)
+        self.send_waiting(waiting)
+    }
+
+    /// The kept key's grab over: what waited for it sent, in order.
+    fn grab_over(&mut self) -> bool {
+        self.grab = None;
+        let deferred = std::mem::take(&mut self.deferred);
+        deferred
+            .into_iter()
+            .map(|waiting| self.send_waiting(waiting))
+            .filter(|sent| !sent)
+            .count()
+            == 0
+    }
+
+    /// Sends a chord's key events, or the keys held for a dialog with the modifiers down now.
+    fn send_waiting(&mut self, waiting: Waiting) -> bool {
+        match waiting {
+            Waiting::Strokes(strokes) => self.send_now(&strokes),
+            Waiting::Again(events) => {
+                let Some((strokes, missing)) = self
+                    .keymap
+                    .as_ref()
+                    .map(|keymap| strokes_again(keymap, self.modifiers_down, &events))
+                else {
+                    return false;
+                };
+                self.send_now(&strokes) && missing == 0
+            }
+        }
     }
 
     /// Sends `strokes` through XTest, each key pressed noted first: the grab may read it back
@@ -465,22 +509,14 @@ impl X11KeySender {
             .map(|code| (*code, true))
             .chain(codes.iter().rev().map(|code| (*code, false)))
             .collect();
-        keys.send(strokes)
+        keys.send(Waiting::Strokes(strokes))
     }
 
     /// Presses `events` again, in order, each by its keycode as it came: the Shift, Control,
     /// Alt and Super keys it was pressed with that are not down now pressed around it, those
     /// down now that it was pressed without released around it. False when one has no keycode.
     pub fn press_again(&self, events: &[KeyEvent]) -> bool {
-        let mut keys = lock(&self.keys);
-        let Some((strokes, missing)) = keys
-            .keymap
-            .as_ref()
-            .map(|keymap| strokes_again(keymap, keys.modifiers_down, events))
-        else {
-            return false;
-        };
-        keys.send(strokes) && missing == 0
+        lock(&self.keys).send(Waiting::Again(events.to_vec()))
     }
 }
 
@@ -507,12 +543,13 @@ fn strokes_again(keymap: &Keymap, down: u32, events: &[KeyEvent]) -> (Vec<Stroke
             (m.win, MOD4, Key::Windows),
         ]
         .into_iter()
-        .filter(|(wanted, bit, _)| *wanted != (down & bit != 0))
-        .filter_map(|(wanted, _, key)| keymap.code_of(key).map(|code| (code, wanted)))
+        .filter(|(wanted, bit, _)| *wanted && down & bit == 0)
+        .filter_map(|(_, _, key)| keymap.code_of(key))
+        .map(|code| (code, true))
         .collect();
         strokes.extend(around.iter().copied());
         strokes.extend([(code, true), (code, false)]);
-        strokes.extend(around.iter().rev().map(|&(code, wanted)| (code, !wanted)));
+        strokes.extend(around.iter().rev().map(|&(code, _)| (code, false)));
     }
     (strokes, missing)
 }
@@ -637,6 +674,7 @@ impl KeyboardHook for X11KeyboardHook {
                         .into_iter()
                         .find(|info| {
                             info.type_ == xinput::DeviceType::SLAVE_KEYBOARD
+                                && info.attachment == keyboard
                                 && info.name.windows(5).any(|w| w == b"XTEST")
                         })
                         .map(|info| info.deviceid)
@@ -645,6 +683,9 @@ impl KeyboardHook for X11KeyboardHook {
                 tracing::warn!("keyboard: no XTEST: Okur cannot press keys itself");
             }
             let mut keys = lock(&self.keys);
+            // Nothing kept from a run before: a key then down, never seen up, would hold
+            // every key Okur presses.
+            *keys = Keys::default();
             keys.conn = xtest.then(|| Arc::clone(&conn));
             keys.keymap = Some(keymap.clone());
             keys.xtest_device = xtest_device;
@@ -880,10 +921,7 @@ impl Run<'_> {
 
     /// The kept key's grab over (its release, or a key passed on): the keys waiting sent.
     fn grab_over(&self) {
-        let mut keys = lock(&self.keys);
-        keys.grab = None;
-        let deferred = std::mem::take(&mut keys.deferred);
-        if !deferred.is_empty() && !keys.send_now(&deferred) {
+        if !lock(&self.keys).grab_over() {
             tracing::warn!("keyboard: keys Okur pressed could not be sent");
         }
     }
@@ -983,6 +1021,12 @@ impl Run<'_> {
         // presses while it is being decided wait for it.
         let started = {
             let mut keys = lock(&self.keys);
+            if !keys.down.contains(&code) {
+                keys.down.push(code);
+            }
+            if keys.grab.is_some_and(|kept| !keys.down.contains(&kept)) && !keys.grab_over() {
+                tracing::warn!("keyboard: keys Okur pressed could not be sent");
+            }
             let started = keys.grab.is_none();
             if started {
                 keys.grab = Some(code);
@@ -1043,8 +1087,18 @@ impl Run<'_> {
             }
             lock(&self.keys).modifiers_down = self.modifiers_down;
         }
-        // The kept key's release ends its grab.
-        let released = !is_down && lock(&self.keys).grab == Some(code);
+        // The keys down; the kept key's release ends its grab.
+        let released = {
+            let mut keys = lock(&self.keys);
+            if is_down {
+                if !keys.down.contains(&code) {
+                    keys.down.push(code);
+                }
+            } else {
+                keys.down.retain(|c| *c != code);
+            }
+            !is_down && keys.grab == Some(code)
+        };
         if released {
             self.grab_over();
         }
@@ -1090,12 +1144,10 @@ mod tests {
         }
     }
 
-    /// The keys Okur presses are found by the keycodes the hook reads them from: the gray Left,
-    /// not the keypad's 4, which types a digit with Num Lock on; a key the keyboard lacks has
-    /// none.
     /// A key held for a dialog is pressed again by its keycode as it came, with the Shift it
-    /// was pressed with put around it while Shift is up now, and Shift let go around it when
-    /// it was pressed without it and Shift is down now; a key with no keycode is counted.
+    /// was pressed with put around it while Shift is up now; the Shift the user holds now is
+    /// never let go or pressed again (a key pressed without it is pressed with it); a key with
+    /// no keycode is counted.
     #[test]
     fn held_keys_are_pressed_again_with_their_own_modifiers() {
         let keymap = keymap();
@@ -1104,12 +1156,16 @@ mod tests {
         let mut shifted = a.clone();
         shifted.modifiers.shift = true;
         assert_eq!(
-            strokes_again(&keymap, 0, &[shifted]),
+            strokes_again(&keymap, 0, &[shifted.clone()]),
             (vec![(50, true), (38, true), (38, false), (50, false)], 0)
         );
         assert_eq!(
             strokes_again(&keymap, keys::state::SHIFT, std::slice::from_ref(&a)),
-            (vec![(50, false), (38, true), (38, false), (50, true)], 0)
+            (vec![(38, true), (38, false)], 0)
+        );
+        assert_eq!(
+            strokes_again(&keymap, keys::state::SHIFT, &[shifted]),
+            (vec![(38, true), (38, false)], 0)
         );
         let f1 = KeyEvent::new(Key::F(1), okur_core::input::Modifiers::none(), true);
         assert_eq!(
@@ -1118,6 +1174,9 @@ mod tests {
         );
     }
 
+    /// The keys Okur presses are found by the keycodes the hook reads them from: the gray Left,
+    /// not the keypad's 4, which types a digit with Num Lock on; a key the keyboard lacks has
+    /// none.
     #[test]
     fn keys_okur_presses_have_the_keycodes_the_hook_reads() {
         let keymap = keymap();

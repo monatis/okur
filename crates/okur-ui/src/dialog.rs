@@ -173,6 +173,7 @@ fn window_of(id: u32) -> Option<HWND> {
 pub fn show(spec: &DialogSpec) {
     if let Some(window) = window_of(spec.id) {
         bring_forward(window);
+        tell_shown(spec.id, window);
         return;
     }
     // SAFETY: a plain query.
@@ -231,6 +232,17 @@ pub fn show(spec: &DialogSpec) {
     });
     fill_all(window, &spec.controls, &layout.ids);
     bring_forward(window);
+    tell_shown(spec.id, window);
+}
+
+/// Tells Okur that dialog `id` is shown with the keyboard in it, once its window is in front:
+/// the keys Okur held since it asked for it go to it then. Not in front (another program kept
+/// the foreground), it is not told, and the keys wait their time and go where the focus is.
+fn tell_shown(id: u32, window: HWND) {
+    // SAFETY: a plain query.
+    if unsafe { GetForegroundWindow() } == window {
+        crate::win32::tell(&FromUi::DialogShown { id });
+    }
 }
 
 /// The value a pane's creation passes to its first message, which leaves the focus alone.

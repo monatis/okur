@@ -27,10 +27,7 @@ impl UiHost for DialogWatch {
     fn send(&self, message: ToUi) {
         if let ToUi::DialogShow { dialog } = &message {
             if let Ok(mut asked) = self.asked.lock() {
-                *asked = Some(AskedDialog {
-                    id: dialog.id,
-                    title: dialog.title.clone(),
-                });
+                *asked = Some(AskedDialog { id: dialog.id });
             }
         }
         if let Ok(mut open) = self.open.lock() {
