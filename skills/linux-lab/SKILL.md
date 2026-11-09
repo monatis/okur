@@ -51,7 +51,12 @@ code):
 bash skills/linux-lab/scripts/job.sh start probe1 'bash /mnt/d/okur-linux/a11y-stack.sh bash /mnt/d/okur-linux/probe-chrome.sh'
 bash skills/linux-lab/scripts/job.sh wait probe1 90   # in the background: until done, then the exit and the log's last 90 lines
 bash skills/linux-lab/scripts/job.sh log probe1       # the log so far
+bash skills/linux-lab/scripts/job.sh stop probe1      # the distribution terminated: the job and its stack (Xvfb, Chrome, Okur) end
 ```
+
+A job checks the code first (`check-linux.sh`), then runs. Read the check's line before leaving a
+long run alone: `live-web.sh` goes on without okur-ui where okur-ui does not build, and Okur's own
+dialogs are then silent in every run (full4 at fa7403d8, stopped and run again).
 
 ## Live runs, traces and their replay
 
@@ -74,6 +79,13 @@ cargo run --bin okur-lab -- live-replay linux [--only <id prefix>] [--pages-afte
 - The replay says what the run said on all but a run's Say All after a page load. Its speech
   reports no marks, so a Say All does not go down the page as the silent synthesizer's does live.
 - `--recorded-settings` and `--pages-after-focus` try a change on the runs before the lab runs it.
+- okur-ui's messages (a dialog's choices, its buttons, its close) are records of the trace since
+  fa7403d8, so a run made after it replays its dialogs whole.
+- A full run: the list of every scenario with an HTML fixture or a Linux replica and JAWS's
+  evidence, ARIA-AT's left for a run of their own (512 scenarios, about ten hours), pushed to
+  `D:\okur-linux\full3-ids.txt` and given to `live-web.sh` as `$(tr -d '\r' < /mnt/d/okur-linux/full3-ids.txt)`.
+- Compare the replay with Windows' parity to find Linux's own gaps: the steps
+  `corpus/parity-baseline.json` has matched and `corpus/live/linux-replay-baseline.json` has not.
 - Before committing traces, check them for anything but fixture content (application names,
   addresses, e-mail addresses).
 
