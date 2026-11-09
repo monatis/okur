@@ -518,7 +518,7 @@ fn text_cells(column: usize) -> gtk::SignalListItemFactory {
         label.set_xalign(0.0);
         item.set_child(Some(&label));
     });
-    factory.connect_bind(|_, object| {
+    factory.connect_bind(move |_, object| {
         let Some(item) = object.downcast_ref::<gtk::ListItem>() else {
             return;
         };
