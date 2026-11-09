@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "ccb4c70a"
  },
  "trials": [
   {
@@ -15,14 +15,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794196825946
+     "t_ms": 1794207427097
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794196827308,
-     "t_end_ms": 1794196828312,
+     "t_start_ms": 1794207428460,
+     "t_end_ms": 1794207429463,
      "action": {
       "type": "key",
       "command": "Down"
@@ -31,7 +31,7 @@
       "Down"
      ],
      "key_times": [
-      1794196827308
+      1794207428460
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e \u00c7a\u011fr\u0131 ve I\u015f\u0131k",
@@ -41,8 +41,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794196828312,
-     "t_end_ms": 1794196829316,
+     "t_start_ms": 1794207429463,
+     "t_end_ms": 1794207430468,
      "action": {
       "type": "key",
       "command": "Numpad5"
@@ -51,7 +51,7 @@
       "Numpad5"
      ],
      "key_times": [
-      1794196828312
+      1794207429463
      ],
      "observation": {
       "speech_raw": "\u00c7",
@@ -61,8 +61,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794196829316,
-     "t_end_ms": 1794196830441,
+     "t_start_ms": 1794207430468,
+     "t_end_ms": 1794207431593,
      "action": {
       "type": "key",
       "command": "Numpad5"
@@ -72,8 +72,8 @@
       "Numpad5"
      ],
      "key_times": [
-      1794196829316,
-      1794196829437
+      1794207430468,
+      1794207430589
      ],
      "observation": {
       "speech_raw": "\u00c7\n\u00c7",
@@ -83,8 +83,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794196830441,
-     "t_end_ms": 1794196831445,
+     "t_start_ms": 1794207431593,
+     "t_end_ms": 1794207432597,
      "action": {
       "type": "key",
       "command": "Right"
@@ -93,7 +93,7 @@
       "Right"
      ],
      "key_times": [
-      1794196830441
+      1794207431593
      ],
      "observation": {
       "speech_raw": "a",
@@ -103,8 +103,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794196831445,
-     "t_end_ms": 1794196832450,
+     "t_start_ms": 1794207432597,
+     "t_end_ms": 1794207433602,
      "action": {
       "type": "key",
       "command": "Right"
@@ -113,7 +113,7 @@
       "Right"
      ],
      "key_times": [
-      1794196831445
+      1794207432597
      ],
      "observation": {
       "speech_raw": "\u011f",
@@ -123,8 +123,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794196832450,
-     "t_end_ms": 1794196833576,
+     "t_start_ms": 1794207433602,
+     "t_end_ms": 1794207434728,
      "action": {
       "type": "key",
       "command": "Numpad5"
@@ -134,8 +134,8 @@
       "Numpad5"
      ],
      "key_times": [
-      1794196832450,
-      1794196832571
+      1794207433602,
+      1794207433723
      ],
      "observation": {
       "speech_raw": "\u011f\n\u011f",
@@ -145,8 +145,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794196833576,
-     "t_end_ms": 1794196834580,
+     "t_start_ms": 1794207434728,
+     "t_end_ms": 1794207435731,
      "action": {
       "type": "key",
       "command": "Right"
@@ -155,7 +155,7 @@
       "Right"
      ],
      "key_times": [
-      1794196833576
+      1794207434728
      ],
      "observation": {
       "speech_raw": "r",
@@ -165,8 +165,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794196834580,
-     "t_end_ms": 1794196835584,
+     "t_start_ms": 1794207435731,
+     "t_end_ms": 1794207436735,
      "action": {
       "type": "key",
       "command": "Right"
@@ -175,7 +175,7 @@
       "Right"
      ],
      "key_times": [
-      1794196834580
+      1794207435731
      ],
      "observation": {
       "speech_raw": "\u0131",
@@ -185,8 +185,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794196835584,
-     "t_end_ms": 1794196836589,
+     "t_start_ms": 1794207436735,
+     "t_end_ms": 1794207437740,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -195,7 +195,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794196835584
+      1794207436735
      ],
      "observation": {
       "speech_raw": "ve",
@@ -205,8 +205,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794196836589,
-     "t_end_ms": 1794196837595,
+     "t_start_ms": 1794207437740,
+     "t_end_ms": 1794207438746,
      "action": {
       "type": "key",
       "command": "Ctrl+Right"
@@ -215,7 +215,7 @@
       "Ctrl+Right"
      ],
      "key_times": [
-      1794196836589
+      1794207437740
      ],
      "observation": {
       "speech_raw": "I\u015f\u0131k",
@@ -225,8 +225,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794196837595,
-     "t_end_ms": 1794196838600,
+     "t_start_ms": 1794207438746,
+     "t_end_ms": 1794207439750,
      "action": {
       "type": "key",
       "command": "CapsLock+K"
@@ -235,7 +235,7 @@
       "CapsLock+K"
      ],
      "key_times": [
-      1794196837595
+      1794207438746
      ],
      "observation": {
       "speech_raw": "I\u015f\u0131k",
@@ -245,8 +245,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794196838600,
-     "t_end_ms": 1794196839728,
+     "t_start_ms": 1794207439750,
+     "t_end_ms": 1794207440877,
      "action": {
       "type": "key",
       "command": "CapsLock+K"
@@ -256,8 +256,8 @@
       "CapsLock+K"
      ],
      "key_times": [
-      1794196838600,
-      1794196838723
+      1794207439750,
+      1794207439872
      ],
      "observation": {
       "speech_raw": "I\u015f\u0131k\nI\u015f\u0131k",
@@ -267,8 +267,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794196839728,
-     "t_end_ms": 1794196840732,
+     "t_start_ms": 1794207440877,
+     "t_end_ms": 1794207441881,
      "action": {
       "type": "key",
       "command": "Down"
@@ -277,7 +277,7 @@
       "Down"
      ],
      "key_times": [
-      1794196839728
+      1794207440877
      ],
      "observation": {
       "speech_raw": "\u015eehirde \u0131l\u0131k bir \u00f6\u011fleden sonra.",
@@ -287,8 +287,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794196840732,
-     "t_end_ms": 1794196841737,
+     "t_start_ms": 1794207441881,
+     "t_end_ms": 1794207442886,
      "action": {
       "type": "key",
       "command": "Down"
@@ -297,7 +297,7 @@
       "Down"
      ],
      "key_times": [
-      1794196840732
+      1794207441881
      ],
      "observation": {
       "speech_raw": "\u0130stanbul, \u00d6demi\u015f, \u00dcnye, A\u011fr\u0131",
@@ -307,8 +307,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794196841737,
-     "t_end_ms": 1794196842741,
+     "t_start_ms": 1794207442886,
+     "t_end_ms": 1794207443891,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -317,7 +317,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794196841737
+      1794207442886
      ],
      "observation": {
       "speech_raw": "\u0130stanbul, \u00d6demi\u015f, \u00dcnye, A\u011fr\u0131",
@@ -327,8 +327,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794196842741,
-     "t_end_ms": 1794196843869,
+     "t_start_ms": 1794207443891,
+     "t_end_ms": 1794207445018,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -338,8 +338,8 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794196842741,
-      1794196842864
+      1794207443891,
+      1794207444013
      ],
      "observation": {
       "speech_raw": "\u0130stanbul, \u00d6demi\u015f, \u00dcnye, A\u011fr\u0131\n\u0130 s t a n b u l , space \u00d6 d e m i \u015f , space \u00dc n y e , space A \u011f r \u0131 space",
@@ -349,8 +349,8 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794196843869,
-     "t_end_ms": 1794196844873,
+     "t_start_ms": 1794207445018,
+     "t_end_ms": 1794207446023,
      "action": {
       "type": "key",
       "command": "Down"
@@ -359,7 +359,7 @@
       "Down"
      ],
      "key_times": [
-      1794196843869
+      1794207445018
      ],
      "observation": {
       "speech_raw": "list of 2 items",
@@ -369,8 +369,8 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794196844873,
-     "t_end_ms": 1794196845877,
+     "t_start_ms": 1794207446023,
+     "t_end_ms": 1794207447027,
      "action": {
       "type": "key",
       "command": "Down"
@@ -379,7 +379,7 @@
       "Down"
      ],
      "key_times": [
-      1794196844873
+      1794207446023
      ],
      "observation": {
       "speech_raw": "\u2022 \u00e7i\u011f b\u00f6rek",
@@ -389,8 +389,8 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794196845877,
-     "t_end_ms": 1794196846882,
+     "t_start_ms": 1794207447027,
+     "t_end_ms": 1794207448031,
      "action": {
       "type": "key",
       "command": "Down"
@@ -399,7 +399,7 @@
       "Down"
      ],
      "key_times": [
-      1794196845877
+      1794207447027
      ],
      "observation": {
       "speech_raw": "\u2022 \u015feker",
@@ -409,8 +409,8 @@
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794196846882,
-     "t_end_ms": 1794196847886,
+     "t_start_ms": 1794207448031,
+     "t_end_ms": 1794207449036,
      "action": {
       "type": "key",
       "command": "Down"
@@ -419,7 +419,7 @@
       "Down"
      ],
      "key_times": [
-      1794196846882
+      1794207448031
      ],
      "observation": {
       "speech_raw": "list end",
@@ -429,8 +429,8 @@
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794196847886,
-     "t_end_ms": 1794196848890,
+     "t_start_ms": 1794207449036,
+     "t_end_ms": 1794207450040,
      "action": {
       "type": "key",
       "command": "Down"
@@ -439,7 +439,7 @@
       "Down"
      ],
      "key_times": [
-      1794196847886
+      1794207449036
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Sonraki b\u00f6l\u00fcm",
@@ -449,8 +449,8 @@
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794196848890,
-     "t_end_ms": 1794196849895,
+     "t_start_ms": 1794207450040,
+     "t_end_ms": 1794207451044,
      "action": {
       "type": "key",
       "command": "Down"
@@ -459,7 +459,7 @@
       "Down"
      ],
      "key_times": [
-      1794196848890
+      1794207450040
      ],
      "observation": {
       "speech_raw": " \u001d heading level 2 \u001e Son",
@@ -469,8 +469,8 @@
     },
     {
      "step_id": "s23",
-     "t_start_ms": 1794196849895,
-     "t_end_ms": 1794196850999,
+     "t_start_ms": 1794207451044,
+     "t_end_ms": 1794207452049,
      "action": {
       "type": "key",
       "command": "Down"
@@ -479,7 +479,7 @@
       "Down"
      ],
      "key_times": [
-      1794196849895
+      1794207451044
      ],
      "observation": {
       "speech_raw": "\u00c7\u011e\u0130\u00d6\u015e\u00dc \u00e7\u011f\u0131\u00f6\u015f\u00fc",
@@ -489,8 +489,8 @@
     },
     {
      "step_id": "s24",
-     "t_start_ms": 1794196850999,
-     "t_end_ms": 1794196852126,
+     "t_start_ms": 1794207452049,
+     "t_end_ms": 1794207453176,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -500,8 +500,8 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794196850999,
-      1794196851122
+      1794207452049,
+      1794207452171
      ],
      "observation": {
       "speech_raw": "\u00c7\u011e\u0130\u00d6\u015e\u00dc \u00e7\u011f\u0131\u00f6\u015f\u00fc\n\u00c7 \u011e \u0130 \u00d6 \u015e \u00dc space \u00e7 \u011f \u0131 \u00f6 \u015f \u00fc",
@@ -511,8 +511,8 @@
     },
     {
      "step_id": "s25",
-     "t_start_ms": 1794196852126,
-     "t_end_ms": 1794196853131,
+     "t_start_ms": 1794207453176,
+     "t_end_ms": 1794207454182,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -521,7 +521,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794196852126
+      1794207453176
      ],
      "observation": {
       "speech_raw": "T\u00fcrk\u00e7e Metin",
@@ -531,8 +531,8 @@
     },
     {
      "step_id": "s26",
-     "t_start_ms": 1794196853131,
-     "t_end_ms": 1794196854135,
+     "t_start_ms": 1794207454182,
+     "t_end_ms": 1794207455187,
      "action": {
       "type": "key",
       "command": "Insert+Down"
@@ -541,7 +541,7 @@
       "Insert+Down"
      ],
      "key_times": [
-      1794196853131
+      1794207454182
      ],
      "observation": {
       "speech_raw": "T\u00fcrk\u00e7e Metin\n \u001d heading level 1 \u001e \u00c7a\u011fr\u0131 ve I\u015f\u0131k\n\u015eehirde \u0131l\u0131k bir \u00f6\u011fleden sonra.\n\u0130stanbul, \u00d6demi\u015f, \u00dcnye, A\u011fr\u0131\nlist of 2 items\n\u2022 \u00e7i\u011f b\u00f6rek\n\u2022 \u015feker\nlist end\n \u001d same page link \u001e Sonraki b\u00f6l\u00fcm\n \u001d heading level 2 \u001e Son\n\u00c7\u011e\u0130\u00d6\u015e\u00dc \u00e7\u011f\u0131\u00f6\u015f\u00fc\n\u00e7\u011f\u0131\u00f6\u015f\u00fc",

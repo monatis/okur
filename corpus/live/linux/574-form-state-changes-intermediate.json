@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "ccb4c70a"
  },
  "trials": [
   {
@@ -15,14 +15,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794196196293
+     "t_ms": 1794206894002
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794196197655,
-     "t_end_ms": 1794196198659,
+     "t_start_ms": 1794206895366,
+     "t_end_ms": 1794206896369,
      "action": {
       "type": "key",
       "command": "X"
@@ -31,7 +31,7 @@
       "X"
      ],
      "key_times": [
-      1794196197655
+      1794206895366
      ],
      "observation": {
       "speech_raw": "Send me the monthly newsletter  \u001d check box \u001e   \u001dchecked\u001e ",
@@ -41,8 +41,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794196198659,
-     "t_end_ms": 1794196199763,
+     "t_start_ms": 1794206896369,
+     "t_end_ms": 1794206897472,
      "action": {
       "type": "key",
       "command": "Space"
@@ -51,18 +51,18 @@
       "Space"
      ],
      "key_times": [
-      1794196198659
+      1794206896369
      ],
      "observation": {
-      "speech_raw": "Create Your Account - Riverside Library\nSend me the monthly newsletter  \u001d check box \u001e   \u001dchecked\u001e \nTo clear checkmark press Spacebar.\n \u001dnot checked\u001e ",
+      "speech_raw": "Create Your Account - Riverside Library\nSend me the monthly newsletter  \u001d check box \u001e   \u001dnot checked\u001e \nTo check press Spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794196199763,
-     "t_end_ms": 1794196200867,
+     "t_start_ms": 1794206897472,
+     "t_end_ms": 1794206898576,
      "action": {
       "type": "key",
       "command": "Space"
@@ -71,7 +71,7 @@
       "Space"
      ],
      "key_times": [
-      1794196199763
+      1794206897472
      ],
      "observation": {
       "speech_raw": " \u001dchecked\u001e ",
@@ -81,8 +81,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794196200867,
-     "t_end_ms": 1794196201871,
+     "t_start_ms": 1794206898576,
+     "t_end_ms": 1794206899579,
      "action": {
       "type": "key",
       "command": "A"
@@ -91,7 +91,7 @@
       "A"
      ],
      "key_times": [
-      1794196200867
+      1794206898576
      ],
      "observation": {
       "speech_raw": "wrapping to top\nMembership type \u001d group \u001e \nAdult  \u001d radio button \u001e   \u001dchecked\u001e \n1 of 3",
@@ -101,8 +101,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794196201871,
-     "t_end_ms": 1794196202875,
+     "t_start_ms": 1794206899579,
+     "t_end_ms": 1794206900582,
      "action": {
       "type": "key",
       "command": "A"
@@ -111,7 +111,7 @@
       "A"
      ],
      "key_times": [
-      1794196201871
+      1794206899579
      ],
      "observation": {
       "speech_raw": "Student  \u001d radio button \u001e   \u001dnot checked\u001e \n2 of 3",
@@ -121,8 +121,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794196202875,
-     "t_end_ms": 1794196203980,
+     "t_start_ms": 1794206900582,
+     "t_end_ms": 1794206901686,
      "action": {
       "type": "key",
       "command": "Space"
@@ -131,18 +131,18 @@
       "Space"
      ],
      "key_times": [
-      1794196202875
+      1794206900582
      ],
      "observation": {
-      "speech_raw": "Membership type \u001d group \u001e \nStudent  \u001d radio button \u001e   \u001dnot checked\u001e \n \u001dchecked\u001e ",
+      "speech_raw": "Membership type \u001d group \u001e \nStudent  \u001d radio button \u001e   \u001dchecked\u001e ",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794196203980,
-     "t_end_ms": 1794196204984,
+     "t_start_ms": 1794206901686,
+     "t_end_ms": 1794206902689,
      "action": {
       "type": "key",
       "command": "C"
@@ -151,7 +151,7 @@
       "C"
      ],
      "key_times": [
-      1794196203980
+      1794206901686
      ],
      "observation": {
       "speech_raw": "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside",
@@ -161,8 +161,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794196204984,
-     "t_end_ms": 1794196206089,
+     "t_start_ms": 1794206902689,
+     "t_end_ms": 1794206903793,
      "action": {
       "type": "key",
       "command": "Enter"
@@ -171,7 +171,7 @@
       "Enter"
      ],
      "key_times": [
-      1794196204984
+      1794206902689
      ],
      "observation": {
       "speech_raw": "Home branch  \u001d Combo box \u001e   \u001dcollapsed\u001e \nNorthside\nTo change the selection use the Arrow keys.",
@@ -181,8 +181,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794196206089,
-     "t_end_ms": 1794196207193,
+     "t_start_ms": 1794206903793,
+     "t_end_ms": 1794206904896,
      "action": {
       "type": "key",
       "command": "Down"
@@ -191,7 +191,7 @@
       "Down"
      ],
      "key_times": [
-      1794196206089
+      1794206903793
      ],
      "observation": {
       "speech_raw": "Eastgate",
@@ -201,8 +201,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794196207193,
-     "t_end_ms": 1794196208298,
+     "t_start_ms": 1794206904896,
+     "t_end_ms": 1794206906001,
      "action": {
       "type": "key",
       "command": "Up"
@@ -211,7 +211,7 @@
       "Up"
      ],
      "key_times": [
-      1794196207193
+      1794206904896
      ],
      "observation": {
       "speech_raw": "Northside",
@@ -221,8 +221,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794196208298,
-     "t_end_ms": 1794196209302,
+     "t_start_ms": 1794206906001,
+     "t_end_ms": 1794206907005,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -231,7 +231,7 @@
       "Escape"
      ],
      "key_times": [
-      1794196208298
+      1794206906001
      ],
      "observation": {
       "speech_raw": "virtual PC",

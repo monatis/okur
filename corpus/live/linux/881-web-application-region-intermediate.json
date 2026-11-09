@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "ccb4c70a"
  },
  "trials": [
   {
@@ -15,18 +15,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794201992796
+     "t_ms": 1794207613957
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794201993156
+     "t_ms": 1794207614315
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794201994460,
-     "t_end_ms": 1794201995564,
+     "t_start_ms": 1794207615620,
+     "t_end_ms": 1794207616724,
      "action": {
       "type": "key",
       "command": "H"
@@ -35,7 +35,7 @@
       "H"
      ],
      "key_times": [
-      1794201994460
+      1794207615620
      ],
      "observation": {
       "speech_raw": "Web App Patterns\n \u001d heading level 1 \u001e",
@@ -45,8 +45,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794201995564,
-     "t_end_ms": 1794201996568,
+     "t_start_ms": 1794207616724,
+     "t_end_ms": 1794207617728,
      "action": {
       "type": "key",
       "command": "H"
@@ -55,7 +55,7 @@
       "H"
      ],
      "key_times": [
-      1794201995564
+      1794207616724
      ],
      "observation": {
       "speech_raw": "Current links\n \u001d heading level 2 \u001e",
@@ -65,8 +65,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794201996568,
-     "t_end_ms": 1794201997572,
+     "t_start_ms": 1794207617728,
+     "t_end_ms": 1794207618732,
      "action": {
       "type": "key",
       "command": "H"
@@ -75,7 +75,7 @@
       "H"
      ],
      "key_times": [
-      1794201996568
+      1794207617728
      ],
      "observation": {
       "speech_raw": "Described controls\n \u001d heading level 2 \u001e",
@@ -85,8 +85,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794201997572,
-     "t_end_ms": 1794201998576,
+     "t_start_ms": 1794207618732,
+     "t_end_ms": 1794207619737,
      "action": {
       "type": "key",
       "command": "H"
@@ -95,7 +95,7 @@
       "H"
      ],
      "key_times": [
-      1794201997572
+      1794207618732
      ],
      "observation": {
       "speech_raw": "Popup buttons\n \u001d heading level 2 \u001e",
@@ -105,8 +105,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794201998576,
-     "t_end_ms": 1794201999580,
+     "t_start_ms": 1794207619737,
+     "t_end_ms": 1794207620741,
      "action": {
       "type": "key",
       "command": "H"
@@ -115,7 +115,7 @@
       "H"
      ],
      "key_times": [
-      1794201998576
+      1794207619737
      ],
      "observation": {
       "speech_raw": "Fruit search\n \u001d heading level 2 \u001e",
@@ -125,8 +125,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794201999580,
-     "t_end_ms": 1794202000585,
+     "t_start_ms": 1794207620741,
+     "t_end_ms": 1794207621745,
      "action": {
       "type": "key",
       "command": "H"
@@ -135,7 +135,7 @@
       "H"
      ],
      "key_times": [
-      1794201999580
+      1794207620741
      ],
      "observation": {
       "speech_raw": "Tab from here\n \u001d heading level 2 \u001e",
@@ -145,8 +145,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794202000585,
-     "t_end_ms": 1794202001590,
+     "t_start_ms": 1794207621745,
+     "t_end_ms": 1794207622749,
      "action": {
       "type": "key",
       "command": "H"
@@ -155,7 +155,7 @@
       "H"
      ],
      "key_times": [
-      1794202000585
+      1794207621745
      ],
      "observation": {
       "speech_raw": "Repository files\n \u001d heading level 2 \u001e",
@@ -165,8 +165,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794202001590,
-     "t_end_ms": 1794202002594,
+     "t_start_ms": 1794207622749,
+     "t_end_ms": 1794207623754,
      "action": {
       "type": "key",
       "command": "H"
@@ -175,7 +175,7 @@
       "H"
      ],
      "key_times": [
-      1794202001590
+      1794207622749
      ],
      "observation": {
       "speech_raw": "Workbench region\n \u001d heading level 2 \u001e",
@@ -185,8 +185,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794202002594,
-     "t_end_ms": 1794202003699,
+     "t_start_ms": 1794207623754,
+     "t_end_ms": 1794207624858,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -195,7 +195,7 @@
       "Tab"
      ],
      "key_times": [
-      1794202002594
+      1794207623754
      ],
      "observation": {
       "speech_raw": "Web App Patterns\nWorkbench\nFirst tool  \u001d Button \u001e \nTo activate press Enter.",
@@ -205,8 +205,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794202003699,
-     "t_end_ms": 1794202004704,
+     "t_start_ms": 1794207624858,
+     "t_end_ms": 1794207625862,
      "action": {
       "type": "key",
       "command": "H"
@@ -215,7 +215,7 @@
       "H"
      ],
      "key_times": [
-      1794202003699
+      1794207624858
      ],
      "observation": {
       "speech_raw": "",
@@ -225,8 +225,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794202004704,
-     "t_end_ms": 1794202005708,
+     "t_start_ms": 1794207625862,
+     "t_end_ms": 1794207626866,
      "action": {
       "type": "key",
       "command": "Down"
@@ -235,7 +235,7 @@
       "Down"
      ],
      "key_times": [
-      1794202004704
+      1794207625862
      ],
      "observation": {
       "speech_raw": "",
@@ -245,8 +245,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794202005708,
-     "t_end_ms": 1794202006712,
+     "t_start_ms": 1794207626866,
+     "t_end_ms": 1794207627870,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -255,7 +255,7 @@
       "Escape"
      ],
      "key_times": [
-      1794202005708
+      1794207626866
      ],
      "observation": {
       "speech_raw": "",
@@ -265,8 +265,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794202006712,
-     "t_end_ms": 1794202007817,
+     "t_start_ms": 1794207627870,
+     "t_end_ms": 1794207628974,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -275,7 +275,7 @@
       "Tab"
      ],
      "key_times": [
-      1794202006712
+      1794207627870
      ],
      "observation": {
       "speech_raw": "Second tool  \u001d Button \u001e \nTo activate press Enter.",

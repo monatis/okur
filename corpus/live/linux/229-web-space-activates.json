@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "ccb4c70a"
  },
  "trials": [
   {
@@ -15,18 +15,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794193157756
+     "t_ms": 1794206725892
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794193158116
+     "t_ms": 1794206726249
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794193159421,
-     "t_end_ms": 1794193160425,
+     "t_start_ms": 1794206727554,
+     "t_end_ms": 1794206728558,
      "action": {
       "type": "key",
       "command": "Down"
@@ -35,7 +35,7 @@
       "Down"
      ],
      "key_times": [
-      1794193159421
+      1794206727554
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e Activation",
@@ -45,8 +45,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794193160425,
-     "t_end_ms": 1794193161429,
+     "t_start_ms": 1794206728558,
+     "t_end_ms": 1794206729561,
      "action": {
       "type": "key",
       "command": "Space"
@@ -55,7 +55,7 @@
       "Space"
      ],
      "key_times": [
-      1794193160425
+      1794206728558
      ],
      "observation": {
       "speech_raw": "",
@@ -65,8 +65,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794193161429,
-     "t_end_ms": 1794193162433,
+     "t_start_ms": 1794206729561,
+     "t_end_ms": 1794206730565,
      "action": {
       "type": "key",
       "command": "B"
@@ -75,7 +75,7 @@
       "B"
      ],
      "key_times": [
-      1794193161429
+      1794206729561
      ],
      "observation": {
       "speech_raw": "Count  \u001d Button \u001e ",
@@ -85,8 +85,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794193162433,
-     "t_end_ms": 1794193163537,
+     "t_start_ms": 1794206730565,
+     "t_end_ms": 1794206731669,
      "action": {
       "type": "key",
       "command": "Space"
@@ -95,7 +95,7 @@
       "Space"
      ],
      "key_times": [
-      1794193162433
+      1794206730565
      ],
      "observation": {
       "speech_raw": "Activation Fixture\nCount  \u001d Button \u001e \nTo activate press Enter.",
@@ -105,8 +105,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794193163537,
-     "t_end_ms": 1794193164542,
+     "t_start_ms": 1794206731669,
+     "t_end_ms": 1794206732673,
      "action": {
       "type": "key",
       "command": "B"
@@ -115,7 +115,7 @@
       "B"
      ],
      "key_times": [
-      1794193163537
+      1794206731669
      ],
      "observation": {
       "speech_raw": "Custom button  \u001d Button \u001e ",
@@ -125,8 +125,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794193164542,
-     "t_end_ms": 1794193165646,
+     "t_start_ms": 1794206732673,
+     "t_end_ms": 1794206733778,
      "action": {
       "type": "key",
       "command": "Space"
@@ -135,7 +135,7 @@
       "Space"
      ],
      "key_times": [
-      1794193164542
+      1794206732673
      ],
      "observation": {
       "speech_raw": "Custom button  \u001d Button \u001e \nTo activate press Enter.",
@@ -145,8 +145,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794193165646,
-     "t_end_ms": 1794193166650,
+     "t_start_ms": 1794206733778,
+     "t_end_ms": 1794206734783,
      "action": {
       "type": "key",
       "command": "X"
@@ -155,7 +155,7 @@
       "X"
      ],
      "key_times": [
-      1794193165646
+      1794206733778
      ],
      "observation": {
       "speech_raw": "Subscribe  \u001d check box \u001e   \u001dnot checked\u001e ",
@@ -165,8 +165,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794193166650,
-     "t_end_ms": 1794193167754,
+     "t_start_ms": 1794206734783,
+     "t_end_ms": 1794206735887,
      "action": {
       "type": "key",
       "command": "Space"
@@ -175,18 +175,18 @@
       "Space"
      ],
      "key_times": [
-      1794193166650
+      1794206734783
      ],
      "observation": {
-      "speech_raw": "Subscribe  \u001d check box \u001e   \u001dnot checked\u001e \nTo check press Spacebar.\n \u001dchecked\u001e ",
+      "speech_raw": "Subscribe  \u001d check box \u001e   \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794193167754,
-     "t_end_ms": 1794193168859,
+     "t_start_ms": 1794206735887,
+     "t_end_ms": 1794206736892,
      "action": {
       "type": "key",
       "command": "A"
@@ -195,7 +195,7 @@
       "A"
      ],
      "key_times": [
-      1794193167754
+      1794206735887
      ],
      "observation": {
       "speech_raw": "Size \u001d group \u001e \nSmall  \u001d radio button \u001e   \u001dnot checked\u001e \n1 of 2",
@@ -205,8 +205,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794193168859,
-     "t_end_ms": 1794193169963,
+     "t_start_ms": 1794206736892,
+     "t_end_ms": 1794206737997,
      "action": {
       "type": "key",
       "command": "Space"
@@ -215,18 +215,18 @@
       "Space"
      ],
      "key_times": [
-      1794193168859
+      1794206736892
      ],
      "observation": {
-      "speech_raw": "Size \u001d group \u001e \nSmall  \u001d radio button \u001e   \u001dnot checked\u001e \n1 of 2\n \u001dchecked\u001e ",
+      "speech_raw": "Size \u001d group \u001e \nSmall  \u001d radio button \u001e   \u001dchecked\u001e \n1 of 2",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794193169963,
-     "t_end_ms": 1794193170967,
+     "t_start_ms": 1794206737997,
+     "t_end_ms": 1794206739001,
      "action": {
       "type": "key",
       "command": "X"
@@ -235,7 +235,7 @@
       "X"
      ],
      "key_times": [
-      1794193169963
+      1794206737997
      ],
      "observation": {
       "speech_raw": "Notify me  \u001d check box \u001e   \u001dnot checked\u001e ",
@@ -245,8 +245,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794193170967,
-     "t_end_ms": 1794193172072,
+     "t_start_ms": 1794206739001,
+     "t_end_ms": 1794206740106,
      "action": {
       "type": "key",
       "command": "Space"
@@ -255,18 +255,18 @@
       "Space"
      ],
      "key_times": [
-      1794193170967
+      1794206739001
      ],
      "observation": {
-      "speech_raw": "Notify me  \u001d check box \u001e   \u001dnot checked\u001e \nTo check press Spacebar.\n \u001dchecked\u001e ",
+      "speech_raw": "Notify me  \u001d check box \u001e   \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794193172072,
-     "t_end_ms": 1794193173077,
+     "t_start_ms": 1794206740106,
+     "t_end_ms": 1794206741110,
      "action": {
       "type": "key",
       "command": "E"
@@ -275,7 +275,7 @@
       "E"
      ],
      "key_times": [
-      1794193172072
+      1794206740106
      ],
      "observation": {
       "speech_raw": "City \u001d Edit \u001e \nIzmir",
@@ -285,8 +285,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794193173077,
-     "t_end_ms": 1794193174182,
+     "t_start_ms": 1794206741110,
+     "t_end_ms": 1794206742215,
      "action": {
       "type": "key",
       "command": "Space"
@@ -295,7 +295,7 @@
       "Space"
      ],
      "key_times": [
-      1794193173077
+      1794206741110
      ],
      "observation": {
       "speech_raw": "City \u001d Edit \u001e \nIzmir\nType in text.",
@@ -305,8 +305,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794193174182,
-     "t_end_ms": 1794193175186,
+     "t_start_ms": 1794206742215,
+     "t_end_ms": 1794206743220,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -315,7 +315,7 @@
       "Escape"
      ],
      "key_times": [
-      1794193174182
+      1794206742215
      ],
      "observation": {
       "speech_raw": "virtual PC Cursor",
@@ -325,8 +325,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794193175186,
-     "t_end_ms": 1794193176191,
+     "t_start_ms": 1794206743220,
+     "t_end_ms": 1794206744224,
      "action": {
       "type": "key",
       "command": "U"
@@ -335,7 +335,7 @@
       "U"
      ],
      "key_times": [
-      1794193175186
+      1794206743220
      ],
      "observation": {
       "speech_raw": " \u001d same page link \u001e Show status",
@@ -345,8 +345,8 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794193176191,
-     "t_end_ms": 1794193177295,
+     "t_start_ms": 1794206744224,
+     "t_end_ms": 1794206745328,
      "action": {
       "type": "key",
       "command": "Space"
@@ -355,7 +355,7 @@
       "Space"
      ],
      "key_times": [
-      1794193176191
+      1794206744224
      ],
      "observation": {
       "speech_raw": "Show status  \u001d same page link \u001e \nTo activate press Enter.",
@@ -365,8 +365,8 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794193177295,
-     "t_end_ms": 1794193178300,
+     "t_start_ms": 1794206745328,
+     "t_end_ms": 1794206746332,
      "action": {
       "type": "key",
       "command": "Down"
@@ -375,7 +375,7 @@
       "Down"
      ],
      "key_times": [
-      1794193177295
+      1794206745328
      ],
      "observation": {
       "speech_raw": "Nothing activated yet.",
@@ -385,8 +385,8 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794193178300,
-     "t_end_ms": 1794193179305,
+     "t_start_ms": 1794206746332,
+     "t_end_ms": 1794206747337,
      "action": {
       "type": "key",
       "command": "Ctrl+End"
@@ -395,7 +395,7 @@
       "Ctrl+End"
      ],
      "key_times": [
-      1794193178300
+      1794206746332
      ],
      "observation": {
       "speech_raw": "No events.",
@@ -405,8 +405,8 @@
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794193179305,
-     "t_end_ms": 1794193180309,
+     "t_start_ms": 1794206747337,
+     "t_end_ms": 1794206748342,
      "action": {
       "type": "key",
       "command": "C"
@@ -415,7 +415,7 @@
       "C"
      ],
      "key_times": [
-      1794193179305
+      1794206747337
      ],
      "observation": {
       "speech_raw": "wrapping to top\nColor  \u001d Combo box \u001e   \u001dcollapsed\u001e \nRed",
@@ -425,8 +425,8 @@
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794193180309,
-     "t_end_ms": 1794193181413,
+     "t_start_ms": 1794206748342,
+     "t_end_ms": 1794206749446,
      "action": {
       "type": "key",
       "command": "Space"
@@ -435,7 +435,7 @@
       "Space"
      ],
      "key_times": [
-      1794193180309
+      1794206748342
      ],
      "observation": {
       "speech_raw": "  \u001d list \u001e \nwith 2 items\nRed\nTo move to an item press the Arrow keys.",
@@ -445,8 +445,8 @@
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794193181413,
-     "t_end_ms": 1794193182417,
+     "t_start_ms": 1794206749446,
+     "t_end_ms": 1794206750450,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -455,7 +455,7 @@
       "Escape"
      ],
      "key_times": [
-      1794193181413
+      1794206749446
      ],
      "observation": {
       "speech_raw": "virtual PC Cursor",

@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "ccb4c70a"
  },
  "trials": [
   {
@@ -15,14 +15,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794190769619
+     "t_ms": 1794206556541
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794190770985,
-     "t_end_ms": 1794190771989,
+     "t_start_ms": 1794206557905,
+     "t_end_ms": 1794206558909,
      "action": {
       "type": "key",
       "command": "E"
@@ -31,7 +31,7 @@
       "E"
      ],
      "key_times": [
-      1794190770985
+      1794206557905
      ],
      "observation": {
       "speech_raw": "City \u001d Edit \u001e \nIzmir",
@@ -41,8 +41,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794190771989,
-     "t_end_ms": 1794190773093,
+     "t_start_ms": 1794206558909,
+     "t_end_ms": 1794206560013,
      "action": {
       "type": "key",
       "command": "Enter"
@@ -51,7 +51,7 @@
       "Enter"
      ],
      "key_times": [
-      1794190771989
+      1794206558909
      ],
      "observation": {
       "speech_raw": "Activation Fixture\nCity \u001d Edit \u001e \nIzmir\nType in text.",
@@ -61,8 +61,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794190773093,
-     "t_end_ms": 1794190774197,
+     "t_start_ms": 1794206560013,
+     "t_end_ms": 1794206561117,
      "action": {
       "type": "key",
       "command": "End"
@@ -71,7 +71,7 @@
       "End"
      ],
      "key_times": [
-      1794190773093
+      1794206560013
      ],
      "observation": {
       "speech_raw": "\n",
@@ -81,8 +81,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794190774197,
-     "t_end_ms": 1794190775301,
+     "t_start_ms": 1794206561117,
+     "t_end_ms": 1794206562221,
      "action": {
       "type": "key",
       "command": "Home"
@@ -91,7 +91,7 @@
       "Home"
      ],
      "key_times": [
-      1794190774197
+      1794206561117
      ],
      "observation": {
       "speech_raw": "I",
@@ -101,8 +101,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794190775301,
-     "t_end_ms": 1794190776306,
+     "t_start_ms": 1794206562221,
+     "t_end_ms": 1794206563225,
      "action": {
       "type": "key",
       "command": "F2"
@@ -111,7 +111,7 @@
       "F2"
      ],
      "key_times": [
-      1794190775301
+      1794206562221
      ],
      "observation": {
       "speech_raw": "",
@@ -121,8 +121,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794190776306,
-     "t_end_ms": 1794190777310,
+     "t_start_ms": 1794206563225,
+     "t_end_ms": 1794206564230,
      "action": {
       "type": "key",
       "command": "Escape"
@@ -131,7 +131,7 @@
       "Escape"
      ],
      "key_times": [
-      1794190776306
+      1794206563225
      ],
      "observation": {
       "speech_raw": "virtual PC Cursor",
@@ -141,8 +141,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794190777310,
-     "t_end_ms": 1794190778314,
+     "t_start_ms": 1794206564230,
+     "t_end_ms": 1794206565234,
      "action": {
       "type": "key",
       "command": "Home"
@@ -151,7 +151,7 @@
       "Home"
      ],
      "key_times": [
-      1794190777310
+      1794206564230
      ],
      "observation": {
       "speech_raw": "",

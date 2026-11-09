@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "ccb4c70a"
  },
  "trials": [
   {
@@ -15,14 +15,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+End",
-     "t_ms": 1794194054402
+     "t_ms": 1794205935674
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794194055765,
-     "t_end_ms": 1794194056769,
+     "t_start_ms": 1794205937034,
+     "t_end_ms": 1794205938037,
      "action": {
       "type": "key",
       "command": "Up"
@@ -31,7 +31,7 @@
       "Up"
      ],
      "key_times": [
-      1794194055765
+      1794205937034
      ],
      "observation": {
       "speech_raw": "Text \u001d edit \u001e \nHello, world. Is it done? Yes! Wait; maybe: no.\nMail ada@example.org or see https://example.org/a-b_c?x=1&y=2#top\nC:\\Users\\Ada\\notes.txt and /usr/local/bin\nPrice $9.95, 50% off; total = 3 * 4 + 1 - 2 / 5 ^ 2 ~ 7\nfn main() { let v = [1, 2]; v.len() } // done <ok> | a && b\n\"double\" 'single' \u201ccurly\u201d \u2018curly\u2019 \u2014 em \u2013 en \u2026 ellipsis \u2022 bullet\n===== ----- ..... !!!!! ##### ***\nMenuBar getElementById XMLHttpRequest iPhone McDonald PowerShell\nSystem32 x86_64 COVID19 123RON 1st 2nd 3rd\n7 42 1234 54321 123456 1-800-444-4443 2.5 1,000,000 10:30\n03-16-00 3/2/2002 1/3 $0.02 $1,250.50\nAda READ me B x\nJAWS sister-in-law 2:00 P.M. aB9 \u00e9 \u20ac\n\n    four spaces\n\tone tab\nSay All reads this. It has three sentences. The last one ends here.\nteh quick brown fxo",
@@ -41,8 +41,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794194056769,
-     "t_end_ms": 1794194057772,
+     "t_start_ms": 1794205938037,
+     "t_end_ms": 1794205939141,
      "action": {
       "type": "key",
       "command": "Up"
@@ -51,47 +51,7 @@
       "Up"
      ],
      "key_times": [
-      1794194056769
-     ],
-     "observation": {
-      "speech_raw": "Text",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
-     "step_id": "s3",
-     "t_start_ms": 1794194057772,
-     "t_end_ms": 1794194058777,
-     "action": {
-      "type": "key",
-      "command": "Up"
-     },
-     "keys": [
-      "Up"
-     ],
-     "key_times": [
-      1794194057772
-     ],
-     "observation": {
-      "speech_raw": "teh quick brown fxo",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
-     "step_id": "s4",
-     "t_start_ms": 1794194058777,
-     "t_end_ms": 1794194059781,
-     "action": {
-      "type": "key",
-      "command": "Up"
-     },
-     "keys": [
-      "Up"
-     ],
-     "key_times": [
-      1794194058777
+      1794205938037
      ],
      "observation": {
       "speech_raw": "Say All reads this. It has three sentences. The last one ends here.",
@@ -100,9 +60,9 @@
      "step_success": true
     },
     {
-     "step_id": "s5",
-     "t_start_ms": 1794194059781,
-     "t_end_ms": 1794194060786,
+     "step_id": "s3",
+     "t_start_ms": 1794205939141,
+     "t_end_ms": 1794205940245,
      "action": {
       "type": "key",
       "command": "Up"
@@ -111,18 +71,58 @@
       "Up"
      ],
      "key_times": [
-      1794194059781
+      1794205939141
      ],
      "observation": {
-      "speech_raw": "\tone tab",
+      "speech_raw": "one tab",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794205940245,
+     "t_end_ms": 1794205941349,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794205940245
+     ],
+     "observation": {
+      "speech_raw": "four spaces",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794205941349,
+     "t_end_ms": 1794205942454,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794205941349
+     ],
+     "observation": {
+      "speech_raw": "\n",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794194060786,
-     "t_end_ms": 1794194061789,
+     "t_start_ms": 1794205942454,
+     "t_end_ms": 1794205943558,
      "action": {
       "type": "key",
       "command": "Up"
@@ -131,47 +131,7 @@
       "Up"
      ],
      "key_times": [
-      1794194060786
-     ],
-     "observation": {
-      "speech_raw": "    four spaces",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
-     "step_id": "s7",
-     "t_start_ms": 1794194061789,
-     "t_end_ms": 1794194062794,
-     "action": {
-      "type": "key",
-      "command": "Up"
-     },
-     "keys": [
-      "Up"
-     ],
-     "key_times": [
-      1794194061789
-     ],
-     "observation": {
-      "speech_raw": "",
-      "settled": true
-     },
-     "step_success": true
-    },
-    {
-     "step_id": "s8",
-     "t_start_ms": 1794194062794,
-     "t_end_ms": 1794194063798,
-     "action": {
-      "type": "key",
-      "command": "Up"
-     },
-     "keys": [
-      "Up"
-     ],
-     "key_times": [
-      1794194062794
+      1794205942454
      ],
      "observation": {
       "speech_raw": "JAWS sister-in-law 2:00 P.M. aB9 \u00e9 \u20ac",
@@ -180,9 +140,9 @@
      "step_success": true
     },
     {
-     "step_id": "s9",
-     "t_start_ms": 1794194063798,
-     "t_end_ms": 1794194064803,
+     "step_id": "s7",
+     "t_start_ms": 1794205943558,
+     "t_end_ms": 1794205944662,
      "action": {
       "type": "key",
       "command": "Up"
@@ -191,7 +151,7 @@
       "Up"
      ],
      "key_times": [
-      1794194063798
+      1794205943558
      ],
      "observation": {
       "speech_raw": "Ada READ me B x",
@@ -200,9 +160,9 @@
      "step_success": true
     },
     {
-     "step_id": "s10",
-     "t_start_ms": 1794194064803,
-     "t_end_ms": 1794194065807,
+     "step_id": "s8",
+     "t_start_ms": 1794205944662,
+     "t_end_ms": 1794205945767,
      "action": {
       "type": "key",
       "command": "Up"
@@ -211,7 +171,7 @@
       "Up"
      ],
      "key_times": [
-      1794194064803
+      1794205944662
      ],
      "observation": {
       "speech_raw": "03-16-00 3/2/2002 1/3 $0.02 $1,250.50",
@@ -220,9 +180,9 @@
      "step_success": true
     },
     {
-     "step_id": "s11",
-     "t_start_ms": 1794194065807,
-     "t_end_ms": 1794194066811,
+     "step_id": "s9",
+     "t_start_ms": 1794205945767,
+     "t_end_ms": 1794205946872,
      "action": {
       "type": "key",
       "command": "Up"
@@ -231,7 +191,7 @@
       "Up"
      ],
      "key_times": [
-      1794194065807
+      1794205945767
      ],
      "observation": {
       "speech_raw": "7 42 1234 54321 123456 1-800-444-4443 2.5 1,000,000 10:30",
@@ -240,9 +200,9 @@
      "step_success": true
     },
     {
-     "step_id": "s12",
-     "t_start_ms": 1794194066811,
-     "t_end_ms": 1794194067816,
+     "step_id": "s10",
+     "t_start_ms": 1794205946872,
+     "t_end_ms": 1794205947976,
      "action": {
       "type": "key",
       "command": "Up"
@@ -251,7 +211,7 @@
       "Up"
      ],
      "key_times": [
-      1794194066811
+      1794205946872
      ],
      "observation": {
       "speech_raw": "System32 x86_64 COVID19 123RON 1st 2nd 3rd",
@@ -260,9 +220,9 @@
      "step_success": true
     },
     {
-     "step_id": "s13",
-     "t_start_ms": 1794194067816,
-     "t_end_ms": 1794194068820,
+     "step_id": "s11",
+     "t_start_ms": 1794205947976,
+     "t_end_ms": 1794205949081,
      "action": {
       "type": "key",
       "command": "Up"
@@ -271,7 +231,7 @@
       "Up"
      ],
      "key_times": [
-      1794194067816
+      1794205947976
      ],
      "observation": {
       "speech_raw": "MenuBar getElementById XMLHttpRequest iPhone McDonald PowerShell",
@@ -280,9 +240,9 @@
      "step_success": true
     },
     {
-     "step_id": "s14",
-     "t_start_ms": 1794194068820,
-     "t_end_ms": 1794194069825,
+     "step_id": "s12",
+     "t_start_ms": 1794205949081,
+     "t_end_ms": 1794205950185,
      "action": {
       "type": "key",
       "command": "Up"
@@ -291,7 +251,7 @@
       "Up"
      ],
      "key_times": [
-      1794194068820
+      1794205949081
      ],
      "observation": {
       "speech_raw": "===== ----- ..... !!!!! ##### ***",
@@ -300,9 +260,9 @@
      "step_success": true
     },
     {
-     "step_id": "s15",
-     "t_start_ms": 1794194069825,
-     "t_end_ms": 1794194070829,
+     "step_id": "s13",
+     "t_start_ms": 1794205950185,
+     "t_end_ms": 1794205951290,
      "action": {
       "type": "key",
       "command": "Up"
@@ -311,7 +271,7 @@
       "Up"
      ],
      "key_times": [
-      1794194069825
+      1794205950185
      ],
      "observation": {
       "speech_raw": "\"double\" 'single' \u201ccurly\u201d \u2018curly\u2019 \u2014 em \u2013 en \u2026 ellipsis \u2022 bullet",
@@ -320,9 +280,9 @@
      "step_success": true
     },
     {
-     "step_id": "s16",
-     "t_start_ms": 1794194070829,
-     "t_end_ms": 1794194071834,
+     "step_id": "s14",
+     "t_start_ms": 1794205951290,
+     "t_end_ms": 1794205952395,
      "action": {
       "type": "key",
       "command": "Up"
@@ -331,7 +291,7 @@
       "Up"
      ],
      "key_times": [
-      1794194070829
+      1794205951290
      ],
      "observation": {
       "speech_raw": "fn main() { let v = [1, 2]; v.len() } // done <ok> | a && b",
@@ -340,9 +300,9 @@
      "step_success": true
     },
     {
-     "step_id": "s17",
-     "t_start_ms": 1794194071834,
-     "t_end_ms": 1794194072838,
+     "step_id": "s15",
+     "t_start_ms": 1794205952395,
+     "t_end_ms": 1794205953498,
      "action": {
       "type": "key",
       "command": "Up"
@@ -351,7 +311,7 @@
       "Up"
      ],
      "key_times": [
-      1794194071834
+      1794205952395
      ],
      "observation": {
       "speech_raw": "Price $9.95, 50% off; total = 3 * 4 + 1 - 2 / 5 ^ 2 ~ 7",
@@ -360,9 +320,9 @@
      "step_success": true
     },
     {
-     "step_id": "s18",
-     "t_start_ms": 1794194072838,
-     "t_end_ms": 1794194073842,
+     "step_id": "s16",
+     "t_start_ms": 1794205953498,
+     "t_end_ms": 1794205954603,
      "action": {
       "type": "key",
       "command": "Up"
@@ -371,7 +331,7 @@
       "Up"
      ],
      "key_times": [
-      1794194072838
+      1794205953498
      ],
      "observation": {
       "speech_raw": "C:\\Users\\Ada\\notes.txt and /usr/local/bin",
@@ -380,9 +340,9 @@
      "step_success": true
     },
     {
-     "step_id": "s19",
-     "t_start_ms": 1794194073842,
-     "t_end_ms": 1794194074847,
+     "step_id": "s17",
+     "t_start_ms": 1794205954603,
+     "t_end_ms": 1794205955707,
      "action": {
       "type": "key",
       "command": "Up"
@@ -391,7 +351,7 @@
       "Up"
      ],
      "key_times": [
-      1794194073842
+      1794205954603
      ],
      "observation": {
       "speech_raw": "Mail ada@example.org or see https://example.org/a-b_c?x=1&y=2#top",
@@ -400,9 +360,9 @@
      "step_success": true
     },
     {
-     "step_id": "s20",
-     "t_start_ms": 1794194074847,
-     "t_end_ms": 1794194075850,
+     "step_id": "s18",
+     "t_start_ms": 1794205955707,
+     "t_end_ms": 1794205956811,
      "action": {
       "type": "key",
       "command": "Up"
@@ -411,7 +371,7 @@
       "Up"
      ],
      "key_times": [
-      1794194074847
+      1794205955707
      ],
      "observation": {
       "speech_raw": "Hello, world. Is it done? Yes! Wait; maybe: no.",
@@ -420,9 +380,9 @@
      "step_success": true
     },
     {
-     "step_id": "s21",
-     "t_start_ms": 1794194075850,
-     "t_end_ms": 1794194076855,
+     "step_id": "s19",
+     "t_start_ms": 1794205956811,
+     "t_end_ms": 1794205957916,
      "action": {
       "type": "key",
       "command": "Up"
@@ -431,18 +391,58 @@
       "Up"
      ],
      "key_times": [
-      1794194075850
+      1794205956811
      ],
      "observation": {
-      "speech_raw": " \u001d heading level 1 \u001e Reading settings",
+      "speech_raw": "Hello, world. Is it done? Yes! Wait; maybe: no.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s20",
+     "t_start_ms": 1794205957916,
+     "t_end_ms": 1794205958921,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794205957916
+     ],
+     "observation": {
+      "speech_raw": "Text",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s21",
+     "t_start_ms": 1794205958921,
+     "t_end_ms": 1794205959925,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794205958921
+     ],
+     "observation": {
+      "speech_raw": "teh quick brown fxo",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794194076855,
-     "t_end_ms": 1794194077859,
+     "t_start_ms": 1794205959925,
+     "t_end_ms": 1794205960929,
      "action": {
       "type": "key",
       "command": "Up"
@@ -451,18 +451,18 @@
       "Up"
      ],
      "key_times": [
-      1794194076855
+      1794205959925
      ],
      "observation": {
-      "speech_raw": "main region",
+      "speech_raw": "Say All reads this. It has three sentences. The last one ends here.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s23",
-     "t_start_ms": 1794194077859,
-     "t_end_ms": 1794194078863,
+     "t_start_ms": 1794205960929,
+     "t_end_ms": 1794205961934,
      "action": {
       "type": "key",
       "command": "Up"
@@ -471,18 +471,18 @@
       "Up"
      ],
      "key_times": [
-      1794194077859
+      1794205960929
      ],
      "observation": {
-      "speech_raw": "Reading Settings - Reading Fixture",
+      "speech_raw": "\tone tab",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s24",
-     "t_start_ms": 1794194078863,
-     "t_end_ms": 1794194079868,
+     "t_start_ms": 1794205961934,
+     "t_end_ms": 1794205962938,
      "action": {
       "type": "key",
       "command": "Up"
@@ -491,10 +491,10 @@
       "Up"
      ],
      "key_times": [
-      1794194078863
+      1794205961934
      ],
      "observation": {
-      "speech_raw": "Reading Settings - Reading Fixture",
+      "speech_raw": "    four spaces",
       "settled": true
      },
      "step_success": true

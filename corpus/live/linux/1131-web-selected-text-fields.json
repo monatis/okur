@@ -6,7 +6,7 @@
   "web_verbosity": "2",
   "settings": "recorded",
   "chrome": "google-chrome",
-  "commit": "fcd2601b"
+  "commit": "ccb4c70a"
  },
  "trials": [
   {
@@ -15,14 +15,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794190501793
+     "t_ms": 1794206523540
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794190503161,
-     "t_end_ms": 1794190504265,
+     "t_start_ms": 1794206524907,
+     "t_end_ms": 1794206526011,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -31,7 +31,7 @@
       "Tab"
      ],
      "key_times": [
-      1794190503161
+      1794206524907
      ],
      "observation": {
       "speech_raw": "Selected Text Fields\nState \u001d Edit \u001e \nAlabama",
@@ -41,8 +41,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794190504265,
-     "t_end_ms": 1794190505271,
+     "t_start_ms": 1794206526011,
+     "t_end_ms": 1794206527016,
      "action": {
       "type": "key",
       "command": "Insert+Shift+Down"
@@ -51,7 +51,7 @@
       "Insert+Shift+Down"
      ],
      "key_times": [
-      1794190504265
+      1794206526011
      ],
      "observation": {
       "speech_raw": "Nothing selected",
@@ -61,8 +61,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794190505271,
-     "t_end_ms": 1794190506375,
+     "t_start_ms": 1794206527016,
+     "t_end_ms": 1794206528320,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -71,7 +71,7 @@
       "Tab"
      ],
      "key_times": [
-      1794190505271
+      1794206527016
      ],
      "observation": {
       "speech_raw": "City \u001d Edit \u001e \nMontgomery",
@@ -81,8 +81,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794190506375,
-     "t_end_ms": 1794190507480,
+     "t_start_ms": 1794206528320,
+     "t_end_ms": 1794206529423,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -91,7 +91,7 @@
       "Tab"
      ],
      "key_times": [
-      1794190506375
+      1794206528320
      ],
      "observation": {
       "speech_raw": "Zip \u001d Edit \u001e \n36104",
@@ -101,8 +101,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794190507480,
-     "t_end_ms": 1794190508486,
+     "t_start_ms": 1794206529423,
+     "t_end_ms": 1794206530429,
      "action": {
       "type": "key",
       "command": "Insert+Shift+Down"
@@ -111,7 +111,7 @@
       "Insert+Shift+Down"
      ],
      "key_times": [
-      1794190507480
+      1794206529423
      ],
      "observation": {
       "speech_raw": "Nothing selected",
@@ -121,8 +121,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794190508486,
-     "t_end_ms": 1794190509591,
+     "t_start_ms": 1794206530429,
+     "t_end_ms": 1794206531535,
      "action": {
       "type": "key",
       "command": "Shift+Tab"
@@ -131,7 +131,7 @@
       "Shift+Tab"
      ],
      "key_times": [
-      1794190508486
+      1794206530429
      ],
      "observation": {
       "speech_raw": "City \u001d Edit \u001e \nMontgomery",
@@ -141,8 +141,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794190509591,
-     "t_end_ms": 1794190510697,
+     "t_start_ms": 1794206531535,
+     "t_end_ms": 1794206532640,
      "action": {
       "type": "key",
       "command": "Shift+Tab"
@@ -151,7 +151,7 @@
       "Shift+Tab"
      ],
      "key_times": [
-      1794190509591
+      1794206531535
      ],
      "observation": {
       "speech_raw": "State \u001d Edit \u001e \nAlabama",
@@ -161,8 +161,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794190510697,
-     "t_end_ms": 1794190511701,
+     "t_start_ms": 1794206532640,
+     "t_end_ms": 1794206533645,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -171,7 +171,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794190510697
+      1794206532640
      ],
      "observation": {
       "speech_raw": "State \u001d Edit \u001e \nAlabama",
