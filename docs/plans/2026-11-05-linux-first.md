@@ -148,6 +148,8 @@ with no change to the `KeyboardHook` port:
   - Okur's own GTK dialogs are dialog boxes with their spec's default button (f4fd1c14): GTK 4 marks no button IS_DEFAULT; Insert+E said "Not in a dialog box".
   - An alert inside a window (GTK's info bar) is part of it, not a window (b375bbfa).
   - A dialog box's window is read within its containers and buttons, not its lists' items (a50440db).
+  - okur-ui on Linux draws Okur's wizards (Flexible Web, the Startup Wizard; 6ad3b989) and trees (the Regions List, Settings Center's; ad9029d7), the wizard's buttons named from the catalog. A dialog's first focus is placed once its window is active and laid out, then okur-ui says it is shown (7c31a514, c47a5731): GTK reported no focus for a row focused before (gtk4's 223, 586, 682), and a held letter chose a row the late focus left.
+  - Okur's own dialogs' group boxes and drop-downs' places from their specs where the platform reads none (5798bd17, 812), and okur-ui's application name, which every trace lacked: xa11y-linux kept an empty name asked before the application's root was up.
 - **Known Linux gaps, not yet built:**
   - Alt+F on Chrome highlights no item on Linux, so Okur says the menu only at the first Down (Windows' Chrome highlights the first item as it opens).
   - A live region added after its page's read (finding 7 of the second review): since 90d63662 a page changing outside its regions is captured again, which finds a new region at its next capture; its first change before that is not said.
