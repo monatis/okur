@@ -5,6 +5,9 @@
 #   bash /mnt/d/okur-linux/a11y-stack.sh bash /mnt/d/okur-linux/live-web.sh 02-doc-next-line ...
 set -uo pipefail
 cd ~/okur
+# Each run's lines in the job's log as they are printed: a file takes Python's output in
+# blocks, and full5's log stood 25 minutes behind its runs (2026-11-09).
+export PYTHONUNBUFFERED=1
 cargo build -q -p okur --bin okur || exit 1
 # Okur's own dialogs (Insert+F7 and the others), started by okur run beside it; the runs go
 # on without them where it does not build (GTK 4's development files missing).
