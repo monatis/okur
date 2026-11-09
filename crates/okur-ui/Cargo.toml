@@ -11,7 +11,8 @@ okur-ui-model = { workspace = true }
 # GTK 4 on Linux: built in the lab, where its development files are (setup.sh); the dev box's
 # Linux clippy leaves this crate out.
 [target.'cfg(target_os = "linux")'.dependencies]
-gtk4 = "0.10"
+# 4.12: a list's Tab behavior and scrolling to an item (Ubuntu 24.04 has 4.14).
+gtk4 = { version = "0.10", features = ["v4_12"] }
 serde_json = { workspace = true }
 
 [target.'cfg(windows)'.dependencies]

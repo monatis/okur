@@ -92,11 +92,18 @@ pub fn native_focus(
     use crate::page::state;
     let parent = ancestors.first();
     let grandparent = ancestors.get(1);
-    event.window_title = ancestors
+    let window = ancestors
         .iter()
-        .find(|a| matches!(a.role.as_str(), "frame" | "dialog" | "window" | "alert"))
-        .map(|a| a.name.clone())
-        .filter(|n| !n.is_empty());
+        .find(|a| matches!(a.role.as_str(), "frame" | "dialog" | "window" | "alert"));
+    event.window_title = window.map(|a| a.name.clone()).filter(|n| !n.is_empty());
+    // A dialog box ("Links List dialog", Okur's own GTK dialogs; a GTK dialog, an alert), said
+    // with its role as its focus comes, as Windows' dialog box is.
+    if window.is_some_and(|w| matches!(w.role.as_str(), "dialog" | "alert")) {
+        event.in_dialog_box = true;
+        if event.dialog_text.is_none() {
+            event.dialog_text = Some(String::new());
+        }
+    }
     // The control as read now, not as its event's snapshot had it: read again as something
     // within it changed, it may have another name or state ("Play" become "Pause"; the code
     // review of 2026-11-08).
@@ -393,6 +400,29 @@ mod tests {
         let mut event = FocusEvent::new(Role::ListItem);
         place(&mut event, &item("/b"), &list);
         assert_eq!((event.item_index, event.item_count), (Some(2), Some(3)));
+    }
+
+    /// A control in a dialog box is in it, which its window's coming says with its role; one in
+    /// a frame is not.
+    #[test]
+    fn a_control_in_a_dialog_box_is_in_it() {
+        let button = AtspiNode {
+            role: "push button".to_owned(),
+            name: "OK".to_owned(),
+            ..AtspiNode::default()
+        };
+        let window = |role: &str| AtspiNode {
+            role: role.to_owned(),
+            name: "Links List".to_owned(),
+            ..AtspiNode::default()
+        };
+        let event = native_focus(FocusEvent::new(Role::Button), &button, &[window("dialog")]);
+        assert!(event.in_dialog_box);
+        assert_eq!(event.dialog_text.as_deref(), Some(""));
+        assert_eq!(event.window_title.as_deref(), Some("Links List"));
+        let event = native_focus(FocusEvent::new(Role::Button), &button, &[window("frame")]);
+        assert!(!event.in_dialog_box);
+        assert!(event.dialog_text.is_none());
     }
 
     #[test]

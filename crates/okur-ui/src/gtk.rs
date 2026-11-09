@@ -125,7 +125,7 @@ enum Shown {
     Entry(gtk::Entry),
     Scale(gtk::Scale),
     Button(gtk::Button),
-    List(gtk::ListBox),
+    List(ShownList),
     Radios(Vec<gtk::CheckButton>),
     Text(gtk::Label),
     Note(gtk::TextView),
@@ -141,12 +141,68 @@ impl Shown {
             Shown::Entry(w) => w.clone().upcast(),
             Shown::Scale(w) => w.clone().upcast(),
             Shown::Button(w) => w.clone().upcast(),
-            Shown::List(w) => w.clone().upcast(),
+            Shown::List(list) => list.widget(),
             Shown::Radios(buttons) => buttons.first()?.clone().upcast(),
             Shown::Text(w) => w.clone().upcast(),
             Shown::Note(w) => w.clone().upcast(),
             Shown::Other(w) => w.clone(),
         })
+    }
+}
+
+/// A list of Okur's: its items, the one selected, and the view showing them: a column view for
+/// a list view (one column, as the element lists' list view on Windows: "links List view"), a
+/// list view for a list box. Tab leaves either after its item, as a Windows list is one stop;
+/// GTK's list box moved Tab from row to row (224 in gtk2).
+struct ShownList {
+    view: ListWidget,
+    items: gtk::StringList,
+    selection: gtk::SingleSelection,
+}
+
+enum ListWidget {
+    Columns(gtk::ColumnView),
+    Rows(gtk::ListView),
+}
+
+impl ShownList {
+    fn widget(&self) -> gtk::Widget {
+        match &self.view {
+            ListWidget::Columns(view) => view.clone().upcast(),
+            ListWidget::Rows(view) => view.clone().upcast(),
+        }
+    }
+
+    /// Its items in place of those it had.
+    fn fill(&self, items: &[String]) {
+        let texts: Vec<&str> = items.iter().map(String::as_str).collect();
+        self.items.splice(0, self.items.n_items(), &texts);
+    }
+
+    /// Item `i` selected, the focus on it where the list has the focus, or `focus`.
+    fn select(&self, i: usize, focus: bool) {
+        let Ok(at) = u32::try_from(i) else {
+            return;
+        };
+        if at >= self.items.n_items() {
+            return;
+        }
+        self.selection.set_selected(at);
+        let widget = self.widget();
+        if focus || widget.has_focus() || widget.focus_child().is_some() {
+            let flags = gtk::ListScrollFlags::FOCUS | gtk::ListScrollFlags::SELECT;
+            match &self.view {
+                ListWidget::Columns(view) => {
+                    view.scroll_to(at, None::<&gtk::ColumnViewColumn>, flags, None);
+                }
+                ListWidget::Rows(view) => view.scroll_to(at, flags, None),
+            }
+        }
+    }
+
+    /// The item selected.
+    fn selected(&self) -> usize {
+        usize::try_from(self.selection.selected()).unwrap_or(0)
     }
 }
 
@@ -236,7 +292,10 @@ impl Ui {
             return;
         }
         let id = spec.id;
-        let window = gtk::Window::new();
+        // A dialog box to the accessibility bus, as Windows' dialog is: "Links List dialog".
+        let window = gtk::Window::builder()
+            .accessible_role(gtk::AccessibleRole::Dialog)
+            .build();
         window.set_title(Some(&spec.title));
         window.set_default_size(480, -1);
         let setting = Rc::new(Cell::new(false));
@@ -326,6 +385,17 @@ impl Ui {
         window.present();
         if let Some(first) = first {
             first.grab_focus();
+            // A list taking the focus as the dialog opens has it on its selected item, as
+            // Windows' list does: "links List view | Current Page Overview | 1 of 15".
+            if let Some(dialog) = ui.dialogs.borrow().get(&id) {
+                for shown in dialog.controls.values() {
+                    if let Shown::List(list) = shown {
+                        if list.widget() == first {
+                            list.select(list.selected(), true);
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -353,7 +423,7 @@ impl Ui {
             (Shown::Choice(choice), Value::Selected(i)) => {
                 choice.set_selected(u32::try_from(*i).unwrap_or(u32::MAX));
             }
-            (Shown::List(list), Value::Selected(i)) => select_row(list, *i),
+            (Shown::List(list), Value::Selected(i)) => list.select(*i, false),
             (Shown::Radios(buttons), Value::Selected(i)) => {
                 if let Some(button) = buttons.get(*i) {
                     button.set_active(true);
@@ -377,8 +447,8 @@ impl Ui {
         dialog.setting.set(true);
         match dialog.controls.get(control) {
             Some(Shown::List(list)) => {
-                fill_list(list, items);
-                select_row(list, selected);
+                list.fill(items);
+                list.select(selected, false);
             }
             Some(Shown::Choice(choice)) => {
                 let texts: Vec<&str> = items.iter().map(String::as_str).collect();
@@ -402,26 +472,30 @@ fn kind(message: &ToUi) -> String {
         .unwrap_or_default()
 }
 
-/// A list's items in place of those it had.
-fn fill_list(list: &gtk::ListBox, items: &[String]) {
-    while let Some(row) = list.first_child() {
-        list.remove(&row);
-    }
-    for item in items {
-        let label = gtk::Label::new(Some(item));
+/// A list of strings' rows: each a label of its item.
+fn text_rows() -> gtk::SignalListItemFactory {
+    let factory = gtk::SignalListItemFactory::new();
+    factory.connect_setup(|_, object| {
+        let Some(item) = object.downcast_ref::<gtk::ListItem>() else {
+            return;
+        };
+        let label = gtk::Label::new(None);
         label.set_xalign(0.0);
-        list.append(&label);
-    }
-}
-
-/// Selects a list's row `i`, scrolled to and focused where the list has the focus.
-fn select_row(list: &gtk::ListBox, i: usize) {
-    if let Some(row) = i32::try_from(i).ok().and_then(|i| list.row_at_index(i)) {
-        list.select_row(Some(&row));
-        if list.focus_child().is_some() {
-            row.grab_focus();
-        }
-    }
+        item.set_child(Some(&label));
+    });
+    factory.connect_bind(|_, object| {
+        let Some(item) = object.downcast_ref::<gtk::ListItem>() else {
+            return;
+        };
+        let Some(label) = item.child().and_downcast::<gtk::Label>() else {
+            return;
+        };
+        let Some(text) = item.item().and_downcast::<gtk::StringObject>() else {
+            return;
+        };
+        label.set_label(&text.string());
+    });
+    factory
 }
 
 /// A label shown before a field, its access key moving to the field.
@@ -534,33 +608,66 @@ fn build(
             (Shown::Button(button), None)
         }
         ControlKind::List { items, selected } | ControlKind::ListBox { items, selected } => {
-            let list = gtk::ListBox::new();
-            list.set_selection_mode(gtk::SelectionMode::Single);
-            fill_list(&list, items);
-            select_row(&list, *selected);
+            let model = gtk::StringList::new(&[]);
+            let selection = gtk::SingleSelection::new(Some(model.clone()));
+            selection.set_autoselect(true);
+            selection.set_can_unselect(false);
+            let list_view = matches!(control.kind, ControlKind::List { .. });
+            let title = plain(&control.label);
+            let view = if list_view {
+                let columns = gtk::ColumnView::new(Some(selection.clone()));
+                let column = gtk::ColumnViewColumn::new(Some(&title), Some(text_rows()));
+                column.set_expand(true);
+                columns.append_column(&column);
+                columns.set_tab_behavior(gtk::ListTabBehavior::Item);
+                ListWidget::Columns(columns)
+            } else {
+                let rows = gtk::ListView::new(Some(selection.clone()), Some(text_rows()));
+                rows.set_tab_behavior(gtk::ListTabBehavior::Item);
+                ListWidget::Rows(rows)
+            };
+            let list = ShownList {
+                view,
+                items: model,
+                selection: selection.clone(),
+            };
+            list.fill(items);
+            list.select(*selected, false);
+            let widget = list.widget();
             // A list's label names it; a list box's is shown above it ("Running Applications
             // List box").
-            let label = matches!(control.kind, ControlKind::ListBox { .. })
-                .then(|| field_label(&control.label, &list));
-            list.update_property(&[gtk::accessible::Property::Label(&plain(&control.label))]);
-            let setting = Rc::clone(setting);
-            list.connect_row_selected(move |_, row| {
-                if let Some(i) = row.and_then(|r| usize::try_from(r.index()).ok()) {
-                    changed(id, &name, &setting, Value::Selected(i));
-                }
-            });
-            // Enter on an item presses the dialog's default button.
+            let label = (!list_view).then(|| field_label(&control.label, &widget));
+            widget.update_property(&[gtk::accessible::Property::Label(&title)]);
             {
-                let window = window.clone();
-                list.connect_row_activated(move |_, _| {
-                    if let Some(default) = window.default_widget() {
-                        default.activate();
+                let setting = Rc::clone(setting);
+                selection.connect_selected_notify(move |selection| {
+                    let at = selection.selected();
+                    if at == gtk::INVALID_LIST_POSITION {
+                        return;
+                    }
+                    if let Ok(i) = usize::try_from(at) {
+                        changed(id, &name, &setting, Value::Selected(i));
                     }
                 });
             }
+            // Enter on an item presses the dialog's default button.
+            let window = window.clone();
+            let press_default = move || {
+                if let Some(default) = window.default_widget() {
+                    default.activate();
+                }
+            };
+            match &list.view {
+                ListWidget::Columns(view) => {
+                    view.connect_activate(move |_, _| press_default());
+                }
+                ListWidget::Rows(view) => {
+                    view.connect_activate(move |_, _| press_default());
+                }
+            }
             let scrolled = gtk::ScrolledWindow::new();
             scrolled.set_min_content_height(200);
-            scrolled.set_child(Some(&list));
+            scrolled.set_child(Some(&widget));
             if let Some(label) = &label {
                 place.append(label);
             }
