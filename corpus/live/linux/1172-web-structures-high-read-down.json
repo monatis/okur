@@ -1,0 +1,875 @@
+{
+ "scenario_id": "1172-web-structures-high-read-down",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "aac6f125"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794181843611
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794181844974,
+     "t_end_ms": 1794181845978,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e Structures Fixture",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794181845978,
+     "t_end_ms": 1794181846982,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Each structure below has one line of its own text.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794181846982,
+     "t_end_ms": 1794181847986,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "A small square\n \u001d Graphic \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794181847986,
+     "t_end_ms": 1794181848990,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Figure caption text",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794181848990,
+     "t_end_ms": 1794181849994,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Updates feed",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794181849994,
+     "t_end_ms": 1794181850998,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "First update article",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794181850998,
+     "t_end_ms": 1794181852003,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "First update text",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794181852003,
+     "t_end_ms": 1794181853008,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "First update article end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794181853008,
+     "t_end_ms": 1794181854112,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Second update article",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794181854112,
+     "t_end_ms": 1794181855116,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Second update text",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794181855116,
+     "t_end_ms": 1794181856120,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Second update article end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794181856120,
+     "t_end_ms": 1794181857125,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Updates feed end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794181857125,
+     "t_end_ms": 1794181858129,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "group start Messages",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794181858130,
+     "t_end_ms": 1794181859134,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Log entry text",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794181859134,
+     "t_end_ms": 1794181860138,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "group end Messages",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794181860138,
+     "t_end_ms": 1794181861142,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "note",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s17",
+     "t_start_ms": 1794181861142,
+     "t_end_ms": 1794181862147,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Note text",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s18",
+     "t_start_ms": 1794181862147,
+     "t_end_ms": 1794181863151,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "note end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s19",
+     "t_start_ms": 1794181863151,
+     "t_end_ms": 1794181864156,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Formatting toolbar with 2 controls",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s20",
+     "t_start_ms": 1794181864156,
+     "t_end_ms": 1794181865160,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Bold \u001d Button \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s21",
+     "t_start_ms": 1794181865160,
+     "t_end_ms": 1794181866165,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Italic \u001d Button \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s22",
+     "t_start_ms": 1794181866165,
+     "t_end_ms": 1794181867169,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "toolbar end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s23",
+     "t_start_ms": 1794181867169,
+     "t_end_ms": 1794181868174,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Notes field",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s24",
+     "t_start_ms": 1794181868174,
+     "t_end_ms": 1794181869179,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Editable Section Start",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s25",
+     "t_start_ms": 1794181869179,
+     "t_end_ms": 1794181870183,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Editable text",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s26",
+     "t_start_ms": 1794181870183,
+     "t_end_ms": 1794181871187,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Editable Section End",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s27",
+     "t_start_ms": 1794181871187,
+     "t_end_ms": 1794181872191,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "group start Delivery",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s28",
+     "t_start_ms": 1794181872191,
+     "t_end_ms": 1794181873195,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Express \u001d check box \u001e  \u001dnot checked\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s29",
+     "t_start_ms": 1794181873195,
+     "t_end_ms": 1794181874200,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "group end Delivery",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s30",
+     "t_start_ms": 1794181874200,
+     "t_end_ms": 1794181875204,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Contact form Form",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s31",
+     "t_start_ms": 1794181875204,
+     "t_end_ms": 1794181876208,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Email",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s32",
+     "t_start_ms": 1794181876208,
+     "t_end_ms": 1794181877213,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d Edit \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s33",
+     "t_start_ms": 1794181877213,
+     "t_end_ms": 1794181878217,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Contact form Form end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s34",
+     "t_start_ms": 1794181878217,
+     "t_end_ms": 1794181879221,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Opening hours region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s35",
+     "t_start_ms": 1794181879221,
+     "t_end_ms": 1794181880226,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Region text",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s36",
+     "t_start_ms": 1794181880226,
+     "t_end_ms": 1794181881230,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Opening hours region end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s37",
+     "t_start_ms": 1794181881230,
+     "t_end_ms": 1794181882234,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Site search search region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s38",
+     "t_start_ms": 1794181882234,
+     "t_end_ms": 1794181883239,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Search",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s39",
+     "t_start_ms": 1794181883239,
+     "t_end_ms": 1794181884242,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d Edit \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s40",
+     "t_start_ms": 1794181884242,
+     "t_end_ms": 1794181885247,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Site search search region end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s41",
+     "t_start_ms": 1794181885247,
+     "t_end_ms": 1794181886251,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "The end of the structures.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s42",
+     "t_start_ms": 1794181886251,
+     "t_end_ms": 1794181887256,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "The end of the structures.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s43",
+     "t_start_ms": 1794181887256,
+     "t_end_ms": 1794181888260,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "The end of the structures.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s44",
+     "t_start_ms": 1794181888260,
+     "t_end_ms": 1794181889264,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "The end of the structures.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s45",
+     "t_start_ms": 1794181889264,
+     "t_end_ms": 1794181890268,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "The end of the structures.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s46",
+     "t_start_ms": 1794181890268,
+     "t_end_ms": 1794181891272,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "The end of the structures.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s47",
+     "t_start_ms": 1794181891272,
+     "t_end_ms": 1794181892276,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "The end of the structures.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s48",
+     "t_start_ms": 1794181892276,
+     "t_end_ms": 1794181893380,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "The end of the structures.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s49",
+     "t_start_ms": 1794181893380,
+     "t_end_ms": 1794181894385,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "The end of the structures.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s50",
+     "t_start_ms": 1794181894385,
+     "t_end_ms": 1794181895389,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "The end of the structures.",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

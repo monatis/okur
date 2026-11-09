@@ -1,0 +1,132 @@
+{
+ "scenario_id": "1141-web-phonetic-on-pause",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "aac6f125"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794180894831
+    },
+    {
+     "key": "Down",
+     "t_ms": 1794180895194
+    },
+    {
+     "key": "Down",
+     "t_ms": 1794180895496
+    },
+    {
+     "key": "Down",
+     "t_ms": 1794180895797
+    },
+    {
+     "key": "Down",
+     "t_ms": 1794180896099
+    },
+    {
+     "key": "Down",
+     "t_ms": 1794180896400
+    },
+    {
+     "key": "Down",
+     "t_ms": 1794180896701
+    },
+    {
+     "key": "Down",
+     "t_ms": 1794180897003
+    },
+    {
+     "key": "Down",
+     "t_ms": 1794180897304
+    },
+    {
+     "key": "Down",
+     "t_ms": 1794180897606
+    },
+    {
+     "key": "Down",
+     "t_ms": 1794180897907
+    },
+    {
+     "key": "Down",
+     "t_ms": 1794180898208
+    },
+    {
+     "key": "Down",
+     "t_ms": 1794180898510
+    },
+    {
+     "key": "Down",
+     "t_ms": 1794180898811
+    },
+    {
+     "key": "Down",
+     "t_ms": 1794180899112
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794180900416,
+     "t_end_ms": 1794180901420,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "d",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794180901420,
+     "t_end_ms": 1794180902425,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "a",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794180902425,
+     "t_end_ms": 1794180903429,
+     "action": {
+      "type": "key",
+      "command": "Left"
+     },
+     "keys": [
+      "Left"
+     ],
+     "observation": {
+      "speech_raw": "d",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

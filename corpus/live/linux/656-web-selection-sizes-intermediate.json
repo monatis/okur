@@ -1,0 +1,518 @@
+{
+ "scenario_id": "656-web-selection-sizes-intermediate",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "aac6f125"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794187226003
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794187227360,
+     "t_end_ms": 1794187228365,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "observation": {
+      "speech_raw": "Selection Sizes",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794187228365,
+     "t_end_ms": 1794187229368,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794187229368,
+     "t_end_ms": 1794187230373,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Shift+End"
+     },
+     "keys": [
+      "Ctrl+Shift+End"
+     ],
+     "observation": {
+      "speech_raw": "selected\n1194 characters up to\nd of all of it here.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794187230373,
+     "t_end_ms": 1794187231379,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "observation": {
+      "speech_raw": "Selection Sizes",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794187231379,
+     "t_end_ms": 1794187232382,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794187232382,
+     "t_end_ms": 1794187233388,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Shift+End"
+     },
+     "keys": [
+      "Ctrl+Shift+End"
+     ],
+     "observation": {
+      "speech_raw": "selected\n1194 characters up to\nd of all of it here.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794187233388,
+     "t_end_ms": 1794187234392,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "observation": {
+      "speech_raw": "Selection Sizes",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794187234392,
+     "t_end_ms": 1794187235396,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794187235396,
+     "t_end_ms": 1794187236402,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Shift+End"
+     },
+     "keys": [
+      "Ctrl+Shift+End"
+     ],
+     "observation": {
+      "speech_raw": "selected\n1194 characters up to\nd of all of it here.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794187236402,
+     "t_end_ms": 1794187237407,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "observation": {
+      "speech_raw": "Selection Sizes",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794187237407,
+     "t_end_ms": 1794187238411,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794187238411,
+     "t_end_ms": 1794187239416,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Shift+End"
+     },
+     "keys": [
+      "Ctrl+Shift+End"
+     ],
+     "observation": {
+      "speech_raw": "selected\n1194 characters up to\nd of all of it here.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794187239416,
+     "t_end_ms": 1794187240420,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "observation": {
+      "speech_raw": "Selection Sizes",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794187240420,
+     "t_end_ms": 1794187241423,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794187241423,
+     "t_end_ms": 1794187242428,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Shift+End"
+     },
+     "keys": [
+      "Ctrl+Shift+End"
+     ],
+     "observation": {
+      "speech_raw": "selected\n1194 characters up to\nd of all of it here.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794187242428,
+     "t_end_ms": 1794187243433,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "observation": {
+      "speech_raw": "Selection Sizes",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s17",
+     "t_start_ms": 1794187243433,
+     "t_end_ms": 1794187244437,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s18",
+     "t_start_ms": 1794187244437,
+     "t_end_ms": 1794187245442,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Shift+End"
+     },
+     "keys": [
+      "Ctrl+Shift+End"
+     ],
+     "observation": {
+      "speech_raw": "selected\n1194 characters up to\nd of all of it here.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s19",
+     "t_start_ms": 1794187245442,
+     "t_end_ms": 1794187246446,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "observation": {
+      "speech_raw": "Selection Sizes",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s20",
+     "t_start_ms": 1794187246446,
+     "t_end_ms": 1794187247451,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s21",
+     "t_start_ms": 1794187247451,
+     "t_end_ms": 1794187248456,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Shift+End"
+     },
+     "keys": [
+      "Ctrl+Shift+End"
+     ],
+     "observation": {
+      "speech_raw": "selected\n1194 characters up to\nd of all of it here.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s22",
+     "t_start_ms": 1794187248456,
+     "t_end_ms": 1794187249462,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "observation": {
+      "speech_raw": "Selection Sizes",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s23",
+     "t_start_ms": 1794187249462,
+     "t_end_ms": 1794187250466,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s24",
+     "t_start_ms": 1794187250466,
+     "t_end_ms": 1794187251473,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Shift+End"
+     },
+     "keys": [
+      "Ctrl+Shift+End"
+     ],
+     "observation": {
+      "speech_raw": "selected\n1194 characters up to\nd of all of it here.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s25",
+     "t_start_ms": 1794187251473,
+     "t_end_ms": 1794187252477,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "observation": {
+      "speech_raw": "Selection Sizes",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s26",
+     "t_start_ms": 1794187252477,
+     "t_end_ms": 1794187253482,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Paragraph 01 of fifteen, eighty characters each: alpha bravo charlie delta echo.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s27",
+     "t_start_ms": 1794187253482,
+     "t_end_ms": 1794187254488,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Shift+End"
+     },
+     "keys": [
+      "Ctrl+Shift+End"
+     ],
+     "observation": {
+      "speech_raw": "selected\n1194 characters up to\nd of all of it here.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s28",
+     "t_start_ms": 1794187254488,
+     "t_end_ms": 1794187255493,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "observation": {
+      "speech_raw": "Selection Sizes",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s29",
+     "t_start_ms": 1794187255493,
+     "t_end_ms": 1794187256499,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Shift+End"
+     },
+     "keys": [
+      "Ctrl+Shift+End"
+     ],
+     "observation": {
+      "speech_raw": "selected\n1210 characters up to\nd of all of it here.",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

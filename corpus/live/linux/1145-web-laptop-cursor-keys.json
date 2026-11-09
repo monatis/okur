@@ -1,0 +1,203 @@
+{
+ "scenario_id": "1145-web-laptop-cursor-keys",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "aac6f125"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": false,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794181014579
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794181015940,
+     "t_end_ms": 1794181016944,
+     "action": {
+      "type": "key",
+      "command": "CapsLock+P"
+     },
+     "keys": [
+      "CapsLock+P"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true,
+      "not_pressed": true
+     },
+     "step_success": false
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794181016944,
+     "t_end_ms": 1794181017948,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "observation": {
+      "speech_raw": "Activation Fixture",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794181017948,
+     "t_end_ms": 1794181018952,
+     "action": {
+      "type": "key",
+      "command": "CapsLock+Semicolon"
+     },
+     "keys": [
+      "CapsLock+Semicolon"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true,
+      "not_pressed": true
+     },
+     "step_success": false
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794181018952,
+     "t_end_ms": 1794181019956,
+     "action": {
+      "type": "key",
+      "command": "CapsLock+P"
+     },
+     "keys": [
+      "CapsLock+P"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true,
+      "not_pressed": true
+     },
+     "step_success": false
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794181019956,
+     "t_end_ms": 1794181020961,
+     "action": {
+      "type": "key",
+      "command": "CapsLock+LeftBracket"
+     },
+     "keys": [
+      "CapsLock+LeftBracket"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true,
+      "not_pressed": true
+     },
+     "step_success": false
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794181020961,
+     "t_end_ms": 1794181021965,
+     "action": {
+      "type": "key",
+      "command": "CapsLock+Semicolon"
+     },
+     "keys": [
+      "CapsLock+Semicolon"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true,
+      "not_pressed": true
+     },
+     "step_success": false
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794181021965,
+     "t_end_ms": 1794181022969,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e Activation",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794181022969,
+     "t_end_ms": 1794181023974,
+     "action": {
+      "type": "key",
+      "command": "CapsLock+P"
+     },
+     "keys": [
+      "CapsLock+P"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true,
+      "not_pressed": true
+     },
+     "step_success": false
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794181023974,
+     "t_end_ms": 1794181024978,
+     "action": {
+      "type": "key",
+      "command": "CapsLock+Apostrophe"
+     },
+     "keys": [
+      "CapsLock+Apostrophe"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true,
+      "not_pressed": true
+     },
+     "step_success": false
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794181024978,
+     "t_end_ms": 1794181025983,
+     "action": {
+      "type": "key",
+      "command": "CapsLock+Semicolon"
+     },
+     "keys": [
+      "CapsLock+Semicolon"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true,
+      "not_pressed": true
+     },
+     "step_success": false
+    }
+   ]
+  }
+ ]
+}

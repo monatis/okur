@@ -1,0 +1,59 @@
+{
+ "scenario_id": "652-web-select-all-web-menus",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "aac6f125"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794187143784
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794187145152,
+     "t_end_ms": 1794187146156,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+A"
+     },
+     "keys": [
+      "Ctrl+A"
+     ],
+     "observation": {
+      "speech_raw": "selected\nWeb Menus\n \u001d heading level 1 \u001e Web Menus\nMain menu MenuBar with 3 items\nFile \u001d menu \u001e  \u001dsub menu\u001e  \u001dcollapsed\u001e \nEdit \u001d menu \u001e  \u001dsub menu\u001e  \u001dcollapsed\u001e \nHelp \u001d menu \u001e \nMenuBar end\nNotes\n \u001d Edit \u001e First line of notes.\nChosen: none",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794187146156,
+     "t_end_ms": 1794187147161,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "observation": {
+      "speech_raw": "Web Menus",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

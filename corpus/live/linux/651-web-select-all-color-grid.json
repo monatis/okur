@@ -1,0 +1,59 @@
+{
+ "scenario_id": "651-web-select-all-color-grid",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "aac6f125"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794187117812
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794187119173,
+     "t_end_ms": 1794187120177,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+A"
+     },
+     "keys": [
+      "Ctrl+A"
+     ],
+     "observation": {
+      "speech_raw": "selected\n4310 characters up to\n\n\nGrid 216, ff ff ff.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794187120177,
+     "t_end_ms": 1794187121182,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "observation": {
+      "speech_raw": "Color Grid",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,59 @@
+{
+ "scenario_id": "653-web-select-all-web-app-patterns",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "aac6f125"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794187169852
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794187171217,
+     "t_end_ms": 1794187172222,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+A"
+     },
+     "keys": [
+      "Ctrl+A"
+     ],
+     "observation": {
+      "speech_raw": "selected\nWeb App Patterns\n \u001d heading level 1 \u001e Web App Patterns\n \u001d heading level 2 \u001e Current links\nlist of 3 items\n\u2022 \u001d same page link \u001e  \u001dCurrent Page\u001e Overview\n\u2022 \u001d Link \u001e Settings\n\u2022 \u001d same page link \u001e  \u001dCurrent Step\u001e Step two\nlist end\n \u001d heading level 2 \u001e Described controls\nNext slide \u001d slide control \u001e \n \u001d chip \u001e Rust\nWrap \u001d toggle \u001e  \u001dnot checked\u001e \n \u001d heading level 2 \u001e Popup buttons\nOutline \u001d button menu \u001e \nActions \u001d button menu \u001e  \u001dcollapsed\u001e \nPick one \u001d Button \u001e  \u001dHas Popup\u001e  listbox\n \u001d heading level 2 \u001e Fruit search\nFruit\n \u001d heading level 2 \u001e Tab from here\nStart \u001d Button \u001e \n \u001d same page link \u001e Skipped link\ngroup start Featured\nGroup text\ngroup end Featured\nNotes\n \u001d Edit \u001e the lazy dog, then reads std::io again\n \u001d heading level 2 \u001e Repository files\nFiles navigation region\nlist of 1 items\n\u2022 \u001d same page link \u001e  \u001dCurrent Page\u001e README\nlist end\nFiles navigation region end\n \u001d heading level 2 \u001e Workbench region\nFirst tool \u001d Button \u001e \nSecond tool \u001d Button \u001e \nKeys:\nEnd of page\n \u001d heading level 2 \u001e Files table\ntable with 2 columns and 4 rows\nName\nMessage\n \u001d same page link \u001e alpha.rs\n \u001d same page link \u001e first commit\n \u001d same page link \u001e beta.rs\nno link\n \u001d same page link \u001e gamma.rs\n \u001d same page link \u001e third commit\ntable end\n \u001d heading level 2 \u001e Landmarks\nRelated complementary information\n \u001d same page link \u001e Aside link\nRelated complementary information end\nSite search region\n \u001d same page link \u001e Search link\nSite search region end\nUpdates region\n \u001d same page link \u001e Region link\nUpdates region end\ncontent information\n \u001d same page link \u001e Footer link\ncontent information end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794187172222,
+     "t_end_ms": 1794187173226,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "observation": {
+      "speech_raw": "Web App Patterns",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

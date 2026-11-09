@@ -1,0 +1,620 @@
+{
+ "scenario_id": "620-web-selection-threshold",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "aac6f125"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794186536815
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794186538874,
+     "t_end_ms": 1794186539878,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "observation": {
+      "speech_raw": "Selection Threshold",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794186539878,
+     "t_end_ms": 1794186540882,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Line 001.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794186540882,
+     "t_end_ms": 1794186541887,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Shift+End"
+     },
+     "keys": [
+      "Ctrl+Shift+End"
+     ],
+     "observation": {
+      "speech_raw": "selected\n1009 characters up to\n\n\nLine 102.\nLine 103.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794186541887,
+     "t_end_ms": 1794186542892,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "observation": {
+      "speech_raw": "Selection Threshold",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794186542892,
+     "t_end_ms": 1794186543896,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Line 001.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794186543896,
+     "t_end_ms": 1794186544902,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Shift+End"
+     },
+     "keys": [
+      "Ctrl+Shift+End"
+     ],
+     "observation": {
+      "speech_raw": "selected\n1009 characters up to\n\n\nLine 102.\nLine 103.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794186544902,
+     "t_end_ms": 1794186545907,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "observation": {
+      "speech_raw": "Selection Threshold",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794186545907,
+     "t_end_ms": 1794186546912,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Line 001.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794186546912,
+     "t_end_ms": 1794186547916,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "i",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794186547916,
+     "t_end_ms": 1794186548922,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Shift+End"
+     },
+     "keys": [
+      "Ctrl+Shift+End"
+     ],
+     "observation": {
+      "speech_raw": "selected\n1008 characters up to\n\n\nLine 102.\nLine 103.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794186548922,
+     "t_end_ms": 1794186549927,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "observation": {
+      "speech_raw": "Selection Threshold",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794186549927,
+     "t_end_ms": 1794186550931,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Line 001.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794186550931,
+     "t_end_ms": 1794186551935,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "i",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794186551935,
+     "t_end_ms": 1794186552941,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Shift+End"
+     },
+     "keys": [
+      "Ctrl+Shift+End"
+     ],
+     "observation": {
+      "speech_raw": "selected\n1008 characters up to\n\n\nLine 102.\nLine 103.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794186552941,
+     "t_end_ms": 1794186553946,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "observation": {
+      "speech_raw": "Selection Threshold",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794186553946,
+     "t_end_ms": 1794186554951,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Line 001.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s17",
+     "t_start_ms": 1794186554951,
+     "t_end_ms": 1794186555956,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Shift+End"
+     },
+     "keys": [
+      "Ctrl+Shift+End"
+     ],
+     "observation": {
+      "speech_raw": "selected\n1009 characters up to\n\n\nLine 102.\nLine 103.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s18",
+     "t_start_ms": 1794186555956,
+     "t_end_ms": 1794186556961,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "observation": {
+      "speech_raw": "Selection Threshold",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s19",
+     "t_start_ms": 1794186556961,
+     "t_end_ms": 1794186557965,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Line 001.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s20",
+     "t_start_ms": 1794186557965,
+     "t_end_ms": 1794186558971,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Shift+End"
+     },
+     "keys": [
+      "Ctrl+Shift+End"
+     ],
+     "observation": {
+      "speech_raw": "selected\n1009 characters up to\n\n\nLine 102.\nLine 103.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s21",
+     "t_start_ms": 1794186558971,
+     "t_end_ms": 1794186559976,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "observation": {
+      "speech_raw": "Selection Threshold",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s22",
+     "t_start_ms": 1794186559976,
+     "t_end_ms": 1794186560980,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Line 001.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s23",
+     "t_start_ms": 1794186560981,
+     "t_end_ms": 1794186561985,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "i",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s24",
+     "t_start_ms": 1794186561985,
+     "t_end_ms": 1794186562991,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Shift+End"
+     },
+     "keys": [
+      "Ctrl+Shift+End"
+     ],
+     "observation": {
+      "speech_raw": "selected\n1008 characters up to\n\n\nLine 102.\nLine 103.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s25",
+     "t_start_ms": 1794186562991,
+     "t_end_ms": 1794186563997,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "observation": {
+      "speech_raw": "Selection Threshold",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s26",
+     "t_start_ms": 1794186563997,
+     "t_end_ms": 1794186565001,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Line 001.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s27",
+     "t_start_ms": 1794186565001,
+     "t_end_ms": 1794186566005,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "i",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s28",
+     "t_start_ms": 1794186566005,
+     "t_end_ms": 1794186567012,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Shift+End"
+     },
+     "keys": [
+      "Ctrl+Shift+End"
+     ],
+     "observation": {
+      "speech_raw": "selected\n1008 characters up to\n\n\nLine 102.\nLine 103.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s29",
+     "t_start_ms": 1794186567012,
+     "t_end_ms": 1794186568017,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "observation": {
+      "speech_raw": "Selection Threshold",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s30",
+     "t_start_ms": 1794186568017,
+     "t_end_ms": 1794186569022,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Line 001.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s31",
+     "t_start_ms": 1794186569022,
+     "t_end_ms": 1794186570026,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "i",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s32",
+     "t_start_ms": 1794186570026,
+     "t_end_ms": 1794186571032,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Shift+End"
+     },
+     "keys": [
+      "Ctrl+Shift+End"
+     ],
+     "observation": {
+      "speech_raw": "selected\n1008 characters up to\n\n\nLine 102.\nLine 103.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s33",
+     "t_start_ms": 1794186571032,
+     "t_end_ms": 1794186572037,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "observation": {
+      "speech_raw": "Selection Threshold",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s34",
+     "t_start_ms": 1794186572037,
+     "t_end_ms": 1794186573041,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Line 001.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s35",
+     "t_start_ms": 1794186573041,
+     "t_end_ms": 1794186574047,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Shift+End"
+     },
+     "keys": [
+      "Ctrl+Shift+End"
+     ],
+     "observation": {
+      "speech_raw": "selected\n1009 characters up to\n\n\nLine 102.\nLine 103.",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

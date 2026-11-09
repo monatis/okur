@@ -1,0 +1,1504 @@
+{
+ "scenario_id": "207-web-character-review",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "aac6f125"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794182396737
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794182398100,
+     "t_end_ms": 1794182399103,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "main region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794182399103,
+     "t_end_ms": 1794182400107,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "a",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794182400107,
+     "t_end_ms": 1794182401110,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "i",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794182401110,
+     "t_end_ms": 1794182402113,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "n",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794182402113,
+     "t_end_ms": 1794182403118,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": " ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794182403118,
+     "t_end_ms": 1794182404122,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "r",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794182404122,
+     "t_end_ms": 1794182405126,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794182405126,
+     "t_end_ms": 1794182406130,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "g",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794182406130,
+     "t_end_ms": 1794182407135,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "i",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794182407135,
+     "t_end_ms": 1794182408139,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "o",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794182408139,
+     "t_end_ms": 1794182409143,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "n",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794182409143,
+     "t_end_ms": 1794182410146,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "\n",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794182410146,
+     "t_end_ms": 1794182411150,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "C",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794182411150,
+     "t_end_ms": 1794182412155,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "h",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794182412155,
+     "t_end_ms": 1794182413159,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "a",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794182413159,
+     "t_end_ms": 1794182414163,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "r",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s17",
+     "t_start_ms": 1794182414163,
+     "t_end_ms": 1794182415168,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "a",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s18",
+     "t_start_ms": 1794182415168,
+     "t_end_ms": 1794182416172,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "c",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s19",
+     "t_start_ms": 1794182416172,
+     "t_end_ms": 1794182417176,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "t",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s20",
+     "t_start_ms": 1794182417176,
+     "t_end_ms": 1794182418181,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s21",
+     "t_start_ms": 1794182418181,
+     "t_end_ms": 1794182419185,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "r",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s22",
+     "t_start_ms": 1794182419185,
+     "t_end_ms": 1794182420189,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": " ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s23",
+     "t_start_ms": 1794182420189,
+     "t_end_ms": 1794182421194,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "r",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s24",
+     "t_start_ms": 1794182421194,
+     "t_end_ms": 1794182422298,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s25",
+     "t_start_ms": 1794182422298,
+     "t_end_ms": 1794182423303,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "v",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s26",
+     "t_start_ms": 1794182423303,
+     "t_end_ms": 1794182424308,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "i",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s27",
+     "t_start_ms": 1794182424308,
+     "t_end_ms": 1794182425312,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s28",
+     "t_start_ms": 1794182425312,
+     "t_end_ms": 1794182426317,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "w",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s29",
+     "t_start_ms": 1794182426317,
+     "t_end_ms": 1794182427321,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "\n",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s30",
+     "t_start_ms": 1794182427321,
+     "t_end_ms": 1794182428325,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "a",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s31",
+     "t_start_ms": 1794182428325,
+     "t_end_ms": 1794182429329,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": " ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s32",
+     "t_start_ms": 1794182429329,
+     "t_end_ms": 1794182430334,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "!",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s33",
+     "t_start_ms": 1794182430334,
+     "t_end_ms": 1794182431338,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "\"",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s34",
+     "t_start_ms": 1794182431338,
+     "t_end_ms": 1794182432342,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "#",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s35",
+     "t_start_ms": 1794182432342,
+     "t_end_ms": 1794182433346,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "$",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s36",
+     "t_start_ms": 1794182433346,
+     "t_end_ms": 1794182434350,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "%",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s37",
+     "t_start_ms": 1794182434350,
+     "t_end_ms": 1794182435354,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "&",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s38",
+     "t_start_ms": 1794182435354,
+     "t_end_ms": 1794182436359,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "'",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s39",
+     "t_start_ms": 1794182436359,
+     "t_end_ms": 1794182437364,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "(",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s40",
+     "t_start_ms": 1794182437364,
+     "t_end_ms": 1794182438368,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": ")",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s41",
+     "t_start_ms": 1794182438368,
+     "t_end_ms": 1794182439373,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "*",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s42",
+     "t_start_ms": 1794182439373,
+     "t_end_ms": 1794182440377,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "+",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s43",
+     "t_start_ms": 1794182440377,
+     "t_end_ms": 1794182441382,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": ",",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s44",
+     "t_start_ms": 1794182441382,
+     "t_end_ms": 1794182442386,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "-",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s45",
+     "t_start_ms": 1794182442386,
+     "t_end_ms": 1794182443389,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": ".",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s46",
+     "t_start_ms": 1794182443389,
+     "t_end_ms": 1794182444393,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "/",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s47",
+     "t_start_ms": 1794182444393,
+     "t_end_ms": 1794182445398,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": ":",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s48",
+     "t_start_ms": 1794182445398,
+     "t_end_ms": 1794182446402,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": ";",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s49",
+     "t_start_ms": 1794182446402,
+     "t_end_ms": 1794182447406,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "<",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s50",
+     "t_start_ms": 1794182447406,
+     "t_end_ms": 1794182448409,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "=",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s51",
+     "t_start_ms": 1794182448409,
+     "t_end_ms": 1794182449414,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": ">",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s52",
+     "t_start_ms": 1794182449414,
+     "t_end_ms": 1794182450418,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "?",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s53",
+     "t_start_ms": 1794182450418,
+     "t_end_ms": 1794182451423,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "@",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s54",
+     "t_start_ms": 1794182451423,
+     "t_end_ms": 1794182452428,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "[",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s55",
+     "t_start_ms": 1794182452428,
+     "t_end_ms": 1794182453433,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "\\",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s56",
+     "t_start_ms": 1794182453433,
+     "t_end_ms": 1794182454437,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "]",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s57",
+     "t_start_ms": 1794182454437,
+     "t_end_ms": 1794182455441,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "^",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s58",
+     "t_start_ms": 1794182455441,
+     "t_end_ms": 1794182456446,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "_",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s59",
+     "t_start_ms": 1794182456446,
+     "t_end_ms": 1794182457449,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "`",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s60",
+     "t_start_ms": 1794182457449,
+     "t_end_ms": 1794182458453,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "{",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s61",
+     "t_start_ms": 1794182458453,
+     "t_end_ms": 1794182459457,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "|",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s62",
+     "t_start_ms": 1794182459457,
+     "t_end_ms": 1794182460462,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "}",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s63",
+     "t_start_ms": 1794182460462,
+     "t_end_ms": 1794182461467,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "~",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s64",
+     "t_start_ms": 1794182461467,
+     "t_end_ms": 1794182462471,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": " ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s65",
+     "t_start_ms": 1794182462471,
+     "t_end_ms": 1794182463475,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "B",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s66",
+     "t_start_ms": 1794182463475,
+     "t_end_ms": 1794182464479,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "\n",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s67",
+     "t_start_ms": 1794182464479,
+     "t_end_ms": 1794182465484,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "\t",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s68",
+     "t_start_ms": 1794182465484,
+     "t_end_ms": 1794182466489,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "x",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s69",
+     "t_start_ms": 1794182466489,
+     "t_end_ms": 1794182467493,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": " ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s70",
+     "t_start_ms": 1794182467493,
+     "t_end_ms": 1794182468498,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": " ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s71",
+     "t_start_ms": 1794182468498,
+     "t_end_ms": 1794182469502,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "=",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s72",
+     "t_start_ms": 1794182469502,
+     "t_end_ms": 1794182470506,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": " ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s73",
+     "t_start_ms": 1794182470506,
+     "t_end_ms": 1794182471511,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "1",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s74",
+     "t_start_ms": 1794182471511,
+     "t_end_ms": 1794182472515,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": ".",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s75",
+     "t_start_ms": 1794182472515,
+     "t_end_ms": 1794182473519,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "5",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s76",
+     "t_start_ms": 1794182473519,
+     "t_end_ms": 1794182474524,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": ";",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s77",
+     "t_start_ms": 1794182474524,
+     "t_end_ms": 1794182475528,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": " ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s78",
+     "t_start_ms": 1794182475528,
+     "t_end_ms": 1794182476533,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "a",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s79",
+     "t_start_ms": 1794182476533,
+     "t_end_ms": 1794182477537,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": ".",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s80",
+     "t_start_ms": 1794182477537,
+     "t_end_ms": 1794182478541,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "b",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s81",
+     "t_start_ms": 1794182478541,
+     "t_end_ms": 1794182479545,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": " ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s82",
+     "t_start_ms": 1794182479545,
+     "t_end_ms": 1794182480549,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s83",
+     "t_start_ms": 1794182480549,
+     "t_end_ms": 1794182481554,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "n",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s84",
+     "t_start_ms": 1794182481554,
+     "t_end_ms": 1794182482558,
+     "action": {
+      "type": "key",
+      "command": "Left"
+     },
+     "keys": [
+      "Left"
+     ],
+     "observation": {
+      "speech_raw": "e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s85",
+     "t_start_ms": 1794182482558,
+     "t_end_ms": 1794182483562,
+     "action": {
+      "type": "key",
+      "command": "Left"
+     },
+     "keys": [
+      "Left"
+     ],
+     "observation": {
+      "speech_raw": " ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s86",
+     "t_start_ms": 1794182483562,
+     "t_end_ms": 1794182484567,
+     "action": {
+      "type": "key",
+      "command": "Left"
+     },
+     "keys": [
+      "Left"
+     ],
+     "observation": {
+      "speech_raw": "b",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s87",
+     "t_start_ms": 1794182484567,
+     "t_end_ms": 1794182485571,
+     "action": {
+      "type": "key",
+      "command": "Insert+T"
+     },
+     "keys": [
+      "Insert+T"
+     ],
+     "observation": {
+      "speech_raw": "Title is\nCharacter Review - Characters Fixture - Google Chrome\nmain region\nlevel 2\nheading is Character review",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

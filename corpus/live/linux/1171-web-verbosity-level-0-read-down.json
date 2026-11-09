@@ -1,0 +1,1283 @@
+{
+ "scenario_id": "1171-web-verbosity-level-0-read-down",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "0",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "aac6f125"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794181744959
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794181746320,
+     "t_end_ms": 1794181747323,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Riverside Gazette",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794181747323,
+     "t_end_ms": 1794181748328,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "\u2022 \u001d same page link \u001e News",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794181748328,
+     "t_end_ms": 1794181749332,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "\u2022 \u001d same page link \u001e Sports",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794181749332,
+     "t_end_ms": 1794181750336,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "\u2022 \u001d same page link \u001e Culture",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794181750336,
+     "t_end_ms": 1794181751340,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "\u2022 \u001d same page link \u001e Opinion",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794181751340,
+     "t_end_ms": 1794181752344,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e City Library Expands Evening Hours",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794181752344,
+     "t_end_ms": 1794181753348,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "By ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794181753348,
+     "t_end_ms": 1794181754353,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Maria Lopez,",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794181754353,
+     "t_end_ms": 1794181755357,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "published March 14, 2026",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794181755357,
+     "t_end_ms": 1794181756360,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "The Riverside City Library will stay open until 9 p.m. on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794181756360,
+     "t_end_ms": 1794181757365,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "most respondents asked for later hours.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794181757365,
+     "t_end_ms": 1794181758369,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Front entrance of the Riverside City Library at dusk\n \u001d Graphic \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794181758369,
+     "t_end_ms": 1794181759374,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e What changes",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794181759374,
+     "t_end_ms": 1794181760378,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Membership costs $5.99 a month, e.g. for adults; children join free. Questions go to help@riverside-library.org \u2014 or call 555-0142. Attendance rose 3.5%",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794181760378,
+     "t_end_ms": 1794181761382,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "last year, and staff say they can't wait.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794181761382,
+     "t_end_ms": 1794181762387,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "\u2022 Weekday hours: 9 a.m. to 9 p.m.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s17",
+     "t_start_ms": 1794181762387,
+     "t_end_ms": 1794181763392,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "\u2022 Weekend hours, which do not change:",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s18",
+     "t_start_ms": 1794181763392,
+     "t_end_ms": 1794181764396,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "\u25e6 Saturday: 10 a.m. to 6 p.m.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s19",
+     "t_start_ms": 1794181764396,
+     "t_end_ms": 1794181765400,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "\u25e6 Sunday: noon to 5 p.m.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s20",
+     "t_start_ms": 1794181765400,
+     "t_end_ms": 1794181766404,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "\u2022 New ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s21",
+     "t_start_ms": 1794181766404,
+     "t_end_ms": 1794181767408,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e study rooms",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s22",
+     "t_start_ms": 1794181767408,
+     "t_end_ms": 1794181768412,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " open in May.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s23",
+     "t_start_ms": 1794181768412,
+     "t_end_ms": 1794181769417,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e Opening schedule",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s24",
+     "t_start_ms": 1794181769417,
+     "t_end_ms": 1794181770421,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "table with 3 columns and 3 rows",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s25",
+     "t_start_ms": 1794181770421,
+     "t_end_ms": 1794181771426,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Branch hours after the change",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s26",
+     "t_start_ms": 1794181771426,
+     "t_end_ms": 1794181772430,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Branch",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s27",
+     "t_start_ms": 1794181772430,
+     "t_end_ms": 1794181773435,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Weekdays",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s28",
+     "t_start_ms": 1794181773435,
+     "t_end_ms": 1794181774439,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Details",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s29",
+     "t_start_ms": 1794181774439,
+     "t_end_ms": 1794181775442,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Central",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s30",
+     "t_start_ms": 1794181775442,
+     "t_end_ms": 1794181776447,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "9 a.m. to 9 p.m.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s31",
+     "t_start_ms": 1794181776447,
+     "t_end_ms": 1794181777451,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Directions",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s32",
+     "t_start_ms": 1794181777451,
+     "t_end_ms": 1794181778456,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Northside",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s33",
+     "t_start_ms": 1794181778456,
+     "t_end_ms": 1794181779460,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "10 a.m. to 8 p.m.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s34",
+     "t_start_ms": 1794181779460,
+     "t_end_ms": 1794181780465,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Directions",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s35",
+     "t_start_ms": 1794181780465,
+     "t_end_ms": 1794181781469,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "table end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s36",
+     "t_start_ms": 1794181781469,
+     "t_end_ms": 1794181782474,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 3 \u001e What readers said",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s37",
+     "t_start_ms": 1794181782474,
+     "t_end_ms": 1794181783478,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Finally, I can study after work.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s38",
+     "t_start_ms": 1794181783478,
+     "t_end_ms": 1794181784483,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "The library board will review attendance in the fall. A long-standing complaint among students and working parents was that the reading rooms closed before",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s39",
+     "t_start_ms": 1794181784483,
+     "t_end_ms": 1794181785487,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "most people finished their day, so the extended schedule is intended to make the collections, the public computers, and the quiet study spaces available",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s40",
+     "t_start_ms": 1794181785487,
+     "t_end_ms": 1794181786492,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "at the times when the community actually needs them, according to the library director.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s41",
+     "t_start_ms": 1794181786492,
+     "t_end_ms": 1794181787496,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "1. Board vote in March",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s42",
+     "t_start_ms": 1794181787496,
+     "t_end_ms": 1794181788501,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "2. Hiring in April",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s43",
+     "t_start_ms": 1794181788501,
+     "t_end_ms": 1794181789504,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "3. Review in October",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s44",
+     "t_start_ms": 1794181789504,
+     "t_end_ms": 1794181790508,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e Related stories",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s45",
+     "t_start_ms": 1794181790508,
+     "t_end_ms": 1794181791513,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "\u2022 \u001d same page link \u001e Council approves library budget",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s46",
+     "t_start_ms": 1794181791513,
+     "t_end_ms": 1794181792517,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "\u2022 \u001d same page link \u001e Spring book fair returns",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s47",
+     "t_start_ms": 1794181792517,
+     "t_end_ms": 1794181793522,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "\u00a9 2026 Riverside Gazette. ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s48",
+     "t_start_ms": 1794181793522,
+     "t_end_ms": 1794181794526,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Contact us",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s49",
+     "t_start_ms": 1794181794526,
+     "t_end_ms": 1794181795530,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Contact us",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s50",
+     "t_start_ms": 1794181795530,
+     "t_end_ms": 1794181796635,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Contact us",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s51",
+     "t_start_ms": 1794181796635,
+     "t_end_ms": 1794181797639,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Contact us",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s52",
+     "t_start_ms": 1794181797639,
+     "t_end_ms": 1794181798644,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Contact us",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s53",
+     "t_start_ms": 1794181798644,
+     "t_end_ms": 1794181799648,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Contact us",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s54",
+     "t_start_ms": 1794181799648,
+     "t_end_ms": 1794181800651,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Contact us",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s55",
+     "t_start_ms": 1794181800651,
+     "t_end_ms": 1794181801656,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Contact us",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s56",
+     "t_start_ms": 1794181801656,
+     "t_end_ms": 1794181802660,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Contact us",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s57",
+     "t_start_ms": 1794181802660,
+     "t_end_ms": 1794181803664,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Contact us",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s58",
+     "t_start_ms": 1794181803664,
+     "t_end_ms": 1794181804669,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Contact us",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s59",
+     "t_start_ms": 1794181804669,
+     "t_end_ms": 1794181805673,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Contact us",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s60",
+     "t_start_ms": 1794181805673,
+     "t_end_ms": 1794181806678,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Contact us",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s61",
+     "t_start_ms": 1794181806678,
+     "t_end_ms": 1794181807683,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Contact us",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s62",
+     "t_start_ms": 1794181807683,
+     "t_end_ms": 1794181808687,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Contact us",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s63",
+     "t_start_ms": 1794181808687,
+     "t_end_ms": 1794181809691,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Contact us",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s64",
+     "t_start_ms": 1794181809691,
+     "t_end_ms": 1794181810695,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Contact us",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s65",
+     "t_start_ms": 1794181810695,
+     "t_end_ms": 1794181811699,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Contact us",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s66",
+     "t_start_ms": 1794181811699,
+     "t_end_ms": 1794181812704,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Contact us",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s67",
+     "t_start_ms": 1794181812704,
+     "t_end_ms": 1794181813708,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Contact us",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s68",
+     "t_start_ms": 1794181813708,
+     "t_end_ms": 1794181814712,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Contact us",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s69",
+     "t_start_ms": 1794181814712,
+     "t_end_ms": 1794181815716,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Contact us",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s70",
+     "t_start_ms": 1794181815716,
+     "t_end_ms": 1794181816721,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Contact us",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s71",
+     "t_start_ms": 1794181816721,
+     "t_end_ms": 1794181817725,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Contact us",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s72",
+     "t_start_ms": 1794181817725,
+     "t_end_ms": 1794181818729,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Contact us",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s73",
+     "t_start_ms": 1794181818729,
+     "t_end_ms": 1794181819734,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Contact us",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s74",
+     "t_start_ms": 1794181819734,
+     "t_end_ms": 1794181820738,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Contact us",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

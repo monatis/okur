@@ -1,0 +1,195 @@
+{
+ "scenario_id": "615-web-table-edges",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "aac6f125"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794185627229
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794185628589,
+     "t_end_ms": 1794185629593,
+     "action": {
+      "type": "key",
+      "command": "T"
+     },
+     "keys": [
+      "T"
+     ],
+     "observation": {
+      "speech_raw": "table with 3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794185629593,
+     "t_end_ms": 1794185630597,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Alt+Left"
+     },
+     "keys": [
+      "Ctrl+Alt+Left"
+     ],
+     "observation": {
+      "speech_raw": "beginning of row",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794185630597,
+     "t_end_ms": 1794185631603,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Alt+Up"
+     },
+     "keys": [
+      "Ctrl+Alt+Up"
+     ],
+     "observation": {
+      "speech_raw": "top of column",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794185631603,
+     "t_end_ms": 1794185632608,
+     "action": {
+      "type": "key",
+      "command": "Win+Alt+Up"
+     },
+     "keys": [
+      "Win+Alt+Up"
+     ],
+     "observation": {
+      "speech_raw": "You are on the first row of the table.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794185632608,
+     "t_end_ms": 1794185633612,
+     "action": {
+      "type": "key",
+      "command": "Win+Alt+Left"
+     },
+     "keys": [
+      "Win+Alt+Left"
+     ],
+     "observation": {
+      "speech_raw": "You are on the first column of the row.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794185633612,
+     "t_end_ms": 1794185634617,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Alt+End"
+     },
+     "keys": [
+      "Ctrl+Alt+End"
+     ],
+     "observation": {
+      "speech_raw": "Details  Northside\n \u001d same page link \u001e Directions\nColumn 3, Row 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794185634617,
+     "t_end_ms": 1794185635622,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Alt+Right"
+     },
+     "keys": [
+      "Ctrl+Alt+Right"
+     ],
+     "observation": {
+      "speech_raw": "end of row",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794185635622,
+     "t_end_ms": 1794185636628,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Alt+Down"
+     },
+     "keys": [
+      "Ctrl+Alt+Down"
+     ],
+     "observation": {
+      "speech_raw": "bottom of column",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794185636628,
+     "t_end_ms": 1794185637634,
+     "action": {
+      "type": "key",
+      "command": "Win+Alt+Down"
+     },
+     "keys": [
+      "Win+Alt+Down"
+     ],
+     "observation": {
+      "speech_raw": "You are on the last row in the table.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794185637634,
+     "t_end_ms": 1794185638640,
+     "action": {
+      "type": "key",
+      "command": "Win+Alt+Right"
+     },
+     "keys": [
+      "Win+Alt+Right"
+     ],
+     "observation": {
+      "speech_raw": "You are on the last column in the row.",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

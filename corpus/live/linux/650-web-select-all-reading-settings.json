@@ -1,0 +1,59 @@
+{
+ "scenario_id": "650-web-select-all-reading-settings",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "aac6f125"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794187091610
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794187092975,
+     "t_end_ms": 1794187093979,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+A"
+     },
+     "keys": [
+      "Ctrl+A"
+     ],
+     "observation": {
+      "speech_raw": "selected\n1547 characters up to\nfxo\nmain region end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794187093979,
+     "t_end_ms": 1794187094983,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "observation": {
+      "speech_raw": "Reading Settings - Reading Fixture",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

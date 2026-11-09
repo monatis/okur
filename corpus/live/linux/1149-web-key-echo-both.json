@@ -1,0 +1,161 @@
+{
+ "scenario_id": "1149-web-key-echo-both",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "aac6f125"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794181149958
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794181151322,
+     "t_end_ms": 1794181152326,
+     "action": {
+      "type": "key",
+      "command": "E"
+     },
+     "keys": [
+      "E"
+     ],
+     "observation": {
+      "speech_raw": "City \u001d Edit \u001e \nIzmir",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794181152326,
+     "t_end_ms": 1794181153431,
+     "action": {
+      "type": "key",
+      "command": "Enter"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "observation": {
+      "speech_raw": "Activation Fixture\nCity \u001d Edit \u001e \nIzmir\nType in text.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794181153431,
+     "t_end_ms": 1794181154434,
+     "action": {
+      "type": "key",
+      "command": "End"
+     },
+     "keys": [
+      "End"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794181154434,
+     "t_end_ms": 1794181155438,
+     "action": {
+      "type": "key",
+      "command": "F2"
+     },
+     "keys": [
+      "F2"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794181155438,
+     "t_end_ms": 1794181156441,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794181156441,
+     "t_end_ms": 1794181157446,
+     "action": {
+      "type": "key",
+      "command": "Space"
+     },
+     "keys": [
+      "Space"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794181157446,
+     "t_end_ms": 1794181158451,
+     "action": {
+      "type": "key",
+      "command": "Home"
+     },
+     "keys": [
+      "Home"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794181158451,
+     "t_end_ms": 1794181159455,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "keys": [
+      "Escape"
+     ],
+     "observation": {
+      "speech_raw": "virtual PC Cursor",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

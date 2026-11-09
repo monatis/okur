@@ -1,0 +1,263 @@
+{
+ "scenario_id": "598-web-virtual-selection-and-copy-intermediate",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "aac6f125"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794185382560
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794185383921,
+     "t_end_ms": 1794185384925,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e The Accessibility Engine Specification",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794185384925,
+     "t_end_ms": 1794185385930,
+     "action": {
+      "type": "key",
+      "command": "Shift+Right"
+     },
+     "keys": [
+      "Shift+Right"
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e \nT\nselected",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794185385930,
+     "t_end_ms": 1794185386934,
+     "action": {
+      "type": "key",
+      "command": "Shift+Right"
+     },
+     "keys": [
+      "Shift+Right"
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e \nh\nselected",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794185386934,
+     "t_end_ms": 1794185387940,
+     "action": {
+      "type": "key",
+      "command": "Insert+Shift+Down"
+     },
+     "keys": [
+      "Insert+Shift+Down"
+     ],
+     "observation": {
+      "speech_raw": "Th",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794185387940,
+     "t_end_ms": 1794185388945,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Shift+Right"
+     },
+     "keys": [
+      "Ctrl+Shift+Right"
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e e \nselected",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794185388945,
+     "t_end_ms": 1794185389950,
+     "action": {
+      "type": "key",
+      "command": "Shift+End"
+     },
+     "keys": [
+      "Shift+End"
+     ],
+     "observation": {
+      "speech_raw": "selected\n \u001d heading level 1 \u001e Accessibility Engine Specification",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794185389950,
+     "t_end_ms": 1794185390955,
+     "action": {
+      "type": "key",
+      "command": "Shift+Down"
+     },
+     "keys": [
+      "Shift+Down"
+     ],
+     "observation": {
+      "speech_raw": "selected\n \u001d heading level 1 \u001e The Accessibility Engine Specification",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794185390955,
+     "t_end_ms": 1794185391961,
+     "action": {
+      "type": "key",
+      "command": "Insert+Shift+Down"
+     },
+     "keys": [
+      "Insert+Shift+Down"
+     ],
+     "observation": {
+      "speech_raw": "The Accessibility Engine Specification",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794185391961,
+     "t_end_ms": 1794185392966,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+C"
+     },
+     "keys": [
+      "Ctrl+C"
+     ],
+     "observation": {
+      "speech_raw": "Copied",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794185392966,
+     "t_end_ms": 1794185393971,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Engine components operate deterministically across synthetic speech pipelines. Speed and accuracy remain paramount.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794185393971,
+     "t_end_ms": 1794185394975,
+     "action": {
+      "type": "key",
+      "command": "Shift+Home"
+     },
+     "keys": [
+      "Shift+Home"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794185394975,
+     "t_end_ms": 1794185395980,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Shift+Home"
+     },
+     "keys": [
+      "Ctrl+Shift+Home"
+     ],
+     "observation": {
+      "speech_raw": "selected\nDocument Reading Reference Fixture\n \u001d heading level 1 \u001e The Accessibility Engine Specification\nThe screen reader engine parses the document object model into a clean virtual buffer.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794185395980,
+     "t_end_ms": 1794185396985,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+A"
+     },
+     "keys": [
+      "Ctrl+A"
+     ],
+     "observation": {
+      "speech_raw": "Unselected\nDocument Reading Reference Fixture\n \u001d heading level 1 \u001e The Accessibility Engine Specification\nThe screen reader engine parses the document object model into a clean virtual buffer.\nselected\nEngine components operate deterministically across synthetic speech pipelines. Speed and accuracy remain paramount.\nRust provides memory safety without garbage collection latency. This ensures predictable audio delivery.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794185396985,
+     "t_end_ms": 1794185397990,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+C"
+     },
+     "keys": [
+      "Ctrl+C"
+     ],
+     "observation": {
+      "speech_raw": "Copied",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

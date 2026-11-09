@@ -1,0 +1,469 @@
+{
+ "scenario_id": "613-web-turkish-text",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "aac6f125"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": false,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794185577037
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794185578397,
+     "t_end_ms": 1794185579401,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e \u00c7a\u011fr\u0131 ve I\u015f\u0131k",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794185579401,
+     "t_end_ms": 1794185580404,
+     "action": {
+      "type": "key",
+      "command": "Numpad5"
+     },
+     "keys": [
+      "Numpad5"
+     ],
+     "observation": {
+      "speech_raw": "\u00c7",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794185580404,
+     "t_end_ms": 1794185581408,
+     "action": {
+      "type": "key",
+      "command": "Numpad5"
+     },
+     "keys": [
+      "Numpad5"
+     ],
+     "observation": {
+      "speech_raw": "\u00c7",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794185581408,
+     "t_end_ms": 1794185582411,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "a",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794185582411,
+     "t_end_ms": 1794185583416,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "\u011f",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794185583416,
+     "t_end_ms": 1794185584420,
+     "action": {
+      "type": "key",
+      "command": "Numpad5"
+     },
+     "keys": [
+      "Numpad5"
+     ],
+     "observation": {
+      "speech_raw": "\u011f",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794185584420,
+     "t_end_ms": 1794185585425,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "r",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794185585425,
+     "t_end_ms": 1794185586430,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "observation": {
+      "speech_raw": "\u0131",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794185586430,
+     "t_end_ms": 1794185587435,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Right"
+     },
+     "keys": [
+      "Ctrl+Right"
+     ],
+     "observation": {
+      "speech_raw": "ve",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794185587435,
+     "t_end_ms": 1794185588441,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Right"
+     },
+     "keys": [
+      "Ctrl+Right"
+     ],
+     "observation": {
+      "speech_raw": "I\u015f\u0131k",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794185588441,
+     "t_end_ms": 1794185589444,
+     "action": {
+      "type": "key",
+      "command": "CapsLock+K"
+     },
+     "keys": [
+      "CapsLock+K"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true,
+      "not_pressed": true
+     },
+     "step_success": false
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794185589444,
+     "t_end_ms": 1794185590448,
+     "action": {
+      "type": "key",
+      "command": "CapsLock+K"
+     },
+     "keys": [
+      "CapsLock+K"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true,
+      "not_pressed": true
+     },
+     "step_success": false
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794185590448,
+     "t_end_ms": 1794185591452,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "\u015eehirde \u0131l\u0131k bir \u00f6\u011fleden sonra.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794185591452,
+     "t_end_ms": 1794185592456,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "\u0130stanbul, \u00d6demi\u015f, \u00dcnye, A\u011fr\u0131",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794185592456,
+     "t_end_ms": 1794185593461,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "observation": {
+      "speech_raw": "\u0130stanbul, \u00d6demi\u015f, \u00dcnye, A\u011fr\u0131",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794185593461,
+     "t_end_ms": 1794185594466,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "observation": {
+      "speech_raw": "\u0130stanbul, \u00d6demi\u015f, \u00dcnye, A\u011fr\u0131",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s17",
+     "t_start_ms": 1794185594466,
+     "t_end_ms": 1794185595470,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "list of 2 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s18",
+     "t_start_ms": 1794185595470,
+     "t_end_ms": 1794185596475,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "\u2022 \u00e7i\u011f b\u00f6rek",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s19",
+     "t_start_ms": 1794185596475,
+     "t_end_ms": 1794185597480,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "\u2022 \u015feker",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s20",
+     "t_start_ms": 1794185597480,
+     "t_end_ms": 1794185598484,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "list end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s21",
+     "t_start_ms": 1794185598484,
+     "t_end_ms": 1794185599489,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Sonraki b\u00f6l\u00fcm",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s22",
+     "t_start_ms": 1794185599489,
+     "t_end_ms": 1794185600493,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e Son",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s23",
+     "t_start_ms": 1794185600493,
+     "t_end_ms": 1794185601498,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "\u00c7\u011e\u0130\u00d6\u015e\u00dc \u00e7\u011f\u0131\u00f6\u015f\u00fc",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s24",
+     "t_start_ms": 1794185601498,
+     "t_end_ms": 1794185602503,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "observation": {
+      "speech_raw": "\u00c7\u011e\u0130\u00d6\u015e\u00dc \u00e7\u011f\u0131\u00f6\u015f\u00fc",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s25",
+     "t_start_ms": 1794185602503,
+     "t_end_ms": 1794185603508,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "observation": {
+      "speech_raw": "T\u00fcrk\u00e7e Metin",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s26",
+     "t_start_ms": 1794185603508,
+     "t_end_ms": 1794185604512,
+     "action": {
+      "type": "key",
+      "command": "Insert+Down"
+     },
+     "keys": [
+      "Insert+Down"
+     ],
+     "observation": {
+      "speech_raw": "T\u00fcrk\u00e7e Metin\n \u001d heading level 1 \u001e \u00c7a\u011fr\u0131 ve I\u015f\u0131k\n\u015eehirde \u0131l\u0131k bir \u00f6\u011fleden sonra.\n\u0130stanbul, \u00d6demi\u015f, \u00dcnye, A\u011fr\u0131\nlist of 2 items\n\u2022 \u00e7i\u011f b\u00f6rek\n\u2022 \u015feker\nlist end\n \u001d same page link \u001e Sonraki b\u00f6l\u00fcm\n \u001d heading level 2 \u001e Son\n\u00c7\u011e\u0130\u00d6\u015e\u00dc \u00e7\u011f\u0131\u00f6\u015f\u00fc\n\u00e7\u011f\u0131\u00f6\u015f\u00fc",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

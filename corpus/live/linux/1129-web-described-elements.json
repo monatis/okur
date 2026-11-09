@@ -1,0 +1,297 @@
+{
+ "scenario_id": "1129-web-described-elements",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "aac6f125"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794180784248
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794180785613,
+     "t_end_ms": 1794180786616,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "main region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794180786616,
+     "t_end_ms": 1794180787620,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e Described elements",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794180787620,
+     "t_end_ms": 1794180788624,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "A plain line before them.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794180788624,
+     "t_end_ms": 1794180789629,
+     "action": {
+      "type": "key",
+      "command": "Insert+Alt+R"
+     },
+     "keys": [
+      "Insert+Alt+R"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794180789629,
+     "t_end_ms": 1794180790633,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e Shipping options Orders over fifty dollars ship free.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794180790633,
+     "t_end_ms": 1794180791638,
+     "action": {
+      "type": "key",
+      "command": "Insert+Alt+R"
+     },
+     "keys": [
+      "Insert+Alt+R"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794180791638,
+     "t_end_ms": 1794180792643,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Delete account \u001d Button \u001e \nThis cannot be undone.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794180792643,
+     "t_end_ms": 1794180793646,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "This cannot be undone.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794180793646,
+     "t_end_ms": 1794180794652,
+     "action": {
+      "type": "key",
+      "command": "Insert+Alt+R"
+     },
+     "keys": [
+      "Insert+Alt+R"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794180794652,
+     "t_end_ms": 1794180795757,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Skip ahead Jumps to the end of the page",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794180795757,
+     "t_end_ms": 1794180796761,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Address Added dialog",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794180796761,
+     "t_end_ms": 1794180797767,
+     "action": {
+      "type": "key",
+      "command": "Insert+Alt+R"
+     },
+     "keys": [
+      "Insert+Alt+R"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794180797767,
+     "t_end_ms": 1794180799021,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "observation": {
+      "speech_raw": "Address Added \u001d dialog \u001e \nThe address you provided has been added.\nOK  \u001d Button \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794180799021,
+     "t_end_ms": 1794180800027,
+     "action": {
+      "type": "key",
+      "command": "Insert+Alt+R"
+     },
+     "keys": [
+      "Insert+Alt+R"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794180800027,
+     "t_end_ms": 1794180801033,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e Address Added",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794180801033,
+     "t_end_ms": 1794180802038,
+     "action": {
+      "type": "key",
+      "command": "Insert+Alt+R"
+     },
+     "keys": [
+      "Insert+Alt+R"
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

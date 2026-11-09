@@ -1,0 +1,5057 @@
+{
+ "scenario_id": "618-web-color-names",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "chrome": "google-chrome",
+  "commit": "aac6f125"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794185748904
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794185750264,
+     "t_end_ms": 1794185751268,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 001, aliceblue.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794185751268,
+     "t_end_ms": 1794185752272,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "alice blue on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794185752272,
+     "t_end_ms": 1794185753276,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 002, antiquewhite.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794185753276,
+     "t_end_ms": 1794185754281,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "antique white on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794185754281,
+     "t_end_ms": 1794185755285,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 003, aqua.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794185755285,
+     "t_end_ms": 1794185756290,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "cyan on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794185756290,
+     "t_end_ms": 1794185757295,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 004, aquamarine.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794185757295,
+     "t_end_ms": 1794185758300,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "aquamarine on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794185758300,
+     "t_end_ms": 1794185759305,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 005, azure.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794185759305,
+     "t_end_ms": 1794185760309,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "azure on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794185760309,
+     "t_end_ms": 1794185761313,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 006, beige.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794185761313,
+     "t_end_ms": 1794185762318,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "beige on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794185762318,
+     "t_end_ms": 1794185763323,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 007, bisque.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794185763323,
+     "t_end_ms": 1794185764328,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "bisque on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794185764328,
+     "t_end_ms": 1794185765332,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 008, black.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794185765332,
+     "t_end_ms": 1794185766337,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "black on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s17",
+     "t_start_ms": 1794185766337,
+     "t_end_ms": 1794185767341,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 009, blanchedalmond.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s18",
+     "t_start_ms": 1794185767341,
+     "t_end_ms": 1794185768346,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "blanched almond on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s19",
+     "t_start_ms": 1794185768346,
+     "t_end_ms": 1794185769350,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 010, blue.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s20",
+     "t_start_ms": 1794185769350,
+     "t_end_ms": 1794185770355,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "blue on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s21",
+     "t_start_ms": 1794185770355,
+     "t_end_ms": 1794185771360,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 011, blueviolet.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s22",
+     "t_start_ms": 1794185771360,
+     "t_end_ms": 1794185772365,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "blue violet on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s23",
+     "t_start_ms": 1794185772365,
+     "t_end_ms": 1794185773370,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 012, brown.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s24",
+     "t_start_ms": 1794185773370,
+     "t_end_ms": 1794185774475,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "brown on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s25",
+     "t_start_ms": 1794185774475,
+     "t_end_ms": 1794185775480,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 013, burlywood.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s26",
+     "t_start_ms": 1794185775480,
+     "t_end_ms": 1794185776486,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "burlywood on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s27",
+     "t_start_ms": 1794185776486,
+     "t_end_ms": 1794185777490,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 014, cadetblue.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s28",
+     "t_start_ms": 1794185777490,
+     "t_end_ms": 1794185778496,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "cadet blue on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s29",
+     "t_start_ms": 1794185778496,
+     "t_end_ms": 1794185779501,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 015, chartreuse.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s30",
+     "t_start_ms": 1794185779501,
+     "t_end_ms": 1794185780506,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "chartreuse on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s31",
+     "t_start_ms": 1794185780506,
+     "t_end_ms": 1794185781510,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 016, chocolate.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s32",
+     "t_start_ms": 1794185781510,
+     "t_end_ms": 1794185782515,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "chocolate on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s33",
+     "t_start_ms": 1794185782515,
+     "t_end_ms": 1794185783519,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 017, coral.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s34",
+     "t_start_ms": 1794185783519,
+     "t_end_ms": 1794185784524,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "coral on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s35",
+     "t_start_ms": 1794185784524,
+     "t_end_ms": 1794185785528,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 018, cornflowerblue.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s36",
+     "t_start_ms": 1794185785528,
+     "t_end_ms": 1794185786533,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "cornflower blue on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s37",
+     "t_start_ms": 1794185786533,
+     "t_end_ms": 1794185787537,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 019, cornsilk.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s38",
+     "t_start_ms": 1794185787537,
+     "t_end_ms": 1794185788542,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "cornsilk on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s39",
+     "t_start_ms": 1794185788542,
+     "t_end_ms": 1794185789545,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 020, crimson.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s40",
+     "t_start_ms": 1794185789545,
+     "t_end_ms": 1794185790550,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "firebrick3 on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s41",
+     "t_start_ms": 1794185790550,
+     "t_end_ms": 1794185791555,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 021, cyan.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s42",
+     "t_start_ms": 1794185791555,
+     "t_end_ms": 1794185792560,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "cyan on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s43",
+     "t_start_ms": 1794185792560,
+     "t_end_ms": 1794185793563,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 022, darkblue.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s44",
+     "t_start_ms": 1794185793563,
+     "t_end_ms": 1794185794567,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "blue4 on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s45",
+     "t_start_ms": 1794185794567,
+     "t_end_ms": 1794185795571,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 023, darkcyan.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s46",
+     "t_start_ms": 1794185795571,
+     "t_end_ms": 1794185796576,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "cyan4 on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s47",
+     "t_start_ms": 1794185796576,
+     "t_end_ms": 1794185797580,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 024, darkgoldenrod.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s48",
+     "t_start_ms": 1794185797580,
+     "t_end_ms": 1794185798585,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "dark goldenrod on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s49",
+     "t_start_ms": 1794185798585,
+     "t_end_ms": 1794185799588,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 025, darkgray.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s50",
+     "t_start_ms": 1794185799588,
+     "t_end_ms": 1794185800592,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "Dark Gray on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s51",
+     "t_start_ms": 1794185800592,
+     "t_end_ms": 1794185801597,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 026, darkgreen.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s52",
+     "t_start_ms": 1794185801597,
+     "t_end_ms": 1794185802601,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "dark green on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s53",
+     "t_start_ms": 1794185802601,
+     "t_end_ms": 1794185803605,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 027, darkgrey.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s54",
+     "t_start_ms": 1794185803605,
+     "t_end_ms": 1794185804610,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "Dark Gray on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s55",
+     "t_start_ms": 1794185804610,
+     "t_end_ms": 1794185805614,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 028, darkkhaki.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s56",
+     "t_start_ms": 1794185805614,
+     "t_end_ms": 1794185806619,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "dark khaki on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s57",
+     "t_start_ms": 1794185806619,
+     "t_end_ms": 1794185807624,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 029, darkmagenta.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s58",
+     "t_start_ms": 1794185807624,
+     "t_end_ms": 1794185808628,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "magenta4 on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s59",
+     "t_start_ms": 1794185808628,
+     "t_end_ms": 1794185809633,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 030, darkolivegreen.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s60",
+     "t_start_ms": 1794185809633,
+     "t_end_ms": 1794185810637,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "dark olive green on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s61",
+     "t_start_ms": 1794185810637,
+     "t_end_ms": 1794185811641,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 031, darkorange.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s62",
+     "t_start_ms": 1794185811641,
+     "t_end_ms": 1794185812645,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "dark orange on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s63",
+     "t_start_ms": 1794185812645,
+     "t_end_ms": 1794185813650,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 032, darkorchid.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s64",
+     "t_start_ms": 1794185813650,
+     "t_end_ms": 1794185814655,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "dark orchid on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s65",
+     "t_start_ms": 1794185814655,
+     "t_end_ms": 1794185815659,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 033, darkred.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s66",
+     "t_start_ms": 1794185815659,
+     "t_end_ms": 1794185816664,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "red4 on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s67",
+     "t_start_ms": 1794185816664,
+     "t_end_ms": 1794185817668,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 034, darksalmon.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s68",
+     "t_start_ms": 1794185817668,
+     "t_end_ms": 1794185818673,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "dark salmon on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s69",
+     "t_start_ms": 1794185818673,
+     "t_end_ms": 1794185819678,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 035, darkseagreen.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s70",
+     "t_start_ms": 1794185819678,
+     "t_end_ms": 1794185820683,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "dark sea green on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s71",
+     "t_start_ms": 1794185820683,
+     "t_end_ms": 1794185821687,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 036, darkslateblue.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s72",
+     "t_start_ms": 1794185821687,
+     "t_end_ms": 1794185822692,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "dark slate blue on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s73",
+     "t_start_ms": 1794185822692,
+     "t_end_ms": 1794185823696,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 037, darkslategray.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s74",
+     "t_start_ms": 1794185823696,
+     "t_end_ms": 1794185824701,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "dark slate gray on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s75",
+     "t_start_ms": 1794185824701,
+     "t_end_ms": 1794185825706,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 038, darkslategrey.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s76",
+     "t_start_ms": 1794185825706,
+     "t_end_ms": 1794185826711,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "dark slate gray on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s77",
+     "t_start_ms": 1794185826711,
+     "t_end_ms": 1794185827715,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 039, darkturquoise.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s78",
+     "t_start_ms": 1794185827715,
+     "t_end_ms": 1794185828720,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "dark turquoise on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s79",
+     "t_start_ms": 1794185828720,
+     "t_end_ms": 1794185829724,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 040, darkviolet.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s80",
+     "t_start_ms": 1794185829724,
+     "t_end_ms": 1794185830729,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "dark violet on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s81",
+     "t_start_ms": 1794185830729,
+     "t_end_ms": 1794185831733,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 041, deeppink.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s82",
+     "t_start_ms": 1794185831733,
+     "t_end_ms": 1794185832738,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "deep pink on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s83",
+     "t_start_ms": 1794185832738,
+     "t_end_ms": 1794185833742,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 042, deepskyblue.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s84",
+     "t_start_ms": 1794185833742,
+     "t_end_ms": 1794185834746,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "deep sky blue on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s85",
+     "t_start_ms": 1794185834746,
+     "t_end_ms": 1794185835751,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 043, dimgray.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s86",
+     "t_start_ms": 1794185835751,
+     "t_end_ms": 1794185836756,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "dim gray on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s87",
+     "t_start_ms": 1794185836756,
+     "t_end_ms": 1794185837761,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 044, dimgrey.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s88",
+     "t_start_ms": 1794185837761,
+     "t_end_ms": 1794185838766,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "dim gray on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s89",
+     "t_start_ms": 1794185838766,
+     "t_end_ms": 1794185839770,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 045, dodgerblue.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s90",
+     "t_start_ms": 1794185839770,
+     "t_end_ms": 1794185840776,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "dodger blue on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s91",
+     "t_start_ms": 1794185840776,
+     "t_end_ms": 1794185841780,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 046, firebrick.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s92",
+     "t_start_ms": 1794185841780,
+     "t_end_ms": 1794185842785,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "firebrick on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s93",
+     "t_start_ms": 1794185842785,
+     "t_end_ms": 1794185843790,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 047, floralwhite.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s94",
+     "t_start_ms": 1794185843790,
+     "t_end_ms": 1794185844795,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "floral white on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s95",
+     "t_start_ms": 1794185844795,
+     "t_end_ms": 1794185845800,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 048, forestgreen.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s96",
+     "t_start_ms": 1794185845800,
+     "t_end_ms": 1794185846805,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "forest green on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s97",
+     "t_start_ms": 1794185846805,
+     "t_end_ms": 1794185847809,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 049, fuchsia.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s98",
+     "t_start_ms": 1794185847809,
+     "t_end_ms": 1794185848814,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "magenta on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s99",
+     "t_start_ms": 1794185848814,
+     "t_end_ms": 1794185849819,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 050, gainsboro.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s100",
+     "t_start_ms": 1794185849819,
+     "t_end_ms": 1794185850824,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "gainsboro on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s101",
+     "t_start_ms": 1794185850824,
+     "t_end_ms": 1794185851828,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 051, ghostwhite.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s102",
+     "t_start_ms": 1794185851828,
+     "t_end_ms": 1794185852833,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "ghost white on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s103",
+     "t_start_ms": 1794185852833,
+     "t_end_ms": 1794185853836,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 052, gold.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s104",
+     "t_start_ms": 1794185853836,
+     "t_end_ms": 1794185854842,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "gold on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s105",
+     "t_start_ms": 1794185854842,
+     "t_end_ms": 1794185855846,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 053, goldenrod.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s106",
+     "t_start_ms": 1794185855846,
+     "t_end_ms": 1794185856851,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "goldenrod on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s107",
+     "t_start_ms": 1794185856851,
+     "t_end_ms": 1794185857855,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 054, gray.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s108",
+     "t_start_ms": 1794185857855,
+     "t_end_ms": 1794185858860,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "gray on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s109",
+     "t_start_ms": 1794185858860,
+     "t_end_ms": 1794185859865,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 055, green.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s110",
+     "t_start_ms": 1794185859865,
+     "t_end_ms": 1794185860870,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "lime green 2 on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s111",
+     "t_start_ms": 1794185860870,
+     "t_end_ms": 1794185861874,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 056, greenyellow.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s112",
+     "t_start_ms": 1794185861874,
+     "t_end_ms": 1794185862879,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "green yellow on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s113",
+     "t_start_ms": 1794185862879,
+     "t_end_ms": 1794185863884,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 057, grey.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s114",
+     "t_start_ms": 1794185863884,
+     "t_end_ms": 1794185864889,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "gray on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s115",
+     "t_start_ms": 1794185864889,
+     "t_end_ms": 1794185865893,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 058, honeydew.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s116",
+     "t_start_ms": 1794185865893,
+     "t_end_ms": 1794185866898,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "honeydew on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s117",
+     "t_start_ms": 1794185866898,
+     "t_end_ms": 1794185867902,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 059, hotpink.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s118",
+     "t_start_ms": 1794185867902,
+     "t_end_ms": 1794185868907,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "hot pink on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s119",
+     "t_start_ms": 1794185868907,
+     "t_end_ms": 1794185869912,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 060, indianred.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s120",
+     "t_start_ms": 1794185869912,
+     "t_end_ms": 1794185870917,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "indian red on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s121",
+     "t_start_ms": 1794185870917,
+     "t_end_ms": 1794185871922,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 061, indigo.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s122",
+     "t_start_ms": 1794185871922,
+     "t_end_ms": 1794185872926,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "indigo on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s123",
+     "t_start_ms": 1794185872926,
+     "t_end_ms": 1794185873931,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 062, ivory.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s124",
+     "t_start_ms": 1794185873931,
+     "t_end_ms": 1794185874936,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "ivory on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s125",
+     "t_start_ms": 1794185874936,
+     "t_end_ms": 1794185875941,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 063, khaki.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s126",
+     "t_start_ms": 1794185875941,
+     "t_end_ms": 1794185876945,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "khaki on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s127",
+     "t_start_ms": 1794185876945,
+     "t_end_ms": 1794185877948,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 064, lavender.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s128",
+     "t_start_ms": 1794185877948,
+     "t_end_ms": 1794185878953,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "lavender on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s129",
+     "t_start_ms": 1794185878953,
+     "t_end_ms": 1794185879958,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 065, lavenderblush.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s130",
+     "t_start_ms": 1794185879958,
+     "t_end_ms": 1794185880963,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "lavender blush on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s131",
+     "t_start_ms": 1794185880963,
+     "t_end_ms": 1794185881968,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 066, lawngreen.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s132",
+     "t_start_ms": 1794185881968,
+     "t_end_ms": 1794185882972,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "lawn green on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s133",
+     "t_start_ms": 1794185882972,
+     "t_end_ms": 1794185883977,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 067, lemonchiffon.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s134",
+     "t_start_ms": 1794185883977,
+     "t_end_ms": 1794185884982,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "lemon chiffon on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s135",
+     "t_start_ms": 1794185884982,
+     "t_end_ms": 1794185885985,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 068, lightblue.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s136",
+     "t_start_ms": 1794185885985,
+     "t_end_ms": 1794185886991,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "light blue on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s137",
+     "t_start_ms": 1794185886991,
+     "t_end_ms": 1794185887995,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 069, lightcoral.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s138",
+     "t_start_ms": 1794185887995,
+     "t_end_ms": 1794185889000,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "light coral on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s139",
+     "t_start_ms": 1794185889000,
+     "t_end_ms": 1794185890005,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 070, lightcyan.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s140",
+     "t_start_ms": 1794185890005,
+     "t_end_ms": 1794185891009,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "light cyan on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s141",
+     "t_start_ms": 1794185891009,
+     "t_end_ms": 1794185892014,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 071, lightgoldenrodyellow.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s142",
+     "t_start_ms": 1794185892014,
+     "t_end_ms": 1794185893019,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "light goldenrod yellow on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s143",
+     "t_start_ms": 1794185893019,
+     "t_end_ms": 1794185894023,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 072, lightgray.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s144",
+     "t_start_ms": 1794185894023,
+     "t_end_ms": 1794185895028,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "light grey on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s145",
+     "t_start_ms": 1794185895028,
+     "t_end_ms": 1794185896032,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 073, lightgreen.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s146",
+     "t_start_ms": 1794185896032,
+     "t_end_ms": 1794185897038,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "Pale Green2 on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s147",
+     "t_start_ms": 1794185897038,
+     "t_end_ms": 1794185898042,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 074, lightgrey.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s148",
+     "t_start_ms": 1794185898042,
+     "t_end_ms": 1794185899047,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "light grey on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s149",
+     "t_start_ms": 1794185899047,
+     "t_end_ms": 1794185900051,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 075, lightpink.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s150",
+     "t_start_ms": 1794185900051,
+     "t_end_ms": 1794185901057,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "light pink on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s151",
+     "t_start_ms": 1794185901057,
+     "t_end_ms": 1794185902062,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 076, lightsalmon.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s152",
+     "t_start_ms": 1794185902062,
+     "t_end_ms": 1794185903067,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "light salmon on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s153",
+     "t_start_ms": 1794185903067,
+     "t_end_ms": 1794185904071,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 077, lightseagreen.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s154",
+     "t_start_ms": 1794185904071,
+     "t_end_ms": 1794185905076,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "light sea green on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s155",
+     "t_start_ms": 1794185905076,
+     "t_end_ms": 1794185906081,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 078, lightskyblue.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s156",
+     "t_start_ms": 1794185906081,
+     "t_end_ms": 1794185907086,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "light sky blue on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s157",
+     "t_start_ms": 1794185907086,
+     "t_end_ms": 1794185908091,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 079, lightslategray.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s158",
+     "t_start_ms": 1794185908091,
+     "t_end_ms": 1794185909096,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "light slate gray on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s159",
+     "t_start_ms": 1794185909096,
+     "t_end_ms": 1794185910101,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 080, lightslategrey.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s160",
+     "t_start_ms": 1794185910101,
+     "t_end_ms": 1794185911106,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "light slate gray on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s161",
+     "t_start_ms": 1794185911106,
+     "t_end_ms": 1794185912211,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 081, lightsteelblue.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s162",
+     "t_start_ms": 1794185912211,
+     "t_end_ms": 1794185913216,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "light steel blue on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s163",
+     "t_start_ms": 1794185913216,
+     "t_end_ms": 1794185914221,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 082, lightyellow.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s164",
+     "t_start_ms": 1794185914221,
+     "t_end_ms": 1794185915226,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "light yellow on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s165",
+     "t_start_ms": 1794185915226,
+     "t_end_ms": 1794185916230,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 083, lime.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s166",
+     "t_start_ms": 1794185916230,
+     "t_end_ms": 1794185917235,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "green on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s167",
+     "t_start_ms": 1794185917235,
+     "t_end_ms": 1794185918239,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 084, limegreen.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s168",
+     "t_start_ms": 1794185918239,
+     "t_end_ms": 1794185919243,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "lime green on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s169",
+     "t_start_ms": 1794185919243,
+     "t_end_ms": 1794185920248,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 085, linen.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s170",
+     "t_start_ms": 1794185920248,
+     "t_end_ms": 1794185921253,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "linen on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s171",
+     "t_start_ms": 1794185921253,
+     "t_end_ms": 1794185922257,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 086, magenta.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s172",
+     "t_start_ms": 1794185922257,
+     "t_end_ms": 1794185923262,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "magenta on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s173",
+     "t_start_ms": 1794185923262,
+     "t_end_ms": 1794185924266,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 087, maroon.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s174",
+     "t_start_ms": 1794185924266,
+     "t_end_ms": 1794185925271,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "maroon on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s175",
+     "t_start_ms": 1794185925271,
+     "t_end_ms": 1794185926275,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 088, mediumaquamarine.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s176",
+     "t_start_ms": 1794185926275,
+     "t_end_ms": 1794185927279,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "medium aquamarine on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s177",
+     "t_start_ms": 1794185927279,
+     "t_end_ms": 1794185928283,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 089, mediumblue.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s178",
+     "t_start_ms": 1794185928283,
+     "t_end_ms": 1794185929288,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "medium blue on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s179",
+     "t_start_ms": 1794185929288,
+     "t_end_ms": 1794185930292,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 090, mediumorchid.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s180",
+     "t_start_ms": 1794185930292,
+     "t_end_ms": 1794185931297,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "medium orchid on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s181",
+     "t_start_ms": 1794185931297,
+     "t_end_ms": 1794185932300,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 091, mediumpurple.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s182",
+     "t_start_ms": 1794185932300,
+     "t_end_ms": 1794185933303,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "medium purple on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s183",
+     "t_start_ms": 1794185933303,
+     "t_end_ms": 1794185934306,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 092, mediumseagreen.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s184",
+     "t_start_ms": 1794185934306,
+     "t_end_ms": 1794185935319,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "medium sea green on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s185",
+     "t_start_ms": 1794185935319,
+     "t_end_ms": 1794185936322,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 093, mediumslateblue.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s186",
+     "t_start_ms": 1794185936322,
+     "t_end_ms": 1794185937334,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "medium slate blue on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s187",
+     "t_start_ms": 1794185937334,
+     "t_end_ms": 1794185938337,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 094, mediumspringgreen.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s188",
+     "t_start_ms": 1794185938337,
+     "t_end_ms": 1794185939341,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "medium spring green on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s189",
+     "t_start_ms": 1794185939341,
+     "t_end_ms": 1794185940344,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 095, mediumturquoise.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s190",
+     "t_start_ms": 1794185940344,
+     "t_end_ms": 1794185941349,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "medium turquoise on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s191",
+     "t_start_ms": 1794185941349,
+     "t_end_ms": 1794185942353,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 096, mediumvioletred.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s192",
+     "t_start_ms": 1794185942353,
+     "t_end_ms": 1794185943359,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "medium violet red on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s193",
+     "t_start_ms": 1794185943359,
+     "t_end_ms": 1794185944362,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 097, midnightblue.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s194",
+     "t_start_ms": 1794185944362,
+     "t_end_ms": 1794185945367,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "midnight blue on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s195",
+     "t_start_ms": 1794185945367,
+     "t_end_ms": 1794185946371,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 098, mintcream.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s196",
+     "t_start_ms": 1794185946371,
+     "t_end_ms": 1794185947376,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "mint cream on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s197",
+     "t_start_ms": 1794185947376,
+     "t_end_ms": 1794185948381,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 099, mistyrose.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s198",
+     "t_start_ms": 1794185948381,
+     "t_end_ms": 1794185949386,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "misty rose on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s199",
+     "t_start_ms": 1794185949386,
+     "t_end_ms": 1794185950391,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 100, moccasin.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s200",
+     "t_start_ms": 1794185950391,
+     "t_end_ms": 1794185951396,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "moccasin on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s201",
+     "t_start_ms": 1794185951396,
+     "t_end_ms": 1794185952401,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 101, navajowhite.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s202",
+     "t_start_ms": 1794185952401,
+     "t_end_ms": 1794185953406,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "navajo white on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s203",
+     "t_start_ms": 1794185953406,
+     "t_end_ms": 1794185954410,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 102, navy.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s204",
+     "t_start_ms": 1794185954410,
+     "t_end_ms": 1794185955415,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "navy on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s205",
+     "t_start_ms": 1794185955415,
+     "t_end_ms": 1794185956420,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 103, oldlace.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s206",
+     "t_start_ms": 1794185956420,
+     "t_end_ms": 1794185957426,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "old lace on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s207",
+     "t_start_ms": 1794185957426,
+     "t_end_ms": 1794185958430,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 104, olive.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s208",
+     "t_start_ms": 1794185958430,
+     "t_end_ms": 1794185959435,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "olive on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s209",
+     "t_start_ms": 1794185959435,
+     "t_end_ms": 1794185960439,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 105, olivedrab.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s210",
+     "t_start_ms": 1794185960439,
+     "t_end_ms": 1794185961443,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "olive drab on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s211",
+     "t_start_ms": 1794185961443,
+     "t_end_ms": 1794185962447,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 106, orange.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s212",
+     "t_start_ms": 1794185962447,
+     "t_end_ms": 1794185963452,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "orange on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s213",
+     "t_start_ms": 1794185963452,
+     "t_end_ms": 1794185964456,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 107, orangered.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s214",
+     "t_start_ms": 1794185964456,
+     "t_end_ms": 1794185965461,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "orange red on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s215",
+     "t_start_ms": 1794185965461,
+     "t_end_ms": 1794185966466,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 108, orchid.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s216",
+     "t_start_ms": 1794185966466,
+     "t_end_ms": 1794185967471,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "orchid on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s217",
+     "t_start_ms": 1794185967471,
+     "t_end_ms": 1794185968476,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 109, palegoldenrod.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s218",
+     "t_start_ms": 1794185968476,
+     "t_end_ms": 1794185969481,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "pale goldenrod on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s219",
+     "t_start_ms": 1794185969481,
+     "t_end_ms": 1794185970485,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 110, palegreen.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s220",
+     "t_start_ms": 1794185970485,
+     "t_end_ms": 1794185971491,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "pale green on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s221",
+     "t_start_ms": 1794185971491,
+     "t_end_ms": 1794185972495,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 111, paleturquoise.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s222",
+     "t_start_ms": 1794185972495,
+     "t_end_ms": 1794185973500,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "pale turquoise on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s223",
+     "t_start_ms": 1794185973500,
+     "t_end_ms": 1794185974505,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 112, palevioletred.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s224",
+     "t_start_ms": 1794185974505,
+     "t_end_ms": 1794185975510,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "pale violet red on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s225",
+     "t_start_ms": 1794185975510,
+     "t_end_ms": 1794185976513,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 113, papayawhip.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s226",
+     "t_start_ms": 1794185976513,
+     "t_end_ms": 1794185977561,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "papaya whip on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s227",
+     "t_start_ms": 1794185977561,
+     "t_end_ms": 1794185978564,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 114, peachpuff.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s228",
+     "t_start_ms": 1794185978564,
+     "t_end_ms": 1794185979569,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "peach puff on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s229",
+     "t_start_ms": 1794185979569,
+     "t_end_ms": 1794185980573,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 115, peru.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s230",
+     "t_start_ms": 1794185980573,
+     "t_end_ms": 1794185981577,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "peru on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s231",
+     "t_start_ms": 1794185981577,
+     "t_end_ms": 1794185982582,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 116, pink.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s232",
+     "t_start_ms": 1794185982582,
+     "t_end_ms": 1794185983587,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "pink on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s233",
+     "t_start_ms": 1794185983587,
+     "t_end_ms": 1794185984592,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 117, plum.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s234",
+     "t_start_ms": 1794185984592,
+     "t_end_ms": 1794185985596,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "plum on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s235",
+     "t_start_ms": 1794185985596,
+     "t_end_ms": 1794185986600,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 118, powderblue.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s236",
+     "t_start_ms": 1794185986600,
+     "t_end_ms": 1794185987606,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "powder blue on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s237",
+     "t_start_ms": 1794185987606,
+     "t_end_ms": 1794185988610,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 119, purple.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s238",
+     "t_start_ms": 1794185988610,
+     "t_end_ms": 1794185989616,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "purple on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s239",
+     "t_start_ms": 1794185989616,
+     "t_end_ms": 1794185990620,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 120, rebeccapurple.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s240",
+     "t_start_ms": 1794185990620,
+     "t_end_ms": 1794185991625,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "Medium Orchid4 on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s241",
+     "t_start_ms": 1794185991625,
+     "t_end_ms": 1794185992630,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 121, red.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s242",
+     "t_start_ms": 1794185992630,
+     "t_end_ms": 1794185993635,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "red on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s243",
+     "t_start_ms": 1794185993635,
+     "t_end_ms": 1794185994640,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 122, rosybrown.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s244",
+     "t_start_ms": 1794185994640,
+     "t_end_ms": 1794185995644,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "rosy brown on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s245",
+     "t_start_ms": 1794185995644,
+     "t_end_ms": 1794185996649,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 123, royalblue.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s246",
+     "t_start_ms": 1794185996649,
+     "t_end_ms": 1794185997653,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "royal blue on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s247",
+     "t_start_ms": 1794185997653,
+     "t_end_ms": 1794185998658,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 124, saddlebrown.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s248",
+     "t_start_ms": 1794185998658,
+     "t_end_ms": 1794185999664,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "saddle brown on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s249",
+     "t_start_ms": 1794185999664,
+     "t_end_ms": 1794186000668,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 125, salmon.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s250",
+     "t_start_ms": 1794186000668,
+     "t_end_ms": 1794186001673,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "salmon on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s251",
+     "t_start_ms": 1794186001673,
+     "t_end_ms": 1794186002678,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 126, sandybrown.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s252",
+     "t_start_ms": 1794186002678,
+     "t_end_ms": 1794186003683,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "sandy brown on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s253",
+     "t_start_ms": 1794186003683,
+     "t_end_ms": 1794186004688,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 127, seagreen.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s254",
+     "t_start_ms": 1794186004688,
+     "t_end_ms": 1794186005693,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "sea green on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s255",
+     "t_start_ms": 1794186005693,
+     "t_end_ms": 1794186006697,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 128, seashell.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s256",
+     "t_start_ms": 1794186006697,
+     "t_end_ms": 1794186007702,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "seashell on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s257",
+     "t_start_ms": 1794186007702,
+     "t_end_ms": 1794186008706,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 129, sienna.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s258",
+     "t_start_ms": 1794186008706,
+     "t_end_ms": 1794186009712,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "sienna on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s259",
+     "t_start_ms": 1794186009712,
+     "t_end_ms": 1794186010716,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 130, silver.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s260",
+     "t_start_ms": 1794186010716,
+     "t_end_ms": 1794186011721,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "silver on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s261",
+     "t_start_ms": 1794186011721,
+     "t_end_ms": 1794186012726,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 131, skyblue.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s262",
+     "t_start_ms": 1794186012726,
+     "t_end_ms": 1794186013731,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "sky blue on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s263",
+     "t_start_ms": 1794186013731,
+     "t_end_ms": 1794186014735,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 132, slateblue.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s264",
+     "t_start_ms": 1794186014735,
+     "t_end_ms": 1794186015740,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "slate blue on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s265",
+     "t_start_ms": 1794186015740,
+     "t_end_ms": 1794186016744,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 133, slategray.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s266",
+     "t_start_ms": 1794186016744,
+     "t_end_ms": 1794186017748,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "slate gray on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s267",
+     "t_start_ms": 1794186017748,
+     "t_end_ms": 1794186018753,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 134, slategrey.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s268",
+     "t_start_ms": 1794186018753,
+     "t_end_ms": 1794186019758,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "slate gray on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s269",
+     "t_start_ms": 1794186019758,
+     "t_end_ms": 1794186020762,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 135, snow.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s270",
+     "t_start_ms": 1794186020762,
+     "t_end_ms": 1794186021767,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "snow on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s271",
+     "t_start_ms": 1794186021767,
+     "t_end_ms": 1794186022771,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 136, springgreen.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s272",
+     "t_start_ms": 1794186022771,
+     "t_end_ms": 1794186023776,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "spring green on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s273",
+     "t_start_ms": 1794186023776,
+     "t_end_ms": 1794186024781,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 137, steelblue.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s274",
+     "t_start_ms": 1794186024781,
+     "t_end_ms": 1794186025786,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "steel blue on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s275",
+     "t_start_ms": 1794186025786,
+     "t_end_ms": 1794186026790,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 138, tan.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s276",
+     "t_start_ms": 1794186026790,
+     "t_end_ms": 1794186027796,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "tan on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s277",
+     "t_start_ms": 1794186027796,
+     "t_end_ms": 1794186028800,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 139, teal.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s278",
+     "t_start_ms": 1794186028800,
+     "t_end_ms": 1794186029805,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "teal on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s279",
+     "t_start_ms": 1794186029805,
+     "t_end_ms": 1794186030810,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 140, thistle.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s280",
+     "t_start_ms": 1794186030810,
+     "t_end_ms": 1794186031815,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "thistle on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s281",
+     "t_start_ms": 1794186031815,
+     "t_end_ms": 1794186032819,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 141, tomato.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s282",
+     "t_start_ms": 1794186032819,
+     "t_end_ms": 1794186033825,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "tomato on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s283",
+     "t_start_ms": 1794186033825,
+     "t_end_ms": 1794186034829,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 142, turquoise.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s284",
+     "t_start_ms": 1794186034829,
+     "t_end_ms": 1794186035834,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "turquoise on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s285",
+     "t_start_ms": 1794186035834,
+     "t_end_ms": 1794186036839,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 143, violet.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s286",
+     "t_start_ms": 1794186036839,
+     "t_end_ms": 1794186037844,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "violet on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s287",
+     "t_start_ms": 1794186037844,
+     "t_end_ms": 1794186038848,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 144, wheat.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s288",
+     "t_start_ms": 1794186038848,
+     "t_end_ms": 1794186039853,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "wheat on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s289",
+     "t_start_ms": 1794186039853,
+     "t_end_ms": 1794186040857,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 145, white.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s290",
+     "t_start_ms": 1794186040857,
+     "t_end_ms": 1794186041862,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "white on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s291",
+     "t_start_ms": 1794186041862,
+     "t_end_ms": 1794186042867,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 146, whitesmoke.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s292",
+     "t_start_ms": 1794186042867,
+     "t_end_ms": 1794186043873,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "white smoke on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s293",
+     "t_start_ms": 1794186043873,
+     "t_end_ms": 1794186044877,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 147, yellow.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s294",
+     "t_start_ms": 1794186044877,
+     "t_end_ms": 1794186045882,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "yellow on white",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s295",
+     "t_start_ms": 1794186045882,
+     "t_end_ms": 1794186046886,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "observation": {
+      "speech_raw": "Color 148, yellowgreen.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s296",
+     "t_start_ms": 1794186046886,
+     "t_end_ms": 1794186047891,
+     "action": {
+      "type": "key",
+      "command": "Insert+5"
+     },
+     "keys": [
+      "Insert+5"
+     ],
+     "observation": {
+      "speech_raw": "yellow green on white",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}
