@@ -149,6 +149,7 @@ impl FlexibleWebWizard {
             id: self.id,
             page,
             buttons,
+            labels: crate::ui::wizard_labels(),
         }
     }
 

@@ -815,3 +815,11 @@ web-structure-search = Search Region
 web-structure-tab-panel = Tab Panel
 web-structure-table = Table Or Grid
 web-structure-toolbar = Toolbar
+
+## A wizard's buttons (Flexible Web, the Startup Wizard) where Okur draws them itself (GTK on
+## Linux), as a Windows property-sheet wizard names them [obs, 705/s5, s10]; "&" marks the
+## access key.
+wizard-back = < &Back
+wizard-next = &Next >
+wizard-finish = Finish
+wizard-cancel = Cancel

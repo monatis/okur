@@ -31,8 +31,19 @@ pub mod windows;
 
 pub use okur_ui_model::{
     Control, ControlKind, DialogKey, DialogSpec, FromUi, MainWindowSpec, MenuItemSpec, MenuSpec,
-    TextSpan, ToUi, TreeItem, Value, WizardButtons, WizardSpec, MAIN_WINDOW_EXIT,
+    TextSpan, ToUi, TreeItem, Value, WizardButtons, WizardLabels, WizardSpec, MAIN_WINDOW_EXIT,
 };
+
+/// A wizard's buttons' labels from the catalog, for a toolkit that draws them itself.
+pub fn wizard_labels() -> WizardLabels {
+    use crate::messages::msg;
+    WizardLabels {
+        back: msg::wizard_back().to_string(),
+        next: msg::wizard_next().to_string(),
+        finish: msg::wizard_finish().to_string(),
+        cancel: msg::wizard_cancel().to_string(),
+    }
+}
 
 /// Where the engine sends what its windows show. Sending never waits for the window.
 pub trait UiHost: Send {

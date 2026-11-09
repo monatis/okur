@@ -17,7 +17,10 @@ use std::rc::Rc;
 use gtk::glib;
 use gtk::prelude::*;
 use gtk4 as gtk;
-use okur_ui_model::{decode, encode, Control, ControlKind, DialogSpec, FromUi, ToUi, Value};
+use okur_ui_model::{
+    decode, encode, Control, ControlKind, DialogSpec, FromUi, ToUi, Value, WizardButtons,
+    WizardLabels, WizardSpec,
+};
 
 /// Draws what Okur sends until its input ends; without a display, reads and drops it, so that
 /// Okur never waits on a full pipe.
@@ -341,18 +344,46 @@ struct ShownDialog {
     setting: Rc<Cell<bool>>,
 }
 
-/// The dialogs shown, by Okur's numbers.
+/// A wizard's parts besides its page's controls (which are its dialog's): the page's box, its
+/// buttons, and what they do now.
+struct ShownWizard {
+    page: gtk::Box,
+    back: gtk::Button,
+    next: gtk::Button,
+    buttons: Rc<Cell<WizardButtons>>,
+    labels: WizardLabels,
+}
+
+/// The dialogs shown, by Okur's numbers; a wizard's page is its dialog, by the wizard's.
 #[derive(Default)]
 struct Ui {
     dialogs: RefCell<HashMap<u32, ShownDialog>>,
+    wizards: RefCell<HashMap<u32, ShownWizard>>,
+}
+
+/// The controls of a dialog, or of a wizard's page, built into a box.
+struct Built {
+    controls: HashMap<String, Shown>,
+    labels: HashMap<String, gtk::Label>,
+    /// The control the focus goes to first.
+    first: Option<gtk::Widget>,
 }
 
 impl Ui {
     fn handle(ui: &Rc<Ui>, message: ToUi) {
         match message {
             ToUi::DialogShow { dialog } => Ui::show(ui, dialog),
+            ToUi::WizardShow { wizard } => Ui::show_wizard(ui, wizard),
+            ToUi::WizardPage { id, page, buttons } => Ui::turn_wizard(ui, id, &page, buttons),
+            ToUi::WizardButtons { id, buttons } => {
+                let window = ui.dialogs.borrow().get(&id).map(|d| d.window.clone());
+                if let (Some(wizard), Some(window)) = (ui.wizards.borrow().get(&id), window) {
+                    set_wizard_buttons(wizard, &window, buttons);
+                }
+            }
             ToUi::DialogClose { id } => {
                 // Out of the map before its window goes: destroying it may call back into it.
+                ui.wizards.borrow_mut().remove(&id);
                 let dialog = ui.dialogs.borrow_mut().remove(&id);
                 if let Some(dialog) = dialog {
                     dialog.window.destroy();
@@ -435,73 +466,31 @@ impl Ui {
         window.set_title(Some(&spec.title));
         window.set_default_size(480, -1);
         let setting = Rc::new(Cell::new(false));
-        let outer = gtk::Box::new(gtk::Orientation::Vertical, 8);
-        outer.set_margin_top(12);
-        outer.set_margin_bottom(12);
-        outer.set_margin_start(12);
-        outer.set_margin_end(12);
-        // The buttons in a row where they come, consecutive ones together: the controls stand
-        // in the spec's order, which is the Tab order (a list, its buttons, then its radio
-        // groups: "Move To Link Button" after the list [obs, 222/s2]; one row of them at the
-        // end had Tab reach the radios first).
-        let mut button_row: Option<gtk::Box> = None;
-        let mut controls = HashMap::new();
-        let mut labels = HashMap::new();
-        // A group box holds the controls after it, up to the next group or the buttons.
-        let mut place: gtk::Box = outer.clone();
-        let mut first: Option<gtk::Widget> = None;
-        for control in &spec.controls {
-            if control.kind == ControlKind::Group {
-                let frame = gtk::Frame::new(Some(&plain(&control.label)));
-                let inner = gtk::Box::new(gtk::Orientation::Vertical, 6);
-                inner.set_margin_top(6);
-                inner.set_margin_bottom(6);
-                inner.set_margin_start(6);
-                inner.set_margin_end(6);
-                frame.set_child(Some(&inner));
-                outer.append(&frame);
-                place = inner;
-                button_row = None;
-                continue;
-            }
-            let target = if matches!(control.kind, ControlKind::Button { .. }) {
-                // A group box ends at its buttons.
-                place = outer.clone();
-                button_row
-                    .get_or_insert_with(|| {
-                        let row = gtk::Box::new(gtk::Orientation::Horizontal, 8);
-                        row.set_halign(gtk::Align::End);
-                        outer.append(&row);
-                        row
-                    })
-                    .clone()
-            } else {
-                button_row = None;
-                place.clone()
-            };
-            let (shown, label) = build(ui, id, control, &target, &window, &setting);
-            if let Some(widget) = shown.widget() {
-                widget.set_sensitive(control.enabled);
-                widget.set_visible(!control.hidden);
-                if first.is_none()
-                    && control.enabled
-                    && !control.hidden
-                    && !matches!(
-                        control.kind,
-                        ControlKind::Text { .. } | ControlKind::Message { .. }
-                    )
-                {
-                    first = Some(widget);
-                }
-            }
-            if let Some(label) = label {
-                labels.insert(control.id.clone(), label);
-            }
-            controls.insert(control.id.clone(), shown);
-        }
+        let outer = margined_box();
+        let Built {
+            controls,
+            labels,
+            first,
+        } = build_controls(ui, id, &spec.controls, &outer, &window, &setting);
         window.set_child(Some(&outer));
-        // Escape and the close box are the dialog's Cancel: Okur is told it was cancelled, and
-        // it goes.
+        Ui::closing(ui, &window, id);
+        ui.dialogs.borrow_mut().insert(
+            id,
+            ShownDialog {
+                window: window.clone(),
+                controls,
+                labels,
+                setting,
+            },
+        );
+        window.present();
+        ui.focus_first(id, first);
+        tell_shown_when_active(&window, id);
+    }
+
+    /// Escape and the close box are the dialog's Cancel, or the wizard's: Okur is told it was
+    /// cancelled, and it goes.
+    fn closing(ui: &Rc<Ui>, window: &gtk::Window, id: u32) {
         let keys = gtk::EventControllerKey::new();
         {
             let ui = Rc::clone(ui);
@@ -514,13 +503,94 @@ impl Ui {
             });
         }
         window.add_controller(keys);
+        let ui = Rc::clone(ui);
+        window.connect_close_request(move |_| {
+            ui.cancelled(id);
+            glib::Propagation::Stop
+        });
+    }
+
+    /// The focus on dialog `id`'s first control, `first`. A list taking the focus as the
+    /// dialog opens has it on its selected item, as Windows' list does: "links List view |
+    /// Current Page Overview | 1 of 15". Once GTK has laid the dialog out (an idle comes after
+    /// its layout): focused at once, the row's object was gone as Okur read it, and the list
+    /// and place went unsaid (222/s1 in full5).
+    fn focus_first(&self, id: u32, first: Option<gtk::Widget>) {
+        let Some(first) = first else {
+            return;
+        };
+        let list = self.dialogs.borrow().get(&id).and_then(|dialog| {
+            dialog.controls.values().find_map(|shown| match shown {
+                Shown::List(list) if list.widget() == first => Some(list.clone()),
+                _ => None,
+            })
+        });
+        match list {
+            Some(list) => {
+                let _ = glib::idle_add_local_once(move || list.take_focus());
+            }
+            None => {
+                first.grab_focus();
+            }
+        }
+    }
+
+    /// Shows a wizard in front, its first page under Back, Next (or Finish) and Cancel, named
+    /// as a Windows property-sheet wizard names them ("< Back", "Next >", "Cancel" [obs,
+    /// 705/s5, s10]); one already shown comes to the front. Okur decides where it goes: its
+    /// buttons are told ("back", "next", "finish"), and Okur turns the page.
+    fn show_wizard(ui: &Rc<Ui>, spec: WizardSpec) {
+        let id = spec.id;
+        if let Some(dialog) = ui.dialogs.borrow().get(&id) {
+            dialog.window.present();
+            return;
+        }
+        let window = gtk::Window::builder()
+            .accessible_role(gtk::AccessibleRole::Dialog)
+            .build();
+        window.set_title(Some(&spec.page.title));
+        window.set_default_size(520, -1);
+        let setting = Rc::new(Cell::new(false));
+        let outer = margined_box();
+        let page = gtk::Box::new(gtk::Orientation::Vertical, 8);
+        outer.append(&page);
+        let Built {
+            controls,
+            labels,
+            first,
+        } = build_controls(ui, id, &spec.page.controls, &page, &window, &setting);
+        let row = gtk::Box::new(gtk::Orientation::Horizontal, 8);
+        row.set_halign(gtk::Align::End);
+        let back = gtk::Button::with_mnemonic(&mnemonic(&spec.labels.back));
+        let next = gtk::Button::with_mnemonic(&mnemonic(&spec.labels.next));
+        let cancel = gtk::Button::with_mnemonic(&mnemonic(&spec.labels.cancel));
+        for button in [&back, &next, &cancel] {
+            row.append(button);
+        }
+        outer.append(&row);
+        let buttons = Rc::new(Cell::new(spec.buttons));
+        back.connect_clicked(move |_| {
+            send(&FromUi::DialogPressed {
+                id,
+                control: "back".to_owned(),
+            });
+        });
         {
-            let ui = Rc::clone(ui);
-            window.connect_close_request(move |_| {
-                ui.cancelled(id);
-                glib::Propagation::Stop
+            let buttons = Rc::clone(&buttons);
+            next.connect_clicked(move |_| {
+                let control = if buttons.get().next { "next" } else { "finish" };
+                send(&FromUi::DialogPressed {
+                    id,
+                    control: control.to_owned(),
+                });
             });
         }
+        {
+            let ui = Rc::clone(ui);
+            cancel.connect_clicked(move |_| ui.cancelled(id));
+        }
+        window.set_child(Some(&outer));
+        Ui::closing(ui, &window, id);
         ui.dialogs.borrow_mut().insert(
             id,
             ShownDialog {
@@ -530,33 +600,51 @@ impl Ui {
                 setting,
             },
         );
+        let shown = ShownWizard {
+            page,
+            back,
+            next,
+            buttons,
+            labels: spec.labels,
+        };
+        set_wizard_buttons(&shown, &window, spec.buttons);
+        ui.wizards.borrow_mut().insert(id, shown);
         window.present();
-        if let Some(first) = first {
-            // A list taking the focus as the dialog opens has it on its selected item, as
-            // Windows' list does: "links List view | Current Page Overview | 1 of 15". Once GTK
-            // has laid the dialog out (an idle comes after its layout): focused at once, the
-            // row's object was gone as Okur read it, and the list and place went unsaid
-            // (222/s1 in full5).
-            let list = ui.dialogs.borrow().get(&id).and_then(|dialog| {
-                dialog.controls.values().find_map(|shown| match shown {
-                    Shown::List(list) if list.widget() == first => Some(list.clone()),
-                    _ => None,
-                })
-            });
-            match list {
-                Some(list) => {
-                    let _ = glib::idle_add_local_once(move || list.take_focus());
-                }
-                None => {
-                    first.grab_focus();
-                }
-            }
+        ui.focus_first(id, first);
+    }
+
+    /// Turns wizard `id` to `page`, with `buttons`, the focus on its first control: the page
+    /// before it goes, its controls no longer Okur's.
+    fn turn_wizard(ui: &Rc<Ui>, id: u32, page: &DialogSpec, buttons: WizardButtons) {
+        let Some((window, setting)) = ui
+            .dialogs
+            .borrow()
+            .get(&id)
+            .map(|dialog| (dialog.window.clone(), Rc::clone(&dialog.setting)))
+        else {
+            return;
+        };
+        let Some(place) = ui.wizards.borrow().get(&id).map(|wizard| {
+            set_wizard_buttons(wizard, &window, buttons);
+            wizard.page.clone()
+        }) else {
+            return;
+        };
+        while let Some(child) = place.first_child() {
+            place.remove(&child);
         }
-        tell_shown_when_active(&window, id);
+        let built = build_controls(ui, id, &page.controls, &place, &window, &setting);
+        window.set_title(Some(&page.title));
+        if let Some(dialog) = ui.dialogs.borrow_mut().get_mut(&id) {
+            dialog.controls = built.controls;
+            dialog.labels = built.labels;
+        }
+        ui.focus_first(id, built.first);
     }
 
     /// The dialog cancelled by the user: Okur told, the window gone.
     fn cancelled(&self, id: u32) {
+        self.wizards.borrow_mut().remove(&id);
         let dialog = self.dialogs.borrow_mut().remove(&id);
         if let Some(dialog) = dialog {
             send(&FromUi::DialogClosed { id });
@@ -750,6 +838,105 @@ fn changed(id: u32, control: &str, setting: &Rc<Cell<bool>>, value: Value) {
 }
 
 /// A control drawn into `place`, with the label shown for it.
+/// A vertical box with a dialog's margins.
+fn margined_box() -> gtk::Box {
+    let outer = gtk::Box::new(gtk::Orientation::Vertical, 8);
+    outer.set_margin_top(12);
+    outer.set_margin_bottom(12);
+    outer.set_margin_start(12);
+    outer.set_margin_end(12);
+    outer
+}
+
+/// `controls` built into `outer`, in the spec's order, which is the Tab order. The buttons in
+/// a row where they come, consecutive ones together (a list, its buttons, then its radio
+/// groups: "Move To Link Button" after the list [obs, 222/s2]; one row of them at the end had
+/// Tab reach the radios first); a group box holds the controls after it, up to the next group
+/// or the buttons.
+fn build_controls(
+    ui: &Rc<Ui>,
+    id: u32,
+    controls: &[Control],
+    outer: &gtk::Box,
+    window: &gtk::Window,
+    setting: &Rc<Cell<bool>>,
+) -> Built {
+    let mut button_row: Option<gtk::Box> = None;
+    let mut built = Built {
+        controls: HashMap::new(),
+        labels: HashMap::new(),
+        first: None,
+    };
+    let mut place: gtk::Box = outer.clone();
+    for control in controls {
+        if control.kind == ControlKind::Group {
+            let frame = gtk::Frame::new(Some(&plain(&control.label)));
+            let inner = gtk::Box::new(gtk::Orientation::Vertical, 6);
+            inner.set_margin_top(6);
+            inner.set_margin_bottom(6);
+            inner.set_margin_start(6);
+            inner.set_margin_end(6);
+            frame.set_child(Some(&inner));
+            outer.append(&frame);
+            place = inner;
+            button_row = None;
+            continue;
+        }
+        let target = if matches!(control.kind, ControlKind::Button { .. }) {
+            // A group box ends at its buttons.
+            place = outer.clone();
+            button_row
+                .get_or_insert_with(|| {
+                    let row = gtk::Box::new(gtk::Orientation::Horizontal, 8);
+                    row.set_halign(gtk::Align::End);
+                    outer.append(&row);
+                    row
+                })
+                .clone()
+        } else {
+            button_row = None;
+            place.clone()
+        };
+        let (shown, label) = build(ui, id, control, &target, window, setting);
+        if let Some(widget) = shown.widget() {
+            widget.set_sensitive(control.enabled);
+            widget.set_visible(!control.hidden);
+            if built.first.is_none()
+                && control.enabled
+                && !control.hidden
+                && !matches!(
+                    control.kind,
+                    ControlKind::Text { .. } | ControlKind::Message { .. }
+                )
+            {
+                built.first = Some(widget);
+            }
+        }
+        if let Some(label) = label {
+            built.labels.insert(control.id.clone(), label);
+        }
+        built.controls.insert(control.id.clone(), shown);
+    }
+    built
+}
+
+/// A wizard's buttons as `buttons` has them: Back where it can go back; Next, or Finish in its
+/// place without it, available where it can finish (JAWS's Save Temporary Customizations, until
+/// the rule has a name [obs, 740]); Enter presses it.
+fn set_wizard_buttons(wizard: &ShownWizard, window: &gtk::Window, buttons: WizardButtons) {
+    wizard.buttons.set(buttons);
+    wizard.back.set_sensitive(buttons.back);
+    if buttons.next {
+        wizard.next.set_label(&mnemonic(&wizard.labels.next));
+        wizard.next.set_sensitive(true);
+    } else {
+        wizard.next.set_label(&mnemonic(&wizard.labels.finish));
+        wizard.next.set_sensitive(buttons.finish);
+    }
+    wizard.next.set_use_underline(true);
+    window.set_default_widget(Some(&wizard.next));
+}
+
 fn build(
     _ui: &Rc<Ui>,
     id: u32,

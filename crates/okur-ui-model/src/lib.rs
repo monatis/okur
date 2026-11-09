@@ -245,6 +245,20 @@ pub struct WizardSpec {
     pub id: u32,
     pub page: DialogSpec,
     pub buttons: WizardButtons,
+    /// The buttons' labels, for a toolkit that has none of its own: Windows' property sheet
+    /// names them itself; GTK's window is Okur's.
+    #[serde(default)]
+    pub labels: WizardLabels,
+}
+
+/// A wizard's buttons' labels, "&" marking each one's access key: "< &Back", "&Next >",
+/// "Finish", "Cancel", as a Windows property-sheet wizard names them [obs, 705/s5, s10].
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub struct WizardLabels {
+    pub back: String,
+    pub next: String,
+    pub finish: String,
+    pub cancel: String,
 }
 
 /// What Okur asks `okur-ui` to show.
