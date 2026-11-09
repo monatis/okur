@@ -65,9 +65,12 @@ def build(app):
     checks.append(remember)
     box.append(checks)
 
-    # The plan: a group of three radio buttons, Pro chosen.
+    # The plan: a group of three radio buttons, Pro chosen, one under another: GTK's arrows move
+    # by where the radios are, and Down from a row of them left the group for the drop-down
+    # below (548/s6 in night2), where the Windows fixture's Down goes on to Team as any Win32
+    # radio group's does [obs, 548/s6].
     plan = Gtk.Frame(label="Plan")
-    radios = Gtk.Box(spacing=12)
+    radios = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
     first = None
     for choice in ("Free", "Pro", "Team"):
         radio = Gtk.CheckButton(label=choice)
