@@ -658,14 +658,36 @@ impl Ui {
     }
 
     /// Escape and the close box are the dialog's Cancel, or the wizard's: Okur is told it was
-    /// cancelled, and it goes.
+    /// cancelled, and it goes. Enter on a check box, a radio button, a drop-down or a slider
+    /// presses the default button, as in a Windows dialog: GTK's took it for the control
+    /// itself, and Enter on Flexible Web's start page undid nothing (716/s29 in gtk7: JAWS's
+    /// wizard did the chosen task and closed).
     fn closing(ui: &Rc<Ui>, window: &gtk::Window, id: u32) {
         let keys = gtk::EventControllerKey::new();
+        // Before the focused control takes the key.
+        keys.set_propagation_phase(gtk::PropagationPhase::Capture);
         {
             let ui = Rc::clone(ui);
+            let weak = window.downgrade();
             keys.connect_key_pressed(move |_, key, _, _| {
                 if key == gtk::gdk::Key::Escape {
                     ui.cancelled(id);
+                    return glib::Propagation::Stop;
+                }
+                let enter = matches!(
+                    key,
+                    gtk::gdk::Key::Return | gtk::gdk::Key::KP_Enter | gtk::gdk::Key::ISO_Enter
+                );
+                let on_a_choice = weak
+                    .upgrade()
+                    .and_then(|window| gtk::prelude::GtkWindowExt::focus(&window))
+                    .is_some_and(|focus| {
+                        focus.is::<gtk::CheckButton>()
+                            || focus.is::<gtk::DropDown>()
+                            || focus.is::<gtk::Scale>()
+                    });
+                if enter && on_a_choice {
+                    press_default(&weak);
                     return glib::Propagation::Stop;
                 }
                 glib::Propagation::Proceed
@@ -814,22 +836,32 @@ impl Ui {
         else {
             return;
         };
-        let Some(place) = ui.wizards.borrow().get(&id).map(|wizard| {
+        // The new page beside the old, focused, and only then the old one gone: removed with
+        // the focus in it, GTK gave the focus to another of its controls, which was said before
+        // the new page (716/s7 in gtk7: "Hide an element radio button" after Alt+N).
+        let new_page = gtk::Box::new(gtk::Orientation::Vertical, 8);
+        let Some(old_page) = ui.wizards.borrow_mut().get_mut(&id).map(|wizard| {
             set_wizard_buttons(wizard, &window, buttons);
-            wizard.page.clone()
+            std::mem::replace(&mut wizard.page, new_page.clone())
         }) else {
             return;
         };
-        while let Some(child) = place.first_child() {
-            place.remove(&child);
+        if let Some(outer) = old_page.parent().and_downcast::<gtk::Box>() {
+            outer.insert_child_after(&new_page, Some(&old_page));
         }
-        let built = build_controls(ui, id, &page.controls, &place, &window, &setting);
+        let built = build_controls(ui, id, &page.controls, &new_page, &window, &setting);
         window.set_title(Some(&page.title));
         if let Some(dialog) = ui.dialogs.borrow_mut().get_mut(&id) {
             dialog.controls = built.controls;
             dialog.labels = built.labels;
         }
         ui.focus_first(id, built.first);
+        // After the first focus, which a list places in an idle of its own.
+        let _ = glib::idle_add_local_once(move || {
+            if let Some(outer) = old_page.parent().and_downcast::<gtk::Box>() {
+                outer.remove(&old_page);
+            }
+        });
     }
 
     /// The dialog cancelled by the user: Okur told, the window gone.
@@ -1209,6 +1241,8 @@ fn build(
     match &control.kind {
         ControlKind::CheckBox { checked } => {
             let button = gtk::CheckButton::with_mnemonic(&mnemonic(&control.label));
+            // Its name without the access key's mark: GTK's had it ("_Hide an element", gtk7).
+            button.update_property(&[gtk::accessible::Property::Label(&plain(&control.label))]);
             button.set_active(*checked);
             let setting = Rc::clone(setting);
             button.connect_toggled(move |b| {
@@ -1566,6 +1600,7 @@ fn build(
             let mut buttons: Vec<gtk::CheckButton> = Vec::new();
             for (i, option) in options.iter().enumerate() {
                 let button = gtk::CheckButton::with_mnemonic(&mnemonic(option));
+                button.update_property(&[gtk::accessible::Property::Label(&plain(option))]);
                 if let Some(first) = buttons.first() {
                     button.set_group(Some(first));
                 }
