@@ -210,6 +210,17 @@ impl ScreenReaderEngine {
         id.is_some() && (id == Some(state.dialog.id) || id == child)
     }
 
+    /// The PlaceMarker List's id when dialog `id` is the one it opened over itself, which it
+    /// owns as JAWS's does: named before it [obs, 702/s5].
+    pub(super) fn placemarker_dialog_owner(&self, id: u32) -> Option<u32> {
+        let state = self.placemarker_list.as_ref()?;
+        let child = match state.child.as_ref()? {
+            Child::Name(dialog, _) => dialog.id,
+            Child::RemoveAll(dialog) => dialog.id,
+        };
+        (child == id).then_some(state.dialog.id)
+    }
+
     /// What the user did to the PlaceMarker List or the dialog it opened.
     pub(super) fn handle_placemarker_event(&mut self, message: &FromUi) -> Option<String> {
         let mut state = self.placemarker_list.take()?;

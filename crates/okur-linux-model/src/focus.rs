@@ -221,6 +221,11 @@ pub fn native_focus(
             .filter(|c| !c.is_empty())
             .collect();
         event.container_is_list_view = true;
+        // Focused and not selected, as Okur's own lists' rows are until one is picked: "Not
+        // Selected Quiet study ... | Document | 1 of 1" [obs, 704/s11].
+        if focus.has(state::SELECTABLE) {
+            event.states.selected = Some(focus.has(state::SELECTED));
+        }
         if let Some((at, of)) = own_place(focus) {
             event.item_index = Some(at);
             event.item_count = Some(of);
@@ -232,6 +237,28 @@ pub fn native_focus(
         event.groups = vec![okur_core::GroupEntry::list(
             event.container_name.clone().unwrap_or_default(),
         )];
+        return event;
+    }
+    // A column view with no rows: GTK gives the focus to its scrolled window, which holds it
+    // alone. The list view focused itself, no item to give it to: "PlaceMarker List view | 0
+    // items | To move to items use the Arrow keys." [obs, 699/s6, 704/s3].
+    let empty_table = match focus.children.as_slice() {
+        [table] if focus.role == "scroll pane" && table.role == "tree table" => {
+            Some(table).filter(|t| {
+                t.children
+                    .iter()
+                    .filter(|c| c.role == "list")
+                    .all(|rows| rows.children.is_empty())
+            })
+        }
+        _ => None,
+    };
+    if let Some(table) = empty_table {
+        event.role = Role::List;
+        event.list_view = true;
+        event.name = Some(table.name.clone()).filter(|n| !n.is_empty());
+        event.item_count = Some(0);
+        event.item_index = None;
         return event;
     }
     // A list's item, its list named.
@@ -1063,6 +1090,85 @@ mod tests {
             said(&event),
             fold(" \u{1d} List view \u{1e} \nbudget.xlsx\n24 KB \n1 of 3\nTo move to items use the Arrow keys.")
         );
+    }
+
+    /// A column view with no rows, its scrolled window focused: the list view itself, with no
+    /// item [obs, 699/s6: "PlaceMarker List view | 0 items | To move to items use the Arrow
+    /// keys."]; one with rows is not.
+    #[test]
+    fn an_empty_column_view_is_its_list_view() {
+        let pane = |rows: Vec<AtspiNode>| {
+            node(
+                "scroll pane",
+                "",
+                vec![node(
+                    "tree table",
+                    "PlaceMarker",
+                    vec![
+                        node("table row", "PlaceMarker Generalized to Domain", vec![]),
+                        node("list", "", rows),
+                    ],
+                )],
+            )
+        };
+        let empty = pane(Vec::new());
+        let event = native_focus(FocusEvent::new(Role::Group), &empty, &[window()]);
+        assert_eq!(
+            (event.role.clone(), event.list_view, event.item_count),
+            (Role::List, true, Some(0))
+        );
+        assert_eq!(
+            said(&event),
+            fold("PlaceMarker \u{1d} List view \u{1e} \n0 items\nTo move to items use the Arrow keys.")
+        );
+        let full = pane(vec![node("table row", "Rules Document", vec![])]);
+        let event = native_focus(FocusEvent::new(Role::Group), &full, &[window()]);
+        assert!(!event.list_view);
+    }
+
+    /// A column view's row focused and not selected, as Okur's own lists' rows are until one
+    /// is picked: "Not Selected" [obs, 704/s11]; selected, or not selectable, it is not said.
+    #[test]
+    fn a_column_views_row_focused_unselected_says_so() {
+        use crate::page::state;
+        let row_with = |states: &[u32]| {
+            let mut row = node(
+                "table row",
+                "Quiet study Document",
+                vec![
+                    node("table cell", "Quiet study", vec![label("Quiet study")]),
+                    node("table cell", "Document", vec![label("Document")]),
+                ],
+            );
+            for s in states {
+                row.states |= 1u64 << s;
+            }
+            row
+        };
+        let selected_of = |row: AtspiNode| {
+            let rows = node("list", "", vec![row.clone()]);
+            let table = node(
+                "tree table",
+                "PlaceMarker",
+                vec![node("table row", "PlaceMarker Type", vec![]), rows.clone()],
+            );
+            native_focus(
+                FocusEvent::new(Role::TableRow),
+                &row,
+                &[rows, table, window()],
+            )
+        };
+        let unselected = selected_of(row_with(&[state::FOCUSED, state::SELECTABLE]));
+        assert_eq!(unselected.states.selected, Some(false));
+        assert!(said(&unselected).contains("Not Selected Quiet study"));
+        let selected = selected_of(row_with(&[
+            state::FOCUSED,
+            state::SELECTABLE,
+            state::SELECTED,
+        ]));
+        assert_eq!(selected.states.selected, Some(true));
+        let plain = selected_of(row_with(&[state::FOCUSED]));
+        assert_eq!(plain.states.selected, None);
     }
 
     /// A notebook focused itself: its selected tab [obs, 301/s9: "General Tab selected"].

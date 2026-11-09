@@ -481,7 +481,8 @@ impl ScreenReaderEngine {
         }
         let title = focus.window_title.as_deref()?;
         let open = self.open_dialogs.lock().ok()?;
-        let dialog = open.iter().rev().find(|d| d.title == title)?;
+        let at = open.iter().rposition(|d| d.title == title)?;
+        let dialog = open.get(at)?;
         let default = dialog.controls.iter().find_map(|c| match c.kind {
             ControlKind::Button { default: true } => Some(shown(&c.label)),
             _ => None,
@@ -490,6 +491,16 @@ impl ScreenReaderEngine {
         told.in_dialog_box = true;
         if told.default_button.is_none() {
             told.default_button = default;
+        }
+        // The dialog of Okur's it opened over, named first as Windows names the dialog box
+        // that owns it: "PlaceMarker List dialog | Add PlaceMarker dialog | Name: Edit" [obs,
+        // 702/s5]. Only where JAWS's own owns it: JAWS names no Dictionary Manager before its
+        // Add Dictionary Definition [obs, 1157/s5].
+        if told.outer_dialogs.is_empty() && !focus.dialog_box_read {
+            let owner = self
+                .placemarker_dialog_owner(dialog.id)
+                .and_then(|owner| open.get(..at)?.iter().find(|d| d.id == owner));
+            told.outer_dialogs = owner.map(|d| d.title.clone()).into_iter().collect();
         }
         // A row of a check list of Okur's: its check, as Windows' list view with check boxes
         // gives it ("Hide ComplementaryRegion 1 from the top ... checked | 1 of 1" [obs,

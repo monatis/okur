@@ -11507,3 +11507,67 @@ fn a_wizard_of_okurs_turning_a_page_says_the_page() {
         "{turned:?}"
     );
 }
+
+/// The dialog the PlaceMarker List opened over itself is said after the list, as JAWS names
+/// the dialog box that owns it ("PlaceMarker List dialog | Add PlaceMarker dialog | Name:
+/// Edit" [obs, 702/s5]), on Linux too, where GTK tells no owner; the list itself is said
+/// alone.
+#[test]
+fn the_placemarker_lists_own_dialog_names_the_list_first() {
+    use crate::ui::{FromUi, ToUi};
+    let mut page =
+        AomNode::new(0, Role::Document).with_children(vec![
+            AomNode::new(1, Role::Paragraph).with_text("Water in a closed bottle is allowed.")
+        ]);
+    page.attributes.insert(
+        "url".to_owned(),
+        "file:///C:/corpus/fixtures/placemarkers.html".to_owned(),
+    );
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(VirtualBuffer::from_aom(&page)),
+        Box::new(MockSpeechOutput::new()),
+    );
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let ctrl_shift = Modifiers {
+        ctrl: true,
+        shift: true,
+        ..Modifiers::none()
+    };
+    let shown = |ui: &crate::ui::RecordingUiHost| {
+        ui.take().into_iter().find_map(|m| match m {
+            ToUi::DialogShow { dialog } => Some((dialog.id, dialog.title)),
+            _ => None,
+        })
+    };
+    // A focus in one of Okur's dialogs as Linux gives it: its window a dialog, no dialog box
+    // read beside it.
+    let focus_in = |title: &str, role: Role, name: &str| {
+        let mut focus = FocusEvent::new(role)
+            .with_name(name)
+            .with_window_title(title);
+        focus.app = Some("okur-ui".into());
+        focus.dialog_text = Some(String::new());
+        AccessibilityEvent::Focus(focus)
+    };
+    engine.handle_key_event(&KeyEvent::new(Key::Alpha('K'), ctrl_shift, true));
+    let (list_id, list) = shown(&ui).unwrap_or_default();
+    let said = engine.handle_accessibility_event(&focus_in(&list, Role::Button, "Add"));
+    assert!(
+        said.as_deref()
+            .is_some_and(|s| s.starts_with(&format!("{list} \u{1d} dialog \u{1e}"))),
+        "{said:?}"
+    );
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id: list_id,
+        control: "add".into(),
+    }));
+    let (_, add) = shown(&ui).unwrap_or_default();
+    let said = engine.handle_accessibility_event(&focus_in(&add, Role::Edit, "Name:"));
+    assert!(
+        said.as_deref().is_some_and(|s| s.starts_with(&format!(
+            "{list} \u{1d} dialog \u{1e} \n{add} \u{1d} dialog \u{1e}"
+        ))),
+        "{said:?}"
+    );
+}

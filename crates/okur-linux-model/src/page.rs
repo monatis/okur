@@ -31,6 +31,7 @@ pub mod state {
     pub const MODAL: u32 = 16;
     pub const MULTI_LINE: u32 = 17;
     pub const PRESSED: u32 = 20;
+    pub const SELECTABLE: u32 = 22;
     pub const SELECTED: u32 = 23;
     pub const VERTICAL: u32 = 29;
     pub const INDETERMINATE: u32 = 32;
