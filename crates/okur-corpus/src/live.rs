@@ -67,6 +67,7 @@ pub fn compare(run: &Value, evidence: &Value) -> Result<Vec<LiveStep>, String> {
         .ok_or("the run has no trial")?;
     let variants = jaws_variants(evidence);
     let spoken_variants = jaws_spoken_variants(evidence);
+    let fixtures = fixture_dirs(run, evidence);
     let steps = trial
         .get("step_results")
         .and_then(Value::as_array)
@@ -88,7 +89,7 @@ pub fn compare(run: &Value, evidence: &Value) -> Result<Vec<LiveStep>, String> {
                 return Err(format!("no JAWS transcript recorded for step {id}"));
             }
             let key = format!("{scenario}/{id}");
-            let comparison = compare_step(&key, &okur, &jaws);
+            let comparison = compare_step(&key, &as_recorded(&okur, fixtures.as_ref()), &jaws);
             let recorded = step
                 .pointer("/observation/spoken")
                 .and_then(Value::as_array)
@@ -96,8 +97,9 @@ pub fn compare(run: &Value, evidence: &Value) -> Result<Vec<LiveStep>, String> {
             let spoken = spoken_variants.as_ref().filter(|_| recorded).map(|all| {
                 let jaws_variants = all.get(id).cloned().unwrap_or_default();
                 let okur = step_spoken(step);
+                let said = as_recorded(&okur, fixtures.as_ref());
                 SpokenParity {
-                    matched: compare_step(&key, &okur, &jaws_variants) == Comparison::Matched,
+                    matched: compare_step(&key, &said, &jaws_variants) == Comparison::Matched,
                     engine: okur,
                     jaws_variants,
                 }
@@ -121,6 +123,34 @@ pub fn compare(run: &Value, evidence: &Value) -> Result<Vec<LiveStep>, String> {
             })
         })
         .collect()
+}
+
+/// Where the run's machine keeps the fixtures and where JAWS's did, each as Chrome shows a
+/// page's address without its scheme ("/root/okur/corpus/fixtures/",
+/// "C:/Users/ailabs/corpus/fixtures/"): from the run's provenance (`fixtures`, the lab's
+/// runner) and the evidence's fixture address. A page's address said is the same page.
+fn fixture_dirs(run: &Value, evidence: &Value) -> Option<(String, String)> {
+    let lab = run
+        .pointer("/provenance/fixtures")
+        .and_then(Value::as_str)?;
+    let recorded = evidence.get("fixture").and_then(Value::as_str)?;
+    let recorded = recorded.strip_prefix("file:///").unwrap_or(recorded);
+    let end = recorded
+        .find("/fixtures/")?
+        .checked_add("/fixtures/".len())?;
+    let recorded = recorded.get(..end)?;
+    (lab != recorded).then(|| (lab.to_owned(), recorded.to_owned()))
+}
+
+/// What Okur said with the run machine's fixture directory said as the reference machine's:
+/// its address with the scheme first, then the path alone (the address bar).
+fn as_recorded(said: &str, fixtures: Option<&(String, String)>) -> String {
+    let Some((lab, recorded)) = fixtures else {
+        return said.to_owned();
+    };
+    let lab_url = format!("file://{lab}");
+    let recorded_url = format!("file:///{recorded}");
+    said.replace(&lab_url, &recorded_url).replace(lab, recorded)
 }
 
 /// Where a platform's live runs are kept: `corpus/live/<platform>/<scenario_id>.json`, each as
@@ -352,6 +382,51 @@ mod tests {
         assert_eq!(
             steps.first().map(|s| s.key.as_str()),
             Some("222-web-links-list/s1")
+        );
+    }
+
+    /// The lab's fixture directory, where Chrome shows a page's address, is compared as the
+    /// reference machine's: the same page.
+    #[test]
+    fn the_labs_fixture_path_is_compared_as_the_reference_machines() {
+        let mut evidence = file(
+            None,
+            &[
+                (
+                    "s1",
+                    "Address and search bar Edit C:/Users/ailabs/corpus/fixtures/form.html",
+                ),
+                ("s2", "file:///C:/Users/ailabs/corpus/fixtures/form.html"),
+            ],
+        );
+        if let Some(fields) = evidence.as_object_mut() {
+            let fixture = "file:///C:/Users/ailabs/corpus/fixtures/form.html";
+            fields.insert("fixture".to_owned(), json!(fixture));
+        }
+        let mut run = file(
+            Some("okur"),
+            &[
+                (
+                    "s1",
+                    "Address and search bar Edit /root/okur/corpus/fixtures/form.html",
+                ),
+                ("s2", "file:///root/okur/corpus/fixtures/form.html"),
+            ],
+        );
+        let steps = compare(&run, &evidence).unwrap_or_default();
+        assert_eq!(steps.iter().filter(|s| s.matched).count(), 0);
+        if let Some(provenance) = run
+            .pointer_mut("/provenance")
+            .and_then(Value::as_object_mut)
+        {
+            provenance.insert("fixtures".to_owned(), json!("/root/okur/corpus/fixtures/"));
+        }
+        let steps = compare(&run, &evidence).unwrap_or_default();
+        assert_eq!(steps.iter().filter(|s| s.matched).count(), 2);
+        // What Okur said is kept as it said it.
+        assert_eq!(
+            steps.first().map(|s| s.okur.as_str()),
+            Some("Address and search bar Edit /root/okur/corpus/fixtures/form.html")
         );
     }
 

@@ -28,6 +28,10 @@ pub const CONTROL_LIMIT: usize = 200;
 /// How many of a native focus's ancestors are read, at most, on the way to its window.
 pub const WINDOW_DEPTH: usize = 12;
 
+/// The view class of Chrome's site information button, its address bar's icon (AT-SPI's
+/// `class` attribute of Chrome's own controls).
+const CHROME_SITE_INFORMATION: &str = "LocationIconView";
+
 /// Whether an AT-SPI role is a window's: where a native focus's read of its ancestors ends.
 pub fn is_window(role: &str) -> bool {
     matches!(role, "frame" | "dialog" | "window" | "alert")
@@ -120,10 +124,13 @@ pub fn native_focus(
     }
     // A button that opens a menu (Chrome's toolbar's "Tab search", AT-SPI's `haspopup` "menu"):
     // a menu button, "Tab search | button menu | Press space to activate the menu ..."
-    // [obs, 204/s11].
-    if matches!(focus.role.as_str(), "push button" | "button")
-        && focus.attributes.get("haspopup").map(String::as_str) == Some("menu")
-    {
+    // [obs, 204/s11]. Chrome's site information button (its address bar's icon: "File", "Not
+    // secure") opens the page's information popup: collapsed in Windows' Chrome, "File | button
+    // menu | Press space ..." [obs, 204/s12], where Chrome on Linux gives it neither
+    // `haspopup` nor a collapsed state, only its view's class.
+    let opens_menu = focus.attributes.get("haspopup").map(String::as_str) == Some("menu")
+        || focus.attributes.get("class").map(String::as_str) == Some(CHROME_SITE_INFORMATION);
+    if matches!(focus.role.as_str(), "push button" | "button") && opens_menu {
         event.role = Role::MenuButton;
     }
     // A notebook focused itself: its selected page's tab, "General Tab selected".
@@ -335,8 +342,6 @@ mod tests {
         assert_eq!((event.item_index, event.item_count), (Some(2), Some(3)));
     }
 
-    /// The parent is read whole, and a list's, a column view's or a group box's above it; the
-    /// rest alone; the read ends at a window, a page's dialog's too.
     #[test]
     fn a_button_opening_a_menu_is_a_menu_button() {
         let mut button = AtspiNode {
@@ -351,6 +356,29 @@ mod tests {
         assert_eq!(event.role, Role::MenuButton);
     }
 
+    /// Chrome's site information button opens a popup, though Chrome on Linux says so only by
+    /// its view's class; another button of the address bar is a button.
+    #[test]
+    fn chromes_site_information_button_is_a_menu_button() {
+        let mut button = AtspiNode {
+            role: "button".to_owned(),
+            name: "File".to_owned(),
+            ..AtspiNode::default()
+        };
+        button
+            .attributes
+            .insert("class".to_owned(), "LocationIconView".to_owned());
+        let event = native_focus(FocusEvent::new(Role::Button), &button, &[]);
+        assert_eq!(event.role, Role::MenuButton);
+        button
+            .attributes
+            .insert("class".to_owned(), "StarView".to_owned());
+        let event = native_focus(FocusEvent::new(Role::Button), &button, &[]);
+        assert_eq!(event.role, Role::Button);
+    }
+
+    /// The parent is read whole, and a list's, a column view's or a group box's above it; the
+    /// rest alone; the read ends at a window, a page's dialog's too.
     #[test]
     fn the_read_plan_for_a_native_focus() {
         let button = AtspiNode {

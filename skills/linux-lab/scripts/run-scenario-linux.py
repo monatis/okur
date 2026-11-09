@@ -319,6 +319,16 @@ def main():
             if not press(key):
                 pressed = False
                 break
+        # "during": chords pressed while the step's speech goes on (Ctrl during Say All, Say
+        # Line again 250 ms later), each after_ms after the one before, as run-scenario.ps1
+        # presses them; the step settles after the last.
+        for during in step.get("during", []) if pressed else []:
+            time.sleep(int(during.get("after_ms", 0)) / 1000)
+            keys = keys + [during["command"]]
+            key_times.append(int(time.time() * 1000))
+            if not press(during["command"]):
+                pressed = False
+                break
         settled = settle(log, offset)
         said, offset = said_since(log, offset)
         # A step Okur was no longer running for heard nothing, and one whose key was not
@@ -377,6 +387,9 @@ def main():
         "scenario_id": scenario["id"],
         "provenance": {"reader": "okur", "platform": "linux", "web_verbosity": level,
                        "settings": "recorded" if recorded else "default",
+                       # Where the lab's fixtures are, said where Chrome shows a page's address:
+                       # compared as old-pc's (okur-lab live-baseline).
+                       "fixtures": FIXTURES,
                        **({"application": "corpus/fixtures/linux/" + os.path.basename(replica)}
                           if replica else {"chrome": "google-chrome"}),
                        "commit": subprocess.run(["git", "rev-parse", "--short", "HEAD"],
