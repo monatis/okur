@@ -731,6 +731,9 @@ fn kind(message: &ToUi) -> String {
         .unwrap_or_default()
 }
 
+/// What runs once, kept until it does.
+type Once = Rc<Cell<Option<Box<dyn FnOnce()>>>>;
+
 /// Runs `then` once `window` is active (the window manager gives it the keyboard after
 /// `present`, in its own time) and a frame of it is laid out (the next frame's tick, then an
 /// idle, which comes after the frame's layout and drawing). A dialog's first focus is placed
@@ -740,7 +743,7 @@ fn kind(message: &ToUi) -> String {
 /// on its first row at the layout after a letter Okur held had chosen another (the lab's
 /// research run of 1205).
 fn once_active(window: &gtk::Window, then: impl FnOnce() + 'static) {
-    let then: Rc<Cell<Option<Box<dyn FnOnce()>>>> = Rc::new(Cell::new(Some(Box::new(then))));
+    let then: Once = Rc::new(Cell::new(Some(Box::new(then))));
     let go = move |window: &gtk::Window| {
         let Some(then) = then.take() else {
             return;
