@@ -290,7 +290,9 @@ def main():
         kind = step.get("type")
         command = step.get("command", "")
         if kind == "key":
-            keys = [command]
+            # "repeat": the chord pressed again 120 ms after each release, as run-scenario.ps1
+            # presses it for JAWS's "twice quickly" commands.
+            keys = [command] * max(1, int(step.get("repeat", 1)))
         elif kind == "keyboard":
             keys = sendkeys(command)
         elif kind == "jaws_script" and command in script_keys:
@@ -302,7 +304,15 @@ def main():
                             "observation": {"speech_raw": "", "skipped": True}, "step_success": False})
             continue
         start = int(time.time() * 1000)
-        pressed = all(press(key) for key in keys)
+        pressed = True
+        key_times = []
+        for index, key in enumerate(keys):
+            if index and kind == "key":
+                time.sleep(0.12)
+            key_times.append(int(time.time() * 1000))
+            if not press(key):
+                pressed = False
+                break
         settled = settle(log, offset)
         said, offset = said_since(log, offset)
         # A step Okur was no longer running for heard nothing, and one whose key was not
@@ -314,8 +324,9 @@ def main():
             "t_start_ms": start,
             "t_end_ms": int(time.time() * 1000),
             "action": {"type": kind, "command": command},
-            # The chords pressed for it, for okur-lab live-replay linux.
+            # The chords pressed for it and when, for okur-lab live-replay linux.
             "keys": keys,
+            "key_times": key_times,
             "observation": {"speech_raw": "\n".join(said), "settled": settled,
                             **({} if running else {"okur_exited": True}),
                             **({} if pressed else {"not_pressed": True})},

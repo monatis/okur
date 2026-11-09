@@ -977,7 +977,14 @@ impl ScreenReaderEngine {
             .last_page_focus
             .and_then(|id| self.cursor.buffer.node(id))
             .filter(|n| n.role == Role::Edit)
-            .map(|n| n.id)?;
+            .map(|n| n.id);
+        tracing::debug!(
+            ?field,
+            caret = self.last_text.as_ref().map(|t| t.caret),
+            length = self.last_text.as_ref().map(|t| t.text.chars().count()),
+            "an arrow in a page's field: its caret's edge?"
+        );
+        let field = field?;
         let context = self.last_text.as_ref()?;
         let at_edge = if down {
             context.caret >= context.text.chars().count()

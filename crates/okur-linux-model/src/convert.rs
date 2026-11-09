@@ -6,7 +6,7 @@
 //! [`Converter::wants_reread`]), reads it, and hands it the record ([`Converter::convert_read`]).
 //! A replay converts each record as [`EventModel::convert`]: the twin passed over, then the read.
 
-use okur_core::event::{AccessibilityEvent, ChangeKind, FocusEvent};
+use okur_core::event::{AccessibilityEvent, ChangeKind, FocusEvent, TextContext};
 use okur_model::event_model::EventModel;
 use serde::{Deserialize, Serialize};
 use xa11y_core::{ElementData, EventKind, Role};
@@ -38,6 +38,17 @@ pub struct PageRead {
     pub read_ms: u64,
 }
 
+/// A text field read at its caret, as the engine asked after a key (`read_at_caret`): the
+/// field's object, by its key, and its text, caret and selection.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct TextRead {
+    pub object: String,
+    pub context: TextContext,
+    /// How long the read took, in milliseconds, from the ask: the caret's wait included.
+    #[serde(default)]
+    pub read_ms: u64,
+}
+
 /// What the driver read for one AT-SPI event.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AtspiRecord {
@@ -56,6 +67,9 @@ pub struct AtspiRecord {
     pub native: Option<NativeRead>,
     /// The focused control read again, as something within it changed.
     pub reread: Option<NativeRead>,
+    /// A text field read at its caret, asked for by the engine: a record of its own.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub text: Option<TextRead>,
 }
 
 impl AtspiRecord {
@@ -65,6 +79,14 @@ impl AtspiRecord {
         Self {
             pages: vec![page],
             ..Self::bare(at_ms, EventKind::DocumentLoaded, String::new(), None)
+        }
+    }
+
+    /// A text field read at its caret, given to the engine as it is read: a record of its own.
+    pub fn text(at_ms: u64, read: TextRead) -> Self {
+        Self {
+            text: Some(read),
+            ..Self::bare(at_ms, EventKind::TextChanged, String::new(), None)
         }
     }
 
@@ -79,6 +101,7 @@ impl AtspiRecord {
             pages: Vec::new(),
             native: None,
             reread: None,
+            text: None,
         }
     }
 }
@@ -114,6 +137,9 @@ pub struct Converter {
     /// focus in it names its node by its id, found where a role and a name do not find it (a
     /// link, whose role holds its address [obs, 204/s9]).
     page_ids: std::collections::HashMap<String, i32>,
+    /// The places of that page's list items, by their paths: an option's focus says its list
+    /// and its place.
+    page_places: std::collections::HashMap<String, crate::page::ItemPlace>,
 }
 
 impl Converter {
@@ -188,10 +214,15 @@ impl Converter {
     /// The engine's events for what was read for one event, in order: the pages read, then the
     /// focus or the change.
     pub fn convert_read(&mut self, record: &AtspiRecord) -> Vec<AccessibilityEvent> {
+        // A text field read at its caret: what the engine asked for, as read.
+        if let Some(read) = &record.text {
+            return vec![AccessibilityEvent::TextContext(read.context.clone())];
+        }
         let mut events = Vec::new();
         for page in &record.pages {
             self.last_page = Some(page.document.clone());
             self.page_ids = crate::page::page_ids(&page.root, page.base);
+            self.page_places = crate::page::item_places(&page.root);
             let root = to_aom_from(&page.root, page.base);
             let title = root.name.clone().unwrap_or_default();
             events.push(AccessibilityEvent::DocumentLoaded { title, root });
@@ -297,12 +328,14 @@ impl Converter {
                 let window = self.window_title.clone().filter(|_| {
                     in_page && same_application(object.as_deref(), self.track.active_window())
                 });
-                let unique_id = target
+                let path = target
                     .filter(|_| in_page)
                     .and_then(|t| t.raw.get("object_path"))
-                    .and_then(|path| path.as_str())
+                    .and_then(|path| path.as_str());
+                let unique_id = path
                     .and_then(|path| self.page_ids.get(path))
                     .map(i32::to_string);
+                let item_place = path.and_then(|path| self.page_places.get(path));
                 let window_id = self
                     .track
                     .active_window()
@@ -318,6 +351,15 @@ impl Converter {
                     | AccessibilityEvent::Change { control: focus, .. } = &mut event
                     {
                         focus.platform.window_id = window_id;
+                        // An option's list and its place, as Windows' focus carries them.
+                        if let Some(place) =
+                            item_place.filter(|_| focus.role == okur_core::aom::Role::ListItem)
+                        {
+                            focus.container_name.clone_from(&place.list);
+                            focus.container_is_list_box = place.list_box;
+                            focus.item_index = Some(place.index);
+                            focus.item_count = Some(place.count);
+                        }
                     }
                     event
                 })
@@ -540,6 +582,7 @@ mod tests {
             pages: Vec::new(),
             native,
             reread: None,
+            text: None,
         }
     }
 
@@ -699,6 +742,77 @@ mod tests {
             converter.convert_read(&focus).as_slice(),
             [AccessibilityEvent::Focus(f)] if f.unique_id.as_deref() == Some(expected.as_str())
         ));
+    }
+
+    /// An option of the page given last is focused with its list's name and its place, as
+    /// Windows' focus has them: "Fruits list | with 3 items | Apple | 1 of 3" [obs, 286/s19].
+    #[test]
+    fn a_page_option_focus_has_its_list_and_place() {
+        let mut converter = Converter::default();
+        let mut root = node("document web", "Patterns", &[]);
+        root.path = "/doc".to_owned();
+        let mut list = node("list box", "Fruits", &[]);
+        list.path = "/fruits".to_owned();
+        for (name, path, at) in [("Apple", "/apple", "1"), ("Apricot", "/apricot", "2")] {
+            let mut item = node("list item", name, &[]);
+            item.path = path.to_owned();
+            item.attributes.insert("posinset".to_owned(), at.to_owned());
+            item.attributes.insert("setsize".to_owned(), "2".to_owned());
+            list.children.push(item);
+        }
+        root.children.push(list);
+        let page = AtspiRecord::page(
+            0,
+            PageRead {
+                document: ":1.5/doc".to_owned(),
+                base: 0,
+                root,
+                read_ms: 0,
+            },
+        );
+        let _ = converter.convert_read(&page);
+        let target = element(ElementRole::ListItem, "Apricot", "/apricot", true);
+        let mut focus = record(EventKind::FocusChanged, target, None);
+        focus.document = Some(":1.5/doc".to_owned());
+        assert!(matches!(
+            converter.convert_read(&focus).as_slice(),
+            [AccessibilityEvent::Focus(f)]
+                if f.container_name.as_deref() == Some("Fruits")
+                    && f.container_is_list_box
+                    && f.item_index == Some(2)
+                    && f.item_count == Some(2)
+        ));
+    }
+
+    /// A text field read at its caret is the engine's text context, as read.
+    #[test]
+    fn a_caret_read_is_the_fields_text_context() {
+        let context = TextContext {
+            text: "sam@example.com".to_owned(),
+            caret: 15,
+            selection: None,
+            font: None,
+            word: None,
+            misspelled: Vec::new(),
+            structure: None,
+        };
+        let read = AtspiRecord::text(
+            0,
+            TextRead {
+                object: ":1.5/email".to_owned(),
+                context: context.clone(),
+                read_ms: 4,
+            },
+        );
+        let mut converter = Converter::default();
+        assert_eq!(
+            converter.convert_read(&read),
+            vec![AccessibilityEvent::TextContext(context)]
+        );
+        // And as a trace line, read back the same.
+        let line = serde_json::to_string(&read).unwrap_or_default();
+        let back: Option<AtspiRecord> = serde_json::from_str(&line).ok();
+        assert_eq!(back.and_then(|r| r.text), read.text);
     }
 
     /// A page's select opened, its expansion reported with its focus gone to its list: the

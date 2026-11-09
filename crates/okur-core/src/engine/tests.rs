@@ -5488,6 +5488,45 @@ fn auto_forms_mode_arrows_into_and_out_of_fields() {
     );
 }
 
+/// Auto Forms Mode on a platform whose page focus gives no text (Linux): the field an arrow
+/// focused keeps its text as the arrow left it, its caret at the start, and Down in the empty
+/// field leaves it for the next line [obs, 280/s6].
+#[test]
+fn an_arrowed_fields_focus_without_text_keeps_the_arrows_text() {
+    let mut name = AomNode::new(2, Role::Edit).with_name("Full name");
+    name.attributes.insert("required".into(), "true".into());
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Web Menus")
+        .with_children(vec![
+            AomNode::new(1, Role::Paragraph).with_text("Full name"),
+            name,
+            AomNode::new(3, Role::Paragraph).with_text("Email address"),
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    engine.set_actions(Box::new(crate::actions::RecordingActions::default()));
+    engine.handle_focus_event(&page_document());
+    engine.cursor.move_to_start();
+    let mut down = || {
+        engine.handle_key_event(&key(Key::DownArrow));
+        norm(&speech.take().join(" "))
+    };
+    down();
+    assert_eq!(down(), "Full name  Edit  Required");
+    let mut focus = FocusEvent::new(Role::Edit)
+        .with_node_id(2)
+        .with_name("Full name");
+    focus.in_document = true;
+    assert_eq!(engine.handle_focus_event(&focus), None);
+    assert_eq!(
+        engine.handle_key_event(&key(Key::DownArrow)),
+        KeyAction::Consume
+    );
+    assert_eq!(norm(&speech.take().join(" ")), "Email address");
+    assert!(!engine.forms_mode);
+}
+
 /// Text typed in a field is said when an arrow comes back onto it, though the captured page
 /// does not have it; Up enters with the caret at the start, and leaves at once
 /// [obs, 284/s6, s7].

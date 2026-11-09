@@ -37,7 +37,7 @@ mod session;
 mod window;
 
 #[cfg(target_os = "linux")]
-pub use atspi::{A11yStatus, AtspiObject, AtspiTree, LinuxProvider};
+pub use atspi::{A11yStatus, AtspiObject, AtspiTextPosition, AtspiTree, LinuxProvider};
 
 #[cfg(target_os = "linux")]
 pub use input::LinuxInputProvider;

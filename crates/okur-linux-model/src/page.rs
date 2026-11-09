@@ -220,6 +220,56 @@ pub fn page_ids(root: &AtspiNode, base: i32) -> HashMap<String, i32> {
         .collect()
 }
 
+/// A list item's place in its page: its list's name, whether that list is a list box, and its
+/// position in it.
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub struct ItemPlace {
+    pub list: Option<String>,
+    pub list_box: bool,
+    pub index: usize,
+    pub count: usize,
+}
+
+/// The places of a page's list items, by their paths: a focus on one is said with its list and
+/// its place, as Windows' focus is, "Fruits list | with 3 items | Apple | 1 of 3" [obs, 286/s19].
+/// The place is the item's own (`posinset`, `setsize`), else its place among its list's items.
+pub fn item_places(root: &AtspiNode) -> HashMap<String, ItemPlace> {
+    let mut places = HashMap::new();
+    collect_places(root, &mut places);
+    places
+}
+
+fn collect_places(node: &AtspiNode, places: &mut HashMap<String, ItemPlace>) {
+    if matches!(node.role.as_str(), "list box" | "list") {
+        let items: Vec<&AtspiNode> = node
+            .children
+            .iter()
+            .filter(|c| c.role == "list item")
+            .collect();
+        let list = Some(node.name.trim())
+            .filter(|n| !n.is_empty())
+            .map(str::to_owned);
+        for (at, item) in items.iter().enumerate() {
+            if item.path.is_empty() {
+                continue;
+            }
+            let (index, count) = crate::focus::own_place(item).unwrap_or((at + 1, items.len()));
+            places.insert(
+                item.path.clone(),
+                ItemPlace {
+                    list: list.clone(),
+                    list_box: node.role == "list box",
+                    index,
+                    count,
+                },
+            );
+        }
+    }
+    for child in &node.children {
+        collect_places(child, places);
+    }
+}
+
 fn number_paths<'a>(node: &'a AtspiNode, next: &mut i32, ids: &mut HashMap<&'a str, i32>) {
     *next += 1;
     if !node.path.is_empty() {
@@ -374,6 +424,56 @@ mod tests {
         node.attributes
             .insert("display".to_owned(), "block".to_owned());
         node
+    }
+
+    /// A list box's items have its name and their places, their own where Chrome gives them,
+    /// else counted among its items; an item without a path has none [obs, 286/s19].
+    #[test]
+    fn a_list_boxs_items_have_their_list_and_place() {
+        let item = |name: &str, path: &str, place: Option<(&str, &str)>| {
+            let mut item = node("list item", name, vec![]);
+            item.path = path.to_owned();
+            if let Some((at, of)) = place {
+                item.attributes.insert("posinset".to_owned(), at.to_owned());
+                item.attributes.insert("setsize".to_owned(), of.to_owned());
+            }
+            item
+        };
+        let fruits = node(
+            "list box",
+            "Fruits",
+            vec![
+                item("Apple", "/apple", Some(("1", "3"))),
+                item("Apricot", "/apricot", Some(("2", "3"))),
+                item("Avocado", "", None),
+            ],
+        );
+        let steps = node(
+            "list",
+            "",
+            vec![item("One", "/one", None), item("Two", "/two", None)],
+        );
+        let root = node("document web", "Patterns", vec![fruits, steps]);
+        let places = item_places(&root);
+        assert_eq!(
+            places.get("/apricot"),
+            Some(&ItemPlace {
+                list: Some("Fruits".to_owned()),
+                list_box: true,
+                index: 2,
+                count: 3,
+            })
+        );
+        assert_eq!(
+            places.get("/two"),
+            Some(&ItemPlace {
+                list: None,
+                list_box: false,
+                index: 2,
+                count: 2,
+            })
+        );
+        assert_eq!(places.len(), 4);
     }
 
     /// A fieldset is a panel to Chrome's AT-SPI, a group to the engine; a select's value is the

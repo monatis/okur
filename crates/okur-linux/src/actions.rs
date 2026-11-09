@@ -2,7 +2,9 @@
 //! a check box activates it (its AT-SPI Action interface's first action, Chrome's "click"), and
 //! focusing an element gives it the keyboard focus (its Component interface's GrabFocus). A page
 //! node finds its object by its unique id, its place in the tree the event source read and
-//! numbered ([`crate::events::PageObjects`]).
+//! numbered ([`crate::events::PageObjects`]). And the focused text field read at its caret after
+//! a key, as the engine asks (`read_at_caret`): its Text interface's caret, selection and text,
+//! the caret polled until the key moved it, given to the engine and written to the trace.
 //!
 //! The calls on the bus run on a thread of their own, in the order asked: the engine asks from
 //! the keyboard hook's callback, with the key held by the X server until it answers, and a slow
@@ -10,19 +12,35 @@
 //! review of 2026-11-08). An action is taken when its object is known; a call that fails is
 //! logged.
 
+use std::collections::VecDeque;
 use std::sync::mpsc::{channel, Sender};
+use std::time::{Duration, Instant};
 
 use okur_core::actions::ApplicationActions;
 use okur_core::aom::{AomNode, UNIQUE_ID_ATTR};
-use xa11y_linux::LinuxProvider;
+use okur_core::event::{AccessibilityEvent, TextContext};
+use okur_linux_model::convert::{AtspiRecord, TextRead};
+use okur_runtime::events::EventSink;
+use xa11y_linux::{AtspiTextPosition, LinuxProvider};
 
-use crate::events::PageObjects;
+use crate::events::{PageObjects, TextReads};
 
 /// A call on the bus for the worker: an object's bus name and path.
 enum Request {
     Focus(String, String),
     Activate(String, String),
+    /// The focused text field read at its caret, after the key the engine asked it for: what
+    /// the engine knew of the field before the key.
+    Text(Option<Box<TextContext>>),
 }
+
+/// How long a caret read waits for the key to move the caret, or change the text or the
+/// selection, before it reads the field as it is: Windows' wait for a page's field.
+const SETTLE: Duration = Duration::from_millis(250);
+
+/// How often the caret is read while it is waited for: a round trip on the bus is under a
+/// millisecond.
+const POLL: Duration = Duration::from_millis(3);
 
 pub struct LinuxActions {
     objects: PageObjects,
@@ -31,8 +49,10 @@ pub struct LinuxActions {
 }
 
 impl LinuxActions {
-    /// Actions on the objects of the pages `objects` holds, as the event source reads them.
-    pub fn new(objects: PageObjects) -> Self {
+    /// Actions on the objects of the pages `objects` holds, as the event source reads them;
+    /// caret reads of the field `text` names as focused, written to its trace and given to the
+    /// engine through `sink`.
+    pub fn new(objects: PageObjects, text: TextReads, sink: EventSink) -> Self {
         let (requests, received) = channel::<Request>();
         let worker = std::thread::Builder::new()
             .name("okur-linux-actions".to_owned())
@@ -44,7 +64,18 @@ impl LinuxActions {
                         return;
                     }
                 };
-                for request in received {
+                let mut pending = VecDeque::new();
+                loop {
+                    let request = match pending.pop_front() {
+                        Some(request) => request,
+                        None => match received.recv() {
+                            Ok(request) => request,
+                            Err(_) => return,
+                        },
+                    };
+                    // The asks queued meanwhile: a caret read is answered for the newest only,
+                    // as keys held down outrun the reads.
+                    pending.extend(received.try_iter());
                     match request {
                         Request::Focus(bus, path) => {
                             if let Err(e) = provider.atspi_grab_focus(&bus, &path) {
@@ -54,6 +85,14 @@ impl LinuxActions {
                         Request::Activate(bus, path) => {
                             if let Err(e) = provider.atspi_do_action(&bus, &path, 0) {
                                 tracing::debug!("not activated: {e}");
+                            }
+                        }
+                        Request::Text(before) => {
+                            if pending.iter().any(|r| matches!(r, Request::Text(_))) {
+                                continue;
+                            }
+                            if !read_text(&provider, &text, &sink, before.map(|b| *b)) {
+                                return;
                             }
                         }
                     }
@@ -81,6 +120,101 @@ impl LinuxActions {
     }
 }
 
+/// A caret read's place, as the engine's text knows it: the caret, the selection, the length.
+type Place = (usize, Option<(usize, usize)>, usize);
+
+fn place_read(position: &AtspiTextPosition) -> Option<Place> {
+    let offset = |o: i32| usize::try_from(o).ok();
+    let selection = match position.selection {
+        Some((start, end)) => Some((offset(start)?, offset(end)?)),
+        None => None,
+    };
+    Some((offset(position.caret)?, selection, offset(position.length)?))
+}
+
+fn place_known(context: &TextContext) -> Place {
+    (
+        context.caret,
+        context.selection,
+        context.text.chars().count(),
+    )
+}
+
+/// Reads the focused field at its caret, once the key moved it from where `before` had it (or
+/// at once, nothing known), and gives the engine the field's text, caret and selection, the
+/// read written to the trace first. False once the engine has gone; a field that cannot be read
+/// (no Text interface, the object gone) is no answer.
+fn read_text(
+    provider: &LinuxProvider,
+    reads: &TextReads,
+    sink: &EventSink,
+    before: Option<TextContext>,
+) -> bool {
+    let started = Instant::now();
+    let focused = reads
+        .focused
+        .lock()
+        .unwrap_or_else(std::sync::PoisonError::into_inner)
+        .clone();
+    let Some(object) = focused else {
+        tracing::debug!("caret read: no focus known");
+        return true;
+    };
+    let read_place = || {
+        provider
+            .atspi_text_position(&object.bus_name, &object.path)
+            .map_err(|e| tracing::debug!("caret read: the caret not read: {e}"))
+            .ok()
+            .and_then(|p| place_read(&p))
+    };
+    let known = before.as_ref().map(place_known);
+    let mut place = read_place();
+    while known.is_some() && place.is_some() && place == known && started.elapsed() < SETTLE {
+        std::thread::sleep(POLL);
+        place = read_place();
+    }
+    let Some((caret, selection, _)) = place else {
+        return true;
+    };
+    let text = match provider.atspi_text(&object.bus_name, &object.path) {
+        Ok(text) => text,
+        Err(e) => {
+            tracing::debug!("caret read: the text not read: {e}");
+            return true;
+        }
+    };
+    let read_ms = u64::try_from(started.elapsed().as_millis()).unwrap_or(u64::MAX);
+    tracing::debug!(
+        chars = text.chars().count(),
+        caret,
+        ?selection,
+        ms = read_ms,
+        "text context read"
+    );
+    let context = TextContext {
+        text,
+        caret,
+        selection,
+        font: None,
+        word: None,
+        misspelled: Vec::new(),
+        structure: None,
+    };
+    let record = AtspiRecord::text(
+        crate::events::unix_ms(),
+        TextRead {
+            object: format!("{}{}", object.bus_name, object.path),
+            context: context.clone(),
+            read_ms,
+        },
+    );
+    reads.hand(
+        &record,
+        vec![AccessibilityEvent::TextContext(context)],
+        sink,
+    )
+}
+
 impl ApplicationActions for LinuxActions {
     fn focus(&self, node: &AomNode) -> bool {
         self.ask(node, Request::Focus)
@@ -88,5 +222,13 @@ impl ApplicationActions for LinuxActions {
 
     fn activate(&self, node: &AomNode) -> bool {
         self.ask(node, Request::Activate)
+    }
+
+    fn read_at_caret(&self, before: Option<&TextContext>, _in_page: bool) -> bool {
+        self.worker.as_ref().is_some_and(|worker| {
+            worker
+                .send(Request::Text(before.cloned().map(Box::new)))
+                .is_ok()
+        })
     }
 }

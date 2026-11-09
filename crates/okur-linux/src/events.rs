@@ -9,6 +9,7 @@ use std::sync::{Arc, Mutex};
 use std::thread::JoinHandle;
 use std::time::Duration;
 
+use okur_core::event::AccessibilityEvent;
 use okur_linux_model::convert::{AtspiRecord, Converter, NativeRead, PageRead};
 use okur_linux_model::delivery::Delivery;
 use okur_linux_model::focus::{ancestor_limit, is_window, CONTROL_LIMIT, WINDOW_DEPTH};
@@ -22,6 +23,58 @@ use xa11y_linux::{A11yStatus, AtspiObject, AtspiTree, LinuxProvider};
 /// from the page's base): what acting on a page's node finds its object by
 /// ([`crate::actions::LinuxActions`]).
 pub type PageObjects = Arc<Mutex<PageIds>>;
+
+/// Where the records are written, shared: the event thread writes each event's, the actions'
+/// worker each text field read at its caret. Each writer holds it while it writes a record and
+/// gives the engine what the record says, so the trace has the records in the order the engine
+/// took them.
+pub type TraceOut = Arc<Mutex<Option<std::io::BufWriter<std::fs::File>>>>;
+
+/// The object with the keyboard focus, as its last focus event named it: the field a caret read
+/// reads.
+pub type FocusedObject = Arc<Mutex<Option<AtspiObject>>>;
+
+/// What reading a text field at its caret needs of the event source: the focused object, and
+/// the trace the read is written to ([`crate::actions::LinuxActions`]).
+#[derive(Clone, Default)]
+pub struct TextReads {
+    pub trace: TraceOut,
+    pub focused: FocusedObject,
+}
+
+impl TextReads {
+    /// Writes `record` to the trace, where there is one, and gives the engine `said`: false
+    /// once the engine has gone.
+    pub fn hand(
+        &self,
+        record: &AtspiRecord,
+        said: Vec<AccessibilityEvent>,
+        sink: &EventSink,
+    ) -> bool {
+        hand(&self.trace, record, said, sink)
+    }
+}
+
+/// Writes `record` to `trace`, where there is one, and gives the engine `said`, the trace held
+/// between the two, so that its records are in the order the engine took them: false once the
+/// engine has gone.
+fn hand(
+    trace: &TraceOut,
+    record: &AtspiRecord,
+    said: Vec<AccessibilityEvent>,
+    sink: &EventSink,
+) -> bool {
+    let mut out = trace
+        .lock()
+        .unwrap_or_else(std::sync::PoisonError::into_inner);
+    if let Some(writer) = out.as_mut() {
+        if let Err(e) = write_record(writer, record) {
+            tracing::warn!("the trace not written, no longer kept: {e}");
+            *out = None;
+        }
+    }
+    said.into_iter().all(|event| sink.send(event))
+}
 
 /// The ids a page read gives its objects, and the objects of the last pages by them.
 #[derive(Debug, Default)]
@@ -407,15 +460,13 @@ fn ask_page(
 fn deliver(
     delivery: &mut Delivery,
     converter: &mut Converter,
-    write: &mut dyn FnMut(&AtspiRecord),
+    trace: &TraceOut,
     sink: &EventSink,
 ) -> bool {
     for record in delivery.take_ready() {
-        write(&record);
-        for said in converter.convert_read(&record) {
-            if !sink.send(said) {
-                return false;
-            }
+        let said = converter.convert_read(&record);
+        if !hand(trace, &record, said, sink) {
+            return false;
         }
     }
     true
@@ -436,7 +487,7 @@ fn drop_pages(documents: Vec<String>, reader: &Option<PageReader>, converter: &m
 
 /// Milliseconds since the Unix epoch: a record's time, on the clock the lab's runner stamps its
 /// steps with, so a replay finds each step's records.
-fn unix_ms() -> u64 {
+pub(crate) fn unix_ms() -> u64 {
     std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
         .map(|d| u64::try_from(d.as_millis()).unwrap_or(u64::MAX))
@@ -508,6 +559,8 @@ pub struct AtspiEventSource {
     status_before: Option<A11yStatus>,
     /// Where each event's record is written, one JSON line each, for the run to be replayed.
     trace: Option<std::path::PathBuf>,
+    /// The trace's writer and the focused object, shared with the actions' caret reads.
+    text_reads: TextReads,
 }
 
 struct Running {
@@ -532,6 +585,11 @@ impl AtspiEventSource {
     /// The objects of the page it read last, for acting on the page's nodes.
     pub fn objects(&self) -> PageObjects {
         Arc::clone(&self.objects)
+    }
+
+    /// The focused object and the trace, for reading a text field at its caret.
+    pub fn text_reads(&self) -> TextReads {
+        self.text_reads.clone()
     }
 }
 
@@ -558,12 +616,17 @@ impl EventSource for AtspiEventSource {
             .subscribe_desktop_kinds(Box::new(okur_linux_model::focus_track::is_heard))
             .map_err(|e| source_error("the desktop's events", e))?;
         tracing::debug!("AT-SPI: the desktop's events subscribed");
-        let mut trace = match &self.trace {
-            Some(path) => Some(std::io::BufWriter::new(
-                std::fs::File::create(path).map_err(|e| source_error("the trace", e))?,
-            )),
-            None => None,
-        };
+        if let Some(path) = &self.trace {
+            let file = std::fs::File::create(path).map_err(|e| source_error("the trace", e))?;
+            *self
+                .text_reads
+                .trace
+                .lock()
+                .unwrap_or_else(std::sync::PoisonError::into_inner) =
+                Some(std::io::BufWriter::new(file));
+        }
+        let trace = Arc::clone(&self.text_reads.trace);
+        let focused = Arc::clone(&self.text_reads.focused);
         let stop = Arc::new(AtomicBool::new(false));
         let thread = {
             let stop = Arc::clone(&stop);
@@ -581,14 +644,6 @@ impl EventSource for AtspiEventSource {
                 // The order the engine takes the records and pages in: a page before the
                 // focus that asked for it, as when pages were read here.
                 let mut delivery = Delivery::default();
-                let mut write = |record: &AtspiRecord| {
-                    if let Some(out) = trace.as_mut() {
-                        if let Err(e) = write_record(out, record) {
-                            tracing::warn!("the trace not written, no longer kept: {e}");
-                            trace = None;
-                        }
-                    }
-                };
                 while !stop.load(Ordering::SeqCst) {
                     // The pages the reader read, into their places; what waited for them, and
                     // for pages waited for too long, goes on.
@@ -601,7 +656,7 @@ impl EventSource for AtspiEventSource {
                     if delivery.is_holding() {
                         drop_pages(delivery.expire(unix_ms()), &reader, &mut converter);
                     }
-                    if !deliver(&mut delivery, &mut converter, &mut write, &sink) {
+                    if !deliver(&mut delivery, &mut converter, &trace, &sink) {
                         return;
                     }
                     // Short while a page is awaited, so that it comes at once when the bus is
@@ -631,12 +686,22 @@ impl EventSource for AtspiEventSource {
                                 );
                                 // In its place, cancelling no page: it was not read.
                                 let _ = delivery.push(twin, false);
-                                if !deliver(&mut delivery, &mut converter, &mut write, &sink) {
+                                if !deliver(&mut delivery, &mut converter, &trace, &sink) {
                                     return;
                                 }
                                 continue;
                             }
                             let focus = event.kind == EventKind::FocusChanged;
+                            // The focused object, for the engine's caret reads.
+                            if let Some(object) = target
+                                .filter(|e| focus && e.states.focused)
+                                .and_then(AtspiObject::of)
+                            {
+                                *focused
+                                    .lock()
+                                    .unwrap_or_else(std::sync::PoisonError::into_inner) =
+                                    Some(object);
+                            }
                             let changed = okur_linux_model::focus_track::is_control_change(
                                 &event.kind,
                                 target.is_some_and(|e| e.states.focused),
@@ -701,10 +766,11 @@ impl EventSource for AtspiEventSource {
                                 pages: Vec::new(),
                                 native,
                                 reread,
+                                text: None,
                             };
                             let cancelled = delivery.push(record, true);
                             drop_pages(cancelled, &reader, &mut converter);
-                            if !deliver(&mut delivery, &mut converter, &mut write, &sink) {
+                            if !deliver(&mut delivery, &mut converter, &trace, &sink) {
                                 return;
                             }
                         }

@@ -241,6 +241,9 @@ impl ScreenReaderEngine {
         self.as_list_dialog_focus(&mut keyed);
         let focus = &keyed;
         self.last_selected = None;
+        // The field's text as an arrow onto it left it, for a platform that reads none with the
+        // focus that follows.
+        let text_before = self.last_text.clone();
         if focus.role != Role::MenuItem {
             self.remember_field_text();
             self.last_text = focus.text.clone();
@@ -527,6 +530,12 @@ impl ScreenReaderEngine {
                 target = ?target_id.and_then(|id| self.cursor.buffer.node(id)).map(|n| (&n.role, &n.name)),
                 "page focus target"
             );
+            // The field an arrow put the focus on, its focus giving no text (Linux's page
+            // fields): its text as the arrow left it, its caret at the start, for the arrow
+            // that leaves it at its caret's edge, Down in an empty "Full name" [obs, 280/s6].
+            if focus.text.is_none() && target_id.is_some() && self.arrow_focus == target_id {
+                self.last_text = text_before;
+            }
 
             // A focus the buffer does not hold: the page changed since it was captured
             // (WhatsApp's search results, built as its search box is typed in). It is captured
@@ -1197,8 +1206,6 @@ impl ScreenReaderEngine {
                     _ => msg::menus_left().to_string(),
                 });
             }
-            // A field an arrow put the focus on was said with the arrow (Auto Forms Mode); its
-            // text is read now, for the arrow that leaves it at its caret's edge.
             // The select Space opened, focused at Okur's own request: its list is said as it
             // takes the focus, after the page and its regions where the page had no focus yet
             // [obs, 276/s2].
@@ -1206,6 +1213,8 @@ impl ScreenReaderEngine {
                 self.last_page_focus = page_focus_before;
                 return None;
             }
+            // A field an arrow put the focus on was said with the arrow (Auto Forms Mode); its
+            // text is read now, for the arrow that leaves it at its caret's edge.
             if self
                 .arrow_focus
                 .take()

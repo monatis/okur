@@ -105,6 +105,35 @@ pub fn read_trace(text: &str) -> Result<Vec<AtspiRecord>, String> {
         .collect()
 }
 
+/// What Okur's Linux driver does for the engine (okur-linux's `LinuxActions`): it focuses and
+/// activates a page's element, recorded as a test's actions are, and reads a text field at its
+/// caret where the run's driver did (its trace holds the reads, given to the engine at their
+/// times); it takes nothing else. A replay given more than the driver did says what no live run
+/// could.
+struct LinuxDriverActions {
+    recorded: okur_core::actions::RecordingActions,
+    /// The run's driver read fields at their carets: its trace has the reads.
+    reads_carets: bool,
+}
+
+impl okur_core::actions::ApplicationActions for LinuxDriverActions {
+    fn focus(&self, node: &okur_core::AomNode) -> bool {
+        self.recorded.focus(node)
+    }
+
+    fn activate(&self, node: &okur_core::AomNode) -> bool {
+        self.recorded.activate(node)
+    }
+
+    fn read_at_caret(
+        &self,
+        _before: Option<&okur_core::event::TextContext>,
+        _in_page: bool,
+    ) -> bool {
+        self.reads_carets
+    }
+}
+
 /// The engine as the Linux lab's `okur run` runs it: the default settings, the page verbosity
 /// the run was given, no page in front, the records converted as its driver converts them.
 struct Replayer<'a> {
@@ -118,7 +147,11 @@ struct Replayer<'a> {
 }
 
 impl<'a> Replayer<'a> {
-    fn new(settings: okur_core::settings::Settings, options: ReplayOptions<'a>) -> Self {
+    fn new(
+        settings: okur_core::settings::Settings,
+        options: ReplayOptions<'a>,
+        reads_carets: bool,
+    ) -> Self {
         // Marks given back as the live run's speech thread gives them, each once handed over:
         // the silent synthesizer reads a Say All as fast as the event loop takes them.
         let speech = RecordingSpeech::reporting_marks();
@@ -131,7 +164,10 @@ impl<'a> Replayer<'a> {
         // The host starts with no page: native navigation until one comes.
         engine.app_mode = okur_core::engine::AppMode::NativeControl;
         let actions = okur_core::actions::RecordingActions::default();
-        engine.set_actions(Box::new(actions.clone()));
+        engine.set_actions(Box::new(LinuxDriverActions {
+            recorded: actions.clone(),
+            reads_carets,
+        }));
         Self {
             options,
             engine,
@@ -247,7 +283,10 @@ pub fn replay_run(
     } else {
         run_settings(run, evidence)
     };
-    let mut replayer = Replayer::new(settings, options);
+    // A run whose driver read text fields at their carets has the reads in its trace; a run
+    // before that driver read none, and its engine was told so.
+    let reads_carets = records.iter().any(|r| r.text.is_some());
+    let mut replayer = Replayer::new(settings, options, reads_carets);
     let mut records = records.iter().peekable();
     // The setup: the records before the first key, the reset's keys among them at their times;
     // what it said is not a step's.
@@ -304,11 +343,22 @@ pub fn replay_run(
         while let Some(record) = records.next_if(|r| r.at_ms < start) {
             replayer.feed(record);
         }
+        // Each key at its time, where the run kept them (a repeated step's presses 120 ms
+        // apart), else one after another from the step's start.
+        let key_times = step.get("key_times").and_then(Value::as_array);
         for (index, chord) in keys.iter().enumerate() {
             let chord = chord
                 .as_str()
                 .ok_or_else(|| format!("{key}: a key is not a chord"))?;
-            replayer.key(chord, start.saturating_add(index as u64))?;
+            let at = key_times
+                .and_then(|times| times.get(index))
+                .and_then(Value::as_u64)
+                .unwrap_or_else(|| start.saturating_add(index as u64));
+            // The events before this key, as they came between the presses.
+            while let Some(record) = records.next_if(|r| r.at_ms < at) {
+                replayer.feed(record);
+            }
+            replayer.key(chord, at)?;
         }
         while let Some(record) = records.next_if(|r| r.at_ms < end) {
             replayer.feed(record);

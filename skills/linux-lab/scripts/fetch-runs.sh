@@ -23,8 +23,10 @@ mkdir -p corpus/live/linux
 # 83 runs (2026-11-08). The archive is made on old-pc, checked by its size, and unpacked here.
 staging=$(mktemp -d)
 trap 'rm -rf "$staging"' EXIT
+# The runs are copied first, a file still being written (a job's run in progress) skipped:
+# Compress-Archive gives up on the whole archive at one locked file.
 timeout 300 opendesk exec --peer "$PEER" --timeout 280 \
-    "Compress-Archive -Path D:/okur-linux/runs/*.json,D:/okur-linux/runs/*.jsonl -DestinationPath D:/okur-linux/runs.zip -Force; (Get-Item D:/okur-linux/runs.zip).Length" \
+    "robocopy D:/okur-linux/runs D:/okur-linux/runs-snap *.json *.jsonl /MIR /R:0 /W:0 /NP /NFL /NDL /NJH /NJS | Out-Null; Compress-Archive -Path D:/okur-linux/runs-snap/* -DestinationPath D:/okur-linux/runs.zip -Force; (Get-Item D:/okur-linux/runs.zip).Length" \
     2>&1 | tr -d '\000\r' | tail -1 > "$staging/size"
 if ! timeout 600 opendesk pull --peer "$PEER" D:/okur-linux/runs.zip "$staging/runs.zip" > /dev/null; then
     echo "fetch-runs: the runs' archive was not fetched" >&2

@@ -4227,6 +4227,15 @@ pub struct AtspiTree {
     pub children: Vec<AtspiTree>,
 }
 
+/// Where a text field's caret is ([`LinuxProvider::atspi_text_position`]): its offset, its
+/// text's length and its first selection, a non-empty one, as `(start, end)`, in characters.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct AtspiTextPosition {
+    pub caret: i32,
+    pub length: i32,
+    pub selection: Option<(i32, i32)>,
+}
+
 /// An AT-SPI object by its application's bus name and its path, with its role's name: where the
 /// tree reads ([`LinuxProvider::atspi_tree`]) and the walks up start, without the reads an
 /// [`ElementData`] costs (for a top-level frame, the window manager's facts, read under an X
@@ -4455,6 +4464,59 @@ impl LinuxProvider {
         reply.body().deserialize().map_err(|e| Error::Platform {
             code: -1,
             message: format!("GrabFocus reply decode failed: {e}"),
+        })
+    }
+
+    /// The caret, the selection and the text's length of the object at `bus_name` and `path`,
+    /// through its Text interface (CaretOffset, GetSelection of its first selection,
+    /// CharacterCount): what a key in a text field moves, polled after the key until it
+    /// changes. Offsets are in characters.
+    pub fn atspi_text_position(&self, bus_name: &str, path: &str) -> Result<AtspiTextPosition> {
+        let proxy = self.make_proxy(bus_name, path, "org.a11y.atspi.Text")?;
+        let property = |name: &str| {
+            proxy
+                .get_property::<i32>(name)
+                .map_err(|e| Error::Platform {
+                    code: -1,
+                    message: format!("Text.{name} not read: {e}"),
+                })
+        };
+        let caret = property("CaretOffset")?;
+        let length = property("CharacterCount")?;
+        let selections: i32 = proxy
+            .call_method("GetNSelections", &())
+            .ok()
+            .and_then(|reply| reply.body().deserialize().ok())
+            .unwrap_or(0);
+        let selection = if selections > 0 {
+            proxy
+                .call_method("GetSelection", &(0i32,))
+                .ok()
+                .and_then(|reply| reply.body().deserialize::<(i32, i32)>().ok())
+                .filter(|(start, end)| start != end)
+        } else {
+            None
+        };
+        Ok(AtspiTextPosition {
+            caret,
+            length,
+            selection,
+        })
+    }
+
+    /// The whole text of the object at `bus_name` and `path`: its Text interface's GetText to
+    /// the end.
+    pub fn atspi_text(&self, bus_name: &str, path: &str) -> Result<String> {
+        let proxy = self.make_proxy(bus_name, path, "org.a11y.atspi.Text")?;
+        let reply = proxy
+            .call_method("GetText", &(0i32, -1i32))
+            .map_err(|e| Error::Platform {
+                code: -1,
+                message: format!("Text.GetText failed: {e}"),
+            })?;
+        reply.body().deserialize().map_err(|e| Error::Platform {
+            code: -1,
+            message: format!("Text.GetText reply decode failed: {e}"),
         })
     }
 
