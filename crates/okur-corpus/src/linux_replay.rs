@@ -190,6 +190,9 @@ impl<'a> Replayer<'a> {
         )));
         let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
         engine.set_settings(settings);
+        // Okur's own dialogs opened as live, for the trace's okur-ui records to act on them (a
+        // dialog's choices, its buttons, its close), as parity's replay has them.
+        engine.set_ui(Box::new(okur_core::ui::RecordingUiHost::default()));
         // The host starts with no page: native navigation until one comes.
         engine.app_mode = okur_core::engine::AppMode::NativeControl;
         let actions = okur_core::actions::RecordingActions::default();

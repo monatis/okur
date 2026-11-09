@@ -5526,6 +5526,35 @@ fn up_onto_a_text_area_puts_its_caret_at_the_end() {
     assert!(engine.forms_mode);
 }
 
+/// Up onto a field of one line puts its caret at the start and asks the platform to put it
+/// there too: Chrome leaves it where it was (the end, after an earlier pass), and the field's
+/// read as it took the focus then kept Up in it a key longer [283/s16 in full5]. The next Up
+/// leaves it.
+#[test]
+fn up_onto_a_field_of_one_line_puts_its_caret_at_the_start() {
+    let mut name = AomNode::new(2, Role::Edit).with_name("Full Name:");
+    name.value = Some("Jane Doe".into());
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Forms")
+        .with_children(vec![
+            AomNode::new(1, Role::Paragraph).with_text("Above"),
+            name,
+            AomNode::new(3, Role::Paragraph).with_text("Below"),
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    engine.handle_focus_event(&page_document());
+    engine.cursor.move_to_node_id(3);
+    speech.take();
+    engine.handle_key_event(&key(Key::UpArrow));
+    assert!(engine.forms_mode);
+    assert!(actions.requests().contains(&("caret to".to_owned(), 0)));
+    assert_eq!(engine.last_text.as_ref().map(|t| t.caret), Some(0));
+}
+
 /// Auto Forms Mode on a platform whose page focus gives no text (Linux): the field an arrow
 /// focused keeps its text as the arrow left it, its caret at the start, and Down in the empty
 /// field leaves it for the next line [obs, 280/s6].

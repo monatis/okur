@@ -1557,6 +1557,11 @@ impl ScreenReaderEngine {
             // In a page's application region every key is the page's (JAWS on the dev box:
             // Escape closes VS Code's command palette).
             if self.web_application.is_some() {
+                tracing::debug!(
+                    application = ?self.web_application,
+                    key = ?event.key,
+                    "forms mode in a page's application region: the page's key"
+                );
                 // Typing and caret keys are read in its text fields only: on its buttons and
                 // lists the page answers keys itself, and JAWS says nothing for them.
                 if self.page_focus_is_field {
@@ -1594,7 +1599,14 @@ impl ScreenReaderEngine {
             // A select (a combo box one does not type in) answers the arrows itself, and its
             // value change says the new choice; reading its text would answer first, with
             // nothing [obs, 205/s9, s10].
-            if !self.page_focus_is_select() {
+            // Up and Down in a combo box whose list is open move in its list, whose option says
+            // itself as it takes the focus: the field's line is not read. Read, it came before the
+            // option where the option's focus came late ("a", then "Fruits list ... Apple" [211/s9
+            // in the Linux lab's full5], JAWS the list alone).
+            let in_open_list = list_open
+                && event.modifiers.is_empty()
+                && matches!(event.key, Key::UpArrow | Key::DownArrow);
+            if !self.page_focus_is_select() && !in_open_list {
                 self.edit_key_feedback(event);
             }
             return KeyAction::PassThrough;

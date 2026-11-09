@@ -922,7 +922,9 @@ impl ScreenReaderEngine {
         // onto a text area puts it at the end, on the last line, where the next Up reads the
         // line above it: "teh quick brown fxo" is the text area's last line, and Up then reads
         // "Say All reads this. ..." [obs, 285/s1, s2]. Windows' recorded caret came from JAWS's
-        // own placing; Okur places it.
+        // own placing; Okur places it, at the start too: Chrome leaves it where it was, and the
+        // field's read as it took the focus said the end, so Up stayed in it a key longer
+        // [283/s16 in full5].
         let text = node.value.clone().unwrap_or_default();
         let multiline = node
             .attributes
@@ -944,9 +946,7 @@ impl ScreenReaderEngine {
         };
         if let Some(actions) = &self.actions {
             actions.focus(&node);
-            if caret > 0 {
-                actions.move_caret(&context, caret);
-            }
+            actions.move_caret(&context, caret);
         }
         self.remember_field_text();
         self.arrow_focus = Some(node.id);
