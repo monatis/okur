@@ -1176,9 +1176,9 @@ mod tests {
                 &[]
             };
             let mut item = menu_item(name, &format!("/item/{at}"), states);
+            // A submenu's item, as Chrome marks it: its HAS_POPUP state.
             if at == 2 {
-                item.attributes
-                    .insert("haspopup".to_owned(), "menu".to_owned());
+                item.states |= 1 << state::HAS_POPUP;
             }
             menu.children.push(item);
             if at == 0 {

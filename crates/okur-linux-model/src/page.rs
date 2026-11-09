@@ -40,6 +40,7 @@ pub mod state {
     pub const IS_DEFAULT: u32 = 39;
     pub const VISITED: u32 = 40;
     pub const CHECKABLE: u32 = 41;
+    pub const HAS_POPUP: u32 = 42;
     pub const READ_ONLY: u32 = 43;
 }
 

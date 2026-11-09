@@ -340,7 +340,10 @@ pub(crate) fn menu_item_focus(item: &AtspiNode, menu: Option<&AtspiNode>) -> Foc
             event.item_count = Some(items.len());
         }
     }
+    // Chrome's own menus mark a submenu's item by its HAS_POPUP state ("Your Chrome Not signed
+    // in", in full5's 220).
     let opens_menu = item.attributes.contains_key("haspopup")
+        || item.has(state::HAS_POPUP)
         || item.has(state::EXPANDABLE)
         || item.children.iter().any(|c| c.role == "menu");
     if opens_menu {
