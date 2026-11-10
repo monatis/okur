@@ -126,6 +126,17 @@ with no change to the `KeyboardHook` port:
    window's focus said as it comes forward, the drop-down's place and open list, the tree's
    depth; then a dialog, and Qt.
 
+**Status, 2026-11-10 (day):** old-pc back. ARIA-AT's 1154 runs on Linux imported (night2), then
+night3's 122 and the GTK code built in the lab at last (`LINUX CHECK PASS` at 6cf0846f, again at
+9c3ff12c; `main` there). Built from them: an ARIA switch as a switch, a page control's state
+changed unfocused read again, a slider's value and its arrows' change, a page menu's places and
+name, an emptied row's read again silent, okur-ui's drop-down arrows and the replica's radio
+group. `okur-lab live-replay linux` after c4f2420b: "9516/9868 steps say what the run said;
+replayed, 8729/9623 match JAWS exactly". Next: the GTK dialogs' first focus where AT-SPI tells
+none (from the dialog's spec), ARIA-AT's AT-SPI snapshots with their setup run (the Linux
+capture presses no "Run Test Setup"), element information on Linux, and night4's runs.
+Handoff: [`../handoff/2026-11-10-aria-at-on-linux-custom-label-delete-element-information.md`](../handoff/2026-11-10-aria-at-on-linux-custom-label-delete-element-information.md).
+
 **Status, 2026-11-10 (night, old-pc offline from 22:32 on the 9th):** worked from the traces
 already imported ([`../handoff/2026-11-10-offline-linux-replay-fixes-and-run-okur-manager.md`](../handoff/2026-11-10-offline-linux-replay-fixes-and-run-okur-manager.md)):
 a wizard's page turn, the PlaceMarker List's own dialogs, an empty list view and "Not
