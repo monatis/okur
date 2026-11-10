@@ -168,6 +168,8 @@ divergences! {
         "688-web-custom-label/s25",
         "1207-web-custom-label-delete/s6",
         "1207-web-custom-label-delete/s21",
+        "1211-web-custom-label-delete-ok/s6",
+        "1211-web-custom-label-delete-ok/s21",
     ],
     "Opening one of its list dialogs, JAWS's speech passes through its own windows before it \
      names the dialog: its main window (its version, a list's tutor message) and the browser's \
@@ -662,7 +664,11 @@ divergences! {
         "970-desktop-wordpad-ribbon-lower/s5",
         "972-desktop-wordpad-ribbon-f10/s2",
     ],
-    "In WordPad's ribbon JAWS gives each tab's and command's place a key behind, the place of      the one the focus left: Right from Home says \"View Tab selected 1 of 2\", Left back      \"Home 2 of 2\", Right from Paste \"Copy 1 of 3\", in every trial. The ribbon's MSAA      objects put View second of the two tabs shown and Copy third of its group's three. Okur      says those places.",
+    "In WordPad's ribbon JAWS gives each tab's and command's place a key behind, the place of \
+     the one the focus left: Right from Home says \"View Tab selected 1 of 2\", Left back \
+     \"Home 2 of 2\", Right from Paste \"Copy 1 of 3\", in every trial. The ribbon's MSAA \
+     objects put View second of the two tabs shown and Copy third of its group's three. Okur \
+     says those places.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-23";
 
     Difference::Step => [
@@ -707,7 +713,12 @@ divergences! {
         "1023-desktop-wpf-scan-cursor-end-alone/s14",
         "1023-desktop-wpf-scan-cursor-end-alone/s15",
     ],
-    "JAWS's Scan Cursor goes past a WPF window's last element onto the window itself and is      stuck there, in every trial: Down from the last element says it again and the window's      title (\"Focus here Edit | SR WPF Controls Fixture\"), then Down, Up, Home and End say      nothing and Right says the title's first letter again and again; Ctrl+End lands there      too, its line the title. Only Ctrl+Home brings it back. Okur's Scan Cursor stays on the      last element, Down saying it again, and Ctrl+End goes to it.",
+    "JAWS's Scan Cursor goes past a WPF window's last element onto the window itself and is \
+     stuck there, in every trial: Down from the last element says it again and the window's \
+     title (\"Focus here Edit | SR WPF Controls Fixture\"), then Down, Up, Home and End say \
+     nothing and Right says the title's first letter again and again; Ctrl+End lands there \
+     too, its line the title. Only Ctrl+Home brings it back. Okur's Scan Cursor stays on the \
+     last element, Down saying it again, and Ctrl+End goes to it.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-24";
 
     Difference::Step => [
@@ -785,11 +796,15 @@ divergences! {
      (Q) are JAWS's.",
     "the agent, 2026-10-24";
 
-    Difference::Step => ["688-web-custom-label/s15"],
-    "After a custom label is given, JAWS's virtual cursor is at the page's top: Say Line says \
-     the page's title, in every trial, as JAWS builds the page again with the label. The user \
-     labelled the field to go on working there. Okur builds the page again with the cursor \
-     still on the field, and Say Line reads it with its label (\"lamp Edit\").",
+    Difference::Step => [
+        "688-web-custom-label/s15",
+        "1211-web-custom-label-delete-ok/s23",
+    ],
+    "After a custom label is given, or deleted, JAWS's virtual cursor is at the page's top: Say \
+     Line says the page's title, in every trial, as JAWS builds the page again with the label \
+     or without it. The user labelled the field to go on working there. Okur builds the page \
+     again with the cursor still on the field, and Say Line reads it with its label (\"lamp \
+     Edit\"), or its own name.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
 
     Difference::Step => [
@@ -805,7 +820,11 @@ divergences! {
         "704-web-placemarker-two/s18",
         "704-web-placemarker-two/s20",
     ],
-    "After the first PlaceMarker is added, JAWS reads the page again and its cursor is left at      the page's end, though Ctrl+Home was pressed: H then went \"wrapping to bottom\" to the      last heading and up from there, so its second PlaceMarker went on the line after the first      heading where the keys meant the third, in every trial; K, Shift+K and 8 then find it      there. Okur moves as the keys say, its second PlaceMarker after the third heading.",
+    "After the first PlaceMarker is added, JAWS reads the page again and its cursor is left at \
+     the page's end, though Ctrl+Home was pressed: H then went \"wrapping to bottom\" to the \
+     last heading and up from there, so its second PlaceMarker went on the line after the first \
+     heading where the keys meant the third, in every trial; K, Shift+K and 8 then find it \
+     there. Okur moves as the keys say, its second PlaceMarker after the third heading.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
 
     Difference::Step => [
@@ -813,7 +832,11 @@ divergences! {
         "702-web-placemarker-saved/s9",
         "702-web-placemarker-saved/s10",
     ],
-    "After a PlaceMarker is added, JAWS builds the page again and reads it from its top as it      does on loading: Ctrl+Home gets \"selected\" and that reading, K then says \"wrapping to      bottom\" before the PlaceMarker after the reading moved the cursor down, and Insert+Up      says \"Not in a Table\", in every trial. Okur keeps the page and its cursor: Ctrl+Home      says the page's title, K the PlaceMarker's line, Insert+Up that line.",
+    "After a PlaceMarker is added, JAWS builds the page again and reads it from its top as it \
+     does on loading: Ctrl+Home gets \"selected\" and that reading, K then says \"wrapping to \
+     bottom\" before the PlaceMarker after the reading moved the cursor down, and Insert+Up \
+     says \"Not in a Table\", in every trial. Okur keeps the page and its cursor: Ctrl+Home \
+     says the page's title, K the PlaceMarker's line, Insert+Up that line.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
 
     Difference::Step => [
@@ -832,7 +855,10 @@ divergences! {
         "735-web-flexible-web-hidden-after-refresh/s15",
         "735-web-flexible-web-hidden-after-refresh/s16",
     ],
-    "After Flexible Web hides a region, JAWS still reads it, in every trial: R finds the      hidden advertisement and Down reads its lines, though the wizard's first page then      offers its Undo, and after JAWS's refresh (Insert+Escape) too. JAWS's guide says a customization \"is immediately applied to the      page\". Okur takes the region out of the page it reads, and Undo puts it back.",
+    "After Flexible Web hides a region, JAWS still reads it, in every trial: R finds the \
+     hidden advertisement and Down reads its lines, though the wizard's first page then \
+     offers its Undo, and after JAWS's refresh (Insert+Escape) too. JAWS's guide says a customization \"is immediately applied to the \
+     page\". Okur takes the region out of the page it reads, and Undo puts it back.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
 
     Difference::Step => [
@@ -843,14 +869,22 @@ divergences! {
         "743-web-flexible-web-saved-rule-for-page/s50",
         "743-web-flexible-web-saved-rule-for-page/s51",
     ],
-    "A Flexible Web rule saved for the page does not hide the advertisement when the page      loads again: JAWS reads it on loading and R finds it, as after a temporary      customization (725). Okur applies the rule as the page loads, as the guide describes      rules: the page has one region and one link less, and R goes from the navigation region      to the main region.",
+    "A Flexible Web rule saved for the page does not hide the advertisement when the page \
+     loads again: JAWS reads it on loading and R finds it, as after a temporary \
+     customization (725). Okur applies the rule as the page loads, as the guide describes \
+     rules: the page has one region and one link less, and R goes from the navigation region \
+     to the main region.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
 
     Difference::Step => [
         "742-web-flexible-web-save-page-and-reload-question/s30",
         "746-web-flexible-web-rule-saved-from-question/s11",
     ],
-    "When a page loads while the one before has temporary Flexible Web customizations, JAWS      asks whether to save them, and says only \"Flexible Web dialog | Yes Button\": not the      question, though it reads the question of its other message boxes (\"Are you sure you      want to remove all PlaceMarkers?\", 702/s27). Okur says the page's title, then the      dialog with its question.",
+    "When a page loads while the one before has temporary Flexible Web customizations, JAWS \
+     asks whether to save them, and says only \"Flexible Web dialog | Yes Button\": not the \
+     question, though it reads the question of its other message boxes (\"Are you sure you \
+     want to remove all PlaceMarkers?\", 702/s27). Okur says the page's title, then the \
+     dialog with its question.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
 
     Difference::Step => [
@@ -862,7 +896,9 @@ divergences! {
         "742-web-flexible-web-save-page-and-reload-question/s45",
         "742-web-flexible-web-save-page-and-reload-question/s46",
     ],
-    "After Escape on Flexible Web's save page that the question as a page loads opened, the      focus is left in JAWS's own hidden main window: F5 reloads nothing and Ctrl+Home and R      say nothing. Okur's wizard gives the focus back to the page, which F5 reloads and reads.",
+    "After Escape on Flexible Web's save page that the question as a page loads opened, the \
+     focus is left in JAWS's own hidden main window: F5 reloads nothing and Ctrl+Home and R \
+     say nothing. Okur's wizard gives the focus back to the page, which F5 reloads and reads.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
 
     Difference::Step => ["718-web-capitals-say-all-indicate-caps/s10"],
@@ -879,7 +915,9 @@ divergences! {
         "703-web-placemarker-none/s6",
         "704-web-placemarker-two/s37",
     ],
-    "After the PlaceMarker List closed (Escape after K opened it, MoveTo), the focus back in      the page, Say Line said nothing, in every trial of these scenarios. The virtual cursor is      on its line, which Okur reads.",
+    "After the PlaceMarker List closed (Escape after K opened it, MoveTo), the focus back in \
+     the page, Say Line said nothing, in every trial of these scenarios. The virtual cursor is \
+     on its line, which Okur reads.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
 
     Difference::Step => [
@@ -890,7 +928,11 @@ divergences! {
         "777-web-skim-reading-speak-unit-and-attributes/s28",
         "777-web-skim-reading-speak-unit-and-attributes/s29",
     ],
-    "Closing Skim Reading by Escape (763, 777) or by Close's Alt+C (776) closes the dialog and      opens JAWS's summary in its Results Viewer, which then says nothing to Say Line: in      every trial of four recordings, after changes and right after it opened (781, 782);      only 760's Escape, after Tab through the dialog, closed it alone. Okur's Escape and      Close close the dialog and give the page back.",
+    "Closing Skim Reading by Escape (763, 777) or by Close's Alt+C (776) closes the dialog and \
+     opens JAWS's summary in its Results Viewer, which then says nothing to Say Line: in \
+     every trial of four recordings, after changes and right after it opened (781, 782); \
+     only 760's Escape, after Tab through the dialog, closed it alone. Okur's Escape and \
+     Close close the dialog and give the page back.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
 
     Difference::Step => [
@@ -901,7 +943,10 @@ divergences! {
         "808-web-word-list-summary-by-alt-s/s7",
         "808-web-word-list-summary-by-alt-s/s8",
     ],
-    "The Word List's Summary, by Alt+S or by Space on it (807), closed the dialog and said      the page, and opened nothing, in every trial: Tab, Enter and Insert+Up after it met the      page. JAWS's help says it opens the virtual viewer with a link for each sentence holding      the word, which Okur does.",
+    "The Word List's Summary, by Alt+S or by Space on it (807), closed the dialog and said \
+     the page, and opened nothing, in every trial: Tab, Enter and Insert+Up after it met the \
+     page. JAWS's help says it opens the virtual viewer with a link for each sentence holding \
+     the word, which Okur does.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-22";
 
     Difference::Step => [
@@ -931,7 +976,10 @@ divergences! {
     "the agent, 2026-10-22: the evidence records the harness's injected chord, not JAWS's key";
 
     Difference::Step => ["790-desktop-drag-and-drop-in-notepad/s6"],
-    "Drag and drop's second Ctrl+Insert+Numpad Slash in Notepad, after the mouse moved three      steps along the text, said in every trial that the object to be dragged was not found      and canceled. Okur drags from where the first press was to where the mouse is, and says      nothing.",
+    "Drag and drop's second Ctrl+Insert+Numpad Slash in Notepad, after the mouse moved three \
+     steps along the text, said in every trial that the object to be dragged was not found \
+     and canceled. Okur drags from where the first press was to where the mouse is, and says \
+     nothing.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-22";
 
     Difference::Step => [
@@ -940,7 +988,10 @@ divergences! {
         "769-web-skim-read-by-sentence/s7",
         "771-web-skim-reading-rule-saved/s4",
     ],
-    "In JAWS's Results Viewer, which skim reading started from its dialog opens at its end,      the recordings got nothing for Say Line, the arrows or Escape, by our keys or JAWS's      TypeKey (762, 767, 768, 769, 771), while Tab got its links (780). Okur's viewer reads      its lines as the Virtual Viewer does, and Escape closes it and reads the page's line.",
+    "In JAWS's Results Viewer, which skim reading started from its dialog opens at its end, \
+     the recordings got nothing for Say Line, the arrows or Escape, by our keys or JAWS's \
+     TypeKey (762, 767, 768, 769, 771), while Tab got its links (780). Okur's viewer reads \
+     its lines as the Virtual Viewer does, and Escape closes it and reads the page's line.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-22";
 
     Difference::JawsSaysBeforeItsDialog => [
@@ -980,7 +1031,19 @@ divergences! {
         "1207-web-custom-label-delete/s22",
         "1207-web-custom-label-delete/s29",
     ],
-    "In JAWS's Delete Custom Label? question, the recorder's Insert+Up, Ctrl+Home, E and      Insert+F2 got nothing in every trial: its keys do not reach JAWS's own dialogs, which run      elevated (Spelling Errors' entry below). Okur's question takes them: Insert+Up says its      button, and Insert+F2 opens Run Okur Manager over it, whose Enter runs Commands Search      where JAWS's Enter pressed the question's Cancel. 1211 answers the question by JAWS's own      keys.",
+    "In JAWS's Delete Custom Label? question, the recorder's Insert+Up, Ctrl+Home, E and \
+     Insert+F2 got nothing in every trial: its keys do not reach JAWS's own dialogs, which run \
+     elevated (Spelling Errors' entry below). Okur's question takes them: Insert+Up says its \
+     button, and Insert+F2 opens Run Okur Manager over it, whose Enter runs Commands Search \
+     where JAWS's Enter pressed the question's Cancel. 1211 answers the question by JAWS's own \
+     keys.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-11-10";
+
+    Difference::Step => ["1209-desktop-window-list-delete/s3"],
+    "After Delete in the Window List closed the chosen window, JAWS says the item the list comes \
+     to twice, in every trial, once with its place and once without, in either order (\"Windows \
+     PowerShell Minimized | Windows PowerShell Minimized | 4 of 5\"). Okur says it once with its \
+     place.",
     "the agent under the owner's rule on JAWS's accidents, 2026-11-10";
 
     Difference::Step => [

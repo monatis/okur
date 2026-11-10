@@ -110,7 +110,8 @@ A step can be in more than one entry; all of its entries apply.
   dialog); and its Overwrite Clipboard question, `826-desktop-notepad-clipboard-edges/s8` (its
   main window, "JAWS Professional", and the window under it said first); and the questions
   Run JAWS Manager's Custom Label Delete and Delete All ask, `688-web-custom-label/s25`,
-  `1207-web-custom-label-delete/s6` and `1207-web-custom-label-delete/s21` (its main window,
+  `1207-web-custom-label-delete/s6`, `1207-web-custom-label-delete/s21`,
+  `1211-web-custom-label-delete-ok/s6` and `1211-web-custom-label-delete-ok/s21` (its main window,
   the closing list's OK button and its tutor message, or the browser's title, said before the
   question).
 - In the recordings of 2026-10-19 (round 9, JAWS freshly started for the batch), JAWS no longer
@@ -309,7 +310,7 @@ A step can be in more than one entry; all of its entries apply.
 
 ### JAWS's cursor goes to the page's top after a custom label
 
-- Steps: `688-web-custom-label/s15`.
+- Steps: `688-web-custom-label/s15`, `1211-web-custom-label-delete-ok/s23` (the label deleted).
 - Difference: the whole step.
 - Why: once a field is given a custom label, JAWS builds the page again with it and its
   virtual cursor is at the page's top: Say Line says the page's title, in every trial. The
@@ -953,6 +954,15 @@ A step can be in more than one entry; all of its entries apply.
   Spelling Errors list below. Okur's question takes them: Insert+Up says its button, and
   Insert+F2 opens Run Okur Manager over it, whose Enter runs Commands Search where JAWS's Enter
   pressed the question's Cancel. 1211 answers the question by JAWS's own keys.
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-11-10.
+
+### The Window List's item said twice after Delete
+
+- Steps: `1209-desktop-window-list-delete/s3`.
+- Difference: the whole step. After Delete closed the chosen window, JAWS says the item the
+  list comes to twice, in every trial, once with its place and once without, in either order
+  ("Windows PowerShell Minimized | Windows PowerShell Minimized | 4 of 5").
+- Why: Okur says it once, with its place, as the list's new selection.
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-11-10.
 
 ### Our keys in JAWS's Spelling Errors list
