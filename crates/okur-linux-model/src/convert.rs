@@ -1887,6 +1887,58 @@ mod tests {
         ));
     }
 
+    /// A control of the page read again as its state changed with the focus elsewhere (a
+    /// switch a script turned on) is spliced into the page by its id, and nothing is said of it:
+    /// it is no live region (ARIA-AT's switch plans on Linux, 2278/s1).
+    #[test]
+    fn a_control_read_again_in_the_page_is_spliced_quietly() {
+        let switch = |states: &[u32]| {
+            let mut switch = node("toggle button", "Living Room Lights", states);
+            switch.path = "/switch".to_owned();
+            switch.id = Some(2);
+            switch
+                .attributes
+                .insert("xml-roles".to_owned(), "switch".to_owned());
+            switch
+        };
+        let mut root = node("document web", "Switch Example", &[]);
+        root.path = "/doc".to_owned();
+        root.id = Some(1);
+        root.children.push(switch(&[state::FOCUSABLE]));
+        let mut converter = Converter::default();
+        let loaded = converter.convert_read(&AtspiRecord::page(
+            0,
+            PageRead {
+                document: ":1.5/doc".to_owned(),
+                base: 0,
+                root,
+                read_ms: 0,
+            },
+        ));
+        assert!(matches!(
+            loaded.as_slice(),
+            [AccessibilityEvent::DocumentLoaded { .. }]
+        ));
+        let read = converter.convert_read(&AtspiRecord::live(
+            0,
+            LiveRead {
+                document: ":1.5/doc".to_owned(),
+                root: switch(&[state::FOCUSABLE, state::PRESSED]),
+                cut: false,
+                read_ms: 0,
+            },
+        ));
+        assert!(
+            matches!(
+                read.as_slice(),
+                [AccessibilityEvent::PagePartsLoaded(parts)]
+                    if parts.first().is_some_and(|p| p.role == OkurRole::CheckBox
+                        && p.states.checked == Some(true))
+            ),
+            "{read:?}"
+        );
+    }
+
     /// A text field read at its caret is the engine's text context, as read.
     #[test]
     fn a_caret_read_is_the_fields_text_context() {

@@ -97,6 +97,18 @@ impl AtspiNode {
     fn attribute(&self, key: &str) -> Option<&str> {
         self.attributes.get(key).map(String::as_str)
     }
+
+    /// Whether this is an ARIA switch (`role="switch"`): Chrome's AT-SPI makes it a toggle
+    /// button with `xml-roles` "switch", its on state PRESSED, where IA2 gives a check box
+    /// checked (ARIA-AT's switch plans, night2 on Linux: "Living Room Lights Toggle button Not
+    /// pressed" for JAWS's "Living Room Lights Switch Off", 2270/s1).
+    fn is_switch(&self) -> bool {
+        self.role == "toggle button"
+            && self
+                .attribute("xml-roles")
+                .and_then(|r| r.split_whitespace().next())
+                == Some("switch")
+    }
 }
 
 /// The main role and the finer one Chrome gives an element whose AT-SPI role is `node`'s, as
@@ -130,6 +142,7 @@ fn web_roles(node: &AtspiNode) -> (WebRole, Option<WebMark>) {
             (WebRole::MenuButton, None)
         }
         "push button" | "button" => (WebRole::Button, None),
+        "toggle button" if node.is_switch() => (WebRole::CheckBox, None),
         "toggle button" => (WebRole::Button, Some(WebMark::ToggleButton)),
         "check box" | "check menu item" | "switch" => (WebRole::CheckBox, None),
         "radio button" | "radio menu item" => (WebRole::RadioButton, None),
@@ -162,10 +175,12 @@ fn web_roles(node: &AtspiNode) -> (WebRole, Option<WebMark>) {
 /// `node`'s AT-SPI states by name.
 fn web_states(node: &AtspiNode) -> WebStates {
     let has = |bit: u32| node.has(bit);
+    // A switch's PRESSED is its checked state, as IA2's check box has it.
+    let switch = node.is_switch();
     WebStates {
-        checked: has(state::CHECKED),
+        checked: has(state::CHECKED) || (switch && has(state::PRESSED)),
         mixed: has(state::INDETERMINATE),
-        pressed: has(state::PRESSED),
+        pressed: has(state::PRESSED) && !switch,
         selected: has(state::SELECTED),
         expanded: has(state::EXPANDED),
         collapsed: has(state::EXPANDABLE) && !has(state::EXPANDED),
@@ -508,6 +523,43 @@ mod tests {
         node.attributes
             .insert("display".to_owned(), "block".to_owned());
         node
+    }
+
+    /// An ARIA switch, a toggle button to Chrome's AT-SPI with `xml-roles` "switch" and its on
+    /// state PRESSED, is a check box with the switch's role, checked when pressed, as IA2 gives
+    /// it on Windows ("Living Room Lights Switch On" [obs, 2278/s1]); a plain toggle button stays
+    /// one.
+    #[test]
+    fn a_switch_is_a_check_box_its_pressed_state_checked() {
+        let switch = |states: u64| {
+            let mut switch = node("toggle button", "Living Room Lights", vec![]);
+            switch.states |= states;
+            switch
+                .attributes
+                .insert("xml-roles".to_owned(), "switch".to_owned());
+            switch
+        };
+        let mut toggle = node("toggle button", "Mute", vec![]);
+        toggle.states |= 1 << state::PRESSED;
+        let root = node(
+            "document web",
+            "Switches",
+            vec![switch(1 << state::PRESSED), switch(0), toggle],
+        );
+        let aom = to_aom(&root);
+        let on = aom.children.first();
+        assert_eq!(on.map(|n| &n.role), Some(&Role::CheckBox));
+        assert_eq!(
+            on.and_then(|n| n.attributes.get("aria_role"))
+                .map(String::as_str),
+            Some("switch")
+        );
+        assert_eq!(on.and_then(|n| n.states.checked), Some(true));
+        let off = aom.children.get(1);
+        assert_eq!(off.and_then(|n| n.states.checked), Some(false));
+        let toggle = aom.children.get(2);
+        assert_eq!(toggle.map(|n| &n.role), Some(&Role::Button));
+        assert_eq!(toggle.and_then(|n| n.states.checked), Some(true));
     }
 
     /// A table cell's default action is MSAA's name for it, which the web model reads as a

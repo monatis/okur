@@ -1507,6 +1507,38 @@ impl EventSource for AtspiEventSource {
                                 }
                                 continue;
                             }
+                            // A page's control checked or expanded while the focus is
+                            // elsewhere (a script's switch turned on, a section opened by
+                            // another button): read again once its signals pause and spliced
+                            // into the engine's page by its id, as a live region is. Nothing
+                            // read it, and the virtual cursor said its old state (ARIA-AT's
+                            // switch plans on Linux, 2278/s1: "Off" for JAWS's "On"). A
+                            // control in a live region is the region's to read.
+                            let page_state = matches!(
+                                event.kind,
+                                EventKind::StateChanged {
+                                    flag: xa11y_core::StateFlag::Checked
+                                        | xa11y_core::StateFlag::Expanded,
+                                    ..
+                                }
+                            );
+                            if let Some(object) = target
+                                .filter(|e| page_state && !e.states.focused)
+                                .and_then(AtspiObject::of)
+                            {
+                                let document =
+                                    page_of_object(&live, &object.bus_name, &object.path)
+                                        .filter(|d| focus_page.as_deref() == Some(d.as_str()))
+                                        .and_then(|d| object_of_key(&d));
+                                let in_region =
+                                    live_page_of(&live, &object.bus_name, &object.path).is_some();
+                                if let (Some(document), false) = (document, in_region) {
+                                    let due = std::time::Instant::now() + LIVE_SETTLE;
+                                    dirty
+                                        .entry(object)
+                                        .or_insert_with(|| DirtyRegion { document, due });
+                                }
+                            }
                             let focus = event.kind == EventKind::FocusChanged;
                             let changed = okur_linux_model::focus_track::is_control_change(
                                 &event.kind,
