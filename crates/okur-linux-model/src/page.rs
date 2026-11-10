@@ -275,6 +275,39 @@ pub fn item_places(root: &AtspiNode) -> HashMap<String, ItemPlace> {
 }
 
 fn collect_places(node: &AtspiNode, places: &mut HashMap<String, ItemPlace>) {
+    // A page's menu's items (an ARIA menu button's menu): their places, "Action 4 | 4 of 4"
+    // [obs, 2600/s1], as IA2's group position gives them on Windows, and the menu's name,
+    // "Actions menu" as it opens [obs, 2622/s1].
+    if node.role == "menu" {
+        let menu = Some(node.name.trim())
+            .filter(|n| !n.is_empty())
+            .map(str::to_owned);
+        let items: Vec<&AtspiNode> = node
+            .children
+            .iter()
+            .filter(|c| {
+                matches!(
+                    c.role.as_str(),
+                    "menu item" | "check menu item" | "radio menu item"
+                )
+            })
+            .collect();
+        for (at, item) in items.iter().enumerate() {
+            if item.path.is_empty() {
+                continue;
+            }
+            let (index, count) = crate::focus::own_place(item).unwrap_or((at + 1, items.len()));
+            places.insert(
+                item.path.clone(),
+                ItemPlace {
+                    list: menu.clone(),
+                    list_box: false,
+                    index,
+                    count,
+                },
+            );
+        }
+    }
     if matches!(node.role.as_str(), "list box" | "list") {
         let items: Vec<&AtspiNode> = node
             .children
@@ -524,6 +557,28 @@ mod tests {
         node.attributes
             .insert("display".to_owned(), "block".to_owned());
         node
+    }
+
+    /// A page's menu's items have their places and the menu's name, as IA2's group position and
+    /// focus chain give them on Windows: "Actions menu | Action 1 | 1 of 4" [obs, 2622/s1].
+    #[test]
+    fn a_menus_items_have_their_places_and_its_name() {
+        let item = |name: &str, at: &str| {
+            let mut item = node("menu item", name, vec![]);
+            item.path = format!("/{name}");
+            item.attributes.insert("posinset".to_owned(), at.to_owned());
+            item.attributes.insert("setsize".to_owned(), "2".to_owned());
+            item
+        };
+        let menu = node(
+            "menu",
+            "Actions ",
+            vec![item("Action 1", "1"), item("Action 2", "2")],
+        );
+        let places = item_places(&node("document web", "Menus", vec![menu]));
+        let second = places.get("/Action 2");
+        assert_eq!(second.map(|p| (p.index, p.count)), Some((2, 2)));
+        assert_eq!(second.and_then(|p| p.list.as_deref()), Some("Actions"));
     }
 
     /// An ARIA switch, a toggle button to Chrome's AT-SPI with `xml-roles` "switch" and its on

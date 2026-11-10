@@ -906,14 +906,21 @@ impl Converter {
                     {
                         focus.platform.window_id = window_id;
                         focus.web_application = application;
-                        // An option's list and its place, as Windows' focus carries them.
-                        if let Some(place) =
-                            item_place.filter(|_| focus.role == okur_core::aom::Role::ListItem)
-                        {
-                            focus.container_name.clone_from(&place.list);
-                            focus.container_is_list_box = place.list_box;
-                            focus.item_index = Some(place.index);
-                            focus.item_count = Some(place.count);
+                        // An option's list and its place, as Windows' focus carries them; a menu
+                        // item's place alone, as IA2's group position gives it.
+                        match (item_place, &focus.role) {
+                            (Some(place), okur_core::aom::Role::ListItem) => {
+                                focus.container_name.clone_from(&place.list);
+                                focus.container_is_list_box = place.list_box;
+                                focus.item_index = Some(place.index);
+                                focus.item_count = Some(place.count);
+                            }
+                            (Some(place), okur_core::aom::Role::MenuItem) => {
+                                focus.item_index = Some(place.index);
+                                focus.item_count = Some(place.count);
+                                focus.menu_name.clone_from(&place.list);
+                            }
+                            _ => {}
                         }
                     }
                     event
