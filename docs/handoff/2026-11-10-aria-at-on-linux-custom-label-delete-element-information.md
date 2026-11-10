@@ -104,7 +104,7 @@ From the commands named, after the commits given:
 --allow-regression`: "8444/9623 steps match JAWS exactly; 245 accepted divergences not counted
 (1668 runs, 0 could not be compared)". Let go, each with its cause in the commit:
 - 256/s1, s2: the GTK first-focus race. okur-ui's log says GTK had the focus on the tree's first
-  row as the dialog came ("dialog 1 shown: active true, focus Some(\"GtkTreeExpander\")"), and
+  row as the dialog came ("dialog 1 shown: active true, focus Some(GtkTreeExpander)"), and
   AT-SPI told it only after the next key (in 241, the same dialog, within 100 ms).
 - 304/s6, s7: Right and Left on the desktop replica's radios went nowhere since c45c97d5 stacked
   them; the replica's group now takes every arrow round itself, as a Win32 group does.
