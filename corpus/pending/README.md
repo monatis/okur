@@ -21,6 +21,8 @@ To record one:
 | 628 | The layer's help and Command Search. Round 91 was inconclusive on old-pc's Turkish keyboard layout | `desktop-editor.ps1` |
 | 665 | Say Window in Notepad's Font dialog, waited for long enough to read its 187 fonts (round 115) | `desktop-notepad.ps1` |
 | 1208 | A text area whose first line wraps: Say Line and the arrows, whether JAWS reads its lines as shown or as written (1206 on Linux read the written line). Recorded in round 1207 (JAWS reads lines as shown) with its IA2 snapshot (round 1210b); waits for its page's AT-SPI snapshot | `wrapped-text-area.html` (here) |
+| 1213 | Element Information on a link read line by line to its end: its blank lines between the elements and before Press ESC (1210 read only the first element) | `news-article.html` (in `corpus/fixtures/`) |
+| 1214 | Advanced Element Information, then Element Information, on a form field, each read line by line: what an edit lists, and what Advanced adds | `custom-label.html` (in `corpus/fixtures/`) |
 
 Office on old-pc is not activated (2026-10-19): Word and Excel open Microsoft's Office Activation
 Wizard and say "Product Activation Failed", which held the fixtures' automation in round 17. The

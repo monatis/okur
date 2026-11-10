@@ -1,0 +1,212 @@
+{
+  "id": "1214-web-advanced-element-information-field",
+  "name": "Advanced Element Information (Insert+Ctrl+Shift+F1), then Element Information (Insert+Shift+F1), on a form field (E to the Branch text field), each read from its top line by line (Down 16 times) and closed with Escape: what an edit lists, and what Advanced adds where it differs (on 1210's link it listed the same)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/custom-label.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "E"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Insert+Ctrl+Shift+F1",
+      "settle_max_ms": 30000
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s17",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s18",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s19",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s20",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s21",
+      "type": "key",
+      "command": "Insert+Shift+F1",
+      "settle_max_ms": 30000
+    },
+    {
+      "id": "s22",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s23",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s24",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s25",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s26",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s27",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s28",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s29",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s30",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s31",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s32",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s33",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s34",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s35",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s36",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s37",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s38",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s39",
+      "type": "key",
+      "command": "Escape"
+    }
+  ]
+}
