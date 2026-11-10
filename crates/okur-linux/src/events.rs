@@ -147,10 +147,14 @@ fn heard(
     if *kind == EventKind::TextChanged && is_focused(focused, bus, path) {
         return true;
     }
-    // A value changing is heard from a read page's progress bars alone: each heard event costs
-    // its object's read, and sliders and scroll bars change anywhere (the code review of
-    // 2026-11-09, third pass, 8).
+    // A value changing is heard from a read page's progress bars, and from the focused control
+    // (a slider moved by its arrows, "129" [obs, 2751/s1]) alone: each heard event costs its
+    // object's read, and sliders and scroll bars change anywhere (the code review of 2026-11-09,
+    // third pass, 8).
     if *kind == EventKind::ValueChanged {
+        if is_focused(focused, bus, path) {
+            return true;
+        }
         let pages = live
             .read()
             .unwrap_or_else(std::sync::PoisonError::into_inner);

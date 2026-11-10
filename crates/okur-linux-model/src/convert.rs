@@ -789,6 +789,18 @@ impl Converter {
             return events;
         }
         if record.kind == EventKind::ValueChanged {
+            // The focused control's value changed by its keys (a slider's arrows): told as its
+            // value's change, as Windows' value change is: "129" [obs, 2751/s1].
+            if let Some(element) = target.filter(|e| e.states.focused) {
+                let mut control = focus_event(element);
+                control.in_document = in_page;
+                control.app = app;
+                events.push(AccessibilityEvent::Change {
+                    kind: ChangeKind::Value,
+                    control,
+                });
+                return events;
+            }
             events.extend(self.progress(record));
             return events;
         }
@@ -1467,6 +1479,24 @@ mod tests {
         assert!(converter.convert_read(&elsewhere_app).is_empty());
         let other = element(ElementRole::ProgressBar, "Elsewhere", "/other", false);
         let elsewhere = chrome_record(EventKind::ValueChanged, other, None);
+        assert!(converter.convert_read(&elsewhere).is_empty());
+    }
+
+    /// The focused slider's value changed by its arrows is its value's change, said as Windows'
+    /// is: "129" [obs, 2751/s1]; an unfocused one's is no progress.
+    #[test]
+    fn the_focused_sliders_value_change_is_told() {
+        let mut converter = Converter::default();
+        let mut slider = element(ElementRole::Slider, "Red", "/red", true);
+        slider.value = Some("129".to_owned());
+        let changed = chrome_record(EventKind::ValueChanged, slider.clone(), None);
+        assert!(matches!(
+            converter.convert_read(&changed).as_slice(),
+            [AccessibilityEvent::Change { kind: ChangeKind::Value, control }]
+                if control.value.as_deref() == Some("129")
+        ));
+        slider.states.focused = false;
+        let elsewhere = chrome_record(EventKind::ValueChanged, slider, None);
         assert!(converter.convert_read(&elsewhere).is_empty());
     }
 
