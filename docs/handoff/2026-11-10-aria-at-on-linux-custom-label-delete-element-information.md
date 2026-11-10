@@ -98,11 +98,57 @@ From the commands named, after the commits given:
 - **1208's snapshot in round 1210b** was taken in another Chrome session than its trials, and
   the replay's focus landed on the Save button: snapshots and trials in one round.
 
+## The afternoon (after 99daf8de)
+
+**night3's runs** (76ae8de5): 122 runs at 6cf0846f. `okur-lab live-baseline linux --write
+--allow-regression`: "8444/9623 steps match JAWS exactly; 245 accepted divergences not counted
+(1668 runs, 0 could not be compared)". Let go, each with its cause in the commit:
+- 256/s1, s2: the GTK first-focus race. okur-ui's log says GTK had the focus on the tree's first
+  row as the dialog came ("dialog 1 shown: active true, focus Some(\"GtkTreeExpander\")"), and
+  AT-SPI told it only after the next key (in 241, the same dialog, within 100 ms).
+- 304/s6, s7: Right and Left on the desktop replica's radios went nowhere since c45c97d5 stacked
+  them; the replica's group now takes every arrow round itself, as a Win32 group does.
+- 742/s24: Down on okur-ui's drop-down's last choice moved the focus to Back.
+
+**Linux** (7a4e26e8): a page's slider says its value (Chrome's `valuetext`, "Red left right
+slider 128"); a control read again with no name, after one that had a name, says nothing
+(742/s9's stray hint); okur-ui's GTK drop-down takes Up, Down, Left, Right, Home and End as a
+Win32 combo box does, stopping at its ends.
+
+**The third review's fixes** (9c3ff12c, one reviewer over 3df88e1b to f9ca67db): a field's line
+from the platform only where it holds the caret, with no break inside it; IA2's line read on
+S_OK alone; Word's line not read twice; the Explorer privacy rule over a focused list's items;
+Custom Label Delete by the label's key; Linux state reads limited to 64 objects, and changes
+made while the focus is away noted; element information's replay stops at the first document.
+Kept with reasons: `in_own_dialog`'s reach, late element-information answers, the tracer's
+40 ms wait.
+
+**night4** (at 9c3ff12c): `LINUX CHECK PASS` (the drop-down arrows, the AT-SPI line read and
+the state limits built at last); `main` moved to 9c3ff12c. Its runs (256, 304, 742, the
+dialog scenarios, ARIA-AT's sliders, menu buttons and ratings: 257 in all) were running at this
+update. The GTK selection probe, each list alone: a no-selection list's rows are SELECTABLE and
+never SELECTED, so "Not Selected" would be said on each; the list's own states are the next
+read to tell it apart.
+
+**Round 1215** (b9a0dfcc, 0012b223): 1208 recorded again with the line in its trace, and 1213.
+Element information's message has a blank line after each element's block too. 1214 (Advanced
+on a field) stays pending: it lists the field's HTML attributes (id, name, type) and JAWS's own
+"fsFormField=true", which Okur does not read, and one trial recorded no s1.
+
+Figures:
+- `okur-lab parity` after 0012b223: "12817/13414 steps match exactly; 392 accepted
+  divergences not counted".
+- `okur-lab parity --api atspi` after b9a0dfcc: "12548/13414 steps match exactly".
+- `okur-lab live-replay linux` after 9c3ff12c: "9555/9868 steps say what the run said;
+  replayed, 8701/9623 match JAWS exactly".
+
 ## Next
 
-1. When `night3` ends: import its runs (privacy check, baselines, apart from code); then round
-   1215 (`lab-deploy.sh` first: the tracer of 56b18fcb).
-2. 1208 with its new trace and both snapshots; 1213 and 1214's layout and Advanced.
-3. `night4`: `check-linux` at HEAD (56b18fcb's AT-SPI line read, f9ca67db), the switch
-   scenarios' Linux-only gaps again, sliders and the menu button next.
-4. Element information on Linux; the GtkNoSelection probe again.
+1. night4's runs: import them (privacy check, baselines apart from code); 256, 304 and 742
+   should come back.
+2. 1208's three steps left: Ctrl+Home at the text area's top (JAWS silent), End on the line's
+   break ("blank"), the page's title before the first Tab's focus.
+3. Element information: the HTML attributes Advanced lists (1214, recorded again), and Linux.
+4. GTK: the dialogs' first focus where GTK tells none (say it from the dialog's spec once shown);
+   the no-selection list's "Not Selected".
+5. ARIA-AT's Linux-only gaps after night4: sliders' value changes, the menu button.
