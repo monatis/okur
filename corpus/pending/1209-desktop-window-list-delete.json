@@ -5,6 +5,9 @@
   "version": "1.0.0",
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-dialogs.ps1",
   "target_app": "desktop",
+  "launch": {
+    "window_title": "SR Dialog Fixture"
+  },
   "reset": {
     "keys": []
   },

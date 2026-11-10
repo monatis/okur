@@ -5304,6 +5304,20 @@
       }
     },
     {
+      "scenario_id": "1207-web-custom-label-delete",
+      "fixture": "custom-label.html",
+      "evidence": {
+        "sha256": "a4fec9868c8822799919126fe3d2fa9fca5bd866c7deb5ff37da030b63e57b9a",
+        "capture_script_sha256": "60f87ebf646ac08ab9f6ab2694c35d49ed9377ad656e2cf1bf5f3702426698a1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "13-struct-next-link",
       "fixture": "structural-navigation.html",
       "evidence": {
@@ -30085,10 +30099,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1980,
-    "scenarios_with_evidence": 1980,
-    "total_trials": 5946,
-    "successful_trials": 5929,
+    "scenarios": 1981,
+    "scenarios_with_evidence": 1981,
+    "total_trials": 5949,
+    "successful_trials": 5932,
     "deterministic_scenarios": 1648
   }
 }
