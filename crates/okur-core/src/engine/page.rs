@@ -29,6 +29,10 @@ pub(super) struct PageBuilds {
 /// How long after Ctrl+R or F5 the page's load is taken for the reload they asked for.
 const RELOAD_WAIT: std::time::Duration = std::time::Duration::from_secs(10);
 
+/// How long one of Okur's dialogs shown waits for its first focus before it is looked for:
+/// GTK's comes within about 100 ms where it comes (241 in night3).
+const FIRST_FOCUS_WAIT_MS: u64 = 250;
+
 impl ScreenReaderEngine {
     /// Handles client-side SPA routing transitions: announces new page title and retargets cursor.
     pub fn handle_route_transition(&mut self, new_title: &str, target_id: Option<&str>) -> String {
@@ -1118,9 +1122,39 @@ impl ScreenReaderEngine {
     /// recorded event too, as one due before it came first.
     pub fn on_time(&mut self, now_ms: u64) -> Option<String> {
         self.held_keys_due(now_ms);
+        self.dialog_focus_due(now_ms);
         let forms = self.forms_mode_after_delay(now_ms);
         let phonetic = self.phonetic_after_pause(now_ms);
         forms.or(phonetic)
+    }
+
+    /// The key clock now, where a key has come: when it came, and the time since.
+    pub(super) fn key_clock_now(&self) -> Option<u64> {
+        self.last_key_at.map(|(at, taken)| {
+            at.saturating_add(u64::try_from(taken.elapsed().as_millis()).unwrap_or(u64::MAX))
+        })
+    }
+
+    /// One of Okur's dialogs shown with no focus told by `now_ms`: its focus looked for in its
+    /// window, which the platform tells as a focus (GTK 4 at times tells none for the first
+    /// control, though it has it: 256/s1, 1207/s1 in night3, said only at the next key).
+    fn dialog_focus_due(&mut self, now_ms: u64) {
+        let Some((id, at)) = self.first_focus_wait else {
+            return;
+        };
+        if now_ms < at.saturating_add(FIRST_FOCUS_WAIT_MS) {
+            return;
+        }
+        self.first_focus_wait = None;
+        let title = self
+            .open_dialogs
+            .lock()
+            .ok()
+            .and_then(|open| open.iter().find(|d| d.id == id).map(|d| d.title.clone()));
+        if let (Some(title), Some(actions)) = (title, self.actions.as_ref()) {
+            tracing::debug!(id, %title, "a dialog's first focus looked for");
+            actions.look_for_dialog_focus(&title);
+        }
     }
 
     /// Whether an application's notification is its echo of what was just typed or edited,

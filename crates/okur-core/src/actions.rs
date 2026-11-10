@@ -439,6 +439,15 @@ pub trait ApplicationActions: Send {
         false
     }
 
+    /// Looks for the focus in the window of Okur's own titled `title` and tells it as a focus
+    /// event, where the platform told none as the window came: GTK 4 at times tells no focus
+    /// for an okur-ui dialog's first control, though it has the focus (256/s1 in night3, okur-ui's
+    /// log "focus Some(GtkTreeExpander)"). Returns false when unsupported.
+    fn look_for_dialog_focus(&self, title: &str) -> bool {
+        let _ = title;
+        false
+    }
+
     /// Reads the page's element with the platform's id `unique_id` and each element above it
     /// to the document, for Element Information (Insert+Shift+F1). They arrive later as
     /// [`crate::event::AccessibilityEvent::ElementInformation`]. Returns false when
@@ -921,6 +930,13 @@ impl ApplicationActions for RecordingActions {
                 format!("{click:?} click at {x}, {y}"),
                 usize::try_from(x).unwrap_or(0),
             ));
+        }
+        true
+    }
+
+    fn look_for_dialog_focus(&self, title: &str) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push((format!("look for dialog focus {title}"), 0));
         }
         true
     }

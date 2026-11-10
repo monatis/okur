@@ -565,6 +565,15 @@ impl ApplicationActions for LinuxActions {
         self.ask(node, Request::Activate)
     }
 
+    fn look_for_dialog_focus(&self, title: &str) -> bool {
+        *self
+            .shared
+            .dialog_focus
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner) = Some(title.to_owned());
+        true
+    }
+
     fn read_element_information(&self, unique_id: &str) -> bool {
         let Ok(id) = unique_id.parse::<i32>() else {
             return false;

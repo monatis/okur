@@ -11962,6 +11962,45 @@ fn an_own_dialog_shown_takes_the_keys_before_its_focus() {
     assert_ne!(engine.cursor.offset, offset);
 }
 
+/// One of Okur's dialogs shown whose first focus is not told within 250 ms on the key clock is
+/// looked for in its window, once (GTK 4's first-focus race: 256/s1, 1207/s1 in night3); a
+/// focus told meanwhile asks for nothing.
+#[test]
+fn an_own_dialogs_first_focus_untold_is_looked_for() {
+    let looked = |actions: &crate::actions::RecordingActions| {
+        actions
+            .requests()
+            .iter()
+            .filter(|(r, _)| r.starts_with("look for dialog focus "))
+            .count()
+    };
+    let (mut engine, ui, actions) = links_page_engine();
+    engine.handle_key_event(&key_at(Key::Alpha('X'), Modifiers::none(), 1_000));
+    let _ = engine.execute(crate::command::Command::SkimReadDialog);
+    let skim = shown_dialog(&ui);
+    engine.handle_accessibility_event(&dialog_shown(skim));
+    let now = |engine: &ScreenReaderEngine| engine.key_clock_now().unwrap_or_default();
+    let shown_at = now(&engine);
+    let _ = engine.on_time(shown_at + 100);
+    assert_eq!(looked(&actions), 0);
+    let _ = engine.on_time(shown_at + 300);
+    assert_eq!(looked(&actions), 1);
+    let _ = engine.on_time(shown_at + 600);
+    assert_eq!(looked(&actions), 1, "looked for once");
+    // A focus told before the wait ends: nothing looked for.
+    let (mut engine, ui, actions) = links_page_engine();
+    engine.handle_key_event(&key_at(Key::Alpha('X'), Modifiers::none(), 1_000));
+    let _ = engine.execute(crate::command::Command::SkimReadDialog);
+    let skim = shown_dialog(&ui);
+    engine.handle_accessibility_event(&dialog_shown(skim));
+    let shown_at = now(&engine);
+    let mut radio = FocusEvent::new(Role::RadioButton).with_name("Read First Line");
+    radio.app = Some("okur-ui".into());
+    engine.handle_accessibility_event(&AccessibilityEvent::Focus(radio));
+    let _ = engine.on_time(shown_at + 300);
+    assert_eq!(looked(&actions), 0);
+}
+
 /// A dialog asked for longer ago than the keys wait is not awaited: one okur-ui never said
 /// shown held the user's next key whenever it came (the code review of 2026-11-10, second
 /// pass, 6).

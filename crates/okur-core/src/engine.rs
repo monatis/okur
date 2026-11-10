@@ -515,6 +515,9 @@ pub struct ScreenReaderEngine {
     /// One of Okur's dialogs said shown with no focus told since: it took the keys from the
     /// virtual cursor, which it gives back if it closes before any focus is told.
     shown_without_focus: Option<u32>,
+    /// One of Okur's dialogs said shown, and when on the key clock, its first focus not yet
+    /// told: looked for once 250 ms passed on it.
+    first_focus_wait: Option<(u32, u64)>,
     /// The system tray list while it is open, and whether its icons were asked for.
     tray_dialog: Option<crate::ui::tray::TrayDialog>,
     tray_asked: bool,
@@ -836,6 +839,7 @@ impl ScreenReaderEngine {
             window_closing: None,
             element_information_asked: None,
             shown_without_focus: None,
+            first_focus_wait: None,
             tray_dialog: None,
             tray_asked: false,
             jump_dialog: None,
@@ -2103,12 +2107,20 @@ impl ScreenReaderEngine {
         self.dialog_came(event);
         if let AccessibilityEvent::Focus(focus) = event {
             self.window_list_after_focus(focus);
-            // A focus told: the mode is the focus's again, whatever the dialog shown left.
+            // A focus told: the mode is the focus's again, whatever the dialog shown left, and
+            // no dialog's first focus is waited for.
             self.shown_without_focus = None;
+            self.first_focus_wait = None;
         }
         match event {
             AccessibilityEvent::Ui(crate::ui::FromUi::DialogClosed { id }) => {
                 self.own_dialog_closed(*id);
+                if self
+                    .first_focus_wait
+                    .is_some_and(|(waited, _)| waited == *id)
+                {
+                    self.first_focus_wait = None;
+                }
             }
             // Only the keys held for it wait on it. One of Okur's dialogs up with the keyboard in
             // it takes the keys from now, before its focus is told, as a list dialog takes them
@@ -2123,6 +2135,10 @@ impl ScreenReaderEngine {
                 if open && self.app_mode == AppMode::VirtualBuffer {
                     self.app_mode = AppMode::NativeControl;
                     self.shown_without_focus = Some(*id);
+                }
+                // Its first focus waited for: where none is told, it is looked for.
+                if open {
+                    self.first_focus_wait = self.key_clock_now().map(|at| (*id, at));
                 }
                 return None;
             }

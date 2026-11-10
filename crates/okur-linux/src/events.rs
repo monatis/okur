@@ -392,6 +392,9 @@ pub struct DriverShared {
     pub page_wanted: Arc<Mutex<Option<PageWanted>>>,
     /// The actions' worker, which reads a text field at its caret as its focus is delivered.
     pub(crate) field_reads: FieldReads,
+    /// The title of one of Okur's own windows whose focus the engine asked to be looked for,
+    /// GTK having told none as it came ([`okur_dialog_focus`]).
+    pub(crate) dialog_focus: Arc<Mutex<Option<String>>>,
 }
 
 /// Where the event loop asks the actions' worker for a field's read.
@@ -771,6 +774,33 @@ fn focus_within(provider: &LinuxProvider, wanted: WindowFocus) -> Option<xa11y_c
             timestamp: std::time::Instant::now(),
         }
         .into(),
+    )
+}
+
+/// The focus within okur-ui's window titled `title`, as the focus event GTK did not send: GTK 4
+/// at times tells no focus for an okur-ui dialog's first control though it has it (256/s1 and
+/// 1207/s1 in night3; okur-ui's log "focus Some(GtkTreeExpander)"), and tells no activation of
+/// okur-ui's windows either, so the engine asks for it once the dialog is shown.
+fn okur_dialog_focus(provider: &LinuxProvider, title: &str) -> Option<xa11y_core::Event> {
+    use xa11y_core::Provider as _;
+    let app = provider
+        .list_apps()
+        .ok()?
+        .into_iter()
+        .find(|app| app.name.as_deref() == Some("okur-ui"))?;
+    let window = provider
+        .get_children(Some(&app))
+        .ok()?
+        .into_iter()
+        .find(|window| window.name.as_deref() == Some(title))?;
+    focus_within(
+        provider,
+        WindowFocus {
+            window: AtspiObject::of(&window)?,
+            app: "okur-ui".to_owned(),
+            pid: app.pid.unwrap_or_default(),
+            due: std::time::Instant::now(),
+        },
     )
 }
 
@@ -1273,6 +1303,7 @@ impl EventSource for AtspiEventSource {
         let activated = Arc::clone(&self.shared.activated);
         let field_reads = Arc::clone(&self.shared.field_reads);
         let page_wanted = Arc::clone(&self.shared.page_wanted);
+        let dialog_focus = Arc::clone(&self.shared.dialog_focus);
         let stop = Arc::new(AtomicBool::new(false));
         let thread = {
             let stop = Arc::clone(&stop);
@@ -1424,6 +1455,15 @@ impl EventSource for AtspiEventSource {
                     } else {
                         100
                     };
+                    // One of Okur's dialogs' focus, which the engine asked for.
+                    let asked = dialog_focus
+                        .lock()
+                        .unwrap_or_else(std::sync::PoisonError::into_inner)
+                        .take();
+                    if let (Some(title), None) = (asked, found_focus.as_ref()) {
+                        found_focus = okur_dialog_focus(&provider, &title).map(Box::new);
+                        tracing::debug!(%title, found = found_focus.is_some(), "a dialog's focus looked for");
+                    }
                     // A window's focus looked for, once due.
                     if window_focus
                         .as_ref()
