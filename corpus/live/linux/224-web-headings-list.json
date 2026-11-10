@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ec1e5cac6"
+  "commit": "6cf0846ff"
  },
  "trials": [
   {
@@ -16,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794244151408
+     "t_ms": 1794291713820
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794244151763
+     "t_ms": 1794291714826
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794244153068,
-     "t_end_ms": 1794244154072,
+     "t_start_ms": 1794291716189,
+     "t_end_ms": 1794291717594,
      "action": {
       "type": "key",
       "command": "Insert+F6"
@@ -36,18 +36,18 @@
       "Insert+F6"
      ],
      "key_times": [
-      1794244153068
+      1794291716189
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Heading List \u001d dialog \u001e \nheadings \u001d List view \u001e \nWeb App Patterns : 1\n1 of 10\nTo move to items use the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794244154073,
-     "t_end_ms": 1794244155176,
+     "t_start_ms": 1794291717595,
+     "t_end_ms": 1794291718698,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -56,18 +56,18 @@
       "Tab"
      ],
      "key_times": [
-      1794244154073
+      1794291717595
      ],
      "observation": {
-      "speech_raw": "Heading List \u001d dialog \u001e \nMove To Heading \u001d Button \u001e \nTo activate press spacebar.",
+      "speech_raw": "Move To Heading \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794244155176,
-     "t_end_ms": 1794244156280,
+     "t_start_ms": 1794291718698,
+     "t_end_ms": 1794291719801,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -76,7 +76,7 @@
       "Tab"
      ],
      "key_times": [
-      1794244155176
+      1794291718698
      ],
      "observation": {
       "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
@@ -86,8 +86,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794244156280,
-     "t_end_ms": 1794244157384,
+     "t_start_ms": 1794291719801,
+     "t_end_ms": 1794291720905,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -96,18 +96,18 @@
       "Tab"
      ],
      "key_times": [
-      1794244156280
+      1794291719801
      ],
      "observation": {
-      "speech_raw": "Sort Headings\nSort Headings In Tab Order \u001d radio button \u001e  \u001dchecked\u001e \n1 of 2\nTo change the selection press Up or Down Arrow.",
+      "speech_raw": "Sort Headings In Tab Order \u001d radio button \u001e  \u001dchecked\u001e \n1 of 2\nTo change the selection press Up or Down Arrow.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794244157384,
-     "t_end_ms": 1794244158588,
+     "t_start_ms": 1794291720905,
+     "t_end_ms": 1794291722109,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -116,18 +116,18 @@
       "Tab"
      ],
      "key_times": [
-      1794244157384
+      1794291720905
      ],
      "observation": {
-      "speech_raw": "Display\nDisplay All Headings \u001d radio button \u001e  \u001dchecked\u001e \n1 of 7\nTo change the selection press Up or Down Arrow.",
+      "speech_raw": "Display All Headings \u001d radio button \u001e  \u001dchecked\u001e \n1 of 7\nTo change the selection press Up or Down Arrow.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794244158588,
-     "t_end_ms": 1794244159692,
+     "t_start_ms": 1794291722109,
+     "t_end_ms": 1794291723313,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -136,7 +136,7 @@
       "Tab"
      ],
      "key_times": [
-      1794244158588
+      1794291722109
      ],
      "observation": {
       "speech_raw": "headings \u001d List view \u001e \nWeb App Patterns : 1\n1 of 10\nTo move to items use the Arrow keys.",
@@ -146,8 +146,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794244159692,
-     "t_end_ms": 1794244160796,
+     "t_start_ms": 1794291723313,
+     "t_end_ms": 1794291724417,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -156,7 +156,7 @@
       "Tab"
      ],
      "key_times": [
-      1794244159692
+      1794291723313
      ],
      "observation": {
       "speech_raw": "Move To Heading \u001d Button \u001e \nTo activate press spacebar.",
@@ -166,8 +166,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794244160796,
-     "t_end_ms": 1794244161901,
+     "t_start_ms": 1794291724417,
+     "t_end_ms": 1794291725621,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -176,18 +176,18 @@
       "DownArrow"
      ],
      "key_times": [
-      1794244160796
+      1794291724417
      ],
      "observation": {
-      "speech_raw": "Sort Headings\nSort Headings In Tab Order \u001d radio button \u001e  \u001dchecked\u001e \n1 of 2\nTo change the selection press Up or Down Arrow.",
+      "speech_raw": "Sort Headings In Tab Order \u001d radio button \u001e  \u001dchecked\u001e \n1 of 2\nTo change the selection press Up or Down Arrow.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794244161901,
-     "t_end_ms": 1794244163106,
+     "t_start_ms": 1794291725621,
+     "t_end_ms": 1794291726925,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -196,18 +196,18 @@
       "DownArrow"
      ],
      "key_times": [
-      1794244161901
+      1794291725621
      ],
      "observation": {
-      "speech_raw": "Alphabetically \u001d radio button \u001e  \u001dchecked\u001e \n2 of 2\nTo change the selection press Up or Down Arrow.",
+      "speech_raw": "Sort Headings Alphabetically \u001d radio button \u001e  \u001dchecked\u001e \n2 of 2\nTo change the selection press Up or Down Arrow.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794244163106,
-     "t_end_ms": 1794244164210,
+     "t_start_ms": 1794291726925,
+     "t_end_ms": 1794291728029,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -216,7 +216,7 @@
       "Enter"
      ],
      "key_times": [
-      1794244163106
+      1794291726925
      ],
      "observation": {
       "speech_raw": " \u001d heading level 1 \u001e Web App Patterns",
@@ -226,8 +226,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794244164210,
-     "t_end_ms": 1794244165215,
+     "t_start_ms": 1794291728029,
+     "t_end_ms": 1794291729034,
      "action": {
       "type": "key",
       "command": "Down"
@@ -236,7 +236,7 @@
       "Down"
      ],
      "key_times": [
-      1794244164210
+      1794291728029
      ],
      "observation": {
       "speech_raw": " \u001d heading level 2 \u001e Current links",

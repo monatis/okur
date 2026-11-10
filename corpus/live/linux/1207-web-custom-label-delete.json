@@ -1,0 +1,766 @@
+{
+ "scenario_id": "1207-web-custom-label-delete",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "6cf0846ff"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+Home",
+     "t_ms": 1794292838225
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794292839583,
+     "t_end_ms": 1794292840588,
+     "action": {
+      "type": "key",
+      "command": "Insert+F2"
+     },
+     "keys": [
+      "Insert+F2"
+     ],
+     "key_times": [
+      1794292839583
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794292840588,
+     "t_end_ms": 1794292841793,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794292840588
+     ],
+     "observation": {
+      "speech_raw": "Run Okur Manager \u001d dialog \u001e \nList1 \u001d List view \u001e \nCustom Highlight Assign\n2 of 21\nTo move to items use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794292841793,
+     "t_end_ms": 1794292842997,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794292841793
+     ],
+     "observation": {
+      "speech_raw": "Custom Label\n3 of 21",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1794292842997,
+     "t_end_ms": 1794292844202,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794292842997
+     ],
+     "observation": {
+      "speech_raw": "Custom Label Delete\n4 of 21",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1794292844202,
+     "t_end_ms": 1794292845407,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794292844202
+     ],
+     "observation": {
+      "speech_raw": "Custom Label Delete All\n5 of 21",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1794292845407,
+     "t_end_ms": 1794292846511,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794292845407
+     ],
+     "observation": {
+      "speech_raw": "Delete all Custom Labels? \u001d dialog \u001e \nThis will remove all custom labels for the current document or web page\nOK \u001d Button \u001e \nTo activate press spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1794292846511,
+     "t_end_ms": 1794292847516,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794292846511
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1794292847516,
+     "t_end_ms": 1794292848520,
+     "action": {
+      "type": "key",
+      "command": "E"
+     },
+     "keys": [
+      "E"
+     ],
+     "key_times": [
+      1794292847516
+     ],
+     "observation": {
+      "speech_raw": "Branch \u001d Edit \u001e \nblank",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1794292848520,
+     "t_end_ms": 1794292849626,
+     "action": {
+      "type": "key",
+      "command": "Insert+Ctrl+Tab"
+     },
+     "keys": [
+      "Insert+Ctrl+Tab"
+     ],
+     "key_times": [
+      1794292848520
+     ],
+     "observation": {
+      "speech_raw": "Custom Label \u001d dialog \u001e \nEnter a custom label for this item \u001d Edit \u001e \nType in text.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1794292849626,
+     "t_end_ms": 1794292850630,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"l\")"
+     },
+     "keys": [
+      "l"
+     ],
+     "key_times": [
+      1794292849626
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1794292850630,
+     "t_end_ms": 1794292851634,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"a\")"
+     },
+     "keys": [
+      "a"
+     ],
+     "key_times": [
+      1794292850630
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1794292851634,
+     "t_end_ms": 1794292852638,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"m\")"
+     },
+     "keys": [
+      "m"
+     ],
+     "key_times": [
+      1794292851634
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1794292852638,
+     "t_end_ms": 1794292853643,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"p\")"
+     },
+     "keys": [
+      "p"
+     ],
+     "key_times": [
+      1794292852638
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1794292853643,
+     "t_end_ms": 1794292854647,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794292853643
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1794292854647,
+     "t_end_ms": 1794292855653,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "key_times": [
+      1794292854647
+     ],
+     "observation": {
+      "speech_raw": "Book Pickup - Riverside Library",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1794292855653,
+     "t_end_ms": 1794292856658,
+     "action": {
+      "type": "key",
+      "command": "E"
+     },
+     "keys": [
+      "E"
+     ],
+     "key_times": [
+      1794292855653
+     ],
+     "observation": {
+      "speech_raw": "lamp \u001d Edit \u001e \nblank",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s17",
+     "t_start_ms": 1794292856658,
+     "t_end_ms": 1794292857863,
+     "action": {
+      "type": "key",
+      "command": "Insert+F2"
+     },
+     "keys": [
+      "Insert+F2"
+     ],
+     "key_times": [
+      1794292856658
+     ],
+     "observation": {
+      "speech_raw": "Run Okur Manager \u001d dialog \u001e \nList1 \u001d List view \u001e \nCommands Search\n1 of 21\nTo move to items use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s18",
+     "t_start_ms": 1794292857863,
+     "t_end_ms": 1794292859068,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794292857863
+     ],
+     "observation": {
+      "speech_raw": "Custom Highlight Assign\n2 of 21",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s19",
+     "t_start_ms": 1794292859068,
+     "t_end_ms": 1794292860272,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794292859068
+     ],
+     "observation": {
+      "speech_raw": "Custom Label\n3 of 21",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s20",
+     "t_start_ms": 1794292860272,
+     "t_end_ms": 1794292861477,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794292860272
+     ],
+     "observation": {
+      "speech_raw": "Custom Label Delete\n4 of 21",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s21",
+     "t_start_ms": 1794292861477,
+     "t_end_ms": 1794292862582,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794292861477
+     ],
+     "observation": {
+      "speech_raw": "Delete Custom Label? \u001d dialog \u001e \nlamp\nOK \u001d Button \u001e \nTo activate press spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s22",
+     "t_start_ms": 1794292862582,
+     "t_end_ms": 1794292863587,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794292862582
+     ],
+     "observation": {
+      "speech_raw": "OK \u001d Button \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s23",
+     "t_start_ms": 1794292863587,
+     "t_end_ms": 1794292864593,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "key_times": [
+      1794292863587
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s24",
+     "t_start_ms": 1794292864593,
+     "t_end_ms": 1794292865597,
+     "action": {
+      "type": "key",
+      "command": "E"
+     },
+     "keys": [
+      "E"
+     ],
+     "key_times": [
+      1794292864593
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s25",
+     "t_start_ms": 1794292865597,
+     "t_end_ms": 1794292866803,
+     "action": {
+      "type": "key",
+      "command": "Insert+F2"
+     },
+     "keys": [
+      "Insert+F2"
+     ],
+     "key_times": [
+      1794292865597
+     ],
+     "observation": {
+      "speech_raw": "Run Okur Manager \u001d dialog \u001e \nList1 \u001d List view \u001e \nCommands Search\n1 of 21\nTo move to items use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s26",
+     "t_start_ms": 1794292866803,
+     "t_end_ms": 1794292867907,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794292866803
+     ],
+     "observation": {
+      "speech_raw": "Custom Highlight Assign\n2 of 21",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s27",
+     "t_start_ms": 1794292867907,
+     "t_end_ms": 1794292869112,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794292867907
+     ],
+     "observation": {
+      "speech_raw": "Custom Label\n3 of 21",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s28",
+     "t_start_ms": 1794292869112,
+     "t_end_ms": 1794292870316,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794292869112
+     ],
+     "observation": {
+      "speech_raw": "Custom Label Delete\n4 of 21",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s29",
+     "t_start_ms": 1794292870316,
+     "t_end_ms": 1794292871420,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794292870316
+     ],
+     "observation": {
+      "speech_raw": "Delete Custom Label? \u001d dialog \u001e \nlamp\nOK \u001d Button \u001e \nTo activate press spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s30",
+     "t_start_ms": 1794292871420,
+     "t_end_ms": 1794292872425,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794292871420
+     ],
+     "observation": {
+      "speech_raw": "OK \u001d Button \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s31",
+     "t_start_ms": 1794292872425,
+     "t_end_ms": 1794292873430,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "key_times": [
+      1794292872425
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s32",
+     "t_start_ms": 1794292873430,
+     "t_end_ms": 1794292874635,
+     "action": {
+      "type": "key",
+      "command": "Insert+F2"
+     },
+     "keys": [
+      "Insert+F2"
+     ],
+     "key_times": [
+      1794292873430
+     ],
+     "observation": {
+      "speech_raw": "Run Okur Manager \u001d dialog \u001e \nList1 \u001d List view \u001e \nCommands Search\n1 of 21\nTo move to items use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s33",
+     "t_start_ms": 1794292874636,
+     "t_end_ms": 1794292875840,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794292874636
+     ],
+     "observation": {
+      "speech_raw": "Custom Highlight Assign\n2 of 21",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s34",
+     "t_start_ms": 1794292875840,
+     "t_end_ms": 1794292876944,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794292875840
+     ],
+     "observation": {
+      "speech_raw": "Custom Label\n3 of 21",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s35",
+     "t_start_ms": 1794292876944,
+     "t_end_ms": 1794292878148,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+     },
+     "keys": [
+      "DownArrow"
+     ],
+     "key_times": [
+      1794292876944
+     ],
+     "observation": {
+      "speech_raw": "Custom Label Delete\n4 of 21",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s36",
+     "t_start_ms": 1794292878148,
+     "t_end_ms": 1794292879253,
+     "action": {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794292878148
+     ],
+     "observation": {
+      "speech_raw": "Delete Custom Label? \u001d dialog \u001e \nlamp\nOK \u001d Button \u001e \nTo activate press spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s37",
+     "t_start_ms": 1794292879253,
+     "t_end_ms": 1794292880258,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794292879253
+     ],
+     "observation": {
+      "speech_raw": "OK \u001d Button \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

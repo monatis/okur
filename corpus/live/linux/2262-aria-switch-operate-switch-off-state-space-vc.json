@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ec1e5cac6"
+  "commit": "6cf0846ff"
  },
  "trials": [
   {
@@ -16,22 +16,22 @@
    "reset_keys": [
     {
      "key": "Ctrl+End",
-     "t_ms": 1794255861123
+     "t_ms": 1794293589968
     },
     {
      "key": "Shift+B",
-     "t_ms": 1794255861487
+     "t_ms": 1794293590328
     },
     {
      "key": "Enter",
-     "t_ms": 1794255861789
+     "t_ms": 1794293590631
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794255863093,
-     "t_end_ms": 1794255864197,
+     "t_start_ms": 1794293591935,
+     "t_end_ms": 1794293593040,
      "action": {
       "type": "key",
       "command": "Space"
@@ -40,7 +40,7 @@
       "Space"
      ],
      "key_times": [
-      1794255863093
+      1794293591935
      ],
      "observation": {
       "speech_raw": " \u001d Toggle button \u001e  \u001dPressed\u001e \nNotifications",

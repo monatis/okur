@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ec1e5cac6"
+  "commit": "6cf0846ff"
  },
  "trials": [
   {
@@ -16,22 +16,22 @@
    "reset_keys": [
     {
      "key": "Ctrl+End",
-     "t_ms": 1794256940178
+     "t_ms": 1794294664473
     },
     {
      "key": "Shift+B",
-     "t_ms": 1794256940547
+     "t_ms": 1794294664837
     },
     {
      "key": "Enter",
-     "t_ms": 1794256940849
+     "t_ms": 1794294665140
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794256942154,
-     "t_end_ms": 1794256943157,
+     "t_start_ms": 1794294666444,
+     "t_end_ms": 1794294667448,
      "action": {
       "type": "key",
       "command": "Down"
@@ -40,7 +40,7 @@
       "Down"
      ],
      "key_times": [
-      1794256942154
+      1794294666444
      ],
      "observation": {
       "speech_raw": "Reduced motion",
@@ -50,8 +50,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794256943157,
-     "t_end_ms": 1794256944161,
+     "t_start_ms": 1794294667448,
+     "t_end_ms": 1794294668451,
      "action": {
       "type": "key",
       "command": "Down"
@@ -60,10 +60,10 @@
       "Down"
      ],
      "key_times": [
-      1794256943157
+      1794294667448
      ],
      "observation": {
-      "speech_raw": "Reduced motion \u001d Toggle button \u001e  \u001dNot pressed\u001e ",
+      "speech_raw": "Reduced motion \u001d Switch \u001e  \u001dOff\u001e ",
       "settled": true
      },
      "step_success": true

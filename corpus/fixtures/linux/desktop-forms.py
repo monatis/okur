@@ -65,21 +65,45 @@ def build(app):
     checks.append(remember)
     box.append(checks)
 
-    # The plan: a group of three radio buttons, Pro chosen, one under another: GTK's arrows move
-    # by where the radios are, and Down from a row of them left the group for the drop-down
-    # below (548/s6 in night2), where the Windows fixture's Down goes on to Team as any Win32
-    # radio group's does [obs, 548/s6].
+    # The plan: a group of three radio buttons, Pro chosen, one under another, whose arrows go
+    # round the group as a Win32 radio group's do: Down and Right to the next, Up and Left to
+    # the one before, wrapping, each checking the radio it comes to. GTK's own arrows move by
+    # where the radios are: Down from a row of them left the group for the drop-down below
+    # (548/s6 in night2), and Right in a column of them went nowhere (304/s6 in night3), where
+    # the Windows fixture's go on to Team [obs, 548/s6, 304/s6].
     plan = Gtk.Frame(label="Plan")
     radios = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
-    first = None
+    group = []
     for choice in ("Free", "Pro", "Team"):
         radio = Gtk.CheckButton(label=choice)
-        if first is None:
-            first = radio
-        else:
-            radio.set_group(first)
+        if group:
+            radio.set_group(group[0])
         radio.set_active(choice == "Pro")
         radios.append(radio)
+        group.append(radio)
+
+    def round_the_group(_controller, keyval, _keycode, state):
+        step = {
+            Gdk.KEY_Down: 1,
+            Gdk.KEY_Right: 1,
+            Gdk.KEY_Up: -1,
+            Gdk.KEY_Left: -1,
+        }.get(keyval)
+        held = Gdk.ModifierType.SHIFT_MASK | Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.ALT_MASK
+        if step is None or state & held:
+            return False
+        at = next((i for i, r in enumerate(group) if r.has_focus()), None)
+        if at is None:
+            return False
+        to = group[(at + step) % len(group)]
+        to.set_active(True)
+        to.grab_focus()
+        return True
+
+    keys = Gtk.EventControllerKey()
+    keys.set_propagation_phase(Gtk.PropagationPhase.CAPTURE)
+    keys.connect("key-pressed", round_the_group)
+    radios.add_controller(keys)
     plan.set_child(radios)
     box.append(plan)
 

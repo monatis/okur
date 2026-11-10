@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ec1e5cac6"
+  "commit": "6cf0846ff"
  },
  "trials": [
   {
@@ -16,26 +16,26 @@
    "reset_keys": [
     {
      "key": "Ctrl+End",
-     "t_ms": 1794255912458
+     "t_ms": 1794293641303
     },
     {
      "key": "Shift+B",
-     "t_ms": 1794255912819
+     "t_ms": 1794293641666
     },
     {
      "key": "Enter",
-     "t_ms": 1794255913121
+     "t_ms": 1794293641968
     },
     {
      "key": "Insert+Z",
-     "t_ms": 1794255913423
+     "t_ms": 1794293642270
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794255914728,
-     "t_end_ms": 1794255915832,
+     "t_start_ms": 1794293643574,
+     "t_end_ms": 1794293644678,
      "action": {
       "type": "key",
       "command": "Space"
@@ -44,7 +44,7 @@
       "Space"
      ],
      "key_times": [
-      1794255914728
+      1794293643574
      ],
      "observation": {
       "speech_raw": " \u001d Toggle button \u001e  \u001dPressed\u001e \nNotifications",
@@ -54,8 +54,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794255915832,
-     "t_end_ms": 1794255916836,
+     "t_start_ms": 1794293644678,
+     "t_end_ms": 1794293645683,
      "action": {
       "type": "key",
       "command": "Insert+Z"
@@ -64,7 +64,7 @@
       "Insert+Z"
      ],
      "key_times": [
-      1794255915832
+      1794293644678
      ],
      "observation": {
       "speech_raw": "use virtual PC cursor on",

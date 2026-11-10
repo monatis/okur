@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ec1e5cac6"
+  "commit": "6cf0846ff"
  },
  "trials": [
   {
@@ -16,22 +16,22 @@
    "reset_keys": [
     {
      "key": "Ctrl+End",
-     "t_ms": 1794256438166
+     "t_ms": 1794294164405
     },
     {
      "key": "Shift+B",
-     "t_ms": 1794256438527
+     "t_ms": 1794294164772
     },
     {
      "key": "Enter",
-     "t_ms": 1794256438830
+     "t_ms": 1794294165075
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794256440135,
-     "t_end_ms": 1794256441239,
+     "t_start_ms": 1794294166379,
+     "t_end_ms": 1794294167484,
      "action": {
       "type": "key",
       "command": "Shift+Tab"
@@ -40,10 +40,10 @@
       "Shift+Tab"
      ],
      "key_times": [
-      1794256440135
+      1794294166379
      ],
      "observation": {
-      "speech_raw": "Living Room Lights  \u001d Toggle button \u001e  \u001dPressed\u001e \nTo toggle the state press spacebar.",
+      "speech_raw": "Living Room Lights  \u001d Switch \u001e   \u001dOn\u001e ",
       "settled": true
      },
      "step_success": true

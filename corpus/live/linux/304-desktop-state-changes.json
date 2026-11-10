@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "application": "corpus/fixtures/linux/desktop-forms.py",
-  "commit": "ec1e5cac6"
+  "commit": "6cf0846ff"
  },
  "trials": [
   {
@@ -16,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Tab",
-     "t_ms": 1794244786988
+     "t_ms": 1794292610934
     },
     {
      "key": "Tab",
-     "t_ms": 1794244787340
+     "t_ms": 1794292611286
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794244788645,
-     "t_end_ms": 1794244789749,
+     "t_start_ms": 1794292612591,
+     "t_end_ms": 1794292613695,
      "action": {
       "type": "key",
       "command": "Space"
@@ -36,7 +36,7 @@
       "Space"
      ],
      "key_times": [
-      1794244788645
+      1794292612591
      ],
      "observation": {
       "speech_raw": "\u001dnot checked\u001e",
@@ -46,8 +46,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794244789749,
-     "t_end_ms": 1794244790854,
+     "t_start_ms": 1794292613695,
+     "t_end_ms": 1794292614799,
      "action": {
       "type": "key",
       "command": "Space"
@@ -56,7 +56,7 @@
       "Space"
      ],
      "key_times": [
-      1794244789749
+      1794292613695
      ],
      "observation": {
       "speech_raw": "\u001dchecked\u001e",
@@ -66,8 +66,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794244790854,
-     "t_end_ms": 1794244791957,
+     "t_start_ms": 1794292614799,
+     "t_end_ms": 1794292615904,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -76,7 +76,7 @@
       "Tab"
      ],
      "key_times": [
-      1794244790854
+      1794292614799
      ],
      "observation": {
       "speech_raw": "Remember me \u001d check box \u001e  \u001dnot checked\u001e \nTo check press Spacebar.",
@@ -86,8 +86,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794244791957,
-     "t_end_ms": 1794244793062,
+     "t_start_ms": 1794292615904,
+     "t_end_ms": 1794292617008,
      "action": {
       "type": "key",
       "command": "Space"
@@ -96,7 +96,7 @@
       "Space"
      ],
      "key_times": [
-      1794244791957
+      1794292615904
      ],
      "observation": {
       "speech_raw": "\u001dchecked\u001e",
@@ -106,8 +106,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794244793062,
-     "t_end_ms": 1794244794367,
+     "t_start_ms": 1794292617008,
+     "t_end_ms": 1794292618313,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -116,7 +116,7 @@
       "Tab"
      ],
      "key_times": [
-      1794244793062
+      1794292617008
      ],
      "observation": {
       "speech_raw": "Plan\nPro \u001d radio button \u001e  \u001dchecked\u001e \n2 of 3\nTo change the selection press Up or Down Arrow.",
@@ -126,8 +126,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794244794367,
-     "t_end_ms": 1794244795572,
+     "t_start_ms": 1794292618313,
+     "t_end_ms": 1794292619318,
      "action": {
       "type": "key",
       "command": "Right"
@@ -136,18 +136,18 @@
       "Right"
      ],
      "key_times": [
-      1794244794367
+      1794292618313
      ],
      "observation": {
-      "speech_raw": "Team \u001d radio button \u001e  \u001dchecked\u001e \n3 of 3\nTo change the selection press Up or Down Arrow.",
+      "speech_raw": "",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794244795572,
-     "t_end_ms": 1794244796676,
+     "t_start_ms": 1794292619318,
+     "t_end_ms": 1794292620322,
      "action": {
       "type": "key",
       "command": "Left"
@@ -156,18 +156,18 @@
       "Left"
      ],
      "key_times": [
-      1794244795572
+      1794292619318
      ],
      "observation": {
-      "speech_raw": "Pro \u001d radio button \u001e  \u001dchecked\u001e \n2 of 3\nTo change the selection press Up or Down Arrow.",
+      "speech_raw": "",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794244796676,
-     "t_end_ms": 1794244797781,
+     "t_start_ms": 1794292620322,
+     "t_end_ms": 1794292621526,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -176,7 +176,7 @@
       "Tab"
      ],
      "key_times": [
-      1794244796676
+      1794292620322
      ],
      "observation": {
       "speech_raw": "Country: \u001d Combo box \u001e \nGermany\nTo change the selection use the Arrow keys.",
@@ -186,8 +186,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794244797781,
-     "t_end_ms": 1794244798886,
+     "t_start_ms": 1794292621526,
+     "t_end_ms": 1794292622630,
      "action": {
       "type": "key",
       "command": "Down"
@@ -196,7 +196,7 @@
       "Down"
      ],
      "key_times": [
-      1794244797781
+      1794292621526
      ],
      "observation": {
       "speech_raw": "Brazil",
@@ -206,8 +206,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794244798886,
-     "t_end_ms": 1794244799990,
+     "t_start_ms": 1794292622630,
+     "t_end_ms": 1794292623735,
      "action": {
       "type": "key",
       "command": "Up"
@@ -216,7 +216,7 @@
       "Up"
      ],
      "key_times": [
-      1794244798886
+      1794292622630
      ],
      "observation": {
       "speech_raw": "Germany",
@@ -226,8 +226,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794244799990,
-     "t_end_ms": 1794244801295,
+     "t_start_ms": 1794292623735,
+     "t_end_ms": 1794292625041,
      "action": {
       "type": "key",
       "command": "Alt+Down"
@@ -236,7 +236,7 @@
       "Alt+Down"
      ],
      "key_times": [
-      1794244799990
+      1794292623735
      ],
      "observation": {
       "speech_raw": "To move to an item press the Arrow keys.\n \u001d List box \u001e \nGermany\n2 of 3\nTo move to an item press the Arrow keys.",
@@ -246,8 +246,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794244801295,
-     "t_end_ms": 1794244802400,
+     "t_start_ms": 1794292625041,
+     "t_end_ms": 1794292626146,
      "action": {
       "type": "key",
       "command": "Down"
@@ -256,7 +256,7 @@
       "Down"
      ],
      "key_times": [
-      1794244801295
+      1794292625041
      ],
      "observation": {
       "speech_raw": "Brazil\n3 of 3",
@@ -266,8 +266,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794244802400,
-     "t_end_ms": 1794244803604,
+     "t_start_ms": 1794292626146,
+     "t_end_ms": 1794292627349,
      "action": {
       "type": "key",
       "command": "Enter"
@@ -276,7 +276,7 @@
       "Enter"
      ],
      "key_times": [
-      1794244802400
+      1794292626146
      ],
      "observation": {
       "speech_raw": "Country: \u001d Combo box \u001e \nBrazil\nTo change the selection use the Arrow keys.",
@@ -286,8 +286,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794244803604,
-     "t_end_ms": 1794244804708,
+     "t_start_ms": 1794292627349,
+     "t_end_ms": 1794292628454,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -296,7 +296,7 @@
       "Tab"
      ],
      "key_times": [
-      1794244803604
+      1794292627349
      ],
      "observation": {
       "speech_raw": "Fruit: \u001d List box \u001e \nBananas\n2 of 3\nTo move to an item press the Arrow keys.",
@@ -306,8 +306,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794244804708,
-     "t_end_ms": 1794244805812,
+     "t_start_ms": 1794292628454,
+     "t_end_ms": 1794292629559,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -316,7 +316,7 @@
       "Tab"
      ],
      "key_times": [
-      1794244804708
+      1794292628454
      ],
      "observation": {
       "speech_raw": " \u001d Tree view \u001e \nDocuments \u001dclosed\u001e \n1 of 2\nTo move through or expand items use the Arrow keys.",
@@ -326,8 +326,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794244805812,
-     "t_end_ms": 1794244807017,
+     "t_start_ms": 1794292629559,
+     "t_end_ms": 1794292630764,
      "action": {
       "type": "key",
       "command": "Right"
@@ -336,7 +336,7 @@
       "Right"
      ],
      "key_times": [
-      1794244805812
+      1794292629559
      ],
      "observation": {
       "speech_raw": "Documents\n \u001dopen\u001e ",
@@ -346,8 +346,8 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794244807017,
-     "t_end_ms": 1794244808121,
+     "t_start_ms": 1794292630764,
+     "t_end_ms": 1794292631868,
      "action": {
       "type": "key",
       "command": "Left"
@@ -356,7 +356,7 @@
       "Left"
      ],
      "key_times": [
-      1794244807017
+      1794292630764
      ],
      "observation": {
       "speech_raw": "Documents\n \u001dclosed\u001e \n1 of 2",

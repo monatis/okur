@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ec1e5cac6"
+  "commit": "6cf0846ff"
  },
  "trials": [
   {
@@ -16,26 +16,26 @@
    "reset_keys": [
     {
      "key": "Ctrl+End",
-     "t_ms": 1794256887245
+     "t_ms": 1794294612040
     },
     {
      "key": "Shift+B",
-     "t_ms": 1794256887610
+     "t_ms": 1794294612402
     },
     {
      "key": "Enter",
-     "t_ms": 1794256887913
+     "t_ms": 1794294612704
     },
     {
      "key": "Insert+Z",
-     "t_ms": 1794256888215
+     "t_ms": 1794294613006
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794256889519,
-     "t_end_ms": 1794256890623,
+     "t_start_ms": 1794294614311,
+     "t_end_ms": 1794294615415,
      "action": {
       "type": "key",
       "command": "Enter"
@@ -44,7 +44,7 @@
       "Enter"
      ],
      "key_times": [
-      1794256889519
+      1794294614311
      ],
      "observation": {
       "speech_raw": " \u001d Toggle button \u001e \nNot pressed\nLiving Room Lights",
@@ -54,8 +54,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794256890623,
-     "t_end_ms": 1794256891628,
+     "t_start_ms": 1794294615415,
+     "t_end_ms": 1794294616420,
      "action": {
       "type": "key",
       "command": "Insert+Z"
@@ -64,7 +64,7 @@
       "Insert+Z"
      ],
      "key_times": [
-      1794256890623
+      1794294615415
      ],
      "observation": {
       "speech_raw": "use virtual PC cursor on",

@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ec1e5cac6"
+  "commit": "6cf0846ff"
  },
  "trials": [
   {
@@ -16,22 +16,22 @@
    "reset_keys": [
     {
      "key": "Ctrl+End",
-     "t_ms": 1794255465504
+     "t_ms": 1794293195501
     },
     {
      "key": "Shift+B",
-     "t_ms": 1794255465866
+     "t_ms": 1794293195864
     },
     {
      "key": "Enter",
-     "t_ms": 1794255466169
+     "t_ms": 1794293196167
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794255467473,
-     "t_end_ms": 1794255468477,
+     "t_start_ms": 1794293197471,
+     "t_end_ms": 1794293198475,
      "action": {
       "type": "key",
       "command": "Down"
@@ -40,10 +40,10 @@
       "Down"
      ],
      "key_times": [
-      1794255467473
+      1794293197471
      ],
      "observation": {
-      "speech_raw": "Notifications \u001d Toggle button \u001e  \u001dNot pressed\u001e ",
+      "speech_raw": "Notifications \u001d Switch \u001e  \u001dOn\u001e ",
       "settled": true
      },
      "step_success": true

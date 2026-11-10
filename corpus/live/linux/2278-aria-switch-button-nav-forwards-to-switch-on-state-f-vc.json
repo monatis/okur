@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ec1e5cac6"
+  "commit": "6cf0846ff"
  },
  "trials": [
   {
@@ -16,22 +16,22 @@
    "reset_keys": [
     {
      "key": "Ctrl+End",
-     "t_ms": 1794256282859
+     "t_ms": 1794294008473
     },
     {
      "key": "Shift+B",
-     "t_ms": 1794256283225
+     "t_ms": 1794294008842
     },
     {
      "key": "Enter",
-     "t_ms": 1794256283528
+     "t_ms": 1794294009145
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794256284833,
-     "t_end_ms": 1794256285836,
+     "t_start_ms": 1794294010449,
+     "t_end_ms": 1794294011453,
      "action": {
       "type": "key",
       "command": "F"
@@ -40,10 +40,10 @@
       "F"
      ],
      "key_times": [
-      1794256284833
+      1794294010449
      ],
      "observation": {
-      "speech_raw": "Living Room Lights  \u001d Toggle button \u001e  \u001dNot pressed\u001e ",
+      "speech_raw": "Environmental Controls \u001d group \u001e \nLiving Room Lights  \u001d Switch \u001e   \u001dOn\u001e ",
       "settled": true
      },
      "step_success": true

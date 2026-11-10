@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ec1e5cac6"
+  "commit": "6cf0846ff"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794248033386
+     "t_ms": 1794291793111
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794248034752,
-     "t_end_ms": 1794248035758,
+     "t_start_ms": 1794291794478,
+     "t_end_ms": 1794291795784,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+W"
@@ -32,18 +32,18 @@
       "Ctrl+Insert+W"
      ],
      "key_times": [
-      1794248034752
+      1794291794478
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Word List \u001d dialog \u001e \nList1 \u001d List view \u001e \nm (10)\n1 of 143\nTo move to items use the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794248035758,
-     "t_end_ms": 1794248037468,
+     "t_start_ms": 1794291795785,
+     "t_end_ms": 1794291796793,
      "action": {
       "type": "jaws_function",
       "command": "TypeString(\"library\")"
@@ -58,24 +58,24 @@
       "y"
      ],
      "key_times": [
-      1794248035758,
-      1794248035759,
-      1794248035760,
-      1794248035761,
-      1794248035762,
-      1794248035762,
-      1794248035763
+      1794291795785,
+      1794291795786,
+      1794291795786,
+      1794291795788,
+      1794291795789,
+      1794291795790,
+      1794291795791
      ],
      "observation": {
-      "speech_raw": "Word List \u001d dialog \u001e \nList1 \u001d List view \u001e \nyear\n143 of 143\nTo move to items use the Arrow keys.",
+      "speech_raw": "",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794248037468,
-     "t_end_ms": 1794248038774,
+     "t_start_ms": 1794291796793,
+     "t_end_ms": 1794291798098,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+S\")"
@@ -84,18 +84,18 @@
       "Alt+S"
      ],
      "key_times": [
-      1794248037468
+      1794291796793
      ],
      "observation": {
-      "speech_raw": "Word List Summary\n1. last year, and staff say they can't wait. \u001d Link \u001e \nTo activate press Enter.",
+      "speech_raw": "year\n143 of 143\nWord List Summary\n1. last year, and staff say they can't wait. \u001d Link \u001e \nTo activate press Enter.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794248038774,
-     "t_end_ms": 1794248039779,
+     "t_start_ms": 1794291798098,
+     "t_end_ms": 1794291799103,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -104,7 +104,7 @@
       "Tab"
      ],
      "key_times": [
-      1794248038774
+      1794291798098
      ],
      "observation": {
       "speech_raw": "1. last year, and staff say they can't wait. \u001d Link \u001e \nTo activate press Enter.",
@@ -114,8 +114,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794248039779,
-     "t_end_ms": 1794248040783,
+     "t_start_ms": 1794291799103,
+     "t_end_ms": 1794291800107,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -124,7 +124,7 @@
       "Tab"
      ],
      "key_times": [
-      1794248039779
+      1794291799103
      ],
      "observation": {
       "speech_raw": "1. last year, and staff say they can't wait. \u001d Link \u001e \nTo activate press Enter.",
@@ -134,8 +134,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794248040783,
-     "t_end_ms": 1794248041787,
+     "t_start_ms": 1794291800107,
+     "t_end_ms": 1794291801111,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -144,7 +144,7 @@
       "Tab"
      ],
      "key_times": [
-      1794248040783
+      1794291800107
      ],
      "observation": {
       "speech_raw": "1. last year, and staff say they can't wait. \u001d Link \u001e \nTo activate press Enter.",
@@ -154,8 +154,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794248041787,
-     "t_end_ms": 1794248042790,
+     "t_start_ms": 1794291801111,
+     "t_end_ms": 1794291802116,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -164,7 +164,7 @@
       "Enter"
      ],
      "key_times": [
-      1794248041787
+      1794291801111
      ],
      "observation": {
       "speech_raw": "last year, and staff say they can't wait.",
@@ -174,8 +174,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794248042791,
-     "t_end_ms": 1794248043795,
+     "t_start_ms": 1794291802116,
+     "t_end_ms": 1794291803120,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -184,7 +184,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794248042791
+      1794291802116
      ],
      "observation": {
       "speech_raw": "last year, and staff say they can't wait.",

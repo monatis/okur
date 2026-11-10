@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ec1e5cac6"
+  "commit": "6cf0846ff"
  },
  "trials": [
   {
@@ -16,26 +16,26 @@
    "reset_keys": [
     {
      "key": "Ctrl+End",
-     "t_ms": 1794257412631
+     "t_ms": 1794295136143
     },
     {
      "key": "Shift+B",
-     "t_ms": 1794257412995
+     "t_ms": 1794295136503
     },
     {
      "key": "Enter",
-     "t_ms": 1794257413297
+     "t_ms": 1794295136805
     },
     {
      "key": "Insert+Z",
-     "t_ms": 1794257413598
+     "t_ms": 1794295137106
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794257414904,
-     "t_end_ms": 1794257415908,
+     "t_start_ms": 1794295138410,
+     "t_end_ms": 1794295139415,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -44,18 +44,18 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794257414904
+      1794295138410
      ],
      "observation": {
-      "speech_raw": "Reduced motion  \u001d Toggle button \u001e  \u001dNot pressed\u001e ",
+      "speech_raw": "Reduced motion  \u001d Switch \u001e   \u001dOff\u001e ",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794257415908,
-     "t_end_ms": 1794257416912,
+     "t_start_ms": 1794295139415,
+     "t_end_ms": 1794295140420,
      "action": {
       "type": "key",
       "command": "Insert+Z"
@@ -64,7 +64,7 @@
       "Insert+Z"
      ],
      "key_times": [
-      1794257415908
+      1794295139415
      ],
      "observation": {
       "speech_raw": "use virtual PC cursor on",

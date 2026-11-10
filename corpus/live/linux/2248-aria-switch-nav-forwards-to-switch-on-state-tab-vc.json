@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ec1e5cac6"
+  "commit": "6cf0846ff"
  },
  "trials": [
   {
@@ -16,22 +16,22 @@
    "reset_keys": [
     {
      "key": "Ctrl+End",
-     "t_ms": 1794255492022
+     "t_ms": 1794293221074
     },
     {
      "key": "Shift+B",
-     "t_ms": 1794255492386
+     "t_ms": 1794293221441
     },
     {
      "key": "Enter",
-     "t_ms": 1794255492688
+     "t_ms": 1794293221743
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794255493992,
-     "t_end_ms": 1794255495096,
+     "t_start_ms": 1794293223048,
+     "t_end_ms": 1794293224152,
      "action": {
       "type": "key",
       "command": "Tab"
@@ -40,10 +40,10 @@
       "Tab"
      ],
      "key_times": [
-      1794255493992
+      1794293223048
      ],
      "observation": {
-      "speech_raw": "Notifications  \u001d Toggle button \u001e  \u001dPressed\u001e \nTo toggle the state press spacebar.",
+      "speech_raw": "Notifications  \u001d Switch \u001e   \u001dOn\u001e ",
       "settled": true
      },
      "step_success": true

@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ec1e5cac6"
+  "commit": "6cf0846ff"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794247208091
+     "t_ms": 1794292065187
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794247209449,
-     "t_end_ms": 1794247210453,
+     "t_start_ms": 1794292066548,
+     "t_end_ms": 1794292067551,
      "action": {
       "type": "key",
       "command": "R"
@@ -32,7 +32,7 @@
       "R"
      ],
      "key_times": [
-      1794247209449
+      1794292066548
      ],
      "observation": {
       "speech_raw": "banner",
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794247210453,
-     "t_end_ms": 1794247211457,
+     "t_start_ms": 1794292067551,
+     "t_end_ms": 1794292068555,
      "action": {
       "type": "key",
       "command": "R"
@@ -52,7 +52,7 @@
       "R"
      ],
      "key_times": [
-      1794247210453
+      1794292067551
      ],
      "observation": {
       "speech_raw": "Sections navigation region",
@@ -62,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794247211457,
-     "t_end_ms": 1794247212461,
+     "t_start_ms": 1794292068555,
+     "t_end_ms": 1794292069559,
      "action": {
       "type": "key",
       "command": "R"
@@ -72,7 +72,7 @@
       "R"
      ],
      "key_times": [
-      1794247211457
+      1794292068555
      ],
      "observation": {
       "speech_raw": "Advertisement complementary information",
@@ -82,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794247212461,
-     "t_end_ms": 1794247213465,
+     "t_start_ms": 1794292069559,
+     "t_end_ms": 1794292070564,
      "action": {
       "type": "key",
       "command": "Down"
@@ -92,7 +92,7 @@
       "Down"
      ],
      "key_times": [
-      1794247212461
+      1794292069559
      ],
      "observation": {
       "speech_raw": "Spring sale at Main Street Shoes: two pairs for the price of one.",
@@ -102,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794247213465,
-     "t_end_ms": 1794247214469,
+     "t_start_ms": 1794292070564,
+     "t_end_ms": 1794292071568,
      "action": {
       "type": "key",
       "command": "Insert+Space"
@@ -112,7 +112,7 @@
       "Insert+Space"
      ],
      "key_times": [
-      1794247213465
+      1794292070564
      ],
      "observation": {
       "speech_raw": "",
@@ -122,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794247214469,
-     "t_end_ms": 1794247215674,
+     "t_start_ms": 1794292071568,
+     "t_end_ms": 1794292072773,
      "action": {
       "type": "key",
       "command": "X"
@@ -132,18 +132,18 @@
       "X"
      ],
      "key_times": [
-      1794247214469
+      1794292071568
      ],
      "observation": {
-      "speech_raw": "Flexible Web \u001d dialog \u001e \nCreate a new customization \u001d radio button \u001e  \u001dchecked\u001e \n1 of 5\nTo change the selection press Up or Down Arrow.",
+      "speech_raw": "Flexible Web \u001d dialog \u001e \nWhat would you like to do?\nCreate a new customization \u001d radio button \u001e  \u001dchecked\u001e \n1 of 5\nTo change the selection press Up or Down Arrow.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794247215674,
-     "t_end_ms": 1794247217080,
+     "t_start_ms": 1794292072773,
+     "t_end_ms": 1794292074180,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+N\")"
@@ -152,18 +152,18 @@
       "Alt+N"
      ],
      "key_times": [
-      1794247215674
+      1794292072773
      ],
      "observation": {
-      "speech_raw": "Choose an Action \u001d dialog \u001e \nHide an element \u001d radio button \u001e  \u001dchecked\u001e \n1 of 2\nTo change the selection press Up or Down Arrow.",
+      "speech_raw": "How would you like to customize the page?\nChoose an Action dialog\nHow would you like to customize the page?\nHide an element \u001d radio button \u001e  \u001dchecked\u001e \n1 of 2\nTo change the selection press Up or Down Arrow.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794247217080,
-     "t_end_ms": 1794247218488,
+     "t_start_ms": 1794292074180,
+     "t_end_ms": 1794292075587,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+N\")"
@@ -172,18 +172,18 @@
       "Alt+N"
      ],
      "key_times": [
-      1794247217080
+      1794292074180
      ],
      "observation": {
-      "speech_raw": "Choose an element \u001d dialog \u001e \nWhich of the following elements would you like to customize? \u001d List box \u001e \nComplementaryRegion Advertisement\n1 of 1\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Choose an element dialog\nWhich of the following elements would you like to customize? \u001d List box \u001e \nComplementaryRegion Advertisement\n1 of 1\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794247218488,
-     "t_end_ms": 1794247219894,
+     "t_start_ms": 1794292075587,
+     "t_end_ms": 1794292076993,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+N\")"
@@ -192,18 +192,18 @@
       "Alt+N"
      ],
      "key_times": [
-      1794247218488
+      1794292075587
      ],
      "observation": {
-      "speech_raw": "To move to an item press the Arrow keys.\nChoose a customization \u001d dialog \u001e \nSelect a customization \u001d List box \u001e \nHide ComplementaryRegion 1 from the top with text: \"Advertisement\"\n1 of 5\nTo move to an item press the Arrow keys.",
+      "speech_raw": "Choose a customization dialog\nSelect a customization \u001d List box \u001e \nHide ComplementaryRegion 1 from the top with text: \"Advertisement\"\n1 of 5\nTo move to an item press the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794247219894,
-     "t_end_ms": 1794247220898,
+     "t_start_ms": 1794292076993,
+     "t_end_ms": 1794292077997,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -212,7 +212,7 @@
       "Enter"
      ],
      "key_times": [
-      1794247219894
+      1794292076993
      ],
      "observation": {
       "speech_raw": "",
@@ -222,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794247220898,
-     "t_end_ms": 1794247221903,
+     "t_start_ms": 1794292077997,
+     "t_end_ms": 1794292079002,
      "action": {
       "type": "key",
       "command": "Insert+Space"
@@ -232,7 +232,7 @@
       "Insert+Space"
      ],
      "key_times": [
-      1794247220898
+      1794292077997
      ],
      "observation": {
       "speech_raw": "",
@@ -242,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794247221903,
-     "t_end_ms": 1794247223108,
+     "t_start_ms": 1794292079002,
+     "t_end_ms": 1794292080207,
      "action": {
       "type": "key",
       "command": "X"
@@ -252,18 +252,18 @@
       "X"
      ],
      "key_times": [
-      1794247221903
+      1794292079002
      ],
      "observation": {
-      "speech_raw": "Flexible Web \u001d dialog \u001e \nCreate a new customization \u001d radio button \u001e  \u001dchecked\u001e \n1 of 5\nTo change the selection press Up or Down Arrow.",
+      "speech_raw": "Flexible Web \u001d dialog \u001e \nWhat would you like to do?\nCreate a new customization \u001d radio button \u001e  \u001dchecked\u001e \n1 of 5\nTo change the selection press Up or Down Arrow.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794247223108,
-     "t_end_ms": 1794247224212,
+     "t_start_ms": 1794292080207,
+     "t_end_ms": 1794292081412,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -272,7 +272,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794247223108
+      1794292080207
      ],
      "observation": {
       "speech_raw": "Retry Hide ComplementaryRegion 1 from the top with text: \"Advertisement\" \u001d radio button \u001e  \u001dchecked\u001e \n2 of 5\nTo change the selection press Up or Down Arrow.",
@@ -282,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794247224212,
-     "t_end_ms": 1794247225316,
+     "t_start_ms": 1794292081412,
+     "t_end_ms": 1794292082617,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -292,7 +292,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794247224212
+      1794292081412
      ],
      "observation": {
       "speech_raw": "Undo Hide ComplementaryRegion 1 from the top with text: \"Advertisement\" \u001d radio button \u001e  \u001dchecked\u001e \n3 of 5\nTo change the selection press Up or Down Arrow.",
@@ -302,8 +302,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794247225316,
-     "t_end_ms": 1794247226419,
+     "t_start_ms": 1794292082617,
+     "t_end_ms": 1794292083821,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -312,7 +312,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794247225316
+      1794292082617
      ],
      "observation": {
       "speech_raw": "Save temporary customizations as a rule \u001d radio button \u001e  \u001dchecked\u001e \n4 of 5\nTo change the selection press Up or Down Arrow.",
@@ -322,8 +322,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794247226419,
-     "t_end_ms": 1794247227825,
+     "t_start_ms": 1794292083821,
+     "t_end_ms": 1794292085228,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+N\")"
@@ -332,18 +332,18 @@
       "Alt+N"
      ],
      "key_times": [
-      1794247226419
+      1794292083821
      ],
      "observation": {
-      "speech_raw": "Save Temporary Customizations \u001d dialog \u001e \nRule Name: \u001d Edit \u001e \nType in text.",
+      "speech_raw": "Save Temporary Customizations dialog\nRule Name: \u001d Edit \u001e \nType in text.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794247227825,
-     "t_end_ms": 1794247228839,
+     "t_start_ms": 1794292085228,
+     "t_end_ms": 1794292086245,
      "action": {
       "type": "jaws_function",
       "command": "TypeString(\"Okur lab rule\")"
@@ -364,19 +364,19 @@
       "e"
      ],
      "key_times": [
-      1794247227825,
-      1794247227827,
-      1794247227828,
-      1794247227828,
-      1794247227829,
-      1794247227830,
-      1794247227831,
-      1794247227832,
-      1794247227832,
-      1794247227833,
-      1794247227834,
-      1794247227834,
-      1794247227835
+      1794292085228,
+      1794292085229,
+      1794292085230,
+      1794292085231,
+      1794292085232,
+      1794292085233,
+      1794292085234,
+      1794292085235,
+      1794292085236,
+      1794292085237,
+      1794292085238,
+      1794292085239,
+      1794292085241
      ],
      "observation": {
       "speech_raw": "",
@@ -386,8 +386,8 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794247228839,
-     "t_end_ms": 1794247229944,
+     "t_start_ms": 1794292086245,
+     "t_end_ms": 1794292087349,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -396,18 +396,18 @@
       "Tab"
      ],
      "key_times": [
-      1794247228839
+      1794292086245
      ],
      "observation": {
-      "speech_raw": "How would you like this rule to apply? \u001d Combo box \u001e \nTo the current site\nTo change the selection use the Arrow keys.",
+      "speech_raw": " \u001d List view \u001e \nHide ComplementaryRegion 1 from the top with text: \"Advertisement\" checked\n1 of 1\nTo move to items use the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794247229944,
-     "t_end_ms": 1794247231048,
+     "t_start_ms": 1794292087349,
+     "t_end_ms": 1794292088454,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -416,18 +416,18 @@
       "Tab"
      ],
      "key_times": [
-      1794247229944
+      1794292087349
      ],
      "observation": {
-      "speech_raw": "< Back \u001d Button \u001e \nTo activate press spacebar.",
+      "speech_raw": "How would you like this rule to apply? \u001d Combo box \u001e \nTo the current site\n2 of 3\nTo change the selection use the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794247231048,
-     "t_end_ms": 1794247232052,
+     "t_start_ms": 1794292088454,
+     "t_end_ms": 1794292089559,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -436,18 +436,18 @@
       "DownArrow"
      ],
      "key_times": [
-      1794247231048
+      1794292088454
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "< Back \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794247232052,
-     "t_end_ms": 1794247233156,
+     "t_start_ms": 1794292089559,
+     "t_end_ms": 1794292090664,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -456,7 +456,7 @@
       "Tab"
      ],
      "key_times": [
-      1794247232052
+      1794292089559
      ],
      "observation": {
       "speech_raw": "Finish \u001d Button \u001e \nTo activate press spacebar.",
@@ -466,8 +466,8 @@
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794247233156,
-     "t_end_ms": 1794247234259,
+     "t_start_ms": 1794292090664,
+     "t_end_ms": 1794292091768,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -476,7 +476,7 @@
       "Tab"
      ],
      "key_times": [
-      1794247233156
+      1794292090664
      ],
      "observation": {
       "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
@@ -486,8 +486,8 @@
     },
     {
      "step_id": "s23",
-     "t_start_ms": 1794247234259,
-     "t_end_ms": 1794247235263,
+     "t_start_ms": 1794292091768,
+     "t_end_ms": 1794292092772,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -496,7 +496,7 @@
       "Enter"
      ],
      "key_times": [
-      1794247234259
+      1794292091768
      ],
      "observation": {
       "speech_raw": "",
@@ -506,8 +506,8 @@
     },
     {
      "step_id": "s24",
-     "t_start_ms": 1794247235263,
-     "t_end_ms": 1794247236568,
+     "t_start_ms": 1794292092772,
+     "t_end_ms": 1794292094077,
      "action": {
       "type": "key",
       "command": "F5"
@@ -516,7 +516,7 @@
       "F5"
      ],
      "key_times": [
-      1794247235263
+      1794292092772
      ],
      "observation": {
       "speech_raw": "Weekend Events - Riverside Gazette  \u001d document \u001e\nFlexible Web \u001d dialog \u001e \nYou have created temporary Flexible Web customizations. If you continue without saving them, these customizations will be lost. Would you like to save your temporary customizations?\nYes \u001d Button \u001e \nTo activate press spacebar.",
@@ -526,8 +526,8 @@
     },
     {
      "step_id": "s25",
-     "t_start_ms": 1794247236568,
-     "t_end_ms": 1794247237573,
+     "t_start_ms": 1794292094077,
+     "t_end_ms": 1794292095082,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -536,7 +536,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794247236568
+      1794292094077
      ],
      "observation": {
       "speech_raw": "",
@@ -546,8 +546,8 @@
     },
     {
      "step_id": "s26",
-     "t_start_ms": 1794247237573,
-     "t_end_ms": 1794247238578,
+     "t_start_ms": 1794292095083,
+     "t_end_ms": 1794292096086,
      "action": {
       "type": "key",
       "command": "R"
@@ -556,7 +556,7 @@
       "R"
      ],
      "key_times": [
-      1794247237573
+      1794292095083
      ],
      "observation": {
       "speech_raw": "",
@@ -566,8 +566,8 @@
     },
     {
      "step_id": "s27",
-     "t_start_ms": 1794247238578,
-     "t_end_ms": 1794247239582,
+     "t_start_ms": 1794292096086,
+     "t_end_ms": 1794292097091,
      "action": {
       "type": "key",
       "command": "R"
@@ -576,7 +576,7 @@
       "R"
      ],
      "key_times": [
-      1794247238578
+      1794292096086
      ],
      "observation": {
       "speech_raw": "",
@@ -586,8 +586,8 @@
     },
     {
      "step_id": "s28",
-     "t_start_ms": 1794247239582,
-     "t_end_ms": 1794247240587,
+     "t_start_ms": 1794292097091,
+     "t_end_ms": 1794292098095,
      "action": {
       "type": "key",
       "command": "R"
@@ -596,7 +596,7 @@
       "R"
      ],
      "key_times": [
-      1794247239582
+      1794292097091
      ],
      "observation": {
       "speech_raw": "",
@@ -606,8 +606,8 @@
     },
     {
      "step_id": "s29",
-     "t_start_ms": 1794247240587,
-     "t_end_ms": 1794247241591,
+     "t_start_ms": 1794292098095,
+     "t_end_ms": 1794292099099,
      "action": {
       "type": "key",
       "command": "R"
@@ -616,7 +616,7 @@
       "R"
      ],
      "key_times": [
-      1794247240587
+      1794292098095
      ],
      "observation": {
       "speech_raw": "",
@@ -626,8 +626,8 @@
     },
     {
      "step_id": "s30",
-     "t_start_ms": 1794247241591,
-     "t_end_ms": 1794247242596,
+     "t_start_ms": 1794292099099,
+     "t_end_ms": 1794292100104,
      "action": {
       "type": "key",
       "command": "Insert+Space"
@@ -636,7 +636,7 @@
       "Insert+Space"
      ],
      "key_times": [
-      1794247241591
+      1794292099099
      ],
      "observation": {
       "speech_raw": "",
@@ -646,8 +646,8 @@
     },
     {
      "step_id": "s31",
-     "t_start_ms": 1794247242596,
-     "t_end_ms": 1794247243601,
+     "t_start_ms": 1794292100104,
+     "t_end_ms": 1794292101109,
      "action": {
       "type": "key",
       "command": "X"
@@ -656,7 +656,7 @@
       "X"
      ],
      "key_times": [
-      1794247242596
+      1794292100104
      ],
      "observation": {
       "speech_raw": "You must be in the web page area to activate Flexible Web.",
@@ -666,8 +666,8 @@
     },
     {
      "step_id": "s32",
-     "t_start_ms": 1794247243601,
-     "t_end_ms": 1794247244605,
+     "t_start_ms": 1794292101109,
+     "t_end_ms": 1794292102113,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -676,7 +676,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794247243601
+      1794292101109
      ],
      "observation": {
       "speech_raw": "",
@@ -686,8 +686,8 @@
     },
     {
      "step_id": "s33",
-     "t_start_ms": 1794247244605,
-     "t_end_ms": 1794247245609,
+     "t_start_ms": 1794292102113,
+     "t_end_ms": 1794292103117,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -696,7 +696,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794247244605
+      1794292102113
      ],
      "observation": {
       "speech_raw": "",
@@ -706,8 +706,8 @@
     },
     {
      "step_id": "s34",
-     "t_start_ms": 1794247245609,
-     "t_end_ms": 1794247246614,
+     "t_start_ms": 1794292103117,
+     "t_end_ms": 1794292104122,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+V\")"
@@ -716,7 +716,7 @@
       "Alt+V"
      ],
      "key_times": [
-      1794247245609
+      1794292103117
      ],
      "observation": {
       "speech_raw": "",
@@ -726,8 +726,8 @@
     },
     {
      "step_id": "s35",
-     "t_start_ms": 1794247246614,
-     "t_end_ms": 1794247248020,
+     "t_start_ms": 1794292104122,
+     "t_end_ms": 1794292105528,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+N\")"
@@ -736,7 +736,7 @@
       "Alt+N"
      ],
      "key_times": [
-      1794247246614
+      1794292104122
      ],
      "observation": {
       "speech_raw": "Weekend Events - Riverside Gazette \u001d document \u001e \nWeekend Events - Riverside Gazette - Google Chrome",
@@ -746,8 +746,8 @@
     },
     {
      "step_id": "s36",
-     "t_start_ms": 1794247248020,
-     "t_end_ms": 1794247249125,
+     "t_start_ms": 1794292105528,
+     "t_end_ms": 1794292106633,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -756,7 +756,7 @@
       "Tab"
      ],
      "key_times": [
-      1794247248020
+      1794292105528
      ],
      "observation": {
       "speech_raw": "Weekend Events - Riverside Gazette\n\u2022 \u001d same page link \u001e News\nTo activate press Enter.",
@@ -766,8 +766,8 @@
     },
     {
      "step_id": "s37",
-     "t_start_ms": 1794247249125,
-     "t_end_ms": 1794247250229,
+     "t_start_ms": 1794292106633,
+     "t_end_ms": 1794292107737,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -776,7 +776,7 @@
       "Tab"
      ],
      "key_times": [
-      1794247249125
+      1794292106633
      ],
      "observation": {
       "speech_raw": "Events  \u001d same page link \u001e \nTo activate press Enter.",
@@ -786,8 +786,8 @@
     },
     {
      "step_id": "s38",
-     "t_start_ms": 1794247250229,
-     "t_end_ms": 1794247251333,
+     "t_start_ms": 1794292107737,
+     "t_end_ms": 1794292108842,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -796,7 +796,7 @@
       "Tab"
      ],
      "key_times": [
-      1794247250229
+      1794292107737
      ],
      "observation": {
       "speech_raw": "Sports  \u001d same page link \u001e \nTo activate press Enter.",
@@ -806,8 +806,8 @@
     },
     {
      "step_id": "s39",
-     "t_start_ms": 1794247251333,
-     "t_end_ms": 1794247252438,
+     "t_start_ms": 1794292108842,
+     "t_end_ms": 1794292109947,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Shift+Tab\")"
@@ -816,7 +816,7 @@
       "Shift+Tab"
      ],
      "key_times": [
-      1794247251333
+      1794292108842
      ],
      "observation": {
       "speech_raw": "Events  \u001d same page link \u001e \nTo activate press Enter.",
@@ -826,8 +826,8 @@
     },
     {
      "step_id": "s40",
-     "t_start_ms": 1794247252438,
-     "t_end_ms": 1794247253543,
+     "t_start_ms": 1794292109947,
+     "t_end_ms": 1794292111052,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Shift+Tab\")"
@@ -836,7 +836,7 @@
       "Shift+Tab"
      ],
      "key_times": [
-      1794247252438
+      1794292109947
      ],
      "observation": {
       "speech_raw": "News  \u001d same page link \u001e \nTo activate press Enter.",
@@ -846,8 +846,8 @@
     },
     {
      "step_id": "s41",
-     "t_start_ms": 1794247253543,
-     "t_end_ms": 1794247254649,
+     "t_start_ms": 1794292111052,
+     "t_end_ms": 1794292112158,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Shift+Tab\")"
@@ -856,7 +856,7 @@
       "Shift+Tab"
      ],
      "key_times": [
-      1794247253543
+      1794292111052
      ],
      "observation": {
       "speech_raw": "Close \u001d Button \u001e \nTo activate press spacebar.",
@@ -866,8 +866,8 @@
     },
     {
      "step_id": "s42",
-     "t_start_ms": 1794247254649,
-     "t_end_ms": 1794247255652,
+     "t_start_ms": 1794292112158,
+     "t_end_ms": 1794292113162,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Delete\")"
@@ -876,7 +876,7 @@
       "Delete"
      ],
      "key_times": [
-      1794247254649
+      1794292112158
      ],
      "observation": {
       "speech_raw": "",
@@ -886,8 +886,8 @@
     },
     {
      "step_id": "s43",
-     "t_start_ms": 1794247255652,
-     "t_end_ms": 1794247256658,
+     "t_start_ms": 1794292113162,
+     "t_end_ms": 1794292114167,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+Y\")"
@@ -896,7 +896,7 @@
       "Alt+Y"
      ],
      "key_times": [
-      1794247255652
+      1794292113162
      ],
      "observation": {
       "speech_raw": "",
@@ -906,8 +906,8 @@
     },
     {
      "step_id": "s44",
-     "t_start_ms": 1794247256658,
-     "t_end_ms": 1794247257863,
+     "t_start_ms": 1794292114167,
+     "t_end_ms": 1794292115372,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -916,7 +916,7 @@
       "Tab"
      ],
      "key_times": [
-      1794247256658
+      1794292114167
      ],
      "observation": {
       "speech_raw": "Weekend Events - Riverside Gazette \u001d document \u001e \nWeekend Events - Riverside Gazette\n\u2022 \u001d same page link \u001e News\nTo activate press Enter.",
@@ -926,8 +926,8 @@
     },
     {
      "step_id": "s45",
-     "t_start_ms": 1794247257863,
-     "t_end_ms": 1794247258866,
+     "t_start_ms": 1794292115372,
+     "t_end_ms": 1794292116376,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Escape\")"
@@ -936,7 +936,7 @@
       "Escape"
      ],
      "key_times": [
-      1794247257863
+      1794292115372
      ],
      "observation": {
       "speech_raw": "",
@@ -946,8 +946,8 @@
     },
     {
      "step_id": "s46",
-     "t_start_ms": 1794247258866,
-     "t_end_ms": 1794247260071,
+     "t_start_ms": 1794292116376,
+     "t_end_ms": 1794292117580,
      "action": {
       "type": "key",
       "command": "F5"
@@ -956,7 +956,7 @@
       "F5"
      ],
      "key_times": [
-      1794247258866
+      1794292116376
      ],
      "observation": {
       "speech_raw": "Weekend Events - Riverside Gazette  \u001d document \u001e\nPage has 4Regions, 4headings and 4links\nWeekend Events - Riverside Gazette\nbanner\nRiverside Gazette\nSections navigation region\nlist of 3 items\n\u2022 \u001d same page link \u001e News\n\u2022 \u001d same page link \u001e Events\n\u2022 \u001d same page link \u001e Sports\nlist end\nSections navigation region end\nbanner end\nAdvertisement complementary information\nSpring sale at Main Street Shoes: two pairs for the price of one.\n \u001d same page link \u001e See the sale\nAdvertisement complementary information end\nmain region\n \u001d heading level 1 \u001e Weekend events\nThree events open to everyone this weekend.\n \u001d heading level 2 \u001e Saturday market\nThe farmers' market opens at eight in Mill Square.\n \u001d heading level 2 \u001e River clean-up\nVolunteers meet at the boat ramp at ten on Saturday.\n \u001d heading level 2 \u001e Sunday concert\nThe town band plays in the park at four.\nmain region end\nend",
@@ -966,8 +966,8 @@
     },
     {
      "step_id": "s47",
-     "t_start_ms": 1794247260071,
-     "t_end_ms": 1794247261076,
+     "t_start_ms": 1794292117580,
+     "t_end_ms": 1794292118586,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -976,7 +976,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794247260071
+      1794292117580
      ],
      "observation": {
       "speech_raw": "Weekend Events - Riverside Gazette",
@@ -986,8 +986,8 @@
     },
     {
      "step_id": "s48",
-     "t_start_ms": 1794247261076,
-     "t_end_ms": 1794247262079,
+     "t_start_ms": 1794292118586,
+     "t_end_ms": 1794292119590,
      "action": {
       "type": "key",
       "command": "R"
@@ -996,7 +996,7 @@
       "R"
      ],
      "key_times": [
-      1794247261076
+      1794292118586
      ],
      "observation": {
       "speech_raw": "banner",
@@ -1006,8 +1006,8 @@
     },
     {
      "step_id": "s49",
-     "t_start_ms": 1794247262079,
-     "t_end_ms": 1794247263083,
+     "t_start_ms": 1794292119590,
+     "t_end_ms": 1794292120595,
      "action": {
       "type": "key",
       "command": "R"
@@ -1016,7 +1016,7 @@
       "R"
      ],
      "key_times": [
-      1794247262079
+      1794292119590
      ],
      "observation": {
       "speech_raw": "Sections navigation region",
@@ -1026,8 +1026,8 @@
     },
     {
      "step_id": "s50",
-     "t_start_ms": 1794247263083,
-     "t_end_ms": 1794247264088,
+     "t_start_ms": 1794292120595,
+     "t_end_ms": 1794292121599,
      "action": {
       "type": "key",
       "command": "R"
@@ -1036,7 +1036,7 @@
       "R"
      ],
      "key_times": [
-      1794247263083
+      1794292120595
      ],
      "observation": {
       "speech_raw": "Advertisement complementary information",
@@ -1046,8 +1046,8 @@
     },
     {
      "step_id": "s51",
-     "t_start_ms": 1794247264088,
-     "t_end_ms": 1794247265092,
+     "t_start_ms": 1794292121599,
+     "t_end_ms": 1794292122603,
      "action": {
       "type": "key",
       "command": "R"
@@ -1056,7 +1056,7 @@
       "R"
      ],
      "key_times": [
-      1794247264088
+      1794292121599
      ],
      "observation": {
       "speech_raw": "main region",

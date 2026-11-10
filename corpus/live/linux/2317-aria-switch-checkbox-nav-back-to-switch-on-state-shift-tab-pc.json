@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ec1e5cac6"
+  "commit": "6cf0846ff"
  },
  "trials": [
   {
@@ -16,26 +16,26 @@
    "reset_keys": [
     {
      "key": "Ctrl+End",
-     "t_ms": 1794257307145
+     "t_ms": 1794295031142
     },
     {
      "key": "Shift+B",
-     "t_ms": 1794257307514
+     "t_ms": 1794295031508
     },
     {
      "key": "Enter",
-     "t_ms": 1794257307817
+     "t_ms": 1794295031812
     },
     {
      "key": "Insert+Z",
-     "t_ms": 1794257308118
+     "t_ms": 1794295032114
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794257309423,
-     "t_end_ms": 1794257310529,
+     "t_start_ms": 1794295033419,
+     "t_end_ms": 1794295034524,
      "action": {
       "type": "key",
       "command": "Shift+Tab"
@@ -44,18 +44,18 @@
       "Shift+Tab"
      ],
      "key_times": [
-      1794257309423
+      1794295033419
      ],
      "observation": {
-      "speech_raw": "Reduced motion  \u001d Toggle button \u001e  \u001dPressed\u001e \nTo toggle the state press spacebar.",
+      "speech_raw": "Reduced motion  \u001d Switch \u001e   \u001dOn\u001e ",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794257310529,
-     "t_end_ms": 1794257311533,
+     "t_start_ms": 1794295034524,
+     "t_end_ms": 1794295035528,
      "action": {
       "type": "key",
       "command": "Insert+Z"
@@ -64,7 +64,7 @@
       "Insert+Z"
      ],
      "key_times": [
-      1794257310529
+      1794295034524
      ],
      "observation": {
       "speech_raw": "use virtual PC cursor on",

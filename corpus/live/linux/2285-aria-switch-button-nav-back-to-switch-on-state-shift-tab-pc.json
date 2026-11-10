@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ec1e5cac6"
+  "commit": "6cf0846ff"
  },
  "trials": [
   {
@@ -16,26 +16,26 @@
    "reset_keys": [
     {
      "key": "Ctrl+End",
-     "t_ms": 1794256464561
+     "t_ms": 1794294190195
     },
     {
      "key": "Shift+B",
-     "t_ms": 1794256464923
+     "t_ms": 1794294190558
     },
     {
      "key": "Enter",
-     "t_ms": 1794256465225
+     "t_ms": 1794294190861
     },
     {
      "key": "Insert+Z",
-     "t_ms": 1794256465526
+     "t_ms": 1794294191163
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794256466831,
-     "t_end_ms": 1794256467936,
+     "t_start_ms": 1794294192468,
+     "t_end_ms": 1794294193572,
      "action": {
       "type": "key",
       "command": "Shift+Tab"
@@ -44,18 +44,18 @@
       "Shift+Tab"
      ],
      "key_times": [
-      1794256466831
+      1794294192468
      ],
      "observation": {
-      "speech_raw": "Living Room Lights  \u001d Toggle button \u001e  \u001dPressed\u001e \nTo toggle the state press spacebar.",
+      "speech_raw": "Living Room Lights  \u001d Switch \u001e   \u001dOn\u001e ",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794256467936,
-     "t_end_ms": 1794256468941,
+     "t_start_ms": 1794294193572,
+     "t_end_ms": 1794294194577,
      "action": {
       "type": "key",
       "command": "Insert+Z"
@@ -64,7 +64,7 @@
       "Insert+Z"
      ],
      "key_times": [
-      1794256467936
+      1794294193572
      ],
      "observation": {
       "speech_raw": "use virtual PC cursor on",

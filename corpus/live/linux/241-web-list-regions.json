@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ec1e5cac6"
+  "commit": "6cf0846ff"
  },
  "trials": [
   {
@@ -16,18 +16,18 @@
    "reset_keys": [
     {
      "key": "Escape",
-     "t_ms": 1794244221004
+     "t_ms": 1794292369836
     },
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794244221368
+     "t_ms": 1794292370198
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794244222673,
-     "t_end_ms": 1794244223879,
+     "t_start_ms": 1794292371503,
+     "t_end_ms": 1794292372708,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+R"
@@ -36,7 +36,7 @@
       "Ctrl+Insert+R"
      ],
      "key_times": [
-      1794244222673
+      1794292371503
      ],
      "observation": {
       "speech_raw": "Document Regions \u001d dialog \u001e \nRegions \u001d Tree view \u001e \nBanner Opened\n1 item\nTo move through or expand items use the Arrow keys.",
@@ -46,8 +46,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794244223880,
-     "t_end_ms": 1794244225084,
+     "t_start_ms": 1794292372708,
+     "t_end_ms": 1794292373812,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -56,7 +56,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794244223880
+      1794292372708
      ],
      "observation": {
       "speech_raw": "level 1\nPrimary Navigation\n1 of 1\nBanner",
@@ -66,8 +66,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794244225084,
-     "t_end_ms": 1794244226288,
+     "t_start_ms": 1794292373812,
+     "t_end_ms": 1794292375016,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -76,7 +76,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794244225084
+      1794292373812
      ],
      "observation": {
       "speech_raw": "level 0\nMain\n2 of 4",
@@ -86,8 +86,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794244226288,
-     "t_end_ms": 1794244227392,
+     "t_start_ms": 1794292375016,
+     "t_end_ms": 1794292376119,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -96,7 +96,7 @@
       "Tab"
      ],
      "key_times": [
-      1794244226288
+      1794292375016
      ],
      "observation": {
       "speech_raw": "Move To region start \u001d Button \u001e \nTo activate press spacebar.",
@@ -106,8 +106,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794244227392,
-     "t_end_ms": 1794244228496,
+     "t_start_ms": 1794292376119,
+     "t_end_ms": 1794292377224,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -116,7 +116,7 @@
       "Tab"
      ],
      "key_times": [
-      1794244227392
+      1794292376119
      ],
      "observation": {
       "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
@@ -126,8 +126,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794244228496,
-     "t_end_ms": 1794244229601,
+     "t_start_ms": 1794292377224,
+     "t_end_ms": 1794292378328,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -136,7 +136,7 @@
       "Tab"
      ],
      "key_times": [
-      1794244228496
+      1794292377224
      ],
      "observation": {
       "speech_raw": "Regions \u001d Tree view \u001e \nMain\n2 of 4\nTo move through or expand items use the Arrow keys.",
@@ -146,8 +146,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794244229601,
-     "t_end_ms": 1794244230705,
+     "t_start_ms": 1794292378328,
+     "t_end_ms": 1794292379433,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -156,7 +156,7 @@
       "Tab"
      ],
      "key_times": [
-      1794244229601
+      1794292378328
      ],
      "observation": {
       "speech_raw": "Move To region start \u001d Button \u001e \nTo activate press spacebar.",
@@ -166,8 +166,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794244230705,
-     "t_end_ms": 1794244231708,
+     "t_start_ms": 1794292379433,
+     "t_end_ms": 1794292380437,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Escape\")"
@@ -176,7 +176,7 @@
       "Escape"
      ],
      "key_times": [
-      1794244230705
+      1794292379433
      ],
      "observation": {
       "speech_raw": "",

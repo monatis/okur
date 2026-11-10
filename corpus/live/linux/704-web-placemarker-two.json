@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ec1e5cac6"
+  "commit": "6cf0846ff"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794246481586
+     "t_ms": 1794292145330
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794246482946,
-     "t_end_ms": 1794246483950,
+     "t_start_ms": 1794292146692,
+     "t_end_ms": 1794292147696,
      "action": {
       "type": "key",
       "command": "H"
@@ -32,7 +32,7 @@
       "H"
      ],
      "key_times": [
-      1794246482946
+      1794292146692
      ],
      "observation": {
       "speech_raw": "Reading room rules\n \u001d heading level 1 \u001e",
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794246483950,
-     "t_end_ms": 1794246484953,
+     "t_start_ms": 1794292147696,
+     "t_end_ms": 1794292148699,
      "action": {
       "type": "key",
       "command": "Down"
@@ -52,7 +52,7 @@
       "Down"
      ],
      "key_times": [
-      1794246483950
+      1794292147696
      ],
      "observation": {
       "speech_raw": "Quiet study is welcome in the reading room on every floor.",
@@ -62,8 +62,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794246484953,
-     "t_end_ms": 1794246486259,
+     "t_start_ms": 1794292148699,
+     "t_end_ms": 1794292150006,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+K"
@@ -72,18 +72,18 @@
       "Ctrl+Shift+K"
      ],
      "key_times": [
-      1794246484953
+      1794292148699
      ],
      "observation": {
-      "speech_raw": "PlaceMarker List \u001d dialog \u001e \nPlaceMarker",
+      "speech_raw": "PlaceMarker List \u001d dialog \u001e \nPlaceMarker \u001d List view \u001e \n0 items\nTo move to items use the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794246486259,
-     "t_end_ms": 1794246487664,
+     "t_start_ms": 1794292150006,
+     "t_end_ms": 1794292151410,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -92,18 +92,18 @@
       "Enter"
      ],
      "key_times": [
-      1794246486259
+      1794292150006
      ],
      "observation": {
-      "speech_raw": "Add PlaceMarker \u001d dialog \u001e \nName: \u001d Edit \u001e \nQuiet study is welcome in the reading room on every floor.\nType in text.",
+      "speech_raw": "PlaceMarker List \u001d dialog \u001e \nAdd PlaceMarker \u001d dialog \u001e \nName: \u001d Edit \u001e \nQuiet study is welcome in the reading room on every floor.\nType in text.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794246487664,
-     "t_end_ms": 1794246488669,
+     "t_start_ms": 1794292151410,
+     "t_end_ms": 1794292152414,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -112,7 +112,7 @@
       "Enter"
      ],
      "key_times": [
-      1794246487664
+      1794292151410
      ],
      "observation": {
       "speech_raw": "",
@@ -122,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794246488669,
-     "t_end_ms": 1794246489674,
+     "t_start_ms": 1794292152414,
+     "t_end_ms": 1794292153419,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -132,7 +132,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794246488669
+      1794292152414
      ],
      "observation": {
       "speech_raw": "Reading Room Rules - Riverside Library",
@@ -142,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794246489674,
-     "t_end_ms": 1794246490679,
+     "t_start_ms": 1794292153419,
+     "t_end_ms": 1794292154423,
      "action": {
       "type": "key",
       "command": "H"
@@ -152,7 +152,7 @@
       "H"
      ],
      "key_times": [
-      1794246489674
+      1794292153419
      ],
      "observation": {
       "speech_raw": "Reading room rules\n \u001d heading level 1 \u001e",
@@ -162,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794246490679,
-     "t_end_ms": 1794246491684,
+     "t_start_ms": 1794292154423,
+     "t_end_ms": 1794292155427,
      "action": {
       "type": "key",
       "command": "H"
@@ -172,7 +172,7 @@
       "H"
      ],
      "key_times": [
-      1794246490679
+      1794292154423
      ],
      "observation": {
       "speech_raw": "Food and drink\n \u001d heading level 2 \u001e",
@@ -182,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794246491684,
-     "t_end_ms": 1794246492688,
+     "t_start_ms": 1794292155427,
+     "t_end_ms": 1794292156432,
      "action": {
       "type": "key",
       "command": "H"
@@ -192,7 +192,7 @@
       "H"
      ],
      "key_times": [
-      1794246491684
+      1794292155427
      ],
      "observation": {
       "speech_raw": "Devices\n \u001d heading level 2 \u001e",
@@ -202,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794246492688,
-     "t_end_ms": 1794246493693,
+     "t_start_ms": 1794292156432,
+     "t_end_ms": 1794292157436,
      "action": {
       "type": "key",
       "command": "Down"
@@ -212,7 +212,7 @@
       "Down"
      ],
      "key_times": [
-      1794246492688
+      1794292156432
      ],
      "observation": {
       "speech_raw": "Phones stay silent, and calls are taken in the lobby.",
@@ -222,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794246493693,
-     "t_end_ms": 1794246494898,
+     "t_start_ms": 1794292157436,
+     "t_end_ms": 1794292158642,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+K"
@@ -232,18 +232,18 @@
       "Ctrl+Shift+K"
      ],
      "key_times": [
-      1794246493693
+      1794292157436
      ],
      "observation": {
-      "speech_raw": "PlaceMarker List \u001d dialog \u001e \nPlaceMarker \u001d List view \u001e \nQuiet study is welcome in the reading room on every floor.\nDocument\n1 of 1\nTo move to items use the Arrow keys.",
+      "speech_raw": "PlaceMarker List \u001d dialog \u001e \nPlaceMarker \u001d List view \u001e \nNot Selected Quiet study is welcome in the reading room on every floor.\nDocument\n1 of 1\nTo move to items use the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794246494898,
-     "t_end_ms": 1794246496103,
+     "t_start_ms": 1794292158642,
+     "t_end_ms": 1794292159846,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -252,18 +252,18 @@
       "Enter"
      ],
      "key_times": [
-      1794246494898
+      1794292158642
      ],
      "observation": {
-      "speech_raw": "Add PlaceMarker \u001d dialog \u001e \nName: \u001d Edit \u001e \nPhones stay silent, and calls are taken in the lobby.\nType in text.",
+      "speech_raw": "PlaceMarker List \u001d dialog \u001e \nAdd PlaceMarker \u001d dialog \u001e \nName: \u001d Edit \u001e \nPhones stay silent, and calls are taken in the lobby.\nType in text.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794246496103,
-     "t_end_ms": 1794246497107,
+     "t_start_ms": 1794292159846,
+     "t_end_ms": 1794292160850,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -272,7 +272,7 @@
       "Enter"
      ],
      "key_times": [
-      1794246496103
+      1794292159846
      ],
      "observation": {
       "speech_raw": "",
@@ -282,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794246497107,
-     "t_end_ms": 1794246498112,
+     "t_start_ms": 1794292160850,
+     "t_end_ms": 1794292161856,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -292,7 +292,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794246497107
+      1794292160850
      ],
      "observation": {
       "speech_raw": "Reading Room Rules - Riverside Library",
@@ -302,8 +302,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794246498112,
-     "t_end_ms": 1794246499117,
+     "t_start_ms": 1794292161856,
+     "t_end_ms": 1794292162860,
      "action": {
       "type": "key",
       "command": "K"
@@ -312,7 +312,7 @@
       "K"
      ],
      "key_times": [
-      1794246498112
+      1794292161856
      ],
      "observation": {
       "speech_raw": "Quiet study is welcome in the reading room on every floor.",
@@ -322,8 +322,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794246499117,
-     "t_end_ms": 1794246500121,
+     "t_start_ms": 1794292162860,
+     "t_end_ms": 1794292163864,
      "action": {
       "type": "key",
       "command": "K"
@@ -332,7 +332,7 @@
       "K"
      ],
      "key_times": [
-      1794246499117
+      1794292162860
      ],
      "observation": {
       "speech_raw": "Phones stay silent, and calls are taken in the lobby.",
@@ -342,8 +342,8 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794246500121,
-     "t_end_ms": 1794246501126,
+     "t_start_ms": 1794292163864,
+     "t_end_ms": 1794292164868,
      "action": {
       "type": "key",
       "command": "K"
@@ -352,7 +352,7 @@
       "K"
      ],
      "key_times": [
-      1794246500121
+      1794292163864
      ],
      "observation": {
       "speech_raw": "Quiet study is welcome in the reading room on every floor.",
@@ -362,8 +362,8 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794246501126,
-     "t_end_ms": 1794246502130,
+     "t_start_ms": 1794292164868,
+     "t_end_ms": 1794292165873,
      "action": {
       "type": "key",
       "command": "Shift+K"
@@ -372,7 +372,7 @@
       "Shift+K"
      ],
      "key_times": [
-      1794246501126
+      1794292164868
      ],
      "observation": {
       "speech_raw": "Phones stay silent, and calls are taken in the lobby.",
@@ -382,8 +382,8 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794246502130,
-     "t_end_ms": 1794246503134,
+     "t_start_ms": 1794292165873,
+     "t_end_ms": 1794292166877,
      "action": {
       "type": "key",
       "command": "7"
@@ -392,7 +392,7 @@
       "7"
      ],
      "key_times": [
-      1794246502130
+      1794292165873
      ],
      "observation": {
       "speech_raw": "Quiet study is welcome in the reading room on every floor.",
@@ -402,8 +402,8 @@
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794246503134,
-     "t_end_ms": 1794246504138,
+     "t_start_ms": 1794292166877,
+     "t_end_ms": 1794292167882,
      "action": {
       "type": "key",
       "command": "8"
@@ -412,7 +412,7 @@
       "8"
      ],
      "key_times": [
-      1794246503134
+      1794292166877
      ],
      "observation": {
       "speech_raw": "Phones stay silent, and calls are taken in the lobby.",
@@ -422,8 +422,8 @@
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794246504138,
-     "t_end_ms": 1794246505142,
+     "t_start_ms": 1794292167882,
+     "t_end_ms": 1794292168887,
      "action": {
       "type": "key",
       "command": "9"
@@ -432,7 +432,7 @@
       "9"
      ],
      "key_times": [
-      1794246504138
+      1794292167882
      ],
      "observation": {
       "speech_raw": "No place marker #3",
@@ -442,8 +442,8 @@
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794246505142,
-     "t_end_ms": 1794246506348,
+     "t_start_ms": 1794292168887,
+     "t_end_ms": 1794292170094,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+K"
@@ -452,18 +452,18 @@
       "Ctrl+Shift+K"
      ],
      "key_times": [
-      1794246505142
+      1794292168887
      ],
      "observation": {
-      "speech_raw": "PlaceMarker List \u001d dialog \u001e \nPlaceMarker \u001d List view \u001e \nQuiet study is welcome in the reading room on every floor.\nDocument\n1 of 2\nTo move to items use the Arrow keys.",
+      "speech_raw": "PlaceMarker List \u001d dialog \u001e \nPlaceMarker \u001d List view \u001e \nNot Selected Quiet study is welcome in the reading room on every floor.\nDocument\n1 of 2\nTo move to items use the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s23",
-     "t_start_ms": 1794246506348,
-     "t_end_ms": 1794246507351,
+     "t_start_ms": 1794292170094,
+     "t_end_ms": 1794292171098,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -472,7 +472,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794246506348
+      1794292170094
      ],
      "observation": {
       "speech_raw": "",
@@ -482,8 +482,8 @@
     },
     {
      "step_id": "s24",
-     "t_start_ms": 1794246507351,
-     "t_end_ms": 1794246508456,
+     "t_start_ms": 1794292171098,
+     "t_end_ms": 1794292172203,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -492,7 +492,7 @@
       "Tab"
      ],
      "key_times": [
-      1794246507351
+      1794292171098
      ],
      "observation": {
       "speech_raw": "Add... \u001d Button \u001e \nTo activate press spacebar.",
@@ -502,8 +502,8 @@
     },
     {
      "step_id": "s25",
-     "t_start_ms": 1794246508456,
-     "t_end_ms": 1794246509560,
+     "t_start_ms": 1794292172203,
+     "t_end_ms": 1794292173308,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -512,7 +512,7 @@
       "Tab"
      ],
      "key_times": [
-      1794246508456
+      1794292172203
      ],
      "observation": {
       "speech_raw": "MoveTo \u001d Button \u001e \nTo activate press spacebar.",
@@ -522,8 +522,8 @@
     },
     {
      "step_id": "s26",
-     "t_start_ms": 1794246509560,
-     "t_end_ms": 1794246510665,
+     "t_start_ms": 1794292173308,
+     "t_end_ms": 1794292174412,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -532,7 +532,7 @@
       "Tab"
      ],
      "key_times": [
-      1794246509560
+      1794292173308
      ],
      "observation": {
       "speech_raw": "Change... \u001d Button \u001e \nTo activate press spacebar.",
@@ -542,8 +542,8 @@
     },
     {
      "step_id": "s27",
-     "t_start_ms": 1794246510665,
-     "t_end_ms": 1794246511770,
+     "t_start_ms": 1794292174412,
+     "t_end_ms": 1794292175517,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -552,7 +552,7 @@
       "Tab"
      ],
      "key_times": [
-      1794246510665
+      1794292174412
      ],
      "observation": {
       "speech_raw": "Remove \u001d Button \u001e \nTo activate press spacebar.",
@@ -562,8 +562,8 @@
     },
     {
      "step_id": "s28",
-     "t_start_ms": 1794246511770,
-     "t_end_ms": 1794246512875,
+     "t_start_ms": 1794292175517,
+     "t_end_ms": 1794292176621,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -572,7 +572,7 @@
       "Tab"
      ],
      "key_times": [
-      1794246511770
+      1794292175517
      ],
      "observation": {
       "speech_raw": "Remove All \u001d Button \u001e \nTo activate press spacebar.",
@@ -582,8 +582,8 @@
     },
     {
      "step_id": "s29",
-     "t_start_ms": 1794246512875,
-     "t_end_ms": 1794246513978,
+     "t_start_ms": 1794292176621,
+     "t_end_ms": 1794292177726,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -592,7 +592,7 @@
       "Tab"
      ],
      "key_times": [
-      1794246512875
+      1794292176621
      ],
      "observation": {
       "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
@@ -602,8 +602,8 @@
     },
     {
      "step_id": "s30",
-     "t_start_ms": 1794246513979,
-     "t_end_ms": 1794246515083,
+     "t_start_ms": 1794292177726,
+     "t_end_ms": 1794292178831,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -612,18 +612,18 @@
       "Tab"
      ],
      "key_times": [
-      1794246513979
+      1794292177726
      ],
      "observation": {
-      "speech_raw": "Display PlaceMarkers For:\nDisplay PlaceMarkers For: All \u001d radio button \u001e  \u001dchecked\u001e \n3 of 3\nTo change the selection press Up or Down Arrow.",
+      "speech_raw": "Display PlaceMarkers For: All \u001d radio button \u001e  \u001dchecked\u001e \n3 of 3\nTo change the selection press Up or Down Arrow.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s31",
-     "t_start_ms": 1794246515083,
-     "t_end_ms": 1794246516187,
+     "t_start_ms": 1794292178831,
+     "t_end_ms": 1794292179935,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -632,7 +632,7 @@
       "Tab"
      ],
      "key_times": [
-      1794246515083
+      1794292178831
      ],
      "observation": {
       "speech_raw": "PlaceMarker \u001d List view \u001e \nQuiet study is welcome in the reading room on every floor.\nDocument\n1 of 2\nTo move to items use the Arrow keys.",
@@ -642,8 +642,8 @@
     },
     {
      "step_id": "s32",
-     "t_start_ms": 1794246516187,
-     "t_end_ms": 1794246517593,
+     "t_start_ms": 1794292179935,
+     "t_end_ms": 1794292181341,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+H\")"
@@ -652,18 +652,18 @@
       "Alt+H"
      ],
      "key_times": [
-      1794246516187
+      1794292179935
      ],
      "observation": {
-      "speech_raw": "Change PlaceMarker \u001d dialog \u001e \nName: \u001d Edit \u001e \nQuiet study is welcome in the reading room on every floor.\nType in text.",
+      "speech_raw": "PlaceMarker List \u001d dialog \u001e \nChange PlaceMarker \u001d dialog \u001e \nName: \u001d Edit \u001e \nQuiet study is welcome in the reading room on every floor.\nType in text.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s33",
-     "t_start_ms": 1794246517593,
-     "t_end_ms": 1794246518597,
+     "t_start_ms": 1794292181341,
+     "t_end_ms": 1794292182345,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Escape\")"
@@ -672,7 +672,7 @@
       "Escape"
      ],
      "key_times": [
-      1794246517593
+      1794292181341
      ],
      "observation": {
       "speech_raw": "",
@@ -682,8 +682,8 @@
     },
     {
      "step_id": "s34",
-     "t_start_ms": 1794246518597,
-     "t_end_ms": 1794246519805,
+     "t_start_ms": 1794292182345,
+     "t_end_ms": 1794292183551,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+K"
@@ -692,18 +692,18 @@
       "Ctrl+Shift+K"
      ],
      "key_times": [
-      1794246518597
+      1794292182345
      ],
      "observation": {
-      "speech_raw": "PlaceMarker List \u001d dialog \u001e \nPlaceMarker \u001d List view \u001e \nQuiet study is welcome in the reading room on every floor.\nDocument\n1 of 2\nTo move to items use the Arrow keys.",
+      "speech_raw": "PlaceMarker List \u001d dialog \u001e \nPlaceMarker \u001d List view \u001e \nNot Selected Quiet study is welcome in the reading room on every floor.\nDocument\n1 of 2\nTo move to items use the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s35",
-     "t_start_ms": 1794246519805,
-     "t_end_ms": 1794246520808,
+     "t_start_ms": 1794292183551,
+     "t_end_ms": 1794292184555,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -712,7 +712,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794246519805
+      1794292183551
      ],
      "observation": {
       "speech_raw": "",
@@ -722,8 +722,8 @@
     },
     {
      "step_id": "s36",
-     "t_start_ms": 1794246520808,
-     "t_end_ms": 1794246521813,
+     "t_start_ms": 1794292184555,
+     "t_end_ms": 1794292185560,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+M\")"
@@ -732,7 +732,7 @@
       "Alt+M"
      ],
      "key_times": [
-      1794246520808
+      1794292184555
      ],
      "observation": {
       "speech_raw": "",
@@ -742,8 +742,8 @@
     },
     {
      "step_id": "s37",
-     "t_start_ms": 1794246521814,
-     "t_end_ms": 1794246522818,
+     "t_start_ms": 1794292185560,
+     "t_end_ms": 1794292186565,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -752,7 +752,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794246521814
+      1794292185560
      ],
      "observation": {
       "speech_raw": "Quiet study is welcome in the reading room on every floor.",
@@ -762,8 +762,8 @@
     },
     {
      "step_id": "s38",
-     "t_start_ms": 1794246522818,
-     "t_end_ms": 1794246524025,
+     "t_start_ms": 1794292186565,
+     "t_end_ms": 1794292187771,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+K"
@@ -772,18 +772,18 @@
       "Ctrl+Shift+K"
      ],
      "key_times": [
-      1794246522818
+      1794292186565
      ],
      "observation": {
-      "speech_raw": "PlaceMarker List \u001d dialog \u001e \nPlaceMarker \u001d List view \u001e \nQuiet study is welcome in the reading room on every floor.\nDocument\n1 of 2\nTo move to items use the Arrow keys.",
+      "speech_raw": "PlaceMarker List \u001d dialog \u001e \nPlaceMarker \u001d List view \u001e \nNot Selected Quiet study is welcome in the reading room on every floor.\nDocument\n1 of 2\nTo move to items use the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s39",
-     "t_start_ms": 1794246524025,
-     "t_end_ms": 1794246525028,
+     "t_start_ms": 1794292187771,
+     "t_end_ms": 1794292188775,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -792,7 +792,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794246524025
+      1794292187771
      ],
      "observation": {
       "speech_raw": "",
@@ -802,8 +802,8 @@
     },
     {
      "step_id": "s40",
-     "t_start_ms": 1794246525028,
-     "t_end_ms": 1794246526033,
+     "t_start_ms": 1794292188775,
+     "t_end_ms": 1794292189779,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+R\")"
@@ -812,7 +812,7 @@
       "Alt+R"
      ],
      "key_times": [
-      1794246525028
+      1794292188775
      ],
      "observation": {
       "speech_raw": "",
@@ -822,8 +822,8 @@
     },
     {
      "step_id": "s41",
-     "t_start_ms": 1794246526033,
-     "t_end_ms": 1794246527239,
+     "t_start_ms": 1794292189779,
+     "t_end_ms": 1794292190985,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+K"
@@ -832,18 +832,18 @@
       "Ctrl+Shift+K"
      ],
      "key_times": [
-      1794246526033
+      1794292189779
      ],
      "observation": {
-      "speech_raw": "PlaceMarker List \u001d dialog \u001e \nPlaceMarker \u001d List view \u001e \nPhones stay silent, and calls are taken in the lobby.\nDocument\n1 of 1\nTo move to items use the Arrow keys.",
+      "speech_raw": "PlaceMarker List \u001d dialog \u001e \nPlaceMarker \u001d List view \u001e \nNot Selected Phones stay silent, and calls are taken in the lobby.\nDocument\n1 of 1\nTo move to items use the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s42",
-     "t_start_ms": 1794246527239,
-     "t_end_ms": 1794246528646,
+     "t_start_ms": 1794292190985,
+     "t_end_ms": 1794292192391,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+V\")"
@@ -852,18 +852,18 @@
       "Alt+V"
      ],
      "key_times": [
-      1794246527239
+      1794292190985
      ],
      "observation": {
-      "speech_raw": "PlaceMarker RemoveAll Warning \u001d dialog \u001e \nAre you sure you want to remove all PlaceMarkers?\nYes \u001d Button \u001e \nTo activate press spacebar.",
+      "speech_raw": "PlaceMarker List \u001d dialog \u001e \nPlaceMarker RemoveAll Warning \u001d dialog \u001e \nAre you sure you want to remove all PlaceMarkers?\nYes \u001d Button \u001e \nTo activate press spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s43",
-     "t_start_ms": 1794246528646,
-     "t_end_ms": 1794246529650,
+     "t_start_ms": 1794292192391,
+     "t_end_ms": 1794292193395,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -872,7 +872,7 @@
       "Enter"
      ],
      "key_times": [
-      1794246528646
+      1794292192391
      ],
      "observation": {
       "speech_raw": "",
@@ -882,8 +882,8 @@
     },
     {
      "step_id": "s44",
-     "t_start_ms": 1794246529650,
-     "t_end_ms": 1794246530854,
+     "t_start_ms": 1794292193395,
+     "t_end_ms": 1794292194600,
      "action": {
       "type": "key",
       "command": "K"
@@ -892,18 +892,18 @@
       "K"
      ],
      "key_times": [
-      1794246529650
+      1794292193395
      ],
      "observation": {
-      "speech_raw": "PlaceMarker List \u001d dialog \u001e \nPlaceMarker",
+      "speech_raw": "PlaceMarker List \u001d dialog \u001e \nPlaceMarker \u001d List view \u001e \n0 items\nTo move to items use the Arrow keys.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s45",
-     "t_start_ms": 1794246530854,
-     "t_end_ms": 1794246531858,
+     "t_start_ms": 1794292194600,
+     "t_end_ms": 1794292195604,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Escape\")"
@@ -912,7 +912,7 @@
       "Escape"
      ],
      "key_times": [
-      1794246530854
+      1794292194600
      ],
      "observation": {
       "speech_raw": "",

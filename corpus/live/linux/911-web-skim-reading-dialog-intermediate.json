@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ec1e5cac6"
+  "commit": "6cf0846ff"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794248829571
+     "t_ms": 1794291904570
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794248830934,
-     "t_end_ms": 1794248832243,
+     "t_start_ms": 1794291905927,
+     "t_end_ms": 1794291907235,
      "action": {
       "type": "key",
       "command": "Ctrl+Shift+Insert+Down"
@@ -32,18 +32,18 @@
       "Ctrl+Shift+Insert+Down"
      ],
      "key_times": [
-      1794248830934
+      1794291905927
      ],
      "observation": {
-      "speech_raw": "Skim Reading \u001d dialog \u001e \nUse Rule Type:\nUse Rule Type: Read First Line of Every Paragraph \u001d radio button \u001e  \u001dchecked\u001e \n1 of 4\nTo change the selection press Up or Down Arrow.",
+      "speech_raw": "Skim Reading \u001d dialog \u001e \nUse Rule Type: Read First Line of Every Paragraph \u001d radio button \u001e  \u001dchecked\u001e \n1 of 4\nTo change the selection press Up or Down Arrow.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794248832243,
-     "t_end_ms": 1794248833547,
+     "t_start_ms": 1794291907235,
+     "t_end_ms": 1794291908539,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -52,18 +52,18 @@
       "Tab"
      ],
      "key_times": [
-      1794248832243
+      1794291907235
      ],
      "observation": {
-      "speech_raw": "Color or Attribute Rules Skim Reading Indication \u001d check box \u001e  \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
+      "speech_raw": "Color or Attribute Rules: Skim Reading Indication \u001d check box \u001e  \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794248833547,
-     "t_end_ms": 1794248834652,
+     "t_start_ms": 1794291908539,
+     "t_end_ms": 1794291909644,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -72,7 +72,7 @@
       "Tab"
      ],
      "key_times": [
-      1794248833547
+      1794291908539
      ],
      "observation": {
       "speech_raw": "Start Skim Reading \u001d Button \u001e \nTo activate press spacebar.",
@@ -82,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794248834652,
-     "t_end_ms": 1794248835757,
+     "t_start_ms": 1794291909644,
+     "t_end_ms": 1794291910748,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -92,7 +92,7 @@
       "Tab"
      ],
      "key_times": [
-      1794248834652
+      1794291909644
      ],
      "observation": {
       "speech_raw": "Create Summary \u001d Button \u001e \nTo activate press spacebar.",
@@ -102,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794248835757,
-     "t_end_ms": 1794248836861,
+     "t_start_ms": 1794291910748,
+     "t_end_ms": 1794291911852,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -112,7 +112,7 @@
       "Tab"
      ],
      "key_times": [
-      1794248835757
+      1794291910748
      ],
      "observation": {
       "speech_raw": "Close \u001d Button \u001e \nTo activate press spacebar.",
@@ -122,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794248836861,
-     "t_end_ms": 1794248837965,
+     "t_start_ms": 1794291911852,
+     "t_end_ms": 1794291912956,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -132,7 +132,7 @@
       "Tab"
      ],
      "key_times": [
-      1794248836861
+      1794291911852
      ],
      "observation": {
       "speech_raw": "Help \u001d Button \u001e \nTo activate press spacebar.",
@@ -142,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794248837965,
-     "t_end_ms": 1794248839170,
+     "t_start_ms": 1794291912956,
+     "t_end_ms": 1794291914160,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -152,18 +152,18 @@
       "Tab"
      ],
      "key_times": [
-      1794248837965
+      1794291912956
      ],
      "observation": {
-      "speech_raw": "Use Rule Type:\nUse Rule Type: Read First Line of Every Paragraph \u001d radio button \u001e  \u001dchecked\u001e \n1 of 4\nTo change the selection press Up or Down Arrow.",
+      "speech_raw": "Use Rule Type: Read First Line of Every Paragraph \u001d radio button \u001e  \u001dchecked\u001e \n1 of 4\nTo change the selection press Up or Down Arrow.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794248839170,
-     "t_end_ms": 1794248840475,
+     "t_start_ms": 1794291914160,
+     "t_end_ms": 1794291915465,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -172,18 +172,18 @@
       "Tab"
      ],
      "key_times": [
-      1794248839170
+      1794291914160
      ],
      "observation": {
-      "speech_raw": "Color or Attribute Rules Skim Reading Indication \u001d check box \u001e  \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
+      "speech_raw": "Color or Attribute Rules: Skim Reading Indication \u001d check box \u001e  \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794248840475,
-     "t_end_ms": 1794248841580,
+     "t_start_ms": 1794291915465,
+     "t_end_ms": 1794291916568,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -192,7 +192,7 @@
       "Tab"
      ],
      "key_times": [
-      1794248840475
+      1794291915465
      ],
      "observation": {
       "speech_raw": "Start Skim Reading \u001d Button \u001e \nTo activate press spacebar.",
@@ -202,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794248841580,
-     "t_end_ms": 1794248842684,
+     "t_start_ms": 1794291916568,
+     "t_end_ms": 1794291917672,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -212,7 +212,7 @@
       "Tab"
      ],
      "key_times": [
-      1794248841580
+      1794291916568
      ],
      "observation": {
       "speech_raw": "Create Summary \u001d Button \u001e \nTo activate press spacebar.",
@@ -222,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794248842684,
-     "t_end_ms": 1794248843789,
+     "t_start_ms": 1794291917672,
+     "t_end_ms": 1794291918776,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -232,7 +232,7 @@
       "Tab"
      ],
      "key_times": [
-      1794248842684
+      1794291917672
      ],
      "observation": {
       "speech_raw": "Close \u001d Button \u001e \nTo activate press spacebar.",
@@ -242,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794248843789,
-     "t_end_ms": 1794248844893,
+     "t_start_ms": 1794291918776,
+     "t_end_ms": 1794291919880,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -252,7 +252,7 @@
       "Tab"
      ],
      "key_times": [
-      1794248843789
+      1794291918776
      ],
      "observation": {
       "speech_raw": "Help \u001d Button \u001e \nTo activate press spacebar.",
@@ -262,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794248844893,
-     "t_end_ms": 1794248845998,
+     "t_start_ms": 1794291919880,
+     "t_end_ms": 1794291921085,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -272,18 +272,18 @@
       "Tab"
      ],
      "key_times": [
-      1794248844893
+      1794291919880
      ],
      "observation": {
-      "speech_raw": "Use Rule Type:\nUse Rule Type: Read First Line of Every Paragraph \u001d radio button \u001e  \u001dchecked\u001e \n1 of 4\nTo change the selection press Up or Down Arrow.",
+      "speech_raw": "Use Rule Type: Read First Line of Every Paragraph \u001d radio button \u001e  \u001dchecked\u001e \n1 of 4\nTo change the selection press Up or Down Arrow.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794248845998,
-     "t_end_ms": 1794248847002,
+     "t_start_ms": 1794291921085,
+     "t_end_ms": 1794291922088,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Escape\")"
@@ -292,7 +292,7 @@
       "Escape"
      ],
      "key_times": [
-      1794248845998
+      1794291921085
      ],
      "observation": {
       "speech_raw": "",
@@ -302,8 +302,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794248847002,
-     "t_end_ms": 1794248848007,
+     "t_start_ms": 1794291922088,
+     "t_end_ms": 1794291923092,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -312,7 +312,7 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794248847002
+      1794291922088
      ],
      "observation": {
       "speech_raw": "City Library Expands Evening Hours - Riverside Gazette",

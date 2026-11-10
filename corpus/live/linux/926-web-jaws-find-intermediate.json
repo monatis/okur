@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ec1e5cac6"
+  "commit": "6cf0846ff"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794248912006
+     "t_ms": 1794291825703
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794248913368,
-     "t_end_ms": 1794248914372,
+     "t_start_ms": 1794291827065,
+     "t_end_ms": 1794291828370,
      "action": {
       "type": "key",
       "command": "Ctrl+F"
@@ -32,18 +32,18 @@
       "Ctrl+F"
      ],
      "key_times": [
-      1794248913368
+      1794291827065
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Okur Find \u001d dialog \u001e \nFind what: \u001d Edit \u001e \nType in text.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794248914372,
-     "t_end_ms": 1794248915376,
+     "t_start_ms": 1794291828370,
+     "t_end_ms": 1794291829373,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"b\")"
@@ -52,18 +52,18 @@
       "b"
      ],
      "key_times": [
-      1794248914372
+      1794291828370
      ],
      "observation": {
-      "speech_raw": "No buttons",
+      "speech_raw": "",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794248915376,
-     "t_end_ms": 1794248916380,
+     "t_start_ms": 1794291829373,
+     "t_end_ms": 1794291830377,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"o\")"
@@ -72,18 +72,18 @@
       "o"
      ],
      "key_times": [
-      1794248915376
+      1794291829373
      ],
      "observation": {
-      "speech_raw": "article",
+      "speech_raw": "",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794248916380,
-     "t_end_ms": 1794248917383,
+     "t_start_ms": 1794291830377,
+     "t_end_ms": 1794291831381,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"a\")"
@@ -92,18 +92,18 @@
       "a"
      ],
      "key_times": [
-      1794248916380
+      1794291830377
      ],
      "observation": {
-      "speech_raw": "No radio buttons",
+      "speech_raw": "",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794248917383,
-     "t_end_ms": 1794248918387,
+     "t_start_ms": 1794291831381,
+     "t_end_ms": 1794291832385,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"r\")"
@@ -112,18 +112,18 @@
       "r"
      ],
      "key_times": [
-      1794248917383
+      1794291831381
      ],
      "observation": {
-      "speech_raw": "Related stories complementary information",
+      "speech_raw": "",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794248918387,
-     "t_end_ms": 1794248919392,
+     "t_start_ms": 1794291832385,
+     "t_end_ms": 1794291833389,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"d\")"
@@ -132,18 +132,18 @@
       "d"
      ],
      "key_times": [
-      1794248918387
+      1794291832386
      ],
      "observation": {
-      "speech_raw": "Related stories\n \u001d heading level 2 \u001e",
+      "speech_raw": "",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794248919392,
-     "t_end_ms": 1794248920396,
+     "t_start_ms": 1794291833389,
+     "t_end_ms": 1794291834494,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -152,18 +152,18 @@
       "Enter"
      ],
      "key_times": [
-      1794248919392
+      1794291833389
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "The Riverside City Library will stay open until 9 p.m. on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794248920396,
-     "t_end_ms": 1794248921400,
+     "t_start_ms": 1794291834494,
+     "t_end_ms": 1794291835597,
      "action": {
       "type": "key",
       "command": "F3"
@@ -172,18 +172,18 @@
       "F3"
      ],
      "key_times": [
-      1794248920396
+      1794291834494
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "The library board will review attendance in the fall. A long-standing complaint among students and working parents was that the reading rooms closed before",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794248921400,
-     "t_end_ms": 1794248922404,
+     "t_start_ms": 1794291835597,
+     "t_end_ms": 1794291836599,
      "action": {
       "type": "key",
       "command": "F3"
@@ -192,18 +192,18 @@
       "F3"
      ],
      "key_times": [
-      1794248921400
+      1794291835597
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "1. Board vote in March",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794248922404,
-     "t_end_ms": 1794248923409,
+     "t_start_ms": 1794291836600,
+     "t_end_ms": 1794291837604,
      "action": {
       "type": "key",
       "command": "Shift+F3"
@@ -212,18 +212,18 @@
       "Shift+F3"
      ],
      "key_times": [
-      1794248922404
+      1794291836600
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "The library board will review attendance in the fall. A long-standing complaint among students and working parents was that the reading rooms closed before",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794248923409,
-     "t_end_ms": 1794248924414,
+     "t_start_ms": 1794291837604,
+     "t_end_ms": 1794291838609,
      "action": {
       "type": "key",
       "command": "Insert+Up"
@@ -232,18 +232,18 @@
       "Insert+Up"
      ],
      "key_times": [
-      1794248923409
+      1794291837604
      ],
      "observation": {
-      "speech_raw": " \u001d heading level 2 \u001e Related stories",
+      "speech_raw": "The library board will review attendance in the fall. A long-standing complaint among students and working parents was that the reading rooms closed before",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794248924414,
-     "t_end_ms": 1794248925420,
+     "t_start_ms": 1794291838609,
+     "t_end_ms": 1794291839817,
      "action": {
       "type": "key",
       "command": "Ctrl+Insert+F"
@@ -252,18 +252,18 @@
       "Ctrl+Insert+F"
      ],
      "key_times": [
-      1794248924414
+      1794291838609
      ],
      "observation": {
-      "speech_raw": "",
+      "speech_raw": "Okur Find \u001d dialog \u001e \nFind what: \u001d Edit \u001e \nboard\nType in text.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794248925420,
-     "t_end_ms": 1794248926424,
+     "t_start_ms": 1794291839817,
+     "t_end_ms": 1794291840820,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Escape\")"
@@ -272,7 +272,7 @@
       "Escape"
      ],
      "key_times": [
-      1794248925420
+      1794291839817
      ],
      "observation": {
       "speech_raw": "",

@@ -7,7 +7,7 @@
   "settings": "recorded",
   "fixtures": "/root/okur/corpus/fixtures/",
   "chrome": "google-chrome",
-  "commit": "ec1e5cac6"
+  "commit": "6cf0846ff"
  },
  "trials": [
   {
@@ -16,14 +16,14 @@
    "reset_keys": [
     {
      "key": "Ctrl+Home",
-     "t_ms": 1794247337347
+     "t_ms": 1794292267693
     }
    ],
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1794247338703,
-     "t_end_ms": 1794247339708,
+     "t_start_ms": 1794292269056,
+     "t_end_ms": 1794292270061,
      "action": {
       "type": "key",
       "command": "Insert+Space"
@@ -32,7 +32,7 @@
       "Insert+Space"
      ],
      "key_times": [
-      1794247338703
+      1794292269056
      ],
      "observation": {
       "speech_raw": "",
@@ -42,8 +42,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1794247339708,
-     "t_end_ms": 1794247340911,
+     "t_start_ms": 1794292270061,
+     "t_end_ms": 1794292271265,
      "action": {
       "type": "key",
       "command": "X"
@@ -52,18 +52,18 @@
       "X"
      ],
      "key_times": [
-      1794247339708
+      1794292270061
      ],
      "observation": {
-      "speech_raw": "Flexible Web \u001d dialog \u001e \nCreate a new customization \u001d radio button \u001e  \u001dchecked\u001e \n1 of 5\nTo change the selection press Up or Down Arrow.",
+      "speech_raw": "Flexible Web \u001d dialog \u001e \nWhat would you like to do?\nCreate a new customization \u001d radio button \u001e  \u001dchecked\u001e \n1 of 5\nTo change the selection press Up or Down Arrow.",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1794247340911,
-     "t_end_ms": 1794247341916,
+     "t_start_ms": 1794292271265,
+     "t_end_ms": 1794292272269,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+V\")"
@@ -72,7 +72,7 @@
       "Alt+V"
      ],
      "key_times": [
-      1794247340911
+      1794292271265
      ],
      "observation": {
       "speech_raw": "",
@@ -82,8 +82,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1794247341916,
-     "t_end_ms": 1794247343020,
+     "t_start_ms": 1794292272269,
+     "t_end_ms": 1794292273373,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -92,7 +92,7 @@
       "Tab"
      ],
      "key_times": [
-      1794247341916
+      1794292272269
      ],
      "observation": {
       "speech_raw": "Enable Flexible Web \u001d check box \u001e  \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
@@ -102,8 +102,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1794247343020,
-     "t_end_ms": 1794247344124,
+     "t_start_ms": 1794292273373,
+     "t_end_ms": 1794292274478,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -112,7 +112,7 @@
       "Tab"
      ],
      "key_times": [
-      1794247343020
+      1794292273373
      ],
      "observation": {
       "speech_raw": "Next > \u001d Button \u001e \nTo activate press spacebar.",
@@ -122,8 +122,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1794247344124,
-     "t_end_ms": 1794247345228,
+     "t_start_ms": 1794292274478,
+     "t_end_ms": 1794292275583,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -132,7 +132,7 @@
       "Enter"
      ],
      "key_times": [
-      1794247344124
+      1794292274478
      ],
      "observation": {
       "speech_raw": "No customizable elements were found at the current virtual PC cursor location. Please change the cursor's location and try again.",
@@ -142,8 +142,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1794247345228,
-     "t_end_ms": 1794247346332,
+     "t_start_ms": 1794292275583,
+     "t_end_ms": 1794292276687,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -152,7 +152,7 @@
       "Tab"
      ],
      "key_times": [
-      1794247345228
+      1794292275583
      ],
      "observation": {
       "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
@@ -162,8 +162,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1794247346332,
-     "t_end_ms": 1794247347437,
+     "t_start_ms": 1794292276687,
+     "t_end_ms": 1794292277793,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Shift+Tab\")"
@@ -172,7 +172,7 @@
       "Shift+Tab"
      ],
      "key_times": [
-      1794247346332
+      1794292276687
      ],
      "observation": {
       "speech_raw": "Next > \u001d Button \u001e \nTo activate press spacebar.",
@@ -182,8 +182,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1794247347437,
-     "t_end_ms": 1794247348442,
+     "t_start_ms": 1794292277793,
+     "t_end_ms": 1794292278797,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -192,7 +192,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794247347437
+      1794292277793
      ],
      "observation": {
       "speech_raw": "",
@@ -202,8 +202,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1794247348442,
-     "t_end_ms": 1794247349547,
+     "t_start_ms": 1794292278797,
+     "t_end_ms": 1794292279902,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"RightArrow\")"
@@ -212,7 +212,7 @@
       "RightArrow"
      ],
      "key_times": [
-      1794247348442
+      1794292278797
      ],
      "observation": {
       "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
@@ -222,8 +222,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1794247349547,
-     "t_end_ms": 1794247350551,
+     "t_start_ms": 1794292279902,
+     "t_end_ms": 1794292280906,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
@@ -232,7 +232,7 @@
       "DownArrow"
      ],
      "key_times": [
-      1794247349547
+      1794292279902
      ],
      "observation": {
       "speech_raw": "",
@@ -242,8 +242,8 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1794247350551,
-     "t_end_ms": 1794247351655,
+     "t_start_ms": 1794292280906,
+     "t_end_ms": 1794292282011,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -252,7 +252,7 @@
       "Tab"
      ],
      "key_times": [
-      1794247350551
+      1794292280906
      ],
      "observation": {
       "speech_raw": "Create a new customization \u001d radio button \u001e  \u001dchecked\u001e \n1 of 5\nTo change the selection press Up or Down Arrow.",
@@ -262,8 +262,8 @@
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1794247351655,
-     "t_end_ms": 1794247352761,
+     "t_start_ms": 1794292282011,
+     "t_end_ms": 1794292283117,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Shift+Tab\")"
@@ -272,7 +272,7 @@
       "Shift+Tab"
      ],
      "key_times": [
-      1794247351655
+      1794292282011
      ],
      "observation": {
       "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
@@ -282,8 +282,8 @@
     },
     {
      "step_id": "s14",
-     "t_start_ms": 1794247352761,
-     "t_end_ms": 1794247353866,
+     "t_start_ms": 1794292283117,
+     "t_end_ms": 1794292284221,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"UpArrow\")"
@@ -292,7 +292,7 @@
       "UpArrow"
      ],
      "key_times": [
-      1794247352761
+      1794292283117
      ],
      "observation": {
       "speech_raw": "Enable Flexible Web \u001d check box \u001e  \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
@@ -302,8 +302,8 @@
     },
     {
      "step_id": "s15",
-     "t_start_ms": 1794247353866,
-     "t_end_ms": 1794247354971,
+     "t_start_ms": 1794292284221,
+     "t_end_ms": 1794292285326,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -312,7 +312,7 @@
       "Tab"
      ],
      "key_times": [
-      1794247353866
+      1794292284221
      ],
      "observation": {
       "speech_raw": "Next > \u001d Button \u001e \nTo activate press spacebar.",
@@ -322,8 +322,8 @@
     },
     {
      "step_id": "s16",
-     "t_start_ms": 1794247354971,
-     "t_end_ms": 1794247356076,
+     "t_start_ms": 1794292285326,
+     "t_end_ms": 1794292286432,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Shift+Tab\")"
@@ -332,7 +332,7 @@
       "Shift+Tab"
      ],
      "key_times": [
-      1794247354971
+      1794292285326
      ],
      "observation": {
       "speech_raw": "Enable Flexible Web \u001d check box \u001e  \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
@@ -342,8 +342,8 @@
     },
     {
      "step_id": "s17",
-     "t_start_ms": 1794247356076,
-     "t_end_ms": 1794247357182,
+     "t_start_ms": 1794292286432,
+     "t_end_ms": 1794292287538,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Shift+Tab\")"
@@ -352,7 +352,7 @@
       "Shift+Tab"
      ],
      "key_times": [
-      1794247356076
+      1794292286432
      ],
      "observation": {
       "speech_raw": "Create a new customization \u001d radio button \u001e  \u001dchecked\u001e \n1 of 5\nTo change the selection press Up or Down Arrow.",
@@ -362,8 +362,8 @@
     },
     {
      "step_id": "s18",
-     "t_start_ms": 1794247357182,
-     "t_end_ms": 1794247358286,
+     "t_start_ms": 1794292287538,
+     "t_end_ms": 1794292288642,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -372,7 +372,7 @@
       "Tab"
      ],
      "key_times": [
-      1794247357182
+      1794292287538
      ],
      "observation": {
       "speech_raw": "Enable Flexible Web \u001d check box \u001e  \u001dchecked\u001e \nTo clear checkmark press Spacebar.",
@@ -382,8 +382,8 @@
     },
     {
      "step_id": "s19",
-     "t_start_ms": 1794247358287,
-     "t_end_ms": 1794247359391,
+     "t_start_ms": 1794292288642,
+     "t_end_ms": 1794292289747,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -392,7 +392,7 @@
       "Tab"
      ],
      "key_times": [
-      1794247358287
+      1794292288642
      ],
      "observation": {
       "speech_raw": "Next > \u001d Button \u001e \nTo activate press spacebar.",
@@ -402,8 +402,8 @@
     },
     {
      "step_id": "s20",
-     "t_start_ms": 1794247359391,
-     "t_end_ms": 1794247360395,
+     "t_start_ms": 1794292289747,
+     "t_end_ms": 1794292290751,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Delete\")"
@@ -412,7 +412,7 @@
       "Delete"
      ],
      "key_times": [
-      1794247359391
+      1794292289747
      ],
      "observation": {
       "speech_raw": "",
@@ -422,8 +422,8 @@
     },
     {
      "step_id": "s21",
-     "t_start_ms": 1794247360395,
-     "t_end_ms": 1794247361401,
+     "t_start_ms": 1794292290751,
+     "t_end_ms": 1794292291757,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Alt+Y\")"
@@ -432,7 +432,7 @@
       "Alt+Y"
      ],
      "key_times": [
-      1794247360395
+      1794292290751
      ],
      "observation": {
       "speech_raw": "",
@@ -442,8 +442,8 @@
     },
     {
      "step_id": "s22",
-     "t_start_ms": 1794247361401,
-     "t_end_ms": 1794247362506,
+     "t_start_ms": 1794292291757,
+     "t_end_ms": 1794292292861,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Tab\")"
@@ -452,7 +452,7 @@
       "Tab"
      ],
      "key_times": [
-      1794247361401
+      1794292291757
      ],
      "observation": {
       "speech_raw": "Cancel \u001d Button \u001e \nTo activate press spacebar.",
@@ -462,8 +462,8 @@
     },
     {
      "step_id": "s23",
-     "t_start_ms": 1794247362506,
-     "t_end_ms": 1794247363510,
+     "t_start_ms": 1794292292861,
+     "t_end_ms": 1794292293866,
      "action": {
       "type": "jaws_function",
       "command": "TypeKey(\"Enter\")"
@@ -472,7 +472,7 @@
       "Enter"
      ],
      "key_times": [
-      1794247362506
+      1794292292861
      ],
      "observation": {
       "speech_raw": "",
@@ -482,8 +482,8 @@
     },
     {
      "step_id": "s24",
-     "t_start_ms": 1794247363510,
-     "t_end_ms": 1794247364615,
+     "t_start_ms": 1794292293866,
+     "t_end_ms": 1794292294871,
      "action": {
       "type": "key",
       "command": "Ctrl+Home"
@@ -492,7 +492,7 @@
       "Ctrl+Home"
      ],
      "key_times": [
-      1794247363510
+      1794292293866
      ],
      "observation": {
       "speech_raw": "Weekend Events - Riverside Gazette",
@@ -502,8 +502,8 @@
     },
     {
      "step_id": "s25",
-     "t_start_ms": 1794247364615,
-     "t_end_ms": 1794247365619,
+     "t_start_ms": 1794292294871,
+     "t_end_ms": 1794292295876,
      "action": {
       "type": "key",
       "command": "R"
@@ -512,7 +512,7 @@
       "R"
      ],
      "key_times": [
-      1794247364615
+      1794292294871
      ],
      "observation": {
       "speech_raw": "banner",
