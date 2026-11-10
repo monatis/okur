@@ -2092,6 +2092,10 @@ mod tests {
         let mut converter = focused();
         let unfocused = read(node("list item", "", &[]));
         assert_eq!(focuses(&converter.convert_read(&renamed(unfocused))), 0);
+        // Still focused, its name gone: the wizard's old row as its page goes (742/s9).
+        let mut converter = focused();
+        let emptied = read(node("list item", "", &[state::FOCUSED]));
+        assert_eq!(focuses(&converter.convert_read(&renamed(emptied))), 0);
     }
 
     /// A window in front renamed is told the engine, as Windows' converter tells it: GTK 4's

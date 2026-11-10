@@ -1278,6 +1278,55 @@ fn held() -> gtk::gdk::ModifierType {
         | gtk::gdk::ModifierType::META_MASK
 }
 
+/// A closed drop-down's arrows change its choice, as a Win32 combo box's do: Down and Right to
+/// the next, Up and Left to the one before, Home and End to the first and the last, stopping at
+/// its ends. GTK's own arrows move the focus by where the controls are: Down on the last of
+/// Flexible Web's "How would you like this rule to apply?" went on to the Back button (742/s24
+/// in night3), where JAWS's stays [obs, 742/s24]. Alt+Down opens it, as GTK's own; in its open
+/// list the keys are the list's.
+fn choose_by_arrows(choice: &gtk::DropDown) {
+    let keys = gtk::EventControllerKey::new();
+    keys.set_propagation_phase(gtk::PropagationPhase::Capture);
+    let weak = choice.downgrade();
+    keys.connect_key_pressed(move |_, key, _, modifiers| {
+        use gtk::gdk::Key;
+        let Some(choice) = weak.upgrade() else {
+            return glib::Propagation::Proceed;
+        };
+        // A key held with it (Caps Lock and Num Lock do not count): GTK's own.
+        if modifiers.intersects(held()) {
+            return glib::Propagation::Proceed;
+        }
+        let in_list = choice
+            .root()
+            .and_then(|root| root.focus())
+            .is_some_and(|focus| focus.ancestor(gtk::Popover::static_type()).is_some());
+        if in_list {
+            return glib::Propagation::Proceed;
+        }
+        let count = choice.model().map_or(0, |model| model.n_items());
+        let Some(last) = count.checked_sub(1) else {
+            return glib::Propagation::Proceed;
+        };
+        let at = choice.selected();
+        let chosen = at != gtk::INVALID_LIST_POSITION;
+        let to = match key {
+            Key::Down | Key::Right | Key::KP_Down | Key::KP_Right if chosen => {
+                at.saturating_add(1).min(last)
+            }
+            Key::Up | Key::Left | Key::KP_Up | Key::KP_Left if chosen => at.saturating_sub(1),
+            Key::Down | Key::Right | Key::KP_Down | Key::KP_Right | Key::Home | Key::KP_Home => 0,
+            Key::Up | Key::Left | Key::KP_Up | Key::KP_Left | Key::End | Key::KP_End => last,
+            _ => return glib::Propagation::Proceed,
+        };
+        if to != at {
+            choice.set_selected(to);
+        }
+        glib::Propagation::Stop
+    });
+    choice.add_controller(keys);
+}
+
 /// The arrows go round a group of radios, choosing the one they come to, as a Win32 dialog's
 /// radio group does: GTK's own arrows leave the group at either end. Down on the last of Skim
 /// Reading's rule types went on to Rules History (763/s5 in night2), where JAWS's dialog
@@ -1448,6 +1497,7 @@ fn build(
             let texts: Vec<&str> = options.iter().map(String::as_str).collect();
             let choice = gtk::DropDown::from_strings(&texts);
             choice.set_selected(u32::try_from(*selected).unwrap_or(u32::MAX));
+            choose_by_arrows(&choice);
             let label = field_label(&control.label, &choice);
             let setting = Rc::clone(setting);
             choice.connect_selected_notify(move |d| {

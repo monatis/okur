@@ -412,9 +412,10 @@ fn numbered(node: &AtspiNode, next: &mut i32, ids: &HashMap<&str, i32>) -> WebNo
             .filter(|t| !t.is_empty() && !t.contains('\u{fffc}'))
             .or_else(|| chosen_item(node)),
         WebRole::Link | WebRole::Document => node.uri.clone(),
-        // A progress bar's or a meter's, as Chrome writes it ("40", "86.0274"), as MSAA's value
-        // gives it on Windows.
-        WebRole::ProgressBar => node.attribute("valuetext").map(str::to_owned),
+        // A progress bar's or a meter's, as Chrome writes it ("40", "86.0274"), and a slider's
+        // ("128", or its aria-valuetext), as MSAA's value gives them on Windows: "Red left right
+        // slider 128" [obs, 2740/s1].
+        WebRole::ProgressBar | WebRole::Slider => node.attribute("valuetext").map(str::to_owned),
         _ => None,
     };
     let number = |key: &str| node.attribute(key).and_then(|v| v.parse::<i32>().ok());

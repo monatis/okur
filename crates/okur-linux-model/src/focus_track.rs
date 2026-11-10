@@ -168,6 +168,19 @@ impl FocusTrack {
 
     /// The focused control read again as `read`, as something within it changed.
     pub fn reread(&mut self, read: &FocusEvent) -> Reread {
+        // A control read again with no name, where the one said had one, is going away: the
+        // wizard's old list row, still focused and emptied as its page goes, said only "To move
+        // to an item press the Arrow keys." (742/s9 in night3, at 6cf0846f). Nothing is said;
+        // the next page's focus follows.
+        let nameless = read.name.as_deref().is_none_or(|n| n.trim().is_empty());
+        let named_before = self
+            .said
+            .as_ref()
+            .and_then(|(_, name)| name.as_deref())
+            .is_some_and(|n| !n.trim().is_empty());
+        if nameless && named_before {
+            return Reread::Same;
+        }
         let said = (read.role.clone(), read.name.clone());
         if self.said.as_ref() != Some(&said) {
             self.said = Some(said);
