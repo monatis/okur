@@ -1,0 +1,60 @@
+{
+  "id": "1189-desktop-excel-totals-setters",
+  "name": "JAWS commands for Excel (popapps.chm): Right and Down to B2; Set current column to the column containing row totals (Ctrl+Insert+Enter); Read row total (Insert+Delete); Set current row to the row containing column totals (Ctrl+Insert+Delete); Down; Read column total (Insert+NumPad Enter)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-excel.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "jaws_forget": [
+    "PersonalizedSettings\\excel_sr-excel-fixture.xlsx.JSI",
+    "excel.JCF"
+  ],
+  "launch": {
+    "window_title": "sr-excel-fixture.xlsx - Excel (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Ctrl+Insert+Enter"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Insert+Delete"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Ctrl+Insert+Delete"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Insert+NumpadEnter"
+    }
+  ]
+}

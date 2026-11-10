@@ -1,0 +1,80 @@
+{
+  "id": "1196-desktop-excel-custom-summary",
+  "name": "JAWS's custom summary in Excel (popapps.chm, Creating a Custom Summary in Excel): Right and Down to B2; Custom Summary Labels (Ctrl+Insert+Tab); Add (Alt+A), the label Sum typed, Enter, and Enter again, in JAWS's dialogs (keys with UI Access); the custom summary (Ctrl+Insert+Shift+Tab), Escape (UI Access)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-excel.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "jaws_forget": [
+    "PersonalizedSettings\\excel_sr-excel-fixture.xlsx.JSI",
+    "excel.JCF"
+  ],
+  "launch": {
+    "window_title": "sr-excel-fixture.xlsx - Excel (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Ctrl+Insert+Tab"
+    },
+    {
+      "id": "s4",
+      "type": "key_ui_access",
+      "command": "Alt+A"
+    },
+    {
+      "id": "s5",
+      "type": "key_ui_access",
+      "command": "Shift+S"
+    },
+    {
+      "id": "s6",
+      "type": "key_ui_access",
+      "command": "U"
+    },
+    {
+      "id": "s7",
+      "type": "key_ui_access",
+      "command": "M"
+    },
+    {
+      "id": "s8",
+      "type": "key_ui_access",
+      "command": "Enter"
+    },
+    {
+      "id": "s9",
+      "type": "key_ui_access",
+      "command": "Enter"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Ctrl+Insert+Shift+Tab"
+    },
+    {
+      "id": "s11",
+      "type": "key_ui_access",
+      "command": "Escape"
+    }
+  ]
+}

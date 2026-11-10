@@ -2360,6 +2360,10 @@
     "web-structures.html": {
       "sha256": "d0c074772e3aa267b6679197051e1ef859606783970820af562211904fb1009e",
       "size_bytes": 1356
+    },
+    "wrapped-text-area.html": {
+      "sha256": "9c051568c8c98f412dce64fc8ed61208474c9e43939c9a7924651371be0a7327",
+      "size_bytes": 569
     }
   },
   "scenarios": [
@@ -5318,6 +5322,20 @@
       }
     },
     {
+      "scenario_id": "1208-web-wrapped-text-area-lines",
+      "fixture": "wrapped-text-area.html",
+      "evidence": {
+        "sha256": "c85bd72a13f03e8332b75536aae094147aa5c155bb73610ae3519cbcd69f7fdd",
+        "capture_script_sha256": "60f87ebf646ac08ab9f6ab2694c35d49ed9377ad656e2cf1bf5f3702426698a1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "1209-desktop-window-list-delete",
       "fixture": "desktop-dialogs.ps1",
       "evidence": {
@@ -5350,6 +5368,20 @@
       "fixture": "custom-label.html",
       "evidence": {
         "sha256": "81dbf32e37c2aa20b7331c79d0f5b637d2e4ea8e22a085d6100665833333bb94",
+        "capture_script_sha256": "60f87ebf646ac08ab9f6ab2694c35d49ed9377ad656e2cf1bf5f3702426698a1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1213-web-element-information-lines",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "dd68e6ce8defc160fb397c3841dc81ed9be5946bba6c0a5c99317fc02a769456",
         "capture_script_sha256": "60f87ebf646ac08ab9f6ab2694c35d49ed9377ad656e2cf1bf5f3702426698a1",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
@@ -30141,10 +30173,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1984,
-    "scenarios_with_evidence": 1984,
-    "total_trials": 5958,
-    "successful_trials": 5941,
-    "deterministic_scenarios": 1648
+    "scenarios": 1986,
+    "scenarios_with_evidence": 1986,
+    "total_trials": 5964,
+    "successful_trials": 5947,
+    "deterministic_scenarios": 1649
   }
 }

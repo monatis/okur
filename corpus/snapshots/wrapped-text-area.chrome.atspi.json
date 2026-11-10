@@ -1,0 +1,256 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "okur-linux 0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Ubuntu 26.04.1 LTS",
+    "window_title": "Wrapped Notes - Text Area Fixture",
+    "window_class": "",
+    "process_version": "Google Chrome 157.0.8103.38 ",
+    "fixture_sha256": "9c051568c8c98f412dce64fc8ed61208474c9e43939c9a7924651371be0a7327",
+    "captured_at_unix_ms": 1794291448702,
+    "node_count": 10,
+    "capture_ms": 41
+  },
+  "root": {
+    "role": "document web",
+    "name": "Wrapped Notes - Text Area Fixture",
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "states": 1124079872,
+    "text": "￼",
+    "text_attributes": {
+      "bg-color": "255,255,255",
+      "direction": "lr",
+      "family-name": "Liberation Serif",
+      "fg-color": "0,0,0",
+      "language": "en",
+      "size": "12pt"
+    },
+    "path": "/org/a11y/atspi/accessible/13",
+    "relations": [
+      [
+        14,
+        [
+          "/org/a11y/atspi/accessible/1"
+        ]
+      ]
+    ],
+    "uri": "file:///root/okur/corpus/fixtures/wrapped-text-area.html",
+    "children": [
+      {
+        "role": "landmark",
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "states": 1124073728,
+        "text": "￼￼￼",
+        "text_attributes": {
+          "bg-color": "255,255,255",
+          "direction": "lr",
+          "family-name": "Liberation Serif",
+          "fg-color": "0,0,0",
+          "language": "en",
+          "size": "24pt",
+          "weight": "700"
+        },
+        "path": "/org/a11y/atspi/accessible/14",
+        "children": [
+          {
+            "role": "heading",
+            "name": "Branch notes",
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "Branch notes",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "24pt",
+              "weight": "700"
+            },
+            "path": "/org/a11y/atspi/accessible/15",
+            "children": [
+              {
+                "role": "static",
+                "name": "Branch notes",
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "states": 1124073728,
+                "text": "Branch notes",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "24pt",
+                  "weight": "700"
+                },
+                "path": "/org/a11y/atspi/accessible/18"
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼￼",
+            "text_attributes": {
+              "bg-color": "255,255,255",
+              "direction": "lr",
+              "family-name": "Liberation Serif",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "12pt"
+            },
+            "path": "/org/a11y/atspi/accessible/16",
+            "children": [
+              {
+                "role": "label",
+                "attributes": {
+                  "display": "inline",
+                  "tag": "label",
+                  "text-align": "left"
+                },
+                "states": 1124073728,
+                "text": "Notes",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "Liberation Serif",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/19",
+                "relations": [
+                  [
+                    1,
+                    [
+                      "/org/a11y/atspi/accessible/12"
+                    ]
+                  ]
+                ],
+                "children": [
+                  {
+                    "role": "static",
+                    "name": "Notes",
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "states": 1124073728,
+                    "text": "Notes",
+                    "text_attributes": {
+                      "bg-color": "255,255,255",
+                      "direction": "lr",
+                      "family-name": "Liberation Serif",
+                      "fg-color": "0,0,0",
+                      "language": "en",
+                      "size": "12pt"
+                    },
+                    "path": "/org/a11y/atspi/accessible/20"
+                  }
+                ]
+              },
+              {
+                "role": "entry",
+                "name": "Notes",
+                "attributes": {
+                  "display": "inline-block",
+                  "explicit-name": "true",
+                  "id": "notes",
+                  "name-from": "related-element",
+                  "tag": "textarea",
+                  "text-align": "left",
+                  "text-model": "a1"
+                },
+                "states": 276002113920,
+                "text": "The reading room opens at nine on weekdays.\nQuiet please.",
+                "text_attributes": {
+                  "bg-color": "255,255,255",
+                  "direction": "lr",
+                  "family-name": "DejaVu Sans Mono",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "12pt"
+                },
+                "path": "/org/a11y/atspi/accessible/12",
+                "relations": [
+                  [
+                    2,
+                    [
+                      "/org/a11y/atspi/accessible/19"
+                    ]
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "role": "paragraph",
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "states": 1124073728,
+            "text": "￼",
+            "text_attributes": {
+              "bg-color": "239,239,239",
+              "direction": "lr",
+              "family-name": "Liberation Sans",
+              "fg-color": "0,0,0",
+              "language": "en",
+              "size": "10pt"
+            },
+            "path": "/org/a11y/atspi/accessible/17",
+            "children": [
+              {
+                "role": "button",
+                "name": "Save",
+                "attributes": {
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "states": 1124075776,
+                "text": "Save",
+                "text_attributes": {
+                  "bg-color": "239,239,239",
+                  "direction": "lr",
+                  "family-name": "Liberation Sans",
+                  "fg-color": "0,0,0",
+                  "language": "en",
+                  "size": "10pt"
+                },
+                "path": "/org/a11y/atspi/accessible/21"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
