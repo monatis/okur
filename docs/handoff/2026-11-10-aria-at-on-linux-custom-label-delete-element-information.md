@@ -142,13 +142,41 @@ Figures:
 - `okur-lab live-replay linux` after 9c3ff12c: "9555/9868 steps say what the run said;
   replayed, 8701/9623 match JAWS exactly".
 
+## The evening (after 1debf565)
+
+- **Linux, from the Linux-only gaps** (831 in the morning, 610 after c4f2420b, ARIA-AT's 330 to
+  176): a page menu's items say their place and the menu its name as it opens (c4f2420b); the
+  focused control's value change is heard and told (1c9f0987), in its page and as its value
+  text (e9dd01fc); element information on Linux (96dbcd5e); AT-SPI snapshots of ARIA-AT's
+  pages read after their "Run Test Setup" (77e78985); Okur's own dialog's first focus looked
+  for where GTK tells none (0a37c9bb): the engine asks once 250 ms pass after okur-ui said the
+  dialog shown, and the driver finds okur-ui's window by title and its focus.
+- **The fourth review** (one reviewer over 7a4e26e8 to 1c9f0987), built in e9dd01fc: the
+  slider's change in its page (it said nothing live), its value text, a "\r\n" line not taken
+  for a break inside it, no places for a menu bar's menus, a value change with a name emptied
+  still said.
+- **Ctrl+Home or Ctrl+End that moves nothing says nothing** [obs, 1208/s2] (e9dd01fc), a
+  selection taken away counting as a move (660/s11).
+- Not built yet in the lab: 96dbcd5e, 77e78985, 1c9f0987's and e9dd01fc's driver parts,
+  0a37c9bb's. night5 starts with `check-linux` and stops if it fails.
+
+Figures:
+- `okur-lab parity` after e9dd01fc: "12818/13414 steps match exactly; 392 accepted
+  divergences not counted".
+- `okur-lab parity --api atspi` after e9dd01fc: "12549/13414 steps match exactly".
+- `okur-lab live-replay linux` after 0a37c9bb: "9519/9868 steps say what the run said;
+  replayed, 8729/9623 match JAWS exactly".
+
 ## Next
 
 1. night4's runs: import them (privacy check, baselines apart from code); 256, 304 and 742
    should come back.
-2. 1208's three steps left: Ctrl+Home at the text area's top (JAWS silent), End on the line's
-   break ("blank"), the page's title before the first Tab's focus.
-3. Element information: the HTML attributes Advanced lists (1214, recorded again), and Linux.
-4. GTK: the dialogs' first focus where GTK tells none (say it from the dialog's spec once shown);
-   the no-selection list's "Not Selected".
-5. ARIA-AT's Linux-only gaps after night4: sliders' value changes, the menu button.
+2. night5 (lists pushed: `D:\okur-linux\night5-ids.txt`, 180 runs: the ARIA-AT scenarios
+   with Linux-only gaps, 256, 304, 742, the replica's 548, 549, 554, 1208, 1210, 1213;
+   `aria-fixtures.txt`, 224 pages): `check-linux`, then the AT-SPI snapshots of ARIA-AT's
+   pages with their setup, then the runs. Then `parity --api atspi` with the new snapshots.
+3. 1208's End onto a line break ("blank" in Chrome's text area, empty in Word's and Notepad's
+   history): one recording more before a rule.
+4. Element information's Advanced: the HTML attributes JAWS lists (1214, recorded again).
+5. The ARIA combo box's own button taken as the prior form field on Linux (2918/s1).
+6. The no-selection GTK list's "Not Selected": read the list's own states.
