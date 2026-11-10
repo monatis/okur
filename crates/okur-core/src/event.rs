@@ -106,6 +106,16 @@ pub struct TextContext {
     pub line: Option<(usize, usize)>,
 }
 
+/// One element of a page as Element Information shows it (Insert+Shift+F1): its tag, its
+/// parameters by name in their order, and its role's number (IA2's on Windows) [obs, 1210/s2].
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub struct ElementDetails {
+    pub tag: String,
+    pub parameters: Vec<(String, String)>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub role: Option<u32>,
+}
+
 /// What a word processor says of the line at the caret through its text's attributes and
 /// elements (Word's UI Automation): its own line, the paragraph's heading level and list, and
 /// the table cell. JAWS reads Word by them: "heading level 1 Library Hours", "Entering List",
@@ -1452,6 +1462,10 @@ pub enum AccessibilityEvent {
     /// Page elements asked for by DOM id, each with its subtree, as they are now; empty when
     /// none was found ([`crate::actions::ApplicationActions::read_page_elements`]).
     PageElements(Vec<crate::aom::AomNode>),
+    /// The page's element asked for by Element Information and each element above it to the
+    /// document, from the element up; empty when none could be read
+    /// ([`crate::actions::ApplicationActions::read_element_information`]).
+    ElementInformation(Vec<ElementDetails>),
     /// Where a page element the virtual cursor read is on the screen, once scrolled into
     /// view, asked for by [`crate::actions::ApplicationActions::track_node`]: the reading
     /// highlight frames it.

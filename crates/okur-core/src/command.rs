@@ -274,6 +274,12 @@ pub enum Command {
     WindowList,
     /// Insert+F2 (RunJAWSManager): Run Okur Manager, Okur's managers in a list, to run one.
     RunManager,
+    /// Insert+Shift+F1 (DisplayBasicElementInfo): the element at the virtual cursor and those
+    /// above it, with their parameters, in a message.
+    ElementInformation,
+    /// Insert+Ctrl+Shift+F1 (DisplayAdvancedElementInfo): the same, "Advanced Element
+    /// Information".
+    AdvancedElementInformation,
     /// Insert+F11 (ListTaskTrayIcons): the notification area's icons, to click one.
     SystemTrayList,
     /// J in a page (JumpToLine): Jump To Line, a line number to move to.
@@ -661,6 +667,12 @@ impl Command {
             "RoutePCCursorToJAWS" => RoutePcToOkur,
             "WindowList" | "Insert+F10" => WindowList,
             "RunJAWSManager" | "Insert+F2" | "JAWSKey+F2" => RunManager,
+            "DisplayBasicElementInfo" | "Insert+Shift+F1" | "Shift+JAWSKey+F1" => {
+                ElementInformation
+            }
+            "DisplayAdvancedElementInfo" | "Insert+Ctrl+Shift+F1" | "Control+Shift+JAWSKey+F1" => {
+                AdvancedElementInformation
+            }
             "ListTaskTrayIcons" | "Insert+F11" => SystemTrayList,
             "JumpToLine" => JumpToLine,
             "DefineATempPlaceMarker" => DefineTempPlaceMarker,
@@ -882,6 +894,8 @@ const CTRL_SHIFT: Chord = ANY.ctrl(Yes).shift(Yes).alt(No).insert(No);
 const OKUR_CTRL: Chord = ANY.insert(Yes).ctrl(Yes).shift(No).alt(No);
 /// The Okur key with Shift.
 const OKUR_SHIFT: Chord = ANY.insert(Yes).shift(Yes).ctrl(No).alt(No);
+/// The Okur key with Ctrl and Shift.
+const OKUR_CTRL_SHIFT: Chord = ANY.insert(Yes).ctrl(Yes).shift(Yes).alt(No);
 /// Ctrl and Alt, with or without Shift.
 const CTRL_ALT: Chord = ANY.ctrl(Yes).alt(Yes);
 
@@ -1166,6 +1180,10 @@ static BINDINGS: &[Binding] = &{
         // Help (JAWS 2025 help, Keystrokes for Accessing Help) [obs, 526, 527]. In the laptop
         // layout CapsLock+H is Say Sentence, as there.
         bind(Key::F(1), OKUR, ScreenSensitiveHelp),
+        // JAWS's keystrokes for the web: Shift+Insert+F1 and Ctrl+Shift+Insert+F1, element
+        // information [obs, 1210].
+        bind(Key::F(1), OKUR_SHIFT, ElementInformation),
+        bind(Key::F(1), OKUR_CTRL_SHIFT, AdvancedElementInformation),
         bind(Alpha('H'), OKUR, HotKeyHelp),
         bind(Alpha('W'), OKUR, WindowsKeysHelp),
         bind(

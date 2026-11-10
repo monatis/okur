@@ -439,6 +439,15 @@ pub trait ApplicationActions: Send {
         false
     }
 
+    /// Reads the page's element with the platform's id `unique_id` and each element above it
+    /// to the document, for Element Information (Insert+Shift+F1). They arrive later as
+    /// [`crate::event::AccessibilityEvent::ElementInformation`]. Returns false when
+    /// unsupported.
+    fn read_element_information(&self, unique_id: &str) -> bool {
+        let _ = unique_id;
+        false
+    }
+
     /// Puts `text` on the system clipboard (the Virtual Viewer's Ctrl+C). Returns false when
     /// unsupported.
     fn copy_text(&self, text: &str) -> bool {
@@ -912,6 +921,13 @@ impl ApplicationActions for RecordingActions {
                 format!("{click:?} click at {x}, {y}"),
                 usize::try_from(x).unwrap_or(0),
             ));
+        }
+        true
+    }
+
+    fn read_element_information(&self, unique_id: &str) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push((format!("read element information {unique_id}"), 0));
         }
         true
     }

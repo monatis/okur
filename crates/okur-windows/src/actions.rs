@@ -167,6 +167,9 @@ mod windows_actions {
         Window(bool),
         /// The page's elements with these DOM ids, answered even when none was found.
         PageElements(Vec<String>),
+        /// The page's object with this child id and those above it, for Element Information,
+        /// answered even when none was read.
+        ElementInformation(i32),
         /// Text for the clipboard. Not set in the keyboard hook: emptying the clipboard tells
         /// its last owner at once, and a hung owner would hold the hook (responsiveness
         /// review, 2026-10-19).
@@ -266,6 +269,7 @@ mod windows_actions {
                 Request::Keys(_) => "keys",
                 Request::Window(_) => "viewer read",
                 Request::PageElements(_) => "page elements",
+                Request::ElementInformation(_) => "element information",
                 Request::Copy(_) => "copy",
                 Request::Caret(..) => "caret",
                 Request::ListWindows => "window list",
@@ -1042,6 +1046,36 @@ mod windows_actions {
                             }
                             Request::SwitchTo(id) => crate::top_windows::switch_to(id),
                             Request::Close(id) => crate::top_windows::close(id),
+                            Request::ElementInformation(id) => {
+                                let Some(events) = events.as_ref() else {
+                                    tracing::warn!(
+                                        "element information impossible: no event channel"
+                                    );
+                                    return;
+                                };
+                                let started = Instant::now();
+                                // SAFETY: plain Win32 call with no preconditions.
+                                let window = unsafe {
+                                    windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow()
+                                };
+                                let elements: Vec<okur_core::event::ElementDetails> =
+                                    xa11y_windows::ia2::chromium_object_chain(window, id)
+                                        .map_err(|e| {
+                                            tracing::debug!("element information not read: {e}")
+                                        })
+                                        .unwrap_or_default()
+                                        .iter()
+                                        .filter_map(okur_windows_model::element_info::details)
+                                        .collect();
+                                tracing::debug!(
+                                    elements = elements.len(),
+                                    ms = started.elapsed().as_millis(),
+                                    "element information read"
+                                );
+                                // Answered even when empty: the engine waits for it.
+                                let _ =
+                                    events.send(AccessibilityEvent::ElementInformation(elements));
+                            }
                             Request::Point(x, y) => {
                                 let (Some(uia), Some(events)) = (uia.as_ref(), events.as_ref())
                                 else {
@@ -1481,6 +1515,12 @@ mod windows_actions {
                 super::click_at(x, y, click);
             });
             true
+        }
+
+        fn read_element_information(&self, unique_id: &str) -> bool {
+            unique_id
+                .parse::<i32>()
+                .is_ok_and(|id| self.send(Request::ElementInformation(id)))
         }
 
         fn read_page_elements(&self, ids: &[&str]) -> bool {

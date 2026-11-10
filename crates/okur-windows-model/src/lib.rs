@@ -7,6 +7,7 @@
 //! types, and parity replays recordings of them (docs/references/crate-structure-proposal.md).
 
 pub mod classes;
+pub mod element_info;
 pub mod event_trace;
 pub mod ia2_snapshot;
 pub mod node_ids;

@@ -135,6 +135,7 @@ pub fn event_kind(event: &okur_core::AccessibilityEvent) -> &'static str {
         AccessibilityEvent::TopWindows(_) => "top windows",
         AccessibilityEvent::TrayIcons(_) => "tray icons",
         AccessibilityEvent::PageElements(_) => "page elements",
+        AccessibilityEvent::ElementInformation(_) => "element information",
         AccessibilityEvent::TrackedPlace { .. } => "tracked place",
         AccessibilityEvent::DocumentHeadings(_) => "document headings",
         AccessibilityEvent::DocumentLinks(_) => "document links",

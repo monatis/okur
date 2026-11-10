@@ -252,7 +252,7 @@ pub struct Ia2Probe {
 #[cfg(target_os = "windows")]
 pub use com::capture::{
     capture_chromium_document, capture_chromium_object, chromium_caret_text,
-    chromium_document_busy, chromium_focus_runs, chromium_modal_dialog_of,
+    chromium_document_busy, chromium_focus_runs, chromium_modal_dialog_of, chromium_object_chain,
     chromium_object_location, chromium_scroll_to_object, chromium_text_state,
     has_chromium_document, perform_chromium_action, probe_window, ChromiumTextField, Ia2Action,
     Ia2CaptureError,
@@ -749,6 +749,44 @@ mod com {
                 object = parent;
             }
             Ok(None)
+        }
+
+        /// One object of a Chromium page, by the child id the engine names (its negative IA2
+        /// uniqueID), and each object above it to its document, from the object up: each read
+        /// alone, without its subtree (the document's is the whole page). What Element
+        /// Information lists (Insert+Shift+F1).
+        pub fn chromium_object_chain(
+            top_level: HWND,
+            child_id: i32,
+        ) -> Result<Vec<Ia2Node>, Ia2CaptureError> {
+            const ROLE_SYSTEM_DOCUMENT: i32 = 0xf;
+            const MAX_CHAIN: usize = 64;
+            let document = chromium_document(top_level)?;
+            let child = VARIANT::from(child_id);
+            // SAFETY: MSAA child lookup on a valid IAccessible; Chromium returns an object.
+            let mut object: IAccessible = unsafe { document.get_accChild(&child) }
+                .map_err(|e| err("accChild", e))?
+                .cast()
+                .map_err(|e| err("IAccessible of the object", e))?;
+            let mut chain = Vec::new();
+            for _ in 0..MAX_CHAIN {
+                // At the deepest depth a node is read without its children.
+                let node = read_node(&object, MAX_DEPTH);
+                let at_document = node.msaa_role == Some(ROLE_SYSTEM_DOCUMENT);
+                chain.push(node);
+                if at_document {
+                    break;
+                }
+                // SAFETY: plain MSAA parent read on a valid IAccessible.
+                let Some(parent) = unsafe { object.accParent() }
+                    .ok()
+                    .and_then(|p| p.cast::<IAccessible>().ok())
+                else {
+                    break;
+                };
+                object = parent;
+            }
+            Ok(chain)
         }
 
         /// What to do with a live object.

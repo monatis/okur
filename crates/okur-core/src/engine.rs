@@ -26,6 +26,7 @@ mod commands;
 mod console;
 mod cursors;
 mod dictionary;
+mod element_info;
 mod find;
 mod flexible_web;
 mod focus;
@@ -509,6 +510,8 @@ pub struct ScreenReaderEngine {
     window_list_asked: bool,
     /// The window the Window List's Delete asked to close, until the list comes back.
     window_closing: Option<window_list::ClosingWindow>,
+    /// Element Information asked of the platform, advanced or not, until its elements come.
+    element_information_asked: Option<bool>,
     /// One of Okur's dialogs said shown with no focus told since: it took the keys from the
     /// virtual cursor, which it gives back if it closes before any focus is told.
     shown_without_focus: Option<u32>,
@@ -831,6 +834,7 @@ impl ScreenReaderEngine {
             window_list: None,
             window_list_asked: false,
             window_closing: None,
+            element_information_asked: None,
             shown_without_focus: None,
             tray_dialog: None,
             tray_asked: false,
@@ -2200,6 +2204,7 @@ impl ScreenReaderEngine {
             AccessibilityEvent::TopWindows(windows) => self.open_window_list(windows),
             AccessibilityEvent::TrayIcons(icons) => self.open_tray_list(icons),
             AccessibilityEvent::PageElements(elements) => self.say_page_font(elements),
+            AccessibilityEvent::ElementInformation(elements) => self.element_information(elements),
             AccessibilityEvent::TrackedPlace { node, rect } => {
                 self.show_reading_highlight(*node, *rect);
                 None

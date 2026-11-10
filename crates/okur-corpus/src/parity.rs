@@ -361,6 +361,8 @@ fn replay_scenario(
     // Desktop scenarios have no document: the engine starts in native-app mode and its speech
     // comes from the replayed OS events. Browser scenarios load the captured document tree.
     let desktop = scenario.launch.is_some();
+    // The page's IA2 objects, for the reads of them Okur asks for (Element Information).
+    let mut page_objects = None;
     let aom = if desktop {
         okur_core::AomNode::new(0, okur_core::Role::Document)
     } else {
@@ -374,6 +376,7 @@ fn replay_scenario(
                 "snapshot for {fixture} was not captured from the current fixture bytes"
             ));
         }
+        page_objects = snapshot.ia2;
         snapshot.aom
     };
     let mut cursor = VirtualCursor::new(VirtualBuffer::from_aom(&aom));
@@ -451,6 +454,7 @@ fn replay_scenario(
     // The focused text as the trace last showed it, and the fresh reads of it answered.
     let mut last_text: Option<okur_core::TextContext> = None;
     let mut text_reads = 0;
+    let mut element_reads = 0;
     // The screen reads and recognitions answered from the recorder's snapshots.
     let mut screen_reads = ScreenReads::default();
     let mut reset_keys = replay.reset_times.iter().peekable();
@@ -595,6 +599,13 @@ fn replay_scenario(
                     &actions,
                     &mut text_reads,
                     last_text.as_ref(),
+                    &spoken,
+                );
+                answer_element_reads(
+                    &mut engine,
+                    &actions,
+                    &mut element_reads,
+                    page_objects.as_ref(),
                     &spoken,
                 );
                 // Replay the OS events recorded while JAWS handled this step (e.g. the focus
@@ -1154,6 +1165,37 @@ fn answer_text_reads(
             continue;
         };
         let event = okur_core::AccessibilityEvent::TextContext(context.clone());
+        if let Some(speech) = engine.handle_accessibility_event(&event) {
+            if spoken.is_empty() {
+                spoken.push(&speech, false);
+            }
+        }
+    }
+}
+
+/// Answers the reads of a page's elements Okur asked for (Element Information) since the last
+/// answer, from the page's IA2 objects as captured: what the live read would have found. With
+/// no IA2 snapshot (AT-SPI's, a desktop scenario's) they are answered with nothing.
+fn answer_element_reads(
+    engine: &mut ScreenReaderEngine,
+    actions: &okur_core::actions::RecordingActions,
+    answered: &mut usize,
+    page: Option<&okur_windows_model::ia2_snapshot::Ia2Node>,
+    spoken: &RecordingSpeech,
+) {
+    let asked: Vec<String> = actions
+        .requests()
+        .iter()
+        .filter_map(|(action, _)| action.strip_prefix("read element information "))
+        .map(str::to_owned)
+        .collect();
+    for id in asked.iter().skip(*answered) {
+        *answered += 1;
+        let elements = match (page, id.parse::<i32>()) {
+            (Some(page), Ok(id)) => okur_windows_model::element_info::chain(page, id),
+            _ => Vec::new(),
+        };
+        let event = okur_core::AccessibilityEvent::ElementInformation(elements);
         if let Some(speech) = engine.handle_accessibility_event(&event) {
             if spoken.is_empty() {
                 spoken.push(&speech, false);

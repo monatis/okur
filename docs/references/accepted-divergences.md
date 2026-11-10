@@ -956,6 +956,15 @@ A step can be in more than one entry; all of its entries apply.
   pressed the question's Cancel. 1211 answers the question by JAWS's own keys.
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-11-10.
 
+### "message" after Element Information
+
+- Steps: `1210-web-element-information/s2`, `1210-web-element-information/s11`.
+- Difference: JAWS also says "message". After Element Information's message, read whole, JAWS
+  says "message", in every trial: its viewer's window named as it comes up, after the text.
+  Its Say Font message and its comment viewer say no such word (314/s2, 1095).
+- Why: Okur's message ends with its last line, "Press ESC to close this message."
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-11-10.
+
 ### The Window List's item said twice after Delete
 
 - Steps: `1209-desktop-window-list-delete/s3`.

@@ -66,6 +66,9 @@ pub fn path(corpus_dir: &Path, fixture: &str, api: Api) -> PathBuf {
 pub struct Loaded {
     pub aom: AomNode,
     pub fixture_sha256: Option<String>,
+    /// The page's IA2 objects as captured, where the snapshot is IA2's: what a live read of
+    /// them (Element Information's) would have found.
+    pub ia2: Option<okur_windows_model::ia2_snapshot::Ia2Node>,
 }
 
 /// Loads and maps a snapshot, choosing the API by its file name.
@@ -76,6 +79,7 @@ pub fn load(path: &Path) -> Result<Loaded, String> {
             Ok(Loaded {
                 aom: to_aom(&s.root),
                 fixture_sha256: s.provenance.fixture_sha256,
+                ia2: None,
             })
         }
         Some(Api::Ia2) => {
@@ -83,6 +87,7 @@ pub fn load(path: &Path) -> Result<Loaded, String> {
             Ok(Loaded {
                 aom: ia2_to_aom(&s.root),
                 fixture_sha256: s.provenance.fixture_sha256,
+                ia2: Some(s.root),
             })
         }
         Some(Api::Atspi) => {
@@ -93,6 +98,7 @@ pub fn load(path: &Path) -> Result<Loaded, String> {
             Ok(Loaded {
                 aom: okur_linux_model::page::to_aom(&s.root),
                 fixture_sha256: s.provenance.fixture_sha256,
+                ia2: None,
             })
         }
         None => Err(format!(

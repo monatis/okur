@@ -82,6 +82,18 @@ viewer-font-information = Font information:
 # name.
 viewer-hot-keys-link = List Okur Hot Keys
 viewer-close-hint = Press ESCAPE to close this message.
+
+## Element Information (Insert+Shift+F1) and Advanced Element Information (Insert+Ctrl+Shift+F1)
+## in a page: JAWS 2025's message [obs, 1210/s2, s11]. Each element's parameters follow its tag
+## line as "name=value", the page's own words.
+
+element-information-title = Element Information:
+element-information-advanced-title = Advanced Element Information:
+# An element's tag, upper case ("A", "HEADER", "#DOCUMENT"), and how many parameters follow.
+element-information-tag = Tag { $tag } has { $count } parameters:
+# The element's role, its number in hexadecimal ("1E" for a link, "42D" for a landmark).
+element-information-role = MSAA Role={ $role }
+element-information-close = Press ESC to close this message.
 # The Virtual Viewer window's status bar, as JAWS's shows it.
 viewer-status-ready = Ready
 

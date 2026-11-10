@@ -1039,6 +1039,16 @@ divergences! {
      keys.",
     "the agent under the owner's rule on JAWS's accidents, 2026-11-10";
 
+    Difference::JawsAlsoSays("\nmessage") => [
+        "1210-web-element-information/s2",
+        "1210-web-element-information/s11",
+    ],
+    "After Element Information's message, read whole, JAWS says \"message\", in every trial: \
+     its viewer's window named as it comes up, after the text (its Say Font message and its \
+     comment viewer say no such word, 314/s2, 1095). Okur's message ends with its last line, \
+     \"Press ESC to close this message.\"",
+    "the agent under the owner's rule on JAWS's accidents, 2026-11-10";
+
     Difference::Step => ["1209-desktop-window-list-delete/s3"],
     "After Delete in the Window List closed the chosen window, JAWS says the item the list comes \
      to twice, in every trial, once with its place and once without, in either order (\"Windows \

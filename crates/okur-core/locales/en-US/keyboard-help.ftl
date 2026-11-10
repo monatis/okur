@@ -464,6 +464,8 @@ command-route-pc-to-okur = Moves the PC cursor, or the virtual cursor, to the Ok
 # WindowList (Insert+F10).
 command-window-list = Lists the open windows, to switch to one.
 command-run-manager = Lists Okur's managers, to run one.
+command-element-information = Shows the element at the cursor and those around it, with their attributes.
+command-advanced-element-information = Shows the element at the cursor and those around it, with all their attributes.
 # ListTaskTrayIcons (Insert+F11).
 command-system-tray-list = Lists the icons of the notification area, to click one.
 # JumpToLine (J in a page).
