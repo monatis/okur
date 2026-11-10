@@ -1950,6 +1950,7 @@ mod tests {
             word: None,
             misspelled: Vec::new(),
             structure: None,
+            line: None,
         };
         let read = AtspiRecord::text(
             0,

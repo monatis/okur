@@ -491,6 +491,7 @@ mod tests {
                 word: None,
                 misspelled: Vec::new(),
                 structure: None,
+                line: None,
             }))
         };
         report(&mut engine, "Zed", 3);

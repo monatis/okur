@@ -450,7 +450,19 @@ fn read_text(
     let font = i32::try_from(at)
         .ok()
         .and_then(|offset| colors_at(provider, &object, offset));
-    let (line_start, line_end) = line_around(&text, caret);
+    // The caret's line as shown, by the field's own line boundary: a text area's wrapped line
+    // is two, which JAWS reads apart [obs, 1208/s3, s4]; the written line where none is read.
+    let shown = i32::try_from(caret)
+        .ok()
+        .and_then(|offset| {
+            provider
+                .atspi_line_at(&object.bus_name, &object.path, offset)
+                .map_err(|e| tracing::debug!("caret read: the line not read: {e}"))
+                .ok()
+        })
+        .and_then(|(start, end)| Some((usize::try_from(start).ok()?, usize::try_from(end).ok()?)))
+        .filter(|&(start, end)| start <= end && end <= length);
+    let (line_start, line_end) = shown.unwrap_or_else(|| line_around(&text, caret));
     let misspelled = misspelled(provider, &object, line_start, line_end);
     let word = in_page
         .then(|| okur_core::editing::web_word_at(&text, caret))
@@ -471,6 +483,7 @@ fn read_text(
         word,
         misspelled,
         structure: None,
+        line: shown,
     };
     // The focus moved on while the field was read (Tab during the wait): the read is the field
     // left, and the engine is not given it.

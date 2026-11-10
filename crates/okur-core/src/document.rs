@@ -1095,6 +1095,7 @@ mod tests {
                 tracking: false,
                 place: None,
             }),
+            line: None,
         }
     }
 
@@ -1114,6 +1115,7 @@ mod tests {
                 form_fields: fields,
                 ..LineStructure::default()
             }),
+            line: None,
         }
     }
 
@@ -1212,6 +1214,7 @@ mod tests {
                 }],
                 ..Default::default()
             }),
+            line: None,
         };
         assert_eq!(
             line_with_fields(&context(14)).as_deref(),
@@ -1312,6 +1315,7 @@ mod tests {
                 }],
                 ..Default::default()
             }),
+            line: None,
         };
         let Some(shown) = as_shown(&context) else {
             panic_free_fail("no shown text");
@@ -1375,6 +1379,7 @@ mod tests {
                 .collect(),
                 ..Default::default()
             }),
+            line: None,
         };
         let (on, selected, below) = (
             context(false, true),
@@ -1426,6 +1431,7 @@ mod tests {
                 }),
                 ..Default::default()
             }),
+            line: None,
         };
         let said = |key: EditKey, before: &TextContext, after: &TextContext| {
             around_line(key, Some(before), after, "Borrowing".into())
@@ -1513,6 +1519,7 @@ mod tests {
                 }],
                 ..Default::default()
             }),
+            line: None,
         };
         assert_eq!(
             line_with_fields(&context(34)).as_deref(),

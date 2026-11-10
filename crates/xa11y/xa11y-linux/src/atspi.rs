@@ -4663,6 +4663,27 @@ impl LinuxProvider {
         })
     }
 
+    /// The line holding character `offset` in the object at `bus_name` and `path`, as `(start,
+    /// end)` in characters: its Text interface's GetStringAtOffset by line
+    /// (`ATSPI_TEXT_GRANULARITY_LINE`). Chromium's lines are the lines shown: a text area's
+    /// wrapped line is two.
+    pub fn atspi_line_at(&self, bus_name: &str, path: &str, offset: i32) -> Result<(i32, i32)> {
+        const GRANULARITY_LINE: u32 = 3;
+        let proxy = self.make_proxy(bus_name, path, "org.a11y.atspi.Text")?;
+        let reply = proxy
+            .call_method("GetStringAtOffset", &(offset, GRANULARITY_LINE))
+            .map_err(|e| Error::Platform {
+                code: -1,
+                message: format!("Text.GetStringAtOffset failed: {e}"),
+            })?;
+        let (_, start, end): (String, i32, i32) =
+            reply.body().deserialize().map_err(|e| Error::Platform {
+                code: -1,
+                message: format!("Text.GetStringAtOffset reply decode failed: {e}"),
+            })?;
+        Ok((start, end))
+    }
+
     /// The whole text of the object at `bus_name` and `path`: its Text interface's GetText to
     /// the end.
     pub fn atspi_text(&self, bus_name: &str, path: &str) -> Result<String> {

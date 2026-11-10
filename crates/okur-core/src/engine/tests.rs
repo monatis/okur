@@ -535,6 +535,7 @@ fn a_native_field_says_its_paragraph_formatting() {
         word: None,
         misspelled: Vec::new(),
         structure: None,
+        line: None,
     });
     engine.handle_focus_event(&focus);
     assert_eq!(
@@ -1063,6 +1064,7 @@ fn the_window_named_after_a_viewer_follows_its_line() {
         word: None,
         misspelled: Vec::new(),
         structure: None,
+        line: None,
     });
     engine.handle_focus_event(&field);
     let insert = Modifiers {
@@ -1395,6 +1397,7 @@ fn say_color_names_the_text_and_background_colors() {
         word: None,
         misspelled: Vec::new(),
         structure: None,
+        line: None,
     });
     engine.handle_focus_event(&field);
     assert_eq!(
@@ -1500,6 +1503,7 @@ fn the_okur_cursor_reads_a_text_fields_lines() {
         word: None,
         misspelled: Vec::new(),
         structure: None,
+        line: None,
     });
     engine.handle_focus_event(&field);
     let press = |engine: &mut ScreenReaderEngine, key: Key, insert: bool| {
@@ -2158,6 +2162,7 @@ fn say_color_in_a_page_field_is_its_texts() {
         word: None,
         misspelled: Vec::new(),
         structure: None,
+        line: None,
     };
     let say_color = |engine: &mut ScreenReaderEngine| engine.execute_command("SayColor");
     engine.execute_command("{DOWN}");
@@ -2358,6 +2363,7 @@ fn a_selected_result_replaces_the_fields_read() {
         word: None,
         misspelled: Vec::new(),
         structure: None,
+        line: None,
     });
     assert_eq!(engine.handle_accessibility_event(&read), None);
 }
@@ -2579,6 +2585,7 @@ fn laptop_reading_keys_in_a_document() {
         word: None,
         misspelled: Vec::new(),
         structure: None,
+        line: None,
     });
     engine.handle_focus_event(&notepad);
     speech.take();
@@ -2744,6 +2751,7 @@ fn test_okur_key_in_forms_mode_reads_the_caret_line() {
             word: None,
             misspelled: Vec::new(),
             structure: None,
+            line: None,
         },
     ));
     assert_eq!(
@@ -3348,6 +3356,7 @@ fn a_forms_field_is_virtualized_with_its_window() {
         word: None,
         misspelled: Vec::new(),
         structure: None,
+        line: None,
     });
     engine.handle_focus_event(&name);
     assert_eq!(engine.execute_command("VirtualizeWindow"), None);
@@ -3384,6 +3393,7 @@ fn a_text_editor_is_virtualized_from_its_text() {
         word: None,
         misspelled: Vec::new(),
         structure: None,
+        line: None,
     };
     engine.handle_accessibility_event(&AccessibilityEvent::TextContext(context));
     assert_eq!(
@@ -3431,6 +3441,7 @@ fn a_console_is_virtualized_from_its_text_at_the_prompt() {
         word: None,
         misspelled: Vec::new(),
         structure: None,
+        line: None,
     };
     assert_eq!(
         engine
@@ -4369,6 +4380,7 @@ fn a_plain_multi_line_edit_is_silent_on_home() {
         word: None,
         misspelled: Vec::new(),
         structure: None,
+        line: None,
     };
     let mut field = FocusEvent::new(Role::Edit).with_name("Text Editor");
     field.multi_line = true;
@@ -4436,6 +4448,7 @@ fn a_pages_multi_line_field_reads_keys_as_a_document() {
         word: None,
         misspelled: Vec::new(),
         structure: None,
+        line: None,
     };
     let mut focus = FocusEvent::new(Role::Edit)
         .with_node_id(2)
@@ -4719,6 +4732,7 @@ fn an_edit_combos_line_is_said_with_its_items_position() {
         word: None,
         misspelled: Vec::new(),
         structure: None,
+        line: None,
     };
     let mut field = FocusEvent::new(Role::Edit)
         .with_name("Font:")
@@ -5442,6 +5456,7 @@ fn auto_forms_mode_arrows_into_and_out_of_fields() {
             word: None,
             misspelled: Vec::new(),
             structure: None,
+            line: None,
         });
         focus
     };
@@ -5658,6 +5673,7 @@ fn an_arrow_back_onto_a_field_says_what_was_typed() {
             word: None,
             misspelled: Vec::new(),
             structure: None,
+            line: None,
         },
     ));
     speech.take();
@@ -6231,6 +6247,7 @@ fn numpad_5_says_the_character_its_word_and_its_value() {
         word: None,
         misspelled: Vec::new(),
         structure: None,
+        line: None,
     });
     engine.handle_focus_event(&field);
     speech.take();
@@ -6620,6 +6637,7 @@ fn notepads_edit_and_its_menu_bar() {
         word: None,
         misspelled: Vec::new(),
         structure: None,
+        line: None,
     });
     let arrival = engine.handle_focus_event(&edit).unwrap_or_default();
     assert!(
@@ -7404,6 +7422,7 @@ fn the_clipboard_keys_append_say_and_ask_before_overwriting() {
         word: None,
         misspelled: Vec::new(),
         structure: None,
+        line: None,
     };
     let mut field = FocusEvent::new(Role::Edit).with_window_title("Notes - Notepad");
     field.multi_line = true;
@@ -8108,6 +8127,7 @@ fn appending_to_the_clipboard_is_said_at_the_levels_length() {
             word: None,
             misspelled: Vec::new(),
             structure: None,
+            line: None,
         });
         engine.handle_focus_event(&field);
         actions.set_clipboard("one");
@@ -8259,6 +8279,7 @@ fn a_consoles_new_output_is_said_while_screen_echo_is_on() {
             word: None,
             misspelled: Vec::new(),
             structure: None,
+            line: None,
         });
         focus
     };
@@ -8352,6 +8373,7 @@ fn a_selections_caret_is_the_end_that_moved() {
             word: None,
             misspelled: Vec::new(),
             structure: None,
+            line: None,
         })
     };
     let caret = |engine: &ScreenReaderEngine| engine.last_text.as_ref().map(|t| t.caret);
@@ -8388,6 +8410,7 @@ fn word_document(
         word: None,
         misspelled: Vec::new(),
         structure: Some(structure),
+        line: None,
     });
     engine.handle_focus_event(&document);
     speech.take();
@@ -8451,6 +8474,7 @@ fn an_edit_combos_list_keeps_the_keys_on_the_field() {
         word: None,
         misspelled: Vec::new(),
         structure: None,
+        line: None,
     });
     engine.handle_focus_event(&font);
     engine.handle_accessibility_event(&AccessibilityEvent::Menu(MenuEvent::PopupStart {
@@ -8618,6 +8642,7 @@ fn a_word_drop_down_fields_list_is_opened_and_closed() {
             word: None,
             misspelled: Vec::new(),
             structure: Some(structure("Northside", 2)),
+            line: None,
         },
     ));
     assert_eq!(
@@ -8919,6 +8944,7 @@ fn words_notes_lists_list_comments_and_footnotes() {
                     line: (14, 55),
                     ..Default::default()
                 }),
+                line: None,
             },
         ));
     };
@@ -9028,6 +9054,7 @@ fn words_bookmarks_and_endnotes_lists() {
                     line: (56, 94),
                     ..Default::default()
                 }),
+                line: None,
             },
         ));
     };
@@ -9305,6 +9332,7 @@ fn alt_shift_e_reads_the_note_at_the_caret() {
         word: None,
         misspelled: Vec::new(),
         structure: Some(structure(at_caret)),
+        line: None,
     };
     // Left from before the period onto the reference, which the text does not show.
     engine.handle_accessibility_event(&AccessibilityEvent::TextContext(context(50, false)));
@@ -9339,6 +9367,7 @@ fn ctrl_shift_apostrophe_is_the_applications_outside_word() {
         word: None,
         misspelled: Vec::new(),
         structure: None,
+        line: None,
     });
     engine.handle_focus_event(&editor);
     let actions = crate::actions::RecordingActions::default();
@@ -9398,6 +9427,7 @@ fn words_table_keys_move_to_the_next_cell() {
                 cell: Some(cell(2, 2)),
                 ..Default::default()
             }),
+            line: None,
         },
     ));
     assert_eq!(
@@ -10954,6 +10984,7 @@ fn closing_the_layer_help_reads_the_line_then_the_window() {
         word: None,
         misspelled: Vec::new(),
         structure: None,
+        line: None,
     });
     engine.handle_focus_event(&field);
     GatedSpeech::take(&speech.history);

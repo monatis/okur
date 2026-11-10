@@ -944,6 +944,7 @@ impl ScreenReaderEngine {
             word: None,
             misspelled: Vec::new(),
             structure: None,
+            line: None,
         };
         if let Some(actions) = &self.actions {
             // The caret put in the field the focus was given to: not given, the field focused

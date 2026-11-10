@@ -166,16 +166,22 @@ pub(crate) fn char_at(context: &TextContext) -> Option<char> {
     context.text.chars().nth(context.caret)
 }
 
-/// The line containing the caret, without its line break: the field's own line where the
-/// platform read it (Word's lines, wrapped or ended by a table cell [obs, 518]), else the text
-/// between line breaks.
-pub fn line_at(context: &TextContext) -> String {
-    if let Some((start, end)) = context
+/// The caret's line by the field's own line unit, where the platform read it: Word's lines,
+/// wrapped or ended by a table cell [obs, 518], a browser's text area's lines as shown [obs,
+/// 1208/s3, s4].
+fn own_line(context: &TextContext) -> Option<(usize, usize)> {
+    context
         .structure
         .as_ref()
         .map(|s| s.line)
-        .filter(|&(start, _)| start <= context.text.chars().count())
-    {
+        .or(context.line)
+        .filter(|&(start, end)| start <= end && start <= context.text.chars().count())
+}
+
+/// The line containing the caret, without its line break: the field's own line where the
+/// platform read it ([`own_line`]), else the text between line breaks.
+pub fn line_at(context: &TextContext) -> String {
+    if let Some((start, end)) = own_line(context) {
         let line: String = context
             .text
             .chars()
@@ -215,8 +221,12 @@ fn line_bytes(context: &TextContext) -> (usize, usize, usize) {
     (start, caret, end)
 }
 
-/// Where the caret's line starts and ends, in characters, without its line break.
+/// Where the caret's line starts and ends, in characters, without its line break: the field's
+/// own line where the platform read it.
 fn line_range(context: &TextContext) -> (usize, usize) {
+    if let Some(line) = own_line(context) {
+        return line;
+    }
     let (start, caret, end) = line_bytes(context);
     let text = &context.text;
     let count = |from: usize, to: usize| text.get(from..to).map_or(0, |s| s.chars().count());
@@ -909,6 +919,7 @@ mod tests {
             word: None,
             misspelled: Vec::new(),
             structure: None,
+            line: None,
         }
     }
 
@@ -1259,6 +1270,30 @@ mod tests {
         assert_eq!(word("rose 3.5% last", 5), "3.5");
         assert_eq!(word("rose 3.5% last", 8), "%");
         assert_eq!(web_word_at("a b", 1), None);
+    }
+
+    /// A text area's line as shown, where the platform reads the field's own line: its wrapped
+    /// first line is two, "The reading room opens at", then "nine on weekdays." [obs,
+    /// 1208/s3, s4]; without that read, the written line whole.
+    #[test]
+    fn a_wrapped_line_is_read_as_shown() {
+        let text = "The reading room opens at nine on weekdays.\nQuiet please.";
+        let shown = |caret: usize, line: (usize, usize)| TextContext {
+            line: Some(line),
+            ..ctx(text, caret, None)
+        };
+        assert_eq!(
+            line_at(&shown(0, (0, 26))).trim_end(),
+            "The reading room opens at"
+        );
+        assert_eq!(line_at(&shown(26, (26, 44))), "nine on weekdays.");
+        assert_eq!(line_at(&shown(44, (44, 57))), "Quiet please.");
+        assert_eq!(
+            line_at(&ctx(text, 26, None)),
+            "The reading room opens at nine on weekdays."
+        );
+        // A line past the text is not taken.
+        assert_eq!(line_at(&shown(44, (90, 95))), "Quiet please.");
     }
 
     #[test]

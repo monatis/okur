@@ -1185,6 +1185,7 @@ mod tests {
             word: None,
             misspelled: Vec::new(),
             structure: None,
+            line: None,
         });
         let _ = engine.start_field_say_all();
         assert_eq!(
@@ -1223,6 +1224,7 @@ mod tests {
             word: None,
             misspelled: Vec::new(),
             structure: Some(crate::event::LineStructure::default()),
+            line: None,
         });
         assert_eq!(engine.start_field_say_all(), None);
         assert!(marks(&speech).is_empty());
@@ -1290,6 +1292,7 @@ five"
             word: None,
             misspelled: Vec::new(),
             structure: None,
+            line: None,
         });
         let _ = engine.start_field_say_all();
         engine.speech_reached(mark_of(&speech, "two"));

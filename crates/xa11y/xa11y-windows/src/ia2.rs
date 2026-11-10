@@ -74,6 +74,9 @@ pub struct Ia2TextState {
     /// last one at the text's end; none in an empty text.
     pub color: Option<String>,
     pub background: Option<String>,
+    /// The caret's line by IA2's line boundary (`IA2_TEXT_BOUNDARY_LINE`), in UTF-16 code
+    /// units: the line as shown, where a text area wraps its text. None where it was not read.
+    pub line: Option<(i32, i32)>,
 }
 
 /// What one walk over a text's formatting runs finds: its misspellings, and the colors of
@@ -1199,7 +1202,30 @@ mod com {
                     misspelled: runs.misspelled,
                     color: runs.color,
                     background: runs.background,
+                    line: self.line_at(caret.max(0)),
                 })
+            }
+
+            /// The line holding `offset` by IA2's line boundary, as `(start, end)` in UTF-16
+            /// code units: Chromium's lines are the lines shown, a wrapped line's parts each
+            /// one. None where it gives none (an empty text, past its end).
+            fn line_at(&self, offset: i32) -> Option<(i32, i32)> {
+                let (mut start, mut end) = (0i32, 0i32);
+                let mut unit = BSTR::default();
+                // SAFETY: out-pointers to locals on a valid interface; BSTR ownership transfers.
+                unsafe {
+                    self.0
+                        .get_textAtOffset(
+                            offset,
+                            IA2_TEXT_BOUNDARY_LINE,
+                            &mut start,
+                            &mut end,
+                            &mut unit,
+                        )
+                        .ok()
+                        .ok()?;
+                }
+                (start <= end).then_some((start, end))
             }
 
             /// The runs of its text marked as spelling errors (`invalid:spelling`), in UTF-16

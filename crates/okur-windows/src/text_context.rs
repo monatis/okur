@@ -500,6 +500,12 @@ mod reader {
                     )
                 })
                 .collect(),
+            line: state.line.map(|(start, end)| {
+                (
+                    utf16_to_chars(&state.text, start),
+                    utf16_to_chars(&state.text, end),
+                )
+            }),
             text: state.text,
             font,
             structure: None,
@@ -579,6 +585,7 @@ mod reader {
                 word: None,
                 misspelled: Vec::new(),
                 structure: None,
+                line: None,
             })
         }
     }
@@ -1777,6 +1784,7 @@ mod reader {
                     word: None,
                     misspelled: Vec::new(),
                     structure: None,
+                    line: None,
                 });
             }
             // The caret, as a range of its own.
@@ -1795,6 +1803,12 @@ mod reader {
                 windows::Win32::UI::Accessibility::TextUnit_Word,
             );
             let structure = word_structure(uia, &focused, &pattern, &caret, start);
+            // The caret's line by the field's own line unit: the line shown, where it wraps.
+            let line = unit_at(
+                &caret,
+                start,
+                windows::Win32::UI::Accessibility::TextUnit_Line,
+            );
             Some(TextContext {
                 text,
                 caret: start,
@@ -1803,6 +1817,7 @@ mod reader {
                 word,
                 misspelled: Vec::new(),
                 structure,
+                line,
             })
         }
     }
@@ -2031,6 +2046,7 @@ mod tests {
             word: None,
             misspelled: Vec::new(),
             structure: None,
+            line: None,
         };
         assert_eq!(
             ia2_position(&context),

@@ -326,6 +326,7 @@ mod tests {
                 form_fields: fields,
                 ..LineStructure::default()
             }),
+            line: None,
         }
     }
 

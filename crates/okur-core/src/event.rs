@@ -98,6 +98,12 @@ pub struct TextContext {
     /// What a word processor says of the caret's line, where it marks its structure (Word).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub structure: Option<LineStructure>,
+    /// The caret's line as `(start, end)` by the field's own line unit, where the platform
+    /// read it: a browser's text area wraps a long line, and JAWS reads the line as shown,
+    /// "The reading room opens at", then "nine on weekdays." [obs, 1208/s3, s4]. `None` where
+    /// it was not read: the line then ends at line breaks.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub line: Option<(usize, usize)>,
 }
 
 /// What a word processor says of the line at the caret through its text's attributes and

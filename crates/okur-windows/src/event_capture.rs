@@ -250,6 +250,7 @@ fn record_console_text() {
             word: None,
             misspelled: Vec::new(),
             structure: None,
+            line: None,
         });
         (state.sink)(event);
         state.count += 1;
@@ -2710,9 +2711,12 @@ fn record_at(
             let first = read();
             // Chromium fires the caret event before its IA2 caret offset moves: a trace
             // reads the field again once it has settled (live, the actions worker polls
-            // for the change after the key instead). Only a page's: elsewhere (Word) the
-            // second read only doubled each caret event's cost.
-            if !state.live && in_page && matches!(name, "caret" | "text_selection_change") {
+            // for the change after the key instead). Only Chromium's: elsewhere (Word) the
+            // second read only doubled each caret event's cost. A caret event of a page's
+            // text area can come with no focus chain, and read once it kept the caret where
+            // it was (1208/s4, "caret: 0" after Down onto a wrapped line's second part).
+            let chromium = in_page || class.starts_with("Chrome_");
+            if !state.live && chromium && matches!(name, "caret" | "text_selection_change") {
                 std::thread::sleep(std::time::Duration::from_millis(40));
                 read().or(first)
             } else {

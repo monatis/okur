@@ -2663,6 +2663,7 @@ Undo  Unavailable"
             word: None,
             misspelled: Vec::new(),
             structure: None,
+            line: None,
         });
         assert_eq!(
             norm(&focus_speech(&notepad, None).render()),
@@ -2698,6 +2699,7 @@ Undo  Unavailable"
             word: None,
             misspelled: Vec::new(),
             structure: None,
+            line: None,
         });
         assert_eq!(
             norm(&focus_speech(&code, None).render()),

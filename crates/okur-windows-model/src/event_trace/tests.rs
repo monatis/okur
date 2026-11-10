@@ -2101,6 +2101,7 @@ fn a_selects_value_change_is_a_change_not_text() {
             word: None,
             misspelled: Vec::new(),
             structure: None,
+            line: None,
         }),
         ..focus_event(Vec::new())
     };
@@ -2133,6 +2134,7 @@ fn another_objects_value_change_is_not_the_fields_text() {
             word: None,
             misspelled: Vec::new(),
             structure: None,
+            line: None,
         })
     };
     let document = TraceEvent {
