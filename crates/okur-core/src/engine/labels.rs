@@ -12,8 +12,10 @@ use crate::ui::label::{DeleteDialog, LabelDialog, Outcome};
 /// What Custom Label Delete's question takes away on OK.
 #[derive(Debug, Clone)]
 pub(super) enum Deleting {
-    /// The label of the page's node.
-    One(usize),
+    /// The label of the element known by its key, in its place: kept by key, not by the page's
+    /// node, which a page read again while the question is open renumbers (the code review of
+    /// 2026-11-10, third pass, 5).
+    One { place: String, key: String },
     /// Every label of the place.
     All(String),
 }
@@ -147,17 +149,18 @@ impl ScreenReaderEngine {
         Some(again)
     }
 
-    /// The label of the element at the virtual cursor, if it has one.
-    fn label_at_cursor(&self) -> Option<(usize, String)> {
+    /// The label of the element at the virtual cursor, if it has one: its place, its key and
+    /// the label.
+    fn label_at_cursor(&self) -> Option<(String, String, String)> {
         let target = self.label_target()?;
         let place = place_of(self.cursor.buffer.document_url()?);
-        let label = self
+        let key = self
             .cursor
             .buffer
             .node(target)
-            .and_then(crate::labels::element_key)
-            .and_then(|key| self.custom_labels.places.get(&place)?.get(&key).cloned())?;
-        Some((target, label))
+            .and_then(crate::labels::element_key)?;
+        let label = self.custom_labels.places.get(&place)?.get(&key).cloned()?;
+        Some((place, key, label))
     }
 
     /// Custom Label Delete (Run Okur Manager, in a page): asks whether to take the label of the
@@ -169,7 +172,7 @@ impl ScreenReaderEngine {
         if self.app_mode != AppMode::VirtualBuffer {
             return None;
         }
-        let Some((target, label)) = self.label_at_cursor() else {
+        let Some((place, key, label)) = self.label_at_cursor() else {
             return self
                 .say_message(crate::messages::msg::custom_label_none_to_delete().to_string());
         };
@@ -182,7 +185,7 @@ impl ScreenReaderEngine {
         ui.send(ToUi::DialogShow {
             dialog: dialog.spec(),
         });
-        self.labels_delete = Some((dialog, Deleting::One(target)));
+        self.labels_delete = Some((dialog, Deleting::One { place, key }));
         None
     }
 
@@ -234,8 +237,8 @@ impl ScreenReaderEngine {
                 ui.send(ToUi::DialogClose { id: dialog.id });
             }
             match deleting {
-                Deleting::All(place) if yes => self.delete_all_labels(&place),
-                Deleting::One(target) if yes => self.give_label(target, ""),
+                Deleting::All(place) if yes => self.delete_labels(&place, None),
+                Deleting::One { place, key } if yes => self.delete_labels(&place, Some(&key)),
                 _ => {}
             }
             self.returning_from_dialog();
@@ -294,10 +297,14 @@ impl ScreenReaderEngine {
 }
 
 impl ScreenReaderEngine {
-    /// Takes every label of `place` away, keeps that, and reads the page without them, the
-    /// cursor where it was.
-    fn delete_all_labels(&mut self, place: &str) {
-        if !self.custom_labels.remove_place(place) {
+    /// Takes the label of the element known by `key` in `place` away, or every label of
+    /// `place` with none, keeps that, and reads the page without them, the cursor where it was.
+    fn delete_labels(&mut self, place: &str, key: Option<&str>) {
+        let removed = match key {
+            Some(key) => self.custom_labels.remove(place, key),
+            None => self.custom_labels.remove_place(place),
+        };
+        if !removed {
             return;
         }
         if let Some(store) = &self.label_store {

@@ -97,6 +97,18 @@ impl CustomLabels {
         true
     }
 
+    /// Takes the label of the element known by `key` in `place` away; whether it had one.
+    pub fn remove(&mut self, place: &str, key: &str) -> bool {
+        let Some(labels) = self.places.get_mut(place) else {
+            return false;
+        };
+        let had = labels.remove(key).is_some();
+        if labels.is_empty() {
+            self.places.remove(place);
+        }
+        had
+    }
+
     /// Takes every label of `place` away; whether it had any.
     pub fn remove_place(&mut self, place: &str) -> bool {
         self.places

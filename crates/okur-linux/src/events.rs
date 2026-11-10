@@ -58,10 +58,12 @@ struct LivePage {
     armed: std::sync::atomic::AtomicBool,
 }
 
-/// A live region heard changing, read once its signals pause: the page's document and when.
+/// A live region heard changing, read once its signals pause: the page's document, when, and
+/// the most objects it is read with.
 struct DirtyRegion {
     document: AtspiObject,
     due: std::time::Instant,
+    limit: usize,
 }
 
 /// How long after a live region's first signal it is read: its change's signals (a message's
@@ -70,6 +72,12 @@ const LIVE_SETTLE: Duration = Duration::from_millis(40);
 
 /// The most objects a live region is read with.
 const LIVE_LIMIT: usize = 2000;
+
+/// The most objects a page's control is read with when its state changed with the focus
+/// elsewhere: its own state is what changed, and a menu or a combo box's wrapper read whole for
+/// each flip cost a subtree's reads over D-Bus (the code review of 2026-11-10, third pass, 6).
+/// A control bigger than this is the page's change instead, which captures the page again.
+const CONTROL_STATE_LIMIT: usize = 64;
 
 /// The page in front captured again after it changed, as the engine asks
 /// (`ApplicationActions::page_changed`): when first and last asked, and whether at once.
@@ -239,9 +247,10 @@ fn read_region(
     document: &str,
     region: &AtspiObject,
     objects: &PageObjects,
+    limit: usize,
 ) -> AtspiRecord {
     let started = std::time::Instant::now();
-    let tree = provider.atspi_tree_parallel(region, LIVE_LIMIT);
+    let tree = provider.atspi_tree_parallel(region, limit);
     let ids = {
         let mut objects = objects
             .lock()
@@ -261,7 +270,7 @@ fn read_region(
         okur_linux_model::convert::LiveRead {
             document: document.to_owned(),
             root,
-            cut: objects >= LIVE_LIMIT,
+            cut: objects >= limit,
             read_ms,
         },
     )
@@ -270,7 +279,7 @@ fn read_region(
 /// The live regions read off the event thread, as their signals pause: a big region read on
 /// it held every focus behind it (the code review of 2026-11-09, second pass, finding 1).
 struct RegionReader {
-    asks: std::sync::mpsc::Sender<(String, AtspiObject)>,
+    asks: std::sync::mpsc::Sender<(String, AtspiObject, usize)>,
     reads: std::sync::mpsc::Receiver<AtspiRecord>,
 }
 
@@ -280,7 +289,7 @@ impl RegionReader {
     fn start(objects: PageObjects) -> Result<Self, RuntimeError> {
         let provider =
             LinuxProvider::new().map_err(|e| source_error("the region reader's bus", e))?;
-        let (asks, asked) = std::sync::mpsc::channel::<(String, AtspiObject)>();
+        let (asks, asked) = std::sync::mpsc::channel::<(String, AtspiObject, usize)>();
         let (read, reads) = std::sync::mpsc::channel();
         std::thread::spawn(move || {
             while let Ok(first) = asked.recv() {
@@ -290,9 +299,9 @@ impl RegionReader {
                         waiting.push(more);
                     }
                 }
-                for (document, region) in waiting {
+                for (document, region, limit) in waiting {
                     if read
-                        .send(read_region(&provider, &document, &region, &objects))
+                        .send(read_region(&provider, &document, &region, &objects, limit))
                         .is_err()
                     {
                         return;
@@ -1310,7 +1319,7 @@ impl EventSource for AtspiEventSource {
                     for region in due {
                         if let (Some(d), Some(regions)) = (dirty.remove(&region), regions.as_ref())
                         {
-                            let _ = regions.asks.send((key_of(&d.document), region));
+                            let _ = regions.asks.send((key_of(&d.document), region, d.limit));
                         }
                     }
                     // The regions read, given to the engine where the focus is still in their
@@ -1501,9 +1510,11 @@ impl EventSource for AtspiEventSource {
                                         .map(|d| d.due)
                                         .min()
                                         .unwrap_or_else(|| std::time::Instant::now() + LIVE_SETTLE);
-                                    dirty
-                                        .entry(region)
-                                        .or_insert_with(|| DirtyRegion { document, due });
+                                    dirty.entry(region).or_insert_with(|| DirtyRegion {
+                                        document,
+                                        due,
+                                        limit: LIVE_LIMIT,
+                                    });
                                 }
                                 continue;
                             }
@@ -1522,21 +1533,33 @@ impl EventSource for AtspiEventSource {
                                     ..
                                 }
                             );
+                            // One changed while the focus is away from its page (in the address
+                            // bar, in Okur's dialog) is that page's change, read as the focus
+                            // comes back to it (the code review of 2026-11-10, third pass, 6).
                             if let Some(object) = target
                                 .filter(|e| page_state && !e.states.focused)
                                 .and_then(AtspiObject::of)
                             {
-                                let document =
-                                    page_of_object(&live, &object.bus_name, &object.path)
-                                        .filter(|d| focus_page.as_deref() == Some(d.as_str()))
-                                        .and_then(|d| object_of_key(&d));
+                                let page = page_of_object(&live, &object.bus_name, &object.path);
                                 let in_region =
                                     live_page_of(&live, &object.bus_name, &object.path).is_some();
-                                if let (Some(document), false) = (document, in_region) {
-                                    let due = std::time::Instant::now() + LIVE_SETTLE;
-                                    dirty
-                                        .entry(object)
-                                        .or_insert_with(|| DirtyRegion { document, due });
+                                match page {
+                                    Some(key) if focus_page.as_deref() == Some(key.as_str()) => {
+                                        if let (Some(document), false) =
+                                            (object_of_key(&key), in_region)
+                                        {
+                                            let due = std::time::Instant::now() + LIVE_SETTLE;
+                                            dirty.entry(object).or_insert_with(|| DirtyRegion {
+                                                document,
+                                                due,
+                                                limit: CONTROL_STATE_LIMIT,
+                                            });
+                                        }
+                                    }
+                                    Some(key) => {
+                                        changed_away.insert(key);
+                                    }
+                                    None => {}
                                 }
                             }
                             let focus = event.kind == EventKind::FocusChanged;

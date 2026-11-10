@@ -48,16 +48,38 @@ pub fn unvisited_row_under_mouse(event: &crate::event_trace::TraceEvent) -> bool
 pub fn without_files_beside(event: &mut crate::event_trace::TraceEvent) {
     const UIA_LISTITEM: i32 = 50007;
     const UIA_DATAITEM: i32 = 50029;
-    if event.process.as_deref() != Some("explorer.exe") {
+    let explorer = event
+        .process
+        .as_deref()
+        .is_some_and(|p| p.eq_ignore_ascii_case("explorer.exe"));
+    if !explorer {
         return;
     }
+    let unvisited = |node: &crate::uia_snapshot::UiaNode| {
+        matches!(node.control_type, UIA_LISTITEM | UIA_DATAITEM)
+            && !node.has_keyboard_focus
+            && node.is_selected != Some(true)
+    };
     for sibling in &mut event.focus_siblings {
-        if matches!(sibling.control_type, UIA_LISTITEM | UIA_DATAITEM)
-            && !sibling.has_keyboard_focus
-            && sibling.is_selected != Some(true)
-        {
+        if unvisited(sibling) {
             sibling.name = None;
         }
+    }
+    // The items under the focus too, where the list itself has it: every file of the folder
+    // (the code review of 2026-11-10, third pass, 4).
+    fn under(
+        node: &mut crate::uia_snapshot::UiaNode,
+        unvisited: &dyn Fn(&crate::uia_snapshot::UiaNode) -> bool,
+    ) {
+        for child in &mut node.children {
+            if unvisited(child) {
+                child.name = None;
+            }
+            under(child, unvisited);
+        }
+    }
+    if let Some(subtree) = event.focus_subtree.as_mut() {
+        under(subtree, &unvisited);
     }
 }
 
@@ -246,6 +268,31 @@ mod tests {
             names("jtl.exe"),
             [Some("code".to_owned()), Some("budget.xlsx".to_owned())]
         );
+    }
+
+    /// The list itself focused in File Explorer: the files under it go too, their number
+    /// stays; a selected one keeps its name.
+    #[test]
+    fn the_files_under_an_explorer_list_are_left_out() {
+        let item = |name: &str, selected: bool| {
+            format!(
+                r#"{{"control_type":50007,"name":"{name}","is_enabled":true,"is_offscreen":false,"is_password":false,"is_required_for_form":false,"is_keyboard_focusable":true,"has_keyboard_focus":false,"is_selected":{selected},"is_control_element":true,"is_content_element":true}}"#
+            )
+        };
+        let line = format!(
+            r#"{{"t_ms":1,"event":"focus","win_event":32773,"hwnd":1,"id_object":-4,"id_child":0,"process":"Explorer.EXE","focus_subtree":{{"control_type":50008,"name":"Items View","is_enabled":true,"is_offscreen":false,"is_password":false,"is_required_for_form":false,"is_keyboard_focusable":true,"has_keyboard_focus":true,"is_control_element":true,"is_content_element":true,"children":[{},{}]}}}}"#,
+            item("budget.xlsx", false),
+            item("code", true)
+        );
+        let event: Option<crate::event_trace::TraceEvent> = serde_json::from_str(&line).ok();
+        let names: Vec<Option<String>> = event
+            .and_then(|mut event| {
+                without_files_beside(&mut event);
+                event.focus_subtree
+            })
+            .map(|list| list.children.into_iter().map(|c| c.name).collect())
+            .unwrap_or_default();
+        assert_eq!(names, [None, Some("code".to_owned())]);
     }
 
     #[test]

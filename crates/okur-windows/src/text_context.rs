@@ -1804,11 +1804,17 @@ mod reader {
             );
             let structure = word_structure(uia, &focused, &pattern, &caret, start);
             // The caret's line by the field's own line unit: the line shown, where it wraps.
-            let line = unit_at(
-                &caret,
-                start,
-                windows::Win32::UI::Accessibility::TextUnit_Line,
-            );
+            // Word's structure holds its line already, read the same way: not read twice on
+            // each key (the code review of 2026-11-10, third pass, 3).
+            let line = if structure.is_some() {
+                None
+            } else {
+                unit_at(
+                    &caret,
+                    start,
+                    windows::Win32::UI::Accessibility::TextUnit_Line,
+                )
+            };
             Some(TextContext {
                 text,
                 caret: start,

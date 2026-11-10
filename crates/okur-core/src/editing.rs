@@ -170,12 +170,34 @@ pub(crate) fn char_at(context: &TextContext) -> Option<char> {
 /// wrapped or ended by a table cell [obs, 518], a browser's text area's lines as shown [obs,
 /// 1208/s3, s4].
 fn own_line(context: &TextContext) -> Option<(usize, usize)> {
-    context
+    let count = context.text.chars().count();
+    if let Some(line) = context
         .structure
         .as_ref()
         .map(|s| s.line)
-        .or(context.line)
-        .filter(|&(start, end)| start <= end && start <= context.text.chars().count())
+        .filter(|&(start, end)| start <= end && start <= count)
+    {
+        return Some(line);
+    }
+    // The platform's line only where it still holds the caret, with no line break inside it:
+    // the engine moves its caret itself (Alt+Down's sentence, Say All, a selection's moving
+    // end), and a line read for another place is not the caret's (the code review of
+    // 2026-11-10, third pass, 1).
+    context.line.filter(|&(start, end)| {
+        let line: Vec<char> = context
+            .text
+            .chars()
+            .skip(start)
+            .take(end.saturating_sub(start))
+            .collect();
+        let ends_with_break = line.last().is_some_and(|&c| is_line_break(c));
+        let inside = line
+            .get(..line.len().saturating_sub(1))
+            .is_some_and(|before| before.iter().any(|&c| is_line_break(c)));
+        let holds_caret = start <= context.caret
+            && (context.caret < end || (context.caret == end && !ends_with_break));
+        start <= end && end <= count && holds_caret && !inside
+    })
 }
 
 /// The line containing the caret, without its line break: the field's own line where the
@@ -1294,6 +1316,15 @@ mod tests {
         );
         // A line past the text is not taken.
         assert_eq!(line_at(&shown(44, (90, 95))), "Quiet please.");
+        // Nor one that no longer holds the caret, which the engine moved itself (Alt+Down,
+        // Say All, a selection's end), nor one with a line break inside it (a provider's
+        // paragraph for a line): the text between line breaks is read.
+        assert_eq!(line_at(&shown(44, (0, 26))), "Quiet please.");
+        assert_eq!(line_at(&shown(44, (26, 44))), "Quiet please.");
+        assert_eq!(
+            line_at(&shown(0, (0, 57))),
+            "The reading room opens at nine on weekdays."
+        );
     }
 
     #[test]

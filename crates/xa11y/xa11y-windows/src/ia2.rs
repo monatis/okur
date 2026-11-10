@@ -1251,19 +1251,18 @@ mod com {
                 let (mut start, mut end) = (0i32, 0i32);
                 let mut unit = BSTR::default();
                 // SAFETY: out-pointers to locals on a valid interface; BSTR ownership transfers.
-                unsafe {
-                    self.0
-                        .get_textAtOffset(
-                            offset,
-                            IA2_TEXT_BOUNDARY_LINE,
-                            &mut start,
-                            &mut end,
-                            &mut unit,
-                        )
-                        .ok()
-                        .ok()?;
-                }
-                (start <= end).then_some((start, end))
+                let read = unsafe {
+                    self.0.get_textAtOffset(
+                        offset,
+                        IA2_TEXT_BOUNDARY_LINE,
+                        &mut start,
+                        &mut end,
+                        &mut unit,
+                    )
+                };
+                // S_OK alone: Chromium answers S_FALSE with its offsets zeroed where it has no
+                // line there, which is no line (the code review of 2026-11-10, third pass, 2).
+                (read.0 == 0 && start < end).then_some((start, end))
             }
 
             /// The runs of its text marked as spelling errors (`invalid:spelling`), in UTF-16

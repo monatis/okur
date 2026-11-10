@@ -56,7 +56,16 @@ pub fn chain(root: &Ia2Node, unique_id: i32) -> Vec<ElementDetails> {
     if !find(root, unique_id, &mut path) {
         return Vec::new();
     }
-    path.iter().rev().filter_map(|node| details(node)).collect()
+    // Up to the first document, as the live read stops: an iframe's element lists its frame's
+    // document last, not the page's (the code review of 2026-11-10, third pass, 8).
+    let mut chain = Vec::new();
+    for node in path.iter().rev() {
+        chain.extend(details(node));
+        if node.msaa_role == Some(ROLE_SYSTEM_DOCUMENT) {
+            break;
+        }
+    }
+    chain
 }
 
 /// Whether `node` holds the object `unique_id`, with `path` the nodes from `node` to it.
