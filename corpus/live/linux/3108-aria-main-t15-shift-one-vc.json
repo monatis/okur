@@ -1,0 +1,54 @@
+{
+ "scenario_id": "3108-aria-main-t15-shift-one-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794278196081
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794278196446
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794278196749
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794278198053,
+     "t_end_ms": 1794278199057,
+     "action": {
+      "type": "key",
+      "command": "Shift+1"
+     },
+     "keys": [
+      "Shift+1"
+     ],
+     "key_times": [
+      1794278198053
+     ],
+     "observation": {
+      "speech_raw": "Main Landmark\n \u001d heading level 1 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

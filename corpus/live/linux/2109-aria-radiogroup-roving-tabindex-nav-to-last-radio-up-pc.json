@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2109-aria-radiogroup-roving-tabindex-nav-to-last-radio-up-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794251850129
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794251850488
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794251850791
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794251851093
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794251852398,
+     "t_end_ms": 1794251853502,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794251852398
+     ],
+     "observation": {
+      "speech_raw": "Thin crust  \u001d radio button \u001e   \u001dchecked\u001e \n3 of 3\nTo change the selection press Up or Down Arrow.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794251853502,
+     "t_end_ms": 1794251854507,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794251853502
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

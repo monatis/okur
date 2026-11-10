@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2715-aria-minimal-data-grid-nav-to-last-cell-row-grid-end-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794267809101
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794267809466
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794267809768
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794267810070
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794267811375,
+     "t_end_ms": 1794267812479,
+     "action": {
+      "type": "key",
+      "command": "End"
+     },
+     "keys": [
+      "End"
+     ],
+     "key_times": [
+      1794267811375
+     ],
+     "observation": {
+      "speech_raw": "Balance\n$999,741.00\nColumn 5",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794267812479,
+     "t_end_ms": 1794267813484,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794267812479
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

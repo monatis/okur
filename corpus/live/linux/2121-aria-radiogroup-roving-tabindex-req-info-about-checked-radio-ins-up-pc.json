@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2121-aria-radiogroup-roving-tabindex-req-info-about-checked-radio-ins-up-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794252165429
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794252165790
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794252166093
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794252166394
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794252167700,
+     "t_end_ms": 1794252168705,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794252167700
+     ],
+     "observation": {
+      "speech_raw": "Regular crust  \u001d radio button \u001e   \u001dchecked\u001e \n1 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794252168705,
+     "t_end_ms": 1794252169709,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794252168705
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,54 @@
+{
+ "scenario_id": "3018-aria-complementary-t1-r-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794275843920
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794275844283
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794275844586
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794275845907,
+     "t_end_ms": 1794275846911,
+     "action": {
+      "type": "key",
+      "command": "R"
+     },
+     "keys": [
+      "R"
+     ],
+     "key_times": [
+      1794275845907
+     ],
+     "observation": {
+      "speech_raw": "Landmarks complementary information",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2640-aria-menu-button-navigation-nav-back-to-menu-button-shift-b-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794265817140
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794265817506
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794265817808
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794265819113,
+     "t_end_ms": 1794265820117,
+     "action": {
+      "type": "key",
+      "command": "Shift+B"
+     },
+     "keys": [
+      "Shift+B"
+     ],
+     "key_times": [
+      1794265819113
+     ],
+     "observation": {
+      "speech_raw": "WAI-ARIA Quick Links  \u001d button menu \u001e   \u001dcollapsed\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

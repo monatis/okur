@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2298-aria-switch-button-operate-switch-on-state-space-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794256809077
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794256809438
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794256809740
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794256811045,
+     "t_end_ms": 1794256812149,
+     "action": {
+      "type": "key",
+      "command": "Space"
+     },
+     "keys": [
+      "Space"
+     ],
+     "key_times": [
+      1794256811045
+     ],
+     "observation": {
+      "speech_raw": " \u001d Toggle button \u001e \nNot pressed\nLiving Room Lights",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

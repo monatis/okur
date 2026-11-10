@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2674-aria-modal-dialog-close-modal-dialog-enter-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794266720769
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794266721132
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794266721434
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794266721736
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794266723040,
+     "t_end_ms": 1794266724145,
+     "action": {
+      "type": "key",
+      "command": "Enter"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794266723040
+     ],
+     "observation": {
+      "speech_raw": "Add Delivery Address  \u001d Button \u001e \nTo activate press spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794266724145,
+     "t_end_ms": 1794266725150,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794266724145
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

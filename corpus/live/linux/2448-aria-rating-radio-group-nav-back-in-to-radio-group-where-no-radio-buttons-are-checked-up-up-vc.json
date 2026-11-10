@@ -1,0 +1,74 @@
+{
+ "scenario_id": "2448-aria-rating-radio-group-nav-back-in-to-radio-group-where-no-radio-buttons-are-checked-up-up-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794260752729
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794260753096
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794260753399
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794260754703,
+     "t_end_ms": 1794260755708,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794260754703
+     ],
+     "observation": {
+      "speech_raw": "group end Rating",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794260755708,
+     "t_end_ms": 1794260756712,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794260755708
+     ],
+     "observation": {
+      "speech_raw": "five stars \u001d radio button \u001e  \u001dnot checked\u001e \n5 of 5",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

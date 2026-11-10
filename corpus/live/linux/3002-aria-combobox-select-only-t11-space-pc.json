@@ -1,0 +1,78 @@
+{
+ "scenario_id": "3002-aria-combobox-select-only-t11-space-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794275408893
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794275409255
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794275409558
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794275409860
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794275411164,
+     "t_end_ms": 1794275412369,
+     "action": {
+      "type": "key",
+      "command": "Space"
+     },
+     "keys": [
+      "Space"
+     ],
+     "key_times": [
+      1794275411164
+     ],
+     "observation": {
+      "speech_raw": " \u001dexpanded\u001e \nFavorite Fruit \u001d List box \u001e\nChoose a Fruit\n1 of 13\nTo move to an item press the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794275412369,
+     "t_end_ms": 1794275413373,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794275412369
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

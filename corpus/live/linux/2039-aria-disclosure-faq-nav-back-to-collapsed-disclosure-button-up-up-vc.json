@@ -1,0 +1,74 @@
+{
+ "scenario_id": "2039-aria-disclosure-faq-nav-back-to-collapsed-disclosure-button-up-up-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794250014786
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794250015146
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794250015448
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794250016752,
+     "t_end_ms": 1794250017756,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794250016752
+     ],
+     "observation": {
+      "speech_raw": "list end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794250017756,
+     "t_end_ms": 1794250018760,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794250017756
+     ],
+     "observation": {
+      "speech_raw": "Do all parking facilities have the same enforcement rules? \u001d Button \u001e  \u001dcollapsed\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

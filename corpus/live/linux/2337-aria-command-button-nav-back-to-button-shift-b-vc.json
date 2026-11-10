@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2337-aria-command-button-nav-back-to-button-shift-b-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794257830291
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794257830654
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794257830956
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794257832260,
+     "t_end_ms": 1794257833265,
+     "action": {
+      "type": "key",
+      "command": "Shift+B"
+     },
+     "keys": [
+      "Shift+B"
+     ],
+     "key_times": [
+      1794257832260
+     ],
+     "observation": {
+      "speech_raw": "Print Page  \u001d Button \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

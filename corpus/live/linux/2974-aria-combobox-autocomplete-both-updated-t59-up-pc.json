@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2974-aria-combobox-autocomplete-both-updated-t59-up-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794274661606
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794274661974
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794274662276
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794274662577
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794274663882,
+     "t_end_ms": 1794274664987,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794274663882
+     ],
+     "observation": {
+      "speech_raw": " \u001dexpanded\u001e \nStates \u001d List box \u001e\nArkansas\n5 of 5\nTo move to an item press the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794274664987,
+     "t_end_ms": 1794274665991,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794274664987
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

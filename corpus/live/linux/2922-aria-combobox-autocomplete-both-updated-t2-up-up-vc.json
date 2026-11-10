@@ -1,0 +1,74 @@
+{
+ "scenario_id": "2922-aria-combobox-autocomplete-both-updated-t2-up-up-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794273283066
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794273283432
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794273283735
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794273285039,
+     "t_end_ms": 1794273286043,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794273285039
+     ],
+     "observation": {
+      "speech_raw": "States \u001d Button \u001e  \u001dcollapsed\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794273286043,
+     "t_end_ms": 1794273287048,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794273286043
+     ],
+     "observation": {
+      "speech_raw": " \u001d edit combo \u001e  \u001dcollapsed\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

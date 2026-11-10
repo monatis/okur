@@ -1,0 +1,74 @@
+{
+ "scenario_id": "2852-aria-disclosure-navigation-nav-to-collapsed-disclosure-button-from-last-link-dropdown-down-down-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794271441784
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794271442151
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794271442455
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794271443759,
+     "t_end_ms": 1794271444764,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794271443759
+     ],
+     "observation": {
+      "speech_raw": "list end nesting level 1",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794271444764,
+     "t_end_ms": 1794271445767,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794271444764
+     ],
+     "observation": {
+      "speech_raw": "Admissions \u001d Button \u001e  \u001dcollapsed\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2624-aria-menu-button-actions-active-descendant-open-menu-to-last-item-up-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794265391196
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794265391558
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794265391860
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794265392162
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794265393467,
+     "t_end_ms": 1794265394672,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794265393467
+     ],
+     "observation": {
+      "speech_raw": "Action 4\nTo move through items press up or down arrow.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794265394672,
+     "t_end_ms": 1794265395676,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794265394672
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

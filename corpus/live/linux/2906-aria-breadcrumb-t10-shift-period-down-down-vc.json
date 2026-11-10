@@ -1,0 +1,94 @@
+{
+ "scenario_id": "2906-aria-breadcrumb-t10-shift-period-down-down-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794272863431
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794272863803
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794272864105
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794272865409,
+     "t_end_ms": 1794272866414,
+     "action": {
+      "type": "key",
+      "command": "Shift+Period"
+     },
+     "keys": [
+      "Shift+Period"
+     ],
+     "key_times": [
+      1794272865409
+     ],
+     "observation": {
+      "speech_raw": "list end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794272866414,
+     "t_end_ms": 1794272867418,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794272866414
+     ],
+     "observation": {
+      "speech_raw": "Breadcrumb navigation region end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794272867418,
+     "t_end_ms": 1794272868422,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794272867418
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Navigate backwards from here",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

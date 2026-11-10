@@ -1,0 +1,94 @@
+{
+ "scenario_id": "2817-aria-disclosure-navigation-nav-back-to-expanded-disclosure-button-up-up-up-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794270515876
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794270516240
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794270516542
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794270517846,
+     "t_end_ms": 1794270518850,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794270517846
+     ],
+     "observation": {
+      "speech_raw": "Mythical University navigation region end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794270518850,
+     "t_end_ms": 1794270519854,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794270518850
+     ],
+     "observation": {
+      "speech_raw": "list end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794270519854,
+     "t_end_ms": 1794270520858,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794270519854
+     ],
+     "observation": {
+      "speech_raw": "Academics \u001d Button \u001e  \u001dcollapsed\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

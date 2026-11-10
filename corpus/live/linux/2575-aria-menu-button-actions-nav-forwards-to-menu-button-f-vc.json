@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2575-aria-menu-button-actions-nav-forwards-to-menu-button-f-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794264096857
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794264097219
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794264097521
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794264098825,
+     "t_end_ms": 1794264099829,
+     "action": {
+      "type": "key",
+      "command": "F"
+     },
+     "keys": [
+      "F"
+     ],
+     "key_times": [
+      1794264098825
+     ],
+     "observation": {
+      "speech_raw": "Actions  \u001d button menu \u001e   \u001dcollapsed\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

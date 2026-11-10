@@ -1,0 +1,98 @@
+{
+ "scenario_id": "3153-aria-slider-multithumb-t22-up-tab-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794279394112
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794279394478
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794279394781
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794279395082
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794279396387,
+     "t_end_ms": 1794279397391,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794279396387
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794279397391,
+     "t_end_ms": 1794279398495,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794279397391
+     ],
+     "observation": {
+      "speech_raw": "Hotel Maximum Price in US dollars  \u001d left right slider \u001e \nTo increase or decrease use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794279398495,
+     "t_end_ms": 1794279399499,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794279398495
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

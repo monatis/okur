@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2788-aria-vertical-temperature-slider-req-info-about-slider-ins-up-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794269744607
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794269744971
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794269745274
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794269746578,
+     "t_end_ms": 1794269747583,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794269746578
+     ],
+     "observation": {
+      "speech_raw": "Temperature \u001d up down slider \u001e",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2472-aria-rating-radio-group-nav-to-prev-unchecked-radio-shift-f-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794261382482
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794261382845
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794261383147
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794261384451,
+     "t_end_ms": 1794261385457,
+     "action": {
+      "type": "key",
+      "command": "Shift+F"
+     },
+     "keys": [
+      "Shift+F"
+     ],
+     "key_times": [
+      1794261384451
+     ],
+     "observation": {
+      "speech_raw": "one star  \u001d radio button \u001e   \u001dnot checked\u001e \n1 of 5",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

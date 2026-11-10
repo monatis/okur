@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2032-aria-disclosure-faq-nav-forwards-to-collapsed-disclosure-button-f-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794249831803
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794249832164
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794249832467
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794249833771,
+     "t_end_ms": 1794249834775,
+     "action": {
+      "type": "key",
+      "command": "F"
+     },
+     "keys": [
+      "F"
+     ],
+     "key_times": [
+      1794249833771
+     ],
+     "observation": {
+      "speech_raw": "What do I do if I have a permit for an assigned lot, but can't find a space there?  \u001d Button \u001e  \u001dcollapsed\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

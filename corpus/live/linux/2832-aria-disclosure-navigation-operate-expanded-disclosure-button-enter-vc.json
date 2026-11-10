@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2832-aria-disclosure-navigation-operate-expanded-disclosure-button-enter-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794270913788
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794270914150
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794270914453
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794270915757,
+     "t_end_ms": 1794270916861,
+     "action": {
+      "type": "key",
+      "command": "Enter"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794270915757
+     ],
+     "observation": {
+      "speech_raw": " \u001dcollapsed\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

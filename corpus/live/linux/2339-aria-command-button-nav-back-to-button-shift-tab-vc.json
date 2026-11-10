@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2339-aria-command-button-nav-back-to-button-shift-tab-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794257881958
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794257882320
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794257882623
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794257883927,
+     "t_end_ms": 1794257885033,
+     "action": {
+      "type": "key",
+      "command": "Shift+Tab"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794257883927
+     ],
+     "observation": {
+      "speech_raw": "Print Page  \u001d Button \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2101-aria-radiogroup-roving-tabindex-nav-to-next-checked-radio-f-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794251642395
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794251642757
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794251643060
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794251644364,
+     "t_end_ms": 1794251645368,
+     "action": {
+      "type": "key",
+      "command": "F"
+     },
+     "keys": [
+      "F"
+     ],
+     "key_times": [
+      1794251644364
+     ],
+     "observation": {
+      "speech_raw": "Deep dish  \u001d radio button \u001e   \u001dnot checked\u001e \n2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

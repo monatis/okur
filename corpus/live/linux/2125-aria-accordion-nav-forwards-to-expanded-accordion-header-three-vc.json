@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2125-aria-accordion-nav-forwards-to-expanded-accordion-header-three-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794252269170
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794252269532
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794252269834
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794252271139,
+     "t_end_ms": 1794252272142,
+     "action": {
+      "type": "key",
+      "command": "3"
+     },
+     "keys": [
+      "3"
+     ],
+     "key_times": [
+      1794252271139
+     ],
+     "observation": {
+      "speech_raw": "Billing Address\n \u001d heading level 3 \u001e \u001d Button \u001e  \u001dcollapsed\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

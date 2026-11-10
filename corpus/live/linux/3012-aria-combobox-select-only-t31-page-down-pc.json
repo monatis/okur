@@ -1,0 +1,78 @@
+{
+ "scenario_id": "3012-aria-combobox-select-only-t31-page-down-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794275680768
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794275681130
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794275681433
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794275681734
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794275683038,
+     "t_end_ms": 1794275684142,
+     "action": {
+      "type": "key",
+      "command": "PageDown"
+     },
+     "keys": [
+      "PageDown"
+     ],
+     "key_times": [
+      1794275683038
+     ],
+     "observation": {
+      "speech_raw": "Grape\n11 of 13",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794275684142,
+     "t_end_ms": 1794275685146,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794275684142
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

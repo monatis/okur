@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2028-aria-checkbox-tri-state-operate-checked-checkbox-enter-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794249727053
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794249727419
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794249727721
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794249729026,
+     "t_end_ms": 1794249730130,
+     "action": {
+      "type": "key",
+      "command": "Enter"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794249729026
+     ],
+     "observation": {
+      "speech_raw": " \u001dnot checked\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

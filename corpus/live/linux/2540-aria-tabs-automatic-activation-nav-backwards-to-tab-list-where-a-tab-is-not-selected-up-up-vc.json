@@ -1,0 +1,74 @@
+{
+ "scenario_id": "2540-aria-tabs-automatic-activation-nav-backwards-to-tab-list-where-a-tab-is-not-selected-up-up-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794263173659
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794263174022
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794263174323
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794263175628,
+     "t_end_ms": 1794263176631,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794263175628
+     ],
+     "observation": {
+      "speech_raw": "group end Danish Composers",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794263176631,
+     "t_end_ms": 1794263177635,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794263176631
+     ],
+     "observation": {
+      "speech_raw": "Peter M\u00fcller \u001d Tab \u001e \n4 of 4",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

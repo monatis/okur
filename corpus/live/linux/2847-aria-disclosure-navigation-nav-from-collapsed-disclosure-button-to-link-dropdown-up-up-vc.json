@@ -1,0 +1,74 @@
+{
+ "scenario_id": "2847-aria-disclosure-navigation-nav-from-collapsed-disclosure-button-to-link-dropdown-up-up-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794271310558
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794271310923
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794271311226
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794271312530,
+     "t_end_ms": 1794271313534,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794271312530
+     ],
+     "observation": {
+      "speech_raw": "About \u001d Button \u001e  \u001dcollapsed\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794271313534,
+     "t_end_ms": 1794271314537,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794271313534
+     ],
+     "observation": {
+      "speech_raw": "list of 3 items",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

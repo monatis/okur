@@ -1,0 +1,74 @@
+{
+ "scenario_id": "2458-aria-rating-radio-group-nav-back-into-radio-group-where-last-radio-checked-up-up-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794261014666
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794261015029
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794261015331
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794261016634,
+     "t_end_ms": 1794261017638,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794261016634
+     ],
+     "observation": {
+      "speech_raw": "group end Rating",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794261017638,
+     "t_end_ms": 1794261018741,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794261017638
+     ],
+     "observation": {
+      "speech_raw": "five stars \u001d radio button \u001e  \u001dnot checked\u001e \n5 of 5",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

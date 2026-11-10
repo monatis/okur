@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2727-aria-quantity-spin-button-nav-back-to-spinbutton-shift-e-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794268125201
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794268125564
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794268125867
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794268127172,
+     "t_end_ms": 1794268128176,
+     "action": {
+      "type": "key",
+      "command": "Shift+E"
+     },
+     "keys": [
+      "Shift+E"
+     ],
+     "key_times": [
+      1794268127172
+     ],
+     "observation": {
+      "speech_raw": "Guests \u001d group \u001e \nAdults \u001d edit spin box \u001e \n1",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

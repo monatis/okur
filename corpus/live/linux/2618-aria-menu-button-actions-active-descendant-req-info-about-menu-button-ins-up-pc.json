@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2618-aria-menu-button-actions-active-descendant-req-info-about-menu-button-ins-up-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794265230604
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794265230970
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794265231273
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794265231575
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794265232880,
+     "t_end_ms": 1794265233884,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794265232880
+     ],
+     "observation": {
+      "speech_raw": "Actions \u001d button menu \u001e  \u001dcollapsed\u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794265233884,
+     "t_end_ms": 1794265234888,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794265233884
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2895-aria-breadcrumb-t4-shift-u-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794272573121
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794272573486
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794272573789
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794272575092,
+     "t_end_ms": 1794272576097,
+     "action": {
+      "type": "key",
+      "command": "Shift+U"
+     },
+     "keys": [
+      "Shift+U"
+     ],
+     "key_times": [
+      1794272575092
+     ],
+     "observation": {
+      "speech_raw": " \u001d Link \u001e  \u001dCurrent Page\u001e Breadcrumb Example",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

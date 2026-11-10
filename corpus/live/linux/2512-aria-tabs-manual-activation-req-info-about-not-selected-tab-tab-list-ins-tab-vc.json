@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2512-aria-tabs-manual-activation-req-info-about-not-selected-tab-tab-list-ins-tab-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794262435130
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794262435490
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794262435792
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794262437097,
+     "t_end_ms": 1794262438102,
+     "action": {
+      "type": "key",
+      "command": "Insert+Tab"
+     },
+     "keys": [
+      "Insert+Tab"
+     ],
+     "key_times": [
+      1794262437097
+     ],
+     "observation": {
+      "speech_raw": "Carl Andersen  \u001d Tab \u001e \n2 of 4",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2141-aria-accordion-nav-forwards-to-collapsed-accordion-header-tab-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794252682867
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794252683231
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794252683534
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794252683835
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794252685140,
+     "t_end_ms": 1794252686244,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794252685140
+     ],
+     "observation": {
+      "speech_raw": "Billing Address \u001d heading level 3 \u001e   \u001d Button \u001e  \u001dcollapsed\u001e \nTo activate press spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794252686244,
+     "t_end_ms": 1794252687250,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794252686244
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

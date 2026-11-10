@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2902-aria-breadcrumb-t8-ins-tab-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794272756415
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794272756782
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794272757084
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794272757385
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794272758689,
+     "t_end_ms": 1794272759694,
+     "action": {
+      "type": "key",
+      "command": "Insert+Tab"
+     },
+     "keys": [
+      "Insert+Tab"
+     ],
+     "key_times": [
+      1794272758689
+     ],
+     "observation": {
+      "speech_raw": "Breadcrumb Example \u001dCurrent Page\u001e   \u001d Link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794272759694,
+     "t_end_ms": 1794272760698,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794272759694
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

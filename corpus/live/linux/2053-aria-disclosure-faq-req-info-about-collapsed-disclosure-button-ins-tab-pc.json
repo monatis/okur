@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2053-aria-disclosure-faq-req-info-about-collapsed-disclosure-button-ins-tab-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794250381270
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794250381633
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794250381936
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794250382237
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794250383542,
+     "t_end_ms": 1794250384547,
+     "action": {
+      "type": "key",
+      "command": "Insert+Tab"
+     },
+     "keys": [
+      "Insert+Tab"
+     ],
+     "key_times": [
+      1794250383542
+     ],
+     "observation": {
+      "speech_raw": "What do I do if I have a permit for an assigned lot, but can't find a space there?  \u001d Button \u001e  \u001dcollapsed\u001e \nTo activate press spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794250384547,
+     "t_end_ms": 1794250385551,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794250384547
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

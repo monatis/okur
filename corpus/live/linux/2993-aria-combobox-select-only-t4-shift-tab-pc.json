@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2993-aria-combobox-select-only-t4-shift-tab-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794275167748
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794275168111
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794275168413
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794275168715
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794275170019,
+     "t_end_ms": 1794275171124,
+     "action": {
+      "type": "key",
+      "command": "Shift+Tab"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794275170019
+     ],
+     "observation": {
+      "speech_raw": "Favorite Fruit  \u001d Combo box \u001e   \u001dcollapsed\u001e \nChoose a Fruit\nTo change the selection use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794275171124,
+     "t_end_ms": 1794275172129,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794275171124
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,74 @@
+{
+ "scenario_id": "3039-aria-complementary-t17-l-down-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794276390929
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794276391294
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794276391597
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794276392901,
+     "t_end_ms": 1794276393905,
+     "action": {
+      "type": "key",
+      "command": "L"
+     },
+     "keys": [
+      "L"
+     ],
+     "key_times": [
+      1794276392901
+     ],
+     "observation": {
+      "speech_raw": "list of 6 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794276393906,
+     "t_end_ms": 1794276394910,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794276393906
+     ],
+     "observation": {
+      "speech_raw": "\u2022 Banner",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

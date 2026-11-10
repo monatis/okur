@@ -1,0 +1,74 @@
+{
+ "scenario_id": "2566-aria-tabs-automatic-activation-nav-forwards-to-tab-panel-down-down-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794263859363
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794263859724
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794263860027
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794263861331,
+     "t_end_ms": 1794263862335,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794263861331
+     ],
+     "observation": {
+      "speech_raw": "group end Danish Composers",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794263862335,
+     "t_end_ms": 1794263863338,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794263862335
+     ],
+     "observation": {
+      "speech_raw": "tab panel start Maria Ahlefeldt",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

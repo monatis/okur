@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2882-aria-banner-t19-g-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794272231303
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794272231669
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794272231972
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794272233276,
+     "t_end_ms": 1794272234280,
+     "action": {
+      "type": "key",
+      "command": "G"
+     },
+     "keys": [
+      "G"
+     ],
+     "key_times": [
+      1794272233276
+     ],
+     "observation": {
+      "speech_raw": "W3C Logo. To get missing image descriptions, open the context menu.\n \u001d Unlabeled image \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

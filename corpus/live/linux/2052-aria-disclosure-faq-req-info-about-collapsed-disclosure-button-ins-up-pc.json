@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2052-aria-disclosure-faq-req-info-about-collapsed-disclosure-button-ins-up-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794250354247
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794250354609
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794250354912
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794250355213
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794250356518,
+     "t_end_ms": 1794250357522,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794250356518
+     ],
+     "observation": {
+      "speech_raw": "What do I do if I have a permit for an assigned lot, but can't find a space there?  \u001d Button \u001e  \u001dcollapsed\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794250357522,
+     "t_end_ms": 1794250358527,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794250357522
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

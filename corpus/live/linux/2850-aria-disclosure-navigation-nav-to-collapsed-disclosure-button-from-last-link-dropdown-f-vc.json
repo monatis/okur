@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2850-aria-disclosure-navigation-nav-to-collapsed-disclosure-button-from-last-link-dropdown-f-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794271389937
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794271390301
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794271390605
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794271391909,
+     "t_end_ms": 1794271392913,
+     "action": {
+      "type": "key",
+      "command": "F"
+     },
+     "keys": [
+      "F"
+     ],
+     "key_times": [
+      1794271391909
+     ],
+     "observation": {
+      "speech_raw": "Admissions  \u001d Button \u001e  \u001dcollapsed\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

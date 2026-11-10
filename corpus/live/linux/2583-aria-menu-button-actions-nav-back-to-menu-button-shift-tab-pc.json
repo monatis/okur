@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2583-aria-menu-button-actions-nav-back-to-menu-button-shift-tab-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794264304664
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794264305026
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794264305328
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794264305630
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794264306934,
+     "t_end_ms": 1794264308039,
+     "action": {
+      "type": "key",
+      "command": "Shift+Tab"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794264306934
+     ],
+     "observation": {
+      "speech_raw": "Actions  \u001d button menu \u001e   \u001dcollapsed\u001e \nPress space to activate the menu, then navigate with arrow keys",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794264308039,
+     "t_end_ms": 1794264309044,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794264308039
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

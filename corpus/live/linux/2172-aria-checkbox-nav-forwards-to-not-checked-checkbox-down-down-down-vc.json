@@ -1,0 +1,94 @@
+{
+ "scenario_id": "2172-aria-checkbox-nav-forwards-to-not-checked-checkbox-down-down-down-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794253496351
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794253496716
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794253497020
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794253498324,
+     "t_end_ms": 1794253499327,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794253498324
+     ],
+     "observation": {
+      "speech_raw": "group start Sandwich Condiments",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794253499327,
+     "t_end_ms": 1794253500331,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794253499327
+     ],
+     "observation": {
+      "speech_raw": "list of 5 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794253500331,
+     "t_end_ms": 1794253501335,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794253500331
+     ],
+     "observation": {
+      "speech_raw": "Lettuce \u001d check box \u001e  \u001dnot checked\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

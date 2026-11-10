@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2086-aria-radiogroup-roving-tabindex-nav-back-into-radio-group-where-last-radio-checked-shift-tab-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794251249741
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794251250101
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794251250403
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794251250704
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794251252010,
+     "t_end_ms": 1794251253115,
+     "action": {
+      "type": "key",
+      "command": "Shift+Tab"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794251252010
+     ],
+     "observation": {
+      "speech_raw": "Pizza Crust \u001d group \u001e   \u001d\u001e \nThin crust  \u001d radio button \u001e   \u001dchecked\u001e \n3 of 3\nTo change the selection press Up or Down Arrow.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794251253115,
+     "t_end_ms": 1794251254119,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794251253115
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

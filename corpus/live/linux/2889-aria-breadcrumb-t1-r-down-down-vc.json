@@ -1,0 +1,94 @@
+{
+ "scenario_id": "2889-aria-breadcrumb-t1-r-down-down-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794272412587
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794272412951
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794272413254
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794272414558,
+     "t_end_ms": 1794272415562,
+     "action": {
+      "type": "key",
+      "command": "R"
+     },
+     "keys": [
+      "R"
+     ],
+     "key_times": [
+      1794272414558
+     ],
+     "observation": {
+      "speech_raw": "Breadcrumb navigation region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794272415562,
+     "t_end_ms": 1794272416566,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794272415562
+     ],
+     "observation": {
+      "speech_raw": "list of 4 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794272416566,
+     "t_end_ms": 1794272417570,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794272416566
+     ],
+     "observation": {
+      "speech_raw": " \u001d Link \u001e WAI-ARIA Authoring Practices",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

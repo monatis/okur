@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2369-aria-link-img-alt-nav-back-to-link-shift-tab-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794258671720
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794258672160
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794258672462
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794258672764
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794258674067,
+     "t_end_ms": 1794258675172,
+     "action": {
+      "type": "key",
+      "command": "Shift+Tab"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794258674067
+     ],
+     "observation": {
+      "speech_raw": "W3C Website  \u001d Link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794258675172,
+     "t_end_ms": 1794258676177,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794258675172
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

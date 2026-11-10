@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2701-aria-minimal-data-grid-nav-back-to-grid-shift-tab-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794267437380
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794267437744
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794267438046
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794267438347
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794267439652,
+     "t_end_ms": 1794267440757,
+     "action": {
+      "type": "key",
+      "command": "Shift+Tab"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794267439652
+     ],
+     "observation": {
+      "speech_raw": "Transactions January 1 through January 6\ngrid with 5 columns and 7 rows\n01-Jan-16",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794267440757,
+     "t_end_ms": 1794267441761,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794267440757
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

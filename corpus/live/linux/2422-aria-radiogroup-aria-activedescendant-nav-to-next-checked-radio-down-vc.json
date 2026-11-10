@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2422-aria-radiogroup-aria-activedescendant-nav-to-next-checked-radio-down-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794260067319
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794260067688
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794260067990
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794260069295,
+     "t_end_ms": 1794260070298,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794260069295
+     ],
+     "observation": {
+      "speech_raw": "Deep dish \u001d radio button \u001e  \u001dnot checked\u001e \n2 of 3",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

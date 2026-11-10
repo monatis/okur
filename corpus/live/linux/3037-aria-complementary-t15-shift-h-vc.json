@@ -1,0 +1,54 @@
+{
+ "scenario_id": "3037-aria-complementary-t15-shift-h-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794276339740
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794276340106
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794276340408
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794276341713,
+     "t_end_ms": 1794276342717,
+     "action": {
+      "type": "key",
+      "command": "Shift+H"
+     },
+     "keys": [
+      "Shift+H"
+     ],
+     "key_times": [
+      1794276341713
+     ],
+     "observation": {
+      "speech_raw": "Landmarks\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

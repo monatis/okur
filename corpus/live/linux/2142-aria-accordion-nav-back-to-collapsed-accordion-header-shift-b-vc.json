@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2142-aria-accordion-nav-back-to-collapsed-accordion-header-shift-b-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794252709999
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794252710362
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794252710665
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794252711969,
+     "t_end_ms": 1794252712974,
+     "action": {
+      "type": "key",
+      "command": "Shift+B"
+     },
+     "keys": [
+      "Shift+B"
+     ],
+     "key_times": [
+      1794252711969
+     ],
+     "observation": {
+      "speech_raw": "Personal Information \u001d heading level 3 \u001e   \u001d Button \u001e  \u001dexpanded\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

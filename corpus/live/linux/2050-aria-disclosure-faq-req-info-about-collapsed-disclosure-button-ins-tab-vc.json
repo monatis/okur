@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2050-aria-disclosure-faq-req-info-about-collapsed-disclosure-button-ins-tab-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794250303038
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794250303402
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794250303704
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794250305009,
+     "t_end_ms": 1794250306013,
+     "action": {
+      "type": "key",
+      "command": "Insert+Tab"
+     },
+     "keys": [
+      "Insert+Tab"
+     ],
+     "key_times": [
+      1794250305009
+     ],
+     "observation": {
+      "speech_raw": "What do I do if I have a permit for an assigned lot, but can't find a space there?  \u001d Button \u001e  \u001dcollapsed\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

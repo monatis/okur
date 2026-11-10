@@ -1,0 +1,94 @@
+{
+ "scenario_id": "2682-aria-modal-dialog-bump-bottom-edge-down-down-ins-up-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794266933394
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794266933763
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794266934066
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794266935370,
+     "t_end_ms": 1794266936373,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794266935370
+     ],
+     "observation": {
+      "speech_raw": "Cancel \u001d Button \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794266936373,
+     "t_end_ms": 1794266937377,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794266936373
+     ],
+     "observation": {
+      "speech_raw": "Cancel \u001d Button \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794266937377,
+     "t_end_ms": 1794266938382,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794266937377
+     ],
+     "observation": {
+      "speech_raw": "Cancel \u001d Button \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

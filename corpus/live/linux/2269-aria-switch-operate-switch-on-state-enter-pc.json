@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2269-aria-switch-operate-switch-on-state-enter-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794256046058
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794256046422
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794256046724
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794256047026
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794256048332,
+     "t_end_ms": 1794256049436,
+     "action": {
+      "type": "key",
+      "command": "Enter"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794256048332
+     ],
+     "observation": {
+      "speech_raw": " \u001d Toggle button \u001e \nNot pressed\nNotifications",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794256049436,
+     "t_end_ms": 1794256050440,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794256049436
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

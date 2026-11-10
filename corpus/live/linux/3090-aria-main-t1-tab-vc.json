@@ -1,0 +1,54 @@
+{
+ "scenario_id": "3090-aria-main-t1-tab-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794277721862
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794277722224
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794277722526
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794277723831,
+     "t_end_ms": 1794277724934,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794277723831
+     ],
+     "observation": {
+      "speech_raw": " \u001d MainRegion \u001e \nTop  \u001d same page link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

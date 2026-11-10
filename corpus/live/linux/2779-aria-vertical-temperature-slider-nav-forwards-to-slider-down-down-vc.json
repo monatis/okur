@@ -1,0 +1,74 @@
+{
+ "scenario_id": "2779-aria-vertical-temperature-slider-nav-forwards-to-slider-down-down-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794269508947
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794269509310
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794269509612
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794269510917,
+     "t_end_ms": 1794269511921,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794269510917
+     ],
+     "observation": {
+      "speech_raw": "Temperature",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794269511921,
+     "t_end_ms": 1794269512925,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794269511921
+     ],
+     "observation": {
+      "speech_raw": "Temperature \u001d up down slider \u001e",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

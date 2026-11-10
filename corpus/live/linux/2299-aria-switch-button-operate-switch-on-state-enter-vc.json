@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2299-aria-switch-button-operate-switch-on-state-enter-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794256834780
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794256835146
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794256835448
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794256836752,
+     "t_end_ms": 1794256837857,
+     "action": {
+      "type": "key",
+      "command": "Enter"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794256836752
+     ],
+     "observation": {
+      "speech_raw": " \u001d Toggle button \u001e \nNot pressed\nLiving Room Lights",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

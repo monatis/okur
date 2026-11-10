@@ -1,0 +1,54 @@
+{
+ "scenario_id": "3084-aria-form-t19-b-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794277564162
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794277564527
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794277564829
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794277566133,
+     "t_end_ms": 1794277567137,
+     "action": {
+      "type": "key",
+      "command": "B"
+     },
+     "keys": [
+      "B"
+     ],
+     "key_times": [
+      1794277566133
+     ],
+     "observation": {
+      "speech_raw": "Add Contact \u001d group \u001e \nAdd Contact  \u001d Button \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2679-aria-modal-dialog-nav-to-beginning-modal-dialog-ctrl-home-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794266854226
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794266854590
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794266854893
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794266856197,
+     "t_end_ms": 1794266857202,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "key_times": [
+      1794266856197
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e Add Delivery Address",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

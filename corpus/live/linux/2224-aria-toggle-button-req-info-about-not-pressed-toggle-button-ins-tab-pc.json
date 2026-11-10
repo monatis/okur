@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2224-aria-toggle-button-req-info-about-not-pressed-toggle-button-ins-tab-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794254860268
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794254860630
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794254860934
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794254861235
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794254862540,
+     "t_end_ms": 1794254863544,
+     "action": {
+      "type": "key",
+      "command": "Insert+Tab"
+     },
+     "keys": [
+      "Insert+Tab"
+     ],
+     "key_times": [
+      1794254862540
+     ],
+     "observation": {
+      "speech_raw": "Mute  \u001d Toggle button \u001e  \u001dNot pressed\u001e \nTo toggle the state press spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794254863544,
+     "t_end_ms": 1794254864549,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794254863544
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

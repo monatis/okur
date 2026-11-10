@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2432-aria-radiogroup-aria-activedescendant-check-radio-space-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794260330820
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794260331186
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794260331488
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794260331790
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794260333095,
+     "t_end_ms": 1794260334199,
+     "action": {
+      "type": "key",
+      "command": "Space"
+     },
+     "keys": [
+      "Space"
+     ],
+     "key_times": [
+      1794260333095
+     ],
+     "observation": {
+      "speech_raw": "Regular crust  \u001d radio button \u001e   \u001dchecked\u001e \n1 of 3",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794260334199,
+     "t_end_ms": 1794260335204,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794260334199
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

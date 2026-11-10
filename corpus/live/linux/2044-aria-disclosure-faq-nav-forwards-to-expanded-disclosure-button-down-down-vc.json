@@ -1,0 +1,74 @@
+{
+ "scenario_id": "2044-aria-disclosure-faq-nav-forwards-to-expanded-disclosure-button-down-down-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794250145444
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794250145806
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794250146108
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794250147412,
+     "t_end_ms": 1794250148416,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794250147412
+     ],
+     "observation": {
+      "speech_raw": "list of 4 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794250148416,
+     "t_end_ms": 1794250149420,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794250148416
+     ],
+     "observation": {
+      "speech_raw": "What do I do if I have a permit for an assigned lot, but can't find a space there? \u001d Button \u001e  \u001dcollapsed\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

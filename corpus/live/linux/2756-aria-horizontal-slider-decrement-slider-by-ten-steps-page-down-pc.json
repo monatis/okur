@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2756-aria-horizontal-slider-decrement-slider-by-ten-steps-page-down-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794268895939
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794268896302
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794268896604
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794268896906
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794268898211,
+     "t_end_ms": 1794268899214,
+     "action": {
+      "type": "key",
+      "command": "PageDown"
+     },
+     "keys": [
+      "PageDown"
+     ],
+     "key_times": [
+      1794268898211
+     ],
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794268899214,
+     "t_end_ms": 1794268900219,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794268899214
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

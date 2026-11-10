@@ -1,0 +1,74 @@
+{
+ "scenario_id": "2843-aria-disclosure-navigation-nav-to-expanded-disclosure-button-from-link-associated-dropdown-up-up-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794271205332
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794271205698
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794271206000
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794271207305,
+     "t_end_ms": 1794271208309,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794271207305
+     ],
+     "observation": {
+      "speech_raw": "list of 4 items nesting level 1",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794271208309,
+     "t_end_ms": 1794271209313,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794271208309
+     ],
+     "observation": {
+      "speech_raw": "About \u001d Button \u001e  \u001dexpanded\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

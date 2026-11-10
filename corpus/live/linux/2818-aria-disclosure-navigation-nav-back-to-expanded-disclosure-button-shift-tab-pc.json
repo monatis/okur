@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2818-aria-disclosure-navigation-nav-back-to-expanded-disclosure-button-shift-tab-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794270543513
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794270543873
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794270544176
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794270544477
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794270545782,
+     "t_end_ms": 1794270546888,
+     "action": {
+      "type": "key",
+      "command": "Shift+Tab"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794270545782
+     ],
+     "observation": {
+      "speech_raw": "Mythical University \u001d NavigationRegion \u001e \n \u001d list \u001e \nwith 3 items\nAcademics  \u001d Button \u001e  \u001dexpanded\u001e \nTo activate press spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794270546888,
+     "t_end_ms": 1794270547892,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794270546888
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2716-aria-minimal-data-grid-nav-to-first-cell-grid-ctrl-home-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794267836189
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794267836553
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794267836855
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794267837157
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794267838462,
+     "t_end_ms": 1794267839567,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "keys": [
+      "Ctrl+Home"
+     ],
+     "key_times": [
+      1794267838462
+     ],
+     "observation": {
+      "speech_raw": "Date\n01-Jan-16\ncolumn 1 row 2",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794267839567,
+     "t_end_ms": 1794267840572,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794267839567
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

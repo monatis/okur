@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2836-aria-disclosure-navigation-nav-from-expanded-disclosure-button-to-current-page-link-tab-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794271019986
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794271020353
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794271020655
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794271021960,
+     "t_end_ms": 1794271023165,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794271021960
+     ],
+     "observation": {
+      "speech_raw": " \u001d list \u001e \nwith 4 items\nOverview  \u001d same page link \u001e  \u001dCurrent Page\u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

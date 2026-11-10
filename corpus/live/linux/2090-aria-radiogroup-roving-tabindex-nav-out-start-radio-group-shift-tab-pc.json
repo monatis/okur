@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2090-aria-radiogroup-roving-tabindex-nav-out-start-radio-group-shift-tab-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794251355715
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794251356080
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794251356382
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794251356683
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794251357988,
+     "t_end_ms": 1794251359093,
+     "action": {
+      "type": "key",
+      "command": "Shift+Tab"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794251357988
+     ],
+     "observation": {
+      "speech_raw": "Navigate forwards from here  \u001d Link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794251359093,
+     "t_end_ms": 1794251360098,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794251359093
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

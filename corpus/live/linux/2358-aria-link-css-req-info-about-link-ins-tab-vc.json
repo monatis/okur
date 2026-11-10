@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2358-aria-link-css-req-info-about-link-ins-tab-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794258383187
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794258383552
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794258383854
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794258385159,
+     "t_end_ms": 1794258386163,
+     "action": {
+      "type": "key",
+      "command": "Insert+Tab"
+     },
+     "keys": [
+      "Insert+Tab"
+     ],
+     "key_times": [
+      1794258385159
+     ],
+     "observation": {
+      "speech_raw": "W3C website  \u001d Link \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

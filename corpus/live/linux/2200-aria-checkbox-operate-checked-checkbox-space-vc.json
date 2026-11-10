@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2200-aria-checkbox-operate-checked-checkbox-space-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794254233048
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794254233418
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794254233720
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794254235024,
+     "t_end_ms": 1794254236128,
+     "action": {
+      "type": "key",
+      "command": "Space"
+     },
+     "keys": [
+      "Space"
+     ],
+     "key_times": [
+      1794254235024
+     ],
+     "observation": {
+      "speech_raw": " \u001dnot checked\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

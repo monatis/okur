@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2216-aria-toggle-button-nav-back-to-pressed-toggle-button-up-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794254650785
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794254651146
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794254651449
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794254652754,
+     "t_end_ms": 1794254653757,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794254652754
+     ],
+     "observation": {
+      "speech_raw": "Mute \u001d Toggle button \u001e  \u001dNot pressed\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

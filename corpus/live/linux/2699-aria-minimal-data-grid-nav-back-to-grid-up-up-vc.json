@@ -1,0 +1,74 @@
+{
+ "scenario_id": "2699-aria-minimal-data-grid-nav-back-to-grid-up-up-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794267384389
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794267384753
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794267385056
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794267386361,
+     "t_end_ms": 1794267387365,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794267386361
+     ],
+     "observation": {
+      "speech_raw": "grid end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794267387365,
+     "t_end_ms": 1794267388369,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794267387365
+     ],
+     "observation": {
+      "speech_raw": "$995,532.00\nclickable",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

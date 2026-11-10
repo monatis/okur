@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2809-aria-disclosure-navigation-nav-forwards-to-expanded-disclosure-button-b-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794270306470
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794270306832
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794270307135
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794270308440,
+     "t_end_ms": 1794270309444,
+     "action": {
+      "type": "key",
+      "command": "B"
+     },
+     "keys": [
+      "B"
+     ],
+     "key_times": [
+      1794270308440
+     ],
+     "observation": {
+      "speech_raw": "About  \u001d Button \u001e  \u001dcollapsed\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

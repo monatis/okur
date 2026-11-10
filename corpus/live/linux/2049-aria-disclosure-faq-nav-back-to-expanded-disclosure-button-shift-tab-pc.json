@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2049-aria-disclosure-faq-nav-back-to-expanded-disclosure-button-shift-tab-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794250276028
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794250276385
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794250276688
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794250276989
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794250278294,
+     "t_end_ms": 1794250279398,
+     "action": {
+      "type": "key",
+      "command": "Shift+Tab"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794250278294
+     ],
+     "observation": {
+      "speech_raw": " \u001d list \u001e \nwith 4 items\nDo all parking facilities have the same enforcement rules?  \u001d Button \u001e  \u001dexpanded\u001e \nTo activate press spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794250279398,
+     "t_end_ms": 1794250280403,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794250279398
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

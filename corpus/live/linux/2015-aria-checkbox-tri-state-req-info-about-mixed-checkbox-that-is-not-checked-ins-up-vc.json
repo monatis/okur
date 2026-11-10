@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2015-aria-checkbox-tri-state-req-info-about-mixed-checkbox-that-is-not-checked-ins-up-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794249385126
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794249385484
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794249385787
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794249387091,
+     "t_end_ms": 1794249388095,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794249387091
+     ],
+     "observation": {
+      "speech_raw": "All condiments \u001d check box \u001e  \u001dnot checked\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

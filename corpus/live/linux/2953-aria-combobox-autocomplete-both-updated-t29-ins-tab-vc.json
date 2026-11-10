@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2953-aria-combobox-autocomplete-both-updated-t29-ins-tab-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794274099678
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794274100042
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794274100345
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794274101650,
+     "t_end_ms": 1794274102654,
+     "action": {
+      "type": "key",
+      "command": "Insert+Tab"
+     },
+     "keys": [
+      "Insert+Tab"
+     ],
+     "key_times": [
+      1794274101650
+     ],
+     "observation": {
+      "speech_raw": "State  \u001d edit combo \u001e   \u001dexpanded\u001e   \u001dSupports AutoComplete\u001e \nblank",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

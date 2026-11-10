@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2950-aria-combobox-autocomplete-both-updated-t23-alt-up-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794274018580
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794274018945
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794274019247
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794274019548
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794274020853,
+     "t_end_ms": 1794274021958,
+     "action": {
+      "type": "key",
+      "command": "Alt+Up"
+     },
+     "keys": [
+      "Alt+Up"
+     ],
+     "key_times": [
+      1794274020853
+     ],
+     "observation": {
+      "speech_raw": "Close List Box \u001dcollapsed\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794274021958,
+     "t_end_ms": 1794274022963,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794274021958
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2884-aria-banner-t23-h-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794272282611
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794272282973
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794272283276
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794272284581,
+     "t_end_ms": 1794272285585,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "keys": [
+      "H"
+     ],
+     "key_times": [
+      1794272284581
+     ],
+     "observation": {
+      "speech_raw": "ARIA Landmarks Example\n \u001d heading level 1 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

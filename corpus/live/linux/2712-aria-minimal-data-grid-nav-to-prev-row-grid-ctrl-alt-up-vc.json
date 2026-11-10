@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2712-aria-minimal-data-grid-nav-to-prev-row-grid-ctrl-alt-up-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794267729089
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794267729453
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794267729756
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794267731060,
+     "t_end_ms": 1794267732067,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Alt+Up"
+     },
+     "keys": [
+      "Ctrl+Alt+Up"
+     ],
+     "key_times": [
+      1794267731060
+     ],
+     "observation": {
+      "speech_raw": "$250.00\nclickable\nRow 3 of 7",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

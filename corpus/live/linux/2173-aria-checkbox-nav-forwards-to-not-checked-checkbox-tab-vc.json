@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2173-aria-checkbox-nav-forwards-to-not-checked-checkbox-tab-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794253523870
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794253524234
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794253524536
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794253525840,
+     "t_end_ms": 1794253526945,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794253525840
+     ],
+     "observation": {
+      "speech_raw": "Sandwich Condiments \u001d group \u001e \n \u001d list \u001e \nwith 5 items\nLettuce  \u001d check box \u001e   \u001dnot checked\u001e \nTo check press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

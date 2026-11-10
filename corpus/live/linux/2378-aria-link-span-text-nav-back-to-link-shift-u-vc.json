@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2378-aria-link-span-text-nav-back-to-link-shift-u-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794258909046
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794258909410
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794258909712
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794258911016,
+     "t_end_ms": 1794258912020,
+     "action": {
+      "type": "key",
+      "command": "Shift+U"
+     },
+     "keys": [
+      "Shift+U"
+     ],
+     "key_times": [
+      1794258911016
+     ],
+     "observation": {
+      "speech_raw": " \u001d Link \u001e W3C website",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

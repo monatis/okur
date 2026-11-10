@@ -1,0 +1,74 @@
+{
+ "scenario_id": "2393-aria-radiogroup-aria-activedescendant-nav-back-in-to-radio-group-where-no-radio-buttons-are-checked-up-up-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794259304924
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794259305288
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794259305590
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794259306895,
+     "t_end_ms": 1794259307899,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794259306895
+     ],
+     "observation": {
+      "speech_raw": "group end Pizza Crust",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794259307899,
+     "t_end_ms": 1794259308902,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794259307899
+     ],
+     "observation": {
+      "speech_raw": "Thin crust \u001d radio button \u001e  \u001dnot checked\u001e \n3 of 3",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

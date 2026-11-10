@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2880-aria-banner-t16-shift-tab-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794272178070
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794272178433
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794272178736
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794272180039,
+     "t_end_ms": 1794272181144,
+     "action": {
+      "type": "key",
+      "command": "Shift+Tab"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794272180039
+     ],
+     "observation": {
+      "speech_raw": " \u001d BannerRegion \u001e \nShow Headings  \u001d Button \u001e \nVisually outline the landmarks and/or headings on the page using the following buttons.\nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

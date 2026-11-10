@@ -1,0 +1,94 @@
+{
+ "scenario_id": "2088-aria-radiogroup-roving-tabindex-nav-out-start-radio-group-up-up-up-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794251302486
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794251302847
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794251303150
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794251304454,
+     "t_end_ms": 1794251305458,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794251304454
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 3 \u001e Pizza Crust",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794251305458,
+     "t_end_ms": 1794251306461,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794251305458
+     ],
+     "observation": {
+      "speech_raw": "group start Pizza Crust",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794251306461,
+     "t_end_ms": 1794251307465,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794251306461
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Navigate forwards from here",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

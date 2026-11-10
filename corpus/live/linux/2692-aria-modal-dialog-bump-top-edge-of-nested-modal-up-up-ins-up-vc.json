@@ -1,0 +1,94 @@
+{
+ "scenario_id": "2692-aria-modal-dialog-bump-top-edge-of-nested-modal-up-up-ins-up-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794267198390
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794267198749
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794267199052
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794267200356,
+     "t_end_ms": 1794267201359,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794267200356
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e Address Added",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794267201359,
+     "t_end_ms": 1794267202363,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794267201359
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e Address Added",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794267202363,
+     "t_end_ms": 1794267203368,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794267202363
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e Address Added",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

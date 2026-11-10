@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2065-aria-disclosure-faq-operate-expanded-disclosure-button-enter-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794250698231
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794250698595
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794250698897
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794250699198
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794250700503,
+     "t_end_ms": 1794250701607,
+     "action": {
+      "type": "key",
+      "command": "Enter"
+     },
+     "keys": [
+      "Enter"
+     ],
+     "key_times": [
+      1794250700503
+     ],
+     "observation": {
+      "speech_raw": " \u001dcollapsed\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794250701607,
+     "t_end_ms": 1794250702612,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794250701607
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

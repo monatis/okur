@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2406-aria-radiogroup-aria-activedescendant-nav-out-start-radio-group-shift-u-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794259648967
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794259649328
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794259649631
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794259650936,
+     "t_end_ms": 1794259651942,
+     "action": {
+      "type": "key",
+      "command": "Shift+U"
+     },
+     "keys": [
+      "Shift+U"
+     ],
+     "key_times": [
+      1794259650936
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Navigate forwards from here",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

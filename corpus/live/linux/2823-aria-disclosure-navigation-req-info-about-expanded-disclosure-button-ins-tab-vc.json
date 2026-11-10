@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2823-aria-disclosure-navigation-req-info-about-expanded-disclosure-button-ins-tab-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794270675971
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794270676380
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794270676682
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794270677987,
+     "t_end_ms": 1794270678991,
+     "action": {
+      "type": "key",
+      "command": "Insert+Tab"
+     },
+     "keys": [
+      "Insert+Tab"
+     ],
+     "key_times": [
+      1794270677987
+     ],
+     "observation": {
+      "speech_raw": "About  \u001d Button \u001e  \u001dexpanded\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

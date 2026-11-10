@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2861-aria-banner-t1-tab-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794271679817
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794271680179
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794271680482
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794271681786,
+     "t_end_ms": 1794271682890,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794271681786
+     ],
+     "observation": {
+      "speech_raw": " \u001d BannerRegion \u001e \nTop  \u001d same page link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

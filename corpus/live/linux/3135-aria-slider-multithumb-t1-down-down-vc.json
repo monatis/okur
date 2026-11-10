@@ -1,0 +1,74 @@
+{
+ "scenario_id": "3135-aria-slider-multithumb-t1-down-down-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794278912682
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794278913042
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794278913345
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794278914650,
+     "t_end_ms": 1794278915654,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794278914650
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 3 \u001e Hotel Price Range (in USD)",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794278915654,
+     "t_end_ms": 1794278916657,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794278915654
+     ],
+     "observation": {
+      "speech_raw": "Hotel Minimum Price in US dollars \u001d left right slider \u001e",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

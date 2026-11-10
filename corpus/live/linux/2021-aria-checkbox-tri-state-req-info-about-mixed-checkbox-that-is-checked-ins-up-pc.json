@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2021-aria-checkbox-tri-state-req-info-about-mixed-checkbox-that-is-checked-ins-up-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794249542626
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794249542988
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794249543290
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794249543591
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794249544897,
+     "t_end_ms": 1794249545901,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794249544897
+     ],
+     "observation": {
+      "speech_raw": "All condiments  \u001d check box \u001e   \u001dchecked\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794249545901,
+     "t_end_ms": 1794249546906,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794249545901
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

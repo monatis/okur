@@ -1,0 +1,78 @@
+{
+ "scenario_id": "3069-aria-form-t5-shift-tab-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794277170899
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794277171264
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794277171567
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794277171868
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794277173173,
+     "t_end_ms": 1794277174279,
+     "action": {
+      "type": "key",
+      "command": "Shift+Tab"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794277173173
+     ],
+     "observation": {
+      "speech_raw": "Add Contact \u001d FormRegion \u001e \nBottom  \u001d Link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794277174279,
+     "t_end_ms": 1794277175283,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794277174279
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2696-aria-minimal-data-grid-nav-forwards-to-grid-tab-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794267306090
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794267306454
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794267306756
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794267308061,
+     "t_end_ms": 1794267309166,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794267308061
+     ],
+     "observation": {
+      "speech_raw": "Transactions January 1 through January 6\ngrid with 5 columns and 7 rows\nDate\n01-Jan-16\ncolumn 1 row 2",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

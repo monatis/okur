@@ -1,0 +1,94 @@
+{
+ "scenario_id": "2462-aria-rating-radio-group-nav-out-start-radio-group-up-up-up-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794261120226
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794261120591
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794261120893
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794261122198,
+     "t_end_ms": 1794261123202,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794261122198
+     ],
+     "observation": {
+      "speech_raw": "Rating",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794261123202,
+     "t_end_ms": 1794261124206,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794261123202
+     ],
+     "observation": {
+      "speech_raw": "group start Rating",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794261124206,
+     "t_end_ms": 1794261125209,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794261124206
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Navigate forwards from here",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2936-aria-combobox-autocomplete-both-updated-t11-shift-tab-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794273649703
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794273650068
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794273650370
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794273651674,
+     "t_end_ms": 1794273652778,
+     "action": {
+      "type": "key",
+      "command": "Shift+Tab"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794273651674
+     ],
+     "observation": {
+      "speech_raw": "State  \u001d edit combo \u001e   \u001dcollapsed\u001e \nAlabama\nTo set the value use the Arrow keys or type the value.",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

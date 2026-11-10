@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2848-aria-disclosure-navigation-nav-from-collapsed-disclosure-button-to-link-dropdown-shift-tab-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794271337133
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794271337495
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794271337798
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794271338100
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794271339405,
+     "t_end_ms": 1794271340610,
+     "action": {
+      "type": "key",
+      "command": "Shift+Tab"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794271339405
+     ],
+     "observation": {
+      "speech_raw": " \u001d list \u001e \nwith 4 items\nCampus Tours  \u001d Link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794271340610,
+     "t_end_ms": 1794271341614,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794271340610
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

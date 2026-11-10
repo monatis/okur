@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2708-aria-minimal-data-grid-nav-to-prev-column-grid-ctrl-alt-left-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794267623071
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794267623437
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794267623740
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794267625045,
+     "t_end_ms": 1794267626050,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Alt+Left"
+     },
+     "keys": [
+      "Ctrl+Alt+Left"
+     ],
+     "key_times": [
+      1794267625045
+     ],
+     "observation": {
+      "speech_raw": "Description \n \u001d Link \u001e Hot Coffee\nColumn 3 of 5",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

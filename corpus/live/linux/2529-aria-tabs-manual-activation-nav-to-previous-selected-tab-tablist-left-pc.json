@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2529-aria-tabs-manual-activation-nav-to-previous-selected-tab-tablist-left-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794262882292
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794262882660
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794262882963
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794262883264
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794262884569,
+     "t_end_ms": 1794262885673,
+     "action": {
+      "type": "key",
+      "command": "Left"
+     },
+     "keys": [
+      "Left"
+     ],
+     "key_times": [
+      1794262884569
+     ],
+     "observation": {
+      "speech_raw": "Maria Ahlefeldt  \u001d Tab \u001e  \u001dselected\u001e \n1 of 4\n \u001dselected\u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794262885673,
+     "t_end_ms": 1794262886678,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794262885673
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

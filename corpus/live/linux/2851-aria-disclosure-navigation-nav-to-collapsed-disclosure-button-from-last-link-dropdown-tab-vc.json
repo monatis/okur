@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2851-aria-disclosure-navigation-nav-to-collapsed-disclosure-button-from-last-link-dropdown-tab-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794271415949
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794271416310
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794271416612
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794271417917,
+     "t_end_ms": 1794271419021,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794271417917
+     ],
+     "observation": {
+      "speech_raw": "Admissions  \u001d Button \u001e  \u001dcollapsed\u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

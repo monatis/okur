@@ -1,0 +1,54 @@
+{
+ "scenario_id": "3082-aria-form-t16-shift-e-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794277510979
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794277511354
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794277511657
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794277512961,
+     "t_end_ms": 1794277513965,
+     "action": {
+      "type": "key",
+      "command": "Shift+E"
+     },
+     "keys": [
+      "Shift+E"
+     ],
+     "key_times": [
+      1794277512961
+     ],
+     "observation": {
+      "speech_raw": "Add Contact \u001d group \u001e \nPhone \u001d Edit \u001e \nblank",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

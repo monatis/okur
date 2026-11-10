@@ -1,0 +1,74 @@
+{
+ "scenario_id": "3098-aria-main-t7-shift-period-down-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794277933240
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794277933609
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794277933911
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794277935215,
+     "t_end_ms": 1794277936220,
+     "action": {
+      "type": "key",
+      "command": "Shift+Period"
+     },
+     "keys": [
+      "Shift+Period"
+     ],
+     "key_times": [
+      1794277935215
+     ],
+     "observation": {
+      "speech_raw": "main region end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794277936220,
+     "t_end_ms": 1794277937224,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794277936220
+     ],
+     "observation": {
+      "speech_raw": " \u001d same page link \u001e Navigate backwards from here",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

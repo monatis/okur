@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2174-aria-checkbox-nav-forwards-to-not-checked-checkbox-tab-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794253549736
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794253550098
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794253550400
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794253550702
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794253552006,
+     "t_end_ms": 1794253553110,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794253552006
+     ],
+     "observation": {
+      "speech_raw": "Sandwich Condiments \u001d group \u001e \n \u001d list \u001e \nwith 5 items\nLettuce  \u001d check box \u001e   \u001dnot checked\u001e \nTo check press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794253553110,
+     "t_end_ms": 1794253554114,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794253553110
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

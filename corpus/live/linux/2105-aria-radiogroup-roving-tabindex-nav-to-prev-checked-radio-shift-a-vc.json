@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2105-aria-radiogroup-roving-tabindex-nav-to-prev-checked-radio-shift-a-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794251744810
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794251745169
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794251745472
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794251746775,
+     "t_end_ms": 1794251747779,
+     "action": {
+      "type": "key",
+      "command": "Shift+A"
+     },
+     "keys": [
+      "Shift+A"
+     ],
+     "key_times": [
+      1794251746775
+     ],
+     "observation": {
+      "speech_raw": "Regular crust  \u001d radio button \u001e   \u001dnot checked\u001e \n1 of 3",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

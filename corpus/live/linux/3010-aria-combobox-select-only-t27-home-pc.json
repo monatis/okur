@@ -1,0 +1,78 @@
+{
+ "scenario_id": "3010-aria-combobox-select-only-t27-home-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794275626179
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794275626541
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794275626844
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794275627146
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794275628451,
+     "t_end_ms": 1794275629555,
+     "action": {
+      "type": "key",
+      "command": "Home"
+     },
+     "keys": [
+      "Home"
+     ],
+     "key_times": [
+      1794275628451
+     ],
+     "observation": {
+      "speech_raw": "Choose a Fruit\n1 of 13",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794275629555,
+     "t_end_ms": 1794275630559,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794275629555
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

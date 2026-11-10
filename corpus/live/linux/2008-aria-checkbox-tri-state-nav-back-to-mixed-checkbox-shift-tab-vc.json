@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2008-aria-checkbox-tri-state-nav-back-to-mixed-checkbox-shift-tab-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794249201123
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794249201483
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794249201785
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794249203089,
+     "t_end_ms": 1794249204194,
+     "action": {
+      "type": "key",
+      "command": "Shift+Tab"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794249203089
+     ],
+     "observation": {
+      "speech_raw": "All condiments  \u001d check box \u001e   \u001dpartially checked\u001e \nTo check press Spacebar.",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2470-aria-rating-radio-group-nav-to-next-unchecked-radio-a-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794261331010
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794261331375
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794261331678
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794261332982,
+     "t_end_ms": 1794261333987,
+     "action": {
+      "type": "key",
+      "command": "A"
+     },
+     "keys": [
+      "A"
+     ],
+     "key_times": [
+      1794261332982
+     ],
+     "observation": {
+      "speech_raw": "two stars  \u001d radio button \u001e   \u001dnot checked\u001e \n2 of 5",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

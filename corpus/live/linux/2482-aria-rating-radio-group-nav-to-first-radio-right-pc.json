@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2482-aria-rating-radio-group-nav-to-first-radio-right-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794261640936
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794261641299
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794261641602
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794261641904
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794261643210,
+     "t_end_ms": 1794261644314,
+     "action": {
+      "type": "key",
+      "command": "Right"
+     },
+     "keys": [
+      "Right"
+     ],
+     "key_times": [
+      1794261643210
+     ],
+     "observation": {
+      "speech_raw": "one star  \u001d radio button \u001e   \u001dchecked\u001e \n1 of 5\nTo change the selection press Up or Down Arrow.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794261644314,
+     "t_end_ms": 1794261645318,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794261644314
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

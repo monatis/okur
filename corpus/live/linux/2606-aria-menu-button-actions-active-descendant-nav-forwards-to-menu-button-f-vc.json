@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2606-aria-menu-button-actions-active-descendant-nav-forwards-to-menu-button-f-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794264917076
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794264917439
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794264917741
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794264919045,
+     "t_end_ms": 1794264920049,
+     "action": {
+      "type": "key",
+      "command": "F"
+     },
+     "keys": [
+      "F"
+     ],
+     "key_times": [
+      1794264919045
+     ],
+     "observation": {
+      "speech_raw": "Actions  \u001d button menu \u001e   \u001dcollapsed\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

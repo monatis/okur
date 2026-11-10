@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2976-aria-combobox-autocomplete-both-updated-t63-up-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794274715673
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794274716040
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794274716342
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794274716644
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794274717949,
+     "t_end_ms": 1794274719053,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794274717949
+     ],
+     "observation": {
+      "speech_raw": "Alabama\n1 of 56",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794274719053,
+     "t_end_ms": 1794274720058,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794274719053
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

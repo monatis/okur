@@ -1,0 +1,78 @@
+{
+ "scenario_id": "3011-aria-combobox-select-only-t28-end-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794275653271
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794275653636
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794275653939
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794275654240
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794275655546,
+     "t_end_ms": 1794275656650,
+     "action": {
+      "type": "key",
+      "command": "End"
+     },
+     "keys": [
+      "End"
+     ],
+     "key_times": [
+      1794275655546
+     ],
+     "observation": {
+      "speech_raw": "Huckleberry\n13 of 13",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794275656650,
+     "t_end_ms": 1794275657654,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794275656650
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2972-aria-combobox-autocomplete-both-updated-t55-up-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794274607438
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794274607803
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794274608106
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794274608408
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794274609712,
+     "t_end_ms": 1794274610917,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794274609712
+     ],
+     "observation": {
+      "speech_raw": " \u001dexpanded\u001e \nStates \u001d List box \u001e\nWyoming\n56 of 56\nTo move to an item press the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794274610917,
+     "t_end_ms": 1794274611922,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794274610917
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

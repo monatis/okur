@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2967-aria-combobox-autocomplete-both-updated-t45-down-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794274471480
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794274471842
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794274472144
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794274472446
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794274473752,
+     "t_end_ms": 1794274474955,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "keys": [
+      "Down"
+     ],
+     "key_times": [
+      1794274473752
+     ],
+     "observation": {
+      "speech_raw": " \u001dexpanded\u001e \nStates \u001d List box \u001e\nAlabama\n1 of 56\nTo move to an item press the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794274474956,
+     "t_end_ms": 1794274475960,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794274474956
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,94 @@
+{
+ "scenario_id": "2681-aria-modal-dialog-bump-top-edge-up-up-ins-up-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794266905851
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794266906214
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794266906517
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794266907821,
+     "t_end_ms": 1794266908824,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794266907821
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e Add Delivery Address",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794266908824,
+     "t_end_ms": 1794266909828,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794266908824
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e Add Delivery Address",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1794266909828,
+     "t_end_ms": 1794266910833,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "keys": [
+      "Insert+Up"
+     ],
+     "key_times": [
+      1794266909828
+     ],
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e Add Delivery Address",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

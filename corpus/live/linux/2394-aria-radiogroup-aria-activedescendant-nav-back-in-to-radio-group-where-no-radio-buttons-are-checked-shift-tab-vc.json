@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2394-aria-radiogroup-aria-activedescendant-nav-back-in-to-radio-group-where-no-radio-buttons-are-checked-shift-tab-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794259331831
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794259332195
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794259332498
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794259333801,
+     "t_end_ms": 1794259334905,
+     "action": {
+      "type": "key",
+      "command": "Shift+Tab"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794259333801
+     ],
+     "observation": {
+      "speech_raw": "Pizza Crust \u001d group \u001e   \u001d\u001e \nRegular crust  \u001d radio button \u001e   \u001dnot checked\u001e \n1 of 3",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

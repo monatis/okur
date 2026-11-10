@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2745-aria-horizontal-slider-nav-back-to-slider-shift-tab-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794268601870
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794268602232
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794268602535
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794268603840,
+     "t_end_ms": 1794268604945,
+     "action": {
+      "type": "key",
+      "command": "Shift+Tab"
+     },
+     "keys": [
+      "Shift+Tab"
+     ],
+     "key_times": [
+      1794268603840
+     ],
+     "observation": {
+      "speech_raw": "Red  \u001d left right slider \u001e \nTo increase or decrease use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

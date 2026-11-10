@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2892-aria-breadcrumb-t1-tab-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794272492363
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794272492730
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794272493032
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794272494336,
+     "t_end_ms": 1794272495440,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794272494336
+     ],
+     "observation": {
+      "speech_raw": "Breadcrumb \u001d NavigationRegion \u001e \n \u001d list \u001e \nwith 4 items\nWAI-ARIA Authoring Practices  \u001d Link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

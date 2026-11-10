@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2762-aria-seek-slider-nav-forwards-to-slider-tab-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794269055519
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794269055880
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794269056183
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794269056484
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794269057789,
+     "t_end_ms": 1794269058894,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794269057789
+     ],
+     "observation": {
+      "speech_raw": "Seek  \u001d left right slider \u001e \nTo increase or decrease use the Arrow keys.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794269058894,
+     "t_end_ms": 1794269059898,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794269058894
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

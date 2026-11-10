@@ -1,0 +1,78 @@
+{
+ "scenario_id": "2863-aria-banner-t2-tab-pc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794271731418
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794271731785
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794271732087
+    },
+    {
+     "key": "Insert+Z",
+     "t_ms": 1794271732388
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794271733693,
+     "t_end_ms": 1794271734796,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "keys": [
+      "Tab"
+     ],
+     "key_times": [
+      1794271733693
+     ],
+     "observation": {
+      "speech_raw": " \u001d BannerRegion \u001e \nTop  \u001d Link \u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1794271734796,
+     "t_end_ms": 1794271735801,
+     "action": {
+      "type": "key",
+      "command": "Insert+Z"
+     },
+     "keys": [
+      "Insert+Z"
+     ],
+     "key_times": [
+      1794271734796
+     ],
+     "observation": {
+      "speech_raw": "use virtual PC cursor on",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

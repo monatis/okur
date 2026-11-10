@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2243-aria-switch-nav-back-to-switch-off-state-up-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794255360954
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794255361321
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794255361623
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794255362927,
+     "t_end_ms": 1794255363932,
+     "action": {
+      "type": "key",
+      "command": "Up"
+     },
+     "keys": [
+      "Up"
+     ],
+     "key_times": [
+      1794255362927
+     ],
+     "observation": {
+      "speech_raw": "Notifications \u001d Toggle button \u001e  \u001dNot pressed\u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

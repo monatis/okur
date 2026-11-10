@@ -1,0 +1,54 @@
+{
+ "scenario_id": "2706-aria-minimal-data-grid-nav-to-next-column-grid-ctrl-alt-right-vc",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "web_verbosity": "2",
+  "settings": "recorded",
+  "fixtures": "/root/okur/corpus/fixtures/",
+  "chrome": "google-chrome",
+  "commit": "ec1e5cac6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "reset_keys": [
+    {
+     "key": "Ctrl+End",
+     "t_ms": 1794267569926
+    },
+    {
+     "key": "Shift+B",
+     "t_ms": 1794267570286
+    },
+    {
+     "key": "Enter",
+     "t_ms": 1794267570589
+    }
+   ],
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1794267571892,
+     "t_end_ms": 1794267572898,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Alt+Right"
+     },
+     "keys": [
+      "Ctrl+Alt+Right"
+     ],
+     "key_times": [
+      1794267571892
+     ],
+     "observation": {
+      "speech_raw": "Balance \n$999,741.00\nclickable\nColumn 5 of 5",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}
