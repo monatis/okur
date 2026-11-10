@@ -167,6 +167,22 @@ Figures:
 - `okur-lab live-replay linux` after 0a37c9bb: "9519/9868 steps say what the run said;
   replayed, 8729/9623 match JAWS exactly".
 
+## Paused (the owner, 2026-11-10, evening)
+
+The owner paused Okur's development to work on other repositories. The state it was left in:
+- **Code:** every commit is on `windows-ui-round-2`, and `main` was fast-forwarded to it
+  after the lab's `check-linux` passed at a072d0e8 (`LINUX CHECK PASS`: every Linux-only
+  part of the day, element information, the slider's value change, the setup capture and the
+  dialogs' first focus, built, linted and tested there). Nothing is pushed: the owner pushes.
+- **The lab (old-pc):** no job runs; the WSL distribution "okur" is stopped. `night4` was
+  stopped at 165 of its 257 runs (at 9c3ff12c); its runs are in `D:\okur-linux\runs`, not
+  imported (fetch them with `fetch-runs.sh` and their ids from `night4-ids.txt` before the
+  next run overwrites them). `night5`'s lists are pushed (`night5-ids.txt`,
+  `aria-fixtures.txt`) and never ran. The JAWS voice profile is at Rate=90. The Excel keeper
+  window is closed. Pending 1214 is in `corpus/pending`.
+- **To resume:** read this handoff, then start with "Next" below; the first job is night4's
+  import, then night5.
+
 ## Next
 
 1. night4's runs: import them (privacy check, baselines apart from code); 256, 304 and 742
