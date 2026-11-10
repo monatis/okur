@@ -791,10 +791,18 @@ impl Converter {
         if record.kind == EventKind::ValueChanged {
             // The focused control's value changed by its keys (a slider's arrows): told as its
             // value's change, as Windows' value change is: "129" [obs, 2751/s1].
-            if let Some(element) = target.filter(|e| e.states.focused) {
+            // In a page alone, named by its page id as a focus is (the code review of
+            // 2026-11-10, fourth pass, 1).
+            if let Some(element) = target.filter(|e| e.states.focused && in_page) {
                 let mut control = focus_event(element);
-                control.in_document = in_page;
+                control.in_document = true;
                 control.app = app;
+                control.unique_id = element
+                    .raw
+                    .get("object_path")
+                    .and_then(|p| p.as_str())
+                    .and_then(|path| self.page_ids.get(path))
+                    .map(i32::to_string);
                 events.push(AccessibilityEvent::Change {
                     kind: ChangeKind::Value,
                     control,
@@ -1487,17 +1495,25 @@ mod tests {
     #[test]
     fn the_focused_sliders_value_change_is_told() {
         let mut converter = Converter::default();
+        converter.page_ids.insert("/red".to_owned(), 21);
         let mut slider = element(ElementRole::Slider, "Red", "/red", true);
         slider.value = Some("129".to_owned());
-        let changed = chrome_record(EventKind::ValueChanged, slider.clone(), None);
+        let in_page = |slider: &ElementData| AtspiRecord {
+            document: Some(":1.5/doc".to_owned()),
+            ..chrome_record(EventKind::ValueChanged, slider.clone(), None)
+        };
         assert!(matches!(
-            converter.convert_read(&changed).as_slice(),
+            converter.convert_read(&in_page(&slider)).as_slice(),
             [AccessibilityEvent::Change { kind: ChangeKind::Value, control }]
                 if control.value.as_deref() == Some("129")
+                    && control.in_document
+                    && control.unique_id.as_deref() == Some("21")
         ));
+        // Outside a page (a GTK slider), no page's change; nor an unfocused slider's.
+        let outside = chrome_record(EventKind::ValueChanged, slider.clone(), None);
+        assert!(converter.convert_read(&outside).is_empty());
         slider.states.focused = false;
-        let elsewhere = chrome_record(EventKind::ValueChanged, slider, None);
-        assert!(converter.convert_read(&elsewhere).is_empty());
+        assert!(converter.convert_read(&in_page(&slider)).is_empty());
     }
 
     /// A focus in a dialog box has its default button and buttons, from its window read whole

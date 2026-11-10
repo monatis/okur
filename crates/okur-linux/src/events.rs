@@ -1614,8 +1614,18 @@ impl EventSource for AtspiEventSource {
                             // The focus's page, looked up once: read when it is new to the
                             // engine, and telling it the focus is in it; a focused control's
                             // change is told the same way, whether it is on a page.
+                            // The focused control's value changed (a slider's arrows): in the
+                            // page the focus is in, where the converter tells it (the code
+                            // review of 2026-11-10, fourth pass, 1).
+                            let value_of_focus = event.kind == EventKind::ValueChanged
+                                && target.and_then(AtspiObject::of).is_some_and(|object| {
+                                    is_focused(&focused, &object.bus_name, &object.path)
+                                });
                             let (document, walked) = match target.filter(|_| focus || changed) {
                                 Some(element) => look_for_page(&provider, element),
+                                None if value_of_focus => {
+                                    (focus_page.as_deref().and_then(object_of_key), Vec::new())
+                                }
                                 None => (None, Vec::new()),
                             };
                             if focus && target.is_some_and(|e| e.states.focused) {
@@ -1672,6 +1682,21 @@ impl EventSource for AtspiEventSource {
                                 (focus, document.is_some(), snapshot.as_mut())
                             {
                                 settle_toggle(&provider, &activated, element);
+                            }
+                            // Its value as the page writes it (aria-valuetext), "1 Minute 31
+                            // Seconds" [obs, 2771], where the event's snapshot has the number
+                            // (the code review of 2026-11-10, fourth pass, 2).
+                            if let (true, true, Some(element)) =
+                                (value_of_focus, document.is_some(), snapshot.as_mut())
+                            {
+                                if let Some(object) = AtspiObject::of(element) {
+                                    let read = provider.atspi_tree(&object, 1);
+                                    if let Some(text) =
+                                        read.attributes.get("valuetext").filter(|t| !t.is_empty())
+                                    {
+                                        element.value = Some(text.clone());
+                                    }
+                                }
                             }
                             // A focus and a control's change read with the ancestors walked
                             // for its page, a window alone, anything else (a menu's item

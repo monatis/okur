@@ -61,6 +61,39 @@ fn a_page_buttons_expanded_state_is_spoken() {
     assert_eq!(engine.handle_accessibility_event(&changed(false)), None);
 }
 
+/// A page's slider moved by its arrows says its new value, its change named by its page id as
+/// Linux's converter gives it: "129" [obs, 2751/s1] (the code review of 2026-11-10, fourth
+/// pass, 1).
+#[test]
+fn a_page_sliders_value_change_says_its_value() {
+    let mut slider = AomNode::new(1, Role::Slider).with_name("Red");
+    slider.value = Some("128".to_owned());
+    slider
+        .attributes
+        .insert(crate::aom::UNIQUE_ID_ATTR.to_owned(), "21".to_owned());
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Color Viewer")
+        .with_children(vec![slider]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let control = |value: &str| {
+        let mut control = FocusEvent::new(Role::Slider).with_name("Red");
+        control.value = Some(value.to_owned());
+        control.in_document = true;
+        control.unique_id = Some("21".to_owned());
+        control
+    };
+    engine.handle_accessibility_event(&AccessibilityEvent::Focus(control("128")));
+    let said = engine.handle_accessibility_event(&AccessibilityEvent::Change {
+        kind: crate::event::ChangeKind::Value,
+        control: control("129"),
+    });
+    assert!(
+        said.as_deref().is_some_and(|s| s.contains("129")),
+        "{said:?}"
+    );
+}
+
 /// Only the focused control's changes are said: Modify Rule opening changes its Rule Type
 /// combo box before the focus reaches it, and JAWS says nothing of it [obs, 787/s11]; the
 /// focused combo box's own change is said.

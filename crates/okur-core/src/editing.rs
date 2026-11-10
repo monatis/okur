@@ -190,10 +190,19 @@ fn own_line(context: &TextContext) -> Option<(usize, usize)> {
             .skip(start)
             .take(end.saturating_sub(start))
             .collect();
-        let ends_with_break = line.last().is_some_and(|&c| is_line_break(c));
-        let inside = line
-            .get(..line.len().saturating_sub(1))
-            .is_some_and(|before| before.iter().any(|&c| is_line_break(c)));
+        // The line's own break at its end, "\r\n" in a Win32 or WPF edit (the code review of
+        // 2026-11-10, fourth pass, 3), is not one inside it.
+        let body = line.strip_suffix(&['\n']).unwrap_or(&line);
+        let body = body.strip_suffix(&['\r']).unwrap_or(body);
+        let body = if body.len() == line.len() {
+            line.strip_suffix(&['\u{2028}'])
+                .or_else(|| line.strip_suffix(&['\u{2029}']))
+                .unwrap_or(&line)
+        } else {
+            body
+        };
+        let ends_with_break = body.len() < line.len();
+        let inside = body.iter().any(|&c| is_line_break(c));
         let holds_caret = start <= context.caret
             && (context.caret < end || (context.caret == end && !ends_with_break));
         start <= end && end <= count && holds_caret && !inside
@@ -839,6 +848,17 @@ pub fn speech_in(
             };
             wording.selection(word, &text, true)
         }
+        // Ctrl+Home or Ctrl+End that moved nothing, the caret already at its edge and nothing
+        // selected away, says nothing
+        // [obs, 1208/s2: Ctrl+Home in a text area just entered at its start], where one that
+        // moved says the edge and the line [obs, 1208/s11].
+        EditKey::TopOfFile | EditKey::BottomOfFile
+            if before.is_some_and(|b| {
+                b.caret == after.caret && b.selection == after.selection && b.text == after.text
+            }) =>
+        {
+            return None
+        }
         // "top of file", "top" at Intermediate, nothing at Advanced, then the line [obs, 660/s4,
         // 668/s4, 669/s4].
         EditKey::TopOfFile => edge_of_file(
@@ -1294,6 +1314,21 @@ mod tests {
         assert_eq!(web_word_at("a b", 1), None);
     }
 
+    /// Ctrl+Home that moved nothing says nothing [obs, 1208/s2]; one that moved the caret, or
+    /// only took a selection away (after Ctrl+A), says the top and the line [obs, 660/s11].
+    #[test]
+    fn ctrl_home_that_moved_nothing_says_nothing() {
+        let text = "first line\nsecond line";
+        let top = ctx(text, 0, None);
+        assert_eq!(speech(EditKey::TopOfFile, Some(&top), &top, ""), None);
+        let selected = ctx(text, 0, Some((0, 22)));
+        assert!(speech(EditKey::TopOfFile, Some(&selected), &top, "")
+            .is_some_and(|s| s.contains("first line")));
+        let below = ctx(text, 14, None);
+        assert!(speech(EditKey::TopOfFile, Some(&below), &top, "")
+            .is_some_and(|s| s.contains("first line")));
+    }
+
     /// A text area's line as shown, where the platform reads the field's own line: its wrapped
     /// first line is two, "The reading room opens at", then "nine on weekdays." [obs,
     /// 1208/s3, s4]; without that read, the written line whole.
@@ -1325,6 +1360,18 @@ mod tests {
             line_at(&shown(0, (0, 57))),
             "The reading room opens at nine on weekdays."
         );
+        // A Win32 edit's line ends in "\r\n": its own break, not one inside it.
+        let crlf = "Opens at nine on\r\nweekdays.";
+        let edit = TextContext {
+            line: Some((0, 18)),
+            ..ctx(crlf, 3, None)
+        };
+        assert_eq!(line_at(&edit), "Opens at nine on");
+        let wrapped = TextContext {
+            line: Some((0, 9)),
+            ..ctx(crlf, 3, None)
+        };
+        assert_eq!(line_at(&wrapped).trim_end(), "Opens at");
     }
 
     #[test]

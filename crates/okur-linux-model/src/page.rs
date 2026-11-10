@@ -270,15 +270,18 @@ pub struct ItemPlace {
 /// The place is the item's own (`posinset`, `setsize`), else its place among its list's items.
 pub fn item_places(root: &AtspiNode) -> HashMap<String, ItemPlace> {
     let mut places = HashMap::new();
-    collect_places(root, &mut places);
+    collect_places(root, false, &mut places);
     places
 }
 
-fn collect_places(node: &AtspiNode, places: &mut HashMap<String, ItemPlace>) {
+fn collect_places(node: &AtspiNode, under_bar: bool, places: &mut HashMap<String, ItemPlace>) {
+    let under_bar = under_bar || node.role == "menu bar";
     // A page's menu's items (an ARIA menu button's menu): their places, "Action 4 | 4 of 4"
     // [obs, 2600/s1], as IA2's group position gives them on Windows, and the menu's name,
     // "Actions menu" as it opens [obs, 2622/s1].
-    if node.role == "menu" {
+    // Not a menu bar's menus: Windows' focus says no place under a bar, and the bar's own
+    // handling has them (the code review of 2026-11-10, fourth pass, 5).
+    if node.role == "menu" && !under_bar {
         let menu = Some(node.name.trim())
             .filter(|n| !n.is_empty())
             .map(str::to_owned);
@@ -334,7 +337,7 @@ fn collect_places(node: &AtspiNode, places: &mut HashMap<String, ItemPlace>) {
         }
     }
     for child in &node.children {
-        collect_places(child, places);
+        collect_places(child, under_bar, places);
     }
 }
 

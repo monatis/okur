@@ -178,7 +178,9 @@ impl FocusTrack {
             .as_ref()
             .and_then(|(_, name)| name.as_deref())
             .is_some_and(|n| !n.trim().is_empty());
-        if nameless && named_before {
+        // Its value unchanged: a value change with a name emptied is still said (the code
+        // review of 2026-11-10, fourth pass, 6).
+        if nameless && named_before && read.value == self.value {
             return Reread::Same;
         }
         let said = (read.role.clone(), read.name.clone());
