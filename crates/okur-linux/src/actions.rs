@@ -38,6 +38,33 @@ pub(crate) enum Request {
     /// carries its text: Say Color right after (676/s4) and the lines read before any key
     /// need it. Whether the field is a page's.
     FieldFocused(bool),
+    /// The page's object and each object above it to its document, for Element Information
+    /// (Insert+Shift+F1), answered even when none was read.
+    ElementInformation(String, String),
+}
+
+/// The object and each object above it to its page's document, as Element Information lists
+/// them [obs, 1210/s2]: each read alone, without its subtree (the document's is the whole page).
+fn element_chain(
+    provider: &LinuxProvider,
+    object: AtspiObject,
+) -> Vec<okur_core::event::ElementDetails> {
+    const MAX_CHAIN: usize = 64;
+    let mut chain = Vec::new();
+    let mut object = object;
+    for _ in 0..MAX_CHAIN {
+        let node = crate::events::snapshot(provider.atspi_tree(&object, 1));
+        let at_document = node.role == "document web";
+        chain.extend(okur_linux_model::element_info::details(&node));
+        if at_document {
+            break;
+        }
+        match provider.atspi_parent(&object) {
+            Some(parent) => object = parent,
+            None => break,
+        }
+    }
+    chain
 }
 
 /// How long a caret read waits for the key to move the caret, or change the text or the
@@ -180,6 +207,17 @@ impl LinuxActions {
                                 Ok(false) => tracing::debug!(offset, "caret not put"),
                                 Err(e) => tracing::debug!("caret not put: {e}"),
                             }
+                        }
+                        Request::ElementInformation(bus, path) => {
+                            let object = AtspiObject {
+                                bus_name: bus,
+                                path,
+                                role: String::new(),
+                            };
+                            let elements = element_chain(&provider, object);
+                            tracing::debug!(elements = elements.len(), "element information read");
+                            // Answered even when empty: the engine waits for it.
+                            let _ = sink.send(AccessibilityEvent::ElementInformation(elements));
                         }
                         Request::Activate(bus, path) => {
                             // Its focus, if Chrome focuses it as it toggles it, waits for its
@@ -525,6 +563,21 @@ impl ApplicationActions for LinuxActions {
 
     fn activate(&self, node: &AomNode) -> bool {
         self.ask(node, Request::Activate)
+    }
+
+    fn read_element_information(&self, unique_id: &str) -> bool {
+        let Ok(id) = unique_id.parse::<i32>() else {
+            return false;
+        };
+        let object = self
+            .objects
+            .lock()
+            .ok()
+            .and_then(|objects| objects.by_id.get(&id).cloned());
+        let (Some(worker), Some((bus, path))) = (self.worker.as_ref(), object) else {
+            return false;
+        };
+        worker.send(Request::ElementInformation(bus, path)).is_ok()
     }
 
     fn presses_keys(&self) -> bool {

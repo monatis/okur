@@ -3,6 +3,7 @@
 
 pub mod convert;
 pub mod delivery;
+pub mod element_info;
 pub mod focus;
 pub mod focus_track;
 pub mod keys;

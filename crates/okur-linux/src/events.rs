@@ -612,7 +612,7 @@ fn give_ids(node: &mut okur_linux_model::page::AtspiNode, ids: &mut std::slice::
 const PAGE_LIMIT: usize = 20_000;
 
 /// xa11y-linux's capture as the model's snapshot node.
-fn snapshot(tree: AtspiTree) -> okur_linux_model::page::AtspiNode {
+pub(crate) fn snapshot(tree: AtspiTree) -> okur_linux_model::page::AtspiNode {
     okur_linux_model::page::AtspiNode {
         role: tree.role,
         name: tree.name,
