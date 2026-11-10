@@ -54,7 +54,7 @@ Where to go from here:
 > macOS comes after it.
 
 - **Parity with JAWS, measured.** Every behavior is recorded from JAWS on a lab machine and
-  replayed through Okur step by step: 12,547 of 13,143 recorded steps match JAWS's speech word
+  replayed through Okur step by step: 12,779 of 13,373 recorded steps match JAWS's speech word
   for word.
 - **Beyond JAWS on the web.** W3C's [ARIA-AT](https://aria-at.w3.org/) test plans say what a
   screen reader must convey for each ARIA pattern. Where JAWS falls short of a plan, Okur
