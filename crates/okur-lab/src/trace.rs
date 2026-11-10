@@ -36,8 +36,10 @@ pub fn run_trace(
         if privacy::internet_feed(&event) || privacy::unvisited_row_under_mouse(&event) {
             return;
         }
-        // Nor JAWS's own dictionary, which its Dictionary Manager shows.
+        // Nor JAWS's own dictionary, which its Dictionary Manager shows, nor the machine's
+        // files beside the focus in File Explorer.
         privacy::without_shipped_dictionary(&mut event);
+        privacy::without_files_beside(&mut event);
         // Nor JAWS's help text and command descriptions, nor its viewers' page addresses.
         privacy::without_jaws_help_text(&mut event);
         if let Ok(line) = serde_json::to_string(&event) {

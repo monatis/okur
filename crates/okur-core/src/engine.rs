@@ -270,8 +270,8 @@ pub struct ScreenReaderEngine {
     label_store: Option<Box<dyn crate::labels::LabelStore>>,
     /// Custom Label while it is open, and the node it labels.
     label_dialog: Option<(crate::ui::label::LabelDialog, usize)>,
-    /// Custom Label Delete All's question while it is open, and the place whose labels go.
-    labels_delete_all: Option<(crate::ui::label::DeleteAllDialog, String)>,
+    /// Custom Label Delete's or Delete All's question while it is open, and what goes.
+    labels_delete: Option<(crate::ui::label::DeleteDialog, labels::Deleting)>,
     /// Excel's Edit note (Shift+F2) while it is open.
     note_dialog: Option<crate::ui::label::LabelDialog>,
     /// Shift+F2 asked Excel for the cell's note, to open Edit note with it.
@@ -732,7 +732,7 @@ impl ScreenReaderEngine {
             custom_labels: crate::labels::CustomLabels::default(),
             label_store: None,
             label_dialog: None,
-            labels_delete_all: None,
+            labels_delete: None,
             note_dialog: None,
             note_edit_asked: false,
             alt_held: false,
@@ -2146,10 +2146,20 @@ impl ScreenReaderEngine {
         }
         let spoken = match event {
             // Back from one of Okur's dialogs, the focus returns to where it was and is taken
-            // in silently, as JAWS returns from its own Links List (dev box, 2026-10-17).
+            // in silently, as JAWS returns from its own Links List (dev box, 2026-10-17). A
+            // focus in another dialog of Okur's, opened as the first went (a manager run from
+            // Run Okur Manager), is that dialog's, and said.
             AccessibilityEvent::Focus(focus)
-                if self.quiet_return() && !self.reaches_dialog_focus_target(focus) =>
+                if self.quiet_return()
+                    && !self.in_own_dialog(focus)
+                    && !self.reaches_dialog_focus_target(focus) =>
             {
+                tracing::debug!(
+                    role = ?focus.role,
+                    name = ?focus.name,
+                    window = ?focus.window_title,
+                    "focus taken in quietly, returning from a dialog"
+                );
                 self.quietly(|engine| engine.handle_focus_event(focus));
                 None
             }
@@ -3696,6 +3706,7 @@ impl ScreenReaderEngine {
                 None
             }
             Manager::CustomLabel => self.execute(crate::command::Command::AssignCustomLabel),
+            Manager::CustomLabelDelete => self.ask_delete_label(),
             Manager::CustomLabelDeleteAll => self.ask_delete_all_labels(),
             Manager::DictionaryManager => self.open_dictionary_manager(),
             Manager::FlexibleWeb => self.open_flexible_web(),
@@ -4441,8 +4452,9 @@ impl ScreenReaderEngine {
             }
             // Run Okur Manager goes and the chosen manager runs from where it was opened, as
             // JAWS's runs it: "Delete all Custom Labels? dialog | This will remove ..." [obs,
-            // 688/s6]. A manager that opens a dialog is said as that dialog takes the focus; the
-            // return is quiet only when none opened.
+            // 688/s6]. The return to where it was opened is quiet, before a dialog the manager
+            // opened too: JAWS says no page between its two dialogs [obs, 1207/s6, s21]; that
+            // dialog is said as it takes the focus.
             Outcome::Run(manager) => {
                 let managers = self.list_dialog.take();
                 self.app_mode = self.list_return_mode;
@@ -4454,22 +4466,11 @@ impl ScreenReaderEngine {
                 }
                 let (application, site) = self.list_return_place.clone();
                 self.settings_place(application.as_deref(), site);
-                let dialog_asked = std::sync::Arc::clone(&self.dialog_asked);
-                let asked = || {
-                    dialog_asked
-                        .lock()
-                        .ok()
-                        .and_then(|asked| asked.as_ref().map(|a| a.id))
-                };
-                let before = asked();
                 let said = self.run_manager(manager);
-                let opened = asked().is_some_and(|id| Some(id) != before);
                 if let (Some(managers), Some(ui)) = (managers, &self.ui) {
                     ui.send(crate::ui::ToUi::DialogClose { id: managers.id });
                 }
-                if !opened {
-                    self.returning_from_dialog();
-                }
+                self.returning_from_dialog();
                 said
             }
             // Select a Form Field gives the page back named, or, with the virtual cursor on a

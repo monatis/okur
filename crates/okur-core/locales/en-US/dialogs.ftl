@@ -266,6 +266,11 @@ custom-label-not-here = A Custom Label cannot be created for this item.
 # [obs, 688/s6].
 custom-labels-delete-all-title = Delete all Custom Labels?
 custom-labels-delete-all-text = This will remove all custom labels for the current document or web page
+# Custom Label Delete (Run Okur Manager) on an element with a label: JAWS 2025's question, the
+# label its text, OK (the default) and Cancel [obs, 1207/s21, s26-s28].
+custom-label-delete-title = Delete Custom Label?
+# Custom Label Delete where the element at the cursor has no label, or on text [obs, 1207/s36].
+custom-label-none-to-delete = There is no Custom Label to delete for this item.
 
 ## The PlaceMarker List (Ctrl+Shift+K in a page): JAWS 2025's dialog [obs, 699, 702]. An "&"
 ## marks a label's access key, as in JAWS's dialog.

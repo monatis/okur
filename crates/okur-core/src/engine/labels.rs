@@ -7,7 +7,16 @@
 use super::{AppMode, ScreenReaderEngine};
 use crate::buffer::VirtualBuffer;
 use crate::labels::{place_of, CustomLabels, LabelStore};
-use crate::ui::label::{DeleteAllDialog, LabelDialog, Outcome};
+use crate::ui::label::{DeleteDialog, LabelDialog, Outcome};
+
+/// What Custom Label Delete's question takes away on OK.
+#[derive(Debug, Clone)]
+pub(super) enum Deleting {
+    /// The label of the page's node.
+    One(usize),
+    /// Every label of the place.
+    All(String),
+}
 use crate::ui::{FromUi, ToUi};
 
 impl ScreenReaderEngine {
@@ -138,6 +147,45 @@ impl ScreenReaderEngine {
         Some(again)
     }
 
+    /// The label of the element at the virtual cursor, if it has one.
+    fn label_at_cursor(&self) -> Option<(usize, String)> {
+        let target = self.label_target()?;
+        let place = place_of(self.cursor.buffer.document_url()?);
+        let label = self
+            .cursor
+            .buffer
+            .node(target)
+            .and_then(crate::labels::element_key)
+            .and_then(|key| self.custom_labels.places.get(&place)?.get(&key).cloned())?;
+        Some((target, label))
+    }
+
+    /// Custom Label Delete (Run Okur Manager, in a page): asks whether to take the label of the
+    /// element at the virtual cursor away, "Delete Custom Label? dialog | lamp | OK Button"
+    /// [obs, 1207/s21]; with none there, or on text, "There is no Custom Label to delete for
+    /// this item." [obs, 1207/s36]. Okur says nothing itself as it asks: the question is read as
+    /// it takes the focus.
+    pub(super) fn ask_delete_label(&mut self) -> Option<String> {
+        if self.app_mode != AppMode::VirtualBuffer {
+            return None;
+        }
+        let Some((target, label)) = self.label_at_cursor() else {
+            return self
+                .say_message(crate::messages::msg::custom_label_none_to_delete().to_string());
+        };
+        let ui = self.ui.as_ref()?;
+        self.dialog_count += 1;
+        let dialog = DeleteDialog {
+            id: self.dialog_count,
+            label: Some(label),
+        };
+        ui.send(ToUi::DialogShow {
+            dialog: dialog.spec(),
+        });
+        self.labels_delete = Some((dialog, Deleting::One(target)));
+        None
+    }
+
     /// Custom Label Delete All (Run Okur Manager, in a page): asks whether to take away every
     /// custom label of the page's site, "Delete all Custom Labels? dialog | This will remove all
     /// custom labels for the current document or web page | OK Button" [obs, 688/s6]. Okur
@@ -149,42 +197,46 @@ impl ScreenReaderEngine {
         let place = place_of(self.cursor.buffer.document_url()?);
         let ui = self.ui.as_ref()?;
         self.dialog_count += 1;
-        let dialog = DeleteAllDialog {
+        let dialog = DeleteDialog {
             id: self.dialog_count,
+            label: None,
         };
         ui.send(ToUi::DialogShow {
             dialog: dialog.spec(),
         });
-        self.labels_delete_all = Some((dialog, place));
+        self.labels_delete = Some((dialog, Deleting::All(place)));
         None
     }
 
-    /// Whether `message` is Custom Label's, or Custom Label Delete All's.
+    /// Whether `message` is Custom Label's, or Custom Label Delete's or Delete All's.
     pub(super) fn is_label_event(&self, message: &FromUi) -> bool {
         let id = super::dialog_of(message);
         self.label_dialog
             .as_ref()
             .is_some_and(|(d, _)| Some(d.id) == id)
             || self
-                .labels_delete_all
+                .labels_delete
                 .as_ref()
                 .is_some_and(|(d, _)| Some(d.id) == id)
     }
 
     /// What the user did to Custom Label. OK closes it silently [obs, 688/s14]. OK in Custom
-    /// Label Delete All takes the site's labels away, quietly too [obs, 688/s7].
+    /// Label Delete All takes the site's labels away, quietly too [obs, 688/s7]; in Custom
+    /// Label Delete, the element's; Cancel keeps it [obs, 1207/s29, s30].
     pub(super) fn handle_label_event(&mut self, message: &FromUi) -> Option<String> {
         if let Some(yes) = self
-            .labels_delete_all
+            .labels_delete
             .as_ref()
             .and_then(|(dialog, _)| dialog.answer(message))
         {
-            let (dialog, place) = self.labels_delete_all.take()?;
+            let (dialog, deleting) = self.labels_delete.take()?;
             if let Some(ui) = &self.ui {
                 ui.send(ToUi::DialogClose { id: dialog.id });
             }
-            if yes {
-                self.delete_all_labels(&place);
+            match deleting {
+                Deleting::All(place) if yes => self.delete_all_labels(&place),
+                Deleting::One(target) if yes => self.give_label(target, ""),
+                _ => {}
             }
             self.returning_from_dialog();
             return None;

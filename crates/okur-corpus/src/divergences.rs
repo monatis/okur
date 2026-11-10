@@ -165,6 +165,9 @@ divergences! {
         "815-web-skim-read-by-superscript-positions/s1",
         "816-web-skim-read-by-subscript-positions/s1",
         "826-desktop-notepad-clipboard-edges/s8",
+        "688-web-custom-label/s25",
+        "1207-web-custom-label-delete/s6",
+        "1207-web-custom-label-delete/s21",
     ],
     "Opening one of its list dialogs, JAWS's speech passes through its own windows before it \
      names the dialog: its main window (its version, a list's tutor message) and the browser's \
@@ -972,6 +975,13 @@ divergences! {
      (\"Please wait processing 2 items | Inserted\" for two revisions, the first one's change). \
      Okur's lists open without them, as JAWS's do in the other trials.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-24";
+
+    Difference::Step => [
+        "1207-web-custom-label-delete/s22",
+        "1207-web-custom-label-delete/s29",
+    ],
+    "In JAWS's Delete Custom Label? question, the recorder's Insert+Up, Ctrl+Home, E and      Insert+F2 got nothing in every trial: its keys do not reach JAWS's own dialogs, which run      elevated (Spelling Errors' entry below). Okur's question takes them: Insert+Up says its      button, and Insert+F2 opens Run Okur Manager over it, whose Enter runs Commands Search      where JAWS's Enter pressed the question's Cancel. 1211 answers the question by JAWS's own      keys.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-11-10";
 
     Difference::Step => [
         "519-desktop-word-lists-and-spelling/s6",

@@ -473,21 +473,33 @@ impl ScreenReaderEngine {
         }
     }
 
+    /// Whether `focus` is in one of Okur's open dialogs (a window of okur-ui's titled as one).
+    pub(super) fn in_own_dialog(&self, focus: &FocusEvent) -> bool {
+        is_okur_window(focus)
+            && focus.window_title.as_deref().is_some_and(|title| {
+                self.open_dialogs
+                    .lock()
+                    .is_ok_and(|open| open.iter().any(|d| d.title == title))
+            })
+    }
+
     /// `focus` in one of Okur's dialogs, told what its spec says and the platform did not: in
     /// a dialog box, its default button, its control's group box, a drop-down's place; none
     /// when nothing is to be told.
     pub(super) fn as_own_dialog_focus(&self, focus: &FocusEvent) -> Option<FocusEvent> {
-        let okur_windows = focus
-            .app
-            .as_deref()
-            .map(crate::settings_layers::application_id)
-            .is_some_and(|app| app == OKUR_WINDOWS);
-        if !okur_windows {
+        if !is_okur_window(focus) {
             return None;
         }
         let title = focus.window_title.as_deref()?;
         let open = self.open_dialogs.lock().ok()?;
-        let at = open.iter().rposition(|d| d.title == title)?;
+        let Some(at) = open.iter().rposition(|d| d.title == title) else {
+            tracing::debug!(
+                title,
+                open = ?open.iter().map(|d| d.title.as_str()).collect::<Vec<_>>(),
+                "a focus in Okur's windows, in none of its open dialogs"
+            );
+            return None;
+        };
         let dialog = open.get(at)?;
         let default = dialog.controls.iter().find_map(|c| match c.kind {
             ControlKind::Button { default: true } => Some(shown(&c.label)),
@@ -596,6 +608,15 @@ impl ScreenReaderEngine {
         }
         (told != *focus).then_some(told)
     }
+}
+
+/// Whether `focus` is in one of okur-ui's windows.
+fn is_okur_window(focus: &FocusEvent) -> bool {
+    focus
+        .app
+        .as_deref()
+        .map(crate::settings_layers::application_id)
+        .is_some_and(|app| app == OKUR_WINDOWS)
 }
 
 #[cfg(test)]

@@ -40,6 +40,27 @@ pub fn unvisited_row_under_mouse(event: &crate::event_trace::TraceEvent) -> bool
         })
 }
 
+/// `event` without the names of the files beside the focus in File Explorer's views: the
+/// machine's own files and folders, not a fixture's. A trace of scenario 1209 (round 1209b,
+/// 2026-11-10) held the reference machine's desktop, where the focus came back after the
+/// fixture's window closed. The items stay, so their number and the focus's place among them
+/// are kept, and the focused one keeps its name: the item a scenario visits, which JAWS says.
+pub fn without_files_beside(event: &mut crate::event_trace::TraceEvent) {
+    const UIA_LISTITEM: i32 = 50007;
+    const UIA_DATAITEM: i32 = 50029;
+    if event.process.as_deref() != Some("explorer.exe") {
+        return;
+    }
+    for sibling in &mut event.focus_siblings {
+        if matches!(sibling.control_type, UIA_LISTITEM | UIA_DATAITEM)
+            && !sibling.has_keyboard_focus
+            && sibling.is_selected != Some(true)
+        {
+            sibling.name = None;
+        }
+    }
+}
+
 /// `event` without the names of the items beside the focus in JAWS's Dictionary Manager
 /// (JDiction.exe): its tree shows the dictionary JAWS ships, which is JAWS's data, not a
 /// fixture's ("paciello=Pah see ello", in the traces of 1154's first run, 2026-11-05). The items
@@ -194,6 +215,39 @@ mod tests {
     /// In JAWS's Dictionary Manager the tree's items beside the focus lose their names, JAWS's
     /// own entries; the focused entry, the dialog's other controls and other programs keep
     /// theirs.
+    /// The files beside the focus in File Explorer go, their number stays; the focused file,
+    /// and the rows of other programs, keep their names.
+    #[test]
+    fn the_files_beside_the_focus_in_explorer_are_left_out() {
+        let node = |name: &str, focused: bool| {
+            format!(
+                r#"{{"control_type":50007,"name":"{name}","is_enabled":true,"is_offscreen":false,"is_password":false,"is_required_for_form":false,"is_keyboard_focusable":true,"has_keyboard_focus":{focused},"is_control_element":true,"is_content_element":true}}"#
+            )
+        };
+        let names = |process: &str| {
+            let line = format!(
+                r#"{{"t_ms":1,"event":"focus","win_event":32773,"hwnd":1,"id_object":-4,"id_child":0,"process":"{process}","focus_siblings":[{},{}]}}"#,
+                node("code", true),
+                node("budget.xlsx", false)
+            );
+            let event: Option<crate::event_trace::TraceEvent> = serde_json::from_str(&line).ok();
+            event
+                .map(|mut event| {
+                    without_files_beside(&mut event);
+                    event.focus_siblings
+                })
+                .unwrap_or_default()
+                .into_iter()
+                .map(|s| s.name)
+                .collect::<Vec<_>>()
+        };
+        assert_eq!(names("explorer.exe"), [Some("code".to_owned()), None]);
+        assert_eq!(
+            names("jtl.exe"),
+            [Some("code".to_owned()), Some("budget.xlsx".to_owned())]
+        );
+    }
+
     #[test]
     fn jaws_shipped_dictionary_is_left_out() {
         let node = |control_type: i32, name: &str, focused: bool| {

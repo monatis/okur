@@ -108,7 +108,11 @@ A step can be in more than one entry; all of its entries apply.
   `813-web-skim-read-by-shadow/s1`, `815-web-skim-read-by-superscript-positions/s1` and
   `816-web-skim-read-by-subscript-positions/s1` (its rule type, or its rules' history, said before the
   dialog); and its Overwrite Clipboard question, `826-desktop-notepad-clipboard-edges/s8` (its
-  main window, "JAWS Professional", and the window under it said first).
+  main window, "JAWS Professional", and the window under it said first); and the questions
+  Run JAWS Manager's Custom Label Delete and Delete All ask, `688-web-custom-label/s25`,
+  `1207-web-custom-label-delete/s6` and `1207-web-custom-label-delete/s21` (its main window,
+  the closing list's OK button and its tutor message, or the browser's title, said before the
+  question).
 - In the recordings of 2026-10-19 (round 9, JAWS freshly started for the batch), JAWS no longer
   said its version or the list's tutor message before the Links List, the Heading List and
   Virtual HTML Features, and said nothing before some dialogs at all: those steps were taken
@@ -939,6 +943,17 @@ A step can be in more than one entry; all of its entries apply.
   one's change); one trial of 1050 says nothing at all before the next key.
 - Why: Okur's lists open without them, as JAWS's do in the other trials.
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-24.
+
+### Our keys in JAWS's Delete Custom Label? question
+
+- Steps: `1207-web-custom-label-delete/s22`, `1207-web-custom-label-delete/s29`.
+- Difference: the whole step. In JAWS's Delete Custom Label? question, the recorder's
+  Insert+Up, Ctrl+Home, E and Insert+F2 got nothing in every trial.
+- Why: the recorder's keys do not reach JAWS's own dialogs, which run elevated, as in the
+  Spelling Errors list below. Okur's question takes them: Insert+Up says its button, and
+  Insert+F2 opens Run Okur Manager over it, whose Enter runs Commands Search where JAWS's Enter
+  pressed the question's Cancel. 1211 answers the question by JAWS's own keys.
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-11-10.
 
 ### Our keys in JAWS's Spelling Errors list
 

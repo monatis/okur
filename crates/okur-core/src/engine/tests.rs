@@ -11725,6 +11725,148 @@ fn custom_label_delete_all_takes_the_sites_labels_away() {
     assert!(!engine.custom_labels.has("library.example"));
 }
 
+/// Custom Label Delete, from Run Okur Manager in a page: on a labelled field its question,
+/// "Delete Custom Label? dialog | lamp | OK Button", the page's focus between the two dialogs
+/// quiet [obs, 1207/s21]; Cancel keeps the label [obs, 1207/s29, s30], OK takes it away. On text,
+/// "There is no Custom Label to delete for this item." [obs, 1207/s36].
+#[test]
+fn custom_label_delete_takes_the_elements_label_away() {
+    use crate::ui::{FromUi, ToUi, Value};
+    let mut field = AomNode::new(2, Role::Edit).with_name("Branch");
+    field
+        .attributes
+        .insert("id".to_owned(), "pickup-branch".to_owned());
+    let mut page = AomNode::new(0, Role::Document)
+        .with_name("Book Pickup")
+        .with_children(vec![
+            AomNode::new(1, Role::Heading { level: 1 }).with_text("Book pickup"),
+            field.clone(),
+        ]);
+    page.attributes.insert(
+        "url".to_owned(),
+        "https://library.example/pickup".to_owned(),
+    );
+    let mut labels = crate::labels::CustomLabels::default();
+    labels.set("library.example", &field, Some("lamp"));
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(VirtualBuffer::from_aom(&page)),
+        Box::new(MockSpeechOutput::new()),
+    );
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    engine.set_custom_labels(labels, None);
+    let buffer = std::mem::replace(
+        &mut engine.cursor.buffer,
+        VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)),
+    );
+    engine.cursor.buffer = engine.labeled(buffer);
+    let insert = Modifiers {
+        insert: true,
+        ..Modifiers::none()
+    };
+    let ui_event = |engine: &mut ScreenReaderEngine, message: FromUi| {
+        engine.handle_accessibility_event(&AccessibilityEvent::Ui(message))
+    };
+    // Insert+F2, Custom Label Delete (the fourth row), OK: what is said, and the dialog shown.
+    let ask = |engine: &mut ScreenReaderEngine| {
+        engine.handle_key_event(&KeyEvent::new(Key::F(2), insert, true));
+        let managers = shown_dialog(&ui);
+        ui_event(
+            engine,
+            FromUi::DialogChanged {
+                id: managers,
+                control: "managers".into(),
+                value: Value::Selected(3),
+            },
+        );
+        let said = ui_event(
+            engine,
+            FromUi::DialogPressed {
+                id: managers,
+                control: "ok".into(),
+            },
+        );
+        let question = ui.take().into_iter().find_map(|m| match m {
+            ToUi::DialogShow { dialog } => Some(dialog),
+            _ => None,
+        });
+        (said, question)
+    };
+    // On the page's heading, text: nothing to delete, and no dialog.
+    engine.cursor.move_to_start();
+    let (said, question) = ask(&mut engine);
+    assert_eq!(
+        said.as_deref(),
+        Some("There is no Custom Label to delete for this item.")
+    );
+    assert!(question.is_none());
+    for _ in 0..5 {
+        if engine.cursor.current_line().contains("lamp") {
+            break;
+        }
+        engine.execute_command("{DOWN}");
+    }
+    assert!(engine.cursor.current_line().contains("lamp"));
+    // On the labelled field: the question, its text the label.
+    let (said, question) = ask(&mut engine);
+    assert_eq!(said, None);
+    let question = question.unwrap_or_else(|| crate::ui::DialogSpec {
+        id: 0,
+        title: String::new(),
+        controls: Vec::new(),
+        keys: Vec::new(),
+    });
+    assert_eq!(question.title, "Delete Custom Label?");
+    assert!(question.controls.iter().any(|c| matches!(
+        &c.kind,
+        crate::ui::ControlKind::Message { text } if text == "lamp"
+    )));
+    // The page's focus as Okur's list goes is quiet; the question's own focus is said.
+    let mut document = FocusEvent::new(Role::Document).with_name("Book Pickup");
+    document.in_document = true;
+    let between = engine.handle_accessibility_event(&AccessibilityEvent::Focus(document.clone()));
+    assert_eq!(between, None);
+    let mut ok = FocusEvent::new(Role::Button)
+        .with_name("OK")
+        .with_window_title("Delete Custom Label?");
+    ok.app = Some("okur-ui.exe".into());
+    // Its text as the platform reads the dialog's message.
+    ok.dialog_text = Some("lamp".into());
+    let said = engine.handle_accessibility_event(&AccessibilityEvent::Focus(ok));
+    assert!(
+        said.as_deref()
+            .is_some_and(|s| s.contains("Delete Custom Label?") && s.contains("lamp")),
+        "{said:?}"
+    );
+    // Cancel keeps it.
+    ui_event(
+        &mut engine,
+        FromUi::DialogPressed {
+            id: question.id,
+            control: "cancel".into(),
+        },
+    );
+    // The focus back on the page, quietly.
+    assert_eq!(
+        engine.handle_accessibility_event(&AccessibilityEvent::Focus(document)),
+        None
+    );
+    assert!(engine.cursor.current_line().contains("lamp"));
+    // OK takes it away.
+    let (_, question) = ask(&mut engine);
+    let id = question.map(|q| q.id).unwrap_or_default();
+    let said = ui_event(
+        &mut engine,
+        FromUi::DialogPressed {
+            id,
+            control: "ok".into(),
+        },
+    );
+    assert_eq!(said, None);
+    assert!(engine.cursor.current_line().contains("Branch"));
+    assert!(!engine.custom_labels.has("library.example"));
+}
+
 /// One of Okur's dialogs up with the keyboard in it (okur-ui's DialogShown) takes the keys
 /// before its focus is told: GTK told none for Skim Reading's first radio, and the Downs after
 /// moved the virtual cursor in the page (816/s2-s4 in night2). A dialog not Okur's, or none

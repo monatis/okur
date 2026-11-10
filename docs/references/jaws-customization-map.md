@@ -174,7 +174,7 @@ with no way to change it), **Missing** (neither). §4.13 and §4.14 list setting
 | 14a | Starting JAWS: at the sign-in screen; after sign-in for all users (**off**) or for this user (**always**); run from the system tray (**off**) | | all | [S-wizard], [WFH-wizard] | Missing | An installer that starts Okur at sign-in is being tested (README "Not yet") |
 | 15 | Explore My Settings / Explore Shared Settings | | | [SU17] | Missing | |
 | 16 | Insert+Q: which settings are loaded | | | [R] §9.1 | Built | "Default settings are loaded" and the application, spelled (`engine/information.rs:100-120`) |
-| 17 | Run JAWS Manager (Insert+F2): the list of managers | | | [SU6]; [`jaws-dialogs-and-visual-features.md`](jaws-dialogs-and-visual-features.md) | Partial | Run Okur Manager lists JAWS's 21 managers in its order (`ui/lists.rs`, `Manager`); OK runs Commands Search, Custom Label, Custom Label Delete All, Dictionary Manager, Flexible Web, Notification History, Quick Settings, Settings Center and the Skim Reading Tool, and says "Okur has no ... yet." for the others (2026-11-09) |
+| 17 | Run JAWS Manager (Insert+F2): the list of managers | | | [SU6]; [`jaws-dialogs-and-visual-features.md`](jaws-dialogs-and-visual-features.md) | Partial | Run Okur Manager lists JAWS's 21 managers in its order (`ui/lists.rs`, `Manager`); OK runs Commands Search, Custom Label, Custom Label Delete (its question, 1207), Custom Label Delete All, Dictionary Manager, Flexible Web, Notification History, Quick Settings, Settings Center and the Skim Reading Tool, and says "Okur has no ... yet." for the others (2026-11-09) |
 
 ### 4.2 Speech and voice
 

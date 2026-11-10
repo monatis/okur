@@ -246,10 +246,12 @@ impl DialogMirror {
     /// Find" for "JAWS Find" [obs, 506/s12].
     pub fn as_okur_window(&self, focus: &mut FocusEvent) {
         let Some(dialog) = &self.dialog else {
+            tracing::debug!(window = ?focus.window_title, "no dialog of Okur's mirrored");
             return;
         };
         let title = focus.window_title.as_deref().unwrap_or_default();
         let ours = plain(title) == plain(&dialog.title);
+        tracing::debug!(title, okurs = %dialog.title, ours, "a focus beside Okur's dialog");
         if crate::parity::in_okurs_name(title) != title && ours {
             focus.window_title = Some(dialog.title.clone());
         }
