@@ -26,8 +26,11 @@ for fixture in "$@"; do
     stem="${stem//\//.}"
     sha=$(sha256sum "$file" | cut -d' ' -f1)
     profile=$(mktemp -d)
+    # An ARIA-AT page is read after its "Run Test Setup" ran, as the Windows capture reads it.
+    setup=
+    case "$fixture" in aria-at/*) setup=--setup ;; esac
     ./target/debug/examples/atspi_snapshot "fixtures/$fixture" "$sha" "$chrome_version" \
-        "$out/$stem.chrome.atspi.json" &
+        "$out/$stem.chrome.atspi.json" $setup &
     capture=$!
     sleep 2
     google-chrome --no-sandbox --no-first-run --disable-gpu --user-data-dir="$profile" \

@@ -4,25 +4,35 @@
 //! `okur-lab parity --api atspi` to replay on every OS. Run by
 //! `skills/linux-lab/scripts/capture-atspi-snapshots.sh`, started before Chrome:
 //!
-//!     atspi_snapshot <address end> <fixture sha256> <Chrome's version> <out.json>
+//!     atspi_snapshot <address end> <fixture sha256> <Chrome's version> <out.json> [--setup]
+//!
+//! With `--setup`, an ARIA-AT page is read once its "Run Test Setup" button ran, the state
+//! every scenario of it starts from.
 
 #[cfg(target_os = "linux")]
 fn main() {
-    let args: Vec<String> = std::env::args().skip(1).collect();
+    let mut args: Vec<String> = std::env::args().skip(1).collect();
+    let setup = args.iter().any(|a| a == "--setup");
+    args.retain(|a| a != "--setup");
     let [address_end, fixture_sha256, chrome, out] = args.as_slice() else {
         eprintln!(
-            "usage: atspi_snapshot <address end> <fixture sha256> <Chrome's version> <out.json>"
+            "usage: atspi_snapshot <address end> <fixture sha256> <Chrome's version> <out.json> [--setup]"
         );
         std::process::exit(2);
     };
-    let (root, reading) =
-        match okur_linux::events::capture_page(address_end, std::time::Duration::from_secs(60)) {
-            Ok(read) => read,
-            Err(error) => {
-                eprintln!("atspi_snapshot: {error}");
-                std::process::exit(1);
-            }
-        };
+    let wait = std::time::Duration::from_secs(60);
+    let captured = if setup {
+        okur_linux::events::capture_set_up_page(address_end, wait)
+    } else {
+        okur_linux::events::capture_page(address_end, wait)
+    };
+    let (root, reading) = match captured {
+        Ok(read) => read,
+        Err(error) => {
+            eprintln!("atspi_snapshot: {error}");
+            std::process::exit(1);
+        }
+    };
     let capture_ms = reading.as_millis();
     let node_count = count(&root);
     let read = |path: &str| std::fs::read_to_string(path).unwrap_or_default();

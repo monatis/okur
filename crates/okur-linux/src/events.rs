@@ -1108,6 +1108,37 @@ pub fn capture_page(
     address_end: &str,
     wait: Duration,
 ) -> Result<(okur_linux_model::page::AtspiNode, Duration), RuntimeError> {
+    capture_page_with(address_end, wait, false)
+}
+
+/// [`capture_page`] once the page's ARIA-AT setup ran: its "Run Test Setup" button activated
+/// through AT-SPI, as the Windows capture's keys press it (capture-snapshot.ps1 -Keys), and the
+/// page read once its script settled (a menu opened, a box checked). The Linux snapshots of
+/// ARIA-AT's pages held their state before it (2026-11-10: the menu button's menu closed where
+/// IA2's snapshot has it open). A page without the button is read as it is.
+pub fn capture_set_up_page(
+    address_end: &str,
+    wait: Duration,
+) -> Result<(okur_linux_model::page::AtspiNode, Duration), RuntimeError> {
+    capture_page_with(address_end, wait, true)
+}
+
+/// How long a page's setup script is given before the page is read.
+const SETUP_SETTLE: Duration = Duration::from_millis(1500);
+
+/// The page's "Run Test Setup" button, ARIA-AT's.
+fn setup_button(tree: &AtspiTree) -> Option<&AtspiTree> {
+    if tree.role == "push button" && tree.name.trim() == "Run Test Setup" {
+        return Some(tree);
+    }
+    tree.children.iter().find_map(setup_button)
+}
+
+fn capture_page_with(
+    address_end: &str,
+    wait: Duration,
+    setup: bool,
+) -> Result<(okur_linux_model::page::AtspiNode, Duration), RuntimeError> {
     let provider = LinuxProvider::new().map_err(|e| source_error("the bus", e))?;
     let subscription = provider
         .subscribe_desktop_kinds(Box::new(|kind, _, _| {
@@ -1135,6 +1166,15 @@ pub fn capture_page(
         let address = provider.atspi_tree(&document, 1).uri;
         if !address.is_some_and(|a| a.ends_with(address_end)) {
             continue;
+        }
+        if setup {
+            let tree = provider.atspi_tree(&document, PAGE_LIMIT);
+            if let Some(button) = setup_button(&tree) {
+                if let Err(error) = provider.atspi_do_action(&button.bus_name, &button.path, 0) {
+                    tracing::warn!("the page's setup not run: {error}");
+                }
+                std::thread::sleep(SETUP_SETTLE);
+            }
         }
         let reading = std::time::Instant::now();
         let tree = provider.atspi_tree(&document, PAGE_LIMIT);
