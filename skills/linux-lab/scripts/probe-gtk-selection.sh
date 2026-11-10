@@ -4,8 +4,10 @@
 # SELECTED, as Okur's own PlaceMarker List's rows are until one is picked [obs, 704/s11]). The
 # code review of 2026-11-10 asked whether a list with no selection (GtkNoSelection) marks its
 # rows SELECTABLE too, which would say "Not Selected" on every row, and how a multiple
-# selection's rows read. Three column views, single, none and multiple, each with three rows;
-# Tab into each in turn, Down once, and the focused row's states read after each key.
+# selection's rows read. Three column views, single, none and multiple, each with three rows,
+# each alone in its window: GTK 4's Tab moves from row to row inside a column view, so one window
+# holding the three had the first Tabs walk the first list (night3, 2026-11-10). The focused
+# row's states are read as the window comes, then after Tab, Down and Down.
 # Run in the lab:
 #   bash /mnt/d/okur-linux/a11y-stack.sh bash /mnt/d/okur-linux/probe-gtk-selection.sh
 set -uo pipefail
@@ -36,15 +38,15 @@ def view(kind):
     columns.update_property([Gtk.AccessibleProperty.LABEL], [kind])
     return columns
 
+import sys
+KIND = sys.argv[1] if len(sys.argv) > 1 else "single"
+
 def activate(app):
-    window = Gtk.ApplicationWindow(application=app, title="Selection Probe")
-    box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
-    for kind in ("single", "none", "multiple"):
-        box.append(view(kind))
-    window.set_child(box)
+    window = Gtk.ApplicationWindow(application=app, title="Selection Probe " + KIND)
+    window.set_child(view(KIND))
     window.present()
 
-app = Gtk.Application(application_id="org.okur.SelectionProbe")
+app = Gtk.Application(application_id="org.okur.SelectionProbe." + KIND)
 app.connect("activate", activate)
 app.run(None)
 PY
@@ -79,16 +81,19 @@ for i in range(desktop.get_child_count()):
     marks = [s for s in ("SELECTABLE", "SELECTED", "FOCUSED") if states.contains(getattr(Atspi.StateType, s))]
     print(node.get_role_name(), repr(node.get_name()), marks)
 PY
-python3 "$out/app.py" > "$out/app.log" 2>&1 &
-app=$!
-sleep 6
-xdotool search --sync --onlyvisible --name "Selection Probe" windowactivate --sync %1 2>/dev/null
 for kind in single none multiple; do
-    xdotool key Tab; sleep 0.8
-    echo "--- $kind, Tab"; python3 "$out/read.py"
-    xdotool key Down; sleep 0.8
-    echo "--- $kind, Down"; python3 "$out/read.py"
+    python3 "$out/app.py" "$kind" > "$out/app-$kind.log" 2>&1 &
+    app=$!
+    sleep 5
+    xdotool search --sync --onlyvisible --name "Selection Probe $kind" windowactivate --sync %1 2>/dev/null
+    sleep 0.8
+    echo "--- $kind, as the window came"; python3 "$out/read.py"
+    for key in Tab Down Down; do
+        xdotool key "$key"; sleep 0.8
+        echo "--- $kind, $key"; python3 "$out/read.py"
+    done
+    kill "$app" 2>/dev/null
+    sleep 1
+    head -3 "$out/app-$kind.log"
 done
-kill "$app" 2>/dev/null
-cat "$out/app.log" | head -5
 rm -rf "$out"
