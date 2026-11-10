@@ -958,7 +958,8 @@ A step can be in more than one entry; all of its entries apply.
 
 ### "message" after Element Information
 
-- Steps: `1210-web-element-information/s2`, `1210-web-element-information/s11`.
+- Steps: `1210-web-element-information/s2`, `1210-web-element-information/s11`,
+  `1213-web-element-information-lines/s2`.
 - Difference: JAWS also says "message". After Element Information's message, read whole, JAWS
   says "message", in every trial: its viewer's window named as it comes up, after the text.
   Its Say Font message and its comment viewer say no such word (314/s2, 1095).

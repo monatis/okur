@@ -61,9 +61,9 @@ impl ScreenReaderEngine {
     }
 }
 
-/// The message's lines: its title, a blank line [obs, 1210/s4], each element's tag with its
-/// parameters' count, its parameters by name and its role's number in hexadecimal, then how
-/// to close it.
+/// The message's lines: its title and a blank line, then each element's tag with its
+/// parameters' count, its parameters by name and its role's number in hexadecimal, a blank
+/// line after each, then how to close it [obs, 1213/s3-s28].
 pub(crate) fn element_lines(advanced: bool, elements: &[ElementDetails]) -> Vec<String> {
     let title = if advanced {
         msg::element_information_advanced_title()
@@ -88,6 +88,7 @@ pub(crate) fn element_lines(advanced: bool, elements: &[ElementDetails]) -> Vec<
         if let Some(role) = element.role {
             lines.push(msg::element_information_role(format!("{role:X}")).to_string());
         }
+        lines.push(String::new());
     }
     lines.push(msg::element_information_close().to_string());
     lines
@@ -136,9 +137,11 @@ mod tests {
                 "tag=a",
                 "text-align=left",
                 "MSAA Role=1E",
+                "",
                 "Tag #DOCUMENT has 1 parameters:",
                 "tag=#document",
                 "MSAA Role=F",
+                "",
                 "Press ESC to close this message.",
             ]
         );

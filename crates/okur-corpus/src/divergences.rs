@@ -1042,6 +1042,7 @@ divergences! {
     Difference::JawsAlsoSays("\nmessage") => [
         "1210-web-element-information/s2",
         "1210-web-element-information/s11",
+        "1213-web-element-information-lines/s2",
     ],
     "After Element Information's message, read whole, JAWS says \"message\", in every trial: \
      its viewer's window named as it comes up, after the text (its Say Font message and its \
